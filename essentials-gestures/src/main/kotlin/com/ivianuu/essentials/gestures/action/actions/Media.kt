@@ -16,7 +16,7 @@ import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppPredicate
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerScreen
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bindResource
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
@@ -26,9 +26,9 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
@@ -72,10 +72,10 @@ private fun mediaIntentFor(
   }
 }
 
-class MediaActionSettingsKey : Key<Unit>
+class MediaActionSettingsScreen : Screen<Unit>
 
 @Provide
-val mediaActionSettingsUi = Ui<MediaActionSettingsKey, MediaActionSettingsModel> { model ->
+val mediaActionSettingsUi = Ui<MediaActionSettingsScreen, MediaActionSettingsModel> { model ->
   SimpleListScreen(R.string.es_media_app_settings_ui_title) {
     item {
       ListItem(
@@ -112,7 +112,7 @@ data class MediaActionSettingsModel(
       .bindResource(),
     updateMediaApp = action {
       val newMediaApp = navigator.push(
-        AppPickerKey(
+        AppPickerScreen(
           intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
         )
       )

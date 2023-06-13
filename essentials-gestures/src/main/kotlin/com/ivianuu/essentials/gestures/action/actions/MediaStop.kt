@@ -11,7 +11,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKey
-import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.injekt.Provide
 
 @Provide object StopActionId : ActionId("media_stop")
@@ -28,5 +28,5 @@ import com.ivianuu.injekt.Provide
   mediaActionSender(KeyEvent.KEYCODE_MEDIA_STOP)
 }
 
-@Provide inline val stopMediaActionSettingsKey: @ActionSettingsKey<StopActionId> Key<Unit>
-  get() = MediaActionSettingsKey()
+@Provide inline val stopMediaActionSettingsScreen: @ActionSettingsKey<StopActionId> Screen<Unit>
+  get() = MediaActionSettingsScreen()

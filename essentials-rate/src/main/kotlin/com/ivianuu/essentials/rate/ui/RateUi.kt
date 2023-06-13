@@ -37,14 +37,14 @@ import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.replaceTop
 import com.ivianuu.injekt.Provide
 
-object RateKey : OverlayKey<Unit>
+object RateScreen : OverlayScreen<Unit>
 
-@Provide val rateUi = Ui<RateKey, RateModel> { model ->
+@Provide val rateUi = Ui<RateScreen, RateModel> { model ->
   DialogScaffold(dismissible = false) {
     Dialog(
       content = {
@@ -118,9 +118,9 @@ data class RateModel(
 
 @Provide fun rateModel(
   appConfig: AppConfig,
-  key: RateKey,
   navigator: Navigator,
-  rateUseCases: RateUseCases
+  rateUseCases: RateUseCases,
+  screen: RateScreen
 ) = Model {
   var rating by remember { mutableStateOf(0) }
   RateModel(
@@ -132,9 +132,9 @@ data class RateModel(
     updateRating = action { value -> rating = value },
     confirm = action {
       if (rating >= MIN_PLAY_RATING) {
-        navigator.replaceTop(RateOnPlayKey)
+        navigator.replaceTop(RateOnPlayScreen)
       } else {
-        navigator.replaceTop(FeedbackKey)
+        navigator.replaceTop(FeedbackScreen)
       }
     }
   )

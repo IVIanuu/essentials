@@ -6,11 +6,11 @@ package com.ivianuu.essentials.sample.ui
 
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.donation.DonationKey
+import com.ivianuu.essentials.donation.DonationScreen
 import com.ivianuu.injekt.Provide
 import org.json.JSONObject
 
-@Provide val donationHomeItem = HomeItem("Donation") { DonationKey }
+@Provide val donationHomeItem = HomeItem("Donation") { DonationScreen }
 
 private fun SkuDetails(
   sku: Sku,

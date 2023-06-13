@@ -66,7 +66,7 @@ import com.ivianuu.essentials.ui.navigation.push
       indication = indication,
       onClick = action {
         navigator.push(
-          PopupKey(
+          PopupScreen(
             position = coordinates!!.boundsInRoot(),
             onCancel = onCancel
           ) {

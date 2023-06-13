@@ -7,13 +7,13 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.material.Icon
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.premium.AppFeature
-import com.ivianuu.essentials.premium.GoPremiumKey
+import com.ivianuu.essentials.premium.GoPremiumScreen
 import com.ivianuu.essentials.premium.PremiumVersionSku
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.injekt.Provide
 
 @Provide val premiumHomeItem = HomeItem("Premium") {
-  GoPremiumKey(showTryBasicOption = true)
+  GoPremiumScreen(showTryBasicOption = true)
 }
 
 @Provide val premiumVersionSku: PremiumVersionSku = PremiumVersionSku(

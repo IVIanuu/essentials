@@ -14,14 +14,14 @@ import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 
-object RateOnPlayKey : OverlayKey<Unit>
+object RateOnPlayScreen : OverlayScreen<Unit>
 
-@Provide val rateOnPlayUi = Ui<RateOnPlayKey, RateOnPlayModel> { model ->
+@Provide val rateOnPlayUi = Ui<RateOnPlayScreen, RateOnPlayModel> { model ->
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(R.string.es_rate_on_play_title) },
@@ -47,15 +47,15 @@ data class RateOnPlayModel(
 )
 
 @Provide fun rateOnPlayModel(
-  key: RateOnPlayKey,
   navigator: Navigator,
-  rateUseCases: RateUseCases
+  rateUseCases: RateUseCases,
+  screen: RateOnPlayScreen
 ) = Model {
   RateOnPlayModel(
     displayShowNever = produce(false) { rateUseCases.shouldDisplayShowNever() },
     rate = action {
       rateUseCases.rateOnPlay()
-      navigator.pop(key)
+      navigator.pop(screen)
     },
     showLater = action { rateUseCases.showLater() },
     showNever = action { rateUseCases.showNever() }

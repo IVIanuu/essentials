@@ -9,32 +9,32 @@ import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 
-class ColorPickerKey(
+class ColorPickerScreen(
   val initialColor: Color,
   val colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
   val title: String? = null,
   val allowCustomArgb: Boolean = true,
   val showAlphaSelector: Boolean = false,
-) : OverlayKey<Color>
+) : OverlayScreen<Color>
 
 @Provide fun colorPickerUi(
-  key: ColorPickerKey,
-  navigator: Navigator
-) = Ui<ColorPickerKey, Unit> {
+  navigator: Navigator,
+  screen: ColorPickerScreen
+) = Ui<ColorPickerScreen, Unit> {
   DialogScaffold {
     ColorPickerDialog(
-      initialColor = key.initialColor,
-      onColorSelected = action { color -> navigator.pop(key, color) },
-      onCancel = action { navigator.pop(key, null) },
-      colorPalettes = key.colorPalettes,
-      showAlphaSelector = key.showAlphaSelector,
-      allowCustomArgb = key.allowCustomArgb,
-      title = key.title?.let { { Text(it) } }
+      initialColor = screen.initialColor,
+      onColorSelected = action { color -> navigator.pop(screen, color) },
+      onCancel = action { navigator.pop(screen, null) },
+      colorPalettes = screen.colorPalettes,
+      showAlphaSelector = screen.showAlphaSelector,
+      allowCustomArgb = screen.allowCustomArgb,
+      title = screen.title?.let { { Text(it) } }
     )
   }
 }

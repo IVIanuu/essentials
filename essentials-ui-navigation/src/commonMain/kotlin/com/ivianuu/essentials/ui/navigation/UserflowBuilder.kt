@@ -13,20 +13,20 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 
-interface UserflowBuilder : suspend () -> List<Key<*>>, Service<UserflowBuilder>
+interface UserflowBuilder : suspend () -> List<Screen<*>>, Service<UserflowBuilder>
 
 @Provide fun userflowBuilderWorker(
   elements: List<ServiceElement<UserflowBuilder>>,
   logger: Logger,
   navigator: Navigator
 ) = ScopeWorker<UiScope> {
-  val userflowKeys = elements
+  val userflowScreens = elements
     .sortedWithLoadingOrder()
     .flatMap { it.instance() }
 
-  logger.log { "Userflow -> $userflowKeys" }
+  logger.log { "Userflow -> $userflowScreens" }
 
-  if (userflowKeys.isEmpty()) return@ScopeWorker
+  if (userflowScreens.isEmpty()) return@ScopeWorker
 
-  navigator.setBackStack(backStack = navigator.backStack.value + userflowKeys)
+  navigator.setBackStack(backStack = navigator.backStack.value + userflowScreens)
 }

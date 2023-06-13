@@ -6,9 +6,9 @@ package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerScreen
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
@@ -66,18 +66,18 @@ interface ActionFactory {
 
 @Tag annotation class ActionSettingsKey<I : ActionId>
 
-@Provide fun <@Spread T : @ActionSettingsKey<I> Key<Unit>, I : ActionId> actionSettingsKeyPair(
+@Provide fun <@Spread T : @ActionSettingsKey<I> Screen<Unit>, I : ActionId> actionSettingsKeyPair(
   id: I,
   provider: () -> T,
-): Pair<String, () -> @ActionSettingsKey<ActionId> Key<Unit>> = id.value to provider
+): Pair<String, () -> @ActionSettingsKey<ActionId> Screen<Unit>> = id.value to provider
 
 interface ActionPickerDelegate {
   val baseId: String
   val title: String
-  val settingsKey: Key<Unit>? get() = null
+  val settingsScreen: Screen<Unit>? get() = null
   val icon: @Composable () -> Unit
 
-  suspend fun pickAction(): ActionPickerKey.Result?
+  suspend fun pickAction(): ActionPickerScreen.Result?
 }
 
 @JvmInline value class FloatingWindowActionsEnabled(val value: Boolean) {

@@ -8,17 +8,17 @@ import android.content.Intent
 import android.net.Uri
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.ui.navigation.IntentKey
+import com.ivianuu.essentials.ui.navigation.IntentScreen
 import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
 import com.ivianuu.injekt.Provide
 
-object FeedbackMailKey : IntentKey
+object FeedbackMailScreen : IntentScreen
 
 @Provide fun feedbackMailKeyIntentFactory(
   context: AppContext,
   email: DeveloperEmail,
   resources: Resources
-) = KeyIntentFactory<FeedbackMailKey> {
+) = KeyIntentFactory<FeedbackMailScreen> {
   Intent(Intent.ACTION_SENDTO).apply {
     data = Uri.parse("mailto:")
     putExtra(Intent.EXTRA_EMAIL, arrayOf(email.value))

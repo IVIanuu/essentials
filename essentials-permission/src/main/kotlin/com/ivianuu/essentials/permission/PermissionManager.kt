@@ -8,7 +8,7 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.permission.ui.PermissionRequestKey
+import com.ivianuu.essentials.permission.ui.PermissionRequestScreen
 import com.ivianuu.essentials.ui.UiScopeOwner
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
@@ -70,7 +70,7 @@ interface PermissionManager {
         .cast<UiScopeOwner>()
         .uiScope
         .service<Navigator>()
-        .push(PermissionRequestKey(permissions)) == true
+        .push(PermissionRequestScreen(permissions)) == true
 
       logger.log { "request permissions result $permissions -> $result" }
       return@withContext result

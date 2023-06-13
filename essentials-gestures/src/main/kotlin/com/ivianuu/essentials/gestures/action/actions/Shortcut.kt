@@ -22,10 +22,10 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
-import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
+import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerScreen
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerScreen
+import com.ivianuu.essentials.shortcutpicker.ShortcutPickerScreen
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
@@ -79,8 +79,8 @@ import java.io.ByteArrayOutputStream
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_content_cut) }
 
-  override suspend fun pickAction(): ActionPickerKey.Result? {
-    val shortcut = navigator.push(ShortcutPickerKey()) ?: return null
+  override suspend fun pickAction(): ActionPickerScreen.Result? {
+    val shortcut = navigator.push(ShortcutPickerScreen()) ?: return null
     val name = shortcut.name
     val icon = shortcut.icon.toBitmap()
     val stream = ByteArrayOutputStream()
@@ -88,7 +88,7 @@ import java.io.ByteArrayOutputStream
     val iconBytes = stream.toByteArray()
 
     val isFloating = floatingWindowActionsEnabled.value &&
-        navigator.push(FloatingWindowsPickerKey(name)) ?: return null
+        navigator.push(FloatingWindowsPickerScreen(name)) ?: return null
 
     val key = "$BASE_ID$ACTION_DELIMITER" +
         "$name$ACTION_DELIMITER" +
@@ -96,7 +96,7 @@ import java.io.ByteArrayOutputStream
         "${Base64.encodeToString(iconBytes, 0)}$ACTION_DELIMITER" +
         "$isFloating"
 
-    return ActionPickerKey.Result.Action(key)
+    return ActionPickerScreen.Result.Action(key)
   }
 }
 

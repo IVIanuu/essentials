@@ -35,8 +35,8 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
-import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
-import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
+import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
+import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -53,12 +53,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class WriteSecureSettingsPcInstructionsKey(
+class WriteSecureSettingsPcInstructionsScreen(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
-) : CriticalUserFlowKey<Boolean>
+) : CriticalUserFlowScreen<Boolean>
 
 @Provide val writeSecureSettingsPcInstructionsUi =
-  Ui<WriteSecureSettingsPcInstructionsKey, WriteSecureSettingsPcInstructionsModel> { model ->
+  Ui<WriteSecureSettingsPcInstructionsScreen, WriteSecureSettingsPcInstructionsModel> { model ->
     SimpleListScreen(R.string.es_secure_settings_pc_instructions_title) {
       item {
         SecureSettingsHeader(
@@ -195,11 +195,11 @@ typealias AdbEnabled = @AdbEnabledTag Int
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   appConfig: AppConfig,
-  key: WriteSecureSettingsPcInstructionsKey,
   navigator: Navigator,
   developerModeSetting: DataStore<DeveloperMode>,
   permissionManager: PermissionManager,
   resources: Resources,
+  screen: WriteSecureSettingsPcInstructionsScreen,
   toaster: Toaster
 ) = Model {
   var currentStep by remember { mutableStateOf(1) }
@@ -212,7 +212,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     3 -> true
     4 -> produce(false) {
       while (true) {
-        value = permissionManager.permissionState(listOf(key.permissionKey)).first()
+        value = permissionManager.permissionState(listOf(screen.permissionKey)).first()
         delay(1000)
       }
     }
@@ -226,7 +226,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     canContinueStep = canContinueStep,
     continueStep = action {
       if (completedStep == 4)
-        navigator.pop(key, true)
+        navigator.pop(screen, true)
       else {
         completedStep++
         currentStep = completedStep
@@ -241,7 +241,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
       race(
         { developerModeSetting.data.first { it != 0 } },
         {
-          navigator.push(DefaultIntentKey(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
+          navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
             ?.onFailure { toaster(R.string.open_phone_info_failed) }
         }
       )
@@ -250,7 +250,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     openDeveloperSettings = action {
       race(
         { adbEnabledSetting.data.first { it != 0 } },
-        { navigator.push(DefaultIntentKey(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) }
+        { navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) }
       )
       appUiStarter()
     }

@@ -49,7 +49,7 @@ import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
-import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
+import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -67,16 +67,16 @@ data class AppFeature(
   val inBasic: Boolean
 )
 
-class GoPremiumKey(
+class GoPremiumScreen(
   val showTryBasicOption: Boolean,
   val allowBackNavigation: Boolean = true
-) : CriticalUserFlowKey<Boolean> {
+) : CriticalUserFlowScreen<Boolean> {
   companion object {
-    @Provide fun adFeatures() = AdFeatures<GoPremiumKey>(emptyList())
+    @Provide fun adFeatures() = AdFeatures<GoPremiumScreen>(emptyList())
   }
 }
 
-@Provide val goPremiumUi = Ui<GoPremiumKey, GoPremiumModel> { model ->
+@Provide val goPremiumUi = Ui<GoPremiumScreen, GoPremiumModel> { model ->
   BackHandler(onBackPress = model.goBack)
 
   Surface {
@@ -332,31 +332,31 @@ data class GoPremiumModel(
 @Provide fun goPremiumModel(
   features: List<AppFeature>,
   fullScreenAdManager: FullScreenAdManager,
-  key: GoPremiumKey,
   navigator: Navigator,
   premiumVersionManager: PremiumVersionManager,
   resources: Resources,
+  screen: GoPremiumScreen,
   toaster: Toaster
 ) = Model {
   GoPremiumModel(
     features = features,
     premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),
-    showTryBasicOption = key.showTryBasicOption,
+    showTryBasicOption = screen.showTryBasicOption,
     goPremium = action {
       if (premiumVersionManager.purchasePremiumVersion()) {
-        navigator.pop(key, true)
+        navigator.pop(screen, true)
         toaster(R.string.es_premium_activated)
       }
     },
     tryBasicVersion = action {
-      navigator.pop(key, false)
+      navigator.pop(screen, false)
       withContext(NonCancellable) {
         fullScreenAdManager.loadAndShowAd()
       }
     },
     goBack = action {
-      if (key.allowBackNavigation) {
-        navigator.pop(key, false)
+      if (screen.allowBackNavigation) {
+        navigator.pop(screen, false)
         withContext(NonCancellable) {
           fullScreenAdManager.loadAndShowAd()
         }

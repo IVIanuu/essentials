@@ -19,7 +19,7 @@ import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
+import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -31,12 +31,12 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.first
 
-class WriteSecureSettingsKey(
+class WriteSecureSettingsScreen(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
-) : CriticalUserFlowKey<Boolean>
+) : CriticalUserFlowScreen<Boolean>
 
 @Provide val writeSecureSettingsUi =
-  Ui<WriteSecureSettingsKey, WriteSecureSettingsModel> { model ->
+  Ui<WriteSecureSettingsScreen, WriteSecureSettingsModel> { model ->
     SimpleListScreen(R.string.es_secure_settings_title) {
       item {
         SecureSettingsHeader(
@@ -77,24 +77,24 @@ data class WriteSecureSettingsModel(
 
 @Provide fun writeSecureSettingsModel(
   appConfig: AppConfig,
-  key: WriteSecureSettingsKey,
   navigator: Navigator,
   permissionManager: PermissionManager,
   resources: Resources,
+  screen: WriteSecureSettingsScreen,
   shell: Shell,
   toaster: Toaster
 ) = Model {
   WriteSecureSettingsModel(
     openPcInstructions = action {
-      if (navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey)) == true)
-        navigator.pop(key)
+      if (navigator.push(WriteSecureSettingsPcInstructionsScreen(screen.permissionKey)) == true)
+        navigator.pop(screen)
     },
     grantPermissionsViaRoot = action {
       shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
         .onSuccess {
-          if (permissionManager.permissionState(listOf(key.permissionKey)).first()) {
+          if (permissionManager.permissionState(listOf(screen.permissionKey)).first()) {
             toaster(R.string.es_secure_settings_permission_granted)
-            navigator.pop(key)
+            navigator.pop(screen)
           }
         }
         .onFailure {

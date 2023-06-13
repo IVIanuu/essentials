@@ -7,7 +7,6 @@ package com.ivianuu.essentials.ui
 import com.ivianuu.essentials.ui.app.AppUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.NavigatorContent
-import com.ivianuu.essentials.ui.navigation.RootKey
 import com.ivianuu.injekt.Provide
 
 @Provide fun defaultAppUi(navigator: Navigator) = AppUi {

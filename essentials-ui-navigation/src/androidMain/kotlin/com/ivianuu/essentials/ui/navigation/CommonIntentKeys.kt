@@ -10,27 +10,27 @@ import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.injekt.Provide
 
-class DefaultIntentKey(val intent: Intent) : IntentKey
+class DefaultIntentScreen(val intent: Intent) : IntentScreen
 
-@Provide val defaultIntentKeyIntentFactory = KeyIntentFactory<DefaultIntentKey> { it.intent }
+@Provide val defaultIntentKeyIntentFactory = KeyIntentFactory<DefaultIntentScreen> { it.intent }
 
-class AppInfoKey(val packageName: String) : IntentKey
+class AppInfoScreen(val packageName: String) : IntentScreen
 
-@Provide val appInfoKeyIntentFactory = KeyIntentFactory<AppInfoKey> { key ->
+@Provide val appInfoKeyIntentFactory = KeyIntentFactory<AppInfoScreen> { key ->
   Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
     this.data = "package:${key.packageName}".toUri()
   }
 }
 
-class AppKey(val packageName: String) : IntentKey
+class AppScreen(val packageName: String) : IntentScreen
 
-@Provide fun appKeyIntentFactory(packageManager: PackageManager) = KeyIntentFactory<AppKey> { key ->
+@Provide fun appKeyIntentFactory(packageManager: PackageManager) = KeyIntentFactory<AppScreen> { key ->
   packageManager.getLaunchIntentForPackage(key.packageName)!!
 }
 
-class ShareKey(val text: String) : IntentKey
+class ShareScreen(val text: String) : IntentScreen
 
-@Provide val shareKeyIntentFactory = KeyIntentFactory<ShareKey> { key ->
+@Provide val shareKeyIntentFactory = KeyIntentFactory<ShareScreen> { key ->
   Intent.createChooser(
     Intent(Intent.ACTION_SEND).apply {
       type = "text/plain"
@@ -40,11 +40,11 @@ class ShareKey(val text: String) : IntentKey
   )
 }
 
-class UrlKey(val url: String) : IntentKey
+class UrlScreen(val url: String) : IntentScreen
 
-@Provide val urlKeyIntentFactory = KeyIntentFactory<UrlKey> { key ->
+@Provide val urlKeyIntentFactory = KeyIntentFactory<UrlScreen> { key ->
   Intent(Intent.ACTION_VIEW).apply { this.data = key.url.toUri() }
 }
 
 fun PlayStoreAppDetailsKey(packageName: String) =
-  UrlKey("https://play.google.com/store/apps/details?id=${packageName}")
+  UrlScreen("https://play.google.com/store/apps/details?id=${packageName}")

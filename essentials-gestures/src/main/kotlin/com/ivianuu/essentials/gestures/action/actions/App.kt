@@ -11,7 +11,7 @@ import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerScreen
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
 import com.ivianuu.essentials.gestures.action.Action
@@ -21,8 +21,8 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
-import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
+import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerScreen
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerScreen
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
@@ -79,11 +79,11 @@ import kotlinx.coroutines.flow.first
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_apps) }
 
-  override suspend fun pickAction(): ActionPickerKey.Result? {
-    val app = navigator.push(AppPickerKey(launchableAppPredicate)) ?: return null
+  override suspend fun pickAction(): ActionPickerScreen.Result? {
+    val app = navigator.push(AppPickerScreen(launchableAppPredicate)) ?: return null
     val isFloating = floatingWindowActionsEnabled.value &&
-        navigator.push(FloatingWindowsPickerKey(app.appName)) ?: return null
-    return ActionPickerKey.Result.Action("$BASE_ID${app.packageName}$ACTION_DELIMITER$isFloating")
+        navigator.push(FloatingWindowsPickerScreen(app.appName)) ?: return null
+    return ActionPickerScreen.Result.Action("$BASE_ID${app.packageName}$ACTION_DELIMITER$isFloating")
   }
 }
 

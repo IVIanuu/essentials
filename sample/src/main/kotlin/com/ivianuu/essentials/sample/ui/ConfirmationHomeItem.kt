@@ -4,11 +4,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.ui.dialog.ConfirmationKey
+import com.ivianuu.essentials.ui.dialog.ConfirmationScreen
 import com.ivianuu.injekt.Provide
 
 @Provide val confirmationHomeItem = HomeItem("Confirmation") {
-  ConfirmationKey(
+  ConfirmationScreen(
     title = "Would you like to share your private data?",
     items = listOf("YES", "NO")
   )

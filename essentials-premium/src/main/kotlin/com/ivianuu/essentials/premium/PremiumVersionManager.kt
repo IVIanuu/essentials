@@ -105,7 +105,7 @@ interface PremiumVersionManager {
         .cast<UiScopeOwner>()
         .uiScope
         .service<Navigator>()
-        .push(GoPremiumKey(showTryBasicOption = false))
+        .push(GoPremiumScreen(showTryBasicOption = false))
     }
 
     return null

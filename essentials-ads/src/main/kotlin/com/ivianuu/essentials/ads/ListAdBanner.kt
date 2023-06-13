@@ -12,7 +12,7 @@ import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
-import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.StateFlow
@@ -44,10 +44,10 @@ fun interface ListAdBanner : ListDecorator
 ) = ListAdBanner decorator@{
   if (config != null && isVertical) {
     item(null) {
-      val key = catch {
-        LocalScope.current.service<Key<*>>()::class
+      val screen = catch {
+        LocalScope.current.service<Screen<*>>()::class
       }.getOrNull()
-      if ((key == null || isAdFeatureEnabled(key, ListAdBannerFeature)) && adsEnabled.bind().value)
+      if ((screen == null || isAdFeatureEnabled(screen, ListAdBannerFeature)) && adsEnabled.bind().value)
         AdBanner(config)
     }
   }

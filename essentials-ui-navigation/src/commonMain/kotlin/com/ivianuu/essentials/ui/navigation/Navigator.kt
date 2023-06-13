@@ -21,40 +21,40 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlin.collections.set
 
 @Stable interface Navigator {
-  val backStack: StateFlow<List<Key<*>>>
+  val backStack: StateFlow<List<Screen<*>>>
 
-  val results: Flow<Pair<Key<*>, Any?>>
+  val results: Flow<Pair<Screen<*>, Any?>>
 
-  suspend fun setBackStack(backStack: List<Key<*>>, results: Map<Key<*>, Any?> = emptyMap())
+  suspend fun setBackStack(backStack: List<Screen<*>>, results: Map<Screen<*>, Any?> = emptyMap())
 }
 
-suspend fun <R> Navigator.awaitResult(key: Key<R>): R? = results
-  .firstOrNull { it.first == key }
+suspend fun <R> Navigator.awaitResult(screen: Screen<R>): R? = results
+  .firstOrNull { it.first == screen }
   ?.second as? R
 
-suspend fun <R> Navigator.setRoot(key: Key<R>): R? {
-  setBackStack(listOf(key))
-  return awaitResult(key)
+suspend fun <R> Navigator.setRoot(screen: Screen<R>): R? {
+  setBackStack(listOf(screen))
+  return awaitResult(screen)
 }
 
-suspend fun <R> Navigator.push(key: Key<R>): R? {
-  setBackStack(backStack.value.filter { it != key } + key)
-  return awaitResult(key)
+suspend fun <R> Navigator.push(screen: Screen<R>): R? {
+  setBackStack(backStack.value.filter { it != screen } + screen)
+  return awaitResult(screen)
 }
 
-suspend fun <R> Navigator.replaceTop(key: Key<R>): R? {
+suspend fun <R> Navigator.replaceTop(screen: Screen<R>): R? {
   val currentBackStack = backStack.value
-  if (currentBackStack.lastOrNull() == key)
-    return awaitResult(key)
+  if (currentBackStack.lastOrNull() == screen)
+    return awaitResult(screen)
   setBackStack(
     currentBackStack
-      .dropLast(1) + key
+      .dropLast(1) + screen
   )
-  return awaitResult(key)
+  return awaitResult(screen)
 }
 
-suspend fun <R> Navigator.pop(key: Key<R>, result: R? = null) {
-  setBackStack(backStack.value.filter { it != key }, mapOf(key to result))
+suspend fun <R> Navigator.pop(screen: Screen<R>, result: R? = null) {
+  setBackStack(backStack.value.filter { it != screen }, mapOf(screen to result))
 }
 
 suspend fun Navigator.popTop(): Boolean {
@@ -65,10 +65,10 @@ suspend fun Navigator.popTop(): Boolean {
   } else false
 }
 
-suspend fun Navigator.popTo(key: Key<*>) {
-  val index = backStack.value.indexOfLast { it == key }
+suspend fun Navigator.popTo(screen: Screen<*>) {
+  val index = backStack.value.indexOfLast { it == screen }
   check(index != -1) {
-    "Key $key was not in ${backStack.value}"
+    "Screen $screen was not in ${backStack.value}"
   }
   setBackStack(
     backStack.value
@@ -81,29 +81,29 @@ suspend fun Navigator.clear() {
 }
 
 fun Navigator(
-  initialBackStack: List<Key<*>> = emptyList(),
-  keyInterceptors: List<KeyInterceptor<*>> = emptyList(),
+  initialBackStack: List<Screen<*>> = emptyList(),
+  screenInterceptors: List<ScreenInterceptor<*>> = emptyList(),
   scope: CoroutineScope
 ): Navigator = NavigatorImpl(
   initialBackStack = initialBackStack,
-  keyInterceptors = keyInterceptors,
+  screenInterceptors = screenInterceptors,
   scope = scope
 )
 
 class NavigatorImpl(
-  initialBackStack: List<Key<*>>,
-  private val keyInterceptors: List<KeyInterceptor<*>>,
+  initialBackStack: List<Screen<*>>,
+  private val screenInterceptors: List<ScreenInterceptor<*>>,
   scope: CoroutineScope
 ) : Navigator {
   private val _backStack = MutableStateFlow(initialBackStack)
-  override val backStack: StateFlow<List<Key<*>>> by this::_backStack
+  override val backStack: StateFlow<List<Screen<*>>> by this::_backStack
 
-  private val _results = EventFlow<Pair<Key<*>, Any?>>()
-  override val results: Flow<Pair<Key<*>, Any?>> by this::_results
+  private val _results = EventFlow<Pair<Screen<*>, Any?>>()
+  override val results: Flow<Pair<Screen<*>, Any?>> by this::_results
 
   private val actor = scope.actor()
 
-  override suspend fun setBackStack(backStack: List<Key<*>>, results: Map<Key<*>, Any?>) {
+  override suspend fun setBackStack(backStack: List<Screen<*>>, results: Map<Screen<*>, Any?>) {
     backStack.groupBy { it }
       .forEach {
         check(it.value.size == 1) {
@@ -114,17 +114,17 @@ class NavigatorImpl(
     actor.act {
       val finalResults = results.toMutableMap()
       _backStack.value = buildList {
-        for (key in backStack) {
+        for (screen in backStack) {
           @Suppress("UNCHECKED_CAST")
-          key as Key<Any?>
+          screen as Screen<Any?>
 
-          val keyHandle =
-            keyInterceptors.firstNotNullOfOrNull { it.cast<KeyInterceptor<Any?>>()(key) }
+          val interceptedHandle =
+            screenInterceptors.firstNotNullOfOrNull { it.cast<ScreenInterceptor<Any?>>()(screen) }
 
-          if (keyHandle == null) {
-            add(key)
+          if (interceptedHandle == null) {
+            add(screen)
           } else {
-            finalResults[key] = keyHandle()
+            finalResults[screen] = interceptedHandle()
           }
         }
       }
@@ -135,12 +135,12 @@ class NavigatorImpl(
 
   companion object {
     @Provide fun rootNavigator(
-      rootKey: RootKey?,
-      keyInterceptors: List<KeyInterceptor<*>>,
+      rootScreen: RootScreen?,
+      screenInterceptors: List<ScreenInterceptor<*>>,
       scope: ScopedCoroutineScope<UiScope>
     ): @Scoped<UiScope> Navigator = NavigatorImpl(
-      initialBackStack = listOfNotNull(rootKey),
-      keyInterceptors = keyInterceptors,
+      initialBackStack = listOfNotNull(rootScreen),
+      screenInterceptors = screenInterceptors,
       scope = scope
     )
 

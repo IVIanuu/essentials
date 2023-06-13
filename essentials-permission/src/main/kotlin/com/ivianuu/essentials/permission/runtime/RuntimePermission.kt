@@ -10,7 +10,7 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
+import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
@@ -34,7 +34,7 @@ abstract class RuntimePermission(
     ) = PermissionRequestHandler<P> { permission ->
       val contract = ActivityResultContracts.RequestPermission()
       val intent = contract.createIntent(appContext, permission.permissionName)
-      navigator.push(DefaultIntentKey(intent))
+      navigator.push(DefaultIntentScreen(intent))
     }
   }
 }

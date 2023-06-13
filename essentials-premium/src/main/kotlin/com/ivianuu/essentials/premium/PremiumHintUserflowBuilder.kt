@@ -37,7 +37,7 @@ fun interface PremiumHintUserflowBuilder : UserflowBuilder {
   val isFirstRun = isFirstRunFlow.first().value
 
   listOf(
-    GoPremiumKey(
+    GoPremiumScreen(
       showTryBasicOption = isFirstRun,
       allowBackNavigation = !isFirstRun
     )

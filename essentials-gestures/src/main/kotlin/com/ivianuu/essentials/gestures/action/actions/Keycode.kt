@@ -17,8 +17,8 @@ import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.ui.dialog.TextInputKey
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerScreen
+import com.ivianuu.essentials.ui.dialog.TextInputScreen
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
@@ -58,16 +58,16 @@ import com.ivianuu.injekt.common.typeKeyOf
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_keyboard) }
 
-  override suspend fun pickAction(): ActionPickerKey.Result? {
+  override suspend fun pickAction(): ActionPickerScreen.Result? {
     val keycode = navigator.push(
-      TextInputKey(
+      TextInputScreen(
         label = resources(R.string.es_keycode_label),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         predicate = { it.isNotEmpty() }
       )
     )?.toIntOrNull() ?: return null
 
-    return ActionPickerKey.Result.Action("$BASE_ID$keycode")
+    return ActionPickerScreen.Result.Action("$BASE_ID$keycode")
   }
 }
 

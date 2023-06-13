@@ -4,10 +4,10 @@
 
 package com.ivianuu.essentials.ads
 
-import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.OverlayKey
-import com.ivianuu.essentials.ui.navigation.RootKey
+import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
+import com.ivianuu.essentials.ui.navigation.OverlayScreen
+import com.ivianuu.essentials.ui.navigation.RootScreen
+import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
@@ -15,33 +15,33 @@ import kotlin.reflect.KClass
 
 interface AdFeature
 
-@JvmInline value class AdFeatures<K : Key<*>>(val value: List<AdFeature>) {
+@JvmInline value class AdFeatures<K : Screen<*>>(val value: List<AdFeature>) {
   companion object {
-    @Provide fun <K : Key<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
+    @Provide fun <K : Screen<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
       AdFeatures(allFeatures)
 
-    @Provide fun <K : RootKey> defaultRootKeyAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
+    @Provide fun <K : RootScreen> defaultRootKeyAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
       AdFeatures(allFeatures.filter { it != ListAdBannerFeature })
 
-    @Provide fun <K : OverlayKey<*>> defaultPopupAdFeatures(): AdFeatures<K> =
+    @Provide fun <K : OverlayScreen<*>> defaultPopupAdFeatures(): AdFeatures<K> =
       AdFeatures(emptyList())
 
-    @Provide fun <K : CriticalUserFlowKey<*>> defaultCriticalUserFlowAdFeatures(): AdFeatures<K> =
+    @Provide fun <K : CriticalUserFlowScreen<*>> defaultCriticalUserFlowAdFeatures(): AdFeatures<K> =
       AdFeatures(listOf(ScreenAdBannerFeature))
 
-    @Provide fun <@Spread T : Ui<K, *>, K : Key<*>> adFeatureConfigMapEntry(
+    @Provide fun <@Spread T : Ui<K, *>, K : Screen<*>> adFeatureConfigMapEntry(
       keyClass: KClass<K>,
       features: AdFeatures<K>
-    ): Pair<KClass<out Key<*>>, AdFeatures<*>> = keyClass to features
+    ): Pair<KClass<out Screen<*>>, AdFeatures<*>> = keyClass to features
   }
 }
 
 fun interface IsAdFeatureEnabledUseCase {
-  operator fun invoke(keyClass: KClass<out Key<*>>, feature: AdFeature): Boolean
+  operator fun invoke(screenClass: KClass<out Screen<*>>, feature: AdFeature): Boolean
 }
 
 @Provide fun isAdFeatureEnabledUseCase(
-  featuresByKey: Map<KClass<out Key<*>>, AdFeatures<*>>
+  featuresByScreen: Map<KClass<out Screen<*>>, AdFeatures<*>>
 ) = IsAdFeatureEnabledUseCase { keyClass, feature ->
-  featuresByKey[keyClass]?.value?.contains(feature) == true
+  featuresByScreen[keyClass]?.value?.contains(feature) == true
 }

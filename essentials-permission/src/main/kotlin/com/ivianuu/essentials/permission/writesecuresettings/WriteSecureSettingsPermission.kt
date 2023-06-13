@@ -32,7 +32,7 @@ abstract class WriteSecureSettingsPermission(
       navigator: Navigator,
       permissionKey: TypeKey<P>
     ) = PermissionRequestHandler<P> {
-      navigator.push(WriteSecureSettingsKey(permissionKey))
+      navigator.push(WriteSecureSettingsScreen(permissionKey))
     }
   }
 }

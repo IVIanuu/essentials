@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.backup.BackupAndRestoreKey
+import com.ivianuu.essentials.backup.BackupAndRestoreScreen
 import com.ivianuu.injekt.Provide
 
-@Provide val backupHomeItem = HomeItem("Backup and restore") { BackupAndRestoreKey() }
+@Provide val backupHomeItem = HomeItem("Backup and restore") { BackupAndRestoreScreen() }

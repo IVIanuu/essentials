@@ -10,9 +10,9 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.rate.data.RatePrefs
 import com.ivianuu.essentials.time.Clock
-import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
+import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
@@ -31,7 +31,7 @@ interface RateUseCases {
 @Provide class RateUsecasesImpl(
   private val appConfig: AppConfig,
   private val clock: Clock,
-  private val key: Key<*>,
+  private val screen: Screen<*>,
   private val navigator: Navigator,
   private val pref: DataStore<RatePrefs>
 ) : RateUseCases {
@@ -47,7 +47,7 @@ interface RateUseCases {
 
   override suspend fun showNever() {
     pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.NEVER) }
-    navigator.pop(key)
+    navigator.pop(screen)
   }
 
   override suspend fun showLater() {
@@ -59,6 +59,6 @@ interface RateUseCases {
         feedbackState = RatePrefs.FeedbackState.LATER
       )
     }
-    navigator.pop(key)
+    navigator.pop(screen)
   }
 }

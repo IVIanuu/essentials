@@ -21,7 +21,7 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Switch
-import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
+import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -31,11 +31,11 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.first
 
-class PermissionRequestKey(
+class PermissionRequestScreen(
   val permissionsKeys: List<TypeKey<Permission>>
-) : CriticalUserFlowKey<Boolean>
+) : CriticalUserFlowScreen<Boolean>
 
-@Provide val permissionRequestUi = Ui<PermissionRequestKey, PermissionRequestModel> { model ->
+@Provide val permissionRequestUi = Ui<PermissionRequestScreen, PermissionRequestModel> { model ->
   SimpleListScreen(R.string.es_request_permission_title) {
     items(model.permissions) { permission ->
       ListItem(
@@ -70,19 +70,19 @@ data class UiPermission<P : Permission>(
 
 @Provide fun permissionRequestModel(
   appUiStarter: AppUiStarter,
-  key: PermissionRequestKey,
   navigator: Navigator,
   permissionManager: PermissionManager,
-  requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>
+  requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>,
+  screen: PermissionRequestScreen
 ) = Model {
   LaunchedEffect(true) {
-    permissionManager.permissionState(key.permissionsKeys)
+    permissionManager.permissionState(screen.permissionsKeys)
       .first { it }
-    navigator.pop(key, true)
+    navigator.pop(screen, true)
   }
 
   PermissionRequestModel(
-    permissions = key.permissionsKeys
+    permissions = screen.permissionsKeys
       .map { permissionKey ->
         UiPermission(
           permissionKey,

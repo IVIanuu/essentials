@@ -37,27 +37,27 @@ import com.ivianuu.essentials.ui.animation.transition.fromElementModifier
 import com.ivianuu.essentials.ui.animation.transition.rootCoordinates
 import com.ivianuu.essentials.ui.animation.transition.toElementModifier
 import com.ivianuu.essentials.ui.insets.LocalInsets
-import com.ivianuu.essentials.ui.navigation.KeyConfig
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.OverlayScreen
+import com.ivianuu.essentials.ui.navigation.ScreenConfig
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 import kotlin.math.max
 
-class PopupKey(
+class PopupScreen(
   val position: Rect,
   val onCancel: (() -> Unit)?,
   val content: @Composable () -> Unit,
-) : OverlayKey<Unit>
+) : OverlayScreen<Unit>
 
-@Provide fun popupUi(key: PopupKey, navigator: Navigator) = Ui<PopupKey, Unit> {
+@Provide fun popupUi(navigator: Navigator, screen: PopupScreen) = Ui<PopupScreen, Unit> {
   var previousConstraints by remember { refOf<Constraints?>(null) }
 
   BoxWithConstraints {
     if (previousConstraints != null && constraints != previousConstraints)
       LaunchedEffect(true) {
-        navigator.pop(key)
+        navigator.pop(screen)
       }
 
     previousConstraints = constraints
@@ -67,13 +67,13 @@ class PopupKey(
     val dismiss: (Boolean) -> Unit = action { cancelled ->
       if (!dismissed) {
         dismissed = true
-        navigator.pop(key)
-        if (cancelled) key.onCancel?.invoke()
+        navigator.pop(screen)
+        if (cancelled) screen.onCancel?.invoke()
       }
     }
 
     PopupLayout(
-      position = key.position,
+      position = screen.position,
       modifier = Modifier
         .fillMaxSize()
         .pointerInput(true) {
@@ -88,14 +88,14 @@ class PopupKey(
             }
           }
       ) {
-        key.content()
+        screen.content()
       }
     }
   }
 }
 
-@Provide val popupKeyConfig: KeyConfig<PopupKey>
-  get() = KeyConfig(opaque = true, transition = PopupStackTransition)
+@Provide val popupScreenConfig: ScreenConfig<PopupScreen>
+  get() = ScreenConfig(opaque = true, transition = PopupStackTransition)
 
 val PopupStackTransition: StackTransition = transition@ {
   val popupModifier = (if (isPush) toElementModifier(PopupAnimationElementKey)

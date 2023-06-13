@@ -17,8 +17,8 @@ import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
+import com.ivianuu.essentials.ui.navigation.Screen
+import com.ivianuu.essentials.ui.navigation.ScreenDecorator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.StateFlow
@@ -41,20 +41,20 @@ import kotlinx.coroutines.flow.StateFlow
 }
 typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 
-fun interface ScreenAdBanner : KeyUiDecorator
+fun interface ScreenAdBanner : ScreenDecorator
 
 @Provide fun adBannerKeyUiDecorator(
   adsEnabled: StateFlow<AdsEnabled>,
   isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenAdBannerConfig? = null,
-  key: Key<*>
+  screen: Screen<*>
 ) = ScreenAdBanner decorator@{ content ->
   if (config == null) {
     content()
     return@decorator
   }
 
-  if (!isAdFeatureEnabled(key::class, ScreenAdBannerFeature)) {
+  if (!isAdFeatureEnabled(screen::class, ScreenAdBannerFeature)) {
     content()
     return@decorator
   }

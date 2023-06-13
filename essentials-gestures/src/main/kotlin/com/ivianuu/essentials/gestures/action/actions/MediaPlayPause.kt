@@ -13,7 +13,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKey
-import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.injekt.Provide
 
 @Provide object PlayPauseActionId : ActionId("media_play_pause")
@@ -30,5 +30,5 @@ import com.ivianuu.injekt.Provide
   mediaActionSender(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 }
 
-@Provide inline val playPauseMediaActionSettingsKey: @ActionSettingsKey<PlayPauseActionId> Key<Unit>
-  get() = MediaActionSettingsKey()
+@Provide inline val playPauseMediaActionSettingsScreen: @ActionSettingsKey<PlayPauseActionId> Screen<Unit>
+  get() = MediaActionSettingsScreen()

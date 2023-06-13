@@ -92,7 +92,7 @@ private class AnimatedStackWithItemsState<T>(
     itemContent: @Composable (T) -> Unit
   ): AnimatedStackChild<T> {
     val content: @Composable () -> Unit = { itemContent(item) }
-    children.firstOrNull { it.key == item }
+    children.firstOrNull { it.screen == item }
       ?.let {
         it.enterTransition = transition
         it.exitTransition = transition
@@ -120,13 +120,13 @@ private class AnimatedStackWithItemsState<T>(
     propagateMinConstraints = propagateMinConstraints
   ) {
     state.visibleChildren.toList().forEach { child ->
-      key(child.key) { child.Content() }
+      key(child.screen) { child.Content() }
     }
   }
 }
 
 @Stable class AnimatedStackChild<T>(
-  val key: T,
+  val screen: T,
   opaque: Boolean = false,
   enterTransition: StackTransition? = null,
   exitTransition: StackTransition? = null,
@@ -272,7 +272,7 @@ val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
     isPush: Boolean,
     transition: StackTransition
   ) {
-    from?.let { runningTransactions[it.key]?.cancel() }
+    from?.let { runningTransactions[it.screen]?.cancel() }
     val transaction = AnimatedStackTransaction(
       from, to, isPush, transition, this,
       from != null && from !in children
@@ -291,8 +291,8 @@ internal class AnimatedStackTransaction<T>(
   private val forceFromRemoval: Boolean
 ) {
   val transactionKey = when {
-    to != null -> to.key
-    from != null -> from.key
+    to != null -> to.screen
+    from != null -> from.screen
     else -> throw AssertionError()
   }
 

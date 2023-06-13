@@ -45,18 +45,18 @@ import kotlin.reflect.KClass
   val backStack by navigator.backStack.collectAsState()
 
   val stackChildren = backStack
-    .mapIndexed { index, key ->
-      key(key) {
+    .mapIndexed { index, screen ->
+      key(screen) {
         var currentModel by remember { mutableStateOf<Any?>(null) }
-        val (keyUi, child) = remember {
-          val scope = component.keyUiScopeFactory(navigator, key)
-          val ui = component.uiFactories[key::class]?.invoke(navigator, scope, key)
-          checkNotNull(ui) { "No ui factory found for $key" }
-          val config = component.configFactories[key::class]?.invoke(navigator, scope, key)
-          val model = component.modelFactories[key::class]?.invoke(navigator, scope, key)
-          checkNotNull(model) { "No model found for $key" }
+        val (model, child) = remember {
+          val scope = component.screenScopeFactory(navigator, screen)
+          val ui = component.uiFactories[screen::class]?.invoke(navigator, scope, screen)
+          checkNotNull(ui) { "No ui factory found for $screen" }
+          val config = component.configFactories[screen::class]?.invoke(navigator, scope, screen)
+          val model = component.modelFactories[screen::class]?.invoke(navigator, scope, screen)
+          checkNotNull(model) { "No model found for $screen" }
           model to NavigationContentStateChild(
-            key = key,
+            screen = screen,
             config = config,
             content = {
               with(ui as Ui<*, Any>) {
@@ -65,21 +65,21 @@ import kotlin.reflect.KClass
                 }
               }
             },
-            decorateKeyUi = component.decorateKeyUiFactory(navigator, scope, key),
+            decorateScreen = component.decorateScreenFactory(navigator, scope, screen),
             scope = scope
           )
         }
 
         key(index) {
           BackHandler(enabled = handleBack && (index > 0 || popRoot), onBackPress = action {
-            navigator.pop(key)
+            navigator.pop(screen)
           })
         }
 
         ObserveScope(
           remember {
             {
-              currentModel = keyUi()
+              currentModel = model()
 
               DisposableEffect(true) {
                 onDispose {
@@ -102,14 +102,14 @@ import kotlin.reflect.KClass
 }
 
 @Stable private class NavigationContentStateChild(
-  key: Key<*>,
-  config: KeyConfig<*>? = null,
+  screen: Screen<*>,
+  config: ScreenConfig<*>? = null,
   private val content: @Composable () -> Unit,
-  private val decorateKeyUi: DecorateKeyUi,
-  private val scope: Scope<KeyUiScope>
+  private val decorateScreen: DecorateScreen,
+  private val scope: Scope<ScreenScope>
 ) {
   val stackChild = AnimatedStackChild(
-    key = key,
+    screen = screen,
     opaque = config?.opaque ?: false,
     enterTransition = config?.enterTransition,
     exitTransition = config?.exitTransition
@@ -129,7 +129,7 @@ import kotlin.reflect.KClass
       LocalScope provides scope,
       LocalSaveableStateRegistry provides savableStateRegistry
     ) {
-      decorateKeyUi {
+      decorateScreen {
         content()
       }
 
@@ -164,9 +164,9 @@ import kotlin.reflect.KClass
 }
 
 @Provide @Service<UiScope> data class NavigationStateContentComponent(
-  val configFactories: Map<KClass<Key<*>>, KeyConfigFactory<Key<*>>>,
-  val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
-  val modelFactories: Map<KClass<Key<*>>, ModelFactory<Key<*>, *>>,
-  val decorateKeyUiFactory: (Navigator, Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
-  val keyUiScopeFactory: (Navigator, @Service<KeyUiScope> Key<*>) -> Scope<KeyUiScope>
+  val configFactories: Map<KClass<Screen<*>>, ScreenConfigFactory<Screen<*>>>,
+  val uiFactories: Map<KClass<Screen<*>>, UiFactory<Screen<*>>>,
+  val modelFactories: Map<KClass<Screen<*>>, ModelFactory<Screen<*>, *>>,
+  val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen,
+  val screenScopeFactory: (Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>
 )

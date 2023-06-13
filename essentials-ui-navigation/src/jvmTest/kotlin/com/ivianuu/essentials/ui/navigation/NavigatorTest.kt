@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 import org.junit.Test
 
 class NavigatorTest {
-  class KeyA : Key<Unit>
-  class KeyB : Key<Unit>
-  class KeyC : Key<Unit>
+  class ScreenA : Screen<Unit>
+  class ScreenB : Screen<Unit>
+  class ScreenC : Screen<Unit>
 
   @Provide val logger = NoopLogger
 
@@ -30,39 +30,39 @@ class NavigatorTest {
     val collector = navigator._backStack
       .testCollectIn(this)
 
-    launch { navigator.push(KeyA) }
-    navigator.pop(KeyA)
-    launch { navigator.push(KeyB) }
-    launch { navigator.replaceTop(KeyC) }
+    launch { navigator.push(ScreenA) }
+    navigator.pop(ScreenA)
+    launch { navigator.push(ScreenB) }
+    launch { navigator.replaceTop(ScreenC) }
     navigator.popTop()
-    launch { navigator.push(KeyB) }
-    launch { navigator.setRoot(KeyA) }
-    navigator.setBackStack(listOf(KeyC, KeyA, KeyB))
+    launch { navigator.push(ScreenB) }
+    launch { navigator.setRoot(ScreenA) }
+    navigator.setBackStack(listOf(ScreenC, ScreenA, ScreenB))
     navigator.clear()
 
     collector.values.shouldContainExactly(
       listOf(),
-      listOf(KeyA),
+      listOf(ScreenA),
       listOf(),
-      listOf(KeyB),
-      listOf(KeyC),
+      listOf(ScreenB),
+      listOf(ScreenC),
       listOf(),
-      listOf(KeyB),
-      listOf(KeyA),
-      listOf(KeyC, KeyA, KeyB),
+      listOf(ScreenB),
+      listOf(ScreenA),
+      listOf(ScreenC, ScreenA, ScreenB),
       listOf()
     )
   }
 
-  object KeyWithResult : Key<String>
+  object ScreenWithResult : Screen<String>
 
   @Test fun testReturnsResultOnPop() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       keyHandlers = emptyList(),
       scope = this
     )
-    val result = async { navigator.push(KeyWithResult) }
-    navigator.pop(KeyWithResult, "b")
+    val result = async { navigator.push(ScreenWithResult) }
+    navigator.pop(ScreenWithResult, "b")
     result.await() shouldBe "b"
   }
 
@@ -71,7 +71,7 @@ class NavigatorTest {
       keyHandlers = emptyList(),
       scope = this
     )
-    val result = async { navigator.push(KeyWithResult) }
+    val result = async { navigator.push(ScreenWithResult) }
     navigator.popTop()
     result.await() shouldBe null
   }

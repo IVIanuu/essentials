@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.web.ui.WebKey
+import com.ivianuu.essentials.web.ui.WebScreen
 import com.ivianuu.injekt.Provide
 
-@Provide val webHomeItem = HomeItem("Web") { WebKey(title = "Google", "https://google.com") }
+@Provide val webHomeItem = HomeItem("Web") { WebScreen(title = "Google", "https://google.com") }

@@ -14,16 +14,16 @@ import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.UrlScreen
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 
-object FeedbackKey : OverlayKey<Unit>
+object FeedbackScreen : OverlayScreen<Unit>
 
-@Provide val feedbackUi = Ui<FeedbackKey, FeedbackModel> { model ->
+@Provide val feedbackUi = Ui<FeedbackScreen, FeedbackModel> { model ->
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(R.string.es_feedback_title) },
@@ -58,21 +58,21 @@ data class FeedbackModel(
 )
 
 @Provide fun feedbackModel(
-  key: FeedbackKey,
   navigator: Navigator,
-  rateUseCases: RateUseCases
+  rateUseCases: RateUseCases,
+  screen: FeedbackScreen
 ) = Model {
   FeedbackModel(
     displayShowNever = produce(false) { rateUseCases.shouldDisplayShowNever() },
     showNever = action { rateUseCases.showNever() },
     showLater = action { rateUseCases.showLater() },
     openReddit = action {
-      navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
-      navigator.pop(key)
+      navigator.push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
+      navigator.pop(screen)
     },
     sendMail = action {
-      navigator.push(FeedbackMailKey)
-      navigator.pop(key)
+      navigator.push(FeedbackMailScreen)
+      navigator.pop(screen)
     }
   )
 }

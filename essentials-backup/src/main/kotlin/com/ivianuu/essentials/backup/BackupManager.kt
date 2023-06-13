@@ -16,7 +16,7 @@ import com.ivianuu.essentials.getOrThrow
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.processrestart.ProcessRestarter
-import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
+import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
@@ -74,12 +74,12 @@ interface BackupManager {
 
       zipOutputStream.close()
 
-      navigator.push(ShareBackupFileKey(backupFile.absolutePath))?.getOrThrow()
+      navigator.push(ShareBackupFileScreen(backupFile.absolutePath))?.getOrThrow()
     }
 
   override suspend fun restoreBackup() = withContext(scope.coroutineContext + coroutineContext) {
     val uri = navigator.push(
-      DefaultIntentKey(
+      DefaultIntentScreen(
         Intent.createChooser(
           Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "application/zip"

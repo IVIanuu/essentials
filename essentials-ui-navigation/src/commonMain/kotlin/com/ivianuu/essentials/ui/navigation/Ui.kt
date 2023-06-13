@@ -9,11 +9,11 @@ import androidx.compose.runtime.Stable
 import com.ivianuu.injekt.Provide
 
 // todo make fun interface once compose is fixed
-@Stable interface Ui<K : Key<*>, M> {
+@Stable interface Ui<K : Screen<*>, M> {
   @Composable operator fun invoke(model: M)
 }
 
-inline fun <K : Key<*>, M> Ui(
+inline fun <K : Screen<*>, M> Ui(
   crossinline block: @Composable (M) -> Unit
 ): Ui<K, M> = object : Ui<K, M> {
   @Composable override fun invoke(model: M) {

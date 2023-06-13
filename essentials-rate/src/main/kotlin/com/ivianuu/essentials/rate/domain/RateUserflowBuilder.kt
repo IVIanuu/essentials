@@ -8,7 +8,7 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.rate.data.RatePrefs
-import com.ivianuu.essentials.rate.ui.RateKey
+import com.ivianuu.essentials.rate.ui.RateScreen
 import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.time.days
 import com.ivianuu.essentials.time.milliseconds
@@ -33,7 +33,7 @@ fun interface RateUserflowBuilder : UserflowBuilder
 
   pref.updateData { copy(launchTimes = launchTimes.inc()) }
 
-  if (shouldShowRateDialog()) listOf(RateKey)
+  if (shouldShowRateDialog()) listOf(RateScreen)
   else emptyList()
 }
 
