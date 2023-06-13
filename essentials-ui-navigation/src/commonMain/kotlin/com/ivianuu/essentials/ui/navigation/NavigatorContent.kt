@@ -168,5 +168,5 @@ import kotlin.reflect.KClass
   val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
   val modelFactories: Map<KClass<Key<*>>, ModelFactory<Key<*>, *>>,
   val decorateKeyUiFactory: (Navigator, Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
-  val keyUiScopeFactory: (Navigator, Key<*>) -> Scope<KeyUiScope>
+  val keyUiScopeFactory: (Navigator, @Service<KeyUiScope> Key<*>) -> Scope<KeyUiScope>
 )
