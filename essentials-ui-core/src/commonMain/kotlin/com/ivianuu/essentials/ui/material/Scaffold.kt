@@ -5,24 +5,19 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.material.DrawerDefaults
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.contentColorFor
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.max
-import com.ivianuu.essentials.ui.insets.Insets
-import com.ivianuu.essentials.ui.insets.InsetsPadding
-import com.ivianuu.essentials.ui.insets.InsetsProvider
-import com.ivianuu.essentials.ui.insets.LocalInsets
+import com.ivianuu.essentials.ui.layout.navigationBars
+import com.ivianuu.essentials.ui.layout.navigationBarsPadding
+import com.ivianuu.essentials.ui.layout.statusBars
 
 @Composable fun Scaffold(
   modifier: Modifier = Modifier,
@@ -31,57 +26,41 @@ import com.ivianuu.essentials.ui.insets.LocalInsets
   bottomBar: (@Composable () -> Unit)? = null,
   floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
-  isFloatingActionButtonDocked: Boolean = false,
-  drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
-  drawerShape: Shape = MaterialTheme.shapes.large,
-  drawerElevation: Dp = DrawerDefaults.Elevation,
   backgroundColor: Color = MaterialTheme.colors.background,
+  contentColor: Color = contentColorFor(backgroundColor),
   applyInsets: Boolean = true,
-  bodyContent: @Composable () -> Unit
+  content: @Composable () -> Unit
 ) {
-  InsetsPadding(
-    left = applyInsets,
-    top = false,
-    right = applyInsets,
-    bottom = false
-  ) {
-    Scaffold(
-      modifier = modifier,
-      scaffoldState = scaffoldState,
-      topBar = topBar ?: {},
-      bottomBar = bottomBar ?: {},
-      floatingActionButton = if (floatingActionButton != null) (
-          {
-            InsetsPadding(
-              top = applyInsets && topBar == null,
-              bottom = applyInsets && bottomBar == null
-            ) {
-              Box {
-                floatingActionButton()
-              }
-            }
+  androidx.compose.material.Scaffold(
+    modifier = modifier,
+    scaffoldState = scaffoldState,
+    topBar = topBar ?: {},
+    bottomBar = bottomBar ?: {},
+    floatingActionButton = if (floatingActionButton != null) (
+        {
+          Box(
+            modifier = if (applyInsets) Modifier.navigationBarsPadding() else Modifier
+          ) {
+            floatingActionButton()
           }
-          ) else ({}),
-      floatingActionButtonPosition = floatingActionButtonPosition,
-      isFloatingActionButtonDocked = isFloatingActionButtonDocked,
-      drawerContent = drawerContent,
-      drawerShape = drawerShape,
-      drawerElevation = drawerElevation,
-      backgroundColor = backgroundColor
-    ) { bodyPadding ->
-      val insets = if (applyInsets) LocalInsets.current else Insets()
-      InsetsProvider(
-        Insets(
-          left = max(bodyPadding.calculateLeftPadding(LocalLayoutDirection.current), insets.left),
-          top = if (topBar == null) insets.top else bodyPadding.calculateTopPadding(),
-          right = max(
-            bodyPadding.calculateRightPadding(LocalLayoutDirection.current),
-            insets.right
-          ),
-          bottom = if (bottomBar == null) insets.bottom else bodyPadding.calculateBottomPadding()
-        ),
-        bodyContent
-      )
+        }
+        ) else ({}),
+    floatingActionButtonPosition = floatingActionButtonPosition,
+    backgroundColor = backgroundColor,
+    contentColor = contentColor
+  ) {
+    Box(
+      modifier = Modifier
+        .then(
+          if (applyInsets && topBar != null) Modifier.consumeWindowInsets(WindowInsets.statusBars)
+          else Modifier
+        )
+        .then(
+          if (applyInsets && bottomBar != null) Modifier.consumeWindowInsets(WindowInsets.navigationBars)
+          else Modifier
+        )
+    ) {
+      content()
     }
   }
 }

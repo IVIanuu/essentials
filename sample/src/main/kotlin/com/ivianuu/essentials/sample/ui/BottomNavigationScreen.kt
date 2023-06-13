@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animation.AnimatedBox
-import com.ivianuu.essentials.ui.insets.InsetsPadding
+import com.ivianuu.essentials.ui.layout.navigationBarsPadding
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -51,20 +51,19 @@ class BottomNavigationScreen : Screen<Unit>
         elevation = 8.dp,
         color = MaterialTheme.colors.primary
       ) {
-        InsetsPadding(left = false, top = false, right = false) {
-          BottomNavigation(
-            backgroundColor = MaterialTheme.colors.primary,
-            elevation = 0.dp
-          ) {
-            BottomNavItem.values().forEach { item ->
-              BottomNavigationItem(
-                alwaysShowLabel = false,
-                selected = item == selectedItem,
-                onClick = { selectedItem = item },
-                icon = { Icon(item.icon) },
-                label = { Text(item.title) }
-              )
-            }
+        BottomNavigation(
+          modifier = Modifier.navigationBarsPadding(),
+          backgroundColor = MaterialTheme.colors.primary,
+          elevation = 0.dp
+        ) {
+          BottomNavItem.values().forEach { item ->
+            BottomNavigationItem(
+              alwaysShowLabel = false,
+              selected = item == selectedItem,
+              onClick = { selectedItem = item },
+              icon = { Icon(item.icon) },
+              label = { Text(item.title) }
+            )
           }
         }
       }

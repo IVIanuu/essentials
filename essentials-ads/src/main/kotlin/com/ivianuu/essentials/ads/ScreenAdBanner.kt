@@ -6,6 +6,10 @@ package com.ivianuu.essentials.ads
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -15,8 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.ui.insets.InsetsPadding
-import com.ivianuu.essentials.ui.insets.LocalInsets
+import com.ivianuu.essentials.ui.layout.navigationBarsPadding
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenDecorator
 import com.ivianuu.injekt.Provide
@@ -62,20 +65,18 @@ fun interface ScreenAdBanner : ScreenDecorator
   Column {
     val adsEnabled by adsEnabled.collectAsState()
 
-    Box(modifier = Modifier.weight(1f)) {
-      val currentInsets = LocalInsets.current
-      CompositionLocalProvider(
-        LocalInsets provides if (!adsEnabled.value) currentInsets
-        else currentInsets.copy(bottom = 0.dp),
-        content = content
-      )
-    }
+    Box(
+      modifier = Modifier
+        .consumeWindowInsets(WindowInsets.navigationBars)
+        .weight(1f)
+    ) { content() }
 
     if (adsEnabled.value) {
       Surface(elevation = 8.dp) {
-        InsetsPadding(top = false) {
-          AdBanner(config)
-        }
+        AdBanner(
+          modifier = Modifier.navigationBarsPadding(),
+          config = config
+        )
       }
     }
   }

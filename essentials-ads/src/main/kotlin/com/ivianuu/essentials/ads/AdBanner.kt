@@ -22,9 +22,12 @@ import com.google.android.gms.ads.AdView
 
 @Immutable data class AdBannerConfig(val id: String, val size: AdSize)
 
-@Composable fun AdBanner(config: AdBannerConfig) {
+@Composable fun AdBanner(
+  modifier: Modifier = Modifier,
+  config: AdBannerConfig
+) {
   Box(
-    modifier = Modifier
+    modifier = modifier
       .height(
         with(LocalDensity.current) {
           config.size.getHeightInPixels(LocalContext.current).toDp()

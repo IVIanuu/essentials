@@ -45,7 +45,7 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.essentials.ui.common.VerticalList
-import com.ivianuu.essentials.ui.insets.InsetsPadding
+import com.ivianuu.essentials.ui.layout.systemBarsPadding
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
@@ -80,17 +80,37 @@ class GoPremiumScreen(
   BackHandler(onBackPress = model.goBack)
 
   Surface {
-    InsetsPadding {
-      if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
-        Column(
-          modifier = Modifier.padding(16.dp),
-          horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+      Column(
+        modifier = Modifier
+          .systemBarsPadding()
+          .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+      ) {
+        PremiumUiHeader()
+
+        Spacer(Modifier.height(32.dp))
+
+        PremiumUiFeatures(Modifier.weight(1f), model.features)
+
+        Spacer(Modifier.height(8.dp))
+
+        PremiumUiFooter(
+          skuDetails = model.premiumSkuDetails.getOrNull(),
+          showTryBasicOption = model.showTryBasicOption,
+          onGoPremiumClick = model.goPremium,
+          onTryBasicVersionClick = model.tryBasicVersion
+        )
+      }
+    } else {
+      Row(
+        modifier = Modifier
+          .systemBarsPadding()
+          .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        Column(modifier = Modifier.weight(1f)) {
           PremiumUiHeader()
-
-          Spacer(Modifier.height(32.dp))
-
-          PremiumUiFeatures(Modifier.weight(1f), model.features)
 
           Spacer(Modifier.height(8.dp))
 
@@ -101,29 +121,11 @@ class GoPremiumScreen(
             onTryBasicVersionClick = model.tryBasicVersion
           )
         }
-      } else {
-        Row(
-          modifier = Modifier.padding(16.dp),
-          verticalAlignment = Alignment.CenterVertically
-        ) {
-          Column(modifier = Modifier.weight(1f)) {
-            PremiumUiHeader()
 
-            Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.width(16.dp))
 
-            PremiumUiFooter(
-              skuDetails = model.premiumSkuDetails.getOrNull(),
-              showTryBasicOption = model.showTryBasicOption,
-              onGoPremiumClick = model.goPremium,
-              onTryBasicVersionClick = model.tryBasicVersion
-            )
-          }
-
-          Spacer(Modifier.width(16.dp))
-
-          Column(modifier = Modifier.weight(1f)) {
-            PremiumUiFeatures(Modifier.weight(1f), model.features)
-          }
+        Column(modifier = Modifier.weight(1f)) {
+          PremiumUiFeatures(Modifier.weight(1f), model.features)
         }
       }
     }

@@ -13,7 +13,7 @@ import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.common.absorbPointer
+import com.ivianuu.essentials.ui.common.consumeGestures
 import com.ivianuu.essentials.ui.material.ListItem
 
 @Composable fun <T> SingleChoiceListDialog(
@@ -59,7 +59,7 @@ import com.ivianuu.essentials.ui.material.ListItem
     ),
     title = title,
     trailing = {
-      Box(modifier = Modifier.absorbPointer()) {
+      Box(modifier = Modifier.consumeGestures()) {
         RadioButton(
           selected = selected,
           onClick = null

@@ -21,9 +21,6 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.refOf
@@ -36,14 +33,13 @@ import com.ivianuu.essentials.ui.animation.transition.awaitLayoutCoordinates
 import com.ivianuu.essentials.ui.animation.transition.fromElementModifier
 import com.ivianuu.essentials.ui.animation.transition.rootCoordinates
 import com.ivianuu.essentials.ui.animation.transition.toElementModifier
-import com.ivianuu.essentials.ui.insets.LocalInsets
+import com.ivianuu.essentials.ui.layout.systemBarsPadding
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.ScreenConfig
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
-import kotlin.math.max
 
 class PopupScreen(
   val position: Rect,
@@ -127,24 +123,18 @@ val PopupStackTransition: StackTransition = transition@ {
   modifier: Modifier,
   content: @Composable () -> Unit,
 ) {
-  val insets = LocalInsets.current
   var globalLayoutPosition by remember { mutableStateOf(Offset.Zero) }
   Layout(
     content = content,
     modifier = modifier
+      .systemBarsPadding()
       .onGloballyPositioned { globalLayoutPosition = it.positionInRoot() }
   ) { measureables, constraints ->
-    fun Dp.insetOrMinPadding() = max(this, 16.dp).roundToPx()
-
     val childConstraints = constraints.copy(
       minWidth = 0,
       minHeight = 0,
-      maxWidth = constraints.maxWidth -
-          insets.left.insetOrMinPadding() -
-          insets.right.insetOrMinPadding(),
-      maxHeight = constraints.maxHeight -
-          insets.top.insetOrMinPadding() -
-          insets.bottom.insetOrMinPadding()
+      maxWidth = constraints.maxWidth,
+      maxHeight = constraints.maxHeight
     )
 
     val placeable = measureables.single().measure(childConstraints)
@@ -161,7 +151,7 @@ val PopupStackTransition: StackTransition = transition@ {
       x = (position.right - placeable.width).toInt()
     }
 
-    x = x.coerceIn(
+    x = x/*.coerceIn(
       insets.left.insetOrMinPadding(),
       max(
         insets.left.insetOrMinPadding(),
@@ -169,8 +159,8 @@ val PopupStackTransition: StackTransition = transition@ {
             placeable.width -
             insets.right.insetOrMinPadding()
       )
-    )
-    y = y.coerceIn(
+    )*/
+    y = y/*.coerceIn(
       insets.top.insetOrMinPadding(),
       max(
         insets.top.insetOrMinPadding(),
@@ -178,7 +168,7 @@ val PopupStackTransition: StackTransition = transition@ {
             placeable.height -
             insets.bottom.insetOrMinPadding()
       )
-    )
+    )*/
 
     layout(constraints.maxWidth, constraints.maxHeight) {
       placeable.place(x = x, y = y)

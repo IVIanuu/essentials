@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.ui.AppThemeDecorator
 import com.ivianuu.essentials.ui.AppUiDecorator
-import com.ivianuu.essentials.ui.insets.WindowInsetsProvider
 import com.ivianuu.essentials.ui.util.isLight
 import com.ivianuu.injekt.Provide
 
@@ -88,13 +87,7 @@ fun interface RootSystemBarsStyle : AppUiDecorator {
   var elevation by mutableStateOf(elevation)
 }
 
-fun interface SystemBarManagerProvider : AppUiDecorator {
-  companion object {
-    @Provide val loadingOrder
-      get() = LoadingOrder<SystemBarManagerProvider>()
-        .after<WindowInsetsProvider>()
-  }
-}
+fun interface SystemBarManagerProvider : AppUiDecorator
 
 @Provide expect val systemBarManagerProvider: SystemBarManagerProvider
 

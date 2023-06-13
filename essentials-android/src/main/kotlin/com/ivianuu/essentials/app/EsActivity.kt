@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.Scope
@@ -31,6 +32,8 @@ import kotlinx.coroutines.launch
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    WindowCompat.setDecorFitsSystemWindows(window, false)
 
     onBackPressedDispatcher.addCallback {
       finish()

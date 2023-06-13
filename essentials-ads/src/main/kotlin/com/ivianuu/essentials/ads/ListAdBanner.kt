@@ -48,7 +48,7 @@ fun interface ListAdBanner : ListDecorator
         LocalScope.current.screen::class
       }.getOrNull()
       if ((screen == null || isAdFeatureEnabled(screen, ListAdBannerFeature)) && adsEnabled.bind().value)
-        AdBanner(config)
+        AdBanner(config = config)
     }
   }
 

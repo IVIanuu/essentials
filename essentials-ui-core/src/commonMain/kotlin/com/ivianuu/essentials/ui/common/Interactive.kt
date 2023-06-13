@@ -9,4 +9,4 @@ import androidx.compose.ui.draw.alpha
 
 fun Modifier.interactive(interactive: Boolean): Modifier =
   alpha(alpha = if (interactive) 1f else 0.5f)
-    .absorbPointer(enabled = !interactive)
+    .consumeGestures(consume = !interactive)

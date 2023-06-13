@@ -6,7 +6,6 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
@@ -35,7 +34,10 @@ class DynamicSystemBarsScreen : Screen<Unit>
         .flatMap { it.colors }
         .shuffled()
     }
-    VerticalList(contentPadding = PaddingValues(0.dp)) {
+    VerticalList(
+      topPaddingModifier = Modifier,
+      bottomPaddingModifier = Modifier
+    ) {
       // todo use items once fixed
       for (color in colors) {
         item {

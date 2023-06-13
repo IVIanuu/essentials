@@ -21,7 +21,8 @@ import com.ivianuu.essentials.ui.animation.transition.PopupAnimationElementKey
 import com.ivianuu.essentials.ui.animation.transition.ScrimAnimationElementKey
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.essentials.ui.backpress.LocalBackPressHandler
-import com.ivianuu.essentials.ui.insets.InsetsPadding
+import com.ivianuu.essentials.ui.layout.imePadding
+import com.ivianuu.essentials.ui.layout.systemBarsPadding
 
 @Composable fun DialogScaffold(
   modifier: Modifier = Modifier,
@@ -44,17 +45,17 @@ import com.ivianuu.essentials.ui.insets.InsetsPadding
       .then(modifier),
     contentAlignment = Alignment.Center
   ) {
-    InsetsPadding {
-      Box(
-        modifier = Modifier
-          .pointerInput(true) { detectTapGestures { } }
-          .wrapContentSize(align = Alignment.Center)
-          .animationElement(PopupAnimationElementKey)
-          .padding(all = 32.dp),
-        contentAlignment = Alignment.Center
-      ) {
-        dialog()
-      }
+    Box(
+      modifier = Modifier
+        .systemBarsPadding()
+        .imePadding()
+        .pointerInput(true) { detectTapGestures { } }
+        .wrapContentSize(align = Alignment.Center)
+        .animationElement(PopupAnimationElementKey)
+        .padding(all = 32.dp),
+      contentAlignment = Alignment.Center
+    ) {
+      dialog()
     }
   }
 }

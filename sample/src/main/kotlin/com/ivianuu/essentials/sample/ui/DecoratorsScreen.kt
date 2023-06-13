@@ -6,11 +6,14 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imeNestedScroll
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,8 +22,7 @@ import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.common.SimpleListScreen
-import com.ivianuu.essentials.ui.insets.InsetsPadding
-import com.ivianuu.essentials.ui.insets.LocalInsets
+import com.ivianuu.essentials.ui.layout.navigationBarsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenDecorator
@@ -69,25 +71,25 @@ fun interface SampleScreenDecorator : ScreenDecorator
     return@decorator
   } else {
     Column {
-      Box(modifier = Modifier.weight(1f)) {
-        val currentInsets = LocalInsets.current
-        CompositionLocalProvider(
-          LocalInsets provides currentInsets.copy(bottom = 0.dp),
-          content = content
-        )
+      Box(
+        modifier = Modifier
+          .consumeWindowInsets(WindowInsets.navigationBars)
+          .weight(1f)
+      ) {
+        content()
       }
 
       Surface(color = MaterialTheme.colors.primary, elevation = 8.dp) {
-        InsetsPadding(top = false) {
-          Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-          ) {
-            Text(
-              text = "This is a bottom decorator",
-              style = MaterialTheme.typography.h3
-            )
-          }
+        Box(
+          modifier = Modifier
+            .navigationBarsPadding()
+            .fillMaxWidth(),
+          contentAlignment = Alignment.Center
+        ) {
+          Text(
+            text = "This is a bottom decorator",
+            style = MaterialTheme.typography.h3
+          )
         }
       }
     }
