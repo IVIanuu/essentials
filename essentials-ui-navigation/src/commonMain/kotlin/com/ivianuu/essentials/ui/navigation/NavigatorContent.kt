@@ -55,17 +55,19 @@ import kotlin.reflect.KClass
           val config = component.configFactories[screen::class]?.invoke(navigator, scope, screen)
           val model = component.modelFactories[screen::class]?.invoke(navigator, scope, screen)
           checkNotNull(model) { "No model found for $screen" }
+          val decorateScreen = component.decorateScreenFactory(navigator, scope, screen)
           model to NavigationContentStateChild(
             screen = screen,
             config = config,
             content = {
-              with(ui as Ui<*, Any>) {
-                with(currentModel as Any) {
-                  invoke(this)
+              decorateScreen {
+                with(ui as Ui<*, Any>) {
+                  with(currentModel as Any) {
+                    invoke(this)
+                  }
                 }
               }
             },
-            decorateScreen = component.decorateScreenFactory(navigator, scope, screen),
             scope = scope
           )
         }
@@ -83,7 +85,7 @@ import kotlin.reflect.KClass
 
               DisposableEffect(true) {
                 onDispose {
-                  child.detach()
+                  child.remove()
                 }
               }
             }
@@ -104,12 +106,11 @@ import kotlin.reflect.KClass
 @Stable private class NavigationContentStateChild(
   screen: Screen<*>,
   config: ScreenConfig<*>? = null,
-  private val content: @Composable () -> Unit,
-  private val decorateScreen: DecorateScreen,
-  private val scope: Scope<ScreenScope>
+  private val scope: Scope<ScreenScope>,
+  private val content: @Composable () -> Unit
 ) {
   val stackChild = AnimatedStackChild(
-    screen = screen,
+    key = screen,
     opaque = config?.opaque ?: false,
     enterTransition = config?.enterTransition,
     exitTransition = config?.exitTransition
@@ -129,15 +130,14 @@ import kotlin.reflect.KClass
       LocalScope provides scope,
       LocalSaveableStateRegistry provides savableStateRegistry
     ) {
-      decorateScreen {
-        content()
-      }
+      content()
 
       DisposableEffect(true) {
-        isComposing = true
+        isInComposition = true
         onDispose {
-          isComposing = false
-          savedState[compositionKey] = savableStateRegistry.performSave()
+          isInComposition = false
+          if (!isRemoved)
+            savedState[compositionKey] = savableStateRegistry.performSave()
           finalizeIfNeeded()
         }
       }
@@ -146,18 +146,18 @@ import kotlin.reflect.KClass
 
   private var savedState = mutableMapOf<Any, Map<String, List<Any?>>>()
 
-  private var isComposing = false
-  private var isDetached = false
+  private var isInComposition = false
+  private var isRemoved = false
   private var isFinalized = false
 
-  fun detach() {
-    isDetached = true
+  fun remove() {
+    isRemoved = true
     finalizeIfNeeded()
   }
 
   private fun finalizeIfNeeded() {
     if (isFinalized) return
-    if (isComposing || !isDetached) return
+    if (isInComposition || !isRemoved) return
     isFinalized = true
     scope.dispose()
   }
