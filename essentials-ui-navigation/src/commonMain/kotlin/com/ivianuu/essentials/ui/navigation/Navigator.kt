@@ -5,12 +5,13 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Stable
-import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.ProvidedService
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.actor
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -133,14 +134,17 @@ class NavigatorImpl(
   }
 
   companion object {
-    @Provide fun appNavigator(
+    @Provide fun rootNavigator(
       rootKey: RootKey?,
       keyInterceptors: List<KeyInterceptor<*>>,
-      scope: ScopedCoroutineScope<AppScope>
-    ): @Scoped<AppScope> Navigator = NavigatorImpl(
+      scope: ScopedCoroutineScope<UiScope>
+    ): @Scoped<UiScope> Navigator = NavigatorImpl(
       initialBackStack = listOfNotNull(rootKey),
       keyInterceptors = keyInterceptors,
       scope = scope
     )
+
+    @Provide fun rootNavigatorService(navigator: Navigator) =
+      ProvidedService<UiScope, Navigator> { navigator }
   }
 }

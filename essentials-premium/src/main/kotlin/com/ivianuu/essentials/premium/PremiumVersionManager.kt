@@ -12,12 +12,14 @@ import com.ivianuu.essentials.ads.AdsEnabled
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.ui.UiScopeOwner
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unlock.ScreenUnlocker
@@ -56,7 +58,6 @@ interface PremiumVersionManager {
   private val billingService: BillingService,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
   private val logger: Logger,
-  private val navigator: Navigator,
   private val pref: DataStore<PremiumPrefs>,
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
@@ -101,7 +102,10 @@ interface PremiumVersionManager {
       toaster(com.ivianuu.essentials.premium.R.string.es_premium_version_hint)
       if (!screenUnlocker()) return@launch
       appUiStarter()
-      navigator.push(GoPremiumKey(showTryBasicOption = false))
+        .cast<UiScopeOwner>()
+        .uiScope
+        .service<Navigator>()
+        .push(GoPremiumKey(showTryBasicOption = false))
     }
 
     return null

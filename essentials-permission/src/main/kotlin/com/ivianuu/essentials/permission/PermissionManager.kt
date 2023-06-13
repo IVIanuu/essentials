@@ -4,10 +4,12 @@
 
 package com.ivianuu.essentials.permission
 
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
+import com.ivianuu.essentials.ui.UiScopeOwner
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unsafeCast
@@ -34,7 +36,6 @@ interface PermissionManager {
   private val appUiStarter: AppUiStarter,
   private val context: DefaultCoroutineContext,
   private val logger: Logger,
-  private val navigator: Navigator,
   private val permissions: Map<TypeKey<Permission>, () -> Permission>,
   private val stateProviders: Map<TypeKey<Permission>, () -> PermissionStateProvider<Permission>>
 ) : PermissionManager {
@@ -65,11 +66,12 @@ interface PermissionManager {
       if (permissions.all { permissionState(listOf(it)).first() })
         return@withContext true
 
-      println("pre app ui")
-      appUiStarter()
-      println("post app ui")
+      val result = appUiStarter()
+        .cast<UiScopeOwner>()
+        .uiScope
+        .service<Navigator>()
+        .push(PermissionRequestKey(permissions)) == true
 
-      val result = navigator.push(PermissionRequestKey(permissions)) == true
       logger.log { "request permissions result $permissions -> $result" }
       return@withContext result
     }

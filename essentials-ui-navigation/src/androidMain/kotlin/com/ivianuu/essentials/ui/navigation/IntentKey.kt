@@ -36,7 +36,7 @@ fun interface IntentAppUiStarter {
   suspend operator fun invoke(): ComponentActivity
 }
 
-@Provide fun intentKeyHandler(
+@Provide fun intentKeyInterceptor(
   appUiStarter: IntentAppUiStarter,
   context: MainCoroutineContext,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>

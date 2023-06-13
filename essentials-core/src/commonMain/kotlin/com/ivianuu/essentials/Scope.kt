@@ -38,17 +38,17 @@ interface Scope<N> : Disposable {
   override val parent: @ParentScope Scope<*>? = null,
   services: (Scope<N>, @ParentScope Scope<*>?) -> List<ProvidedService<N, *>>
 ) : Scope<N>, SynchronizedObject() {
-  private val services = buildMap {
-    for (service in services(this@ScopeImpl, this@ScopeImpl))
-      this[service.key.value] = service
-  }
-
   @PublishedApi internal var _isDisposed = false
   override val isDisposed: Boolean
     get() = synchronized(this) { _isDisposed }
 
   private val cache = hashMapOf<Any, Any?>()
   private val observers = mutableListOf<ScopeObserver>()
+
+  private val services = buildMap {
+    for (service in services(this@ScopeImpl, this@ScopeImpl))
+      this[service.key.value] = service
+  }
 
   init {
     this.services.forEach {
@@ -114,6 +114,16 @@ interface ProvidedService<N, T> {
 
   companion object {
     @Provide fun <N> defaultServices() = emptyList<ProvidedService<N, *>>()
+
+    inline operator fun <N, T> invoke(
+      @Inject key: TypeKey<T>,
+      crossinline factory: () -> T
+    ): ProvidedService<N, T> = object : ProvidedService<N, T> {
+      override val key: TypeKey<T>
+        get() = key
+
+      override fun get(scope: Scope<N>): T = factory()
+    }
   }
 }
 
@@ -140,12 +150,7 @@ interface ScopeObserver {
     @Provide inline fun <@Spread T : @Service<N> S, S : Any, N> service(
       key: TypeKey<S>,
       crossinline factory: () -> T
-    ): ProvidedService<N, S> = object : ProvidedService<N, S> {
-      override val key: TypeKey<S>
-        get() = key
-
-      override fun get(scope: Scope<N>): T = factory()
-    }
+    ) = ProvidedService<N, S>(factory = factory)
 
     @Provide inline fun <@Spread T : @Service<N> S, S : Any, N> accessor(service: T): S = service
   }

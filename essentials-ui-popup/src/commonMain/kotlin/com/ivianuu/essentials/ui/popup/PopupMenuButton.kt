@@ -26,13 +26,10 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.injekt.Provide
 
 @Composable fun PopupMenuButton(
   modifier: Modifier = Modifier,
@@ -59,7 +56,7 @@ import com.ivianuu.injekt.Provide
   onCancel: (() -> Unit)? = null,
   popupContent: @Composable () -> Unit
 ) = composed {
-  val component = LocalScope.current.service<PopupMenuButtonComponent>()
+  val navigator = LocalScope.current.service<Navigator>()
 
   var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
@@ -68,7 +65,7 @@ import com.ivianuu.injekt.Provide
       interactionSource = remember { MutableInteractionSource() },
       indication = indication,
       onClick = action {
-        component.navigator.push(
+        navigator.push(
           PopupKey(
             position = coordinates!!.boundsInRoot(),
             onCancel = onCancel
@@ -80,5 +77,3 @@ import com.ivianuu.injekt.Provide
     )
 }
 
-@Provide @Service<UiScope>
-data class PopupMenuButtonComponent(val navigator: Navigator)
