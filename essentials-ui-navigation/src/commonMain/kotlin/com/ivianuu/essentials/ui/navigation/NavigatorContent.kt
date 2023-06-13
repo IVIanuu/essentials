@@ -52,12 +52,12 @@ import kotlin.reflect.KClass
           val scope = component.keyUiScopeFactory(navigator, key)
           val ui = component.uiFactories[key::class]?.invoke(navigator, scope, key)
           checkNotNull(ui) { "No ui factory found for $key" }
-          val options = component.optionFactories[key::class]?.invoke(navigator, scope, key)
+          val config = component.configFactories[key::class]?.invoke(navigator, scope, key)
           val model = component.modelFactories[key::class]?.invoke(navigator, scope, key)
           checkNotNull(model) { "No model found for $key" }
           model to NavigationContentStateChild(
             key = key,
-            options = options,
+            config = config,
             content = {
               with(ui as KeyUi<*, Any>) {
                 with(currentModel as Any) {
@@ -103,16 +103,16 @@ import kotlin.reflect.KClass
 
 @Stable private class NavigationContentStateChild(
   key: Key<*>,
-  options: KeyConfig? = null,
+  config: KeyConfig<*>? = null,
   private val content: @Composable () -> Unit,
   private val decorateKeyUi: DecorateKeyUi,
   private val scope: Scope<KeyUiScope>
 ) {
   val stackChild = AnimatedStackChild(
     key = key,
-    opaque = options?.opaque ?: false,
-    enterTransition = options?.enterTransition,
-    exitTransition = options?.exitTransition
+    opaque = config?.opaque ?: false,
+    enterTransition = config?.enterTransition,
+    exitTransition = config?.exitTransition
   ) {
     if (isFinalized) return@AnimatedStackChild
 
@@ -164,7 +164,7 @@ import kotlin.reflect.KClass
 }
 
 @Provide @Service<UiScope> data class NavigationStateContentComponent(
-  val optionFactories: Map<KClass<Key<*>>, KeyConfigFactory<Key<*>>>,
+  val configFactories: Map<KClass<Key<*>>, KeyConfigFactory<Key<*>>>,
   val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
   val modelFactories: Map<KClass<Key<*>>, ModelFactory<Key<*>, *>>,
   val decorateKeyUiFactory: (Navigator, Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,

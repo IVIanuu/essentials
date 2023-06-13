@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.animation.transition.rootCoordinates
 import com.ivianuu.essentials.ui.animation.transition.toElementModifier
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.KeyConfig
-import com.ivianuu.essentials.ui.navigation.KeyConfigFactory
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.pop
@@ -94,9 +93,8 @@ class PopupKey(
   }
 }
 
-@Provide val popupKeyOptionsFactory = KeyConfigFactory<PopupKey> { _, _, _ ->
-  KeyConfig(opaque = true, transition = PopupStackTransition)
-}
+@Provide val popupKeyConfig: KeyConfig<PopupKey>
+  get() = KeyConfig(opaque = true, transition = PopupStackTransition)
 
 val PopupStackTransition: StackTransition = transition@ {
   val popupModifier = (if (isPush) toElementModifier(PopupAnimationElementKey)
