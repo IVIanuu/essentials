@@ -45,9 +45,9 @@ object KeyUiModule {
 
   @Provide fun <@Spread T : KeyUi<K, *>, K : Key<*>> optionsFactory(
     keyClass: KClass<K>,
-    keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
-  ): Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>> =
-    (keyClass to keyUiOptionsFactory).unsafeCast()
+    keyConfigFactory: KeyConfigFactory<K> = noOpKeyConfigFactory()
+  ): Pair<KClass<Key<*>>, KeyConfigFactory<Key<*>>> =
+    (keyClass to keyConfigFactory).unsafeCast()
 
   @Provide fun <@Spread T : KeyUi<K, *>, K : Key<*>> typeKey(
     keyClass: KClass<K>,

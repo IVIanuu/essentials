@@ -103,7 +103,7 @@ import kotlin.reflect.KClass
 
 @Stable private class NavigationContentStateChild(
   key: Key<*>,
-  options: KeyUiOptions? = null,
+  options: KeyConfig? = null,
   private val content: @Composable () -> Unit,
   private val decorateKeyUi: DecorateKeyUi,
   private val scope: Scope<KeyUiScope>
@@ -164,7 +164,7 @@ import kotlin.reflect.KClass
 }
 
 @Provide @Service<UiScope> data class NavigationStateContentComponent(
-  val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
+  val optionFactories: Map<KClass<Key<*>>, KeyConfigFactory<Key<*>>>,
   val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
   val modelFactories: Map<KClass<Key<*>>, ModelFactory<Key<*>, *>>,
   val decorateKeyUiFactory: (Navigator, Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,

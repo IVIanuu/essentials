@@ -15,8 +15,8 @@ interface RootKey : Key<Unit>
 interface OverlayKey<T> : Key<T> {
   companion object {
     @Provide fun <T : OverlayKey<*>> overlayKeyUiOptionsFactory() =
-      KeyUiOptionsFactory<T> { _, _, _ ->
-        KeyUiOptions(opaque = true, transition = FadeScaleStackTransition())
+      KeyConfigFactory<T> { _, _, _ ->
+        KeyConfig(opaque = true, transition = FadeScaleStackTransition())
       }
   }
 }
