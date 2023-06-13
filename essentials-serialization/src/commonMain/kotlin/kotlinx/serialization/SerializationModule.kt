@@ -29,7 +29,7 @@ import kotlin.reflect.KClass
   companion object {
     @Provide val defaultSerializers get() = emptyList<Pair<KClass<*>, KSerializer<*>>>()
 
-    @Provide fun <@Spread T : @InjektSerializer KSerializer<S>, S : Any> serializerPair(
+    @Provide fun <@Spread T : @InjektSerializer KSerializer<S>, S : Any> serializerBinding(
       clazz: KClass<S>,
       serializer: T
     ): Pair<KClass<*>, KSerializer<*>> = clazz to serializer
