@@ -14,7 +14,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.getOrNull
@@ -26,7 +25,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.injekt.Provide
 
 @Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsKey() }
@@ -48,7 +46,7 @@ fun interface SampleListDecorator : ListDecorator
 @Provide val sampleListDecorator = SampleListDecorator {
   item(null) {
     val key = catch { LocalScope.current }.getOrNull()
-      ?.service<SampleDecoratorComponent>()?.key
+      ?.service<Key<*>>()
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
   }
@@ -57,7 +55,7 @@ fun interface SampleListDecorator : ListDecorator
 
   item(null) {
     val key = catch { LocalScope.current }.getOrNull()
-      ?.service<SampleDecoratorComponent>()?.key
+      ?.service<Key<*>>()
     if (key is DecoratorsKey)
       Text("Sample decorator after content $key")
   }
@@ -66,7 +64,7 @@ fun interface SampleListDecorator : ListDecorator
 fun interface SampleKeyUiDecorator : KeyUiDecorator
 
 @Provide val sampleKeyUiDecorator = SampleKeyUiDecorator decorator@ { content ->
-  val key = LocalScope.current.service<SampleDecoratorComponent>().key
+  val key = LocalScope.current.service<Key<*>>()
   if (key !is DecoratorsKey) {
     content()
     return@decorator
@@ -96,6 +94,3 @@ fun interface SampleKeyUiDecorator : KeyUiDecorator
     }
   }
 }
-
-@Provide @Service<KeyUiScope>
-data class SampleDecoratorComponent(val key: Key<*>)

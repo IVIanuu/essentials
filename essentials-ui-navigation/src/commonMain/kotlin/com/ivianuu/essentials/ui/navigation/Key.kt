@@ -5,10 +5,15 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Stable
+import com.ivianuu.essentials.ProvidedService
 import com.ivianuu.essentials.ui.animation.transition.FadeScaleStackTransition
 import com.ivianuu.injekt.Provide
 
-@Stable interface Key<T>
+@Stable interface Key<T> {
+  companion object {
+    @Provide fun keyService(key: Key<*>) = ProvidedService<KeyUiScope, Key<*>> { key }
+  }
+}
 
 interface RootKey : Key<Unit>
 
