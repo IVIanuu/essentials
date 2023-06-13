@@ -10,8 +10,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import kotlin.reflect.KClass
 
-typealias KeyUiFactory<K> = (Navigator, Scope<KeyUiScope>, K) -> Ui<K, *>
-
 object KeyUiModule {
   @Provide fun <@Spread T : Ui<K, *>, K : Key<*>> ui(
     keyClass: KClass<K>,
@@ -32,6 +30,8 @@ object KeyUiModule {
     (keyClass to keyConfigFactory).unsafeCast()
 }
 
-typealias ModelFactory<K, S> = (Navigator, Scope<KeyUiScope>, K) -> Model<S>
+typealias KeyUiFactory<K> = (Navigator, Scope<KeyUiScope>, K) -> Ui<K, *>
 
 typealias KeyConfigFactory<K> = (Navigator, Scope<KeyUiScope>, K) -> KeyConfig<K>
+
+typealias ModelFactory<K, S> = (Navigator, Scope<KeyUiScope>, K) -> Model<S>
