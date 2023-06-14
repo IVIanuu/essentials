@@ -16,8 +16,6 @@ import kotlinx.coroutines.flow.first
 
 fun interface AppUiStarter : IntentAppUiStarter
 
-@Provide fun intentAppUiStarter(appUiStarter: AppUiStarter): IntentAppUiStarter = appUiStarter
-
 @Provide fun appUiStarter(
   appContext: AppContext,
   appConfig: AppConfig,
