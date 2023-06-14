@@ -32,7 +32,8 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
         "-Xuse-ir",
         "-Xskip-runtime-version-check",
         "-XXLanguage:+NewInference",
-        "-Xskip-prerelease-check"
+        "-Xskip-prerelease-check",
+        "-opt-in=androidx.compose.animation.ExperimentalAnimationApi"
       )
       if (kotlinCompilation is KotlinJvmCompilation ||
         kotlinCompilation is KotlinJvmAndroidCompilation

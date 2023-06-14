@@ -11,13 +11,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Constraints
@@ -25,14 +22,6 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.refOf
 import com.ivianuu.essentials.compose.setValue
-import com.ivianuu.essentials.ui.animation.animationElement
-import com.ivianuu.essentials.ui.animation.transition.FadeScaleStackTransition
-import com.ivianuu.essentials.ui.animation.transition.PopupAnimationElementKey
-import com.ivianuu.essentials.ui.animation.transition.StackTransition
-import com.ivianuu.essentials.ui.animation.transition.awaitLayoutCoordinates
-import com.ivianuu.essentials.ui.animation.transition.fromElementModifier
-import com.ivianuu.essentials.ui.animation.transition.rootCoordinates
-import com.ivianuu.essentials.ui.animation.transition.toElementModifier
 import com.ivianuu.essentials.ui.layout.systemBarsPadding
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayScreen
@@ -78,7 +67,6 @@ class PopupScreen(
     ) {
       Box(
         modifier = Modifier
-          .animationElement(PopupAnimationElementKey)
           .pointerInput(true) {
             detectTapGestures {
             }
@@ -91,32 +79,7 @@ class PopupScreen(
 }
 
 @Provide val popupScreenConfig: ScreenConfig<PopupScreen>
-  get() = ScreenConfig(opaque = true, transition = PopupStackTransition)
-
-val PopupStackTransition: StackTransition = transition@ {
-  val popupModifier = (if (isPush) toElementModifier(PopupAnimationElementKey)
-  else fromElementModifier(PopupAnimationElementKey))
-    ?: return@transition
-  if (isPush) {
-    attachTo()
-    popupModifier.value = Modifier.alpha(0f)
-    val popupLayoutCoords = popupModifier.awaitLayoutCoordinates()
-    val windowCoords = popupLayoutCoords.rootCoordinates
-    val boundsInWindow = popupLayoutCoords.boundsInWindow()
-    val isLeft = (boundsInWindow.center.x < windowCoords.size.width / 2)
-    val isTop = (boundsInWindow.center.y <
-        windowCoords.size.height - (windowCoords.size.height / 10))
-    popupModifier.value = Modifier
-    FadeScaleStackTransition(
-      TransformOrigin(
-        if (isLeft) 0f else 1f,
-        if (isTop) 0f else 1f
-      )
-    )()
-  } else {
-    FadeScaleStackTransition()()
-  }
-}
+  get() = ScreenConfig(opaque = true)
 
 @Composable private fun PopupLayout(
   position: Rect,

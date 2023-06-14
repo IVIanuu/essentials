@@ -4,6 +4,10 @@
 
 package com.ivianuu.essentials.colorpicker
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,9 +53,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.animation.AnimatedBox
 import com.ivianuu.essentials.ui.animation.AnimatedStack
-import com.ivianuu.essentials.ui.animation.transition.CrossFadeStackTransition
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.layout.SquareFit
@@ -97,11 +99,11 @@ import com.ivianuu.injekt.Provide
     icon = icon,
     title = title,
     content = {
-      AnimatedBox(
+      AnimatedContent(
         modifier = Modifier.height(300.dp)
           .padding(start = 24.dp, end = 24.dp),
-        current = currentScreen,
-        transition = CrossFadeStackTransition()
+        targetState = currentScreen,
+        transitionSpec = { fadeIn() with fadeOut() }
       ) { currentScreen ->
         when (currentScreen) {
           ColorPickerTab.COLORS -> {
@@ -157,8 +159,8 @@ import com.ivianuu.injekt.Provide
 ) {
   var palettesStack by remember { mutableStateOf<List<ColorPickerPalette?>>(listOf(null)) }
   AnimatedStack(
-    items = palettesStack,
-    transition = CrossFadeStackTransition()
+    targetState = palettesStack,
+    transitionSpec = { fadeIn() with fadeOut() }
   ) { palette ->
     val items = remember {
       palette

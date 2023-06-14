@@ -4,6 +4,12 @@
 
 package com.ivianuu.essentials.ui
 
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.with
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -16,9 +22,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ivianuu.essentials.ui.animation.transition.FadeUpwardsStackTransition
-import com.ivianuu.essentials.ui.animation.transition.LocalStackTransition
-import com.ivianuu.essentials.ui.animation.transition.StackTransition
 import com.ivianuu.essentials.ui.material.colors
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -136,12 +139,14 @@ typealias AppShapes = @AppShapesTag Shapes
   }
 }
 
-typealias AppTransition = @AppTransitionTag StackTransition
+typealias AppTransition = @AppTransitionTag ContentTransform
 
 @Tag annotation class AppTransitionTag {
   companion object {
     @Provide val default: AppTransition
-      get() = FadeUpwardsStackTransition()
+      get() = fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+          scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
+          fadeOut(animationSpec = tween(90))
   }
 }
 
@@ -169,7 +174,7 @@ typealias AppTransition = @AppTransitionTag StackTransition
     shapes = shapes
   ) {
     CompositionLocalProvider(
-      LocalStackTransition provides transition,
+      // TODO LocalStackTransition provides transition,
       content = content
     )
   }

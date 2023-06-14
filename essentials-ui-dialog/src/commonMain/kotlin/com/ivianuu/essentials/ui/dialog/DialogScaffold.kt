@@ -16,9 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.animation.animationElement
-import com.ivianuu.essentials.ui.animation.transition.PopupAnimationElementKey
-import com.ivianuu.essentials.ui.animation.transition.ScrimAnimationElementKey
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.essentials.ui.backpress.LocalBackPressHandler
 import com.ivianuu.essentials.ui.layout.imePadding
@@ -36,7 +33,6 @@ import com.ivianuu.essentials.ui.layout.systemBarsPadding
 
   Box(
     modifier = Modifier
-      .animationElement(ScrimAnimationElementKey)
       .pointerInput(true) {
         detectTapGestures { onDismissRequest() }
       }
@@ -51,7 +47,6 @@ import com.ivianuu.essentials.ui.layout.systemBarsPadding
         .imePadding()
         .pointerInput(true) { detectTapGestures { } }
         .wrapContentSize(align = Alignment.Center)
-        .animationElement(PopupAnimationElementKey)
         .padding(all = 32.dp),
       contentAlignment = Alignment.Center
     ) {

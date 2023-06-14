@@ -4,8 +4,6 @@
 
 package com.ivianuu.essentials
 
-import kotlin.experimental.ExperimentalTypeInference
-
 sealed interface Result<out V, out E>
 
 data class Ok<V>(val value: V) : Result<V, Nothing>
@@ -83,7 +81,6 @@ inline fun <V> V.ok() = Ok(this)
 
 inline fun <E> E.err() = Err(this)
 
-@OptIn(ExperimentalTypeInference::class)
 inline fun <V> catch(@BuilderInference block: ResultControl<Throwable>.() -> V): Result<V, Throwable> =
   try {
     block(ResultControlImpl.cast()).ok()
@@ -91,7 +88,6 @@ inline fun <V> catch(@BuilderInference block: ResultControl<Throwable>.() -> V):
     e.nonFatalOrThrow().err()
   }
 
-@OptIn(ExperimentalTypeInference::class)
 inline fun <V, reified T> catchT(@BuilderInference block: ResultControl<Throwable>.() -> V): Result<V, T> =
   try {
     block(ResultControlImpl.cast()).ok()
@@ -100,7 +96,6 @@ inline fun <V, reified T> catchT(@BuilderInference block: ResultControl<Throwabl
     else throw e
   }
 
-@OptIn(ExperimentalTypeInference::class)
 @Suppress("UNCHECKED_CAST")
 inline fun <V, E> result(@BuilderInference block: ResultControl<E>.() -> V): Result<V, E> =
   try {

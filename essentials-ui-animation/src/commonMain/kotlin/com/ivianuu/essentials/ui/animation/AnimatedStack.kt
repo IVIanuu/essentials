@@ -1,380 +1,457 @@
-/*
- * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
- */
+@file:Suppress("INVISIBLE_REFERENCE", "INVISIBLE_MEMBER", "INVISIBLE_SETTER")
 
 package com.ivianuu.essentials.ui.animation
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.AnimationVector2D
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.Transition
+import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.createDeferredAnimation
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.coroutines.guarantee
-import com.ivianuu.essentials.ui.animation.transition.CrossFadeStackTransition
-import com.ivianuu.essentials.ui.animation.transition.LocalStackTransition
-import com.ivianuu.essentials.ui.animation.transition.NoOpStackTransition
-import com.ivianuu.essentials.ui.animation.transition.StackTransition
-import com.ivianuu.essentials.ui.animation.transition.StackTransitionScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlin.collections.set
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.layout.IntrinsicMeasurable
+import androidx.compose.ui.layout.IntrinsicMeasureScope
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.LayoutModifier
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasurePolicy
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.layout.ParentDataModifier
+import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
+import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.Down
+import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.End
+import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.Left
+import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.Right
+import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.Start
+import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.Up
 
-@Composable fun <T> AnimatedBox(
-  current: T,
+@Composable
+fun <T> AnimatedStack(
+  targetState: List<T>,
   modifier: Modifier = Modifier,
-  transition: StackTransition = CrossFadeStackTransition(),
+  transitionSpec: AnimatedStackScope<T>.() -> ContentTransform = {
+    fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
+        fadeOut(animationSpec = tween(90))
+  },
   contentAlignment: Alignment = Alignment.TopStart,
-  propagateMinConstraints: Boolean = false,
-  itemContent: @Composable (T) -> Unit
+  contentKey: (T) -> Any? = { it },
+  contentOpaque: (T) -> Boolean = { false },
+  label: String = "AnimatedStack",
+  content: @Composable AnimatedVisibilityScope.(targetState: T) -> Unit
 ) {
-  AnimatedStack(
-    modifier = modifier,
-    items = listOf(current),
-    transition = transition,
-    contentAlignment = contentAlignment,
-    propagateMinConstraints = propagateMinConstraints,
-    itemContent = itemContent
+  val transition = updateTransition(targetState = targetState, label = label)
+  transition.AnimatedStack(
+    modifier,
+    transitionSpec,
+    contentAlignment,
+    contentKey,
+    contentOpaque,
+    content
   )
 }
 
-@Composable fun <T> AnimatedStack(
-  items: List<T>,
-  modifier: Modifier = Modifier,
-  transition: StackTransition = LocalStackTransition.current,
-  contentAlignment: Alignment = Alignment.TopStart,
-  propagateMinConstraints: Boolean = false,
-  itemContent: @Composable (T) -> Unit
-) {
-  val state = remember { AnimatedStackWithItemsState(transition, itemContent, items) }
-  state.update(transition, itemContent, items)
-  AnimatedStack(
-    modifier = modifier,
-    contentAlignment = contentAlignment,
-    propagateMinConstraints = propagateMinConstraints,
-    children = state.children
-  )
-}
+class AnimatedStackScope<T> internal constructor(
+  internal val transition: Transition<List<T>>,
+  internal var contentAlignment: Alignment,
+  internal var layoutDirection: LayoutDirection
+) : Transition.Segment<List<T>> {
+  override val initialState: List<T>
+    @Suppress("UnknownNullness")
+    get() = transition.segment.initialState
 
-private class AnimatedStackWithItemsState<T>(
-  transition: StackTransition,
-  itemContent: @Composable (T) -> Unit,
-  items: List<T>
-) {
-  var children by mutableStateOf(emptyList<AnimatedStackChild<T>>())
-    private set
+  override val targetState: List<T>
+    @Suppress("UnknownNullness")
+    get() = transition.segment.targetState
 
-  init {
-    update(transition, itemContent, items)
+  infix fun ContentTransform.using(sizeTransform: SizeTransform?) = this.apply {
+    this.sizeTransform = sizeTransform
   }
 
-  fun update(
-    transition: StackTransition,
-    itemContent: @Composable (T) -> Unit,
-    items: List<T>
-  ) {
-    children = items.map { getOrCreateChild(it, transition, itemContent) }
-  }
-
-  private fun getOrCreateChild(
-    item: T,
-    transition: StackTransition,
-    itemContent: @Composable (T) -> Unit
-  ): AnimatedStackChild<T> {
-    val content: @Composable () -> Unit = { itemContent(item) }
-    children.firstOrNull { it.key == item }
-      ?.let {
-        it.enterTransition = transition
-        it.exitTransition = transition
-        it.content = content
-        return it
-      }
-    return AnimatedStackChild(key = item, transition = transition, content = content)
-  }
-}
-
-@Composable fun <T> AnimatedStack(
-  modifier: Modifier = Modifier,
-  contentAlignment: Alignment = Alignment.TopStart,
-  propagateMinConstraints: Boolean = false,
-  children: List<AnimatedStackChild<T>>,
-) {
-  val scope = rememberCoroutineScope()
-  val state = remember { AnimatedStackState(scope, children, NoOpStackTransition) }
-  state.defaultTransition = LocalStackTransition.current
-  state.updateChildren(children)
-
-  Box(
-    modifier = modifier,
-    contentAlignment = contentAlignment,
-    propagateMinConstraints = propagateMinConstraints
-  ) {
-    state.visibleChildren.toList().forEach { child ->
-      key(child.key) { child.Content() }
+  @Immutable
+  @JvmInline
+  value class SlideDirection internal constructor(private val value: Int) {
+    companion object {
+      val Left = SlideDirection(0)
+      val Right = SlideDirection(1)
+      val Up = SlideDirection(2)
+      val Down = SlideDirection(3)
+      val Start = SlideDirection(4)
+      val End = SlideDirection(5)
     }
 
-    state.animationOverlays.toList().forEach { overlay ->
-      key(overlay as Any) { overlay() }
-    }
-  }
-}
-
-@Stable class AnimatedStackChild<T>(
-  val key: T,
-  opaque: Boolean = false,
-  enterTransition: StackTransition? = null,
-  exitTransition: StackTransition? = null,
-  content: @Composable () -> Unit
-) {
-  var opaque by mutableStateOf(opaque)
-  var enterTransition by mutableStateOf(enterTransition)
-  var exitTransition by mutableStateOf(exitTransition)
-  var content by mutableStateOf(content)
-  val elementStore = AnimationElementStore()
-
-  constructor(
-    key: T,
-    opaque: Boolean = false,
-    transition: StackTransition? = null,
-    content: @Composable () -> Unit
-  ) : this(key, opaque, transition, transition, content)
-
-  @Composable internal fun Content() {
-    CompositionLocalProvider(LocalAnimatedStackChild provides this@AnimatedStackChild) {
-      Box(modifier = Modifier.animationElement(ContentAnimationElementKey)) {
-        content()
+    override fun toString(): String {
+      return when (this) {
+        Left -> "Left"
+        Right -> "Right"
+        Up -> "Up"
+        Down -> "Down"
+        Start -> "Start"
+        End -> "End"
+        else -> "Invalid"
       }
     }
   }
-}
 
-val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
-  error("No stack child provided")
-}
-
-@Stable class AnimatedStackState<T>(
-  val scope: CoroutineScope,
-  private var children: List<AnimatedStackChild<T>>,
-  var defaultTransition: StackTransition,
-) {
-  internal val animationOverlays = mutableStateListOf<@Composable () -> Unit>()
-  internal val visibleChildren = mutableStateListOf<AnimatedStackChild<T>>()
-  internal val runningTransactions = mutableMapOf<T, AnimatedStackTransaction<T>>()
-
-  init {
-    children
-      .filterVisible()
-      .forEach {
-        performChange(
-          from = null,
-          to = it,
-          isPush = true,
-          transition = NoOpStackTransition
+  fun slideIntoContainer(
+    towards: SlideDirection,
+    animationSpec: FiniteAnimationSpec<IntOffset> = spring(
+      visibilityThreshold = IntOffset.VisibilityThreshold
+    ),
+    initialOffset: (offsetForFullSlide: Int) -> Int = { it }
+  ): EnterTransition =
+    when {
+      towards.isLeft -> slideInHorizontally(animationSpec) {
+        initialOffset.invoke(
+          currentSize.width - calculateOffset(IntSize(it, it), currentSize).x
         )
       }
+      towards.isRight -> slideInHorizontally(animationSpec) {
+        initialOffset.invoke(-calculateOffset(IntSize(it, it), currentSize).x - it)
+      }
+      towards == Up -> slideInVertically(animationSpec) {
+        initialOffset.invoke(
+          currentSize.height - calculateOffset(IntSize(it, it), currentSize).y
+        )
+      }
+      towards == Down -> slideInVertically(animationSpec) {
+        initialOffset.invoke(-calculateOffset(IntSize(it, it), currentSize).y - it)
+      }
+      else -> EnterTransition.None
+    }
+
+  private val SlideDirection.isLeft: Boolean
+    get() {
+      return this == Left || this == Start && layoutDirection == LayoutDirection.Ltr ||
+          this == End && layoutDirection == LayoutDirection.Rtl
+    }
+
+  private val SlideDirection.isRight: Boolean
+    get() {
+      return this == Right || this == Start && layoutDirection == LayoutDirection.Rtl ||
+          this == End && layoutDirection == LayoutDirection.Ltr
+    }
+
+  private fun calculateOffset(fullSize: IntSize, currentSize: IntSize): IntOffset {
+    return contentAlignment.align(fullSize, currentSize, LayoutDirection.Ltr)
   }
 
-  internal fun updateChildren(newChildren: List<AnimatedStackChild<T>>) {
-    if (newChildren == children) return
+  fun slideOutOfContainer(
+    towards: SlideDirection,
+    animationSpec: FiniteAnimationSpec<IntOffset> = spring(
+      visibilityThreshold = IntOffset.VisibilityThreshold
+    ),
+    targetOffset: (offsetForFullSlide: Int) -> Int = { it }
+  ): ExitTransition {
+    return when {
+      // Note: targetSize could be 0 for empty composables
+      towards.isLeft -> slideOutHorizontally(animationSpec) {
+        val targetSize = targetSizeMap.targetSize(transition.targetState)
+        targetOffset.invoke(-calculateOffset(IntSize(it, it), targetSize).x - it)
+      }
+      towards.isRight -> slideOutHorizontally(animationSpec) {
+        val targetSize = targetSizeMap.targetSize(transition.targetState)
+        targetOffset.invoke(
+          -calculateOffset(IntSize(it, it), targetSize).x + targetSize.width
+        )
+      }
+      towards == Up -> slideOutVertically(animationSpec) {
+        val targetSize = targetSizeMap.targetSize(transition.targetState)
+        targetOffset.invoke(-calculateOffset(IntSize(it, it), targetSize).y - it)
+      }
+      towards == Down -> slideOutVertically(animationSpec) {
+        val targetSize = targetSizeMap.targetSize(transition.targetState)
+        targetOffset.invoke(
+          -calculateOffset(IntSize(it, it), targetSize).y + targetSize.height
+        )
+      }
+      else -> ExitTransition.None
+    }
+  }
 
-    // do not allow pushing the same child twice
-    newChildren
-      .groupBy { it }
-      .forEach {
-        check(it.value.size == 1) {
-          "Trying to push the same child multiple times $it"
+  internal var measuredSize: IntSize by mutableStateOf(IntSize.Zero)
+  internal val targetSizeMap = mutableMapOf<T, MutableState<IntSize>>()
+  internal var animatedSize: State<IntSize>? = null
+
+  // Current size of the container. If there's any size animation, the current size will be
+  // read from the animation value, otherwise we'll use the current
+  private val currentSize: IntSize
+    get() = animatedSize?.value ?: measuredSize
+
+  @Suppress("ComposableModifierFactory", "ModifierFactoryExtensionFunction")
+  @Composable
+  internal fun createSizeAnimationModifier(
+    contentTransform: ContentTransform
+  ): Modifier {
+    var shouldAnimateSize by remember(this) { mutableStateOf(false) }
+    val sizeTransform = rememberUpdatedState(contentTransform.sizeTransform)
+    if (transition.currentState == transition.targetState) {
+      shouldAnimateSize = false
+    } else {
+      if (sizeTransform.value != null) {
+        shouldAnimateSize = true
+      }
+    }
+    return if (shouldAnimateSize) {
+      val sizeAnimation = transition.createDeferredAnimation(IntSize.VectorConverter)
+      remember(sizeAnimation) {
+        (if (sizeTransform.value?.clip == false) Modifier else Modifier.clipToBounds())
+          .then(SizeModifier(sizeAnimation, sizeTransform))
+      }
+    } else {
+      animatedSize = null
+      Modifier
+    }
+  }
+
+  // This helps track the target measurable without affecting the placement order. Target
+  // measurable needs to be measured first but placed last.
+  internal data class ChildData(val isTarget: Boolean) : ParentDataModifier {
+    override fun Density.modifyParentData(parentData: Any?): Any = this@ChildData
+  }
+
+  private inner class SizeModifier constructor(
+    val sizeAnimation: Transition<List<T>>.DeferredAnimation<IntSize, AnimationVector2D>,
+    val sizeTransform: State<SizeTransform?>,
+  ) : LayoutModifier {
+    override fun MeasureScope.measure(
+      measurable: Measurable,
+      constraints: Constraints
+    ): MeasureResult {
+      val placeable = measurable.measure(constraints)
+      val size = sizeAnimation.animate(
+        transitionSpec = {
+          val initial = targetSizeMap.targetSize(initialState)
+          val target = targetSizeMap.targetSize(targetState)
+          sizeTransform.value?.createAnimationSpec(initial, target) ?: spring()
         }
-      }
-
-    val oldChildren = children.toList()
-    val oldVisibleChildren = oldChildren.filterVisible()
-
-    children = newChildren
-
-    val newVisibleChildren = newChildren.filterVisible()
-
-    if (oldVisibleChildren == newVisibleChildren) return
-
-    val oldTopChild = oldVisibleChildren.lastOrNull()
-    val newTopChild = newVisibleChildren.lastOrNull()
-
-    // check if we should animate the top children
-    val replacingTopChildren = newTopChild != null && oldTopChild != newTopChild &&
-        newVisibleChildren.count { it !in oldVisibleChildren } == 1
-
-    // Remove all visible children which shouldn't be visible anymore
-    // from top to bottom
-    oldVisibleChildren
-      .dropLast(if (replacingTopChildren) 1 else 0)
-      .reversed()
-      .filterNot { it in newVisibleChildren }
-      .forEach { child ->
-        val localTransition = child.exitTransition
-          ?: defaultTransition
-        performChange(
-          from = child,
-          to = null,
-          isPush = false,
-          transition = localTransition
-        )
-      }
-
-    // Add any new children to the stack from bottom to top
-    newVisibleChildren
-      .dropLast(if (replacingTopChildren) 1 else 0)
-      .filterNot { it in oldVisibleChildren }
-      .forEachIndexed { i, child ->
-        val localTransition =
-          child.enterTransition ?: defaultTransition
-        performChange(
-          from = newVisibleChildren.getOrNull(i - 1),
-          to = child,
-          isPush = true,
-          transition = localTransition
-        )
-      }
-
-    val isPush = newTopChild !in oldChildren
-
-    // Replace the old visible top with the new one
-    if (replacingTopChildren) {
-      val localTransition =
-        if (isPush) newTopChild?.enterTransition ?: defaultTransition
-        else oldTopChild?.exitTransition ?: defaultTransition
-      performChange(
-        from = oldTopChild,
-        to = newTopChild,
-        isPush = isPush,
-        transition = localTransition
+      ) { targetSizeMap.targetSize(it) }
+      animatedSize = size
+      val offset = contentAlignment.align(
+        IntSize(placeable.width, placeable.height), size.value, LayoutDirection.Ltr
       )
-    }
-  }
-
-  private fun List<AnimatedStackChild<T>>.filterVisible(): List<AnimatedStackChild<T>> {
-    val visibleChildren = mutableListOf<AnimatedStackChild<T>>()
-
-    for (child in reversed()) {
-      visibleChildren.add(0, child)
-      if (!child.opaque) break
+      return layout(size.value.width, size.value.height) {
+        placeable.place(offset)
+      }
     }
 
-    return visibleChildren
-  }
+    override fun IntrinsicMeasureScope.minIntrinsicWidth(
+      measurable: IntrinsicMeasurable,
+      height: Int
+    ) = measurable.minIntrinsicWidth(height)
 
-  private fun performChange(
-    from: AnimatedStackChild<T>?,
-    to: AnimatedStackChild<T>?,
-    isPush: Boolean,
-    transition: StackTransition
-  ) {
-    from?.let { runningTransactions[it.key]?.cancel() }
-    val transaction = AnimatedStackTransaction(
-      from, to, isPush, transition, this,
-      from != null && from !in children
-    )
-    runningTransactions[transaction.transactionKey] = transaction
-    transaction.execute()
+    override fun IntrinsicMeasureScope.minIntrinsicHeight(
+      measurable: IntrinsicMeasurable,
+      width: Int
+    ) = measurable.minIntrinsicHeight(width)
+
+    override fun IntrinsicMeasureScope.maxIntrinsicWidth(
+      measurable: IntrinsicMeasurable,
+      height: Int
+    ) = measurable.maxIntrinsicWidth(height)
+
+    override fun IntrinsicMeasureScope.maxIntrinsicHeight(
+      measurable: IntrinsicMeasurable,
+      width: Int
+    ) = measurable.maxIntrinsicHeight(width)
   }
 }
 
-internal class AnimatedStackTransaction<T>(
-  private val from: AnimatedStackChild<T>?,
-  private val to: AnimatedStackChild<T>?,
-  private val isPush: Boolean,
-  private val transition: StackTransition,
-  private val state: AnimatedStackState<T>,
-  private val forceFromRemoval: Boolean
+private fun <T> Map<T, State<IntSize>>.targetSize(state: List<T>): IntSize = state.maxByOrNull {
+  this[it]?.value?.let { it.width + it.height } ?: 0
+}?.let { this[it]?.value } ?: IntSize.Zero
+
+@Composable fun <T> Transition<List<T>>.AnimatedStack(
+  modifier: Modifier = Modifier,
+  transitionSpec: AnimatedStackScope<T>.() -> ContentTransform = {
+    fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
+        fadeOut(animationSpec = tween(90))
+  },
+  contentAlignment: Alignment = Alignment.TopStart,
+  contentKey: (T) -> Any? = { it },
+  contentOpaque: (T) -> Boolean = { false },
+  content: @Composable AnimatedVisibilityScope.(T) -> Unit
 ) {
-  val transactionKey = when {
-    to != null -> to.key
-    from != null -> from.key
-    else -> throw AssertionError()
+  fun List<T>.filterVisible(): List<T> = buildList {
+    for (stateForContent in this@filterVisible.reversed()) {
+      add(0, stateForContent)
+      if (!contentOpaque(stateForContent)) break
+    }
   }
 
-  private val removesFrom: Boolean
-    get() = forceFromRemoval || (from != null && (!isPush || !to!!.opaque))
+  val layoutDirection = LocalLayoutDirection.current
+  val rootScope = remember(this) {
+    AnimatedStackScope(this, contentAlignment, layoutDirection)
+  }
 
-  private var job: Job? = null
+  val currentlyVisible = remember(this) { currentState.filterVisible().toMutableStateList() }
+  val contentMap = remember(this) { mutableMapOf<T, @Composable () -> Unit>() }
 
-  private var isCancelled = false
-  private var isCompleted = false
+  if (currentState.filterVisible() == targetState.filterVisible()) {
+    rootScope.contentAlignment = contentAlignment
+    rootScope.layoutDirection = layoutDirection
+  }
 
-  fun execute() {
-    job = state.scope.launch(start = CoroutineStart.UNDISPATCHED) {
-      guarantee(
-        block = {
-          val transitionScope = object : StackTransitionScope, CoroutineScope by this {
-            override val state: AnimatedStackState<*>
-              get() = this@AnimatedStackTransaction.state
-            override val isPush: Boolean
-              get() = this@AnimatedStackTransaction.isPush
-            override val from: AnimatedStackChild<*>?
-              get() = this@AnimatedStackTransaction.from
-            override val to: AnimatedStackChild<*>?
-              get() = this@AnimatedStackTransaction.to
-            override val fromWillBeRemoved: Boolean
-              get() = removesFrom
+  targetState.filterVisible().forEach {
+    if (it !in currentlyVisible)
+      currentlyVisible.add(it)
+  }
 
-            override fun attachTo() {
-              this@AnimatedStackTransaction.attachTo()
-            }
-
-            override fun detachFrom() {
-              this@AnimatedStackTransaction.removeFrom()
+  if (currentState.filterVisible().any { it !in contentMap } ||
+    targetState.filterVisible().any { it !in contentMap }) {
+    contentMap.clear()
+    currentlyVisible.forEach { stateForContent ->
+      contentMap[stateForContent] = {
+        val specOnEnter = remember { transitionSpec(rootScope) }
+        // NOTE: enter and exit for this AnimatedVisibility will be using different spec,
+        // naturally.
+        val exit =
+          remember(stateForContent in segment.targetState) {
+            if (stateForContent in segment.targetState) {
+              ExitTransition.None
+            } else {
+              rootScope.transitionSpec().initialContentExit
             }
           }
-          transition(transitionScope)
-        },
-        finalizer = { complete() }
-      )
+
+        AnimatedVisibility(
+          visible = { stateForContent in it.filterVisible() },
+          enter = specOnEnter.targetContentEnter,
+          exit = exit,
+          modifier = Modifier
+            .layout { measurable, constraints ->
+              val placeable = measurable.measure(constraints)
+              rootScope.targetSizeMap.getOrPut(stateForContent) {
+                mutableStateOf(IntSize.Zero)
+              }.value = IntSize(placeable.width, placeable.height)
+              layout(placeable.width, placeable.height) {
+                placeable.place(0, 0, zIndex = specOnEnter.targetContentZIndex)
+              }
+            }
+            .then(AnimatedStackScope.ChildData(stateForContent in targetState.filterVisible()))
+        ) {
+          DisposableEffect(this) {
+            onDispose {
+              currentlyVisible.remove(stateForContent)
+              rootScope.targetSizeMap.remove(stateForContent)
+            }
+          }
+          content(stateForContent)
+        }
+      }
     }
   }
 
-  fun cancel() {
-    if (isCancelled) return
-    isCancelled = true
-    job?.cancel()
-    job = null
-    complete()
-  }
+  val contentTransform = remember(rootScope, segment) { transitionSpec(rootScope) }
+  val sizeModifier = rootScope.createSizeAnimationModifier(contentTransform)
+  Layout(
+    modifier = modifier.then(sizeModifier),
+    content = {
+      currentlyVisible.forEach {
+        key(contentKey(it)) {
+          contentMap[it]?.invoke()
+        }
+      }
+    },
+    measurePolicy = remember { AnimatedContentMeasurePolicy(rootScope) }
+  )
+}
 
-  private fun attachTo() {
-    if (to == null) return
-    val oldToIndex = state.visibleChildren.indexOf(to)
-    val fromIndex = state.visibleChildren.indexOf(from)
-    val toIndex = when {
-      fromIndex != -1 -> if (isPush) fromIndex + 1 else fromIndex
-      oldToIndex != -1 -> oldToIndex
-      else -> state.visibleChildren.size
+private class AnimatedContentMeasurePolicy(val rootScope: AnimatedStackScope<*>) : MeasurePolicy {
+  override fun MeasureScope.measure(
+    measurables: List<Measurable>,
+    constraints: Constraints
+  ): MeasureResult {
+    val placeables = arrayOfNulls<Placeable>(measurables.size)
+    // Measure the target composable first (but place it on top unless zIndex is specified)
+    measurables.forEachIndexed { index, measurable ->
+      if ((measurable.parentData as? AnimatedStackScope.ChildData)?.isTarget == true) {
+        placeables[index] = measurable.measure(constraints)
+      }
     }
-    if (oldToIndex != toIndex) {
-      if (oldToIndex != -1) state.visibleChildren.removeAt(oldToIndex)
-      state.visibleChildren.add(toIndex, to)
+    // Measure the non-target composables after target, since these have no impact on
+    // container size in the size animation.
+    measurables.forEachIndexed { index, measurable ->
+      if (placeables[index] == null) {
+        placeables[index] = measurable.measure(constraints)
+      }
+    }
+
+    val maxWidth: Int = placeables.maxByOrNull { it?.width ?: 0 }?.width ?: 0
+    val maxHeight = placeables.maxByOrNull { it?.height ?: 0 }?.height ?: 0
+    rootScope.measuredSize = IntSize(maxWidth, maxHeight)
+    // Position the children.
+    return layout(maxWidth, maxHeight) {
+      placeables.forEach { placeable ->
+        placeable?.let {
+          val offset = rootScope.contentAlignment.align(
+            IntSize(it.width, it.height),
+            IntSize(maxWidth, maxHeight),
+            LayoutDirection.Ltr
+          )
+          it.place(offset.x, offset.y)
+        }
+      }
     }
   }
 
-  private fun removeFrom() {
-    if (from == null || !removesFrom) return
-    state.visibleChildren -= from
-  }
+  override fun IntrinsicMeasureScope.minIntrinsicWidth(
+    measurables: List<IntrinsicMeasurable>,
+    height: Int
+  ) = measurables.asSequence().map { it.minIntrinsicWidth(height) }.maxOrNull() ?: 0
 
-  private fun complete() {
-    if (isCompleted) return
-    isCompleted = true
-    job?.cancel()
-    job = null
-    if (to != null && to !in state.visibleChildren) attachTo()
-    if (removesFrom && from in state.visibleChildren) removeFrom()
-    state.runningTransactions -= transactionKey
-  }
+  override fun IntrinsicMeasureScope.minIntrinsicHeight(
+    measurables: List<IntrinsicMeasurable>,
+    width: Int
+  ) = measurables.asSequence().map { it.minIntrinsicHeight(width) }.maxOrNull() ?: 0
+
+  override fun IntrinsicMeasureScope.maxIntrinsicWidth(
+    measurables: List<IntrinsicMeasurable>,
+    height: Int
+  ) = measurables.asSequence().map { it.maxIntrinsicWidth(height) }.maxOrNull() ?: 0
+
+  override fun IntrinsicMeasureScope.maxIntrinsicHeight(
+    measurables: List<IntrinsicMeasurable>,
+    width: Int
+  ) = measurables.asSequence().map { it.maxIntrinsicHeight(width) }.maxOrNull() ?: 0
 }

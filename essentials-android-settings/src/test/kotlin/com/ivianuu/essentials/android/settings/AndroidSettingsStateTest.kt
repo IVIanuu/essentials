@@ -21,7 +21,6 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class AndroidSettingsStateTest {
-  @OptIn(ExperimentalStdlibApi::class)
   @Test fun testAndroidSettingsState() = runCancellingBlockingTest {
     var value = 0
     val contentChanges = EventFlow<Unit>()

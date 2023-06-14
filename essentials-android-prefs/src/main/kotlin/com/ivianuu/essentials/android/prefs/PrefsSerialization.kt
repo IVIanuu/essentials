@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.android.prefs
 
 import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -17,7 +16,6 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.internal.TaggedEncoder
 import kotlinx.serialization.modules.SerializersModule
 
-@OptIn(InternalSerializationApi::class)
 class PrefsEncoder(
   private val embeddedFormat: StringFormat,
   private val descriptor: SerialDescriptor,

@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.MaterialTheme
@@ -16,7 +15,6 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.layout.center
@@ -30,7 +28,6 @@ import com.ivianuu.injekt.Provide
 
 class TabsScreen : Screen<Unit>
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
 @Provide val tabsUi = Ui<TabsScreen, Unit> {
   val pagerState = rememberPagerState()
   Scaffold(

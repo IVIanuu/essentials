@@ -2,8 +2,6 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-@file:OptIn(ExperimentalSerializationApi::class)
-
 package com.ivianuu.essentials.android.prefs
 
 import androidx.datastore.core.CorruptionException
@@ -21,7 +19,6 @@ import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json

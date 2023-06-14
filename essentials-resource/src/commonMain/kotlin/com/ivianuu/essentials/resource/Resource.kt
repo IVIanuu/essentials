@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlin.experimental.ExperimentalTypeInference
 
 sealed interface Resource<out T>
 
@@ -56,7 +55,6 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
 }
 
 // todo context
-@OptIn(ExperimentalTypeInference::class)
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
   flow<Resource<T>> {
     emit(Loading)

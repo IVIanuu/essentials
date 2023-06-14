@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,8 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.animation.transition.HorizontalStackTransition
-import com.ivianuu.essentials.ui.animation.transition.LocalStackTransition
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -37,33 +34,29 @@ class ChildNavigationScreen : Screen<Unit>
 
 @Provide val childNavigationHomeItem = HomeItem("Child Navigation") { ChildNavigationScreen() }
 
-@Provide fun childNavigationUi() = Ui<ChildNavigationScreen, Unit> {
+@Provide val childNavigationUi = Ui<ChildNavigationScreen, Unit> {
   Scaffold(
     topBar = {
       TopAppBar(title = { Text("Child Navigation") })
     }
   ) {
     Column {
-      CompositionLocalProvider(
-        LocalStackTransition provides HorizontalStackTransition()
-      ) {
-        (1..3).forEach { navigationIndex ->
-          key(navigationIndex) {
-            val scope = rememberCoroutineScope()
-            val navigator = remember {
-              Navigator(
-                initialBackStack = listOf(ChildNavigationItemScreen(navigationIndex, 0)),
-                scope = scope
-              )
-            }
-
-            NavigatorContent(
-              modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-              navigator = navigator
+      (1..3).forEach { navigationIndex ->
+        key(navigationIndex) {
+          val scope = rememberCoroutineScope()
+          val navigator = remember {
+            Navigator(
+              initialBackStack = listOf(ChildNavigationItemScreen(navigationIndex, 0)),
+              scope = scope
             )
           }
+
+          NavigatorContent(
+            modifier = Modifier
+              .weight(1f)
+              .fillMaxWidth(),
+            navigator = navigator
+          )
         }
       }
     }

@@ -24,7 +24,6 @@ import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.animation.AnimatedStack
-import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.injekt.Provide
 import kotlin.collections.set
@@ -57,7 +56,6 @@ import kotlin.reflect.KClass
           checkNotNull(model) { "No model found for $screen" }
           val decorateScreen = component.decorateScreenFactory(navigator, scope, screen)
           model to NavigationContentStateChild(
-            screen = screen,
             config = config,
             content = {
               decorateScreen {
@@ -96,7 +94,13 @@ import kotlin.reflect.KClass
       }
     }
 
-  AnimatedStack(modifier = modifier, children = stackChildren.map { it.stackChild })
+  AnimatedStack(
+    modifier = modifier,
+    targetState = stackChildren,
+    contentOpaque = { it.config?.opaque ?: false }
+  ) {
+    it.Content()
+  }
 }
 
 @Composable fun ObserveScope(body: @Composable () -> Unit) {
@@ -104,18 +108,12 @@ import kotlin.reflect.KClass
 }
 
 @Stable private class NavigationContentStateChild(
-  screen: Screen<*>,
-  config: ScreenConfig<*>? = null,
+  val config: ScreenConfig<*>? = null,
   private val scope: Scope<ScreenScope>,
   private val content: @Composable () -> Unit
 ) {
-  val stackChild = AnimatedStackChild(
-    key = screen,
-    opaque = config?.opaque ?: false,
-    enterTransition = config?.enterTransition,
-    exitTransition = config?.exitTransition
-  ) {
-    if (isFinalized) return@AnimatedStackChild
+  @Composable fun Content() {
+    if (isFinalized) return
 
     val compositionKey = currentCompositeKeyHash
 

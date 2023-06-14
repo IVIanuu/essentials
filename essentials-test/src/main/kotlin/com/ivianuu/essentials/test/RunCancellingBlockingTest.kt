@@ -3,13 +3,11 @@
  */
 
 @file:Suppress("INVISIBLE_REFERENCE", "INVISIBLE_MEMBER")
-@file:OptIn(ExperimentalCoroutinesApi::class)
 
 package com.ivianuu.essentials.test
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -61,5 +59,5 @@ fun TestCoroutineScope.runCancellingBlockingTest(
   }
 }
 
-@OptIn(ExperimentalStdlibApi::class) val TestCoroutineScope.dispatcher: TestCoroutineDispatcher
+val TestCoroutineScope.dispatcher: TestCoroutineDispatcher
   get() = (coroutineContext as CoroutineContext)[CoroutineDispatcher]!! as TestCoroutineDispatcher
