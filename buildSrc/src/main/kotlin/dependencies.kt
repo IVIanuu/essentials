@@ -17,7 +17,6 @@ object Deps {
   object Accompanist {
     private const val version = "0.30.1"
     const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
-    const val pager = "com.google.accompanist:accompanist-pager:$version"
     const val pagerIndicators = "com.google.accompanist:accompanist-pager-indicators:$version"
   }
 

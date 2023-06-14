@@ -4,6 +4,9 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Tab
@@ -14,9 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.google.accompanist.pager.rememberPagerState
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -29,7 +30,7 @@ import com.ivianuu.injekt.Provide
 
 class TabsScreen : Screen<Unit>
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
 @Provide val tabsUi = Ui<TabsScreen, Unit> {
   val pagerState = rememberPagerState()
   Scaffold(
@@ -63,7 +64,7 @@ class TabsScreen : Screen<Unit>
       }
     }
   ) {
-    HorizontalPager(count = TabItems.size, state = pagerState) { page ->
+    HorizontalPager(pageCount = TabItems.size, state = pagerState) { page ->
       val color = TabItems[page]
       Surface(color = color) {
         Text(

@@ -45,7 +45,6 @@ kotlin {
     named("androidMain") {
       dependencies {
         api(Deps.Accompanist.flowLayout)
-        api(Deps.Accompanist.pager)
         api(Deps.Accompanist.pagerIndicators)
         api(Deps.AndroidX.Activity.compose)
         api(Deps.AndroidX.core)
