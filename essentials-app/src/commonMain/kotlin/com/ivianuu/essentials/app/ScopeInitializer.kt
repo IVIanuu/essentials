@@ -13,12 +13,12 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 
-interface ScopeInitializer<N> : () -> Unit, Service<ScopeInitializer<N>>
+interface ScopeInitializer<N> : () -> Unit, ExtensionPoint<ScopeInitializer<N>>
 
 @Provide inline fun <N> scopeInitializerRunner(
   crossinline key: () -> TypeKey<ScopeInitializerRunner>,
   crossinline nameKey: () -> TypeKey<N>,
-  crossinline initializers: (Scope<N>) -> List<ServiceElement<ScopeInitializer<N>>>,
+  crossinline initializers: (Scope<N>) -> List<ExtensionPointRecord<ScopeInitializer<N>>>,
   crossinline workerRunner: (Scope<N>) -> ScopeWorkerRunner<N>,
   crossinline logger: (Scope<N>) -> Logger
 ): ProvidedService<N, ScopeInitializerRunner> = object : ProvidedService<N, ScopeInitializerRunner>, ScopeObserver {

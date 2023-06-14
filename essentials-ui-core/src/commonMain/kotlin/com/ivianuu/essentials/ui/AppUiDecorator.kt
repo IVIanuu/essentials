@@ -6,16 +6,16 @@ package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.app.ExtensionPoint
+import com.ivianuu.essentials.app.ExtensionPointRecord
 import com.ivianuu.essentials.app.LoadingOrder
-import com.ivianuu.essentials.app.Service
-import com.ivianuu.essentials.app.ServiceElement
 import com.ivianuu.essentials.app.sortedWithLoadingOrder
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.systembars.SystemBarManagerProvider
 import com.ivianuu.injekt.Provide
 
-fun interface AppUiDecorator : Service<AppUiDecorator> {
+fun interface AppUiDecorator : ExtensionPoint<AppUiDecorator> {
   @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
@@ -24,16 +24,16 @@ fun interface DecorateAppUi {
 }
 
 @Provide fun decorateAppUi(
-  elements: List<ServiceElement<AppUiDecorator>>,
+  records: List<ExtensionPointRecord<AppUiDecorator>>,
   logger: Logger
 ) = DecorateAppUi { content ->
-  val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(elements) {
-    elements
+  val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
+    records
       .sortedWithLoadingOrder()
       .fold({ it() }) { acc, element ->
         { content ->
           acc {
-            logger.log { "Decorate ui ${element.key.value}" }
+            logger.log { "Decorate app ui ${element.key.value}" }
             element.instance(content)
           }
         }

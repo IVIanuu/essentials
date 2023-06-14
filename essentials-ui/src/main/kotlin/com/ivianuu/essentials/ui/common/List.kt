@@ -21,13 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.app.Service
-import com.ivianuu.essentials.app.ServiceElement
+import com.ivianuu.essentials.app.ExtensionPoint
+import com.ivianuu.essentials.app.ExtensionPointRecord
 import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.essentials.ui.layout.navigationBarsPadding
 import com.ivianuu.injekt.Provide
 
-fun interface ListDecorator : Service<ListDecorator> {
+fun interface ListDecorator : ExtensionPoint<ListDecorator> {
   operator fun ListDecoratorScope.invoke()
 }
 
@@ -37,14 +37,14 @@ fun interface ListDecorator : Service<ListDecorator> {
   fun content()
 }
 
-val LocalListDecorators = staticCompositionLocalOf<() -> List<ServiceElement<ListDecorator>>> {
+val LocalListDecorators = staticCompositionLocalOf<() -> List<ExtensionPointRecord<ListDecorator>>> {
   { emptyList() }
 }
 
 fun interface ListDecoratorsProvider : AppUiDecorator
 
 @Provide fun listDecoratorsProvider(
-  decorators: () -> List<ServiceElement<ListDecorator>>
+  decorators: () -> List<ExtensionPointRecord<ListDecorator>>
 ) = ListDecoratorsProvider { content ->
   CompositionLocalProvider(
     LocalListDecorators provides decorators,
@@ -114,7 +114,7 @@ fun interface ListDecoratorsProvider : AppUiDecorator
 
 private fun LazyListScope.decoratedContent(
   isVertical: Boolean,
-  decorators: List<ServiceElement<ListDecorator>>,
+  decorators: List<ExtensionPointRecord<ListDecorator>>,
   content: LazyListScope.() -> Unit
 ) {
   decorators

@@ -14,7 +14,7 @@ import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
-fun interface ScopeWorker<N> : Service<ScopeWorker<N>> {
+fun interface ScopeWorker<N> : ExtensionPoint<ScopeWorker<N>> {
   suspend operator fun invoke()
 }
 
@@ -26,7 +26,7 @@ fun interface ScopeWorkerRunner<N> {
   logger: Logger,
   nameKey: TypeKey<N>,
   scope: ScopedCoroutineScope<N>,
-  workers: () -> List<ServiceElement<ScopeWorker<N>>>
+  workers: () -> List<ExtensionPointRecord<ScopeWorker<N>>>
 ) = ScopeWorkerRunner<N> {
   scope.launch {
     guarantee(

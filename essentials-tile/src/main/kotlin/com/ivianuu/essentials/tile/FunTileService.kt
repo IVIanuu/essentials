@@ -139,13 +139,13 @@ abstract class AbstractFunTileService<T : Any>(
 
 @Provide @Service<TileScope> data class TileComponent(
   val tileId: TileId,
-  val tileModelElements: List<Pair<TileId, Model<TileModel<*>>>>,
+  val tileModelRecords: List<Pair<TileId, Model<TileModel<*>>>>,
   val coroutineScope: ScopedCoroutineScope<TileScope>,
   val scope: Scope<TileScope>
 ) {
   val tileModel = coroutineScope.composedState {
-    tileModelElements.toMap()[tileId]
+    tileModelRecords.toMap()[tileId]
       ?.invoke()
-      ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")
+      ?: error("No tile found for $tileId in ${tileModelRecords.toMap()}")
   }
 }
