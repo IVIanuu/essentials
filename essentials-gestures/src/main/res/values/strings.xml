@@ -22,15 +22,13 @@
     <string name="es_action_keycode">Keycode</string>
     <string name="es_action_keycode_suffix">Keycode: %s</string>
     <string name="es_action_kill_current_app">Kill foreground app</string>
-    <string name="es_action_last_app">Last app</string>
-    <string name="es_action_last_app_native">Last app (native)</string>
+    <string name="es_action_last_app">Last app (native)</string>
     <string name="es_action_lock_screen">Lock screen</string>
     <string name="es_action_media_play_pause">Media play/pause</string>
     <string name="es_action_media_skip_next">Media skip to next</string>
     <string name="es_action_media_skip_previous">Media skip to previous</string>
     <string name="es_action_media_stop">Media stop</string>
     <string name="es_action_menu">Menu</string>
-    <string name="es_action_next_app">Next app</string>
     <string name="es_action_none">None</string>
     <string name="es_action_notifications">Notifications</string>
     <string name="es_action_power_dialog">Power dialog</string>
@@ -76,5 +74,4 @@
     <string name="es_action_write_secure_settings_permission_desc">Required to change the navigation bar visibility</string>
     <string name="es_action_write_settings_permission_title">Write settings</string>
     <string name="es_action_write_settings_permission_desc">Required to change settings</string>
-
 </resources>

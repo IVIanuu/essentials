@@ -4,34 +4,31 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.pm.PackageManager
-import com.ivianuu.essentials.AppContext
+import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.typeKeyOf
+import kotlinx.coroutines.delay
 
 @Provide object LastAppActionId : ActionId("last_app")
 
 @Provide fun lastAppAction(resources: Resources) = Action(
   id = LastAppActionId,
   title = resources(R.string.es_action_last_app),
-  permissions = accessibilityActionPermissions + typeKeyOf<ActionSystemOverlayPermission>(),
+  permissions = accessibilityActionPermissions,
   unlockScreen = true,
   closeSystemDialogs = true,
-  icon = staticActionIcon(R.drawable.es_ic_arrow_back)
+  icon = staticActionIcon(R.drawable.es_ic_repeat)
 )
 
 @Provide fun lastAppActionExecutor(
-  appContext: AppContext,
-  appSwitchManager: AppSwitchManager,
-  intentSender: ActionIntentSender,
-  packageManager: PackageManager
+  globalActionExecutor: GlobalActionExecutor
 ) = ActionExecutor<LastAppActionId> {
-  appSwitchManager.lastApp()
-    ?.let { switchToApp(it, R.anim.es_slide_in_right, R.anim.es_slide_out_right) }
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
+  delay(250)
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }
