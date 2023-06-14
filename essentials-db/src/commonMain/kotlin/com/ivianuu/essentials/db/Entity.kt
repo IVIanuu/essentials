@@ -20,11 +20,11 @@ interface EntityDescriptor<T> {
   val serializer: KSerializer<T>
 }
 
-abstract class AbstractEntityDescriptor<T>(
+fun <T> EntityDescriptor(
   tableName: String,
-  @Inject K: TypeKey<T>,
-  @Inject S: KSerializer<T>
-) : EntityDescriptor<T> by EntityDescriptor(tableName)
+  @Inject key: TypeKey<T>,
+  @Inject serializer: KSerializer<T>
+): EntityDescriptor<T> = EntityDescriptorImpl(tableName, key, serializer)
 
 @Target(AnnotationTarget.CLASS)
 @SerialInfo
@@ -37,12 +37,6 @@ annotation class PrimaryKey
 @Target(AnnotationTarget.PROPERTY)
 @SerialInfo
 annotation class AutoIncrement
-
-fun <T> EntityDescriptor(
-  tableName: String,
-  @Inject key: TypeKey<T>,
-  @Inject serializer: KSerializer<T>
-): EntityDescriptor<T> = EntityDescriptorImpl(tableName, key, serializer)
 
 private class EntityDescriptorImpl<T>(
   override val tableName: String,
