@@ -7,17 +7,15 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -36,19 +34,19 @@ class TabsScreen : Screen<Unit>
   Scaffold(
     topBar = {
       Surface(
-        color = MaterialTheme.colors.primary,
-        elevation = 8.dp
+        color = MaterialTheme.colorScheme.primary,
+        shadowElevation = 8.dp
       ) {
         TopAppBar(
           title = { Text("Tabs") },
           bottomContent = {
             TabRow(
               selectedTabIndex = pagerState.currentPage,
-              backgroundColor = MaterialTheme.colors.primary,
+              containerColor = MaterialTheme.colorScheme.primary,
               indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
+                /*TabRowDefaults.Indicator(
                   Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-                )
+                )*/
               }
             ) {
               TabItems.indices.forEach { page ->

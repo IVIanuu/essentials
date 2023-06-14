@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.rate.ui
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.produce
 import com.ivianuu.essentials.rate.R

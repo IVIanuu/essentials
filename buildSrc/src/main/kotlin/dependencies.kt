@@ -67,7 +67,7 @@ object Deps {
     const val compilerVersion = "1.4.6-dev-k1.8.21-290a127309e"
     const val compiler = "org.jetbrains.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
-    const val material = "org.jetbrains.compose.material:material:$version"
+    const val material = "org.jetbrains.compose.material3:material3:$version"
     const val runtime = "org.jetbrains.compose.runtime:runtime:$version"
   }
 

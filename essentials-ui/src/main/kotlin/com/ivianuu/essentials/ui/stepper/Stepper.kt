@@ -17,19 +17,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.R
+import com.ivianuu.essentials.ui.material.DisabledAlpha
 import com.ivianuu.essentials.ui.material.VerticalDivider
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 
@@ -52,8 +51,8 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
         .height(48.dp),
       verticalAlignment = Alignment.CenterVertically
     ) {
-      val backgroundColor = if (isCurrent || isCompleted) MaterialTheme.colors.secondary
-      else LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+      val backgroundColor = if (isCurrent || isCompleted) MaterialTheme.colorScheme.secondary
+      else LocalContentColor.current.copy(alpha = DisabledAlpha)
       Box(
         modifier = Modifier
           .size(24.dp)
@@ -71,7 +70,7 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
           } else {
             Text(
               text = step.toString(),
-              style = MaterialTheme.typography.caption
+              style = MaterialTheme.typography.bodySmall
             )
           }
         }
@@ -80,8 +79,8 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
       Spacer(Modifier.width(16.dp))
 
       CompositionLocalProvider(
-        LocalTextStyle provides MaterialTheme.typography.subtitle1,
-        LocalContentAlpha provides ContentAlpha.high,
+        LocalTextStyle provides MaterialTheme.typography.titleMedium,
+        LocalContentColor provides MaterialTheme.colorScheme.onSurface,
         content = title
       )
     }
@@ -100,8 +99,8 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
         Column {
           if (content != null) {
             CompositionLocalProvider(
-              LocalTextStyle provides MaterialTheme.typography.body2,
-              LocalContentAlpha provides ContentAlpha.medium,
+              LocalTextStyle provides MaterialTheme.typography.bodyMedium,
+              LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant,
               content = content
             )
 

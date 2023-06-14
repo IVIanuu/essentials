@@ -7,8 +7,8 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,14 +28,14 @@ class DisplayRotationScreen : Screen<Unit>
   Ui<DisplayRotationScreen, Unit> {
     Box(
       modifier = Modifier.fillMaxSize()
-        .background(MaterialTheme.colors.primary)
-        .systemBarStyle(MaterialTheme.colors.primary),
+        .background(MaterialTheme.colorScheme.primary)
+        .systemBarStyle(MaterialTheme.colorScheme.primary),
       contentAlignment = Alignment.Center
     ) {
       val currentDisplayInfo by displayInfo.collectAsState(null)
       Text(
         text = currentDisplayInfo.toString(),
-        style = MaterialTheme.typography.h4
+        style = MaterialTheme.typography.headlineMedium
     )
   }
 }

@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.gestures.R

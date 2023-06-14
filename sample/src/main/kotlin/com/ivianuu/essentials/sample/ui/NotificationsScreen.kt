@@ -20,10 +20,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
@@ -89,7 +89,7 @@ class NotificationsScreen : Screen<Unit>
   if (notifications.isEmpty()) {
     Text(
       text = "No notifications",
-      style = MaterialTheme.typography.subtitle1,
+      style = MaterialTheme.typography.titleMedium,
       modifier = Modifier.center()
     )
   } else {
@@ -132,7 +132,7 @@ class NotificationsScreen : Screen<Unit>
   ) {
     Text(
       text = "Permissions required",
-      style = MaterialTheme.typography.subtitle1
+      style = MaterialTheme.typography.titleMedium
     )
     Spacer(Modifier.height(8.dp))
     Button(onClick = onRequestPermissionsClick) {

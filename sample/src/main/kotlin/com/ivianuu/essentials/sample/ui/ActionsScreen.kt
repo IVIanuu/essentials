@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.coroutines.coroutineScope

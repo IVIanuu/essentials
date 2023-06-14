@@ -6,8 +6,9 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TextField
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable fun TextInputDialog(
   modifier: Modifier = Modifier,
   value: String,
@@ -49,7 +51,7 @@ import androidx.compose.ui.text.input.TextFieldValue
             onValueChange(it.text)
           },
           keyboardOptions = keyboardOptions,
-          textStyle = MaterialTheme.typography.subtitle1,
+          textStyle = MaterialTheme.typography.bodyLarge,
           label = label ?: {}
         )
 

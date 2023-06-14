@@ -9,10 +9,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material.ButtonColors
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ButtonElevation
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -24,16 +24,16 @@ import androidx.compose.ui.unit.dp
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
   enabled: Boolean = true,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  elevation: ButtonElevation? = null,
   shape: Shape = MaterialTheme.shapes.small,
-  border: BorderStroke? = null,
   colors: ButtonColors = ButtonDefaults.esButtonColors(),
+  elevation: ButtonElevation? = null,
+  border: BorderStroke? = null,
   contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   forceMinSize: Boolean = true,
   content: @Composable RowScope.() -> Unit
 ) {
-  androidx.compose.material.Button(
+  androidx.compose.material3.Button(
     onClick,
     modifier
       .then(
@@ -41,12 +41,12 @@ import androidx.compose.ui.unit.dp
         else Modifier
       ),
     enabled,
-    interactionSource,
-    elevation,
     shape,
-    border,
     colors,
+    elevation,
+    border,
     contentPadding,
+    interactionSource,
     content
   )
 }
@@ -55,24 +55,26 @@ import androidx.compose.ui.unit.dp
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
   enabled: Boolean = true,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  elevation: ButtonElevation? = null,
   shape: Shape = MaterialTheme.shapes.small,
-  border: BorderStroke? = ButtonDefaults.outlinedBorder,
   colors: ButtonColors = ButtonDefaults.outlinedButtonColors(),
+  elevation: ButtonElevation? = null,
+  border: BorderStroke? = ButtonDefaults.outlinedButtonBorder,
   contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  forceMinSize: Boolean = true,
   content: @Composable RowScope.() -> Unit
 ) = Button(
-  onClick = onClick,
-  modifier = modifier,
-  enabled = enabled,
-  interactionSource = interactionSource,
-  elevation = elevation,
-  shape = shape,
-  border = border,
-  colors = colors,
-  contentPadding = contentPadding,
-  content = content
+  onClick,
+  modifier,
+  enabled,
+  shape,
+  colors,
+  elevation,
+  border,
+  contentPadding,
+  interactionSource,
+  forceMinSize,
+  content
 )
 
 @Composable fun TextButton(
@@ -85,24 +87,26 @@ import androidx.compose.ui.unit.dp
   border: BorderStroke? = null,
   colors: ButtonColors = ButtonDefaults.textButtonColors(),
   contentPadding: PaddingValues = ButtonDefaults.TextButtonContentPadding,
+  forceMinSize: Boolean = true,
   content: @Composable RowScope.() -> Unit
 ) = Button(
-  onClick = onClick,
-  modifier = modifier,
-  enabled = enabled,
-  interactionSource = interactionSource,
-  elevation = elevation,
-  shape = shape,
-  border = border,
-  colors = colors,
-  contentPadding = contentPadding,
-  content = content
+  onClick,
+  modifier,
+  enabled,
+  shape,
+  colors,
+  elevation,
+  border,
+  contentPadding,
+  interactionSource,
+  forceMinSize,
+  content
 )
 
 @Composable fun ButtonDefaults.esButtonColors(
-  backgroundColor: Color = MaterialTheme.colors.secondary,
-  contentColor: Color = guessingContentColorFor(backgroundColor)
+  containerColor: Color = MaterialTheme.colorScheme.secondary,
+  contentColor: Color = guessingContentColorFor(containerColor)
 ) = buttonColors(
-  backgroundColor = backgroundColor,
+  containerColor = containerColor,
   contentColor = contentColor
 )

@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,9 +16,9 @@ import androidx.compose.ui.unit.dp
   content: @Composable () -> Unit
 ) {
   Surface(
-    modifier = modifier.widthIn(min = 280.dp, max = 356.dp),
-    color = MaterialTheme.colors.surface,
-    elevation = 24.dp,
+    modifier = modifier.widthIn(min = 280.dp, max = 560.dp),
+    color = MaterialTheme.colorScheme.surface,
+    shadowElevation = 6.dp,
     shape = MaterialTheme.shapes.medium,
     content = content
   )

@@ -7,8 +7,8 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -35,7 +35,7 @@ class TorchScreen : Screen<Unit>
     ) {
       Text(
         "Torch is ${if (torchManager.torchEnabled.bind()) "enabled" else "disabled"}",
-        style = MaterialTheme.typography.h4
+        style = MaterialTheme.typography.headlineMedium
       )
 
       Spacer(Modifier.height(8.dp))

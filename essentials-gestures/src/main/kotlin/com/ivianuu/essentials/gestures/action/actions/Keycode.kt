@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.Resources

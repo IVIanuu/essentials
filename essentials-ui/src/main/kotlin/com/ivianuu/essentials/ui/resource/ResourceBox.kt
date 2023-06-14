@@ -10,9 +10,9 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -152,8 +152,8 @@ object ResourceBoxDefaults {
         .verticalScroll(rememberScrollState())
         .padding(16.dp),
       text = it.stackTraceToString(),
-      color = MaterialTheme.colors.error,
-      style = MaterialTheme.typography.body2
+      color = MaterialTheme.colorScheme.error,
+      style = MaterialTheme.typography.bodyMedium
     )
   }
   val loading: @Composable () -> Unit = {

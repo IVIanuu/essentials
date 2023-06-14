@@ -5,8 +5,7 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material.FabPosition
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,7 +18,6 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
   modifier: Modifier = Modifier,
   popupMenuContent: (@Composable () -> Unit)? = null,
   floatingActionButton: (@Composable () -> Unit)? = null,
-  floatingActionButtonPosition: FabPosition = FabPosition.End,
   content: LazyListScope.() -> Unit
 ) {
   Scaffold(
@@ -32,8 +30,7 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
         })
       )
     },
-    floatingActionButton = floatingActionButton,
-    floatingActionButtonPosition = floatingActionButtonPosition
+    floatingActionButton = floatingActionButton
   ) {
     VerticalList(content = content)
   }
@@ -44,7 +41,6 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
   modifier: Modifier = Modifier,
   noinline popupMenuContent: (@Composable () -> Unit)? = null,
   noinline floatingActionButton: (@Composable () -> Unit)? = null,
-  floatingActionButtonPosition: FabPosition = FabPosition.End,
   noinline content: LazyListScope.() -> Unit
 ) {
   SimpleListScreen(
@@ -52,7 +48,6 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
     modifier,
     popupMenuContent,
     floatingActionButton,
-    floatingActionButtonPosition,
     content
   )
 }

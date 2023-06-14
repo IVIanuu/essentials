@@ -9,9 +9,9 @@ import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,7 +19,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
@@ -74,7 +73,7 @@ class WriteSecureSettingsPcInstructionsScreen(
           content = {
             Text(
               textResId = R.string.es_secure_settings_step_1_content,
-              style = MaterialTheme.typography.body2
+              style = MaterialTheme.typography.bodyMedium
             )
           },
           actions = {
@@ -97,7 +96,7 @@ class WriteSecureSettingsPcInstructionsScreen(
         content = {
           Text(
             textResId = R.string.es_secure_settings_step_2_content,
-            style = MaterialTheme.typography.body2
+            style = MaterialTheme.typography.bodyMedium
           )
         },
         actions = {
@@ -143,7 +142,7 @@ class WriteSecureSettingsPcInstructionsScreen(
               .background(LocalContentColor.current.copy(alpha = 0.12f), RoundedCornerShape(4.dp))
               .padding(4.dp),
             text = model.adbCommand,
-            style = MaterialTheme.typography.body2.copy(fontSize = 14.sp)
+            style = MaterialTheme.typography.bodySmall
           )
         },
         actions = {

@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.foundation.clickable
-import androidx.compose.material.RadioButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.material.ListItem

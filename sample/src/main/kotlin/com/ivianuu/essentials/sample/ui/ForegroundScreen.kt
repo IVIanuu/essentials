@@ -6,8 +6,8 @@ package com.ivianuu.essentials.sample.ui
 
 import android.annotation.SuppressLint
 import android.app.NotificationManager
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +43,7 @@ class ForegroundScreen : Screen<Unit>
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
   ) {
-    val primaryColor = MaterialTheme.colors.primary
+    val primaryColor = MaterialTheme.colorScheme.primary
     var isEnabled by remember { mutableStateOf(false) }
 
     if (isEnabled)

@@ -10,7 +10,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
 import androidx.compose.foundation.Image
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.vector.ImageVector
 import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.AppConfig

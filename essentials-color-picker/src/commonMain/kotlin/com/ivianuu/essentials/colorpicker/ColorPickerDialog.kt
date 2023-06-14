@@ -23,17 +23,18 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -330,6 +331,7 @@ private sealed interface ColorGridItem {
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable private fun ColorEditorHeader(
   color: Color,
   showAlphaSelector: Boolean,
@@ -352,11 +354,11 @@ private sealed interface ColorGridItem {
       )
     },
     colors = TextFieldDefaults.textFieldColors(
-      backgroundColor = color,
+      containerColor = color,
       //   activeColor = guessingContentColorFor(color),
       //        inactiveColor = guessingContentColorFor(color),
     ),
-    textStyle = MaterialTheme.typography.subtitle1
+    textStyle = MaterialTheme.typography.titleMedium
       .copy(color = guessingContentColorFor(color)),
     value = hexInput,
     onValueChange = { newValue ->
@@ -388,11 +390,11 @@ private sealed interface ColorGridItem {
   ) {
     Text(
       text = component.title,
-      style = MaterialTheme.typography.subtitle1
+      style = MaterialTheme.typography.titleMedium
     )
 
     MaterialTheme(
-      colors = MaterialTheme.colors.copy(
+      colorScheme = MaterialTheme.colorScheme.copy(
         primary = component.color()
       ),
       typography = MaterialTheme.typography,
@@ -409,7 +411,7 @@ private sealed interface ColorGridItem {
     Text(
       text = (255 * value).toInt().toString(),
       modifier = Modifier.widthIn(min = 56.dp),
-      style = MaterialTheme.typography.subtitle1
+      style = MaterialTheme.typography.titleMedium
     )
   }
 }

@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Inject

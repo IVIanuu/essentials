@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import com.ivianuu.essentials.help.HelpCategory
 import com.ivianuu.essentials.help.HelpItem
 import com.ivianuu.essentials.help.HelpScreen

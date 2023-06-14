@@ -4,7 +4,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.net.wifi.WifiManager
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember

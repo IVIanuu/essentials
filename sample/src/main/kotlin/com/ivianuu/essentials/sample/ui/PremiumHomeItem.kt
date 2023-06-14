@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.premium.AppFeature
 import com.ivianuu.essentials.premium.GoPremiumScreen

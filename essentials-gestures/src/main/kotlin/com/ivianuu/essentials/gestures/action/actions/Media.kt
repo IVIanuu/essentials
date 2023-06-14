@@ -8,7 +8,7 @@ import android.content.Intent
 import android.provider.MediaStore
 import android.view.KeyEvent
 import androidx.compose.foundation.clickable
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.AppContext

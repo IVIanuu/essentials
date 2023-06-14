@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.app.NotificationManager
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

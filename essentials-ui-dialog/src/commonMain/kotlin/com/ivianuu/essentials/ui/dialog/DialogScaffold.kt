@@ -10,10 +10,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animation.animationElement
@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.layout.systemBarsPadding
         detectTapGestures { onDismissRequest() }
       }
       .fillMaxSize()
-      .background(Color.Black.copy(alpha = 0.6f))
+      .background(MaterialTheme.colorScheme.scrim)
       .then(modifier),
     contentAlignment = Alignment.Center
   ) {

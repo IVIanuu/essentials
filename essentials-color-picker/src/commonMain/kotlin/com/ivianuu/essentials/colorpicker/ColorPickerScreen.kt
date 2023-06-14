@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.colorpicker
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.DialogScaffold

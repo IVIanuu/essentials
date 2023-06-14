@@ -7,11 +7,9 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.material.FabPosition
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.contentColorFor
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,21 +17,19 @@ import com.ivianuu.essentials.ui.layout.navigationBars
 import com.ivianuu.essentials.ui.layout.navigationBarsPadding
 import com.ivianuu.essentials.ui.layout.statusBars
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable fun Scaffold(
   modifier: Modifier = Modifier,
-  scaffoldState: ScaffoldState = rememberScaffoldState(),
   topBar: (@Composable () -> Unit)? = null,
   bottomBar: (@Composable () -> Unit)? = null,
   floatingActionButton: (@Composable () -> Unit)? = null,
-  floatingActionButtonPosition: FabPosition = FabPosition.End,
-  backgroundColor: Color = MaterialTheme.colors.background,
-  contentColor: Color = contentColorFor(backgroundColor),
+  containerColor: Color = MaterialTheme.colorScheme.background,
+  contentColor: Color = contentColorFor(containerColor),
   applyInsets: Boolean = true,
   content: @Composable () -> Unit
 ) {
-  androidx.compose.material.Scaffold(
+  androidx.compose.material3.Scaffold(
     modifier = modifier,
-    scaffoldState = scaffoldState,
     topBar = topBar ?: {},
     bottomBar = bottomBar ?: {},
     floatingActionButton = if (floatingActionButton != null) (
@@ -45,8 +41,7 @@ import com.ivianuu.essentials.ui.layout.statusBars
           }
         }
         ) else ({}),
-    floatingActionButtonPosition = floatingActionButtonPosition,
-    backgroundColor = backgroundColor,
+    containerColor = containerColor,
     contentColor = contentColor
   ) {
     Box(

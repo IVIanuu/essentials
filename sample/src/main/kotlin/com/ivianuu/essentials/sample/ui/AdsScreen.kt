@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.ads.AdsEnabled
 import com.ivianuu.essentials.ads.FullScreenAdManager

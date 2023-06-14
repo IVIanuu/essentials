@@ -11,11 +11,10 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
@@ -44,8 +43,8 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
   actions: (@Composable () -> Unit)? = null,
   bottomContent: (@Composable () -> Unit)? = null,
   backgroundColor: Color = when (LocalAppBarStyle.current) {
-    AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
-    AppBarStyle.SURFACE -> MaterialTheme.colors.surface
+    AppBarStyle.PRIMARY -> MaterialTheme.colorScheme.primary
+    AppBarStyle.SURFACE -> MaterialTheme.colorScheme.surface
   },
   contentColor: Color = guessingContentColorFor(backgroundColor),
   elevation: Dp = DefaultAppBarElevation,
@@ -61,8 +60,8 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
   ) {
     leading?.invoke()
     if (title != null) {
-      val startPadding = if (leading != null) 16.dp else 0.dp
-      val endPadding = if (actions != null) 16.dp else 0.dp
+      val startPadding = if (leading != null) 24.dp else 0.dp
+      val endPadding = if (actions != null) 24.dp else 0.dp
       Column(
         modifier = Modifier
           .padding(start = startPadding, end = endPadding)
@@ -70,8 +69,8 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
         verticalArrangement = Arrangement.Center
       ) {
         CompositionLocalProvider(
-          LocalTextStyle provides MaterialTheme.typography.h6,
-          LocalContentAlpha provides ContentAlpha.high,
+          LocalTextStyle provides MaterialTheme.typography.titleLarge,
+          LocalContentColor provides contentColor,
           content = title
         )
       }
@@ -91,8 +90,8 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
 @Composable fun TopAppBar(
   modifier: Modifier = Modifier,
   backgroundColor: Color = when (LocalAppBarStyle.current) {
-    AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
-    AppBarStyle.SURFACE -> MaterialTheme.colors.surface
+    AppBarStyle.PRIMARY -> MaterialTheme.colorScheme.primary
+    AppBarStyle.SURFACE -> MaterialTheme.colorScheme.surface
   },
   contentColor: Color = guessingContentColorFor(backgroundColor),
   elevation: Dp = DefaultAppBarElevation,
@@ -110,7 +109,7 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
   Surface(
     color = backgroundColor,
     contentColor = contentColor,
-    elevation = elevation,
+    shadowElevation = elevation,
     modifier = systemBarStyleModifier.then(modifier)
   ) {
     Column(modifier = Modifier.systemBarsPadding()) {

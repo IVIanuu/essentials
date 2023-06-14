@@ -12,12 +12,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,8 +59,8 @@ object RateScreen : OverlayScreen<Unit>
 
           Text(
             textResId = R.string.es_rate_title,
-            style = MaterialTheme.typography.h6,
-            color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSurface
           )
 
           Row(
@@ -78,7 +77,7 @@ object RateScreen : OverlayScreen<Unit>
                     indication = rememberRipple(bounded = false)
                   ) { model.updateRating(currentRating) },
                 painterResId = R.drawable.es_ic_star,
-                tint = if (currentRating <= model.rating) MaterialTheme.colors.secondary
+                tint = if (currentRating <= model.rating) MaterialTheme.colorScheme.secondary
                 else LocalContentColor.current.copy(alpha = 0.12f)
               )
             }

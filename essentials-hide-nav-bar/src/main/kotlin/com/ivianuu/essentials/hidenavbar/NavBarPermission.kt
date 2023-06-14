@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.data.DataStore

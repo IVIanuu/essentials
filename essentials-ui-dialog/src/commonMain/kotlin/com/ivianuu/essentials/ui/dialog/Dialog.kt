@@ -6,14 +6,14 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -62,8 +62,8 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
       val styledTitle: (@Composable () -> Unit)? = title?.let {
         {
           CompositionLocalProvider(
-            LocalTextStyle provides MaterialTheme.typography.h6,
-            LocalContentAlpha provides ContentAlpha.high,
+            LocalTextStyle provides MaterialTheme.typography.headlineSmall,
+            LocalContentColor provides MaterialTheme.colorScheme.onSurface,
             content = title
           )
         }
@@ -72,14 +72,14 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
       val styledIcon: (@Composable () -> Unit)? = icon?.let {
         {
           CompositionLocalProvider(
-            LocalContentAlpha provides ContentAlpha.high,
+            LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant,
             content = icon
           )
         }
       }
 
       if (styledIcon != null && styledTitle != null) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
           styledIcon()
           Spacer(Modifier.width(16.dp))
           styledTitle()
@@ -97,8 +97,8 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
   val finalContent: (@Composable () -> Unit)? = if (content != null) {
     {
       CompositionLocalProvider(
-        LocalTextStyle provides MaterialTheme.typography.body2,
-        LocalContentAlpha provides ContentAlpha.medium,
+        LocalTextStyle provides MaterialTheme.typography.bodyMedium,
+        LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant,
         content = content
       )
     }

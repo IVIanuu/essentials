@@ -9,11 +9,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -79,7 +78,7 @@ fun interface SampleScreenDecorator : ScreenDecorator
         content()
       }
 
-      Surface(color = MaterialTheme.colors.primary, elevation = 8.dp) {
+      Surface(color = MaterialTheme.colorScheme.primary, shadowElevation = 8.dp) {
         Box(
           modifier = Modifier
             .navigationBarsPadding()
@@ -88,7 +87,7 @@ fun interface SampleScreenDecorator : ScreenDecorator
         ) {
           Text(
             text = "This is a bottom decorator",
-            style = MaterialTheme.typography.h3
+            style = MaterialTheme.typography.displaySmall
           )
         }
       }

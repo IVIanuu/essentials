@@ -7,12 +7,12 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,20 +44,20 @@ class BottomNavigationScreen : Screen<Unit>
     bottomBar = {
       Surface(
         modifier = Modifier.systemBarStyle(
-          bgColor = overlaySystemBarBgColor(MaterialTheme.colors.primary),
-          lightIcons = MaterialTheme.colors.primary.isLight,
+          bgColor = overlaySystemBarBgColor(MaterialTheme.colorScheme.primary),
+          lightIcons = MaterialTheme.colorScheme.primary.isLight,
           elevation = 8.dp
         ),
-        elevation = 8.dp,
-        color = MaterialTheme.colors.primary
+        shadowElevation = 8.dp,
+        color = MaterialTheme.colorScheme.primary
       ) {
-        BottomNavigation(
+        NavigationBar(
           modifier = Modifier.navigationBarsPadding(),
-          backgroundColor = MaterialTheme.colors.primary,
-          elevation = 0.dp
+          containerColor = MaterialTheme.colorScheme.primary,
+          tonalElevation = 0.dp
         ) {
           BottomNavItem.values().forEach { item ->
-            BottomNavigationItem(
+            NavigationBarItem(
               alwaysShowLabel = false,
               selected = item == selectedItem,
               onClick = { selectedItem = item },

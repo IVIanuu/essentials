@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -89,7 +89,7 @@ import kotlin.time.Duration
       modifier = Modifier.widthIn(min = 72.dp),
       contentAlignment = Alignment.CenterEnd
     ) {
-      CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.body2) {
+      CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyMedium) {
         valueText!!(stepPolicy.stepValue(internalValue, valueRange))
       }
     }

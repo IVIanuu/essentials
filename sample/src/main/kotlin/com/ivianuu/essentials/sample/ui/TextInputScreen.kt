@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,7 +61,7 @@ class TextInputScreen : Screen<Unit>
               if (state.inputValue.text.isEmpty()) {
                 Text(
                   text = "Search..",
-                  style = MaterialTheme.typography.subtitle1,
+                  style = MaterialTheme.typography.titleMedium,
                   modifier = Modifier.alpha(0.5f)
                     .align(Alignment.CenterStart)
                 )
@@ -69,7 +69,7 @@ class TextInputScreen : Screen<Unit>
               BasicTextField(
                 value = state.inputValue,
                 onValueChange = { state.inputValue = it },
-                textStyle = MaterialTheme.typography.subtitle1,
+                textStyle = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.CenterStart)
                   .focusRequester(focusRequester)
               )
@@ -87,10 +87,7 @@ class TextInputScreen : Screen<Unit>
     },
     floatingActionButton = {
       if (!state.searchVisible) {
-        ExtendedFloatingActionButton(
-          text = { Text("Search") },
-          onClick = { state.searchVisible = true }
-        )
+        ExtendedFloatingActionButton(onClick = { state.searchVisible = true }) { Text("Search") }
       }
     }
   ) {

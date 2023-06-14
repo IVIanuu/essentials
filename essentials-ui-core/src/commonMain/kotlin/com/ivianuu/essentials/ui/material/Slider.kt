@@ -5,9 +5,9 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.SliderColors
-import androidx.compose.material.SliderDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SliderColors
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,8 +41,8 @@ import kotlin.time.Duration
   enabled: Boolean = true,
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   colors: SliderColors = SliderDefaults.colors(
-    thumbColor = MaterialTheme.colors.secondary,
-    activeTrackColor = MaterialTheme.colors.secondary,
+    thumbColor = MaterialTheme.colorScheme.secondary,
+    activeTrackColor = MaterialTheme.colorScheme.secondary,
   ),
   @Inject converter: SliderValueConverter<T>,
   @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
@@ -51,7 +51,7 @@ import kotlin.time.Duration
 
   var valueChangeJob: Job? by remember { refOf(null) }
   val scope = rememberCoroutineScope()
-  androidx.compose.material.Slider(
+  androidx.compose.material3.Slider(
     internalValue,
     { newInternalValue ->
       internalValue = newInternalValue
@@ -76,8 +76,8 @@ import kotlin.time.Duration
         onValueChangeFinished(stepPolicy.stepValue(internalValue.toValue(), valueRange))
       }
     },
-    interactionSource,
-    colors
+    colors,
+    interactionSource
   )
 }
 

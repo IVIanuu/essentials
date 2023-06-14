@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.PackageManager
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.apps.AppRepository

@@ -8,12 +8,12 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.BottomAppBar
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -53,18 +53,17 @@ class WebScreen(val title: String, val url: String) : Screen<Unit>
     topBar = { TopAppBar(title = { Text(screen.title) }) },
     bottomBar = {
       val backgroundColor = when (LocalAppBarStyle.current) {
-        AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
-        AppBarStyle.SURFACE -> MaterialTheme.colors.surface
+        AppBarStyle.PRIMARY -> MaterialTheme.colorScheme.primary
+        AppBarStyle.SURFACE -> MaterialTheme.colorScheme.surface
       }
       Surface(
         modifier = Modifier.systemBarStyle(backgroundColor),
         color = backgroundColor,
-        elevation = 8.dp
+        shadowElevation = 8.dp
       ) {
         BottomAppBar(
           modifier = Modifier.navigationBarsPadding(),
-          elevation = 0.dp,
-          backgroundColor = backgroundColor
+          containerColor = backgroundColor
         ) {
           IconButton(onClick = { webViewRef!!.goBack() }) {
             Icon(R.drawable.es_ic_arrow_back_ios_new)

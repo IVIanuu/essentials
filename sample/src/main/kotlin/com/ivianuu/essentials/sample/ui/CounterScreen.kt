@@ -6,9 +6,9 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,9 +39,9 @@ class CounterScreen : Screen<Unit>
       verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
-      Text(text = "Count: ${model.count}", style = MaterialTheme.typography.h3)
-      ExtendedFloatingActionButton(onClick = model.inc, text = { Text("Inc") })
-      ExtendedFloatingActionButton(onClick = model.dec, text = { Text("dec") })
+      Text(text = "Count: ${model.count}", style = MaterialTheme.typography.displaySmall)
+      ExtendedFloatingActionButton(onClick = model.inc) { Text("Inc") }
+      ExtendedFloatingActionButton(onClick = model.dec) { Text("dec") }
     }
   }
 }

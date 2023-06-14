@@ -4,10 +4,10 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.backpress.LocalBackPressHandler
 

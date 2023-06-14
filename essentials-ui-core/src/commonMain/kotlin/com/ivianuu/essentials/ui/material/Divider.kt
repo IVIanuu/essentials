@@ -10,34 +10,37 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable fun HorizontalDivider(
   modifier: Modifier = Modifier,
-  color: Color = LocalContentColor.current.copy(alpha = 0.12f),
+  color: Color = MaterialTheme.colorScheme.outlineVariant,
+  thickness: Dp = 1.dp
 ) {
   Box(
     modifier = Modifier
       .fillMaxWidth()
       .background(color)
-      .height(1.dp)
+      .height(thickness)
       .then(modifier)
   )
 }
 
 @Composable fun VerticalDivider(
   modifier: Modifier = Modifier,
-  color: Color = LocalContentColor.current.copy(alpha = 0.12f),
+  color: Color = MaterialTheme.colorScheme.outlineVariant,
+  thickness: Dp = 1.dp
 ) {
   Box(
     modifier = Modifier
       .fillMaxHeight()
       .background(color)
-      .width(1.dp)
+      .width(thickness)
       .then(modifier)
   )
 }

@@ -2,7 +2,7 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package androidx.compose.material
+package androidx.compose.material3
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -35,9 +35,9 @@ import androidx.compose.ui.unit.TextUnit
   maxLines: Int = Int.MAX_VALUE,
   minLines: Int = 1,
   noinline onTextLayout: (TextLayoutResult) -> Unit = {},
-  style: TextStyle = LocalTextStyle.current
+  style: TextStyle = androidx.compose.material.LocalTextStyle.current
 ) {
-  Text(
+  androidx.compose.material.Text(
     stringResource(textResId), modifier, color, fontSize, fontStyle, fontWeight,
     fontFamily, letterSpacing, textDecoration, textAlign, lineHeight, overflow,
     softWrap, maxLines, minLines, onTextLayout, style
@@ -62,9 +62,9 @@ import androidx.compose.ui.unit.TextUnit
   maxLines: Int = Int.MAX_VALUE,
   minLines: Int = 1,
   noinline onTextLayout: (TextLayoutResult) -> Unit = {},
-  style: TextStyle = LocalTextStyle.current
+  style: TextStyle = androidx.compose.material.LocalTextStyle.current
 ) {
-  Text(
+  androidx.compose.material.Text(
     stringResource(textResId, *textFormatArgs), modifier, color, fontSize, fontStyle, fontWeight,
     fontFamily, letterSpacing, textDecoration, textAlign, lineHeight, overflow,
     softWrap, maxLines, minLines, onTextLayout, style

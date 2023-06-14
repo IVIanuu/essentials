@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -81,7 +81,7 @@ class NavBarScreen : Screen<Unit>
               else -> "Nav bar shown"
             }
           } else "Unknown nav bar state",
-          style = MaterialTheme.typography.h3
+          style = MaterialTheme.typography.displaySmall
         )
       }
 

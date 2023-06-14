@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.Settings
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.android.settings.AndroidSettingModule

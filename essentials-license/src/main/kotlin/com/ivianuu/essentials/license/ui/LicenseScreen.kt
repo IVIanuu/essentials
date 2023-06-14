@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.license.ui
 
 import androidx.compose.foundation.clickable
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bindResource

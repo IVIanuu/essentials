@@ -7,7 +7,7 @@ package com.ivianuu.essentials.ads
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
@@ -36,7 +36,7 @@ import com.google.android.gms.ads.AdView
       .fillMaxWidth(),
     contentAlignment = Alignment.Center
   ) {
-    val backgroundColor = MaterialTheme.colors.surface
+    val backgroundColor = MaterialTheme.colorScheme.surface
     AndroidView(factory = {
       AdView(it).apply {
         setBackgroundColor(backgroundColor.toArgb())

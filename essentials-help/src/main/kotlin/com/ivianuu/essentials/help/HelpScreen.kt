@@ -16,13 +16,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -104,8 +102,8 @@ data class HelpItem(
       verticalAlignment = Alignment.CenterVertically
     ) {
       CompositionLocalProvider(
-        LocalTextStyle provides MaterialTheme.typography.subtitle1,
-        LocalContentAlpha provides ContentAlpha.high
+        LocalTextStyle provides MaterialTheme.typography.bodyLarge,
+        LocalContentColor provides MaterialTheme.colorScheme.onSurface
       ) {
         Text(item.question)
       }
@@ -118,14 +116,14 @@ data class HelpItem(
         modifier = Modifier
           .size(24.dp)
           .rotate(iconRotation),
-        tint = MaterialTheme.colors.primary
+        tint = MaterialTheme.colorScheme.primary
       )
     }
 
     if (isExpanded) {
       CompositionLocalProvider(
-        LocalTextStyle provides MaterialTheme.typography.body2,
-        LocalContentAlpha provides ContentAlpha.medium
+        LocalTextStyle provides MaterialTheme.typography.bodyMedium,
+        LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant
       ) {
         Text(
           modifier = Modifier.padding(top = 8.dp),

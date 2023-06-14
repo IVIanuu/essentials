@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.action
@@ -35,7 +35,7 @@ class NavBarUnsupportedScreen : Screen<Unit>
       Text(
         modifier = Modifier.padding(16.dp),
         textResId = R.string.es_nav_bar_unsupported_content,
-        style = MaterialTheme.typography.body2
+        style = MaterialTheme.typography.bodyMedium
       )
 
       Row {

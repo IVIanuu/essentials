@@ -15,13 +15,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -141,20 +140,20 @@ class GoPremiumScreen(
         .padding(16.dp)
         .size(36.dp),
       painterResId = R.drawable.es_ic_medal,
-      tint = MaterialTheme.colors.primary
+      tint = MaterialTheme.colorScheme.primary
     )
 
     Text(
       textResId = R.string.es_go_premium_title,
-      style = MaterialTheme.typography.h5,
+      style = MaterialTheme.typography.headlineSmall,
       fontWeight = FontWeight.Bold
     )
 
     Text(
       modifier = Modifier.padding(top = 8.dp),
       textResId = R.string.es_go_premium_desc,
-      style = MaterialTheme.typography.body2,
-      color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+      style = MaterialTheme.typography.bodyMedium,
+      color = MaterialTheme.colorScheme.onSurfaceVariant
     )
   }
 }
@@ -177,7 +176,7 @@ class GoPremiumScreen(
               contentAlignment = Alignment.Center
             ) {
               CompositionLocalProvider(
-                LocalContentColor provides MaterialTheme.colors.primary,
+                LocalContentColor provides MaterialTheme.colorScheme.primary,
                 content = feature.icon
               )
             }
@@ -198,7 +197,7 @@ class GoPremiumScreen(
                 text = it.title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.subtitle2
+                style = MaterialTheme.typography.titleSmall
               )
             }
           }
@@ -212,8 +211,8 @@ class GoPremiumScreen(
           Text(
             modifier = Modifier.height(32.dp),
             textResId = R.string.es_premium_title,
-            style = MaterialTheme.typography.button,
-            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
           )
 
           features.forEach { feature ->
@@ -224,7 +223,7 @@ class GoPremiumScreen(
               Icon(
                 painterResId = if (feature.inPremium) R.drawable.es_ic_done
                 else R.drawable.es_ic_remove,
-                tint = MaterialTheme.colors.primary
+                tint = MaterialTheme.colorScheme.primary
               )
             }
           }
@@ -237,8 +236,8 @@ class GoPremiumScreen(
           Text(
             modifier = Modifier.height(32.dp),
             textResId = R.string.es_basic_title,
-            style = MaterialTheme.typography.button,
-            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
           )
 
           features.forEach { feature ->
@@ -249,7 +248,7 @@ class GoPremiumScreen(
               Icon(
                 painterResId = if (feature.inBasic) R.drawable.es_ic_done
                 else R.drawable.es_ic_remove,
-                tint = MaterialTheme.colors.primary
+                tint = MaterialTheme.colorScheme.primary
               )
             }
           }
@@ -290,8 +289,8 @@ class GoPremiumScreen(
             }
           }
         },
-        style = MaterialTheme.typography.caption,
-        color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
       )
     }
 
@@ -300,7 +299,7 @@ class GoPremiumScreen(
         .padding(top = 8.dp)
         .height(72.dp)
         .fillMaxWidth(),
-      colors = ButtonDefaults.esButtonColors(backgroundColor = MaterialTheme.colors.primary),
+      colors = ButtonDefaults.esButtonColors(containerColor = MaterialTheme.colorScheme.primary),
       onClick = onGoPremiumClick
     ) {
       Text(R.string.es_go_premium_title)

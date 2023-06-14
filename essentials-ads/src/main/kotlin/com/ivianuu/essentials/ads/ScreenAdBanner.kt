@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.Surface
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -72,7 +70,7 @@ fun interface ScreenAdBanner : ScreenDecorator
     ) { content() }
 
     if (adsEnabled.value) {
-      Surface(elevation = 8.dp) {
+      Surface(shadowElevation = 8.dp) {
         AdBanner(
           modifier = Modifier.navigationBarsPadding(),
           config = config

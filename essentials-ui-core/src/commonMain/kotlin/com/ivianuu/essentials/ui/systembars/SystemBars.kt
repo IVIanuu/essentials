@@ -6,8 +6,8 @@ package com.ivianuu.essentials.ui.systembars
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
@@ -34,7 +34,7 @@ import com.ivianuu.injekt.Provide
   if (color.isLight) Color.White.copy(alpha = 0.4f) else Color.Black.copy(alpha = 0.2f)
 
 @Composable fun Modifier.systemBarStyle(
-  bgColor: Color = overlaySystemBarBgColor(MaterialTheme.colors.surface),
+  bgColor: Color = overlaySystemBarBgColor(MaterialTheme.colorScheme.surface),
   lightIcons: Boolean = bgColor.isLight,
   elevation: Dp = 0.dp
 ): Modifier = composed {
