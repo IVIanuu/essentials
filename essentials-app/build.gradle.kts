@@ -12,7 +12,6 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
-        api(project(":essentials-analytics"))
         api(project(":essentials-compose"))
         api(project(":essentials-core"))
         api(project(":essentials-coroutines"))
