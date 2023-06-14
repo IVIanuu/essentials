@@ -13,7 +13,7 @@ fun interface GlobalActionExecutor {
   suspend operator fun invoke(action: Int): Boolean
 }
 
-@Provide fun performGlobalAction(service: Flow<AccessibilityService?>) =
+@Provide fun globalActionExecutor(service: Flow<AccessibilityService?>) =
   GlobalActionExecutor { action ->
     service.first()?.performGlobalAction(action) ?: false
   }
