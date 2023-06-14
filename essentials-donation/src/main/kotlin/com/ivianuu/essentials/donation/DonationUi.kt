@@ -57,9 +57,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
   }
 }
 
-@Provide fun donationUi(
-  commonStrings: CommonStrings
-) = Ui<DonationScreen, DonationModel> { model ->
+@Provide fun donationUi(commonStrings: CommonStrings) = Ui<DonationScreen, DonationModel> { model ->
   DialogScaffold {
     Dialog(
       applyContentPadding = false,
