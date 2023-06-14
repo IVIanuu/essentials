@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
@@ -16,7 +15,6 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.DefaultCoroutineContext
 import kotlinx.coroutines.flow.first
@@ -30,7 +28,6 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
   logger: Logger,
   permissionManager: PermissionManager,
   repository: ActionRepository,
-  resources: Resources,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
   toaster: Toaster

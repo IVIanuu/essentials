@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bindResource
@@ -33,7 +32,6 @@ import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 
 class ShortcutPickerScreen : Screen<Shortcut>
@@ -64,7 +62,6 @@ data class ShortcutPickerModel(
 
 @Provide fun shortcutPickerModel(
   navigator: Navigator,
-  resources: Resources,
   repository: ShortcutRepository,
   screen: ShortcutPickerScreen,
   toaster: Toaster

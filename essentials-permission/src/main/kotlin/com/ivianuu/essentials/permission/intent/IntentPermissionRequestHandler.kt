@@ -6,7 +6,6 @@ package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
 import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.onFailure
@@ -18,7 +17,6 @@ import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.delay
@@ -34,7 +32,6 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
   permissionManager: PermissionManager,
-  resources: Resources,
   showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
   toaster: Toaster
 ) = PermissionRequestHandler<P> { permission ->

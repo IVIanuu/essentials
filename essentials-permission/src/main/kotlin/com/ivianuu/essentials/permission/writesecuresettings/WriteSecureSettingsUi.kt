@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.onSuccess
@@ -26,7 +25,6 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.first
@@ -79,7 +77,6 @@ data class WriteSecureSettingsModel(
   appConfig: AppConfig,
   navigator: Navigator,
   permissionManager: PermissionManager,
-  resources: Resources,
   screen: WriteSecureSettingsScreen,
   shell: Shell,
   toaster: Toaster

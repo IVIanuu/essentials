@@ -27,10 +27,8 @@ import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.inject
 
 fun staticActionImage(data: Any) = ActionIcon {
   Image(
@@ -77,13 +75,12 @@ fun interface ActionIntentSender {
 
 @Provide fun actionIntentSender(
   appContext: AppContext,
-  resources: Resources,
   toaster: Toaster
 ) = ActionIntentSender { intent, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   catch {
     PendingIntent.getActivity(
-      inject(),
+      appContext,
       1000,
       intent,
       PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,

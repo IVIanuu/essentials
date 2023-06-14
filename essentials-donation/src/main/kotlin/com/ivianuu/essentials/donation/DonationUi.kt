@@ -18,7 +18,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.compose.action
@@ -38,7 +37,6 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 
 object DonationScreen : OverlayScreen<Unit>
@@ -127,7 +125,6 @@ data class UiDonation(
   billingService: BillingService,
   donations: Donations,
   navigator: Navigator,
-  resources: Resources,
   screen: DonationScreen,
   toaster: Toaster
 ) = Model {

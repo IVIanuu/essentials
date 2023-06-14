@@ -9,38 +9,36 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.launch
 
-fun interface Toaster {
+interface Toaster {
   operator fun invoke(message: String)
+
+  operator fun invoke(messageRes: Int)
+
+  operator fun invoke(messageRes: Int, vararg args: Any?)
 }
 
-@Provide fun toaster(
-  appContext: AppContext,
-  mainCoroutineContext: MainCoroutineContext,
-  scope: ScopedCoroutineScope<AppScope>
-) = Toaster { message ->
-  scope.launch(mainCoroutineContext) {
-    Toast.makeText(
-      appContext,
-      message,
-      Toast.LENGTH_SHORT
-    ).show()
+@Provide class ToasterImpl(
+  private val appContext: AppContext,
+  private val mainCoroutineContext: MainCoroutineContext,
+  private val resources: Resources,
+  private val scope: ScopedCoroutineScope<AppScope>
+) : Toaster {
+  override fun invoke(message: String) {
+    scope.launch(mainCoroutineContext) {
+      Toast.makeText(
+        appContext,
+        message,
+        Toast.LENGTH_SHORT
+      ).show()
+    }
   }
-}
 
-operator fun Toaster.invoke(messageRes: Int, @Inject resources: Resources) {
-  this(resources<String>(messageRes))
-}
+  override fun invoke(messageRes: Int) = invoke(resources<String>(messageRes))
 
-operator fun Toaster.invoke(
-  messageRes: Int,
-  vararg args: Any?,
-  @Inject resources: Resources
-) {
-  this(resources<String>(messageRes, *args))
+  override fun invoke(messageRes: Int, vararg args: Any?) =
+    invoke(resources<String>(messageRes, *args))
 }
-

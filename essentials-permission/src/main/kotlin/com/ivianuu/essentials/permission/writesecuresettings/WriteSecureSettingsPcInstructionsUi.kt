@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.compose.action
@@ -45,7 +44,6 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.stepper.Step
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
@@ -198,7 +196,6 @@ typealias AdbEnabled = @AdbEnabledTag Int
   navigator: Navigator,
   developerModeSetting: DataStore<DeveloperMode>,
   permissionManager: PermissionManager,
-  resources: Resources,
   screen: WriteSecureSettingsPcInstructionsScreen,
   toaster: Toaster
 ) = Model {

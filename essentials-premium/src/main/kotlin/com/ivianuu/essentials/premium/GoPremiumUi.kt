@@ -32,7 +32,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ads.AdFeatures
 import com.ivianuu.essentials.ads.FullScreenAdManager
 import com.ivianuu.essentials.billing.Sku
@@ -55,7 +54,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
@@ -336,7 +334,6 @@ data class GoPremiumModel(
   fullScreenAdManager: FullScreenAdManager,
   navigator: Navigator,
   premiumVersionManager: PremiumVersionManager,
-  resources: Resources,
   screen: GoPremiumScreen,
   toaster: Toaster
 ) = Model {

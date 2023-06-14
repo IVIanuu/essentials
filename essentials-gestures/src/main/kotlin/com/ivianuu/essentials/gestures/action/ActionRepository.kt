@@ -9,7 +9,6 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.staticActionIcon
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.DefaultCoroutineContext
 import kotlinx.coroutines.withContext
