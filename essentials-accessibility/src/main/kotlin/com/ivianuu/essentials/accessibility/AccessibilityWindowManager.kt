@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.app.Service
+import android.accessibilityservice.AccessibilityService
 import android.view.WindowManager
 import androidx.core.content.getSystemService
 import com.ivianuu.injekt.Provide
@@ -12,7 +12,7 @@ import com.ivianuu.injekt.Tag
 
 @Tag annotation class AccessibilityWindowManagerTag {
   companion object {
-    @Provide inline fun windowManager(service: Service): AccessibilityWindowManager =
+    @Provide inline fun windowManager(service: AccessibilityService): AccessibilityWindowManager =
       service.getSystemService()!!
   }
 }
