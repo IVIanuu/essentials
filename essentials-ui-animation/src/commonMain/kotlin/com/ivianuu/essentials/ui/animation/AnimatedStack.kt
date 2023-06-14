@@ -22,6 +22,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.dropAllAfter
 
 @Composable fun AnimatedVisibility(
   visible: Boolean,
@@ -72,12 +73,7 @@ import androidx.compose.ui.Modifier
 ) {
   val transition = updateTransition(targetState = items)
 
-  fun List<T>.filterVisible(): List<T> = buildList {
-    for (stateForContent in this@filterVisible.reversed()) {
-      add(0, stateForContent)
-      if (!contentOpaque(stateForContent)) break
-    }
-  }
+  fun List<T>.filterVisible(): List<T> = dropAllAfter(contentOpaque)
 
   val scope = remember(transition) { AnimationScope(transition) }
 
