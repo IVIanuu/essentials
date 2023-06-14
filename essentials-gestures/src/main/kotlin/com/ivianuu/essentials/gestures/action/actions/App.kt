@@ -20,8 +20,6 @@ import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
-import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
-import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerScreen
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerScreen
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
@@ -53,13 +51,12 @@ import kotlinx.coroutines.flow.first
   }
 
   override suspend fun createExecutor(id: String): ActionExecutor<*> {
-    val (packageName, isFloating) = id.removePrefix(BASE_ID)
+    val packageName = id.removePrefix(BASE_ID)
       .split(ACTION_DELIMITER)
-      .let { it[0] to it[1].toBoolean() }
+      .first()
     return ActionExecutor<ActionId> {
       intentSender(
         packageManager.getLaunchIntentForPackage(packageName)!!,
-        isFloating,
         null
       )
     }
@@ -67,7 +64,6 @@ import kotlinx.coroutines.flow.first
 }
 
 @Provide class AppActionPickerDelegate(
-  private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
   private val launchableAppPredicate: LaunchableAppPredicate,
   private val navigator: Navigator,
   private val resources: Resources
@@ -81,9 +77,7 @@ import kotlinx.coroutines.flow.first
 
   override suspend fun pickAction(): ActionPickerScreen.Result? {
     val app = navigator.push(AppPickerScreen(launchableAppPredicate)) ?: return null
-    val isFloating = floatingWindowActionsEnabled.value &&
-        navigator.push(FloatingWindowsPickerScreen(app.appName)) ?: return null
-    return ActionPickerScreen.Result.Action("$BASE_ID${app.packageName}$ACTION_DELIMITER$isFloating")
+    return ActionPickerScreen.Result.Action("$BASE_ID${app.packageName}$ACTION_DELIMITER")
   }
 }
 

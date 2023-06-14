@@ -80,11 +80,4 @@ interface ActionPickerDelegate {
   suspend fun pickAction(): ActionPickerScreen.Result?
 }
 
-@JvmInline value class FloatingWindowActionsEnabled(val value: Boolean) {
-  companion object {
-    @Provide val default
-      get() = FloatingWindowActionsEnabled(false)
-  }
-}
-
 const val ACTION_DELIMITER = "=:="

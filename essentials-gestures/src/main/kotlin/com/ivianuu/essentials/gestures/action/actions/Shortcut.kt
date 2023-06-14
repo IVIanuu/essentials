@@ -21,8 +21,6 @@ import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
-import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
-import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerScreen
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerScreen
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerScreen
@@ -62,13 +60,11 @@ import java.io.ByteArrayOutputStream
   override suspend fun createExecutor(id: String): ActionExecutor<*> {
     val tmp = id.split(ACTION_DELIMITER)
     val intent = Intent.getIntent(tmp[2])
-    val isFloating = tmp[4].toBoolean()
-    return ActionExecutor<ActionId> { intentSender(intent, isFloating, null) }
+    return ActionExecutor<ActionId> { intentSender(intent, null) }
   }
 }
 
 @Provide class ShortcutActionPickerDelegate(
-  private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
   private val navigator: Navigator,
   private val resources: Resources
 ) : ActionPickerDelegate {
@@ -87,14 +83,10 @@ import java.io.ByteArrayOutputStream
     icon.compress(Bitmap.CompressFormat.PNG, 100, stream)
     val iconBytes = stream.toByteArray()
 
-    val isFloating = floatingWindowActionsEnabled.value &&
-        navigator.push(FloatingWindowsPickerScreen(name)) ?: return null
-
     val key = "$BASE_ID$ACTION_DELIMITER" +
         "$name$ACTION_DELIMITER" +
         "${shortcut.intent.toUri(0)}$ACTION_DELIMITER" +
-        "${Base64.encodeToString(iconBytes, 0)}$ACTION_DELIMITER" +
-        "$isFloating"
+        "${Base64.encodeToString(iconBytes, 0)}$ACTION_DELIMITER"
 
     return ActionPickerScreen.Result.Action(key)
   }

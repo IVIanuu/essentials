@@ -43,7 +43,6 @@ fun switchToApp(
     )
     intentSender(
       intent,
-      false,
       ActivityOptionsCompat.makeCustomAnimation(
         appContext,
         enterAnimResId,

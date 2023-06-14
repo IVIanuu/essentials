@@ -19,7 +19,6 @@ import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOW_FLAG
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ui.LocalActionIconSizeModifier
@@ -73,17 +72,15 @@ fun interface ActionRootCommandRunner {
 }
 
 fun interface ActionIntentSender {
-  operator fun invoke(intent: Intent, isFloating: Boolean, options: Bundle?)
+  operator fun invoke(intent: Intent, options: Bundle?)
 }
 
 @Provide fun actionIntentSender(
   appContext: AppContext,
   resources: Resources,
   toaster: Toaster
-) = ActionIntentSender { intent, isFloating, options ->
+) = ActionIntentSender { intent, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-  if (isFloating)
-    intent.addFlags(FLOATING_WINDOW_FLAG)
   catch {
     PendingIntent.getActivity(
       inject(),

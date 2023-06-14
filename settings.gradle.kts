@@ -30,7 +30,6 @@ include(
   ":essentials-data",
   ":essentials-db",
   ":essentials-donation",
-  ":essentials-floating-windows",
   ":essentials-font",
   ":essentials-foreground",
   ":essentials-gestures",

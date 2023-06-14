@@ -21,7 +21,6 @@ dependencies {
   api(project(":essentials-apps"))
   api(project(":essentials-apps-ui"))
   api(project(":essentials-hide-nav-bar"))
-  api(project(":essentials-floating-windows"))
   api(project(":essentials-permission"))
   api(project(":essentials-recent-apps"))
   api(project(":essentials-screen-state"))

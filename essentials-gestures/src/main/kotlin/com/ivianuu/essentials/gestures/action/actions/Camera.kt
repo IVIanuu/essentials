@@ -103,7 +103,7 @@ import kotlin.coroutines.resume
   if (frontFacing != null)
     intent.addCameraFacingExtras(frontFacing)
 
-  actionIntentSender(intent, false, null)
+  actionIntentSender(intent, null)
 }
 
 fun Intent.addCameraFacingExtras(frontFacing: Boolean) {
