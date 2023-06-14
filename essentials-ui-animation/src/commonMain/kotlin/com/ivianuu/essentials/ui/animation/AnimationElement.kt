@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import kotlin.collections.set
 
-@Stable class AnimationElement(val key: AnimationElementKey) {
+@Stable class AnimationElement(val key: Any) {
   internal val modifiers = mutableStateListOf<State<Modifier>>()
   private val props = mutableStateMapOf<AnimationElementPropKey<*>, Any?>()
 
@@ -24,24 +24,22 @@ import kotlin.collections.set
   operator fun <T> get(key: AnimationElementPropKey<T>): T? = props[key] as? T
 }
 
-class AnimationElementKey
-
-val ContentAnimationElementKey = AnimationElementKey()
+object ContentAnimationElementKey
 
 class AnimationElementPropKey<T>
 
 @Stable class AnimationElementStore {
-  private val elements = mutableMapOf<AnimationElementKey, AnimationElement>()
-  fun elementFor(key: AnimationElementKey) = elements.getOrPut(key) { AnimationElement(key) }
+  private val elements = mutableMapOf<Any, AnimationElement>()
+  fun elementFor(key: Any) = elements.getOrPut(key) { AnimationElement(key) }
 }
 
-@Composable fun rememberAnimationElementFor(key: AnimationElementKey): AnimationElement =
+@Composable fun rememberAnimationElementFor(key: Any): AnimationElement =
   LocalAnimatedStackChild.current
     .elementStore
     .elementFor(key)
 
 fun Modifier.animationElement(
-  key: AnimationElementKey,
+  key: Any,
   vararg props: Pair<AnimationElementPropKey<*>, Any?>
 ): Modifier = composed {
   val element = rememberAnimationElementFor(key)

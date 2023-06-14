@@ -122,6 +122,10 @@ private class AnimatedStackWithItemsState<T>(
     state.visibleChildren.toList().forEach { child ->
       key(child.key) { child.Content() }
     }
+
+    state.animationOverlays.toList().forEach { overlay ->
+      key(overlay as Any) { overlay() }
+    }
   }
 }
 
@@ -163,6 +167,7 @@ val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
   private var children: List<AnimatedStackChild<T>>,
   var defaultTransition: StackTransition,
 ) {
+  internal val animationOverlays = mutableStateListOf<@Composable () -> Unit>()
   internal val visibleChildren = mutableStateListOf<AnimatedStackChild<T>>()
   internal val runningTransactions = mutableMapOf<T, AnimatedStackTransaction<T>>()
 

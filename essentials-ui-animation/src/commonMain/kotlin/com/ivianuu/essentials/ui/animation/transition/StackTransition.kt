@@ -9,6 +9,7 @@ import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -16,17 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import com.ivianuu.essentials.coroutines.guarantee
+import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.essentials.ui.animation.AnimatedStackState
 import com.ivianuu.essentials.ui.animation.AnimationElement
-import com.ivianuu.essentials.ui.animation.AnimationElementKey
 import com.ivianuu.essentials.ui.animation.AnimationElementPropKey
 import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.job
+import kotlinx.coroutines.launch
 import kotlin.time.Duration
 
 typealias StackTransition = suspend StackTransitionScope.() -> Unit
@@ -66,6 +70,13 @@ suspend fun MutableState<Modifier>.awaitLayoutCoordinates(): LayoutCoordinates {
   }
 }
 
+fun StackTransitionScope.overlay(overlay: @Composable () -> Unit): Job = launch(
+  start = CoroutineStart.UNDISPATCHED
+) {
+  state.animationOverlays += overlay
+  onCancel { state.animationOverlays -= overlay }
+}
+
 val LayoutCoordinates.rootCoordinates: LayoutCoordinates
   get() = parentCoordinates?.rootCoordinates ?: this
 
@@ -88,43 +99,43 @@ fun defaultAnimationSpec(
   easing = easing
 )
 
-fun StackTransitionScope.fromElement(key: AnimationElementKey): AnimationElement? =
+fun StackTransitionScope.fromElement(key: Any): AnimationElement? =
   from?.let { element(it, key) }
 
-fun StackTransitionScope.toElement(key: AnimationElementKey): AnimationElement? =
+fun StackTransitionScope.toElement(key: Any): AnimationElement? =
   to?.let { element(it, key) }
 
 fun StackTransitionScope.element(
   child: AnimatedStackChild<*>,
-  key: AnimationElementKey
+  key: Any
 ): AnimationElement =
   child.elementStore.elementFor(key)
 
 fun <T> StackTransitionScope.fromElementProp(
-  elementKey: AnimationElementKey,
+  elementKey: Any,
   propKey: AnimationElementPropKey<T>
 ) = from?.let { elementProp(it, elementKey, propKey) }
 
 fun <T> StackTransitionScope.toElementProp(
-  elementKey: AnimationElementKey,
+  elementKey: Any,
   propKey: AnimationElementPropKey<T>
 ) = to?.let { elementProp(it, elementKey, propKey) }
 
 fun <T> StackTransitionScope.elementProp(
   child: AnimatedStackChild<*>,
-  elementKey: AnimationElementKey,
+  elementKey: Any,
   propKey: AnimationElementPropKey<T>,
 ) = element(child, elementKey)[propKey]
 
-fun StackTransitionScope.fromElementModifier(key: AnimationElementKey): MutableState<Modifier>? =
+fun StackTransitionScope.fromElementModifier(key: Any): MutableState<Modifier>? =
   from?.let { elementModifier(it, key) }
 
-fun StackTransitionScope.toElementModifier(key: AnimationElementKey): MutableState<Modifier>? =
+fun StackTransitionScope.toElementModifier(key: Any): MutableState<Modifier>? =
   to?.let { elementModifier(it, key) }
 
 fun StackTransitionScope.elementModifier(
   child: AnimatedStackChild<*>,
-  key: AnimationElementKey,
+  key: Any,
 ): MutableState<Modifier> {
   val modifier = mutableStateOf<Modifier>(Modifier)
   val element = element(child, key)
