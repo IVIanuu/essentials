@@ -102,7 +102,7 @@ import com.ivianuu.injekt.Provide
       AnimatedContent(
         modifier = Modifier.height(300.dp)
           .padding(start = 24.dp, end = 24.dp),
-        targetState = currentScreen,
+        state = currentScreen,
         transitionSpec = { fadeIn() with fadeOut() }
       ) { currentScreen ->
         when (currentScreen) {
@@ -159,7 +159,7 @@ import com.ivianuu.injekt.Provide
 ) {
   var palettesStack by remember { mutableStateOf<List<ColorPickerPalette?>>(listOf(null)) }
   AnimatedStack(
-    targetState = palettesStack,
+    items = palettesStack,
     transitionSpec = { fadeIn() with fadeOut() }
   ) { palette ->
     val items = remember {

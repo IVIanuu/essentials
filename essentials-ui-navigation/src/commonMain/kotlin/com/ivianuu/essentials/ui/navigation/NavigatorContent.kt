@@ -96,7 +96,7 @@ import kotlin.reflect.KClass
 
   AnimatedStack(
     modifier = modifier,
-    targetState = stackChildren,
+    items = stackChildren,
     contentOpaque = { it.config?.opaque ?: false }
   ) {
     it.Content()

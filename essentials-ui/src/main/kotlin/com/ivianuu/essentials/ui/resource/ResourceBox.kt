@@ -29,7 +29,7 @@ import com.ivianuu.essentials.resource.Loading
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.Success
 import com.ivianuu.essentials.ui.animation.AnimatedContent
-import com.ivianuu.essentials.ui.animation.AnimatedStackScope
+import com.ivianuu.essentials.ui.animation.AnimationScope
 import com.ivianuu.essentials.ui.common.HorizontalList
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.layout.center
@@ -38,7 +38,7 @@ import kotlin.reflect.KClass
 @Composable fun <T> ResourceVerticalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
-  transitionSpec: AnimatedStackScope<ResourceBoxItem<List<T>>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: AnimationScope<ResourceBoxItem<List<T>>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -64,7 +64,7 @@ import kotlin.reflect.KClass
 @Composable fun <T> ResourceHorizontalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
-  transitionSpec: AnimatedStackScope<ResourceBoxItem<List<T>>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: AnimationScope<ResourceBoxItem<List<T>>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -90,7 +90,7 @@ import kotlin.reflect.KClass
 @Composable fun <T> ResourceBox(
   resource: Resource<T>,
   modifier: Modifier = Modifier,
-  transitionSpec: AnimatedStackScope<ResourceBoxItem<T>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: AnimationScope<ResourceBoxItem<T>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -104,7 +104,7 @@ import kotlin.reflect.KClass
   currentItem.value = resource
 
   AnimatedContent(
-    targetState = currentItem,
+    state = currentItem,
     modifier = modifier,
     transitionSpec = transitionSpec
   ) { itemToRender ->
@@ -141,7 +141,7 @@ class ResourceBoxItem<T>(
 }
 
 object ResourceBoxDefaults {
-  val transitionSpec: AnimatedStackScope<*>.() -> ContentTransform = { fadeIn() with fadeOut() }
+  val transitionSpec: AnimationScope<*>.() -> ContentTransform = { fadeIn() with fadeOut() }
   val error: @Composable (Throwable) -> Unit = {
     Text(
       modifier = Modifier
