@@ -13,13 +13,16 @@ import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.createChildTransition
 import androidx.compose.animation.core.createDeferredAnimation
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
@@ -27,7 +30,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.with
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -57,15 +59,90 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
-import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.Down
-import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.End
-import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.Left
-import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.Right
-import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.Start
-import com.ivianuu.essentials.ui.animation.AnimatedStackScope.SlideDirection.Companion.Up
 
-@Composable
-fun <T> AnimatedStack(
+@Composable fun AnimatedVisibility(
+  visible: Boolean,
+  modifier: Modifier = Modifier,
+  transitionSpec: AnimatedStackScope<Boolean>.() -> ContentTransform = {
+    expandHorizontally() +
+        fadeIn() with shrinkHorizontally() + fadeOut()
+  },
+  content: @Composable AnimatedVisibilityScope.() -> Unit
+) {
+  AnimatedContent(
+    visible,
+    modifier,
+    transitionSpec,
+    content = {
+      if (it) content()
+    }
+  )
+}
+
+@Composable fun <T> Transition<T>.AnimatedVisibility(
+  modifier: Modifier = Modifier,
+  transitionSpec: AnimatedStackScope<T>.() -> ContentTransform = {
+    expandHorizontally() +
+        fadeIn() with shrinkHorizontally() + fadeOut()
+  },
+  contentAlignment: Alignment = Alignment.TopStart,
+  contentKey: (T) -> Any? = { it },
+  content: @Composable AnimatedVisibilityScope.(T) -> Unit
+) {
+  val childTransition = createChildTransition { listOf(it) }
+  childTransition.AnimatedStack(
+    modifier = modifier,
+    transitionSpec = transitionSpec,
+    contentAlignment = contentAlignment,
+    contentKey = contentKey,
+    content = content
+  )
+}
+
+@Composable fun <T> AnimatedContent(
+  targetState: T,
+  modifier: Modifier = Modifier,
+  transitionSpec: AnimatedStackScope<T>.() -> ContentTransform = {
+    fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
+        fadeOut(animationSpec = tween(90))
+  },
+  contentAlignment: Alignment = Alignment.TopStart,
+  contentKey: (T) -> Any? = { it },
+  content: @Composable AnimatedVisibilityScope.(T) -> Unit
+) {
+  val transition = updateTransition(targetState = targetState)
+  transition.AnimatedContent(
+    modifier,
+    transitionSpec,
+    contentAlignment,
+    contentKey,
+    content
+  )
+}
+
+@Composable fun <T> Transition<T>.AnimatedContent(
+  modifier: Modifier = Modifier,
+  transitionSpec: AnimatedStackScope<T>.() -> ContentTransform = {
+    fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
+        fadeOut(animationSpec = tween(90))
+  },
+  contentAlignment: Alignment = Alignment.TopStart,
+  contentKey: (T) -> Any? = { it },
+  content: @Composable AnimatedVisibilityScope.(T) -> Unit
+) {
+  val childTransition = createChildTransition { listOf(it) }
+  childTransition.AnimatedStack(
+    modifier = modifier,
+    transitionSpec = transitionSpec,
+    contentAlignment = contentAlignment,
+    contentKey = contentKey,
+    content = content
+  )
+}
+
+@Composable fun <T> AnimatedStack(
   targetState: List<T>,
   modifier: Modifier = Modifier,
   transitionSpec: AnimatedStackScope<T>.() -> ContentTransform = {
@@ -76,10 +153,9 @@ fun <T> AnimatedStack(
   contentAlignment: Alignment = Alignment.TopStart,
   contentKey: (T) -> Any? = { it },
   contentOpaque: (T) -> Boolean = { false },
-  label: String = "AnimatedStack",
-  content: @Composable AnimatedVisibilityScope.(targetState: T) -> Unit
+  content: @Composable AnimatedVisibilityScope.(T) -> Unit
 ) {
-  val transition = updateTransition(targetState = targetState, label = label)
+  val transition = updateTransition(targetState = targetState)
   transition.AnimatedStack(
     modifier,
     transitionSpec,
@@ -90,8 +166,151 @@ fun <T> AnimatedStack(
   )
 }
 
+@Composable fun <T> Transition<List<T>>.AnimatedStack(
+  modifier: Modifier = Modifier,
+  transitionSpec: AnimatedStackScope<T>.() -> ContentTransform = {
+    fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
+        fadeOut(animationSpec = tween(90))
+  },
+  contentAlignment: Alignment = Alignment.TopStart,
+  contentKey: (T) -> Any? = { it },
+  contentOpaque: (T) -> Boolean = { false },
+  content: @Composable AnimatedVisibilityScope.(T) -> Unit
+) {
+  fun List<T>.filterVisible(): List<T> = buildList {
+    for (stateForContent in this@filterVisible.reversed()) {
+      add(0, stateForContent)
+      if (!contentOpaque(stateForContent)) break
+    }
+  }
+
+  val layoutDirection = LocalLayoutDirection.current
+  val rootScope = remember(this) {
+    AnimatedStackScope(this, contentAlignment, layoutDirection)
+  }
+
+  val currentlyVisible = remember(this) { currentState.filterVisible().toMutableStateList() }
+
+  rootScope.contentAlignment = contentAlignment
+  rootScope.layoutDirection = layoutDirection
+
+  targetState.filterVisible().forEach {
+    if (it !in currentlyVisible)
+      currentlyVisible.add(it)
+  }
+
+  val contentTransform = remember(rootScope, segment) { transitionSpec(rootScope) }
+  val sizeModifier = rootScope.createSizeAnimationModifier(contentTransform)
+  Layout(
+    modifier = modifier.then(sizeModifier),
+    content = {
+      currentlyVisible.forEach { stateForContent ->
+        key(contentKey(stateForContent)) {
+          val specOnEnter = remember { transitionSpec(rootScope) }
+          // NOTE: enter and exit for this AnimatedVisibility will be using different spec,
+          // naturally.
+          val exit =
+            remember(stateForContent in segment.targetState) {
+              if (stateForContent in segment.targetState) {
+                ExitTransition.None
+              } else {
+                rootScope.transitionSpec().initialContentExit
+              }
+            }
+
+          AnimatedVisibility(
+            visible = { stateForContent in it.filterVisible() },
+            enter = specOnEnter.targetContentEnter,
+            exit = exit,
+            modifier = Modifier
+              .layout { measurable, constraints ->
+                val placeable = measurable.measure(constraints)
+                rootScope.targetSizeMap.getOrPut(stateForContent) {
+                  mutableStateOf(IntSize.Zero)
+                }.value = IntSize(placeable.width, placeable.height)
+                layout(placeable.width, placeable.height) {
+                  placeable.place(0, 0, zIndex = specOnEnter.targetContentZIndex)
+                }
+              }
+              .then(AnimatedStackScope.ChildData(stateForContent in targetState.filterVisible()))
+          ) {
+            DisposableEffect(this) {
+              onDispose {
+                currentlyVisible.remove(stateForContent)
+                rootScope.targetSizeMap.remove(stateForContent)
+              }
+            }
+            content(stateForContent)
+          }
+        }
+      }
+    },
+    measurePolicy = remember { AnimatedContentMeasurePolicy(rootScope) }
+  )
+}
+
+private class AnimatedContentMeasurePolicy(val rootScope: AnimatedStackScope<*>) : MeasurePolicy {
+  override fun MeasureScope.measure(
+    measurables: List<Measurable>,
+    constraints: Constraints
+  ): MeasureResult {
+    val placeables = arrayOfNulls<Placeable>(measurables.size)
+    // Measure the target composable first (but place it on top unless zIndex is specified)
+    measurables.forEachIndexed { index, measurable ->
+      if ((measurable.parentData as? AnimatedStackScope.ChildData)?.isTarget == true) {
+        placeables[index] = measurable.measure(constraints)
+      }
+    }
+    // Measure the non-target composables after target, since these have no impact on
+    // container size in the size animation.
+    measurables.forEachIndexed { index, measurable ->
+      if (placeables[index] == null) {
+        placeables[index] = measurable.measure(constraints)
+      }
+    }
+
+    val maxWidth: Int = placeables.maxByOrNull { it?.width ?: 0 }?.width ?: 0
+    val maxHeight = placeables.maxByOrNull { it?.height ?: 0 }?.height ?: 0
+    rootScope.measuredSize = IntSize(maxWidth, maxHeight)
+    // Position the children.
+    return layout(maxWidth, maxHeight) {
+      placeables.forEach { placeable ->
+        placeable?.let {
+          val offset = rootScope.contentAlignment.align(
+            IntSize(it.width, it.height),
+            IntSize(maxWidth, maxHeight),
+            LayoutDirection.Ltr
+          )
+          it.place(offset.x, offset.y)
+        }
+      }
+    }
+  }
+
+  override fun IntrinsicMeasureScope.minIntrinsicWidth(
+    measurables: List<IntrinsicMeasurable>,
+    height: Int
+  ) = measurables.asSequence().map { it.minIntrinsicWidth(height) }.maxOrNull() ?: 0
+
+  override fun IntrinsicMeasureScope.minIntrinsicHeight(
+    measurables: List<IntrinsicMeasurable>,
+    width: Int
+  ) = measurables.asSequence().map { it.minIntrinsicHeight(width) }.maxOrNull() ?: 0
+
+  override fun IntrinsicMeasureScope.maxIntrinsicWidth(
+    measurables: List<IntrinsicMeasurable>,
+    height: Int
+  ) = measurables.asSequence().map { it.maxIntrinsicWidth(height) }.maxOrNull() ?: 0
+
+  override fun IntrinsicMeasureScope.maxIntrinsicHeight(
+    measurables: List<IntrinsicMeasurable>,
+    width: Int
+  ) = measurables.asSequence().map { it.maxIntrinsicHeight(width) }.maxOrNull() ?: 0
+}
+
 class AnimatedStackScope<T> internal constructor(
-  internal val transition: Transition<List<T>>,
+  private val transition: Transition<List<T>>,
   internal var contentAlignment: Alignment,
   internal var layoutDirection: LayoutDirection
 ) : Transition.Segment<List<T>> {
@@ -107,29 +326,13 @@ class AnimatedStackScope<T> internal constructor(
     this.sizeTransform = sizeTransform
   }
 
-  @Immutable
-  @JvmInline
-  value class SlideDirection internal constructor(private val value: Int) {
-    companion object {
-      val Left = SlideDirection(0)
-      val Right = SlideDirection(1)
-      val Up = SlideDirection(2)
-      val Down = SlideDirection(3)
-      val Start = SlideDirection(4)
-      val End = SlideDirection(5)
-    }
-
-    override fun toString(): String {
-      return when (this) {
-        Left -> "Left"
-        Right -> "Right"
-        Up -> "Up"
-        Down -> "Down"
-        Start -> "Start"
-        End -> "End"
-        else -> "Invalid"
-      }
-    }
+  enum class SlideDirection {
+    Left,
+    Right,
+    Up,
+    Down,
+    Start,
+    End
   }
 
   fun slideIntoContainer(
@@ -148,12 +351,12 @@ class AnimatedStackScope<T> internal constructor(
       towards.isRight -> slideInHorizontally(animationSpec) {
         initialOffset.invoke(-calculateOffset(IntSize(it, it), currentSize).x - it)
       }
-      towards == Up -> slideInVertically(animationSpec) {
+      towards == SlideDirection.Up -> slideInVertically(animationSpec) {
         initialOffset.invoke(
           currentSize.height - calculateOffset(IntSize(it, it), currentSize).y
         )
       }
-      towards == Down -> slideInVertically(animationSpec) {
+      towards == SlideDirection.Down -> slideInVertically(animationSpec) {
         initialOffset.invoke(-calculateOffset(IntSize(it, it), currentSize).y - it)
       }
       else -> EnterTransition.None
@@ -161,14 +364,14 @@ class AnimatedStackScope<T> internal constructor(
 
   private val SlideDirection.isLeft: Boolean
     get() {
-      return this == Left || this == Start && layoutDirection == LayoutDirection.Ltr ||
-          this == End && layoutDirection == LayoutDirection.Rtl
+      return this == SlideDirection.Left || this == SlideDirection.Start && layoutDirection == LayoutDirection.Ltr ||
+          this == SlideDirection.End && layoutDirection == LayoutDirection.Rtl
     }
 
   private val SlideDirection.isRight: Boolean
     get() {
-      return this == Right || this == Start && layoutDirection == LayoutDirection.Rtl ||
-          this == End && layoutDirection == LayoutDirection.Ltr
+      return this == SlideDirection.Right || this == SlideDirection.Start && layoutDirection == LayoutDirection.Rtl ||
+          this == SlideDirection.End && layoutDirection == LayoutDirection.Ltr
     }
 
   private fun calculateOffset(fullSize: IntSize, currentSize: IntSize): IntOffset {
@@ -194,11 +397,11 @@ class AnimatedStackScope<T> internal constructor(
           -calculateOffset(IntSize(it, it), targetSize).x + targetSize.width
         )
       }
-      towards == Up -> slideOutVertically(animationSpec) {
+      towards == SlideDirection.Up -> slideOutVertically(animationSpec) {
         val targetSize = targetSizeMap.targetSize(transition.targetState)
         targetOffset.invoke(-calculateOffset(IntSize(it, it), targetSize).y - it)
       }
-      towards == Down -> slideOutVertically(animationSpec) {
+      towards == SlideDirection.Down -> slideOutVertically(animationSpec) {
         val targetSize = targetSizeMap.targetSize(transition.targetState)
         targetOffset.invoke(
           -calculateOffset(IntSize(it, it), targetSize).y + targetSize.height
@@ -299,159 +502,3 @@ class AnimatedStackScope<T> internal constructor(
 private fun <T> Map<T, State<IntSize>>.targetSize(state: List<T>): IntSize = state.maxByOrNull {
   this[it]?.value?.let { it.width + it.height } ?: 0
 }?.let { this[it]?.value } ?: IntSize.Zero
-
-@Composable fun <T> Transition<List<T>>.AnimatedStack(
-  modifier: Modifier = Modifier,
-  transitionSpec: AnimatedStackScope<T>.() -> ContentTransform = {
-    fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
-        fadeOut(animationSpec = tween(90))
-  },
-  contentAlignment: Alignment = Alignment.TopStart,
-  contentKey: (T) -> Any? = { it },
-  contentOpaque: (T) -> Boolean = { false },
-  content: @Composable AnimatedVisibilityScope.(T) -> Unit
-) {
-  fun List<T>.filterVisible(): List<T> = buildList {
-    for (stateForContent in this@filterVisible.reversed()) {
-      add(0, stateForContent)
-      if (!contentOpaque(stateForContent)) break
-    }
-  }
-
-  val layoutDirection = LocalLayoutDirection.current
-  val rootScope = remember(this) {
-    AnimatedStackScope(this, contentAlignment, layoutDirection)
-  }
-
-  val currentlyVisible = remember(this) { currentState.filterVisible().toMutableStateList() }
-  val contentMap = remember(this) { mutableMapOf<T, @Composable () -> Unit>() }
-
-  if (currentState.filterVisible() == targetState.filterVisible()) {
-    rootScope.contentAlignment = contentAlignment
-    rootScope.layoutDirection = layoutDirection
-  }
-
-  targetState.filterVisible().forEach {
-    if (it !in currentlyVisible)
-      currentlyVisible.add(it)
-  }
-
-  if (currentState.filterVisible().any { it !in contentMap } ||
-    targetState.filterVisible().any { it !in contentMap }) {
-    contentMap.clear()
-    currentlyVisible.forEach { stateForContent ->
-      contentMap[stateForContent] = {
-        val specOnEnter = remember { transitionSpec(rootScope) }
-        // NOTE: enter and exit for this AnimatedVisibility will be using different spec,
-        // naturally.
-        val exit =
-          remember(stateForContent in segment.targetState) {
-            if (stateForContent in segment.targetState) {
-              ExitTransition.None
-            } else {
-              rootScope.transitionSpec().initialContentExit
-            }
-          }
-
-        AnimatedVisibility(
-          visible = { stateForContent in it.filterVisible() },
-          enter = specOnEnter.targetContentEnter,
-          exit = exit,
-          modifier = Modifier
-            .layout { measurable, constraints ->
-              val placeable = measurable.measure(constraints)
-              rootScope.targetSizeMap.getOrPut(stateForContent) {
-                mutableStateOf(IntSize.Zero)
-              }.value = IntSize(placeable.width, placeable.height)
-              layout(placeable.width, placeable.height) {
-                placeable.place(0, 0, zIndex = specOnEnter.targetContentZIndex)
-              }
-            }
-            .then(AnimatedStackScope.ChildData(stateForContent in targetState.filterVisible()))
-        ) {
-          DisposableEffect(this) {
-            onDispose {
-              currentlyVisible.remove(stateForContent)
-              rootScope.targetSizeMap.remove(stateForContent)
-            }
-          }
-          content(stateForContent)
-        }
-      }
-    }
-  }
-
-  val contentTransform = remember(rootScope, segment) { transitionSpec(rootScope) }
-  val sizeModifier = rootScope.createSizeAnimationModifier(contentTransform)
-  Layout(
-    modifier = modifier.then(sizeModifier),
-    content = {
-      currentlyVisible.forEach {
-        key(contentKey(it)) {
-          contentMap[it]?.invoke()
-        }
-      }
-    },
-    measurePolicy = remember { AnimatedContentMeasurePolicy(rootScope) }
-  )
-}
-
-private class AnimatedContentMeasurePolicy(val rootScope: AnimatedStackScope<*>) : MeasurePolicy {
-  override fun MeasureScope.measure(
-    measurables: List<Measurable>,
-    constraints: Constraints
-  ): MeasureResult {
-    val placeables = arrayOfNulls<Placeable>(measurables.size)
-    // Measure the target composable first (but place it on top unless zIndex is specified)
-    measurables.forEachIndexed { index, measurable ->
-      if ((measurable.parentData as? AnimatedStackScope.ChildData)?.isTarget == true) {
-        placeables[index] = measurable.measure(constraints)
-      }
-    }
-    // Measure the non-target composables after target, since these have no impact on
-    // container size in the size animation.
-    measurables.forEachIndexed { index, measurable ->
-      if (placeables[index] == null) {
-        placeables[index] = measurable.measure(constraints)
-      }
-    }
-
-    val maxWidth: Int = placeables.maxByOrNull { it?.width ?: 0 }?.width ?: 0
-    val maxHeight = placeables.maxByOrNull { it?.height ?: 0 }?.height ?: 0
-    rootScope.measuredSize = IntSize(maxWidth, maxHeight)
-    // Position the children.
-    return layout(maxWidth, maxHeight) {
-      placeables.forEach { placeable ->
-        placeable?.let {
-          val offset = rootScope.contentAlignment.align(
-            IntSize(it.width, it.height),
-            IntSize(maxWidth, maxHeight),
-            LayoutDirection.Ltr
-          )
-          it.place(offset.x, offset.y)
-        }
-      }
-    }
-  }
-
-  override fun IntrinsicMeasureScope.minIntrinsicWidth(
-    measurables: List<IntrinsicMeasurable>,
-    height: Int
-  ) = measurables.asSequence().map { it.minIntrinsicWidth(height) }.maxOrNull() ?: 0
-
-  override fun IntrinsicMeasureScope.minIntrinsicHeight(
-    measurables: List<IntrinsicMeasurable>,
-    width: Int
-  ) = measurables.asSequence().map { it.minIntrinsicHeight(width) }.maxOrNull() ?: 0
-
-  override fun IntrinsicMeasureScope.maxIntrinsicWidth(
-    measurables: List<IntrinsicMeasurable>,
-    height: Int
-  ) = measurables.asSequence().map { it.maxIntrinsicWidth(height) }.maxOrNull() ?: 0
-
-  override fun IntrinsicMeasureScope.maxIntrinsicHeight(
-    measurables: List<IntrinsicMeasurable>,
-    width: Int
-  ) = measurables.asSequence().map { it.maxIntrinsicHeight(width) }.maxOrNull() ?: 0
-}

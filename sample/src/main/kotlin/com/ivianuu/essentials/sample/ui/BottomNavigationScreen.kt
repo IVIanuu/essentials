@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.animation.AnimatedContent
 import com.ivianuu.essentials.ui.layout.navigationBarsPadding
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

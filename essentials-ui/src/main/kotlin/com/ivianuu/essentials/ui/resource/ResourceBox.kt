@@ -4,8 +4,6 @@
 
 package com.ivianuu.essentials.ui.resource
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -30,6 +28,8 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Loading
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.Success
+import com.ivianuu.essentials.ui.animation.AnimatedContent
+import com.ivianuu.essentials.ui.animation.AnimatedStackScope
 import com.ivianuu.essentials.ui.common.HorizontalList
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.layout.center
@@ -38,7 +38,7 @@ import kotlin.reflect.KClass
 @Composable fun <T> ResourceVerticalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
-  transitionSpec: AnimatedContentScope<ResourceBoxItem<List<T>>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: AnimatedStackScope<ResourceBoxItem<List<T>>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -64,7 +64,7 @@ import kotlin.reflect.KClass
 @Composable fun <T> ResourceHorizontalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
-  transitionSpec: AnimatedContentScope<ResourceBoxItem<List<T>>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: AnimatedStackScope<ResourceBoxItem<List<T>>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -90,7 +90,7 @@ import kotlin.reflect.KClass
 @Composable fun <T> ResourceBox(
   resource: Resource<T>,
   modifier: Modifier = Modifier,
-  transitionSpec: AnimatedContentScope<ResourceBoxItem<T>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: AnimatedStackScope<ResourceBoxItem<T>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -141,7 +141,7 @@ class ResourceBoxItem<T>(
 }
 
 object ResourceBoxDefaults {
-  val transitionSpec: AnimatedContentScope<*>.() -> ContentTransform = { fadeIn() with fadeOut() }
+  val transitionSpec: AnimatedStackScope<*>.() -> ContentTransform = { fadeIn() with fadeOut() }
   val error: @Composable (Throwable) -> Unit = {
     Text(
       modifier = Modifier

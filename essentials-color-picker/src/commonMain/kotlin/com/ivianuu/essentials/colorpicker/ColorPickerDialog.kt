@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.colorpicker
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
@@ -53,6 +52,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ui.animation.AnimatedContent
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.dialog.Dialog
