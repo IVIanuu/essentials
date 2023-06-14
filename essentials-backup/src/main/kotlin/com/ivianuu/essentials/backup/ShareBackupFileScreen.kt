@@ -10,7 +10,7 @@ import androidx.core.content.FileProvider
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ui.navigation.IntentScreen
-import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
+import com.ivianuu.essentials.ui.navigation.ScreenIntentFactory
 import com.ivianuu.injekt.Provide
 import java.io.File
 
@@ -20,7 +20,7 @@ class ShareBackupFileScreen(val backupFilePath: String) :
 @Provide fun shareBackupFileKeyIntentFactory(
   appContext: AppContext,
   appConfig: AppConfig
-) = KeyIntentFactory<ShareBackupFileScreen> { key ->
+) = ScreenIntentFactory<ShareBackupFileScreen> { key ->
   val uri = FileProvider.getUriForFile(
     appContext,
     "${appConfig.packageName}.backupprovider",

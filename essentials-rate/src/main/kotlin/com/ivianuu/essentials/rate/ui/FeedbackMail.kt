@@ -9,7 +9,7 @@ import android.net.Uri
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ui.navigation.IntentScreen
-import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
+import com.ivianuu.essentials.ui.navigation.ScreenIntentFactory
 import com.ivianuu.injekt.Provide
 
 object FeedbackMailScreen : IntentScreen
@@ -18,7 +18,7 @@ object FeedbackMailScreen : IntentScreen
   context: AppContext,
   email: DeveloperEmail,
   resources: Resources
-) = KeyIntentFactory<FeedbackMailScreen> {
+) = ScreenIntentFactory<FeedbackMailScreen> {
   Intent(Intent.ACTION_SENDTO).apply {
     data = Uri.parse("mailto:")
     putExtra(Intent.EXTRA_EMAIL, arrayOf(email.value))

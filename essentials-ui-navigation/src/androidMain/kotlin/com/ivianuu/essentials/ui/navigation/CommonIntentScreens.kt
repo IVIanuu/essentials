@@ -12,25 +12,25 @@ import com.ivianuu.injekt.Provide
 
 class DefaultIntentScreen(val intent: Intent) : IntentScreen
 
-@Provide val defaultIntentKeyIntentFactory = KeyIntentFactory<DefaultIntentScreen> { it.intent }
+@Provide val defaultIntentScreenIntentFactory = ScreenIntentFactory<DefaultIntentScreen> { it.intent }
 
 class AppInfoScreen(val packageName: String) : IntentScreen
 
-@Provide val appInfoKeyIntentFactory = KeyIntentFactory<AppInfoScreen> { key ->
+@Provide val appInfoScreenIntentFactory = ScreenIntentFactory<AppInfoScreen> { screen ->
   Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-    this.data = "package:${key.packageName}".toUri()
+    this.data = "package:${screen.packageName}".toUri()
   }
 }
 
 class AppScreen(val packageName: String) : IntentScreen
 
-@Provide fun appKeyIntentFactory(packageManager: PackageManager) = KeyIntentFactory<AppScreen> { key ->
-  packageManager.getLaunchIntentForPackage(key.packageName)!!
+@Provide fun appKeyIntentFactory(packageManager: PackageManager) = ScreenIntentFactory<AppScreen> { screen ->
+  packageManager.getLaunchIntentForPackage(screen.packageName)!!
 }
 
 class ShareScreen(val text: String) : IntentScreen
 
-@Provide val shareKeyIntentFactory = KeyIntentFactory<ShareScreen> { key ->
+@Provide val shareScreenIntentFactory = ScreenIntentFactory<ShareScreen> { key ->
   Intent.createChooser(
     Intent(Intent.ACTION_SEND).apply {
       type = "text/plain"
@@ -42,8 +42,8 @@ class ShareScreen(val text: String) : IntentScreen
 
 class UrlScreen(val url: String) : IntentScreen
 
-@Provide val urlKeyIntentFactory = KeyIntentFactory<UrlScreen> { key ->
-  Intent(Intent.ACTION_VIEW).apply { this.data = key.url.toUri() }
+@Provide val urlScreenIntentFactory = ScreenIntentFactory<UrlScreen> { screen ->
+  Intent(Intent.ACTION_VIEW).apply { this.data = screen.url.toUri() }
 }
 
 fun PlayStoreAppDetailsKey(packageName: String) =

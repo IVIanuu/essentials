@@ -23,28 +23,28 @@ import kotlin.reflect.KClass
 
 interface IntentScreen : Screen<Result<ActivityResult, ActivityNotFoundException>>
 
-@Provide fun <@Spread T : KeyIntentFactory<K>, K : Any> intentKeyIntentFactory(
+@Provide fun <@Spread T : ScreenIntentFactory<K>, K : Any> intentKeyIntentFactory(
   intentFactory: T,
   keyClass: KClass<K>
-): Pair<KClass<IntentScreen>, KeyIntentFactory<IntentScreen>> = (keyClass to intentFactory) as Pair<KClass<IntentScreen>, KeyIntentFactory<IntentScreen>>
+): Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>> = (keyClass to intentFactory) as Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>>
 
-fun interface KeyIntentFactory<T> {
-  suspend operator fun invoke(key: T): Intent
+fun interface ScreenIntentFactory<T> {
+  suspend operator fun invoke(screen: T): Intent
 }
 
 fun interface IntentAppUiStarter {
   suspend operator fun invoke(): ComponentActivity
 }
 
-@Provide fun intentKeyInterceptor(
+@Provide fun intentScreenInterceptor(
   appUiStarter: IntentAppUiStarter,
   context: MainCoroutineContext,
-  intentFactories: () -> Map<KClass<IntentScreen>, KeyIntentFactory<IntentScreen>>
-) = ScreenInterceptor<Result<ActivityResult, Throwable>> handler@{ key ->
-  if (key !is IntentScreen) return@handler null
-  val intentFactory = intentFactories()[key::class as KClass<IntentScreen>]
+  intentFactories: () -> Map<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>>
+) = ScreenInterceptor<Result<ActivityResult, Throwable>> handler@{ screen ->
+  if (screen !is IntentScreen) return@handler null
+  val intentFactory = intentFactories()[screen::class as KClass<IntentScreen>]
     ?: return@handler null
-  val intent = intentFactory(key)
+  val intent = intentFactory(screen)
   return@handler {
     val activity = appUiStarter()
     withContext(context) {
