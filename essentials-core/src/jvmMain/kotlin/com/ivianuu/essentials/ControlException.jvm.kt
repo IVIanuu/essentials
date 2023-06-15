@@ -4,6 +4,6 @@
 
 package com.ivianuu.essentials
 
-internal actual open class ControlException : Throwable() {
+actual open class ControlException : Throwable() {
   override fun fillInStackTrace(): Throwable = this
 }
