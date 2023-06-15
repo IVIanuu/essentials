@@ -15,23 +15,23 @@ import kotlin.reflect.KClass
 
 interface AdFeature
 
-@JvmInline value class AdFeatures<K : Screen<*>>(val value: List<AdFeature>) {
+@JvmInline value class AdFeatures<T : Screen<*>>(val value: List<AdFeature>) {
   companion object {
-    @Provide fun <K : Screen<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
+    @Provide fun <T : Screen<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<T> =
       AdFeatures(allFeatures)
 
-    @Provide fun <K : RootScreen> defaultRootKeyAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
+    @Provide fun <T : RootScreen> defaultRootKeyAdFeatures(allFeatures: List<AdFeature>): AdFeatures<T> =
       AdFeatures(allFeatures.filter { it != ListAdBannerFeature })
 
-    @Provide fun <K : OverlayScreen<*>> defaultPopupAdFeatures(): AdFeatures<K> =
+    @Provide fun <T : OverlayScreen<*>> defaultPopupAdFeatures(): AdFeatures<T> =
       AdFeatures(emptyList())
 
-    @Provide fun <K : CriticalUserFlowScreen<*>> defaultCriticalUserFlowAdFeatures(): AdFeatures<K> =
+    @Provide fun <T : CriticalUserFlowScreen<*>> defaultCriticalUserFlowAdFeatures(): AdFeatures<T> =
       AdFeatures(listOf(ScreenAdBannerFeature))
 
-    @Provide fun <@Spread T : Ui<K, *>, K : Screen<*>> adFeatureConfigMapEntry(
-      keyClass: KClass<K>,
-      features: AdFeatures<K>
+    @Provide fun <@Spread T : Ui<S, *>, S : Screen<*>> adFeatureConfigMapEntry(
+      keyClass: KClass<S>,
+      features: AdFeatures<S>
     ): Pair<KClass<out Screen<*>>, AdFeatures<*>> = keyClass to features
   }
 }

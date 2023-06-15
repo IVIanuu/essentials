@@ -6,7 +6,7 @@ package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
 
-data class ScreenConfig<K : Screen<*>>(
+data class ScreenConfig<T : Screen<*>>(
   val enterTransitionSpec: (ElementTransitionSpec<Screen<*>>)? = null,
   val exitTransitionSpec: (ElementTransitionSpec<Screen<*>>)? = null,
   val opaque: Boolean = false,
