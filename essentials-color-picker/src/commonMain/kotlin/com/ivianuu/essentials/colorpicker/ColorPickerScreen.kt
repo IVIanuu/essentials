@@ -8,8 +8,8 @@ import androidx.compose.material.Text
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
+import com.ivianuu.essentials.ui.dialog.DialogScreen
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
@@ -20,7 +20,7 @@ class ColorPickerScreen(
   val title: String? = null,
   val allowCustomArgb: Boolean = true,
   val showAlphaSelector: Boolean = false,
-) : OverlayScreen<Color>
+) : DialogScreen<Color>
 
 @Provide fun colorPickerUi(
   navigator: Navigator,

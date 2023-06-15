@@ -30,6 +30,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
+import com.ivianuu.essentials.ui.dialog.DialogScreen
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
@@ -38,7 +39,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.popTop
@@ -284,7 +284,7 @@ class DialogsScreen : Screen<Unit>
 class DialogLauncherScreen(
   val dismissible: Boolean = true,
   val dialog: @Composable () -> Unit
-) : OverlayScreen<Unit>
+) : DialogScreen<Unit>
 
 @Provide fun dialogLauncherUi(screen: DialogLauncherScreen) = Ui<DialogLauncherScreen, Unit> {
   DialogScaffold(dismissible = screen.dismissible) { screen.dialog() }

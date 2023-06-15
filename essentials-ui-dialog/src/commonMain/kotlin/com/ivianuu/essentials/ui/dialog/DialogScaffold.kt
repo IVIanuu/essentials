@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ui.animation.animationElement
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.essentials.ui.backpress.LocalBackPressHandler
 import com.ivianuu.essentials.ui.layout.imePadding
@@ -33,6 +34,7 @@ import com.ivianuu.essentials.ui.layout.systemBarsPadding
 
   Box(
     modifier = Modifier
+      .animationElement(DialogScrimKey)
       .pointerInput(true) {
         detectTapGestures { onDismissRequest() }
       }
@@ -43,6 +45,7 @@ import com.ivianuu.essentials.ui.layout.systemBarsPadding
   ) {
     Box(
       modifier = Modifier
+        .animationElement(DialogKey)
         .systemBarsPadding()
         .imePadding()
         .pointerInput(true) { detectTapGestures { } }

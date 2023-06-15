@@ -27,19 +27,19 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
+import com.ivianuu.essentials.ui.dialog.DialogScreen
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 
-object DonationScreen : OverlayScreen<Unit>
+object DonationScreen : DialogScreen<Unit>
 
 data class Donation(val sku: Sku, val iconRes: Int)
 

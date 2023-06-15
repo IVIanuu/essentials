@@ -11,15 +11,15 @@ import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
+import com.ivianuu.essentials.ui.dialog.DialogScreen
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 
-object RateOnPlayScreen : OverlayScreen<Unit>
+object RateOnPlayScreen : DialogScreen<Unit>
 
 @Provide val rateOnPlayUi = Ui<RateOnPlayScreen, RateOnPlayModel> { model ->
   DialogScaffold(dismissible = false) {

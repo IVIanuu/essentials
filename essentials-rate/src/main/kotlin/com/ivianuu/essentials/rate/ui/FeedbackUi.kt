@@ -11,17 +11,17 @@ import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
+import com.ivianuu.essentials.ui.dialog.DialogScreen
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.UrlScreen
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 
-object FeedbackScreen : OverlayScreen<Unit>
+object FeedbackScreen : DialogScreen<Unit>
 
 @Provide val feedbackUi = Ui<FeedbackScreen, FeedbackModel> { model ->
   DialogScaffold(dismissible = false) {

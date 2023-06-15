@@ -9,7 +9,6 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
@@ -19,7 +18,7 @@ class ConfirmationScreen<T : Any>(
   val items: List<T>,
   val title: String,
   @Inject val renderer: UiRenderer<T>,
-) : OverlayScreen<T>
+) : DialogScreen<T>
 
 @Provide fun confirmationUi(
   key: ConfirmationScreen<Any>,

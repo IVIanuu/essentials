@@ -14,7 +14,6 @@ import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
@@ -25,7 +24,7 @@ class MultiChoiceListScreen<T : Any>(
   val selectedItems: Set<T>,
   val title: String? = null,
   @Inject val renderable: UiRenderer<T>
-) : OverlayScreen<Set<T>>
+) : DialogScreen<Set<T>>
 
 @Provide fun multiChoiceListUi(
   commonStrings: CommonStrings,

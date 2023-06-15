@@ -10,7 +10,6 @@ import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
@@ -21,7 +20,7 @@ class SingleChoiceListScreen<T : Any>(
   val selectedItem: T,
   val title: String? = null,
   @Inject val renderable: UiRenderer<T>
-) : OverlayScreen<T>
+) : DialogScreen<T>
 
 @Provide fun singleChoiceListUi(
   commonStrings: CommonStrings,

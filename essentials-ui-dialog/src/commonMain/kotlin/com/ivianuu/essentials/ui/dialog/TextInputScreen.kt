@@ -14,7 +14,6 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
@@ -25,7 +24,7 @@ class TextInputScreen(
   val keyboardOptions: KeyboardOptions = KeyboardOptions(),
   val title: String? = null,
   val predicate: (String) -> Boolean = { true }
-) : OverlayScreen<String>
+) : DialogScreen<String>
 
 @Provide fun textInputUi(
   commonStrings: CommonStrings,
