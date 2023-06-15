@@ -89,9 +89,7 @@ val LocalScreenTransitionSpec = compositionLocalOf<ElementTransitionSpec<Screen<
 
             DisposableEffect(true) {
               onDispose {
-                println("on dispose $screen")
                 screenData.finalize {
-                  println("on finalized $screen")
                   screenDatas.remove(screen)
                 }
               }

@@ -112,7 +112,6 @@ import androidx.compose.ui.Modifier
         currentlyVisible.add(currentlyVisible.indexOf(initial), target as T)
       }
     }
-    println("transition from $initial to $target $isPush currentv fixed ${currentlyVisible.toList()}")
 
     ElementTransitionBuilderImpl(
       initial,
