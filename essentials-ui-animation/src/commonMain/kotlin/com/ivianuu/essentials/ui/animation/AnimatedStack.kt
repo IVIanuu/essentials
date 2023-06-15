@@ -50,14 +50,12 @@ import androidx.compose.ui.Modifier
 
     ContentKey exitsWith fadeOut(animationSpec = tween(90))
   },
-  contentKey: (T) -> Any? = { it },
   content: @Composable AnimatedVisibilityScope.(T) -> Unit
 ) {
   AnimatedStack(
     listOf(state),
     modifier,
     transitionSpec,
-    contentKey,
     content = content
   )
 }
@@ -76,7 +74,6 @@ import androidx.compose.ui.Modifier
       ContentKey exitsWith slideOutHorizontally(tween(), slightlyRight) + fadeOut()
     }
   },
-  contentKey: (T) -> Any? = { it },
   contentOpaque: (T) -> Boolean = { false },
   content: @Composable AnimatedVisibilityScope.(T) -> Unit
 ) {
@@ -173,7 +170,7 @@ import androidx.compose.ui.Modifier
 
   Box(modifier = modifier) {
     currentlyVisible.forEach { stateForContent ->
-      key(contentKey(stateForContent)) {
+      key(stateForContent) {
         val enterTransitionsForState = enterTransitions[stateForContent] ?: emptyMap()
         val exitTransitionsForState = exitTransitions[stateForContent] ?: emptyMap()
 
