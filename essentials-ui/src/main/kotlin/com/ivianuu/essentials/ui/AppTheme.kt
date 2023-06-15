@@ -4,12 +4,10 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.with
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -22,7 +20,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ivianuu.essentials.ui.animation.ContentKey
+import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
 import com.ivianuu.essentials.ui.material.colors
+import com.ivianuu.essentials.ui.navigation.LocalScreenTransitionSpec
+import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 
@@ -139,14 +141,16 @@ typealias AppShapes = @AppShapesTag Shapes
   }
 }
 
-typealias AppTransition = @AppTransitionTag ContentTransform
+typealias AppScreenTransitionSpec = @AppTransitionScreenSpecTag ElementTransitionSpec<Screen<*>>
 
-@Tag annotation class AppTransitionTag {
+@Tag annotation class AppTransitionScreenSpecTag {
   companion object {
-    @Provide val default: AppTransition
-      get() = fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-          scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
-          fadeOut(animationSpec = tween(90))
+    @Provide val default: AppScreenTransitionSpec
+      get() = {
+        ContentKey entersWith fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+            scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
+        ContentKey exitsWith fadeOut(animationSpec = tween(90))
+      }
   }
 }
 
@@ -154,7 +158,7 @@ typealias AppTransition = @AppTransitionTag ContentTransform
   colors: AppColors,
   shapes: AppShapes,
   typography: AppTypography,
-  transition: AppTransition
+  transitionSpec: AppScreenTransitionSpec
 ) = AppThemeDecorator { content ->
   MaterialTheme(
     colors = if (isSystemInDarkTheme()) colors(
@@ -174,7 +178,7 @@ typealias AppTransition = @AppTransitionTag ContentTransform
     shapes = shapes
   ) {
     CompositionLocalProvider(
-      // TODO LocalStackTransition provides transition,
+      LocalScreenTransitionSpec provides transitionSpec,
       content = content
     )
   }

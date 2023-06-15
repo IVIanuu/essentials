@@ -4,10 +4,11 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.scaleIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Stable
 import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.ui.animation.ContentKey
 import com.ivianuu.injekt.Provide
 
 @Stable interface Screen<T>
@@ -17,11 +18,12 @@ interface RootScreen : Screen<Unit>
 interface OverlayScreen<T> : Screen<T> {
   companion object {
     @Provide fun <T : OverlayScreen<*>> overlayScreenConfig() =
-      ScreenConfig<T>(
-        opaque = true,
-        enterTransition = scaleIn(),
-        exitTransition = ExitTransition.None
-      )
+      ScreenConfig<T>(opaque = true, transitionSpec = {
+        if (isPush)
+          ContentKey entersWith fadeIn()
+        else
+          ContentKey exitsWith fadeOut()
+      })
   }
 }
 

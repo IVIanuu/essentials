@@ -9,6 +9,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -24,10 +25,13 @@ import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.animation.AnimatedStack
+import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.injekt.Provide
 import kotlin.collections.set
 import kotlin.reflect.KClass
+
+val LocalScreenTransitionSpec = compositionLocalOf<ElementTransitionSpec<Screen<*>>> { { } }
 
 @Composable fun NavigatorContent(
   modifier: Modifier = Modifier,
@@ -37,14 +41,16 @@ import kotlin.reflect.KClass
   componentFactory: @Composable () -> NavigationStateContentComponent = {
     val scope = LocalScope.current
     remember(scope) { scope.service() }
-  }
+  },
+  defaultTransitionSpec: ElementTransitionSpec<Screen<*>> = LocalScreenTransitionSpec.current
 ) {
   val component = componentFactory()
 
   val backStack by navigator.backStack.collectAsState()
 
   val stackChildren = backStack
-    .mapIndexed { index, screen ->
+    .withIndex()
+    .associateWith { (index, screen) ->
       key(screen) {
         var currentModel by remember { mutableStateOf<Any?>(null) }
         val (model, child) = remember {
@@ -56,6 +62,7 @@ import kotlin.reflect.KClass
           checkNotNull(model) { "No model found for $screen" }
           val decorateScreen = component.decorateScreenFactory(navigator, scope, screen)
           model to NavigationContentStateChild(
+            screen = screen,
             config = config,
             content = {
               decorateScreen {
@@ -93,13 +100,23 @@ import kotlin.reflect.KClass
         child
       }
     }
+    .mapKeys { it.key.value }
 
   AnimatedStack(
     modifier = modifier,
-    items = stackChildren,
-    contentOpaque = { it.config?.opaque ?: false }
+    items = backStack,
+    contentOpaque = { stackChildren[it]?.config?.opaque ?: false },
+    transitionSpec = {
+      val spec = (if (isPush)
+        stackChildren[target]?.config?.enterTransitionSpec
+      else
+        stackChildren[initial]?.config?.exitTransitionSpec)
+        ?: defaultTransitionSpec
+
+      spec()
+    }
   ) {
-    it.Content()
+    stackChildren[it]?.Content()
   }
 }
 
@@ -108,10 +125,15 @@ import kotlin.reflect.KClass
 }
 
 @Stable private class NavigationContentStateChild(
+  val screen: Screen<*>,
   val config: ScreenConfig<*>? = null,
   private val scope: Scope<ScreenScope>,
   private val content: @Composable () -> Unit
 ) {
+  override fun toString(): String {
+    return screen.toString()
+  }
+
   @Composable fun Content() {
     if (isFinalized) return
 

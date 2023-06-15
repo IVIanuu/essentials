@@ -4,11 +4,15 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
+import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
 
 data class ScreenConfig<K : Screen<*>>(
-  val enterTransition: EnterTransition? = null,
-  val exitTransition: ExitTransition? = null,
+  val enterTransitionSpec: (ElementTransitionSpec<Screen<*>>)? = null,
+  val exitTransitionSpec: (ElementTransitionSpec<Screen<*>>)? = null,
   val opaque: Boolean = false,
-)
+) {
+  constructor(
+    transitionSpec: ElementTransitionSpec<Screen<*>>,
+    opaque: Boolean = false
+  ) : this(transitionSpec, transitionSpec, opaque)
+}

@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 @Composable fun AnimatedVisibility(
   visible: Boolean,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionBuilder<Boolean>.() -> Unit = {
+  transitionSpec: ElementTransitionSpec<Boolean> = {
     ContentKey entersWith expandHorizontally() + fadeIn()
 
     ContentKey exitsWith shrinkHorizontally() + fadeOut()
@@ -42,7 +42,7 @@ import androidx.compose.ui.Modifier
 @Composable fun <T> AnimatedContent(
   state: T,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionBuilder<T>.() -> Unit = {
+  transitionSpec: ElementTransitionSpec<T> = {
     ContentKey entersWith
         fadeIn(animationSpec = tween(220, delayMillis = 90)) +
         scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
@@ -64,7 +64,7 @@ import androidx.compose.ui.Modifier
 @Composable fun <T> AnimatedStack(
   items: List<T>,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionBuilder<T>.() -> Unit = {
+  transitionSpec: ElementTransitionSpec<T> = {
     ContentKey entersWith
         fadeIn(animationSpec = tween(220, delayMillis = 90)) +
         scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
@@ -97,7 +97,6 @@ import androidx.compose.ui.Modifier
   val exitTransitions = remember { mutableStateMapOf<T, MutableMap<Any, ExitTransition>>() }
 
   fun updateTransitions(initial: T?, target: T?, isPush: Boolean) {
-    println("update transitions initial $initial target $target is push $isPush")
     ElementTransitionBuilderImpl(
       initial,
       target,
@@ -200,3 +199,5 @@ import androidx.compose.ui.Modifier
     }
   }
 }
+
+typealias ElementTransitionSpec<T> = ElementTransitionBuilder<T>.() -> Unit

@@ -24,7 +24,7 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.Success
 import com.ivianuu.essentials.ui.animation.AnimatedContent
 import com.ivianuu.essentials.ui.animation.ContentKey
-import com.ivianuu.essentials.ui.animation.ElementTransitionBuilder
+import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
 import com.ivianuu.essentials.ui.common.HorizontalList
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.layout.center
@@ -32,7 +32,7 @@ import com.ivianuu.essentials.ui.layout.center
 @Composable fun <T> ResourceVerticalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionBuilder<Resource<List<T>>>.() -> Unit = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: ElementTransitionSpec<Resource<List<T>>> = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -58,7 +58,7 @@ import com.ivianuu.essentials.ui.layout.center
 @Composable fun <T> ResourceHorizontalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionBuilder<Resource<List<T>>>.() -> Unit = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: ElementTransitionSpec<Resource<List<T>>> = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -84,7 +84,7 @@ import com.ivianuu.essentials.ui.layout.center
 @Composable fun <T> ResourceBox(
   resource: Resource<T>,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionBuilder<Resource<T>>.() -> Unit = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: ElementTransitionSpec<Resource<T>> = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -106,7 +106,7 @@ import com.ivianuu.essentials.ui.layout.center
 }
 
 object ResourceBoxDefaults {
-  val transitionSpec: ElementTransitionBuilder<*>.() -> Unit = {
+  val transitionSpec: ElementTransitionSpec<*> = {
     ContentKey entersWith fadeIn()
     ContentKey exitsWith fadeOut()
   }
