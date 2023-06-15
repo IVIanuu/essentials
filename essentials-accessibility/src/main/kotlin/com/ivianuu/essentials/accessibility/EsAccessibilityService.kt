@@ -10,6 +10,7 @@ import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.addFlag
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
@@ -89,7 +90,7 @@ import kotlinx.coroutines.launch
   }
 }
 
-@Provide data class AccessibilityComponent(
+@Provide @Service<AccessibilityScope> data class AccessibilityComponent(
   val configs: () -> List<AccessibilityConfig>,
   val coroutineScope: ScopedCoroutineScope<AccessibilityScope>
 )
