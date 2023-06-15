@@ -14,6 +14,10 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.resource.Error
@@ -27,11 +31,12 @@ import com.ivianuu.essentials.ui.animation.crossFade
 import com.ivianuu.essentials.ui.common.HorizontalList
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.layout.center
+import kotlin.reflect.KClass
 
 @Composable fun <T> ResourceVerticalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<Resource<List<T>>> = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: ElementTransitionSpec<ResourceBoxItem<List<T>>> = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -57,7 +62,7 @@ import com.ivianuu.essentials.ui.layout.center
 @Composable fun <T> ResourceHorizontalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<Resource<List<T>>> = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: ElementTransitionSpec<ResourceBoxItem<List<T>>> = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -83,25 +88,44 @@ import com.ivianuu.essentials.ui.layout.center
 @Composable fun <T> ResourceBox(
   resource: Resource<T>,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<Resource<T>> = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: ElementTransitionSpec<ResourceBoxItem<T>> = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
   success: @Composable (T) -> Unit
 ) {
+  // we only wanna animate if the resource type has changed
+  val currentItem by remember(resource::class) {
+    mutableStateOf(ResourceBoxItem(resource::class, resource))
+  }
+
+  currentItem.value = resource
+
   AnimatedContent(
-    state = resource,
+    state = currentItem,
     modifier = modifier,
-    transitionSpec = transitionSpec,
-    contentKey = { it::class }
+    transitionSpec = transitionSpec
   ) { itemToRender ->
-    when (itemToRender) {
+    when (val value = itemToRender.value) {
       is Idle -> idle()
       is Loading -> loading()
-      is Success -> success(itemToRender.value)
-      is Error -> error(itemToRender.error)
+      is Success -> success(value.value)
+      is Error -> error(value.error)
     }
   }
+}
+
+class ResourceBoxItem<T>(
+  val clazz: KClass<out Resource<T>>,
+  value: Resource<T>
+) {
+  var value by mutableStateOf(value)
+    internal set
+
+  override fun equals(other: Any?): Boolean = other is ResourceBoxItem<*> &&
+      other.clazz == clazz
+
+  override fun hashCode(): Int = clazz.hashCode()
 }
 
 object ResourceBoxDefaults {
