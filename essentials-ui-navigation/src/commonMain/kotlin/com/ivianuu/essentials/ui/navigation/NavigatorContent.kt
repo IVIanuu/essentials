@@ -7,7 +7,6 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.currentCompositeKeyHash
@@ -48,75 +47,78 @@ val LocalScreenTransitionSpec = compositionLocalOf<ElementTransitionSpec<Screen<
 
   val backStack by navigator.backStack.collectAsState()
 
-  val stackChildren = backStack
-    .withIndex()
-    .associateWith { (index, screen) ->
-      key(screen) {
-        var currentModel by remember { mutableStateOf<Any?>(null) }
-        val (model, child) = remember {
-          val scope = component.screenScopeFactory(navigator, screen)
-          val ui = component.uiFactories[screen::class]?.invoke(navigator, scope, screen)
-          checkNotNull(ui) { "No ui factory found for $screen" }
-          val config = component.configFactories[screen::class]?.invoke(navigator, scope, screen)
-          val model = component.modelFactories[screen::class]?.invoke(navigator, scope, screen)
-          checkNotNull(model) { "No model found for $screen" }
-          val decorateScreen = component.decorateScreenFactory(navigator, scope, screen)
-          model to NavigationContentStateChild(
-            screen = screen,
-            config = config,
-            content = {
-              decorateScreen {
-                with(ui as Ui<*, Any>) {
-                  with(currentModel as Any) {
-                    invoke(this)
-                  }
+  val screenDatas = remember { mutableMapOf<Screen<*>, ScreenData>() }
+
+  backStack.forEachIndexed { index, screen ->
+    key(screen) {
+      var currentModel by remember { mutableStateOf<Any?>(null) }
+      val (model, screenData) = remember {
+        val scope = component.screenScopeFactory(navigator, screen)
+        val ui = component.uiFactories[screen::class]?.invoke(navigator, scope, screen)
+        checkNotNull(ui) { "No ui factory found for $screen" }
+        val config = component.configFactories[screen::class]?.invoke(navigator, scope, screen)
+        val model = component.modelFactories[screen::class]?.invoke(navigator, scope, screen)
+        checkNotNull(model) { "No model found for $screen" }
+        val decorateScreen = component.decorateScreenFactory(navigator, scope, screen)
+        model to ScreenData(
+          screen = screen,
+          config = config,
+          content = {
+            decorateScreen {
+              with(ui as Ui<*, Any>) {
+                with(currentModel as Any) {
+                  invoke(this)
                 }
               }
-            },
-            scope = scope
-          )
-        }
+            }
+          },
+          scope = scope
+        )
+      }
 
-        key(index) {
-          BackHandler(enabled = handleBack && (index > 0 || popRoot), onBackPress = action {
-            navigator.pop(screen)
-          })
-        }
+      key(index) {
+        BackHandler(enabled = handleBack && (index > 0 || popRoot), onBackPress = action {
+          navigator.pop(screen)
+        })
+      }
 
-        ObserveScope(
-          remember {
-            {
-              currentModel = model()
+      ObserveScope(
+        remember {
+          {
+            currentModel = model()
 
-              DisposableEffect(true) {
-                onDispose {
-                  child.remove()
+            DisposableEffect(true) {
+              onDispose {
+                println("on dispose $screen")
+                screenData.finalize {
+                  println("on finalized $screen")
+                  screenDatas.remove(screen)
                 }
               }
             }
           }
-        )
+        }
+      )
 
-        child
-      }
+      screenDatas[screen] = screenData
     }
-    .mapKeys { it.key.value }
+  }
 
   AnimatedStack(
     modifier = modifier,
     items = backStack,
-    contentOpaque = { stackChildren[it]?.config?.opaque ?: false },
+    contentOpaque = { screenDatas[it]?.config?.opaque ?: false },
     transitionSpec = {
       val spec = (if (isPush)
-        stackChildren[target]?.config?.enterTransitionSpec
+        screenDatas[target]?.config?.enterTransitionSpec
       else
-        stackChildren[initial]?.config?.exitTransitionSpec)
+        screenDatas[initial]?.config?.exitTransitionSpec)
         ?: defaultTransitionSpec
 
       spec()
     }
   ) {
-    stackChildren[it]?.Content()
+    screenDatas[it]!!.Content()
   }
 }
 
@@ -124,16 +126,12 @@ val LocalScreenTransitionSpec = compositionLocalOf<ElementTransitionSpec<Screen<
   body()
 }
 
-@Stable private class NavigationContentStateChild(
+private class ScreenData(
   val screen: Screen<*>,
   val config: ScreenConfig<*>? = null,
   private val scope: Scope<ScreenScope>,
   private val content: @Composable () -> Unit
 ) {
-  override fun toString(): String {
-    return screen.toString()
-  }
-
   @Composable fun Content() {
     if (isFinalized) return
 
@@ -169,8 +167,10 @@ val LocalScreenTransitionSpec = compositionLocalOf<ElementTransitionSpec<Screen<
   private var isInComposition = false
   private var isRemoved = false
   private var isFinalized = false
+  private var onFinalize: (() -> Unit)? = null
 
-  fun remove() {
+  fun finalize(onFinalize: () -> Unit) {
+    this.onFinalize = onFinalize
     isRemoved = true
     finalizeIfNeeded()
   }
@@ -179,6 +179,7 @@ val LocalScreenTransitionSpec = compositionLocalOf<ElementTransitionSpec<Screen<
     if (isFinalized) return
     if (isInComposition || !isRemoved) return
     isFinalized = true
+    onFinalize?.invoke()
     scope.dispose()
   }
 }

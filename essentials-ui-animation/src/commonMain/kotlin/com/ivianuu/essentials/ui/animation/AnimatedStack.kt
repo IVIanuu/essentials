@@ -159,16 +159,8 @@ import androidx.compose.ui.Modifier
   Box(modifier = modifier) {
     currentlyVisible.forEach { stateForContent ->
       key(contentKey(stateForContent)) {
-        val enterTransitionsForState = remember {
-          enterTransitions[stateForContent] ?: emptyMap()
-        }
-        val exitTransitionsForState = remember(stateForContent in transition.segment.targetState) {
-          if (stateForContent in transition.segment.targetState) {
-            emptyMap()
-          } else {
-            exitTransitions[stateForContent] ?: emptyMap()
-          }
-        }
+        val enterTransitionsForState = enterTransitions[stateForContent] ?: emptyMap()
+        val exitTransitionsForState = exitTransitions[stateForContent] ?: emptyMap()
 
         transition.AnimatedVisibility(
           visible = { stateForContent in it.filterVisible() },
