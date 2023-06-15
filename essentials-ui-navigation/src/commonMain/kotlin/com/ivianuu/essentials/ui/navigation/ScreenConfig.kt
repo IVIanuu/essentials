@@ -12,7 +12,7 @@ data class ScreenConfig<K : Screen<*>>(
   val opaque: Boolean = false,
 ) {
   constructor(
-    transitionSpec: ElementTransitionSpec<Screen<*>>,
-    opaque: Boolean = false
+    opaque: Boolean = false,
+    transitionSpec: ElementTransitionSpec<Screen<*>>
   ) : this(transitionSpec, transitionSpec, opaque)
 }

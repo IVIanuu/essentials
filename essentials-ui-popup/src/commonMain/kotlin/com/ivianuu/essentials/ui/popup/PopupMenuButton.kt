@@ -22,8 +22,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.findRootCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.LocalScope
@@ -65,9 +68,19 @@ import com.ivianuu.essentials.ui.navigation.push
       interactionSource = remember { MutableInteractionSource() },
       indication = indication,
       onClick = action {
+        val windowCoords = coordinates!!.findRootCoordinates()
+        val boundsInWindow = coordinates!!.boundsInWindow()
+        val isLeft = (boundsInWindow.center.x < windowCoords.size.width / 2)
+        val isTop = (boundsInWindow.center.y <
+            windowCoords.size.height - (windowCoords.size.height / 10))
+
         navigator.push(
           PopupScreen(
             position = coordinates!!.boundsInRoot(),
+            transformOrigin = TransformOrigin(
+              if (isLeft) 0f else 1f,
+              if (isTop) 0f else 1f
+            ),
             onCancel = onCancel
           ) {
             Popup(popupContent)

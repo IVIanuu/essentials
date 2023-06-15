@@ -1,5 +1,10 @@
 package com.ivianuu.essentials.ui.popup
 
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -13,15 +18,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.refOf
 import com.ivianuu.essentials.compose.setValue
+import com.ivianuu.essentials.safeAs
+import com.ivianuu.essentials.ui.animation.animationElement
 import com.ivianuu.essentials.ui.layout.systemBarsPadding
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayScreen
@@ -29,9 +38,11 @@ import com.ivianuu.essentials.ui.navigation.ScreenConfig
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
+import kotlin.math.max
 
 class PopupScreen(
   val position: Rect,
+  val transformOrigin: TransformOrigin,
   val onCancel: (() -> Unit)?,
   val content: @Composable () -> Unit,
 ) : OverlayScreen<Unit>
@@ -67,6 +78,7 @@ class PopupScreen(
     ) {
       Box(
         modifier = Modifier
+          .animationElement(PopupKey)
           .pointerInput(true) {
             detectTapGestures {
             }
@@ -78,8 +90,22 @@ class PopupScreen(
   }
 }
 
+private val PopupKey = Any()
+
 @Provide val popupScreenConfig: ScreenConfig<PopupScreen>
-  get() = ScreenConfig(opaque = true)
+  get() = ScreenConfig(opaque = true) {
+    if (isPush) {
+      PopupKey entersWith
+          scaleIn(
+            animationSpec = tween(150, easing = LinearOutSlowInEasing),
+            initialScale = 0.8f,
+            transformOrigin = target.safeAs<PopupScreen>()
+              ?.transformOrigin ?: TransformOrigin.Center
+          ) + fadeIn(tween(50))
+    } else {
+      PopupKey exitsWith fadeOut(tween(75))
+    }
+  }
 
 @Composable private fun PopupLayout(
   position: Rect,
@@ -93,45 +119,42 @@ class PopupScreen(
       .systemBarsPadding()
       .onGloballyPositioned { globalLayoutPosition = it.positionInRoot() }
   ) { measureables, constraints ->
+    val padding = 16.dp.roundToPx()
     val childConstraints = constraints.copy(
       minWidth = 0,
       minHeight = 0,
-      maxWidth = constraints.maxWidth,
-      maxHeight = constraints.maxHeight
+      maxWidth = constraints.maxWidth - padding * 2,
+      maxHeight = constraints.maxHeight - padding * 2
     )
 
     val placeable = measureables.single().measure(childConstraints)
 
     var y = position.top.toInt() - globalLayoutPosition.y.toInt()
-    var x: Int
-
-    // Find the ideal horizontal position.
-    if ((position.left + position.right / 2) < constraints.maxWidth / 2) {
-      x = position.left.toInt()
+    var x = if ((position.left + position.right / 2) < constraints.maxWidth / 2) {
+      position.left.toInt()
     } else if (position.left < position.right) {
-      x = (position.right - placeable.width).toInt()
+      (position.right - placeable.width).toInt()
     } else {
-      x = (position.right - placeable.width).toInt()
+      (position.right - placeable.width).toInt()
     }
 
-    x = x/*.coerceIn(
-      insets.left.insetOrMinPadding(),
+    x = x.coerceIn(
+      padding,
       max(
-        insets.left.insetOrMinPadding(),
-        constraints.maxWidth -
-            placeable.width -
-            insets.right.insetOrMinPadding()
+        padding,
+        constraints.maxHeight -
+            placeable.width - padding
       )
-    )*/
-    y = y/*.coerceIn(
-      insets.top.insetOrMinPadding(),
+    )
+    y = y.coerceIn(
+      padding,
       max(
-        insets.top.insetOrMinPadding(),
+        padding,
         constraints.maxHeight -
             placeable.height -
-            insets.bottom.insetOrMinPadding()
+            padding
       )
-    )*/
+    )
 
     layout(constraints.maxWidth, constraints.maxHeight) {
       placeable.place(x = x, y = y)
