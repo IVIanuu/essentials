@@ -4,8 +4,7 @@
 
 package com.ivianuu.essentials.ui.resource
 
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
@@ -23,8 +22,8 @@ import com.ivianuu.essentials.resource.Loading
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.Success
 import com.ivianuu.essentials.ui.animation.AnimatedContent
-import com.ivianuu.essentials.ui.animation.ContentKey
 import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
+import com.ivianuu.essentials.ui.animation.crossFade
 import com.ivianuu.essentials.ui.common.HorizontalList
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.layout.center
@@ -106,10 +105,7 @@ import com.ivianuu.essentials.ui.layout.center
 }
 
 object ResourceBoxDefaults {
-  val transitionSpec: ElementTransitionSpec<*> = {
-    ContentKey entersWith fadeIn()
-    ContentKey exitsWith fadeOut()
-  }
+  val transitionSpec: ElementTransitionSpec<*> = { crossFade(tween(180)) }
   val error: @Composable (Throwable) -> Unit = {
     Text(
       modifier = Modifier

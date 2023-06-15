@@ -78,7 +78,8 @@ import androidx.compose.ui.Modifier
   val transition = updateTransition(targetState = items)
 
   fun List<T>.filterVisible(): List<T> = buildList {
-    for (stateForContent in this@filterVisible.reversed()) {
+    for (i in this@filterVisible.lastIndex downTo 0) {
+      val stateForContent = this@filterVisible[i]
       add(0, stateForContent)
       if (!contentOpaque(stateForContent)) break
     }
@@ -88,7 +89,7 @@ import androidx.compose.ui.Modifier
     transition.currentState.filterVisible().toMutableStateList()
   }
 
-  items.filterVisible().forEach {
+  transition.targetState.filterVisible().forEach {
     if (it !in currentlyVisible)
       currentlyVisible.add(it)
   }
@@ -96,7 +97,18 @@ import androidx.compose.ui.Modifier
   val enterTransitions = remember { mutableStateMapOf<T, MutableMap<Any, EnterTransition>>() }
   val exitTransitions = remember { mutableStateMapOf<T, MutableMap<Any, ExitTransition>>() }
 
-  fun updateTransitions(initial: T?, target: T?, isPush: Boolean) {
+  fun registerTransition(initial: T?, target: T?, isPush: Boolean) {
+    if (initial != null && target != null) {
+      if (isPush && currentlyVisible.indexOf(target) < currentlyVisible.indexOf(initial)) {
+        currentlyVisible.removeAt(currentlyVisible.indexOf(target))
+        currentlyVisible.add(currentlyVisible.indexOf(initial) + 1, target)
+      } else if (!isPush && currentlyVisible.indexOf(target) > currentlyVisible.indexOf(initial)) {
+        currentlyVisible.removeAt(currentlyVisible.indexOf(target))
+        currentlyVisible.add(currentlyVisible.indexOf(initial), target)
+      }
+    }
+    println("transition from $initial to $target $isPush currentv fixed ${currentlyVisible.toList()}")
+
     ElementTransitionBuilderImpl(
       initial,
       target,
@@ -130,24 +142,23 @@ import androidx.compose.ui.Modifier
           .dropLast(if (replacingTopItems) 1 else 0)
           .reversed()
           .filterNot { it in targetVisibleItems }
-          .forEach { updateTransitions(it, null, false) }
+          .forEach { registerTransition(it, null, false) }
 
         // Add any new items to the stack from bottom to top
         targetVisibleItems
           .dropLast(if (replacingTopItems) 1 else 0)
           .filterNot { it in initialVisibleItems }
           .forEachIndexed { i, item ->
-            updateTransitions(
+            registerTransition(
               targetVisibleItems.getOrNull(i - 1),
               item,
               true
             )
           }
 
-
         // Replace the old visible top with the new one
         if (replacingTopItems)
-          updateTransitions(
+          registerTransition(
             initialTopItem,
             targetTopItem,
             targetTopItem !in transition.currentState

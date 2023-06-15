@@ -4,10 +4,6 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -20,8 +16,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ivianuu.essentials.ui.animation.ContentKey
 import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
+import com.ivianuu.essentials.ui.animation.fadeUpwards
 import com.ivianuu.essentials.ui.material.colors
 import com.ivianuu.essentials.ui.navigation.LocalScreenTransitionSpec
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -146,11 +142,7 @@ typealias AppScreenTransitionSpec = @AppTransitionScreenSpecTag ElementTransitio
 @Tag annotation class AppTransitionScreenSpecTag {
   companion object {
     @Provide val default: AppScreenTransitionSpec
-      get() = {
-        ContentKey entersWith fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-            scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
-        ContentKey exitsWith fadeOut(animationSpec = tween(90))
-      }
+      get() = { fadeUpwards() }
   }
 }
 
