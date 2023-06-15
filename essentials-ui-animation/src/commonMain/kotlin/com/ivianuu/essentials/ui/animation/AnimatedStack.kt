@@ -13,6 +13,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -28,7 +30,6 @@ import androidx.compose.ui.Modifier
   modifier: Modifier = Modifier,
   transitionSpec: ElementTransitionSpec<Boolean> = {
     ContentKey entersWith expandHorizontally() + fadeIn()
-
     ContentKey exitsWith shrinkHorizontally() + fadeOut()
   },
   content: @Composable AnimatedVisibilityScope.() -> Unit
@@ -65,11 +66,15 @@ import androidx.compose.ui.Modifier
   items: List<T>,
   modifier: Modifier = Modifier,
   transitionSpec: ElementTransitionSpec<T> = {
-    ContentKey entersWith
-        fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
-
-    ContentKey exitsWith fadeOut(animationSpec = tween(300))
+    val slightlyRight = { width: Int -> (width * 0.05f).toInt() }
+    val slightlyLeft = { width: Int -> 0 - (width * 0.05f).toInt() }
+    if (isPush) {
+      ContentKey entersWith slideInHorizontally(tween(), slightlyRight) + fadeIn()
+      ContentKey exitsWith slideOutHorizontally(tween(), slightlyLeft) + fadeOut()
+    } else {
+      ContentKey entersWith slideInHorizontally(tween(), slightlyLeft) + fadeIn()
+      ContentKey exitsWith slideOutHorizontally(tween(), slightlyRight) + fadeOut()
+    }
   },
   contentKey: (T) -> Any? = { it },
   contentOpaque: (T) -> Boolean = { false },
@@ -98,13 +103,13 @@ import androidx.compose.ui.Modifier
   val exitTransitions = remember { mutableStateMapOf<T, MutableMap<Any, ExitTransition>>() }
 
   fun registerTransition(initial: T?, target: T?, isPush: Boolean) {
-    if (initial != null && target != null) {
+    if (currentlyVisible.indexOf(initial) != -1 && currentlyVisible.indexOf(target) != -1) {
       if (isPush && currentlyVisible.indexOf(target) < currentlyVisible.indexOf(initial)) {
         currentlyVisible.removeAt(currentlyVisible.indexOf(target))
-        currentlyVisible.add(currentlyVisible.indexOf(initial) + 1, target)
+        currentlyVisible.add(currentlyVisible.indexOf(initial) + 1, target as T)
       } else if (!isPush && currentlyVisible.indexOf(target) > currentlyVisible.indexOf(initial)) {
         currentlyVisible.removeAt(currentlyVisible.indexOf(target))
-        currentlyVisible.add(currentlyVisible.indexOf(initial), target)
+        currentlyVisible.add(currentlyVisible.indexOf(initial), target as T)
       }
     }
     println("transition from $initial to $target $isPush currentv fixed ${currentlyVisible.toList()}")

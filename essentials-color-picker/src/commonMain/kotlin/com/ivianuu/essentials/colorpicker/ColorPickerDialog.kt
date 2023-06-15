@@ -4,9 +4,6 @@
 
 package com.ivianuu.essentials.colorpicker
 
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -102,8 +99,7 @@ import com.ivianuu.injekt.Provide
       AnimatedContent(
         modifier = Modifier.height(300.dp)
           .padding(start = 24.dp, end = 24.dp),
-        state = currentScreen,
-        transitionSpec = { fadeIn() with fadeOut() }
+        state = currentScreen
       ) { currentScreen ->
         when (currentScreen) {
           ColorPickerTab.COLORS -> {
@@ -158,10 +154,7 @@ import com.ivianuu.injekt.Provide
   modifier: Modifier = Modifier
 ) {
   var palettesStack by remember { mutableStateOf<List<ColorPickerPalette?>>(listOf(null)) }
-  AnimatedStack(
-    items = palettesStack,
-    transitionSpec = { fadeIn() with fadeOut() }
-  ) { palette ->
+  AnimatedStack(items = palettesStack) { palette ->
     val items = remember {
       palette
         ?.colors
