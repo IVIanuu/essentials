@@ -30,7 +30,7 @@ import kotlin.collections.set
 
   backStack.forEachIndexed { index, screen ->
     key(screen) {
-      screenContexts[screen] = rememberScreenContext(screen)
+      screenContexts[screen] = rememberScreenContext(screen, navigator)
 
       key(index) {
         BackHandler(enabled = handleBack && (index > 0 || popRoot), onBackPress = action {

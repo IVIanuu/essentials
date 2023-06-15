@@ -76,23 +76,24 @@ import kotlin.reflect.KClass
 
 @Composable fun <T : Screen<*>> rememberScreenContext(
   screen: T,
+  navigator: Navigator = LocalScope.current.navigator,
   componentFactory: @Composable () -> ScreenContextComponent = {
     val scope = LocalScope.current
     remember(scope) { scope.service() }
-  },
+  }
 ): ScreenContext<T> {
   val component = componentFactory()
 
   var currentModel by remember { mutableStateOf<Any?>(null) }
 
   val (model, context) = remember {
-    val scope = component.screenScopeFactory(component.navigator, screen)
-    val ui = component.uiFactories[screen::class.cast()]?.invoke(component.navigator, scope, screen)
+    val scope = component.screenScopeFactory(navigator, screen)
+    val ui = component.uiFactories[screen::class.cast()]?.invoke(navigator, scope, screen)
     checkNotNull(ui) { "No ui factory found for $screen" }
-    val config = component.configFactories[screen::class.cast()]?.invoke(component.navigator, scope, screen)
-    val model = component.modelFactories[screen::class.cast()]?.invoke(component.navigator, scope, screen)
+    val config = component.configFactories[screen::class.cast()]?.invoke(navigator, scope, screen)
+    val model = component.modelFactories[screen::class.cast()]?.invoke(navigator, scope, screen)
     checkNotNull(model) { "No model found for $screen" }
-    val decorateScreen = component.decorateScreenFactory(component.navigator, scope, screen)
+    val decorateScreen = component.decorateScreenFactory(navigator, scope, screen)
     model to ScreenContext<T>(
       screen = screen,
       config = config.cast(),
@@ -136,6 +137,5 @@ import kotlin.reflect.KClass
   val uiFactories: Map<KClass<Screen<*>>, UiFactory<Screen<*>>>,
   val modelFactories: Map<KClass<Screen<*>>, ModelFactory<Screen<*>, *>>,
   val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen,
-  val screenScopeFactory: (Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>,
-  val navigator: Navigator
+  val screenScopeFactory: (Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>
 )
