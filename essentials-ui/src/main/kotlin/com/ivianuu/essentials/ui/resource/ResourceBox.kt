@@ -4,10 +4,8 @@
 
 package com.ivianuu.essentials.ui.resource
 
-import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
@@ -25,7 +23,8 @@ import com.ivianuu.essentials.resource.Loading
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.Success
 import com.ivianuu.essentials.ui.animation.AnimatedContent
-import com.ivianuu.essentials.ui.animation.AnimationScope
+import com.ivianuu.essentials.ui.animation.ContentKey
+import com.ivianuu.essentials.ui.animation.ElementTransitionBuilder
 import com.ivianuu.essentials.ui.common.HorizontalList
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.layout.center
@@ -33,7 +32,7 @@ import com.ivianuu.essentials.ui.layout.center
 @Composable fun <T> ResourceVerticalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
-  transitionSpec: AnimationScope<Resource<List<T>>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: ElementTransitionBuilder<Resource<List<T>>>.() -> Unit = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -59,7 +58,7 @@ import com.ivianuu.essentials.ui.layout.center
 @Composable fun <T> ResourceHorizontalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
-  transitionSpec: AnimationScope<Resource<List<T>>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: ElementTransitionBuilder<Resource<List<T>>>.() -> Unit = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -85,7 +84,7 @@ import com.ivianuu.essentials.ui.layout.center
 @Composable fun <T> ResourceBox(
   resource: Resource<T>,
   modifier: Modifier = Modifier,
-  transitionSpec: AnimationScope<Resource<T>>.() -> ContentTransform = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: ElementTransitionBuilder<Resource<T>>.() -> Unit = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
@@ -107,7 +106,10 @@ import com.ivianuu.essentials.ui.layout.center
 }
 
 object ResourceBoxDefaults {
-  val transitionSpec: AnimationScope<*>.() -> ContentTransform = { fadeIn() with fadeOut() }
+  val transitionSpec: ElementTransitionBuilder<*>.() -> Unit = {
+    ContentKey entersWith fadeIn()
+    ContentKey exitsWith fadeOut()
+  }
   val error: @Composable (Throwable) -> Unit = {
     Text(
       modifier = Modifier
