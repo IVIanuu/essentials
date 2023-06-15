@@ -6,6 +6,7 @@
 
 package com.ivianuu.essentials.resource
 
+import androidx.compose.runtime.Stable
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.fold
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
-sealed interface Resource<out T>
+@Stable sealed interface Resource<out T>
 
 object Idle : Resource<Nothing> {
   override fun toString(): String = "Idle"
@@ -54,7 +55,6 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
   emitAll(this@flowAsResource)
 }
 
-// todo context
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
   flow<Resource<T>> {
     emit(Loading)

@@ -17,6 +17,7 @@ kotlin {
       dependencies {
         api(project(":essentials-core"))
         api(project(":essentials-coroutines"))
+        api(Deps.Compose.runtime)
       }
     }
     named("jvmTest") {
