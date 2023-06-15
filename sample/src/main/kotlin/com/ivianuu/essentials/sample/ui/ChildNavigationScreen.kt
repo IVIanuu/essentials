@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.ui.animation.slideHorizontally
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -55,7 +56,8 @@ class ChildNavigationScreen : Screen<Unit>
             modifier = Modifier
               .weight(1f)
               .fillMaxWidth(),
-            navigator = navigator
+            navigator = navigator,
+            defaultTransitionSpec = { slideHorizontally() }
           )
         }
       }
