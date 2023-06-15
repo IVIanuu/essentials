@@ -118,7 +118,7 @@ val LocalScreenTransitionSpec = compositionLocalOf<ElementTransitionSpec<Screen<
       spec()
     }
   ) {
-    screenDatas[it]!!.Content()
+    screenDatas[it]?.Content()
   }
 }
 
