@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.ui.systembars
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -22,8 +21,6 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.ui.AppThemeDecorator
 import com.ivianuu.essentials.ui.AppUiDecorator
@@ -37,12 +34,13 @@ import com.ivianuu.injekt.Provide
 @Composable fun Modifier.systemBarStyle(
   bgColor: Color = overlaySystemBarBgColor(MaterialTheme.colors.surface),
   darkIcons: Boolean = bgColor.isLight,
-  elevation: Dp = 0.dp
+  zIndex: Int = 0,
+  tag: String? = null
 ): Modifier = composed {
-  val style = remember { SystemBarStyle(bgColor, darkIcons, elevation) }
+  val style = remember { SystemBarStyle(bgColor, darkIcons, zIndex, tag) }
   style.barColor = bgColor
   style.darkIcons = darkIcons
-  style.elevation = elevation
+  style.zIndex = zIndex
 
   val systemBarManager = LocalSystemBarManager.current
   DisposableEffect(systemBarManager, style) {
@@ -56,15 +54,12 @@ import com.ivianuu.injekt.Provide
 fun interface RootSystemBarsStyle : AppUiDecorator {
   companion object {
     @Provide val impl = RootSystemBarsStyle { content ->
-      Surface {
-        Box(
-          modifier = Modifier
-            .fillMaxSize()
-            .systemBarStyle()
-        ) {
-          content()
-        }
-      }
+      Surface(
+        modifier = Modifier
+          .fillMaxSize()
+          .systemBarStyle(zIndex = -1, tag = "root"),
+        content = content
+      )
     }
 
     @Provide val loadingOrder
@@ -81,11 +76,14 @@ fun interface RootSystemBarsStyle : AppUiDecorator {
 }
 
 
-@Stable class SystemBarStyle(barColor: Color, darkIcons: Boolean, elevation: Dp) {
+@Stable class SystemBarStyle(barColor: Color, darkIcons: Boolean, zIndex: Int, val tag: String?) {
   var barColor by mutableStateOf(barColor)
   var darkIcons by mutableStateOf(darkIcons)
   var bounds by mutableStateOf(Rect(0f, 0f, 0f, 0f))
-  var elevation by mutableStateOf(elevation)
+  var zIndex by mutableStateOf(zIndex)
+  override fun toString(): String {
+    return "SystemBarStyle(tag=$tag, barColor=$barColor, darkIcons=$darkIcons, bounds=$bounds, zIndex=$zIndex)"
+  }
 }
 
 fun interface SystemBarManagerProvider : AppUiDecorator {

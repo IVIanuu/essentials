@@ -31,8 +31,7 @@ import com.ivianuu.essentials.ui.util.isLight
   val systemBarStyleModifier = if (applySystemBarStyle) {
     Modifier.systemBarStyle(
       bgColor = Color.Transparent,
-      darkIcons = backgroundColor.isLight,
-      elevation = elevation
+      darkIcons = backgroundColor.isLight
     )
   } else Modifier
   Surface(

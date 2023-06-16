@@ -12,7 +12,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -57,18 +56,17 @@ private class AndroidSystemBarManager : SystemBarManager {
     val windowInsets = LocalInsets.current
     val density = LocalDensity.current
 
-    val statusBarHitPoint = remember(density, windowInsets) {
+    val statusBarHitPointY = remember(density, windowInsets) {
       with(density) {
-        Offset(
-          windowInsets.left.toPx(),
-          windowInsets.top.toPx() * 0.5f
-        )
+        windowInsets.top.toPx()
       }
     }
 
     val statusBarStyle = styles
-      .sortedBy { it.elevation }
-      .lastOrNull { it.bounds.contains(statusBarHitPoint) }
+      .sortedBy { it.zIndex }
+      .lastOrNull { it.bounds.top <= statusBarHitPointY && it.bounds.bottom >= statusBarHitPointY }
+
+    println("status bar style hit point $statusBarHitPointY ${styles.toList()}")
 
     DisposableEffect(activity, statusBarStyle?.barColor, statusBarStyle?.darkIcons) {
       activity.window.statusBarColor =
@@ -83,23 +81,23 @@ private class AndroidSystemBarManager : SystemBarManager {
 
     val screenHeight = activity.window.decorView.height.toFloat()
     val screenWidth = activity.window.decorView.width.toFloat()
-    val navBarHitPoint = remember(density, windowInsets, screenWidth, screenHeight) {
+    val navBarHitPointY = remember(density, windowInsets, screenWidth, screenHeight) {
       with(density) {
         val bottomPadding = windowInsets.bottom.toPx()
         val leftPadding = windowInsets.left.toPx()
         val rightPadding = windowInsets.right.toPx()
         when {
-          bottomPadding > 0f -> Offset(bottomPadding, screenHeight - bottomPadding * 0.5f)
-          leftPadding > 0f -> Offset(leftPadding * 0.5f, screenHeight)
-          rightPadding > 0f -> Offset(screenWidth - rightPadding * 0.5f, screenHeight)
-          else -> Offset(0f, 0f)
+          bottomPadding > 0f -> bottomPadding
+          leftPadding > 0f -> leftPadding
+          rightPadding > 0f -> screenWidth - rightPadding
+          else -> 0f
         }
       }
     }
 
     val navBarStyle = styles
-      .sortedBy { it.elevation }
-      .lastOrNull { it.bounds.contains(navBarHitPoint) }
+      .sortedBy { it.zIndex }
+      .lastOrNull { it.bounds.top <= navBarHitPointY && it.bounds.bottom >= statusBarHitPointY }
 
     DisposableEffect(activity, navBarStyle?.barColor, navBarStyle?.darkIcons) {
       activity.window.navigationBarColor =

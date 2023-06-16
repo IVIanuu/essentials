@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,16 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animation.AnimatedContent
-import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.material.NavigationBar
 import com.ivianuu.essentials.ui.material.NavigationBarItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.systembars.overlaySystemBarBgColor
-import com.ivianuu.essentials.ui.systembars.systemBarStyle
-import com.ivianuu.essentials.ui.util.isLight
 import com.ivianuu.injekt.Provide
 
 @Provide val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationScreen() }
@@ -42,30 +37,18 @@ class BottomNavigationScreen : Screen<Unit>
   Scaffold(
     topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
     bottomBar = {
-      Surface(
-        modifier = Modifier.systemBarStyle(
-          bgColor = overlaySystemBarBgColor(MaterialTheme.colors.primary),
-          darkIcons = MaterialTheme.colors.primary.isLight,
-          elevation = 8.dp
-        ),
-        elevation = 8.dp,
-        color = MaterialTheme.colors.primary
+      NavigationBar(
+        backgroundColor = MaterialTheme.colors.primary,
+        elevation = 0.dp
       ) {
-        InsetsPadding(left = false, top = false, right = false) {
-          NavigationBar(
-            backgroundColor = MaterialTheme.colors.primary,
-            elevation = 0.dp
-          ) {
-            BottomNavItem.values().forEach { item ->
-              NavigationBarItem(
-                alwaysShowLabel = false,
-                selected = item == selectedItem,
-                onClick = { selectedItem = item },
-                icon = { Icon(item.icon) },
-                label = { Text(item.title) }
-              )
-            }
-          }
+        BottomNavItem.values().forEach { item ->
+          NavigationBarItem(
+            alwaysShowLabel = false,
+            selected = item == selectedItem,
+            onClick = { selectedItem = item },
+            icon = { Icon(item.icon) },
+            label = { Text(item.title) }
+          )
         }
       }
     }
