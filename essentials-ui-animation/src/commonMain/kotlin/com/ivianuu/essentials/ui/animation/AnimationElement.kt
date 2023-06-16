@@ -3,6 +3,7 @@ package com.ivianuu.essentials.ui.animation
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SizeTransform
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -35,6 +36,8 @@ interface ElementTransitionBuilder<T> {
 
   infix fun Any.entersWith(transition: EnterTransition)
   infix fun Any.exitsWith(transition: ExitTransition)
+
+  fun containerSizeTransform(sizeTransform: SizeTransform?)
 }
 
 internal class ElementTransitionBuilderImpl<T>(
@@ -44,6 +47,7 @@ internal class ElementTransitionBuilderImpl<T>(
 ) : ElementTransitionBuilder<T> {
   val enterTransitions = mutableMapOf<Any, EnterTransition>()
   val exitTransitions = mutableMapOf<Any, ExitTransition>()
+  var containerSizeTransform: SizeTransform? = SizeTransform()
 
   override fun Any.entersWith(transition: EnterTransition) {
     enterTransitions[this] =
@@ -53,5 +57,9 @@ internal class ElementTransitionBuilderImpl<T>(
   override fun Any.exitsWith(transition: ExitTransition) {
     exitTransitions[this] =
       exitTransitions.getOrPut(this) { ExitTransition.None } + transition
+  }
+
+  override fun containerSizeTransform(sizeTransform: SizeTransform?) {
+    containerSizeTransform = sizeTransform
   }
 }
