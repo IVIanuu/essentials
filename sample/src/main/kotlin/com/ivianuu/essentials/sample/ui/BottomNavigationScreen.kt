@@ -45,7 +45,7 @@ class BottomNavigationScreen : Screen<Unit>
       Surface(
         modifier = Modifier.systemBarStyle(
           bgColor = overlaySystemBarBgColor(MaterialTheme.colors.primary),
-          lightIcons = MaterialTheme.colors.primary.isLight,
+          darkIcons = MaterialTheme.colors.primary.isLight,
           elevation = 8.dp
         ),
         elevation = 8.dp,

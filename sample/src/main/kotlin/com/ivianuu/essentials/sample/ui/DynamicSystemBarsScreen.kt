@@ -46,7 +46,7 @@ class DynamicSystemBarsScreen : Screen<Unit>
               .background(color)
               .systemBarStyle(
                 bgColor = Color.Black.copy(alpha = 0.2f),
-                lightIcons = color.isLight
+                darkIcons = color.isLight
               )
           )
         }

@@ -70,13 +70,13 @@ private class AndroidSystemBarManager : SystemBarManager {
       .sortedBy { it.elevation }
       .lastOrNull { it.bounds.contains(statusBarHitPoint) }
 
-    DisposableEffect(activity, statusBarStyle?.barColor, statusBarStyle?.lightIcons) {
+    DisposableEffect(activity, statusBarStyle?.barColor, statusBarStyle?.darkIcons) {
       activity.window.statusBarColor =
         (statusBarStyle?.barColor ?: Color.Black.copy(alpha = 0.2f)).toArgb()
       activity.window.decorView.systemUiVisibility =
         activity.window.decorView.systemUiVisibility.setFlag(
           View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
-          statusBarStyle?.lightIcons ?: false
+          statusBarStyle?.darkIcons ?: false
         )
       onDispose { }
     }
@@ -101,7 +101,7 @@ private class AndroidSystemBarManager : SystemBarManager {
       .sortedBy { it.elevation }
       .lastOrNull { it.bounds.contains(navBarHitPoint) }
 
-    DisposableEffect(activity, navBarStyle?.barColor, navBarStyle?.lightIcons) {
+    DisposableEffect(activity, navBarStyle?.barColor, navBarStyle?.darkIcons) {
       activity.window.navigationBarColor =
         (
             navBarStyle?.barColor ?: Color.Black
@@ -110,7 +110,7 @@ private class AndroidSystemBarManager : SystemBarManager {
       activity.window.decorView.systemUiVisibility =
         activity.window.decorView.systemUiVisibility.setFlag(
           View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
-          navBarStyle?.lightIcons ?: false
+          navBarStyle?.darkIcons ?: false
         )
       onDispose { }
     }

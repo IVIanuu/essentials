@@ -36,12 +36,12 @@ import com.ivianuu.injekt.Provide
 
 @Composable fun Modifier.systemBarStyle(
   bgColor: Color = overlaySystemBarBgColor(MaterialTheme.colors.surface),
-  lightIcons: Boolean = bgColor.isLight,
+  darkIcons: Boolean = bgColor.isLight,
   elevation: Dp = 0.dp
 ): Modifier = composed {
-  val style = remember { SystemBarStyle(bgColor, lightIcons, elevation) }
+  val style = remember { SystemBarStyle(bgColor, darkIcons, elevation) }
   style.barColor = bgColor
-  style.lightIcons = lightIcons
+  style.darkIcons = darkIcons
   style.elevation = elevation
 
   val systemBarManager = LocalSystemBarManager.current
@@ -81,9 +81,9 @@ fun interface RootSystemBarsStyle : AppUiDecorator {
 }
 
 
-@Stable class SystemBarStyle(barColor: Color, lightIcons: Boolean, elevation: Dp) {
+@Stable class SystemBarStyle(barColor: Color, darkIcons: Boolean, elevation: Dp) {
   var barColor by mutableStateOf(barColor)
-  var lightIcons by mutableStateOf(lightIcons)
+  var darkIcons by mutableStateOf(darkIcons)
   var bounds by mutableStateOf(Rect(0f, 0f, 0f, 0f))
   var elevation by mutableStateOf(elevation)
 }
