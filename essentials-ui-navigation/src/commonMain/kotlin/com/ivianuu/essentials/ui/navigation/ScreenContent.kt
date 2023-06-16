@@ -16,14 +16,15 @@ import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.essentials.unsafeCast
 import com.ivianuu.injekt.Provide
 import kotlin.reflect.KClass
 
-@Composable fun <T : Screen<*>> ScreenContent(screen: T) {
+@Composable fun <S : Screen<*>> ScreenContent(screen: S) {
   ScreenContent(rememberScreenContext(screen))
 }
 
-@Composable fun <T : Screen<*>> ScreenContent(context: ScreenContext<T>) {
+@Composable fun <S : Screen<*>> ScreenContent(context: ScreenContext<S>) {
   if (context.isDisposed) return
 
   val compositionKey = currentCompositeKeyHash
@@ -53,10 +54,10 @@ import kotlin.reflect.KClass
   }
 }
 
-@Stable class ScreenContext<T : Screen<*>>(
-  val screen: T,
-  val config: ScreenConfig<T>? = null,
-  val scope: Scope<ScreenScope>,
+@Stable class ScreenContext<S : Screen<*>>(
+  val screen: S,
+  val config: ScreenConfig<S>? = null,
+  val scope: Scope<ScreenScope<S>>,
   internal val content: @Composable () -> Unit
 ) {
   internal var isContentRemoved = false
@@ -74,32 +75,35 @@ import kotlin.reflect.KClass
   }
 }
 
-@Composable fun <T : Screen<*>> rememberScreenContext(
-  screen: T,
+@Composable fun <S : Screen<*>> rememberScreenContext(
+  screen: S,
   navigator: Navigator = LocalScope.current.navigator,
   componentFactory: @Composable () -> ScreenContextComponent = {
     val scope = LocalScope.current
     remember(scope) { scope.service() }
   }
-): ScreenContext<T> {
+): ScreenContext<S> {
   val component = componentFactory()
 
   var currentModel by remember { mutableStateOf<Any?>(null) }
 
   val (model, context) = remember {
-    val scope = component.screenScopeFactory(navigator, screen)
-    val ui = component.uiFactories[screen::class.cast()]?.invoke(navigator, scope, screen)
+    val scope = component.screenScopeFactories[screen::class.cast()]
+      ?.unsafeCast<ScreenScopeFactory<S>>()
+      ?.invoke(navigator, screen)
+    checkNotNull(scope) { "No scope factory found for $screen" }
+    val ui = component.uiFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
     checkNotNull(ui) { "No ui factory found for $screen" }
-    val config = component.configFactories[screen::class.cast()]?.invoke(navigator, scope, screen)
-    val model = component.modelFactories[screen::class.cast()]?.invoke(navigator, scope, screen)
+    val config = component.configFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
+    val model = component.modelFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
     checkNotNull(model) { "No model found for $screen" }
-    val decorateScreen = component.decorateScreenFactory(navigator, scope, screen)
-    model to ScreenContext(
+    val decorateScreen = component.decorateScreenFactory(navigator, scope.cast(), screen)
+    model to ScreenContext<S>(
       screen = screen,
       config = config.cast(),
       content = {
         decorateScreen {
-          with(ui as Ui<*, Any>) {
+          with(ui as Ui<S, Any>) {
             with(currentModel as Any) {
               invoke(this)
             }
@@ -133,9 +137,9 @@ import kotlin.reflect.KClass
 }
 
 @Provide @Service<UiScope> data class ScreenContextComponent(
-  val configFactories: Map<KClass<Screen<*>>, ScreenConfigFactory<Screen<*>>>,
+  val screenScopeFactories: Map<KClass<Screen<*>>, ScreenScopeFactory<Screen<*>>>,
   val uiFactories: Map<KClass<Screen<*>>, UiFactory<Screen<*>>>,
   val modelFactories: Map<KClass<Screen<*>>, ModelFactory<Screen<*>, *>>,
-  val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen,
-  val screenScopeFactory: (Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>
+  val configFactories: Map<KClass<Screen<*>>, ScreenConfigFactory<Screen<*>>>,
+  val decorateScreenFactory: (Navigator, Scope<ScreenScope<*>>, Screen<*>) -> DecorateScreen,
 )

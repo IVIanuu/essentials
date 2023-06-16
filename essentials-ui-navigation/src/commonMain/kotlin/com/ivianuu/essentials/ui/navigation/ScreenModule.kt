@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.unsafeCast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
@@ -28,10 +29,21 @@ object ScreenModule {
     screenConfigFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
   ): Pair<KClass<Screen<*>>, ScreenConfigFactory<Screen<*>>> =
     (screenClass to screenConfigFactory).unsafeCast()
+
+  @Provide fun <@Spread T : Ui<S, *>, S : Screen<*>> scope(
+    screenClass: KClass<S>,
+    scopeFactory: ScreenScopeFactory<S>
+  ): Pair<KClass<Screen<*>>, ScreenScopeFactory<Screen<*>>> =
+    (screenClass to scopeFactory).unsafeCast()
+
+  @Provide fun <@Spread T : Ui<S, *>, S : Screen<*>> screenService(screen: S):
+      @Service<ScreenScope<S>> Screen<*> = screen
 }
 
-typealias UiFactory<K> = (Navigator, Scope<ScreenScope>, K) -> Ui<K, *>
+typealias UiFactory<S> = (Navigator, Scope<ScreenScope<*>>, S) -> Ui<S, *>
 
-typealias ScreenConfigFactory<K> = (Navigator, Scope<ScreenScope>, K) -> ScreenConfig<K>
+typealias ModelFactory<S, M> = (Navigator, Scope<ScreenScope<*>>, S) -> Model<M>
 
-typealias ModelFactory<K, S> = (Navigator, Scope<ScreenScope>, K) -> Model<S>
+typealias ScreenConfigFactory<S> = (Navigator, Scope<ScreenScope<*>>, S) -> ScreenConfig<S>
+
+typealias ScreenScopeFactory<S> = (Navigator, S) -> Scope<ScreenScope<S>>

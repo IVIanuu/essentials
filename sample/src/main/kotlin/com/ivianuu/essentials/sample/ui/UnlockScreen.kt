@@ -13,7 +13,6 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.ui.material.Button
@@ -36,11 +35,10 @@ import kotlinx.coroutines.launch
 class UnlockScreen : Screen<Unit>
 
 @Provide fun unlockUi(
-  resources: Resources,
   screenState: Flow<ScreenState>,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
-  scope: ScopedCoroutineScope<ScreenScope>,
+  scope: ScopedCoroutineScope<ScreenScope<*>>,
   toaster: Toaster
 ) = Ui<UnlockScreen, Unit> {
   Scaffold(
