@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -61,7 +62,7 @@ fun interface SampleListDecorator : ListDecorator
   }
 }
 
-fun interface SampleScreenDecorator : ScreenDecorator<Screen<*>>
+fun interface SampleScreenDecorator : ScreenDecorator
 
 @Provide val sampleKeyUiDecorator = SampleScreenDecorator decorator@ { content ->
   val screen = LocalScope.current.screen

@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Surface
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -42,14 +44,14 @@ import kotlinx.coroutines.flow.StateFlow
 }
 typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 
-fun interface ScreenAdBanner<S : Screen<*>> : ScreenDecorator<S>
+fun interface ScreenAdBanner : ScreenDecorator
 
-@Provide fun <S : Screen<*>> adBannerKeyUiDecorator(
+@Provide fun adBannerKeyUiDecorator(
   adsEnabled: StateFlow<AdsEnabled>,
   isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenAdBannerConfig? = null,
   screen: Screen<*>
-) = ScreenAdBanner<S> decorator@{ content ->
+) = ScreenAdBanner decorator@{ content ->
   if (config == null) {
     content()
     return@decorator

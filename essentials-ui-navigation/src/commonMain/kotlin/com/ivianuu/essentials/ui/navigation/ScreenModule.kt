@@ -26,15 +26,9 @@ object ScreenModule {
 
   @Provide fun <@Spread T : Ui<S, *>, S : Screen<*>> rootNavGraphConfigFactory(
     screenClass: KClass<S>,
-    configFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
+    screenConfigFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
   ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> ScreenConfigFactory<Screen<*>>> =
-    (screenClass to configFactory).unsafeCast()
-
-  @Provide fun <@Spread T : Ui<S, *>, S : Screen<*>> rootNavGraphDecoratorFactory(
-    screenClass: KClass<S>,
-    decoratorFactory: ScreenDecoratorFactory<S>
-  ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> ScreenDecoratorFactory<Screen<*>>> =
-    (screenClass to decoratorFactory).unsafeCast()
+    (screenClass to screenConfigFactory).unsafeCast()
 
   @Provide fun <@Spread T : Ui<S, *>, S : Screen<*>> rootNavGraphScopeFactory(
     screenClass: KClass<S>,
@@ -56,15 +50,9 @@ object ScreenModule {
 
   @Provide fun <@Spread T : @NavGraph<N> Ui<S, *>, N, S : Screen<*>> navGraphConfigFactory(
     screenClass: KClass<S>,
-    configFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
+    screenConfigFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
   ): Pair<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>> =
-    (screenClass to configFactory).unsafeCast()
-
-  @Provide fun <@Spread T : @NavGraph<N> Ui<S, *>, N, S : Screen<*>> navGraphDecoratorFactory(
-    screenClass: KClass<S>,
-    decoratorFactory: ScreenDecoratorFactory<S>
-  ): Pair<KClass<Screen<*>>, @NavGraph<N> ScreenDecoratorFactory<Screen<*>>> =
-    (screenClass to decoratorFactory).unsafeCast()
+    (screenClass to screenConfigFactory).unsafeCast()
 
   @Provide fun <@Spread T : @NavGraph<N> Ui<S, *>, N, S : Screen<*>> navGraphScopeFactory(
     screenClass: KClass<S>,
@@ -81,7 +69,5 @@ typealias UiFactory<S> = (Navigator, Scope<ScreenScope<S>>, S) -> Ui<S, *>
 typealias ModelFactory<S, M> = (Navigator, Scope<ScreenScope<S>>, S) -> Model<M>
 
 typealias ScreenConfigFactory<S> = (Navigator, Scope<ScreenScope<S>>, S) -> ScreenConfig<S>
-
-typealias ScreenDecoratorFactory<S> = (Navigator, Scope<ScreenScope<S>>, S) -> DecorateScreen<S>
 
 typealias ScreenScopeFactory<S> = (Navigator, S) -> Scope<ScreenScope<S>>

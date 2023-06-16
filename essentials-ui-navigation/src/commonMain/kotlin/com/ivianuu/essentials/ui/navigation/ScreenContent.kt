@@ -94,7 +94,7 @@ import kotlin.reflect.KClass
   var currentModel by remember { mutableStateOf<Any?>(null) }
 
   val (model, context) = remember {
-    val scope = component.scopeFactories[screen::class.cast()]
+    val scope = component.screenScopeFactories[screen::class.cast()]
       ?.unsafeCast<ScreenScopeFactory<S>>()
       ?.invoke(navigator, screen)
     checkNotNull(scope) { "No scope factory found for $screen" }
@@ -103,13 +103,12 @@ import kotlin.reflect.KClass
     val config = component.configFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
     val model = component.modelFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
     checkNotNull(model) { "No model found for $screen" }
-    val decorator = component.decoratorFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
-    checkNotNull(decorator) { "No decorator found for $screen" }
+    val decorateScreen = component.decorateScreenFactory(navigator, scope.cast(), screen)
     model to ScreenContext<S>(
       screen = screen,
       config = config.cast(),
       content = {
-        decorator {
+        decorateScreen {
           with(ui as Ui<S, Any>) {
             with(currentModel as Any) {
               invoke(this)
@@ -144,11 +143,11 @@ import kotlin.reflect.KClass
 }
 
 @Provide data class ScreenContextComponent<N>(
-  val scopeFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenScopeFactory<Screen<*>>>,
+  val screenScopeFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenScopeFactory<Screen<*>>>,
   val uiFactories: Map<KClass<Screen<*>>, @NavGraph<N> UiFactory<Screen<*>>>,
   val modelFactories: Map<KClass<Screen<*>>, @NavGraph<N> ModelFactory<Screen<*>, *>>,
   val configFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>>,
-  val decoratorFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenDecoratorFactory<Screen<*>>>,
+  val decorateScreenFactory: (Navigator, Scope<ScreenScope<*>>, Screen<*>) -> DecorateScreen
 ) {
   companion object {
     @Provide inline fun rootNavigationScreenContextComponent(
