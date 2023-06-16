@@ -43,7 +43,8 @@ interface ForegroundActivityMarker
   val observer = LifecycleEventObserver { _, _ ->
     if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
       state.value = activity
-      foregroundScope = foregroundScopeFactory()
+      if (foregroundScope == null)
+        foregroundScope = foregroundScopeFactory()
     } else {
       foregroundScope?.dispose()
       foregroundScope = null
