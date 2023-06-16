@@ -108,7 +108,6 @@ fun materialFadeThroughOut(
 ) = fadeOut(
   animationSpec = tween(
     durationMillis = durationMillis.forOutgoingFadeThrough,
-    delayMillis = 0,
     easing = FastOutLinearInEasing
   )
 )
@@ -169,7 +168,6 @@ fun materialSharedAxisXOut(
 ) + fadeOut(
   animationSpec = tween(
     durationMillis = durationMillis.forOutgoingSharedAxis,
-    delayMillis = 0,
     easing = FastOutLinearInEasing
   )
 )
@@ -222,7 +220,6 @@ fun materialSharedAxisYOut(
 ) + fadeOut(
   animationSpec = tween(
     durationMillis = durationMillis.forOutgoingSharedAxis,
-    delayMillis = 0,
     easing = FastOutLinearInEasing
   )
 )
@@ -264,7 +261,6 @@ fun materialSharedAxisZOut(
 ) = fadeOut(
   animationSpec = tween(
     durationMillis = durationMillis.forOutgoingSharedAxis,
-    delayMillis = 0,
     easing = FastOutLinearInEasing
   )
 ) + scaleOut(

@@ -4,6 +4,7 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -36,12 +37,12 @@ fun ElementTransitionBuilder<*>.fadeUpwards(key: Any = ContentKey) {
   if (isPush) {
     key entersWith
         slideInVertically(tween(300, easing = FastOutSlowInEasing)) { (it * 0.25f).toInt() } +
-        fadeIn(tween(300, easing = FastOutLinearInEasing))
+        fadeIn(tween(300.forIncomingSharedAxis, 300.forOutgoingSharedAxis, easing = LinearOutSlowInEasing))
     key exitsWith holdOut(300)
   } else {
     key exitsWith
         slideOutVertically(tween(300, easing = FastOutLinearInEasing)) { (it * 0.25f).toInt() } +
-        fadeOut(tween(300, easing = FastOutLinearInEasing))
+        fadeOut(tween(300.forOutgoingSharedAxis, easing = FastOutLinearInEasing))
   }
 }
 
