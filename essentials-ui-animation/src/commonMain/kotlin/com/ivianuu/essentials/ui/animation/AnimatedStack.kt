@@ -10,15 +10,7 @@ import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.createDeferredAnimation
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -46,6 +38,7 @@ import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
@@ -54,10 +47,7 @@ import androidx.compose.ui.unit.LayoutDirection
 @Composable fun AnimatedVisibility(
   visible: Boolean,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<Boolean> = {
-    ContentKey entersWith expandHorizontally() + fadeIn()
-    ContentKey exitsWith shrinkHorizontally() + fadeOut()
-  },
+  transitionSpec: ElementTransitionSpec<Boolean> = { materialFade() },
   content: @Composable AnimatedVisibilityScope.() -> Unit
 ) {
   AnimatedContent(state = visible, transitionSpec = transitionSpec) {
@@ -69,13 +59,7 @@ import androidx.compose.ui.unit.LayoutDirection
 @Composable fun <T> AnimatedContent(
   state: T,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<T> = {
-    ContentKey entersWith
-        fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
-
-    ContentKey exitsWith fadeOut(animationSpec = tween(90))
-  },
+  transitionSpec: ElementTransitionSpec<T> = { materialFadeThrough() },
   contentAlignment: Alignment = Alignment.TopStart,
   content: @Composable AnimatedVisibilityScope.(T) -> Unit
 ) {
@@ -91,17 +75,7 @@ import androidx.compose.ui.unit.LayoutDirection
 @Composable fun <T> AnimatedStack(
   items: List<T>,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<T> = {
-    val slightlyRight = { width: Int -> (width * 0.05f).toInt() }
-    val slightlyLeft = { width: Int -> 0 - (width * 0.05f).toInt() }
-    if (isPush) {
-      ContentKey entersWith slideInHorizontally(tween(), slightlyRight) + fadeIn()
-      ContentKey exitsWith slideOutHorizontally(tween(), slightlyLeft) + fadeOut()
-    } else {
-      ContentKey entersWith slideInHorizontally(tween(), slightlyLeft) + fadeIn()
-      ContentKey exitsWith slideOutHorizontally(tween(), slightlyRight) + fadeOut()
-    }
-  },
+  transitionSpec: ElementTransitionSpec<T> = { materialFadeThrough() },
   contentAlignment: Alignment = Alignment.TopStart,
   contentOpaque: (T) -> Boolean = { false },
   content: @Composable AnimatedVisibilityScope.(T) -> Unit
@@ -128,6 +102,7 @@ import androidx.compose.ui.unit.LayoutDirection
   val exitTransitions = remember { mutableStateMapOf<T, MutableMap<Any, ExitTransition>>() }
   val containerSizeTransform = remember { mutableStateOf<SizeTransform?>(SizeTransform()) }
 
+  val density = LocalDensity.current
   fun updateTransitions(
     initial: T?,
     target: T?,
@@ -147,7 +122,8 @@ import androidx.compose.ui.unit.LayoutDirection
     ElementTransitionBuilderImpl(
       initial,
       target,
-      isPush
+      isPush,
+      density
     ).apply(transitionSpec)
       .let { builder ->
         if (target != null)
@@ -163,18 +139,17 @@ import androidx.compose.ui.unit.LayoutDirection
   if (transition.targetState != transition.currentState) {
     remember(transition.targetState, transition.currentState) {
       val initialVisibleItems = transition.currentState.filterVisible(contentOpaque)
-
       val targetVisibleItems = transition.targetState.filterVisible(contentOpaque)
 
       if (initialVisibleItems != targetVisibleItems) {
-        val initialRootItem = initialVisibleItems.lastOrNull()
+        val initialRootItem = initialVisibleItems.firstOrNull()
         val targetRootItem = targetVisibleItems.firstOrNull()
 
         // check if we should animate the root items
         val replacingRootItems = targetRootItem != null && initialRootItem != targetRootItem &&
             targetVisibleItems.count { it !in initialVisibleItems } == 1
 
-        val newRootIsPush = targetRootItem !in initialVisibleItems
+        val newRootIsPush = targetRootItem !in transition.currentState
 
         // Replace the old visible root with the new one
         if (replacingRootItems)

@@ -51,6 +51,8 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.safeAs
 import com.ivianuu.essentials.ui.animation.AnimatedContent
 import com.ivianuu.essentials.ui.animation.AnimatedStack
+import com.ivianuu.essentials.ui.animation.materialSharedAxisX
+import com.ivianuu.essentials.ui.animation.materialSharedAxisY
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.layout.SquareFit
@@ -97,7 +99,8 @@ import com.ivianuu.injekt.Provide
       AnimatedContent(
         modifier = Modifier.height(300.dp)
           .padding(start = 24.dp, end = 24.dp),
-        state = currentScreen
+        state = currentScreen,
+        transitionSpec = { materialSharedAxisY() }
       ) { currentScreen ->
         when (currentScreen) {
           ColorPickerTab.COLORS -> {
@@ -154,7 +157,10 @@ private val NoPalette = Any()
   modifier: Modifier = Modifier
 ) {
   var palettesStack by remember { mutableStateOf(listOf(NoPalette)) }
-  AnimatedStack(items = palettesStack) { palette ->
+  AnimatedStack(
+    items = palettesStack,
+    transitionSpec = { materialSharedAxisX() }
+  ) { palette ->
     val items = remember {
       palette
         .safeAs<ColorPickerPalette>()

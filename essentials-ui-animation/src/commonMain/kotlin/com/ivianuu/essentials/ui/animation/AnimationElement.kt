@@ -7,6 +7,7 @@ import androidx.compose.animation.SizeTransform
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.unit.Density
 
 fun Modifier.animationElement(key: Any): Modifier = composed {
   with(LocalElementAnimationScope.current) {
@@ -29,7 +30,7 @@ internal val LocalElementAnimationScope = compositionLocalOf<ElementAnimationSco
   error("No scope found")
 }
 
-interface ElementTransitionBuilder<T> {
+interface ElementTransitionBuilder<T> : Density {
   val initial: T?
   val target: T?
   val isPush: Boolean
@@ -43,8 +44,9 @@ interface ElementTransitionBuilder<T> {
 internal class ElementTransitionBuilderImpl<T>(
   override val initial: T?,
   override val target: T?,
-  override val isPush: Boolean
-) : ElementTransitionBuilder<T> {
+  override val isPush: Boolean,
+  density: Density
+) : ElementTransitionBuilder<T>, Density by density {
   val enterTransitions = mutableMapOf<Any, EnterTransition>()
   val exitTransitions = mutableMapOf<Any, ExitTransition>()
   var containerSizeTransform: SizeTransform? = SizeTransform()

@@ -1,10 +1,5 @@
 package com.ivianuu.essentials.ui.popup
 
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -25,12 +20,14 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.refOf
 import com.ivianuu.essentials.compose.setValue
-import com.ivianuu.essentials.safeAs
 import com.ivianuu.essentials.ui.animation.animationElement
+import com.ivianuu.essentials.ui.animation.materialFadeIn
+import com.ivianuu.essentials.ui.animation.materialFadeOut
 import com.ivianuu.essentials.ui.layout.systemBarsPadding
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayScreen
@@ -96,14 +93,9 @@ private val PopupKey = "popup"
   get() = ScreenConfig(opaque = true) {
     if (isPush) {
       PopupKey entersWith
-          scaleIn(
-            animationSpec = tween(150, easing = LinearOutSlowInEasing),
-            initialScale = 0.8f,
-            transformOrigin = target.safeAs<PopupScreen>()
-              ?.transformOrigin ?: TransformOrigin.Center
-          ) + fadeIn(tween(75))
+          materialFadeIn(transformOrigin = target!!.cast<PopupScreen>().transformOrigin)
     } else {
-      PopupKey exitsWith fadeOut(tween(100))
+      PopupKey exitsWith materialFadeOut()
     }
   }
 

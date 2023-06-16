@@ -128,7 +128,7 @@ class ResourceBoxItem<T>(
 }
 
 object ResourceBoxDefaults {
-  val transitionSpec: ElementTransitionSpec<*> = { crossFade(100) }
+  val transitionSpec: ElementTransitionSpec<*> = { crossFade() }
   val error: @Composable (Throwable) -> Unit = {
     Text(
       modifier = Modifier
