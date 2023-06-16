@@ -4,6 +4,11 @@
 
 package com.ivianuu.essentials.ui.stepper
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -96,7 +101,11 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
 
       Spacer(Modifier.width(40.dp))
 
-      if (isCurrent) {
+      AnimatedVisibility(
+        visible = isCurrent,
+        enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+        exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
+      ) {
         Column {
           if (content != null) {
             CompositionLocalProvider(
