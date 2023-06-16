@@ -13,18 +13,18 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
-fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
+fun interface ScreenDecorator<S : Screen<*>> : ExtensionPoint<ScreenDecorator<S>> {
   @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
-fun interface DecorateScreen {
+fun interface DecorateScreen<out S : Screen<*>> {
   @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
-@Provide fun decorateScreen(
-  records: List<ExtensionPointRecord<ScreenDecorator>>,
+@Provide fun <S : Screen<*>> decorateScreen(
+  records: List<ExtensionPointRecord<ScreenDecorator<in S>>>,
   logger: Logger
-) = DecorateScreen { content ->
+) = DecorateScreen<S> { content ->
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
     records
       .sortedWithLoadingOrder()
