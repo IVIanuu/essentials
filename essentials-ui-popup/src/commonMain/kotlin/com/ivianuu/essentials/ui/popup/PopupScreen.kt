@@ -90,7 +90,7 @@ class PopupScreen(
   }
 }
 
-private val PopupKey = Any()
+private val PopupKey = "popup"
 
 @Provide val popupScreenConfig: ScreenConfig<PopupScreen>
   get() = ScreenConfig(opaque = true) {
@@ -101,9 +101,9 @@ private val PopupKey = Any()
             initialScale = 0.8f,
             transformOrigin = target.safeAs<PopupScreen>()
               ?.transformOrigin ?: TransformOrigin.Center
-          ) + fadeIn(tween(50))
+          ) + fadeIn(tween(75))
     } else {
-      PopupKey exitsWith fadeOut(tween(75))
+      PopupKey exitsWith fadeOut(tween(100))
     }
   }
 

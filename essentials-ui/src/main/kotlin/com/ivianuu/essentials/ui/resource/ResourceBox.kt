@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.ui.resource
 
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
@@ -129,7 +128,7 @@ class ResourceBoxItem<T>(
 }
 
 object ResourceBoxDefaults {
-  val transitionSpec: ElementTransitionSpec<*> = { crossFade(tween(180)) }
+  val transitionSpec: ElementTransitionSpec<*> = { crossFade(100) }
   val error: @Composable (Throwable) -> Unit = {
     Text(
       modifier = Modifier
