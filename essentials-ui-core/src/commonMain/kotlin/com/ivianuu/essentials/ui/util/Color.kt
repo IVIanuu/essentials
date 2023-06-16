@@ -51,7 +51,7 @@ fun Color.blend(other: Color): Color {
 expect fun Color.toHexString(includeAlpha: Boolean = true): String
 
 fun Color.toHexStringOrNull(includeAlpha: Boolean = true): String? =
-  catch { toHexString(includeAlpha) }.getOrNull()
+  catch { toHexString() }.getOrNull()
 
 expect fun String.toColor(): Color
 

@@ -19,7 +19,9 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.getValue
@@ -28,7 +30,7 @@ import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.animation.animationElement
 import com.ivianuu.essentials.ui.animation.materialFadeIn
 import com.ivianuu.essentials.ui.animation.materialFadeOut
-import com.ivianuu.essentials.ui.layout.systemBarsPadding
+import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayScreen
 import com.ivianuu.essentials.ui.navigation.ScreenConfig
@@ -104,47 +106,56 @@ private val PopupKey = "popup"
   modifier: Modifier,
   content: @Composable () -> Unit,
 ) {
+  val insets = LocalInsets.current
   var globalLayoutPosition by remember { mutableStateOf(Offset.Zero) }
   Layout(
     content = content,
     modifier = modifier
-      .systemBarsPadding()
       .onGloballyPositioned { globalLayoutPosition = it.positionInRoot() }
   ) { measureables, constraints ->
-    val padding = 16.dp.roundToPx()
+    fun Dp.insetOrMinPadding() = max(this, 16.dp).roundToPx()
+
     val childConstraints = constraints.copy(
       minWidth = 0,
       minHeight = 0,
-      maxWidth = constraints.maxWidth - padding * 2,
-      maxHeight = constraints.maxHeight - padding * 2
+      maxWidth = constraints.maxWidth -
+          insets.left.insetOrMinPadding() -
+          insets.right.insetOrMinPadding(),
+      maxHeight = constraints.maxHeight -
+          insets.top.insetOrMinPadding() -
+          insets.bottom.insetOrMinPadding()
     )
 
     val placeable = measureables.single().measure(childConstraints)
 
     var y = position.top.toInt() - globalLayoutPosition.y.toInt()
-    var x = if ((position.left + position.right / 2) < constraints.maxWidth / 2) {
-      position.left.toInt()
+    var x: Int
+
+    // Find the ideal horizontal position.
+    if ((position.left + position.right / 2) < constraints.maxWidth / 2) {
+      x = position.left.toInt()
     } else if (position.left < position.right) {
-      (position.right - placeable.width).toInt()
+      x = (position.right - placeable.width).toInt()
     } else {
-      (position.right - placeable.width).toInt()
+      x = (position.right - placeable.width).toInt()
     }
 
     x = x.coerceIn(
-      padding,
+      insets.left.insetOrMinPadding(),
       max(
-        padding,
-        constraints.maxHeight -
-            placeable.width - padding
+        insets.left.insetOrMinPadding(),
+        constraints.maxWidth -
+            placeable.width -
+            insets.right.insetOrMinPadding()
       )
     )
     y = y.coerceIn(
-      padding,
+      insets.top.insetOrMinPadding(),
       max(
-        padding,
+        insets.top.insetOrMinPadding(),
         constraints.maxHeight -
             placeable.height -
-            padding
+            insets.bottom.insetOrMinPadding()
       )
     )
 

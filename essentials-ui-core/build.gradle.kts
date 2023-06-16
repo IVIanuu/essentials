@@ -42,6 +42,11 @@ kotlin {
       }
     }
 
+    val commonJvmMain by creating
+
+    val androidMain by getting
+    androidMain.dependsOn(commonJvmMain)
+
     named("androidMain") {
       dependencies {
         api(Deps.Accompanist.flowLayout)
@@ -51,6 +56,9 @@ kotlin {
         api(Deps.Injekt.android)
       }
     }
+
+    val jvmMain by getting
+    jvmMain.dependsOn(commonJvmMain)
 
     named("jvmTest") {
       dependencies {

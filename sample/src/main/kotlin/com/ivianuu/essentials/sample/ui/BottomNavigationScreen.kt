@@ -7,8 +7,6 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -22,7 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animation.AnimatedContent
-import com.ivianuu.essentials.ui.layout.navigationBarsPadding
+import com.ivianuu.essentials.ui.insets.InsetsPadding
+import com.ivianuu.essentials.ui.material.NavigationBar
+import com.ivianuu.essentials.ui.material.NavigationBarItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -51,19 +51,20 @@ class BottomNavigationScreen : Screen<Unit>
         elevation = 8.dp,
         color = MaterialTheme.colors.primary
       ) {
-        BottomNavigation(
-          modifier = Modifier.navigationBarsPadding(),
-          backgroundColor = MaterialTheme.colors.primary,
-          elevation = 0.dp
-        ) {
-          BottomNavItem.values().forEach { item ->
-            BottomNavigationItem(
-              alwaysShowLabel = false,
-              selected = item == selectedItem,
-              onClick = { selectedItem = item },
-              icon = { Icon(item.icon) },
-              label = { Text(item.title) }
-            )
+        InsetsPadding(left = false, top = false, right = false) {
+          NavigationBar(
+            backgroundColor = MaterialTheme.colors.primary,
+            elevation = 0.dp
+          ) {
+            BottomNavItem.values().forEach { item ->
+              NavigationBarItem(
+                alwaysShowLabel = false,
+                selected = item == selectedItem,
+                onClick = { selectedItem = item },
+                icon = { Icon(item.icon) },
+                label = { Text(item.title) }
+              )
+            }
           }
         }
       }

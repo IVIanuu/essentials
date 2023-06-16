@@ -7,8 +7,6 @@ package com.ivianuu.essentials.ui.systembars
 import android.os.Build
 import android.view.View
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -19,10 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.core.view.WindowCompat
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.setFlag
+import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.injekt.Provide
 
 @Provide actual val systemBarManagerProvider = SystemBarManagerProvider { content ->
@@ -56,15 +54,16 @@ private class AndroidSystemBarManager : SystemBarManager {
       onDispose { }
     }
 
+    val windowInsets = LocalInsets.current
     val density = LocalDensity.current
-    val windowInsets = WindowInsets.statusBars
-    val layoutDirection = LocalLayoutDirection.current
 
     val statusBarHitPoint = remember(density, windowInsets) {
-      Offset(
-        windowInsets.getLeft(density, layoutDirection).toFloat(),
-        windowInsets.getTop(density) * 0.5f
-      )
+      with(density) {
+        Offset(
+          windowInsets.left.toPx(),
+          windowInsets.top.toPx() * 0.5f
+        )
+      }
     }
 
     val statusBarStyle = styles
@@ -84,11 +83,11 @@ private class AndroidSystemBarManager : SystemBarManager {
 
     val screenHeight = activity.window.decorView.height.toFloat()
     val screenWidth = activity.window.decorView.width.toFloat()
-    val navBarHitPoint = remember(density, layoutDirection, windowInsets, screenWidth, screenHeight) {
+    val navBarHitPoint = remember(density, windowInsets, screenWidth, screenHeight) {
       with(density) {
-        val bottomPadding = windowInsets.getBottom(density).toFloat()
-        val leftPadding = windowInsets.getLeft(density, layoutDirection)
-        val rightPadding = windowInsets.getRight(density, layoutDirection)
+        val bottomPadding = windowInsets.bottom.toPx()
+        val leftPadding = windowInsets.left.toPx()
+        val rightPadding = windowInsets.right.toPx()
         when {
           bottomPadding > 0f -> Offset(bottomPadding, screenHeight - bottomPadding * 0.5f)
           leftPadding > 0f -> Offset(leftPadding * 0.5f, screenHeight)

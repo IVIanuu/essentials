@@ -19,8 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animation.animationElement
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.essentials.ui.backpress.LocalBackPressHandler
-import com.ivianuu.essentials.ui.layout.imePadding
-import com.ivianuu.essentials.ui.layout.systemBarsPadding
+import com.ivianuu.essentials.ui.insets.InsetsPadding
 
 @Composable fun DialogScaffold(
   modifier: Modifier = Modifier,
@@ -43,17 +42,17 @@ import com.ivianuu.essentials.ui.layout.systemBarsPadding
       .then(modifier),
     contentAlignment = Alignment.Center
   ) {
-    Box(
-      modifier = Modifier
-        .animationElement(DialogKey)
-        .systemBarsPadding()
-        .imePadding()
-        .pointerInput(true) { detectTapGestures { } }
-        .wrapContentSize(align = Alignment.Center)
-        .padding(all = 32.dp),
-      contentAlignment = Alignment.Center
-    ) {
-      dialog()
+    InsetsPadding {
+      Box(
+        modifier = Modifier
+          .animationElement(DialogKey)
+          .pointerInput(true) { detectTapGestures { } }
+          .wrapContentSize(align = Alignment.Center)
+          .padding(all = 32.dp),
+        contentAlignment = Alignment.Center
+      ) {
+        dialog()
+      }
     }
   }
 }
