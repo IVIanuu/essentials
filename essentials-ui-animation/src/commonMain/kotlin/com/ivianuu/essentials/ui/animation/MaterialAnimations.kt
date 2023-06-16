@@ -32,42 +32,6 @@ fun holdOut(durationMillis: Int = DefaultMotionDuration) = fadeOut(
   targetAlpha = 0.999f
 )
 
-fun materialElevationScaleIn(
-  initialAlpha: Float = 0.85f,
-  initialScale: Float = 0.85f,
-  durationMillis: Int = DefaultMotionDuration,
-) = fadeIn(
-  animationSpec = tween(
-    durationMillis = durationMillis,
-    easing = LinearEasing
-  ),
-  initialAlpha = initialAlpha
-) + scaleIn(
-  animationSpec = tween(
-    durationMillis = durationMillis,
-    easing = FastOutSlowInEasing
-  ),
-  initialScale = initialScale
-)
-
-fun materialElevationScaleOut(
-  targetAlpha: Float = 0.85f,
-  targetScale: Float = 0.85f,
-  durationMillis: Int = DefaultMotionDuration,
-) = fadeOut(
-  animationSpec = tween(
-    durationMillis = durationMillis,
-    easing = LinearEasing
-  ),
-  targetAlpha = targetAlpha
-) + scaleOut(
-  animationSpec = tween(
-    durationMillis = durationMillis,
-    easing = FastOutSlowInEasing
-  ),
-  targetScale = targetScale,
-)
-
 private const val DefaultFadeEndThresholdEnter = 0.3f
 
 val Int.forMaterialFade: Int
