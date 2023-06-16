@@ -12,10 +12,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
@@ -26,9 +30,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.LocalScope
-import com.ivianuu.essentials.ui.common.BackButton
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.screen
 import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.essentials.ui.util.isLight
@@ -136,7 +141,11 @@ val DefaultAppBarElevation = 0.dp
   val screen = LocalScope.current.screen
   val canGoBack = remember { navigator.backStack.value.indexOf(screen) > 0 }
   return when {
-    canGoBack -> ({ BackButton() })
+    canGoBack -> ({
+      IconButton(onClick = action { navigator.pop(screen) }) {
+        Icon(Icons.Default.ArrowBack)
+      }
+    })
     else -> null
   }
 }
