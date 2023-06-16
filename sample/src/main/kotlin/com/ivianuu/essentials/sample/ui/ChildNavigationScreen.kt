@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.ui.animation.slideHorizontally
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -28,7 +27,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.NavigatorContent
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenContextComponent
-import com.ivianuu.essentials.ui.navigation.ScreenScope
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.navigation.push
@@ -76,8 +74,7 @@ data class ChildNavigationItemScreen(
 
 @Provide fun childNavigationItemUi(
   navigator: Navigator,
-  screen: ChildNavigationItemScreen,
-  scope: ScopedCoroutineScope<ScreenScope<ChildNavigationScreen>>
+  screen: ChildNavigationItemScreen
 ): @NavGraph<ChildNavGraph> Ui<ChildNavigationItemScreen, Unit> = Ui {
   val color = Colors.shuffled().first()
 

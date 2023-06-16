@@ -4,4 +4,4 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-class ScreenScope<out S : Screen<*>>
+class ScreenScope

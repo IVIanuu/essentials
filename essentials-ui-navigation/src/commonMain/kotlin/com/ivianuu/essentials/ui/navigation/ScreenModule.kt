@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.unsafeCast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
@@ -30,15 +29,9 @@ object ScreenModule {
   ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> ScreenConfigFactory<Screen<*>>> =
     (screenClass to screenConfigFactory).unsafeCast()
 
-  @Provide fun <@Spread T : Ui<S, *>, S : Screen<*>> rootNavGraphScopeFactory(
-    screenClass: KClass<S>,
-    scopeFactory: ScreenScopeFactory<S>
-  ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> ScreenScopeFactory<Screen<*>>> =
-    (screenClass to scopeFactory).unsafeCast()
-
   @Provide fun <@Spread T : @NavGraph<N> Ui<S, *>, N, S : Screen<*>> navGraphUiFactory(
     screenClass: KClass<S>,
-    uiFactory: (Navigator, Scope<ScreenScope<S>>, S) -> @NavGraph<N> Ui<S, *>
+    uiFactory: (Navigator, Scope<ScreenScope>, S) -> @NavGraph<N> Ui<S, *>
   ): Pair<KClass<Screen<*>>, @NavGraph<N> UiFactory<Screen<*>>> =
     (screenClass to uiFactory).unsafeCast()
 
@@ -53,21 +46,10 @@ object ScreenModule {
     screenConfigFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
   ): Pair<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>> =
     (screenClass to screenConfigFactory).unsafeCast()
-
-  @Provide fun <@Spread T : @NavGraph<N> Ui<S, *>, N, S : Screen<*>> navGraphScopeFactory(
-    screenClass: KClass<S>,
-    scopeFactory: ScreenScopeFactory<S>
-  ): Pair<KClass<Screen<*>>, @NavGraph<N> ScreenScopeFactory<Screen<*>>> =
-    (screenClass to scopeFactory).unsafeCast()
-
-  @Provide fun <@Spread T : Ui<S, *>, S : Screen<*>> screenService(screen: S):
-      @Service<ScreenScope<S>> Screen<*> = screen
 }
 
-typealias UiFactory<S> = (Navigator, Scope<ScreenScope<S>>, S) -> Ui<S, *>
+typealias UiFactory<S> = (Navigator, Scope<ScreenScope>, S) -> Ui<S, *>
 
-typealias ModelFactory<S, M> = (Navigator, Scope<ScreenScope<S>>, S) -> Model<M>
+typealias ModelFactory<S, M> = (Navigator, Scope<ScreenScope>, S) -> Model<M>
 
-typealias ScreenConfigFactory<S> = (Navigator, Scope<ScreenScope<S>>, S) -> ScreenConfig<S>
-
-typealias ScreenScopeFactory<S> = (Navigator, S) -> Scope<ScreenScope<S>>
+typealias ScreenConfigFactory<S> = (Navigator, Scope<ScreenScope>, S) -> ScreenConfig<S>

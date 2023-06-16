@@ -37,7 +37,7 @@ class CheckAppsScreen : Screen<Unit>
   checkableAppsUi: (CheckableAppsParams) -> CheckableAppsUi,
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate,
-  scope: ScopedCoroutineScope<ScreenScope<*>>
+  scope: ScopedCoroutineScope<ScreenScope>
 ) = Ui<CheckAppsScreen, Unit> {
   remember {
     checkableAppsUi(

@@ -38,7 +38,7 @@ class UnlockScreen : Screen<Unit>
   screenState: Flow<ScreenState>,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
-  scope: ScopedCoroutineScope<ScreenScope<*>>,
+  scope: ScopedCoroutineScope<ScreenScope>,
   toaster: Toaster
 ) = Ui<UnlockScreen, Unit> {
   Scaffold(
