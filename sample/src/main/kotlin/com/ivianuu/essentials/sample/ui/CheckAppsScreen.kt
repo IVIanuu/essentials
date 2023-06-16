@@ -22,6 +22,7 @@ import com.ivianuu.essentials.db.insertAll
 import com.ivianuu.essentials.db.selectAll
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenScope
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.map
@@ -36,7 +37,7 @@ class CheckAppsScreen : Screen<Unit>
   checkableAppsUi: (CheckableAppsParams) -> CheckableAppsUi,
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate,
-  scope: ScopedCoroutineScope<ScreenScope<*>>>
+  scope: ScopedCoroutineScope<ScreenScope<*>>
 ) = Ui<CheckAppsScreen, Unit> {
   remember {
     checkableAppsUi(
