@@ -94,7 +94,7 @@ import kotlin.reflect.KClass
     val model = component.modelFactories[screen::class.cast()]?.invoke(navigator, scope, screen)
     checkNotNull(model) { "No model found for $screen" }
     val decorateScreen = component.decorateScreenFactory(navigator, scope, screen)
-    model to ScreenContext<T>(
+    model to ScreenContext(
       screen = screen,
       config = config.cast(),
       content = {
