@@ -64,7 +64,7 @@ private class AndroidSystemBarManager : SystemBarManager {
 
     val statusBarStyle = styles
       .sortedBy { it.zIndex }
-      .lastOrNull { it.bounds.top <= statusBarHitPointY && it.bounds.bottom >= statusBarHitPointY }
+      .lastOrNull { statusBarHitPointY in it.bounds.top..it.bounds.bottom }
 
     println("status bar style hit point $statusBarHitPointY ${styles.toList()}")
 
@@ -87,7 +87,7 @@ private class AndroidSystemBarManager : SystemBarManager {
         val leftPadding = windowInsets.left.toPx()
         val rightPadding = windowInsets.right.toPx()
         when {
-          bottomPadding > 0f -> bottomPadding
+          bottomPadding > 0f -> screenHeight - bottomPadding
           leftPadding > 0f -> leftPadding
           rightPadding > 0f -> screenWidth - rightPadding
           else -> 0f
@@ -97,7 +97,7 @@ private class AndroidSystemBarManager : SystemBarManager {
 
     val navBarStyle = styles
       .sortedBy { it.zIndex }
-      .lastOrNull { it.bounds.top <= navBarHitPointY && it.bounds.bottom >= statusBarHitPointY }
+      .lastOrNull { navBarHitPointY in it.bounds.top..it.bounds.bottom }
 
     DisposableEffect(activity, navBarStyle?.barColor, navBarStyle?.darkIcons) {
       activity.window.navigationBarColor =

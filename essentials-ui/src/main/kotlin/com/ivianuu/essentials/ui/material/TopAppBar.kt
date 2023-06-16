@@ -103,8 +103,7 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
   val systemBarStyleModifier = if (applySystemBarStyle) {
     Modifier.systemBarStyle(
       bgColor = Color.Transparent,
-      darkIcons = backgroundColor.isLight,
-      tag = "app bar"
+      darkIcons = backgroundColor.isLight
     )
   } else Modifier
   Surface(
