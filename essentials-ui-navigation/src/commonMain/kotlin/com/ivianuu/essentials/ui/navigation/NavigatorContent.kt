@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
@@ -24,13 +25,31 @@ import kotlin.collections.set
   popRoot: Boolean = false,
   defaultTransitionSpec: ElementTransitionSpec<Screen<*>> = LocalScreenTransitionSpec.current
 ) {
+  NavigatorContent<RootNavGraph>(
+    modifier,
+    navigator,
+    LocalScope.current.service(),
+    handleBack,
+    popRoot,
+    defaultTransitionSpec
+  )
+}
+
+@Composable fun <N> NavigatorContent(
+  modifier: Modifier = Modifier,
+  navigator: Navigator,
+  screenContextComponent: ScreenContextComponent<N>,
+  handleBack: Boolean = true,
+  popRoot: Boolean = false,
+  defaultTransitionSpec: ElementTransitionSpec<Screen<*>> = LocalScreenTransitionSpec.current
+) {
   val backStack by navigator.backStack.collectAsState()
 
   val screenContexts = remember { mutableMapOf<Screen<*>, ScreenContext<*>>() }
 
   backStack.forEachIndexed { index, screen ->
     key(screen) {
-      screenContexts[screen] = rememberScreenContext(screen, navigator)
+      screenContexts[screen] = rememberScreenContext(screen, navigator, screenContextComponent)
 
       key(index) {
         BackHandler(enabled = handleBack && (index > 0 || popRoot), onBackPress = action {

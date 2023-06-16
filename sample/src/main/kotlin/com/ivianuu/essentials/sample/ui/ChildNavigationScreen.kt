@@ -17,14 +17,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.ui.animation.slideHorizontally
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
+import com.ivianuu.essentials.ui.navigation.NavGraph
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.NavigatorContent
 import com.ivianuu.essentials.ui.navigation.Screen
+import com.ivianuu.essentials.ui.navigation.ScreenContextComponent
+import com.ivianuu.essentials.ui.navigation.ScreenScope
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.navigation.push
@@ -32,9 +36,13 @@ import com.ivianuu.injekt.Provide
 
 class ChildNavigationScreen : Screen<Unit>
 
+object ChildNavGraph
+
 @Provide val childNavigationHomeItem = HomeItem("Child Navigation") { ChildNavigationScreen() }
 
-@Provide val childNavigationUi = Ui<ChildNavigationScreen, Unit> {
+@Provide fun childNavigationUi(
+  screenContextComponent: ScreenContextComponent<ChildNavGraph>
+) = Ui<ChildNavigationScreen, Unit> {
   Scaffold(
     topBar = {
       TopAppBar(title = { Text("Child Navigation") })
@@ -52,6 +60,7 @@ class ChildNavigationScreen : Screen<Unit>
               .weight(1f)
               .fillMaxWidth(),
             navigator = navigator,
+            screenContextComponent = screenContextComponent,
             defaultTransitionSpec = { slideHorizontally() }
           )
         }
@@ -67,8 +76,9 @@ data class ChildNavigationItemScreen(
 
 @Provide fun childNavigationItemUi(
   navigator: Navigator,
-  screen: ChildNavigationItemScreen
-) = Ui<ChildNavigationItemScreen, Unit> {
+  screen: ChildNavigationItemScreen,
+  scope: ScopedCoroutineScope<ScreenScope<ChildNavigationScreen>>
+): @NavGraph<ChildNavGraph> Ui<ChildNavigationItemScreen, Unit> = Ui {
   val color = Colors.shuffled().first()
 
   Surface(

@@ -11,13 +11,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.setValue
+import com.ivianuu.essentials.ProvidedService
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.unsafeCast
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlin.reflect.KClass
 
 @Composable fun <S : Screen<*>> ScreenContent(screen: S) {
@@ -77,14 +79,18 @@ import kotlin.reflect.KClass
 
 @Composable fun <S : Screen<*>> rememberScreenContext(
   screen: S,
-  navigator: Navigator = LocalScope.current.navigator,
-  componentFactory: @Composable () -> ScreenContextComponent = {
-    val scope = LocalScope.current
-    remember(scope) { scope.service() }
-  }
-): ScreenContext<S> {
-  val component = componentFactory()
+  navigator: Navigator = LocalScope.current.navigator
+) = rememberScreenContext(
+  screen,
+  navigator,
+  LocalScope.current.service<ScreenContextComponent<RootNavGraph>>()
+)
 
+@Composable fun <N, S : Screen<*>> rememberScreenContext(
+  screen: S,
+  navigator: Navigator = LocalScope.current.navigator,
+  component: ScreenContextComponent<N>
+): ScreenContext<S> {
   var currentModel by remember { mutableStateOf<Any?>(null) }
 
   val (model, context) = remember {
@@ -136,10 +142,21 @@ import kotlin.reflect.KClass
   body()
 }
 
-@Provide @Service<UiScope> data class ScreenContextComponent(
-  val screenScopeFactories: Map<KClass<Screen<*>>, ScreenScopeFactory<Screen<*>>>,
-  val uiFactories: Map<KClass<Screen<*>>, UiFactory<Screen<*>>>,
-  val modelFactories: Map<KClass<Screen<*>>, ModelFactory<Screen<*>, *>>,
-  val configFactories: Map<KClass<Screen<*>>, ScreenConfigFactory<Screen<*>>>,
-  val decorateScreenFactory: (Navigator, Scope<ScreenScope<*>>, Screen<*>) -> DecorateScreen,
-)
+@Provide data class ScreenContextComponent<N>(
+  val screenScopeFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenScopeFactory<Screen<*>>>,
+  val uiFactories: Map<KClass<Screen<*>>, @NavGraph<N> UiFactory<Screen<*>>>,
+  val modelFactories: Map<KClass<Screen<*>>, @NavGraph<N> ModelFactory<Screen<*>, *>>,
+  val configFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>>,
+  val decorateScreenFactory: (Navigator, Scope<ScreenScope<*>>, Screen<*>) -> DecorateScreen
+) {
+  companion object {
+    @Provide inline fun rootNavigationScreenContextComponent(
+      crossinline componentFactory: () -> ScreenContextComponent<RootNavGraph>
+    ) = object : ProvidedService<UiScope, ScreenContextComponent<RootNavGraph>> {
+      override val key: TypeKey<ScreenContextComponent<RootNavGraph>>
+        get() = typeKeyOf()
+      override fun get(scope: Scope<UiScope>): ScreenContextComponent<RootNavGraph> =
+        componentFactory()
+    }
+  }
+}

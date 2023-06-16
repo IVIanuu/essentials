@@ -18,7 +18,7 @@ import kotlin.coroutines.CoroutineContext
 
 typealias ScopedCoroutineScope<N> = @ScopedCoroutineScopeTag<N> CoroutineScope
 
-@Tag annotation class ScopedCoroutineScopeTag<N> {
+@Tag annotation class ScopedCoroutineScopeTag<out N> {
   companion object {
     @Provide fun <N> scope(
       context: ScopeCoroutineContext<N>

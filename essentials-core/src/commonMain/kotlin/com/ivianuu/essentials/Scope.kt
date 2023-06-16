@@ -13,7 +13,7 @@ import com.ivianuu.injekt.common.TypeKey
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.atomicfu.locks.synchronized
 
-interface Scope<N> : Disposable {
+interface Scope<out N> : Disposable {
   val name: TypeKey<N>
 
   val parent: Scope<*>?
