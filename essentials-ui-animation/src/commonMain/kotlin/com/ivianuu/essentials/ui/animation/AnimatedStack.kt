@@ -174,7 +174,7 @@ import androidx.compose.ui.unit.LayoutDirection
         val replacingRootItems = targetRootItem != null && initialRootItem != targetRootItem &&
             targetVisibleItems.count { it !in initialVisibleItems } == 1
 
-        val newRootIsPush = targetRootItem !in transition.currentState
+        val newRootIsPush = targetRootItem !in initialVisibleItems
 
         // Replace the old visible root with the new one
         if (replacingRootItems)
