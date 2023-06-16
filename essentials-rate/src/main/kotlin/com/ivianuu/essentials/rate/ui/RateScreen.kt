@@ -119,8 +119,7 @@ data class RateModel(
 @Provide fun rateModel(
   appConfig: AppConfig,
   navigator: Navigator,
-  rateUseCases: RateUseCases,
-  screen: RateScreen
+  rateUseCases: RateUseCases
 ) = Model {
   var rating by remember { mutableStateOf(0) }
   RateModel(
