@@ -35,7 +35,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +48,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.safeAs
 import com.ivianuu.essentials.ui.animation.AnimatedContent
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.common.CommonStrings
@@ -84,10 +84,8 @@ import com.ivianuu.injekt.Provide
     ColorPickerTab.EDITOR -> ColorPickerTab.COLORS
   }
 
-  SideEffect {
-    if (!allowCustomArgb && currentScreen == ColorPickerTab.EDITOR) {
-      currentScreen = ColorPickerTab.COLORS
-    }
+  if (!allowCustomArgb && currentScreen == ColorPickerTab.EDITOR) {
+    currentScreen = ColorPickerTab.COLORS
   }
 
   Dialog(
@@ -147,16 +145,19 @@ import com.ivianuu.injekt.Provide
   )
 }
 
+private val NoPalette = Any()
+
 @Composable private fun ColorGrid(
   currentColor: Color,
   colors: List<ColorPickerPalette>,
   onColorSelected: (Color) -> Unit,
   modifier: Modifier = Modifier
 ) {
-  var palettesStack by remember { mutableStateOf<List<ColorPickerPalette?>>(listOf(null)) }
+  var palettesStack by remember { mutableStateOf(listOf(NoPalette)) }
   AnimatedStack(items = palettesStack) { palette ->
     val items = remember {
       palette
+        .safeAs<ColorPickerPalette>()
         ?.colors
         ?.map { ColorGridItem.Color(it) }
         ?.let { listOf(ColorGridItem.Back) + it }
@@ -176,9 +177,9 @@ import com.ivianuu.injekt.Provide
               maxWidth = this@BoxWithConstraints.maxWidth,
               onItemClick = { item ->
                 when (item) {
-                  ColorGridItem.Back -> palettesStack = listOf(null)
+                  ColorGridItem.Back -> palettesStack = listOf(NoPalette)
                   is ColorGridItem.Color -> {
-                    if (palette == null) {
+                    if (palette !is ColorPickerPalette) {
                       val paletteForItem =
                         colors.first { it.front == item.color }
                       if (paletteForItem.colors.size > 1) {
