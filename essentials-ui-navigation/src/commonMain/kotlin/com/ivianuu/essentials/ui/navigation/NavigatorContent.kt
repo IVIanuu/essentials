@@ -22,7 +22,6 @@ import kotlin.collections.set
   modifier: Modifier = Modifier,
   navigator: Navigator,
   handleBack: Boolean = true,
-  popRoot: Boolean = false,
   defaultTransitionSpec: ElementTransitionSpec<Screen<*>> = LocalScreenTransitionSpec.current
 ) {
   NavigatorContent<RootNavGraph>(
@@ -30,7 +29,6 @@ import kotlin.collections.set
     navigator,
     LocalScope.current.service(),
     handleBack,
-    popRoot,
     defaultTransitionSpec
   )
 }
@@ -40,7 +38,6 @@ import kotlin.collections.set
   navigator: Navigator,
   screenContextComponent: ScreenContextComponent<N>,
   handleBack: Boolean = true,
-  popRoot: Boolean = false,
   defaultTransitionSpec: ElementTransitionSpec<Screen<*>> = LocalScreenTransitionSpec.current
 ) {
   val backStack by navigator.backStack.collectAsState()
@@ -52,7 +49,7 @@ import kotlin.collections.set
       screenContexts[screen] = rememberScreenContext(screen, navigator, screenContextComponent)
 
       key(index) {
-        BackHandler(enabled = handleBack && (index > 0 || popRoot), onBackPress = action {
+        BackHandler(enabled = handleBack && index > 0, onBackPress = action {
           navigator.pop(screen)
         })
       }
