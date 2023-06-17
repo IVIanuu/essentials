@@ -83,7 +83,7 @@ import com.ivianuu.essentials.ui.navigation.push
             ),
             onCancel = onCancel
           ) {
-            Popup(popupContent)
+            PopupContainer(popupContent)
           }
         )
       }

@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.ui.dialog
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -11,12 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-@Composable fun BaseDialog(
+@Composable fun DialogContainer(
   modifier: Modifier = Modifier,
   content: @Composable () -> Unit
 ) {
   Surface(
-    modifier = modifier.widthIn(min = 280.dp, max = 356.dp),
+    modifier = modifier
+      .animateContentSize()
+      .widthIn(min = 280.dp, max = 356.dp),
     color = MaterialTheme.colors.surface,
     elevation = 24.dp,
     shape = MaterialTheme.shapes.medium,

@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
   showBottomDivider: Boolean = false,
   applyContentPadding: Boolean = true,
 ) {
-  BaseDialog(modifier = modifier) {
+  DialogContainer(modifier = modifier) {
     DialogBody(
       showTopDivider = showTopDivider,
       showBottomDivider = showBottomDivider,

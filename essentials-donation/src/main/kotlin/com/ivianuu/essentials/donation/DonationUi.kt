@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.donation
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -64,7 +63,6 @@ data class Donation(val sku: Sku, val iconRes: Int)
       title = { Text(R.string.es_donation_title) },
       content = {
         ResourceVerticalListFor(
-          modifier = Modifier.animateContentSize(),
           resource = model.skus,
           loading = {
             CircularProgressIndicator(
