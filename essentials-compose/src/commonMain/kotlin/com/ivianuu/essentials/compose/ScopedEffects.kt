@@ -15,6 +15,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.coroutines.onCancel
+import com.ivianuu.essentials.safeAs
+import com.ivianuu.injekt.common.Disposable
 import kotlinx.coroutines.CoroutineScope
 
 val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }
@@ -34,6 +36,7 @@ val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }
       }
       ?: init()
         .also {
+          valueHolder.value.safeAs<Disposable>()?.dispose()
           valueHolder.value = it
           valueHolder.inputs = inputs
         }
@@ -42,9 +45,13 @@ val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }
   return value as T
 }
 
-private class ScopedValueHolder {
+private class ScopedValueHolder : Disposable {
   var value: Any? = this
   var inputs: Array<out Any?> = emptyArray()
+
+  override fun dispose() {
+    value.safeAs<Disposable>()?.dispose()
+  }
 }
 
 @Composable fun <T> produceScopedState(
