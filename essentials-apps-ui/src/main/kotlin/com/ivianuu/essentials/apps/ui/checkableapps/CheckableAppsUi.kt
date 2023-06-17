@@ -23,7 +23,7 @@ import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.compose.bindResource
-import com.ivianuu.essentials.compose.composedState
+import com.ivianuu.essentials.compose.compositionStateFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get
@@ -114,7 +114,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
   params: CheckableAppsParams,
   repository: AppRepository,
   scope: ScopedCoroutineScope<ScreenScope>
-): @Scoped<ScreenScope> StateFlow<CheckableAppsModel> = scope.composedState {
+): @Scoped<ScreenScope> StateFlow<CheckableAppsModel> = scope.compositionStateFlow {
   val checkedApps = params.checkedApps.bind(emptySet())
   val allApps = repository.installedApps.bindResource()
 

@@ -11,7 +11,7 @@ import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Service
-import com.ivianuu.essentials.compose.composedState
+import com.ivianuu.essentials.compose.compositionStateFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -143,7 +143,7 @@ abstract class AbstractFunTileService<T : Any>(
   val coroutineScope: ScopedCoroutineScope<TileScope>,
   val scope: Scope<TileScope>
 ) {
-  val tileModel = coroutineScope.composedState {
+  val tileModel = coroutineScope.compositionStateFlow {
     tileModelRecords.toMap()[tileId]
       ?.invoke()
       ?: error("No tile found for $tileId in ${tileModelRecords.toMap()}")
