@@ -51,6 +51,7 @@ private class ScopedValueHolder : Disposable {
 
   override fun dispose() {
     value.safeAs<Disposable>()?.dispose()
+    value = null
   }
 }
 
