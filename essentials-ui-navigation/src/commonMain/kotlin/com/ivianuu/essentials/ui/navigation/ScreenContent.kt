@@ -143,7 +143,7 @@ import kotlin.reflect.KClass
   val uiFactories: Map<KClass<Screen<*>>, @NavGraph<N> UiFactory<Screen<*>>>,
   val modelFactories: Map<KClass<Screen<*>>, @NavGraph<N> ModelFactory<Screen<*>, *>>,
   val configFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>>,
-  val screenScopeFactory: (Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>,
+  val screenScopeFactory: (@Service<ScreenScope> Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>,
   val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen
 ) {
   companion object {
