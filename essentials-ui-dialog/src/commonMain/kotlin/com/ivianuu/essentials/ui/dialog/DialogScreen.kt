@@ -15,7 +15,6 @@ import com.ivianuu.injekt.Provide
 interface DialogScreen<T> : OverlayScreen<T> {
   companion object {
     @Provide fun <T : DialogScreen<*>> config() = ScreenConfig<T>(opaque = true) {
-      println("is push $isPush")
       if (isPush) {
         DialogKey entersWith materialFadeIn()
         DialogScrimKey entersWith fadeIn(

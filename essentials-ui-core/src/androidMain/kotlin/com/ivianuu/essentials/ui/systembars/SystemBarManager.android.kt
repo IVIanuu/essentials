@@ -66,8 +66,6 @@ private class AndroidSystemBarManager : SystemBarManager {
       .sortedBy { it.zIndex }
       .lastOrNull { statusBarHitPointY in it.bounds.top..it.bounds.bottom }
 
-    println("status bar style hit point $statusBarHitPointY ${styles.toList()}")
-
     DisposableEffect(activity, statusBarStyle?.barColor, statusBarStyle?.darkIcons) {
       activity.window.statusBarColor =
         (statusBarStyle?.barColor ?: Color.Black.copy(alpha = 0.2f)).toArgb()
