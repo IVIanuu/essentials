@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.rate.ui
 
 import androidx.compose.material.Text
+import androidx.compose.runtime.produceState
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.produce
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -63,7 +63,7 @@ data class FeedbackModel(
   screen: FeedbackScreen
 ) = Model {
   FeedbackModel(
-    displayShowNever = produce(false) { rateUseCases.shouldDisplayShowNever() },
+    displayShowNever = produceState(false) { value = rateUseCases.shouldDisplayShowNever() }.value,
     showNever = action { rateUseCases.showNever() },
     showLater = action { rateUseCases.showLater() },
     openReddit = action {

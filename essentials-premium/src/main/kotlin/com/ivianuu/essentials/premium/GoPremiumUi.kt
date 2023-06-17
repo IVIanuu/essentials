@@ -39,8 +39,8 @@ import com.ivianuu.essentials.billing.toIso8601Duration
 import com.ivianuu.essentials.billing.toReadableString
 import com.ivianuu.essentials.billing.toSkuType
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bindResource
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.essentials.ui.common.VerticalList
@@ -337,7 +337,7 @@ data class GoPremiumModel(
 ) = Model {
   GoPremiumModel(
     features = features,
-    premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),
+    premiumSkuDetails = premiumVersionManager.premiumSkuDetails.collectAsResourceState().value,
     showTryBasicOption = screen.showTryBasicOption,
     goPremium = action {
       if (premiumVersionManager.purchasePremiumVersion()) {

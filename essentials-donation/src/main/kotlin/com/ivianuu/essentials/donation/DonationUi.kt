@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.produceResource
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.produceResourceState
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -125,20 +125,22 @@ data class UiDonation(
   toaster: Toaster
 ) = Model {
   DonationModel(
-    skus = produceResource {
-      donations
-        .value
-        .parMap { donation ->
-          val details = billingService.getSkuDetails(donation.sku)!!
-          UiDonation(
-            donation,
-            details.title
-              .replaceAfterLast("(", "")
-              .removeSuffix("("),
-            details.price
-          )
-        }
-    },
+    skus = produceResourceState {
+      emit(
+        donations
+          .value
+          .parMap { donation ->
+            val details = billingService.getSkuDetails(donation.sku)!!
+            UiDonation(
+              donation,
+              details.title
+                .replaceAfterLast("(", "")
+                .removeSuffix("("),
+              details.price
+            )
+          }
+      )
+    }.value,
     close = action { navigator.pop(screen) },
     purchase = action { donation ->
       if (billingService.purchase(donation.donation.sku, true, true)) {

@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.produceResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
@@ -25,6 +24,7 @@ import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.produceResourceState
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -140,7 +140,9 @@ sealed interface ActionPickerItem {
   screen: ActionPickerScreen
 ) = Model {
   ActionPickerModel(
-    items = produceResource { getActionPickerItems(filter, screen) },
+    items = produceResourceState {
+      emit(getActionPickerItems(filter, screen))
+    }.value,
     openActionSettings = action { item -> navigator.push(item.settingsScreen!!) },
     pickAction = action { item ->
       val result = item.getResult() ?: return@action

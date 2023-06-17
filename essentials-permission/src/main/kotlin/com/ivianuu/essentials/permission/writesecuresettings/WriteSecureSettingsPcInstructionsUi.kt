@@ -14,6 +14,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -24,8 +25,6 @@ import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bind
-import com.ivianuu.essentials.compose.produce
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.onFailure
@@ -203,18 +202,18 @@ typealias AdbEnabled = @AdbEnabledTag Int
   var completedStep by remember { mutableStateOf(1) }
 
   val canContinueStep = if (currentStep != completedStep) false
-  else when (completedStep) {
-    1 -> developerModeSetting.data.map { it != 0 }.bind(false)
-    2 -> adbEnabledSetting.data.map { it != 0 }.bind(false)
-    3 -> true
-    4 -> produce(false) {
-      while (true) {
+  else produceState(false) {
+    when (completedStep) {
+      1 -> developerModeSetting.data.map { it != 0 }.collect { value = it }
+      2 -> adbEnabledSetting.data.map { it != 0 }.collect { value = it }
+      3 -> value = true
+      4 -> while (true) {
         value = permissionManager.permissionState(listOf(screen.permissionKey)).first()
         delay(1000)
       }
+      else -> value = true
     }
-    else -> true
-  }
+  }.value
 
   WriteSecureSettingsPcInstructionsModel(
     packageName = appConfig.packageName,

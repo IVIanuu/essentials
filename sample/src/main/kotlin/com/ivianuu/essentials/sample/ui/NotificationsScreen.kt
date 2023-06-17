@@ -25,6 +25,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
@@ -36,8 +37,6 @@ import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bind
-import com.ivianuu.essentials.compose.bindResource
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.map
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
@@ -46,6 +45,7 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.recover
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
@@ -165,9 +165,11 @@ data class UiNotification(
 ) = Model {
   NotificationsModel(
     hasPermissions = permissionManager.permissionState(listOf(typeKeyOf<SampleNotificationsPermission>()))
-      .bindResource(),
+      .collectAsResourceState()
+      .value,
     notifications = service.notifications
-      .bind(emptyList())
+      .collectAsState(emptyList())
+      .value
       .map { it.toUiNotification() },
     requestPermissions = action {
       permissionManager.requestPermissions(listOf(typeKeyOf<SampleNotificationsPermission>()))

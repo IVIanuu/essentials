@@ -21,11 +21,10 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.AppPredicate
 import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bind
-import com.ivianuu.essentials.compose.bindResource
 import com.ivianuu.essentials.compose.compositionStateFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.ui.material.ListItem
@@ -115,8 +114,8 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
   repository: AppRepository,
   scope: ScopedCoroutineScope<ScreenScope>
 ): @Scoped<ScreenScope> StateFlow<CheckableAppsModel> = scope.compositionStateFlow {
-  val checkedApps = params.checkedApps.bind(emptySet())
-  val allApps = repository.installedApps.bindResource()
+  val checkedApps by params.checkedApps.collectAsState(emptySet())
+  val allApps by repository.installedApps.collectAsResourceState()
 
   fun pushNewCheckedApps(transform: Set<String>.() -> Set<String>) {
     val newCheckedApps = checkedApps.transform()

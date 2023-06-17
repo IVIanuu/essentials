@@ -15,10 +15,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bindResource
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -67,7 +67,7 @@ data class ShortcutPickerModel(
   toaster: Toaster
 ) = Model {
   ShortcutPickerModel(
-    shortcuts = repository.shortcuts.bindResource(),
+    shortcuts = repository.shortcuts.collectAsResourceState().value,
     pickShortcut = action { shortcut ->
       catch {
         val shortcutRequestResult = navigator.push(DefaultIntentScreen(shortcut.intent))

@@ -8,11 +8,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bindResource
 import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.Project
 import com.ivianuu.essentials.license.domain.LicenceProjectRepository
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -48,7 +48,7 @@ data class LicenseModel(
   repository: LicenceProjectRepository
 ) = Model {
   LicenseModel(
-    projects = repository.licenseProjects.bindResource(),
+    projects = repository.licenseProjects.collectAsResourceState().value,
     openProject = action { project ->
       if (project.url != null)
         navigator.push(UrlScreen(project.url))

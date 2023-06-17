@@ -18,12 +18,12 @@ import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppPredicate
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerScreen
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bindResource
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.getOrNull
+import com.ivianuu.essentials.resource.produceResourceState
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Model
@@ -32,6 +32,7 @@ import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -106,10 +107,12 @@ data class MediaActionSettingsModel(
   pref: DataStore<MediaActionPrefs>
 ) = Model {
   MediaActionSettingsModel(
-    mediaApp = pref.data
-      .map { it.mediaApp }
-      .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
-      .bindResource(),
+    mediaApp = produceResourceState {
+      pref.data
+        .map { it.mediaApp }
+        .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
+        .let { emitAll(it) }
+    }.value,
     updateMediaApp = action {
       val newMediaApp = navigator.push(
         AppPickerScreen(

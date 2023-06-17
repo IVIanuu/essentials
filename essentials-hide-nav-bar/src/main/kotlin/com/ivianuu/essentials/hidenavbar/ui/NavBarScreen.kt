@@ -6,10 +6,11 @@ package com.ivianuu.essentials.hidenavbar.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
@@ -68,7 +69,7 @@ data class NavBarModel(
   resources: Resources,
   pref: DataStore<NavBarPrefs>
 ) = Model {
-  val prefs = pref.data.bind(NavBarPrefs())
+  val prefs by pref.data.collectAsState(NavBarPrefs())
   NavBarModel(
     hideNavBar = prefs.hideNavBar,
     updateHideNavBar = action { value ->

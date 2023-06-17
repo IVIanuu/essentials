@@ -20,6 +20,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,7 +30,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.produce
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -123,7 +123,7 @@ data class RateModel(
 ) = Model {
   var rating by remember { mutableStateOf(0) }
   RateModel(
-    displayShowNever = produce(false) { rateUseCases.shouldDisplayShowNever() },
+    displayShowNever = produceState(false) { value = rateUseCases.shouldDisplayShowNever() }.value,
     packageName = appConfig.packageName,
     rating = rating,
     showLater = action { rateUseCases.showLater() },

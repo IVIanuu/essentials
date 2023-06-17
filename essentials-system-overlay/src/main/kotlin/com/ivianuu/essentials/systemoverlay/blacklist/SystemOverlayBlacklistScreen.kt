@@ -6,9 +6,10 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.common.SimpleListScreen
@@ -87,7 +88,7 @@ data class SystemOverlayBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   screen: SystemOverlayBlacklistScreen
 ) = Model {
-  val prefs = pref.data.bind(SystemOverlayBlacklistPrefs())
+  val prefs by pref.data.collectAsState(SystemOverlayBlacklistPrefs())
   SystemOverlayBlacklistModel(
     systemOverlayName = screen.systemOverlayName,
     disableOnKeyboard = prefs.disableOnKeyboard,

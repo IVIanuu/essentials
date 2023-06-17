@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
@@ -34,7 +34,7 @@ class TorchScreen : Screen<Unit>
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       Text(
-        "Torch is ${if (torchManager.torchEnabled.bind()) "enabled" else "disabled"}",
+        "Torch is ${if (torchManager.torchEnabled.collectAsState().value) "enabled" else "disabled"}",
         style = MaterialTheme.typography.h4
       )
 

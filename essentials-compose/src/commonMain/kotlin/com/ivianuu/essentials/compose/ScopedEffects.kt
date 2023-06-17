@@ -5,10 +5,17 @@
 package com.ivianuu.essentials.compose
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.ProduceStateScope
+import androidx.compose.runtime.State
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.currentCompositeKeyHash
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.coroutines.onCancel
+import kotlinx.coroutines.CoroutineScope
 
 val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }
 
@@ -38,4 +45,21 @@ val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }
 private class ScopedValueHolder {
   var value: Any? = this
   var inputs: Array<out Any?> = emptyArray()
+}
+
+@Composable fun <T> produceScopedState(
+  initialValue: T,
+  vararg keys: Any?,
+  producer: suspend ProduceStateScope<T>.() -> Unit
+): State<T> {
+  val state = rememberScoped { mutableStateOf(initialValue) }
+  LaunchedEffect(keys) {
+    producer(
+      object : ProduceStateScope<T>, MutableState<T> by state, CoroutineScope by this {
+        override suspend fun awaitDispose(onDispose: () -> Unit) =
+          onCancel { onDispose() }
+      }
+    )
+  }
+  return state
 }

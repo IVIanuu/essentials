@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.rate.ui
 
 import androidx.compose.material.Text
+import androidx.compose.runtime.produceState
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.produce
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -52,7 +52,7 @@ data class RateOnPlayModel(
   screen: RateOnPlayScreen
 ) = Model {
   RateOnPlayModel(
-    displayShowNever = produce(false) { rateUseCases.shouldDisplayShowNever() },
+    displayShowNever = produceState(false) { value = rateUseCases.shouldDisplayShowNever() }.value,
     rate = action {
       rateUseCases.rateOnPlay()
       navigator.pop(screen)

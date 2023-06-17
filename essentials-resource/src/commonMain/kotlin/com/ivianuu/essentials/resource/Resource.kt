@@ -6,7 +6,12 @@
 
 package com.ivianuu.essentials.resource
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.fold
@@ -15,6 +20,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 @Stable sealed interface Resource<out T>
 
@@ -67,3 +75,28 @@ fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
   success = { Success(it) },
   failure = { Error(it) }
 )
+
+@Composable fun <T> Flow<T>.collectAsResourceState(
+  vararg keys: Any?,
+  context: CoroutineContext = EmptyCoroutineContext
+): State<Resource<T>> {
+  val state = remember(*keys) { mutableStateOf<Resource<T>>(Idle) }
+
+  LaunchedEffect(this, context) {
+    withContext(context) {
+      flowAsResource()
+        .collect {
+          if (!state.value.isComplete || it.isComplete)
+            state.value = it
+        }
+    }
+  }
+
+  return state
+}
+
+@Composable fun <T> produceResourceState(
+  vararg keys: Any?,
+  producer: suspend FlowCollector<T>.() -> Unit
+): State<Resource<T>> = remember(producer) { flow(producer) }
+  .collectAsResourceState(*keys)

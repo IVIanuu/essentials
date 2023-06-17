@@ -5,6 +5,7 @@
 plugins {
   kotlin("multiplatform")
   id("com.ivianuu.essentials")
+  id("com.ivianuu.essentials.compose")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")

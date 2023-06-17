@@ -19,8 +19,8 @@ import com.ivianuu.essentials.apps.ui.AppPredicate
 import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bindResource
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -81,7 +81,7 @@ data class AppPickerModel(
   AppPickerModel(
     appPredicate = screen.appPredicate,
     title = screen.title,
-    allApps = repository.installedApps.bindResource(),
+    allApps = repository.installedApps.collectAsResourceState().value,
     pickApp = action { app -> navigator.pop(screen, app) }
   )
 }
