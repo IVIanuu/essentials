@@ -31,12 +31,14 @@ fun interface DecorateScreen {
       .fold({ it() }) { acc, element ->
         { content ->
           acc {
-            logger.log { "Decorate screen ${element.key.value}" }
+            logger.log { "decorate screen with ${element.key.value}" }
             element.instance(content)
           }
         }
       }
   }
+
+  logger.log { "decorate screen $content with combined $combinedDecorator" }
 
   combinedDecorator(content)
 }

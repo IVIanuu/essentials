@@ -33,14 +33,14 @@ fun interface DecorateAppUi {
       .fold({ it() }) { acc, element ->
         { content ->
           acc {
-            logger.log { "Decorate app ui ${element.key.value}" }
+            logger.log { "decorate app ui ${element.key.value}" }
             element.instance(content)
           }
         }
       }
   }
 
-  logger.log { "decorate with combined $combinedDecorator" }
+  logger.log { "decorate app ui $content with combined $combinedDecorator" }
 
   combinedDecorator(content)
 }
