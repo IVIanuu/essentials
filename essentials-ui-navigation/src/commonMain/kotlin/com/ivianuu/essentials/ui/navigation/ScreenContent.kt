@@ -60,7 +60,7 @@ import kotlin.reflect.KClass
   val screen: S,
   val config: ScreenConfig<S>? = null,
   val scope: Scope<ScreenScope>,
-  internal val content: @Composable () -> Unit
+  val content: @Composable () -> Unit
 ) {
   internal var isContentRemoved = false
   internal var isContextRemoved = false
@@ -69,7 +69,7 @@ import kotlin.reflect.KClass
 
   internal var savedState = mutableMapOf<Any, Map<String, List<Any?>>>()
 
-  internal fun disposeIfNeeded() {
+  fun disposeIfNeeded() {
     if (isDisposed) return
     if (isContentRemoved || !isContextRemoved) return
     isDisposed = true
