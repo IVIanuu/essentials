@@ -24,11 +24,11 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import com.ivianuu.essentials.Lerper
 import com.ivianuu.essentials.ui.material.DefaultSliderRange
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
 import com.ivianuu.essentials.ui.material.Slider
-import com.ivianuu.essentials.ui.material.SliderValueConverter
 import com.ivianuu.essentials.ui.material.StepPolicy
 import com.ivianuu.essentials.ui.material.stepValue
 import com.ivianuu.injekt.Inject
@@ -48,7 +48,7 @@ import kotlin.time.Duration
   contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
   textPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
   sliderAdjustmentPadding: Dp = 8.dp,
-  @Inject converter: SliderValueConverter<T>,
+  @Inject lerper: Lerper<T>,
   @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
 ) {
   var internalValue by remember(value) { mutableStateOf(value) }

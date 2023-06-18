@@ -15,13 +15,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.Lerper
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.refOf
 import com.ivianuu.essentials.compose.setValue
-import com.ivianuu.essentials.time.toDuration
-import com.ivianuu.essentials.time.toLong
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -44,9 +41,12 @@ import kotlin.time.Duration
     thumbColor = MaterialTheme.colors.secondary,
     activeTrackColor = MaterialTheme.colors.secondary,
   ),
-  @Inject converter: SliderValueConverter<T>,
+  @Inject lerper: Lerper<T>,
   @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
-) = with(converter) {
+) {
+  fun T.toFloat() = lerper.unlerp(valueRange.start, valueRange.endInclusive, this)
+  fun Float.toValue() = lerper.lerp(valueRange.start, valueRange.endInclusive, this)
+
   var internalValue by remember(value) { mutableStateOf(value.toFloat()) }
 
   var valueChangeJob: Job? by remember { refOf(null) }
@@ -90,43 +90,6 @@ import kotlin.time.Duration
   }
 }
 
-interface SliderValueConverter<T : Comparable<T>> {
-  fun T.toFloat(): Float
-  fun Float.toValue(): T
-
-  companion object {
-    @Provide val duration = object : SliderValueConverter<Duration> {
-      override fun Duration.toFloat() = toLong().toFloat()
-      override fun Float.toValue() = toLong().toDuration()
-    }
-
-    @Provide val double = object : SliderValueConverter<Double> {
-      override fun Double.toFloat() = toFloat()
-      override fun Float.toValue() = toDouble()
-    }
-
-    @Provide val dp = object : SliderValueConverter<Dp> {
-      override fun Dp.toFloat() = value
-      override fun Float.toValue() = dp
-    }
-
-    @Provide val float = object : SliderValueConverter<Float> {
-      override fun Float.toFloat() = this
-      override fun Float.toValue() = this
-    }
-
-    @Provide val int = object : SliderValueConverter<Int> {
-      override fun Int.toFloat() = toFloat()
-      override fun Float.toValue() = toInt()
-    }
-
-    @Provide val long = object : SliderValueConverter<Long> {
-      override fun Long.toFloat() = toFloat()
-      override fun Float.toValue() = toLong()
-    }
-  }
-}
-
 typealias StepPolicy<T> = (ClosedRange<T>) -> Int
 
 val NoStepsStepPolicy: StepPolicy<*> = { 0 }
@@ -156,20 +119,17 @@ fun incrementingStepPolicy(incValue: Duration): StepPolicy<Duration> = { valueRa
 fun <T : Comparable<T>> StepPolicy<T>.stepValue(
   value: T,
   @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
-  @Inject converter: SliderValueConverter<T>
-): T = with(converter) {
+  @Inject lerper: Lerper<T>
+): T {
   val steps = this@stepValue(valueRange)
   val stepFractions = (if (steps == 0) emptyList()
   else List(steps + 2) { it.toFloat() / (steps + 1) })
-  val stepValues = stepFractions
-    .map {
-      valueRange.start.toFloat() +
-          ((valueRange.endInclusive.toFloat() - valueRange.start.toFloat()) * it)
-    }
 
-  val steppedValue = stepValues
-    .minByOrNull { (it - value.toFloat()).absoluteValue }
-    ?: value.toFloat()
+  val valueFraction = lerper.unlerp(valueRange.start, valueRange.endInclusive, value)
 
-  return steppedValue.toValue()
+  val steppedFraction = stepFractions
+    .minByOrNull { (it - valueFraction).absoluteValue }
+    ?: valueFraction
+
+  return lerper.lerp(valueRange.start, valueRange.endInclusive, steppedFraction)
 }
