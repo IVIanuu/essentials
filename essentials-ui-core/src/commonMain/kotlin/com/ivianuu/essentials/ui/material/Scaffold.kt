@@ -13,6 +13,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -21,7 +22,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.ui.insets.Insets
 import com.ivianuu.essentials.ui.insets.InsetsPadding
-import com.ivianuu.essentials.ui.insets.InsetsProvider
 import com.ivianuu.essentials.ui.insets.LocalInsets
 
 @Composable fun Scaffold(
@@ -37,7 +37,7 @@ import com.ivianuu.essentials.ui.insets.LocalInsets
   drawerElevation: Dp = DrawerDefaults.Elevation,
   backgroundColor: Color = MaterialTheme.colors.background,
   applyInsets: Boolean = true,
-  bodyContent: @Composable () -> Unit
+  content: @Composable () -> Unit
 ) {
   InsetsPadding(
     left = applyInsets,
@@ -70,8 +70,8 @@ import com.ivianuu.essentials.ui.insets.LocalInsets
       backgroundColor = backgroundColor
     ) { bodyPadding ->
       val insets = if (applyInsets) LocalInsets.current else Insets()
-      InsetsProvider(
-        Insets(
+      CompositionLocalProvider(
+        LocalInsets provides Insets(
           left = max(bodyPadding.calculateLeftPadding(LocalLayoutDirection.current), insets.left),
           top = if (topBar == null) insets.top else bodyPadding.calculateTopPadding(),
           right = max(
@@ -80,7 +80,7 @@ import com.ivianuu.essentials.ui.insets.LocalInsets
           ),
           bottom = if (bottomBar == null) insets.bottom else bodyPadding.calculateBottomPadding()
         ),
-        bodyContent
+        content = content
       )
     }
   }
