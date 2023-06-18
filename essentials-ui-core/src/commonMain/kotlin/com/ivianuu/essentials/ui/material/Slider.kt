@@ -69,7 +69,7 @@ import kotlin.time.Duration
     },
     modifier,
     enabled,
-    remember(valueRange) { valueRange.start.toFloat()..valueRange.endInclusive.toFloat() },
+    0f..1f,
     remember(stepPolicy, valueRange) { stepPolicy(valueRange) },
     onValueChangeFinished?.let {
       {
