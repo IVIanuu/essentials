@@ -86,7 +86,7 @@ fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
     withContext(context) {
       flowAsResource()
         .collect {
-          if (!state.value.isComplete || it.isComplete)
+          if (it.isComplete || !state.value.isComplete)
             state.value = it
         }
     }
