@@ -30,6 +30,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.StepPolicy
+import com.ivianuu.essentials.ui.material.stepValue
 import com.ivianuu.injekt.Inject
 import kotlin.time.Duration
 
@@ -89,7 +90,7 @@ import kotlin.time.Duration
       contentAlignment = Alignment.CenterEnd
     ) {
       CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.body2) {
-        valueText!!(internalValue)
+        valueText!!(stepPolicy.stepValue(internalValue, valueRange))
       }
     }
   }

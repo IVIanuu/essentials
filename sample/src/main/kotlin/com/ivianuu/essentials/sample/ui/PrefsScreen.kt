@@ -11,9 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.android.prefs.PrefModule
@@ -104,10 +102,8 @@ class PrefsScreen : Screen<Unit>
       )
     }
     item {
-      var value by remember(prefs.steppedSlider) { mutableStateOf(prefs.steppedSlider) }
       SliderListItem(
-        value = value,
-        onValueChange = { value = it },
+        value = prefs.steppedSlider,
         onValueChangeFinished = action { value ->
           pref.updateData { copy(steppedSlider = value) }
         },
@@ -117,7 +113,7 @@ class PrefsScreen : Screen<Unit>
         subtitle = { Text("This is a stepped slider preference") },
         stepPolicy = incrementingStepPolicy(0.05f),
         valueRange = 0.75f..1.5f,
-        valueText = { ScaledPercentageUnitText(value) }
+        valueText = { ScaledPercentageUnitText(it) }
       )
     }
     item {

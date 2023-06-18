@@ -19,7 +19,6 @@ import com.ivianuu.essentials.Lerper
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.refOf
 import com.ivianuu.essentials.compose.setValue
-import com.ivianuu.essentials.unlerp
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -74,7 +73,7 @@ import kotlin.time.Duration
     remember(stepPolicy, valueRange) { stepPolicy(valueRange) },
     onValueChangeFinished?.let {
       {
-        onValueChangeFinished(internalValue.toValue())
+        onValueChangeFinished(stepPolicy.stepValue(internalValue.toValue(), valueRange))
       }
     },
     interactionSource,
@@ -115,4 +114,22 @@ fun incrementingStepPolicy(incValue: Long): StepPolicy<Long> = { valueRange ->
 
 fun incrementingStepPolicy(incValue: Duration): StepPolicy<Duration> = { valueRange ->
   (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
+}
+
+fun <T : Comparable<T>> StepPolicy<T>.stepValue(
+  value: T,
+  @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
+  @Inject lerper: Lerper<T>
+): T {
+  val steps = this@stepValue(valueRange)
+  val stepFractions = (if (steps == 0) emptyList()
+  else List(steps + 2) { it.toFloat() / (steps + 1) })
+
+  val valueFraction = lerper.unlerp(valueRange.start, valueRange.endInclusive, value)
+
+  val steppedFraction = stepFractions
+    .minByOrNull { (it - valueFraction).absoluteValue }
+    ?: valueFraction
+
+  return lerper.lerp(valueRange.start, valueRange.endInclusive, steppedFraction)
 }
