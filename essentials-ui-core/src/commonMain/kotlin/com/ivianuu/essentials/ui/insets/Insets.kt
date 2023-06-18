@@ -89,8 +89,8 @@ val LocalInsets = compositionLocalOf { Insets() }
   content: @Composable () -> Unit
 ) {
   val currentInsets = LocalInsets.current
-  InsetsProvider(
-    currentInsets.copy(
+  CompositionLocalProvider(
+    LocalInsets provides currentInsets.copy(
       left = if (left) 0.dp else currentInsets.left,
       top = if (top) 0.dp else currentInsets.top,
       right = if (right) 0.dp else currentInsets.right,
@@ -98,13 +98,6 @@ val LocalInsets = compositionLocalOf { Insets() }
     ),
     content = content
   )
-}
-
-@Composable fun InsetsProvider(
-  insets: Insets,
-  content: @Composable () -> Unit,
-) {
-  CompositionLocalProvider(LocalInsets provides insets, content = content)
 }
 
 fun interface WindowInsetsProvider : AppUiDecorator
