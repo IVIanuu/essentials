@@ -100,14 +100,14 @@ private object UnitApplier : AbstractApplier<Unit>(Unit) {
 @Tag annotation class StateContextTag {
   companion object {
     @Provide val stateContext: StateContext by lazy {
-      Dispatchers.Main + immediateFrameClock()
+      Dispatchers.Main + ImmediateFrameClock
     }
   }
 }
 
 typealias StateContext = @StateContextTag CoroutineContext
 
-private fun immediateFrameClock() = object : MonotonicFrameClock {
+private object ImmediateFrameClock : MonotonicFrameClock {
   override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R =
     onFrame(0L)
 }
