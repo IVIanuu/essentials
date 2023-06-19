@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.ui.insets
 
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imeAnimationTarget
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalDensity
@@ -15,7 +15,7 @@ import kotlin.math.max
 
 @Provide actual val windowInsetsProvider = WindowInsetsProvider { content ->
   val systemBarsInsets = WindowInsets.systemBars
-  val imeInsets = WindowInsets.ime
+  val imeInsets = WindowInsets.imeAnimationTarget
   val density = LocalDensity.current
   val layoutDirection = LocalLayoutDirection.current
   val insets = with(density) {
