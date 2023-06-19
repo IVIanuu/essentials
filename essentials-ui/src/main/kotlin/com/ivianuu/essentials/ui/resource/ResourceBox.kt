@@ -38,7 +38,7 @@ import kotlin.reflect.KClass
   transitionSpec: ElementTransitionSpec<ResourceBoxItem<List<T>>> = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
-  idle: @Composable () -> Unit = {},
+  idle: @Composable () -> Unit = ResourceBoxDefaults.idle,
   successEmpty: @Composable () -> Unit = {},
   successItemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
@@ -64,7 +64,7 @@ import kotlin.reflect.KClass
   transitionSpec: ElementTransitionSpec<ResourceBoxItem<List<T>>> = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
-  idle: @Composable () -> Unit = {},
+  idle: @Composable () -> Unit = ResourceBoxDefaults.idle,
   successEmpty: @Composable () -> Unit = {},
   successItemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
@@ -90,7 +90,7 @@ import kotlin.reflect.KClass
   transitionSpec: ElementTransitionSpec<ResourceBoxItem<T>> = ResourceBoxDefaults.transitionSpec,
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
-  idle: @Composable () -> Unit = {},
+  idle: @Composable () -> Unit = ResourceBoxDefaults.idle,
   success: @Composable (T) -> Unit
 ) {
   // we only wanna animate if the resource type has changed
@@ -142,4 +142,5 @@ object ResourceBoxDefaults {
   val loading: @Composable () -> Unit = {
     CircularProgressIndicator(modifier = Modifier.center())
   }
+  val idle: @Composable () -> Unit = loading
 }
