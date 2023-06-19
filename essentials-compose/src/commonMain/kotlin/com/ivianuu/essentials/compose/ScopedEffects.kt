@@ -30,10 +30,7 @@ val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }
 
   val value = remember(*inputs) {
     valueHolder.value
-      .takeIf {
-        it !== valueHolder &&
-            inputs.contentEquals(valueHolder.inputs)
-      }
+      .takeIf { it !== Uninitialized && inputs.contentEquals(valueHolder.inputs) }
       ?: init()
         .also {
           valueHolder.value.safeAs<Disposable>()?.dispose()
@@ -46,7 +43,7 @@ val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }
 }
 
 private class ScopedValueHolder : Disposable {
-  var value: Any? = this
+  var value: Any? = Uninitialized
   var inputs: Array<out Any?> = emptyArray()
 
   override fun dispose() {
@@ -54,6 +51,8 @@ private class ScopedValueHolder : Disposable {
     value = null
   }
 }
+
+private val Uninitialized = Any()
 
 @Composable fun <T> produceScopedState(
   initialValue: T,
