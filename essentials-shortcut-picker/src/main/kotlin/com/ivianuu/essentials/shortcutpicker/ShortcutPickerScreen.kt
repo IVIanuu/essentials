@@ -44,9 +44,7 @@ class ShortcutPickerScreen : Screen<Shortcut>
         leading = {
           Image(
             modifier = Modifier.size(40.dp),
-            painter = remember {
-              BitmapPainter(shortcut.icon.toBitmap().toImageBitmap())
-            }
+            painter = remember { BitmapPainter(shortcut.icon.toBitmap().toImageBitmap()) }
           )
         },
         title = { Text(shortcut.name) }
