@@ -26,17 +26,16 @@ interface ClipboardManager {
   private val androidClipboardManager: @SystemService AndroidClipboardManager,
   private val toaster: Toaster
 ) : ClipboardManager {
-  override val clipboardText: Flow<String?>
-    get() = callbackFlow<String?> {
-      val listener = AndroidClipboardManager.OnPrimaryClipChangedListener {
-        val current = androidClipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
-        trySend(current)
-      }
-      listener.onPrimaryClipChanged()
-
-      androidClipboardManager.addPrimaryClipChangedListener(listener)
-      awaitClose { androidClipboardManager.removePrimaryClipChangedListener(listener) }
+  override val clipboardText: Flow<String?> = callbackFlow {
+    val listener = AndroidClipboardManager.OnPrimaryClipChangedListener {
+      val current = androidClipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
+      trySend(current)
     }
+    listener.onPrimaryClipChanged()
+
+    androidClipboardManager.addPrimaryClipChangedListener(listener)
+    awaitClose { androidClipboardManager.removePrimaryClipChangedListener(listener) }
+  }
 
   override suspend fun updateClipboardText(value: String, showMessage: Boolean) {
     catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }

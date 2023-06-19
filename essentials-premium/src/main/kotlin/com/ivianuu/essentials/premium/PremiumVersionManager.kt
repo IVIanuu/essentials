@@ -62,8 +62,8 @@ interface PremiumVersionManager {
   private val screenUnlocker: ScreenUnlocker,
   private val toaster: Toaster
 ) : PremiumVersionManager {
-  override val premiumSkuDetails: Flow<SkuDetails>
-    get() = flow { emit(billingService.getSkuDetails(premiumVersionSku)!!) }
+  override val premiumSkuDetails: Flow<SkuDetails> =
+    flow { emit(billingService.getSkuDetails(premiumVersionSku)!!) }
 
   override val isPremiumVersion: Flow<Boolean> = combine(
     billingService.isPurchased(premiumVersionSku),

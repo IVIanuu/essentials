@@ -15,6 +15,8 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
@@ -33,8 +35,8 @@ interface AppRepository {
   private val coroutineContext: IOCoroutineContext,
   private val packageManager: PackageManager
 ) : AppRepository {
-  override val installedApps: Flow<List<AppInfo>>
-    get() = merge(
+  override val installedApps: Flow<List<AppInfo>> = flow {
+    merge(
       broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
       broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED),
       broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
@@ -56,6 +58,8 @@ interface AppRepository {
         }
       }
       .distinctUntilChanged()
+      .let { emitAll(it) }
+  }
 
   override fun appInfo(packageName: String) = broadcastsFactory(
     Intent.ACTION_PACKAGE_ADDED,

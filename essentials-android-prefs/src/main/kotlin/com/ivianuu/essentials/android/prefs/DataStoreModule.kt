@@ -67,8 +67,7 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
     )
 
     return object : DataStore<T> {
-      override val data: Flow<T>
-        get() = androidDataStore.data
+      override val data: Flow<T> = androidDataStore.data
 
       override suspend fun updateData(transform: T.() -> T): T =
         androidDataStore.updateData { transform(it) }

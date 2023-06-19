@@ -34,37 +34,37 @@ interface ShortcutRepository {
   private val coroutineContext: IOCoroutineContext,
   private val packageManager: PackageManager
 ) : ShortcutRepository {
-  override val shortcuts: Flow<List<Shortcut>>
-    get() = broadcastsFactory(
-      Intent.ACTION_PACKAGE_ADDED,
-      Intent.ACTION_PACKAGE_REMOVED,
-      Intent.ACTION_PACKAGE_CHANGED,
-      Intent.ACTION_PACKAGE_REPLACED
-    ).onStart<Any?> { emit(Unit) }
-      .mapLatest {
-        withContext(coroutineContext) {
-          val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
-          packageManager.queryIntentActivities(shortcutsIntent, 0)
-            .parMap { resolveInfo ->
-              catch {
-                Shortcut(
-                  intent = Intent().apply {
-                    action = Intent.ACTION_CREATE_SHORTCUT
-                    component = ComponentName(
-                      resolveInfo.activityInfo.packageName,
-                      resolveInfo.activityInfo.name
-                    )
-                  },
-                  name = resolveInfo.loadLabel(packageManager).toString(),
-                  icon = resolveInfo.loadIcon(packageManager)
-                )
-              }.getOrNull()
-            }
-            .filterNotNull()
-            .sortedBy { it.name }
-        }
+  override val shortcuts: Flow<List<Shortcut>> = broadcastsFactory(
+    Intent.ACTION_PACKAGE_ADDED,
+    Intent.ACTION_PACKAGE_REMOVED,
+    Intent.ACTION_PACKAGE_CHANGED,
+    Intent.ACTION_PACKAGE_REPLACED
+  )
+    .onStart<Any?> { emit(Unit) }
+    .mapLatest {
+      withContext(coroutineContext) {
+        val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
+        packageManager.queryIntentActivities(shortcutsIntent, 0)
+          .parMap { resolveInfo ->
+            catch {
+              Shortcut(
+                intent = Intent().apply {
+                  action = Intent.ACTION_CREATE_SHORTCUT
+                  component = ComponentName(
+                    resolveInfo.activityInfo.packageName,
+                    resolveInfo.activityInfo.name
+                  )
+                },
+                name = resolveInfo.loadLabel(packageManager).toString(),
+                icon = resolveInfo.loadIcon(packageManager)
+              )
+            }.getOrNull()
+          }
+          .filterNotNull()
+          .sortedBy { it.name }
       }
-      .distinctUntilChanged()
+    }
+    .distinctUntilChanged()
 
   override suspend fun extractShortcut(shortcutRequestResult: Intent) = withContext(coroutineContext) {
     val intent =

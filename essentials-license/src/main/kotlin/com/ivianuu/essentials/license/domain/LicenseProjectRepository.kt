@@ -23,17 +23,16 @@ interface LicenceProjectRepository {
   private val coroutineContext: IOCoroutineContext,
   private val json: Json
 ) : LicenceProjectRepository {
-  override val licenseProjects: Flow<List<Project>>
-    get() = flow {
-      emit(
-        withContext(coroutineContext) {
-          appContext.resources.assets.open(LICENSE_JSON_FILE_NAME)
-            .readBytes()
-            .let { String(it) }
-            .let { json.decodeFromString(it) }
-        }
-      )
-    }
+  override val licenseProjects: Flow<List<Project>> = flow {
+    emit(
+      withContext(coroutineContext) {
+        appContext.resources.assets.open(LICENSE_JSON_FILE_NAME)
+          .readBytes()
+          .let { String(it) }
+          .let { json.decodeFromString(it) }
+      }
+    )
+  }
 
   private companion object {
     private const val LICENSE_JSON_FILE_NAME = "open_source_licenses.json"

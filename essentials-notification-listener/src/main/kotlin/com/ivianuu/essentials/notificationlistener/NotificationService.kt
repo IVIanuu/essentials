@@ -30,11 +30,11 @@ interface NotificationService {
 @Provide class NotificationServiceImpl(
   private val ref: Flow<EsNotificationListenerService?>
 ) : NotificationService {
-  override val notifications: Flow<List<StatusBarNotification>>
-    get() = ref.flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
+  override val notifications: Flow<List<StatusBarNotification>> =
+    ref.flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
 
-  override val notificationEvents: Flow<NotificationEvent>
-    get() = ref.flatMapLatest { it?.events ?: emptyFlow() }
+  override val notificationEvents: Flow<NotificationEvent> =
+    ref.flatMapLatest { it?.events ?: emptyFlow() }
 
   override suspend fun openNotification(notification: Notification) =
     catch { notification.contentIntent.send() }

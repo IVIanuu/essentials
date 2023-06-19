@@ -71,28 +71,25 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       } ?: initial()
     }
 
-    val data = callbackFlow<T> {
-      val listener = scope.scoped {
-        SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-          launch(coroutineContext) {
-            appContext.sendBroadcast(Intent(prefsChangedAction(packageName)))
-            send(readData())
-          }
-        }
-      }
-      sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
-      awaitClose { sharedPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
-    }
-      .onStart { emit(readData()) }
-      .distinctUntilChanged()
-      .flowOn(coroutineContext)
-      .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
-
     val actor = coroutineScope.actor(coroutineContext)
 
     return object : DataStore<T> {
-      override val data: Flow<T>
-        get() = data
+      override val data: Flow<T> = callbackFlow {
+        val listener = scope.scoped {
+          SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+            launch(coroutineContext) {
+              appContext.sendBroadcast(Intent(prefsChangedAction(packageName)))
+              send(readData())
+            }
+          }
+        }
+        sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
+        awaitClose { sharedPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
+      }
+        .onStart { emit(readData()) }
+        .distinctUntilChanged()
+        .flowOn(coroutineContext)
+        .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
 
       @SuppressLint("ApplySharedPref")
       override suspend fun updateData(transform: T.() -> T): T = actor.actAndReply<T> {
