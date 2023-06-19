@@ -16,6 +16,7 @@ import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -68,24 +69,27 @@ fun <T> CoroutineScope.launchComposition(
     recomposer.runRecomposeAndApplyChanges()
   }
 
-  var applyScheduled = false
-  val snapshotHandle = Snapshot.registerGlobalWriteObserver {
-    if (!applyScheduled) {
-      applyScheduled = true
-      launch(context) {
-        applyScheduled = false
-        Snapshot.sendApplyNotifications()
-      }
-    }
-  }
+  globalNotificationApplier
 
   coroutineContext.job.invokeOnCompletion {
-    snapshotHandle.dispose()
     composition.dispose()
   }
 
   composition.setContent {
     emitter(body())
+  }
+}
+
+private val globalNotificationApplier by lazy {
+  var applyScheduled = false
+  Snapshot.registerGlobalWriteObserver {
+    if (!applyScheduled) {
+      applyScheduled = true
+      GlobalScope.launch {
+        applyScheduled = false
+        Snapshot.sendApplyNotifications()
+      }
+    }
   }
 }
 
@@ -100,14 +104,14 @@ private object UnitApplier : AbstractApplier<Unit>(Unit) {
 @Tag annotation class StateContextTag {
   companion object {
     @Provide val stateContext: StateContext by lazy {
-      Dispatchers.Main + immediateFrameClock()
+      Dispatchers.Main + ImmediateFrameClock
     }
   }
 }
 
 typealias StateContext = @StateContextTag CoroutineContext
 
-private fun immediateFrameClock() = object : MonotonicFrameClock {
+object ImmediateFrameClock : MonotonicFrameClock {
   override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R =
     onFrame(0L)
 }
