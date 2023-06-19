@@ -35,5 +35,5 @@ class ConfirmationScreen<T : Any>(
         }
       }
     )
-    }
   }
+}
