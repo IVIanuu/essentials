@@ -89,7 +89,7 @@ private enum class BottomNavItem(
   ),
   SETTINGS(
     title = "Settings",
-    icon = R.drawable.ic_settings,
+    icon = R.drawable.es_ic_settings,
     color = Color.Green
   )
 }

@@ -34,7 +34,6 @@ include(
   ":essentials-gestures",
   ":essentials-gradle-plugin",
   ":essentials-help",
-  ":essentials-hide-nav-bar",
   ":essentials-ide-plugin",
   ":essentials-license",
   ":essentials-logging",

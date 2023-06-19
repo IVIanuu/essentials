@@ -50,7 +50,6 @@ dependencies {
   implementation(project(":essentials-foreground"))
   implementation(project(":essentials-gestures"))
   implementation(project(":essentials-help"))
-  implementation(project(":essentials-hide-nav-bar"))
   implementation(project(":essentials-license"))
   implementation(project(":essentials-notification-listener"))
   implementation(project(":essentials-permission"))
