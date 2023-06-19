@@ -58,4 +58,15 @@ import com.ivianuu.essentials.ui.util.isLight
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   selectedContentColor: Color = LocalContentColor.current,
   unselectedContentColor: Color = selectedContentColor.copy(alpha = ContentAlpha.medium)
-) = BottomNavigationItem(selected, onClick, icon, modifier, enabled, label, alwaysShowLabel, interactionSource, unselectedContentColor)
+) = BottomNavigationItem(
+  selected,
+  onClick,
+  icon,
+  modifier,
+  enabled,
+  label,
+  alwaysShowLabel,
+  interactionSource,
+  selectedContentColor,
+  unselectedContentColor
+)
