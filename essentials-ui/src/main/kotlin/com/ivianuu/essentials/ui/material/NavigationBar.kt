@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.essentials.ui.util.isLight
@@ -41,7 +42,7 @@ import com.ivianuu.essentials.ui.util.isLight
     modifier = systemBarStyleModifier.then(modifier)
   ) {
     InsetsPadding(top = false, left = false, right = false) {
-      BottomNavigation(modifier, backgroundColor, contentColor, elevation, content)
+      BottomNavigation(modifier, backgroundColor, contentColor, 0.dp, content)
     }
   }
 }
