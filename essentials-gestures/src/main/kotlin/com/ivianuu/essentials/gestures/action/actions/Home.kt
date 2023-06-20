@@ -17,9 +17,7 @@ import com.ivianuu.injekt.Provide
 
 @Provide object HomeActionId : ActionId("home")
 
-@Provide fun homeAction(
-  resources: Resources
-) = Action(
+@Provide fun homeAction(resources: Resources) = Action(
   id = HomeActionId,
   title = resources(R.string.es_action_home),
   permissions = if (needsHomeIntentWorkaround) emptyList()

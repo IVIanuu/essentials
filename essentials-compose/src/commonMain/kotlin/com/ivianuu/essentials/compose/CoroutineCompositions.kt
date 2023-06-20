@@ -16,12 +16,12 @@ import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
@@ -59,9 +59,7 @@ fun <T> CoroutineScope.launchComposition(
   @Inject context: StateContext,
   emitter: (T) -> Unit = {},
   body: @Composable () -> T
-) {
-  if (!coroutineContext.isActive) return
-
+): Job = launch(start = CoroutineStart.UNDISPATCHED) {
   val recomposer = Recomposer(coroutineContext + context)
   val composition = Composition(UnitApplier, recomposer)
   launch(context, CoroutineStart.UNDISPATCHED) {
