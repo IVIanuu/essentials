@@ -21,7 +21,6 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.compositionStateFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.foreground.Foreground
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
@@ -54,29 +53,29 @@ interface TorchManager {
 ) : TorchManager {
   private var _torchEnabled by mutableStateOf(false)
   override val torchEnabled = scope.compositionStateFlow {
-    if (_torchEnabled) {
-      foregroundManager.Foreground { createTorchNotification() }
+    if (!_torchEnabled) return@compositionStateFlow _torchEnabled
 
-      LaunchedEffect(true) {
-        broadcastsFactory(ACTION_DISABLE_TORCH).first()
-        _torchEnabled = false
-      }
+    foregroundManager.Foreground { createTorchNotification() }
 
-      LaunchedEffect(true) {
-        catch {
-          val cameraId = cameraManager.cameraIdList[0]
-          logger.log { "enable torch" }
-          cameraManager.setTorchMode(cameraId, true)
-          onCancel {
-            logger.log { "disable torch on cancel" }
-            catch { cameraManager.setTorchMode(cameraId, false) }
-            _torchEnabled = false
-          }
-        }.onFailure {
-          logger.log(priority = Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
-          toaster(R.string.es_failed_to_enable_torch)
+    LaunchedEffect(true) {
+      broadcastsFactory(ACTION_DISABLE_TORCH).first()
+      _torchEnabled = false
+    }
+
+    LaunchedEffect(true) {
+      catch {
+        val cameraId = cameraManager.cameraIdList[0]
+        logger.log { "enable torch" }
+        cameraManager.setTorchMode(cameraId, true)
+        onCancel {
+          logger.log { "disable torch on cancel" }
+          catch { cameraManager.setTorchMode(cameraId, false) }
           _torchEnabled = false
         }
+      }.onFailure {
+        logger.log(priority = Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
+        toaster(R.string.es_failed_to_enable_torch)
+        _torchEnabled = false
       }
     }
 

@@ -26,6 +26,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -36,19 +37,15 @@ import androidx.compose.ui.platform.LocalView
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
 import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.common.MainCoroutineContext
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 interface SystemWindowManager {
-  suspend fun attachSystemWindow(
-    state: SystemWindowState = SystemWindowState(),
-    content: @Composable () -> Unit
-  ): Nothing
+  @Composable fun SystemWindow(content: @Composable () -> Unit) =
+    SystemWindow(remember { SystemWindowState() }, content)
+
+  @Composable fun SystemWindow(state: SystemWindowState, content: @Composable () -> Unit)
 }
 
 fun Modifier.systemWindowTrigger() = composed {
@@ -72,8 +69,6 @@ fun Modifier.systemWindowTrigger() = composed {
     }
   }
 
-  val ownerLoc = intArrayOf(0, 0)
-
   DisposableEffect(true) {
     onDispose {
       catch {
@@ -95,6 +90,7 @@ fun Modifier.systemWindowTrigger() = composed {
         height = coords.size.height
       }
 
+      val ownerLoc = intArrayOf(0, 0)
       ownerView.getLocationOnScreen(ownerLoc)
       val positionInWindow = coords.positionInWindow()
 
@@ -117,50 +113,51 @@ fun Modifier.systemWindowTrigger() = composed {
 
 @Provide class SystemWindowManagerImpl(
   private val appContext: AppContext,
-  private val mainCoroutineContext: MainCoroutineContext,
   accessibilityWindowManager: AccessibilityWindowManager? = null,
   windowManager: @SystemService WindowManager
 ) : SystemWindowManager {
   internal val useAccessibility = accessibilityWindowManager != null
   internal val windowManager = accessibilityWindowManager ?: windowManager
 
-  override suspend fun attachSystemWindow(
+  @Composable override fun SystemWindow(
     state: SystemWindowState,
     content: @Composable () -> Unit
-  ): Nothing = withContext(mainCoroutineContext) {
-    lateinit var contentView: View
-    contentView = OverlayComposeView() {
-      Window(contentView, state, content)
+  ) {
+    val updatedState by rememberUpdatedState(state)
+    val updatedContent by rememberUpdatedState(content)
+    val contentView = remember(this) {
+      lateinit var contentView: View
+      contentView = OverlayComposeView(appContext) {
+        Window(contentView, updatedState, updatedContent)
+      }
+      contentView
     }
 
-    guarantee(
-      block = {
-        windowManager.addView(
-          contentView,
-          WindowManager.LayoutParams().apply {
-            this.width = WindowManager.LayoutParams.WRAP_CONTENT
-            this.height = WindowManager.LayoutParams.WRAP_CONTENT
-            gravity = Gravity.LEFT or Gravity.TOP
+    DisposableEffect(contentView) {
+      windowManager.addView(
+        contentView,
+        WindowManager.LayoutParams().apply {
+          this.width = WindowManager.LayoutParams.WRAP_CONTENT
+          this.height = WindowManager.LayoutParams.WRAP_CONTENT
+          gravity = Gravity.LEFT or Gravity.TOP
 
-            type = if (useAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
-            else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+          type = if (useAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+          else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
 
-            flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-                WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
-                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
+          flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+              WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+              WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+              WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
+              WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
 
-            format = PixelFormat.TRANSLUCENT
-          }
-        )
-        awaitCancellation()
-      },
-      finalizer = {
+          format = PixelFormat.TRANSLUCENT
+        }
+      )
+      onDispose {
         catch { windowManager.removeViewImmediate(contentView) }
         contentView.dispose()
       }
-    )
+    }
   }
 
   @Composable private fun Window(
