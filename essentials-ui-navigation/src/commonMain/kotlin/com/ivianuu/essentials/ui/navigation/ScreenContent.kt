@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,11 +16,15 @@ import com.ivianuu.essentials.ProvidedService
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.compose.AndroidUiDispatcher
 import com.ivianuu.essentials.compose.LocalScope
+import com.ivianuu.essentials.compose.compositionStateFlow
+import com.ivianuu.essentials.coroutines.coroutineScope
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
+import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
 @Composable fun <S : Screen<*>> ScreenContent(screen: S) {
@@ -91,8 +96,6 @@ import kotlin.reflect.KClass
   navigator: Navigator = LocalScope.current.navigator,
   component: ScreenContextComponent<N>
 ): ScreenContext<S> {
-  var currentModel by remember { mutableStateOf<Any?>(null) }
-
   val (model, context) = remember {
     val scope = component.screenScopeFactory(navigator, screen)
     val ui = component.uiFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
@@ -107,7 +110,9 @@ import kotlin.reflect.KClass
       content = {
         decorateScreen {
           with(ui as Ui<S, Any>) {
-            with(currentModel as Any) {
+            with(remember {
+              scope.coroutineScope.compositionStateFlow(androidUiDispatcher = component.dispatcher) { model() }
+            }.collectAsState().value as Any) {
               invoke(this)
             }
           }
@@ -120,8 +125,6 @@ import kotlin.reflect.KClass
   ObserveScope(
     remember {
       {
-        currentModel = model()
-
         DisposableEffect(true) {
           onDispose {
             context.isContextRemoved = true
@@ -144,7 +147,8 @@ import kotlin.reflect.KClass
   val modelFactories: Map<KClass<Screen<*>>, @NavGraph<N> ModelFactory<Screen<*>, *>>,
   val configFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>>,
   val screenScopeFactory: (@Service<ScreenScope> Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>,
-  val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen
+  val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen,
+  val dispatcher: @AndroidUiDispatcher CoroutineContext
 ) {
   companion object {
     @Provide inline fun rootNavigationScreenContextComponent(
