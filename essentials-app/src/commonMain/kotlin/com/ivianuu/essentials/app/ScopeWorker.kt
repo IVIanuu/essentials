@@ -36,9 +36,9 @@ fun interface ScopeWorkerRunner<N> {
 
           workers()
             .sortedWithLoadingOrder()
-            .forEach { worker ->
+            .forEach { record ->
               launch {
-                worker.instance()
+                record.instance()
               }
             }
         }

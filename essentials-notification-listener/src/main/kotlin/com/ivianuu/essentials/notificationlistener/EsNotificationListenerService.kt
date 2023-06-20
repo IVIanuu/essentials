@@ -17,6 +17,7 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Provide @AndroidComponent class EsNotificationListenerService(
   private val logger: Logger,
@@ -24,7 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
   private val notificationServiceRef: MutableStateFlow<EsNotificationListenerService?>
 ) : NotificationListenerService() {
   private val _notifications = MutableStateFlow(emptyList<StatusBarNotification>())
-  internal val notifications: Flow<List<StatusBarNotification>> by this::_notifications
+  internal val notifications: StateFlow<List<StatusBarNotification>> by this::_notifications
 
   private val _events: MutableSharedFlow<NotificationEvent> = EventFlow()
   internal val events: Flow<NotificationEvent> by this::_events

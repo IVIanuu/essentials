@@ -6,42 +6,34 @@ package com.ivianuu.essentials.foreground
 
 import android.app.Notification
 import android.content.Intent
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.bracket
-import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.SourceKey
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 interface ForegroundManager {
-  suspend fun <R> runInForeground(
-    notification: Notification,
+  @Composable fun Foreground(
     @Inject foregroundId: ForegroundId,
-    block: suspend ForegroundScope.() -> R
-  ): R
-}
-
-interface ForegroundScope : CoroutineScope {
-  suspend fun updateNotification(notification: Notification)
-}
-
-fun Flow<Notification>.updateNotification(scope: ForegroundScope) {
-  onEach { scope.updateNotification(it) }
-    .launchIn(scope)
+    notification: @Composable () -> Notification
+  )
 }
 
 @JvmInline value class ForegroundId(val value: Int) {
@@ -57,48 +49,42 @@ fun Flow<Notification>.updateNotification(scope: ForegroundScope) {
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
   private val lock = Mutex()
 
-  override suspend fun <R> runInForeground(
-    notification: Notification,
+  @Composable override fun Foreground(
     @Inject foregroundId: ForegroundId,
-    block: suspend ForegroundScope.() -> R
-  ) = coroutineScope {
-    bracket(
-      acquire = {
-        val state = ForegroundState(foregroundId.value, notification)
-        lock.withLock { states.value = states.value + state }
-        logger.log { "start foreground ${foregroundId.value} ${states.value}" }
+    notification: @Composable () -> Notification
+  ) {
+    val state = remember(this, foregroundId) {
+      ForegroundState(foregroundId.value, notification)
+    }
+    state.notification = notification
 
-        ContextCompat.startForegroundService(
-          appContext,
-          Intent(appContext, ForegroundService::class.java)
-        )
+    DisposableEffect(state) {
+      logger.log { "start foreground ${foregroundId.value} ${states.value}" }
 
-        state
-      },
-      use = {
-        par(
-          { block(it) },
-          { it.seen.await() }
-        ).first() as R
-      },
-      release = { state, _ ->
-        lock.withLock { states.value = states.value - state }
+      ContextCompat.startForegroundService(
+        appContext,
+        Intent(appContext, ForegroundService::class.java)
+      )
+
+      onDispose {
         logger.log { "stop foreground $foregroundId ${states.value}" }
       }
-    )
+    }
+
+    LaunchedEffect(state) {
+      bracket(
+        acquire = { lock.withLock { states.value = states.value + state } },
+        use = {
+          state.seen.await()
+          awaitCancellation()
+        },
+        release = { _, _ -> lock.withLock { states.value = states.value - state } }
+      )
+    }
   }
 
-  internal class ForegroundState(
-    val id: Int,
-    notification: Notification,
-    @Inject scope: CoroutineScope
-  ) : ForegroundScope, CoroutineScope by scope {
-    val notification = MutableStateFlow(notification)
-    private val lock = Mutex()
+  internal class ForegroundState(val id: Int, notification: @Composable () -> Notification) {
+    var notification by mutableStateOf(notification)
     val seen = CompletableDeferred<Unit>()
-
-    override suspend fun updateNotification(notification: Notification) = lock.withLock {
-      this.notification.value = notification
-    }
   }
 }

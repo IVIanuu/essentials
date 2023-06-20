@@ -40,7 +40,7 @@ class TorchScreen : Screen<Unit>
 
       Spacer(Modifier.height(8.dp))
 
-      Button(onClick = action { torchManager.setTorchState(!torchManager.torchEnabled.value) }) {
+      Button(onClick = action { torchManager.updateTorchState(!torchManager.torchEnabled.value) }) {
         Text("Toggle torch")
       }
     }

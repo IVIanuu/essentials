@@ -4,43 +4,35 @@
 
 package com.ivianuu.essentials.recentapps
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
+import com.ivianuu.essentials.compose.ScopedState
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.scan
-import kotlinx.coroutines.flow.shareIn
 
 @JvmInline value class RecentApps(val values: List<String>)
 
 @Provide fun recentApps(
-  accessibilityEvents: Flow<AccessibilityEvent>,
-  logger: Logger,
-  scope: ScopedCoroutineScope<AppScope>
-): @Scoped<AppScope> Flow<RecentApps> = accessibilityEvents
-  .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
-  .filter { it.isFullScreen }
-  .filter { it.className != "android.inputmethodservice.SoftInputWindow" }
-  .mapNotNull { it.packageName }
-  .filter { it != "android" }
-  .scan(emptyList<String>()) { recentApps, currentApp ->
-    val index = recentApps.indexOf(currentApp)
+  currentApp: @Composable () -> CurrentApp?,
+  logger: Logger
+): @ScopedState<AppScope> @Composable () -> RecentApps = {
+  val currentApp = currentApp()?.value
+  var recentApps by remember { mutableStateOf(emptyList<String>()) }
 
-    // app has not changed
-    if (index == 0) return@scan recentApps
+  val index = recentApps.indexOf(currentApp)
 
+  // app has not changed
+  if (currentApp != null && index != 0) {
     val newRecentApps = recentApps.toMutableList()
 
     // remove the app from the list
@@ -56,25 +48,31 @@ import kotlinx.coroutines.flow.shareIn
       newRecentApps.removeAt(newRecentApps.lastIndex)
     }
 
-    newRecentApps
+    recentApps = newRecentApps
   }
-  .map { RecentApps(it) }
-  .distinctUntilChanged()
-  .onEach { logger.log { "recent apps changed $it" } }
-  .shareIn(scope, SharingStarted.Eagerly, 1)
-  .distinctUntilChanged()
 
-@Provide val recentAppsAccessibilityConfig: AccessibilityConfig
-  get() = AccessibilityConfig(
-    eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-  )
+  RecentApps(recentApps)
+}
 
 @JvmInline value class CurrentApp(val value: String)
 
-@Provide fun currentApp(recentApps: Flow<RecentApps>): Flow<CurrentApp?> =
-  recentApps
-    .map {
-      it.values.firstOrNull()
-        ?.let { CurrentApp(it) }
-    }
-    .distinctUntilChanged()
+@Provide fun currentApp(
+  accessibilityEvents: Flow<AccessibilityEvent>
+): @ScopedState<AppScope> @Composable () -> CurrentApp? = {
+  produceState<CurrentApp?>(null) {
+    accessibilityEvents
+      .filter {
+        it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
+            it.isFullScreen &&
+            it.className != "android.inputmethodservice.SoftInputWindow" &&
+            it.packageName != null &&
+            it.packageName != "android"
+      }
+      .collect { value = CurrentApp(it.packageName!!) }
+  }.value
+}
+
+@Provide val currentAppAccessibilityConfig: AccessibilityConfig
+  get() = AccessibilityConfig(
+    eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+  )

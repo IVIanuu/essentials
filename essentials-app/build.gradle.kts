@@ -4,6 +4,7 @@
 plugins {
   kotlin("multiplatform")
   id("com.ivianuu.essentials")
+  id("com.ivianuu.essentials.compose")
 }
 
 kotlin {

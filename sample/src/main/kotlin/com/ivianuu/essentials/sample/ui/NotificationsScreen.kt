@@ -25,7 +25,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
@@ -168,8 +167,6 @@ data class UiNotification(
       .collectAsResourceState()
       .value,
     notifications = service.notifications
-      .collectAsState(emptyList())
-      .value
       .map { it.toUiNotification() },
     requestPermissions = action {
       permissionManager.requestPermissions(listOf(typeKeyOf<SampleNotificationsPermission>()))

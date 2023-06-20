@@ -8,7 +8,7 @@ import android.annotation.SuppressLint
 import android.app.NotificationManager
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,9 +27,6 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundScreen() }
 
@@ -47,13 +44,11 @@ class ForegroundScreen : Screen<Unit>
     var isEnabled by remember { mutableStateOf(false) }
 
     if (isEnabled)
-      LaunchedEffect(true) {
-        val notifications = timerFlow(1.seconds)
-          .map { ForegroundNotification(primaryColor, it.toInt()) }
-          .stateIn(this, SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
-        foregroundManager.runInForeground(notifications.value) {
-          notifications.collect { updateNotification(it) }
-        }
+      foregroundManager.Foreground {
+        ForegroundNotification(
+          primaryColor,
+          remember { timerFlow(1.seconds) }.collectAsState(0).value
+        )
       }
 
     Button(onClick = { isEnabled = !isEnabled }) {
@@ -64,7 +59,7 @@ class ForegroundScreen : Screen<Unit>
 
 private fun ForegroundNotification(
   color: Color,
-  count: Int,
+  count: Long,
   @Inject notificationFactory: NotificationFactory
 ) = notificationFactory(
   "foreground",

@@ -7,18 +7,22 @@ package com.ivianuu.essentials.notificationlistener
 import android.app.Notification
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 
 interface NotificationService {
-  val notifications: Flow<List<StatusBarNotification>>
   val notificationEvents: Flow<NotificationEvent>
+
+  val notifications: List<StatusBarNotification>
+    @Composable get
 
   suspend fun openNotification(notification: Notification): Result<Unit, Throwable>
 
@@ -28,13 +32,13 @@ interface NotificationService {
 }
 
 @Provide class NotificationServiceImpl(
-  private val ref: Flow<EsNotificationListenerService?>
+  private val ref: StateFlow<EsNotificationListenerService?>
 ) : NotificationService {
-  override val notifications: Flow<List<StatusBarNotification>> =
-    ref.flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
-
   override val notificationEvents: Flow<NotificationEvent> =
     ref.flatMapLatest { it?.events ?: emptyFlow() }
+
+  override val notifications: List<StatusBarNotification>
+    @Composable get() = ref.collectAsState().value?.notifications?.collectAsState()?.value ?: emptyList()
 
   override suspend fun openNotification(notification: Notification) =
     catch { notification.contentIntent.send() }

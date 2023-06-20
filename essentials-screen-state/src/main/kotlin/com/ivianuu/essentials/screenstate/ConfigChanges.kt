@@ -14,15 +14,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-object ConfigChange
+class ConfigChange
 
 @Provide fun configChanges(
   appContext: AppContext,
   coroutineContext: MainCoroutineContext,
-): Flow<ConfigChange> = callbackFlow<ConfigChange> {
+): Flow<ConfigChange> = callbackFlow {
   val callbacks = object : ComponentCallbacks2 {
     override fun onConfigurationChanged(newConfig: Configuration) {
-      trySend(ConfigChange)
+      trySend(ConfigChange())
     }
 
     override fun onLowMemory() {
