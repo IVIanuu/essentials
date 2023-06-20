@@ -31,4 +31,4 @@ import com.ivianuu.injekt.Provide
 )
 
 @Provide fun torchActionExecutor(torchManager: TorchManager) = ActionExecutor<TorchActionId>
-{ torchManager.setTorchState(!torchManager.torchEnabled.value) }
+{ torchManager.updateTorchState(!torchManager.torchEnabled.value) }

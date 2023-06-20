@@ -8,7 +8,6 @@ import android.annotation.SuppressLint
 import android.app.NotificationManager
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.coroutines.timerFlow
+import com.ivianuu.essentials.foreground.Foreground
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.time.seconds
@@ -28,7 +28,6 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.awaitCancellation
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundScreen() }
 
@@ -46,15 +45,11 @@ class ForegroundScreen : Screen<Unit>
     var isEnabled by remember { mutableStateOf(false) }
 
     if (isEnabled)
-      LaunchedEffect(true) {
-        foregroundManager.runInForeground({
-          ForegroundNotification(
-            primaryColor,
-            remember { timerFlow(1.seconds) }.collectAsState(0).value
-          )
-        }) {
-          awaitCancellation()
-        }
+      foregroundManager.Foreground {
+        ForegroundNotification(
+          primaryColor,
+          remember { timerFlow(1.seconds) }.collectAsState(0).value
+        )
       }
 
     Button(onClick = { isEnabled = !isEnabled }) {

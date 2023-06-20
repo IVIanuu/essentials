@@ -7,15 +7,14 @@ package com.ivianuu.essentials.sample.ui
 import android.app.NotificationManager
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.foreground.Foreground
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
@@ -25,15 +24,12 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.NotificationFactory
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.awaitCancellation
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerScreen() }
 
@@ -42,20 +38,13 @@ class AppTrackerScreen : Screen<Unit>
 @Provide fun appTrackerUi(
   currentApp: @Composable () -> CurrentApp?,
   foregroundManager: ForegroundManager,
-  navigator: Navigator,
   notificationFactory: NotificationFactory,
-  permissionManager: PermissionManager,
-  resources: Resources,
-  toaster: Toaster
+  permissionManager: PermissionManager
 ) = Ui<AppTrackerScreen, Unit> {
   var isEnabled by remember { mutableStateOf(false) }
 
   if (isEnabled)
-    LaunchedEffect(true) {
-      foregroundManager.runInForeground({ AppTrackerNotification(currentApp()) }) {
-        awaitCancellation()
-      }
-    }
+    foregroundManager.Foreground { AppTrackerNotification(currentApp()) }
 
   Scaffold(
     topBar = { TopAppBar(title = { Text("App tracker") }) }

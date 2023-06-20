@@ -7,6 +7,7 @@ package com.ivianuu.essentials.foreground
 import android.app.Notification
 import android.content.Intent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
@@ -20,6 +21,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.SourceKey
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
@@ -31,6 +33,15 @@ interface ForegroundManager {
     @Inject foregroundId: ForegroundId,
     block: suspend ForegroundScope.() -> R
   ): R
+}
+
+@Composable fun ForegroundManager.Foreground(
+  @Inject foregroundId: ForegroundId,
+  notification: @Composable () -> Notification
+) {
+  LaunchedEffect(this, foregroundId) {
+    runInForeground(notification) { awaitCancellation() }
+  }
 }
 
 interface ForegroundScope : CoroutineScope

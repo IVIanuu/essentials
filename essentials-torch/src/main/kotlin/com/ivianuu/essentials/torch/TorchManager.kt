@@ -10,13 +10,18 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.hardware.camera2.CameraManager
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.compose.compositionStateFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.coroutines.race
+import com.ivianuu.essentials.foreground.Foreground
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
@@ -28,19 +33,13 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.context
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 interface TorchManager {
   val torchEnabled: StateFlow<Boolean>
 
-  suspend fun setTorchState(value: Boolean)
+  suspend fun updateTorchState(value: Boolean)
 }
 
 @Provide @Scoped<AppScope> class TorchManagerImpl(
@@ -50,61 +49,47 @@ interface TorchManager {
   private val logger: Logger,
   private val notificationFactory: NotificationFactory,
   private val resources: Resources,
-  private val scope: ScopedCoroutineScope<AppScope>,
+  scope: ScopedCoroutineScope<AppScope>,
   private val toaster: Toaster
 ) : TorchManager {
-  private val _torchEnabled = MutableStateFlow(false)
-  override val torchEnabled: StateFlow<Boolean> by this::_torchEnabled
+  private var _torchEnabled by mutableStateOf(false)
+  override val torchEnabled = scope.compositionStateFlow {
+    if (_torchEnabled) {
+      foregroundManager.Foreground { createTorchNotification() }
 
-  private val torchJobLock = Mutex()
-  private var torchJob: Job? = null
-
-  override suspend fun setTorchState(value: Boolean) {
-    torchJobLock.withLock {
-      torchJob?.cancel()
-      torchJob = null
-      torchJob = scope.launch { doSetTorchState(value) }
-    }
-  }
-
-  private suspend fun doSetTorchState(value: Boolean) {
-    logger.log { "handle torch state $value" }
-    if (!value) {
-      _torchEnabled.value = false
-      return
-    }
-
-    foregroundManager.runInForeground({ createTorchNotification() }) {
-      race(
-        { enableTorch() },
-        { broadcastsFactory(ACTION_DISABLE_TORCH).first() }
-      )
-    }
-  }
-
-  private suspend fun enableTorch() {
-    catch {
-      val cameraId = cameraManager.cameraIdList[0]
-      logger.log { "enable torch" }
-      cameraManager.setTorchMode(cameraId, true)
-      _torchEnabled.value = true
-
-      // todo remove dummy block param once fixed
-      onCancel(block = { awaitCancellation() }) {
-        logger.log { "disable torch on cancel" }
-        catch { cameraManager.setTorchMode(cameraId, false) }
-        _torchEnabled.value = false
+      LaunchedEffect(true) {
+        broadcastsFactory(ACTION_DISABLE_TORCH).first()
+        _torchEnabled = false
       }
-    }.onFailure {
-      logger.log(priority = Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
-      toaster(R.string.es_failed_to_enable_torch)
-      setTorchState(false)
+
+      LaunchedEffect(true) {
+        catch {
+          val cameraId = cameraManager.cameraIdList[0]
+          logger.log { "enable torch" }
+          cameraManager.setTorchMode(cameraId, true)
+          onCancel {
+            logger.log { "disable torch on cancel" }
+            catch { cameraManager.setTorchMode(cameraId, false) }
+            _torchEnabled = false
+          }
+        }.onFailure {
+          logger.log(priority = Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
+          toaster(R.string.es_failed_to_enable_torch)
+          _torchEnabled = false
+        }
+      }
     }
+
+    _torchEnabled
+  }
+
+  override suspend fun updateTorchState(value: Boolean) {
+    _torchEnabled = value
   }
 
   @SuppressLint("LaunchActivityFromNotification")
   private fun createTorchNotification(): Notification = notificationFactory(
-    NOTIFICATION_CHANNEL_ID,
+    "torch",
     resources(R.string.es_notif_channel_torch),
     NotificationManager.IMPORTANCE_LOW
   ) {
@@ -123,7 +108,6 @@ interface TorchManager {
   }
 
   private companion object {
-    private const val NOTIFICATION_CHANNEL_ID = "torch"
     private const val ACTION_DISABLE_TORCH = "com.ivianuu.essentials.torch.DISABLE_TORCH"
   }
 }
