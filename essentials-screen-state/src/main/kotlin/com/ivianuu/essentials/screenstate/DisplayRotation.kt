@@ -8,24 +8,16 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.common.IOCoroutineContext
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.withContext
 
 enum class DisplayRotation(val isPortrait: Boolean) {
   // 0 degrees
@@ -43,44 +35,32 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 
 @Provide fun displayRotation(
   appContext: AppContext,
-  ioCoroutineContext: IOCoroutineContext,
-  logger: Logger,
-  screenState: () -> Flow<ScreenState>,
+  screenState: @Composable () -> ScreenState,
   windowManager: @SystemService WindowManager
-): Flow<DisplayRotation> = flow {
-  screenState()
-    .flatMapLatest { currentScreenState ->
-      if (currentScreenState.isOn) {
-        callbackFlow {
-          val listener = object :
-            OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {
-            override fun onOrientationChanged(orientation: Int) {
-              trySend(orientation)
-            }
-          }
-          listener.enable()
-          awaitClose { listener.disable() }
+): @Composable () -> DisplayRotation = {
+  val screenState = screenState()
+  var displayRotation by remember { mutableStateOf(getCurrentDisplayRotation()) }
+
+  if (screenState.isOn)
+    DisposableEffect(true) {
+      val listener = object : OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {
+        override fun onOrientationChanged(orientation: Int) {
+          displayRotation = getCurrentDisplayRotation()
         }
-      } else {
-        logger.log { "do not observe rotation while screen is off" }
-        emptyFlow()
       }
+      listener.enable()
+      onDispose { listener.disable() }
     }
-    .onStart<Any?> { emit(Unit) }
-    .map { getCurrentDisplayRotation() }
-    .distinctUntilChanged()
-    .let { emitAll(it) }
+
+  displayRotation
 }
 
-private suspend fun getCurrentDisplayRotation(
-  @Inject ioCoroutineContext: IOCoroutineContext,
+private fun getCurrentDisplayRotation(
   @Inject windowManager: @SystemService WindowManager,
-) = withContext(ioCoroutineContext) {
-  when (windowManager.defaultDisplay.rotation) {
-    Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
-    Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT
-    Surface.ROTATION_180 -> DisplayRotation.PORTRAIT_DOWN
-    Surface.ROTATION_270 -> DisplayRotation.LANDSCAPE_RIGHT
-    else -> error("Unexpected rotation")
-  }
+) = when (windowManager.defaultDisplay.rotation) {
+  Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
+  Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT
+  Surface.ROTATION_180 -> DisplayRotation.PORTRAIT_DOWN
+  Surface.ROTATION_270 -> DisplayRotation.LANDSCAPE_RIGHT
+  else -> error("Unexpected rotation")
 }

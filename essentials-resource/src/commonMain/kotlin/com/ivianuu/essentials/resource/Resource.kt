@@ -63,6 +63,16 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
   emitAll(this@flowAsResource)
 }
 
+fun <T> Flow<Resource<T>>.unwrapResource(): Flow<T> = flow {
+  collect {
+    when (it) {
+      is Success -> emit(it.value)
+      is Error -> throw it.error
+      else -> {}
+    }
+  }
+}
+
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
   flow<Resource<T>> {
     emit(Loading)

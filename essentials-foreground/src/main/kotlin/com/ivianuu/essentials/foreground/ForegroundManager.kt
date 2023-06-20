@@ -6,6 +6,7 @@ package com.ivianuu.essentials.foreground
 
 import android.app.Notification
 import android.content.Intent
+import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
@@ -20,29 +21,19 @@ import com.ivianuu.injekt.common.SourceKey
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 interface ForegroundManager {
   suspend fun <R> runInForeground(
-    notification: Notification,
+    notification: @Composable () -> Notification,
     @Inject foregroundId: ForegroundId,
     block: suspend ForegroundScope.() -> R
   ): R
 }
 
-interface ForegroundScope : CoroutineScope {
-  suspend fun updateNotification(notification: Notification)
-}
-
-fun Flow<Notification>.updateNotification(scope: ForegroundScope) {
-  onEach { scope.updateNotification(it) }
-    .launchIn(scope)
-}
+interface ForegroundScope : CoroutineScope
 
 @JvmInline value class ForegroundId(val value: Int) {
   companion object {
@@ -58,7 +49,7 @@ fun Flow<Notification>.updateNotification(scope: ForegroundScope) {
   private val lock = Mutex()
 
   override suspend fun <R> runInForeground(
-    notification: Notification,
+    notification: @Composable () -> Notification,
     @Inject foregroundId: ForegroundId,
     block: suspend ForegroundScope.() -> R
   ) = coroutineScope {
@@ -90,15 +81,9 @@ fun Flow<Notification>.updateNotification(scope: ForegroundScope) {
 
   internal class ForegroundState(
     val id: Int,
-    notification: Notification,
+    val notification: @Composable () -> Notification,
     @Inject scope: CoroutineScope
   ) : ForegroundScope, CoroutineScope by scope {
-    val notification = MutableStateFlow(notification)
-    private val lock = Mutex()
     val seen = CompletableDeferred<Unit>()
-
-    override suspend fun updateNotification(notification: Notification) = lock.withLock {
-      this.notification.value = notification
-    }
   }
 }

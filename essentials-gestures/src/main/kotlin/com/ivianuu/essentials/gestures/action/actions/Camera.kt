@@ -11,6 +11,7 @@ import android.hardware.camera2.CameraManager
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.catch
@@ -28,6 +29,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -50,10 +52,10 @@ import kotlin.coroutines.resume
   accessibilityServiceRef: Flow<EsAccessibilityService?>,
   actionIntentSender: ActionIntentSender,
   cameraManager: @SystemService CameraManager,
-  currentApp: Flow<CurrentApp?>,
+  currentApp: @Composable () -> CurrentApp?,
   logger: Logger,
   packageManager: PackageManager,
-  screenState: Flow<ScreenState>
+  screenState: @Composable () -> ScreenState
 ) = ActionExecutor<CameraActionId> {
   val cameraApp = packageManager
     .resolveActivity(
@@ -71,13 +73,13 @@ import kotlin.coroutines.resume
           CameraCharacteristics.LENS_FACING_FRONT
     }
 
-  val currentScreenState = screenState.first()
+  val currentScreenState = screenState.asFlow().first()
 
   val frontFacing = if (frontCamera != null &&
     currentScreenState != ScreenState.OFF &&
     (currentScreenState == ScreenState.UNLOCKED ||
         accessibilityServiceRef.first()?.rootInActiveWindow?.packageName != "com.android.systemui") &&
-    cameraApp.activityInfo!!.packageName == currentApp.first()?.value
+    cameraApp.activityInfo!!.packageName == currentApp.asFlow().first()?.value
   )
     suspendCancellableCoroutine<Boolean> { cont ->
       cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {

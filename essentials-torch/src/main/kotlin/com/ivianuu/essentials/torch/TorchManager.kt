@@ -74,7 +74,7 @@ interface TorchManager {
       return
     }
 
-    foregroundManager.runInForeground(createTorchNotification()) {
+    foregroundManager.runInForeground({ createTorchNotification() }) {
       race(
         { enableTorch() },
         { broadcastsFactory(ACTION_DISABLE_TORCH).first() }

@@ -6,6 +6,7 @@ package com.ivianuu.essentials.sample.ui
 
 import android.app.NotificationManager
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,17 +33,14 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.awaitCancellation
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerScreen() }
 
 class AppTrackerScreen : Screen<Unit>
 
 @Provide fun appTrackerUi(
-  currentApp: Flow<CurrentApp?>,
+  currentApp: @Composable () -> CurrentApp?,
   foregroundManager: ForegroundManager,
   navigator: Navigator,
   notificationFactory: NotificationFactory,
@@ -54,11 +52,8 @@ class AppTrackerScreen : Screen<Unit>
 
   if (isEnabled)
     LaunchedEffect(true) {
-      val notifications = currentApp
-        .map { AppTrackerNotification(it) }
-        .stateIn(this, SharingStarted.Eagerly, AppTrackerNotification(null))
-      foregroundManager.runInForeground(notifications.value) {
-        notifications.collect { updateNotification(it) }
+      foregroundManager.runInForeground({ AppTrackerNotification(currentApp()) }) {
+        awaitCancellation()
       }
     }
 
