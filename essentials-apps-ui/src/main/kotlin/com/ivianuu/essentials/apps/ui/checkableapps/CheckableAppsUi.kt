@@ -117,7 +117,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
   val checkedApps by params.checkedApps.collectAsState(emptySet())
   val allApps by repository.installedApps.collectAsResourceState()
 
-  fun pushNewCheckedApps(transform: Set<String>.() -> Set<String>) {
+  fun updateCheckedApps(transform: Set<String>.() -> Set<String>) {
     val newCheckedApps = checkedApps.transform()
     params.onCheckedAppsChanged(newCheckedApps)
   }
@@ -128,18 +128,18 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
     appBarTitle = params.appBarTitle,
     checkedApps = checkedApps,
     updateAppCheckedState = action { app, isChecked ->
-      pushNewCheckedApps {
+      updateCheckedApps {
         if (isChecked) this + app.info.packageName
         else this - app.info.packageName
       }
     },
     selectAll = action {
-      pushNewCheckedApps {
+      updateCheckedApps {
         this + allApps.get().map { it.packageName }
       }
     },
     deselectAll = action {
-      pushNewCheckedApps { emptySet() }
+      updateCheckedApps { emptySet() }
     }
   )
 }
