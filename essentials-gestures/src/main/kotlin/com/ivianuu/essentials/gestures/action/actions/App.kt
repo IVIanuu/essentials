@@ -65,7 +65,6 @@ import kotlinx.coroutines.flow.first
 
 @Provide class AppActionPickerDelegate(
   private val launchableAppPredicate: LaunchableAppPredicate,
-  private val navigator: Navigator,
   private val resources: Resources
 ) : ActionPickerDelegate {
   override val baseId: String
@@ -75,7 +74,7 @@ import kotlinx.coroutines.flow.first
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_apps) }
 
-  override suspend fun pickAction(): ActionPickerScreen.Result? {
+  override suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result? {
     val app = navigator.push(AppPickerScreen(launchableAppPredicate)) ?: return null
     return ActionPickerScreen.Result.Action("$BASE_ID${app.packageName}$ACTION_DELIMITER")
   }

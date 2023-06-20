@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerScreen
 import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
@@ -77,7 +78,7 @@ interface ActionPickerDelegate {
   val settingsScreen: Screen<Unit>? get() = null
   val icon: @Composable () -> Unit
 
-  suspend fun pickAction(): ActionPickerScreen.Result?
+  suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result?
 }
 
 const val ACTION_DELIMITER = "=:="

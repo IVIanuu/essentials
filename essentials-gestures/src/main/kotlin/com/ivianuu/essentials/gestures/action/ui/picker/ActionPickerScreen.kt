@@ -86,7 +86,7 @@ sealed interface ActionPickerItem {
       ActionIcon(action = action, modifier = modifier)
     }
 
-    override suspend fun getResult() = ActionPickerScreen.Result.Action(action.id)
+    override suspend fun getResult(navigator: Navigator) = ActionPickerScreen.Result.Action(action.id)
   }
 
   class PickerDelegate(val delegate: ActionPickerDelegate) : ActionPickerItem {
@@ -102,7 +102,7 @@ sealed interface ActionPickerItem {
       }
     }
 
-    override suspend fun getResult() = delegate.pickAction()
+    override suspend fun getResult(navigator: Navigator) = delegate.pickAction(navigator)
   }
 
   class SpecialOption(
@@ -116,7 +116,7 @@ sealed interface ActionPickerItem {
       Spacer(modifier)
     }
 
-    override suspend fun getResult() = getResult.invoke()
+    override suspend fun getResult(navigator: Navigator) = getResult.invoke()
   }
 
   val title: String
@@ -128,7 +128,7 @@ sealed interface ActionPickerItem {
 
   @Composable fun Icon(modifier: Modifier)
 
-  suspend fun getResult(): ActionPickerScreen.Result?
+  suspend fun getResult(navigator: Navigator): ActionPickerScreen.Result?
 }
 
 @Provide fun actionPickerModel(
@@ -145,7 +145,7 @@ sealed interface ActionPickerItem {
     }.value,
     openActionSettings = action { item -> navigator.push(item.settingsScreen!!) },
     pickAction = action { item ->
-      val result = item.getResult() ?: return@action
+      val result = item.getResult(navigator) ?: return@action
       if (result is ActionPickerScreen.Result.Action) {
         val action = repository.getAction(result.actionId)
         if (!permissionManager.requestPermissions(action.permissions))

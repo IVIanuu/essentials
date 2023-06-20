@@ -47,10 +47,7 @@ import com.ivianuu.injekt.common.typeKeyOf
   }
 }
 
-@Provide class KeycodeActionPickerDelegate(
-  private val navigator: Navigator,
-  private val resources: Resources
-) : ActionPickerDelegate {
+@Provide class KeycodeActionPickerDelegate(private val resources: Resources) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String
@@ -58,7 +55,7 @@ import com.ivianuu.injekt.common.typeKeyOf
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_keyboard) }
 
-  override suspend fun pickAction(): ActionPickerScreen.Result? {
+  override suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result? {
     val keycode = navigator.push(
       TextInputScreen(
         label = resources(R.string.es_keycode_label),

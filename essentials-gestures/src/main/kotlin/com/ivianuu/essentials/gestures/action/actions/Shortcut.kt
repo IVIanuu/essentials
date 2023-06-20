@@ -65,7 +65,6 @@ import java.io.ByteArrayOutputStream
 }
 
 @Provide class ShortcutActionPickerDelegate(
-  private val navigator: Navigator,
   private val resources: Resources
 ) : ActionPickerDelegate {
   override val baseId: String
@@ -75,7 +74,7 @@ import java.io.ByteArrayOutputStream
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_content_cut) }
 
-  override suspend fun pickAction(): ActionPickerScreen.Result? {
+  override suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result? {
     val shortcut = navigator.push(ShortcutPickerScreen()) ?: return null
     val name = shortcut.name
     val icon = shortcut.icon.toBitmap()
