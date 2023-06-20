@@ -98,5 +98,5 @@ fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
 @Composable fun <T> produceResourceState(
   vararg keys: Any?,
   producer: suspend FlowCollector<T>.() -> Unit
-): State<Resource<T>> = remember(producer) { flow(producer) }
-  .collectAsResourceState(*keys)
+): State<Resource<T>> = remember(*keys) { flow(producer) }
+  .collectAsResourceState()
