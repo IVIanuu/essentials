@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.insets.LocalInsets
   drawerElevation: Dp = DrawerDefaults.Elevation,
   backgroundColor: Color = MaterialTheme.colors.background,
   applyInsets: Boolean = true,
-  scrollTopBar: Boolean = true,
+  scrollTopBar: Boolean = topBar != null,
   maxTopBarSize: Dp = 56.dp + LocalInsets.current.top,
   content: @Composable () -> Unit
 ) {
