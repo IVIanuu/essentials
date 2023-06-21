@@ -32,12 +32,9 @@ import kotlinx.coroutines.launch
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    onBackPressedDispatcher.addCallback {
-      finish()
-    }
+    onBackPressedDispatcher.addCallback { finish() }
 
     uiScope = uiScopeFactory(this)
-
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
       onCancel { uiScope.dispose() }
     }
@@ -58,4 +55,3 @@ import kotlinx.coroutines.launch
   val appUi: AppUi,
   val decorateAppUi: DecorateAppUi
 )
-

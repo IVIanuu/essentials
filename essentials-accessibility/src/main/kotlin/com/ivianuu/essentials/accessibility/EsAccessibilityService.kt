@@ -16,10 +16,8 @@ import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 @Provide @AndroidComponent class EsAccessibilityService(
   private val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>,
@@ -37,28 +35,26 @@ import kotlinx.coroutines.launch
     val accessibilityComponent = accessibilityScope!!
       .service<AccessibilityComponent>()
 
-    accessibilityComponent.coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
-      val configs = accessibilityComponent.configs()
-      logger.log { "update config from $configs" }
-      serviceInfo = serviceInfo?.apply {
-        eventTypes = configs
-          .map { it.eventTypes }
-          .fold(0) { acc, events -> acc.addFlag(events) }
+    val configs = accessibilityComponent.configs
+    logger.log { "update config from $configs" }
+    serviceInfo = serviceInfo?.apply {
+      eventTypes = configs
+        .map { it.eventTypes }
+        .fold(0) { acc, events -> acc.addFlag(events) }
 
-        flags = configs
-          .map { it.flags }
-          .fold(0) { acc, flags -> acc.addFlag(flags) }
+      flags = configs
+        .map { it.flags }
+        .fold(0) { acc, flags -> acc.addFlag(flags) }
 
-        // first one wins
-        configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
-        feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
+      // first one wins
+      configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
+      feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
 
-        notificationTimeout = configs
-          .map { it.notificationTimeout }
-          .maxOrNull() ?: 0L
+      notificationTimeout = configs
+        .map { it.notificationTimeout }
+        .maxOrNull() ?: 0L
 
-        packageNames = null
-      }
+      packageNames = null
     }
   }
 
@@ -91,6 +87,6 @@ import kotlinx.coroutines.launch
 }
 
 @Provide @Service<AccessibilityScope> data class AccessibilityComponent(
-  val configs: () -> List<AccessibilityConfig>,
+  val configs: List<AccessibilityConfig>,
   val coroutineScope: ScopedCoroutineScope<AccessibilityScope>
 )
