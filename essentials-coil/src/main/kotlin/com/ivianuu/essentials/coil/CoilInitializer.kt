@@ -12,6 +12,5 @@ import com.ivianuu.injekt.Provide
 
 fun interface CoilInitializer : ScopeInitializer<AppScope>
 
-@Provide fun coilInitializer(
-  imageLoaderFactory: () -> ImageLoader
-) = CoilInitializer { Coil.setImageLoader(imageLoaderFactory) }
+@Provide fun coilInitializer(imageLoaderFactory: () -> ImageLoader) =
+  CoilInitializer { Coil.setImageLoader(imageLoaderFactory) }
