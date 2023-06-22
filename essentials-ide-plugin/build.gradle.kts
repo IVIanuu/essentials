@@ -13,7 +13,7 @@ intellij {
   pluginName.set("Essentials ide plugin")
   updateSinceUntilBuild.set(false)
   plugins.addAll("org.jetbrains.kotlin", "gradle", "gradle-java", "java")
-  localPath.set("/home/manu/android-studio")
+  localPath.set("/usr/local/bin/android-studio")
 }
 
 tasks {
