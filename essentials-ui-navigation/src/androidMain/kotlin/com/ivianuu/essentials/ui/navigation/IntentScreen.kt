@@ -26,7 +26,8 @@ interface IntentScreen : Screen<Result<ActivityResult, ActivityNotFoundException
 @Provide fun <@Spread T : ScreenIntentFactory<K>, K : Any> intentKeyIntentFactory(
   intentFactory: T,
   keyClass: KClass<K>
-): Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>> = (keyClass to intentFactory) as Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>>
+): Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>> =
+  (keyClass to intentFactory) as Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>>
 
 fun interface ScreenIntentFactory<T> {
   suspend operator fun invoke(screen: T): Intent
