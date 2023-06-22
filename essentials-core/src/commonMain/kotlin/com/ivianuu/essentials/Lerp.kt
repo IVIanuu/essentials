@@ -7,6 +7,8 @@ package com.ivianuu.essentials
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
+// todo maybe remove
+
 interface Lerper<T> {
   fun lerp(start: T, stop: T, fraction: Float): T
   fun unlerp(start: T, stop: T, value: T): Float

@@ -4,29 +4,33 @@
 
 package com.ivianuu.essentials.recentapps
 
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.compose.ScopedState
+import com.ivianuu.essentials.compose.compositionStateFlow
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 
 @JvmInline value class RecentApps(val values: List<String>)
 
 @Provide fun recentApps(
-  currentApp: @Composable () -> CurrentApp?,
-  logger: Logger
-): @ScopedState<AppScope> @Composable () -> RecentApps = {
-  val currentApp = currentApp()?.value
+  currentApps: Flow<CurrentApp?>,
+  logger: Logger,
+  scope: ScopedCoroutineScope<AppScope>
+): @Scoped<AppScope> StateFlow<RecentApps> = scope.compositionStateFlow {
+  val currentApp = currentApps.collectAsState(null).value?.value
   var recentApps by remember { mutableStateOf(emptyList<String>()) }
 
   val index = recentApps.indexOf(currentApp)
@@ -57,8 +61,9 @@ import kotlinx.coroutines.flow.filter
 @JvmInline value class CurrentApp(val value: String)
 
 @Provide fun currentApp(
-  accessibilityEvents: Flow<AccessibilityEvent>
-): @ScopedState<AppScope> @Composable () -> CurrentApp? = {
+  accessibilityEvents: Flow<AccessibilityEvent>,
+  scope: ScopedCoroutineScope<AppScope>
+): @Scoped<AppScope> Flow<CurrentApp?> = scope.compositionStateFlow {
   produceState<CurrentApp?>(null) {
     accessibilityEvents
       .filter {

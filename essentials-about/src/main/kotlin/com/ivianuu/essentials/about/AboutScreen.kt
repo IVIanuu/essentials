@@ -13,10 +13,10 @@ import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationScreen
-import com.ivianuu.essentials.license.ui.LicenseScreen
-import com.ivianuu.essentials.rate.domain.RateUseCases
-import com.ivianuu.essentials.rate.ui.DeveloperEmail
-import com.ivianuu.essentials.rate.ui.FeedbackMailScreen
+import com.ivianuu.essentials.license.LicenseScreen
+import com.ivianuu.essentials.rate.DeveloperEmail
+import com.ivianuu.essentials.rate.FeedbackMailScreen
+import com.ivianuu.essentials.rate.RateUseCases
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Model

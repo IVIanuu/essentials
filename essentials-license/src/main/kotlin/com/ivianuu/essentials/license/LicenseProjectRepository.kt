@@ -2,10 +2,9 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.license.domain
+package com.ivianuu.essentials.license
 
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.license.data.Project
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.flow.Flow

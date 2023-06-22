@@ -2,13 +2,12 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.rate.domain
+package com.ivianuu.essentials.rate
 
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.rate.data.RatePrefs
 import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey

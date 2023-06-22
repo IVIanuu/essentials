@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,6 +22,7 @@ import androidx.compose.ui.unit.lerp
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.refOf
 import com.ivianuu.essentials.compose.setValue
+import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.injekt.Provide
 
@@ -39,14 +39,16 @@ import com.ivianuu.injekt.Provide
 
   val animatedInsets = if (!animate) targetInsets else {
     val animation = remember(targetInsets) { Animatable(0f) }
-    LaunchedEffect(animation) {
-      animation.animateTo(1f, animationSpec = tween(durationMillis = 150))
-    }
     var lastInsets by remember { refOf(targetInsets) }
+    LaunchedEffect(animation) {
+      guarantee(
+        block = {
+          animation.animateTo(1f, animationSpec = tween(durationMillis = 150))
+        },
+        finalizer = { lastInsets = lerp(lastInsets, targetInsets, animation.value) }
+      )
+    }
     remember(animation.value) { lerp(lastInsets, targetInsets, animation.value) }
-      .also { newInsets ->
-        SideEffect { lastInsets = newInsets }
-      }
   }
 
   Box(

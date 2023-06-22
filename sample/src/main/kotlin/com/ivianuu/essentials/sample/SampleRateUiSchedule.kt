@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.rate.domain.RateUiSchedule
+import com.ivianuu.essentials.rate.RateUiSchedule
 import com.ivianuu.essentials.time.minutes
 import com.ivianuu.injekt.Provide
 

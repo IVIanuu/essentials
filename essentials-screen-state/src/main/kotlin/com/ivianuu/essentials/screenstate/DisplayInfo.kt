@@ -6,9 +6,9 @@ package com.ivianuu.essentials.screenstate
 
 import android.util.DisplayMetrics
 import android.view.WindowManager
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.compose.compositionFlow
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.Flow
@@ -21,10 +21,10 @@ data class DisplayInfo(
 
 @Provide fun displayInfo(
   configChanges: Flow<ConfigChange>,
-  displayRotation: @Composable () -> DisplayRotation,
+  displayRotation: Flow<DisplayRotation>,
   windowManager: @SystemService WindowManager
-): @Composable () -> DisplayInfo = {
-  val rotation = displayRotation()
+): Flow<DisplayInfo> = compositionFlow {
+  val rotation = displayRotation.collectAsState(DisplayRotation.PORTRAIT_UP).value
   remember(configChanges.collectAsState(null).value, rotation) {
     windowManager.defaultDisplay.getRealMetrics(metrics)
     DisplayInfo(

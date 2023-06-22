@@ -6,7 +6,7 @@ package com.ivianuu.essentials.sample.ui
 
 import android.app.NotificationManager
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +30,7 @@ import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerScreen() }
@@ -37,7 +38,7 @@ import kotlinx.coroutines.launch
 class AppTrackerScreen : Screen<Unit>
 
 @Provide fun appTrackerUi(
-  currentApp: @Composable () -> CurrentApp?,
+  currentApp: Flow<CurrentApp?>,
   foregroundManager: ForegroundManager,
   notificationFactory: NotificationFactory,
   permissionManager: PermissionManager,
@@ -46,7 +47,9 @@ class AppTrackerScreen : Screen<Unit>
   var isEnabled by remember { mutableStateOf(false) }
 
   if (isEnabled)
-    foregroundManager.Foreground { AppTrackerNotification(currentApp()) }
+    foregroundManager.Foreground {
+      AppTrackerNotification(currentApp.collectAsState(null).value)
+    }
 
   Scaffold(
     topBar = { TopAppBar(title = { Text("App tracker") }) }

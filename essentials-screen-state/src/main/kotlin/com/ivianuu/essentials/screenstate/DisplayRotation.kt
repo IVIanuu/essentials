@@ -8,16 +8,18 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.compose.compositionFlow
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
+import kotlinx.coroutines.flow.Flow
 
 enum class DisplayRotation(val isPortrait: Boolean) {
   // 0 degrees
@@ -35,10 +37,10 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 
 @Provide fun displayRotation(
   appContext: AppContext,
-  screenState: @Composable () -> ScreenState,
+  screenStates: Flow<ScreenState>,
   windowManager: @SystemService WindowManager
-): @Composable () -> DisplayRotation = {
-  val screenState = screenState()
+): Flow<DisplayRotation> = compositionFlow {
+  val screenState = screenStates.collectAsState(ScreenState.OFF).value
   var displayRotation by remember { mutableStateOf(getCurrentDisplayRotation()) }
 
   if (screenState.isOn)

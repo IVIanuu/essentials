@@ -81,7 +81,7 @@ import java.util.concurrent.ConcurrentHashMap
     when (requestType) {
       REQUEST_TYPE_UNLOCK -> {
         lifecycleScope.launch {
-          delay(50)
+          delay(250)
 
           keyguardManager.requestDismissKeyguard(
             this@UnlockActivity,

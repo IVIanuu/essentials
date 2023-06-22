@@ -14,7 +14,6 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ui.AppColors
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.inject
 
 fun interface NotificationFactory {
   operator fun invoke(
@@ -41,8 +40,8 @@ inline val NotificationCompat.Builder.context: Context
     )
   )
 
-  NotificationCompat.Builder(inject(), channelId)
+  NotificationCompat.Builder(appContext, channelId)
     .apply { color = appColors.primary.toArgb() }
     .apply(builder)
     .build()
-  }
+}

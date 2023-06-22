@@ -8,10 +8,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.compose.asFlow
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
@@ -22,6 +20,7 @@ import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 @Provide object KillCurrentAppActionId : ActionId("kill_current_app")
@@ -35,11 +34,11 @@ import kotlinx.coroutines.flow.first
 
 @Provide fun killCurrentAppActionExecutor(
   appConfig: AppConfig,
-  currentApp: @Composable () -> CurrentApp?,
+  currentApps: Flow<CurrentApp?>,
   packageManager: PackageManager,
   rootCommandRunner: ActionRootCommandRunner
 ) = ActionExecutor<KillCurrentAppActionId> {
-  val currentApp = currentApp.asFlow().first()?.value
+  val currentApp = currentApps.first()?.value
   if (currentApp != "android" &&
     currentApp != "com.android.systemui" &&
     currentApp != appConfig.packageName && // we have no suicidal intentions :D

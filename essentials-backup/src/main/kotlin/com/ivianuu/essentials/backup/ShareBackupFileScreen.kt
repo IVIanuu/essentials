@@ -14,8 +14,7 @@ import com.ivianuu.essentials.ui.navigation.ScreenIntentFactory
 import com.ivianuu.injekt.Provide
 import java.io.File
 
-class ShareBackupFileScreen(val backupFilePath: String) :
-  IntentScreen
+class ShareBackupFileScreen(val backupFilePath: String) : IntentScreen
 
 @Provide fun shareBackupFileKeyIntentFactory(
   appContext: AppContext,

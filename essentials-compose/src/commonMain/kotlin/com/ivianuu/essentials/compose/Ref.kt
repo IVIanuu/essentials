@@ -9,6 +9,8 @@ import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.loop
 import kotlin.reflect.KProperty
 
+// todo maybe remove
+
 fun <T> refOf(value: T): Ref<T> = RefImpl(value)
 
 @Stable interface Ref<T> {

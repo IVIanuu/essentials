@@ -9,8 +9,6 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.injekt.Provide
 
 object ContextModule {
-  @Provide inline fun context(appContext: AppContext): Context = appContext
-
   @Provide inline fun packageManager(appContext: AppContext): PackageManager =
     appContext.packageManager
 }

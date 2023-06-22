@@ -2,13 +2,11 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.rate.domain
+package com.ivianuu.essentials.rate
 
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.rate.data.RatePrefs
-import com.ivianuu.essentials.rate.ui.RateScreen
 import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.time.days
 import com.ivianuu.essentials.time.milliseconds

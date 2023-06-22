@@ -73,10 +73,10 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
 
 @Provide @Scoped<UiScope> class FullScreenAdManagerImpl(
   private val appContext: AppContext,
-  private val adsEnabled: Flow<AdsEnabled>,
+  private val adsEnabledStates: Flow<AdsEnabled>,
   private val id: FullScreenAdId,
   config: FullScreenAdConfig,
-  private val foregroundActivity: Flow<ForegroundActivity>,
+  private val foregroundActivities: Flow<ForegroundActivity>,
   private val logger: Logger,
   private val mainCoroutineContext: MainCoroutineContext,
   private val scope: ScopedCoroutineScope<AppScope>
@@ -92,13 +92,13 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   }
 
   override suspend fun loadAd() = catch {
-    if (!adsEnabled.first().value) return@catch false
+    if (!adsEnabledStates.first().value) return@catch false
     getOrCreateCurrentAd()
     true
   }
 
   override suspend fun loadAndShowAd() = catch {
-    if (!adsEnabled.first().value) return@catch false
+    if (!adsEnabledStates.first().value) return@catch false
     getOrCreateCurrentAd()
       .also { preloadAd() }
       .invoke()
@@ -145,7 +145,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
           logger.log { "show ad" }
           lock.withLock { deferredAd = null }
           withContext(mainCoroutineContext) {
-            ad.show(foregroundActivity.first()!!)
+            ad.show(foregroundActivities.first()!!)
           }
           true
         } else {

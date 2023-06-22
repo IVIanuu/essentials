@@ -2,7 +2,7 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.android.prefs
+package com.ivianuu.essentials.data
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStoreFactory
@@ -14,8 +14,6 @@ import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.childCoroutineScope
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.flow.Flow
