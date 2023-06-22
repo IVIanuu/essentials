@@ -6,6 +6,7 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.compose.asFlow
+import com.ivianuu.essentials.compose.compositionFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -129,7 +130,7 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 @Provide fun userBlacklistState(
   logger: Logger,
   pref: DataStore<SystemOverlayBlacklistPrefs>,
-  currentApp: Flow<CurrentApp?>,
+  currentApp: @Composable () -> CurrentApp?,
   screenState: @Composable () -> ScreenState
 ): @Private Flow<@UserBlacklist SystemOverlayBlacklistState> = pref.data
   .map { it.appBlacklist }
@@ -142,7 +143,7 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
         .flatMapLatest { screenState ->
           // only check the current app if the screen is on
           if (screenState == ScreenState.UNLOCKED) {
-            currentApp
+            compositionFlow(body = currentApp)
               .onEach { logger.log { "current app $it" } }
               .map { currentApp ->
                 if (currentApp?.value in blacklist) {
