@@ -10,7 +10,7 @@ import com.ivianuu.essentials.ScopeObserver
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.DefaultCoroutineContext
+import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -38,7 +38,7 @@ typealias ScopeCoroutineContext<N> = @ScopeCoroutineContextTag<N> CoroutineConte
 
 @Tag annotation class ScopeCoroutineContextTag<N> {
   companion object {
-    @Provide inline fun <N> context(context: DefaultCoroutineContext): ScopeCoroutineContext<N> =
+    @Provide inline fun <N> context(context: MainCoroutineContext): ScopeCoroutineContext<N> =
       context
   }
 }

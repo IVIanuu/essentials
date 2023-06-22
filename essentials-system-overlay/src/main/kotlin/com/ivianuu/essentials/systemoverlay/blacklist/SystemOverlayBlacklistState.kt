@@ -4,6 +4,8 @@
 
 package com.ivianuu.essentials.systemoverlay.blacklist
 
+import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.compose.asFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -65,13 +67,13 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 @Provide fun lockScreenState(
   logger: Logger,
   pref: DataStore<SystemOverlayBlacklistPrefs>,
-  screenState: Flow<ScreenState>
+  screenState: @Composable () -> ScreenState
 ): @Private Flow<@LockScreen SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnLockScreen }
   .distinctUntilChanged()
   .flatMapLatest { disableOnLockScreen ->
     if (disableOnLockScreen) {
-      screenState
+      screenState.asFlow()
         .map {
           logger.log { "screen state $it disable on lock $disableOnLockScreen" }
           if (it != ScreenState.UNLOCKED) {
@@ -92,14 +94,14 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
   logger: Logger,
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   isOnSecureScreen: Flow<IsOnSecureScreen>,
-  screenState: Flow<ScreenState>
+  screenState: @Composable () -> ScreenState
 ): @Private Flow<@SecureScreen SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnSecureScreens }
   .distinctUntilChanged()
   .onEach { logger.log { "disable on secure screens $it" } }
   .flatMapLatest { disableOnSecureScreen ->
     if (disableOnSecureScreen) {
-      screenState
+      screenState.asFlow()
         .onEach { logger.log { "screen state $it" } }
         .flatMapLatest { screenState ->
           if (screenState == ScreenState.UNLOCKED) {
@@ -128,14 +130,14 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
   logger: Logger,
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   currentApp: Flow<CurrentApp?>,
-  screenState: Flow<ScreenState>
+  screenState: @Composable () -> ScreenState
 ): @Private Flow<@UserBlacklist SystemOverlayBlacklistState> = pref.data
   .map { it.appBlacklist }
   .distinctUntilChanged()
   .onEach { logger.log { "blacklist $it" } }
   .flatMapLatest { blacklist ->
     if (blacklist.isNotEmpty()) {
-      screenState
+      screenState.asFlow()
         .onEach { logger.log { "screen state $it" } }
         .flatMapLatest { screenState ->
           // only check the current app if the screen is on
