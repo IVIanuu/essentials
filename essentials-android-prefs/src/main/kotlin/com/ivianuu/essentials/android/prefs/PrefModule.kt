@@ -6,7 +6,6 @@ package com.ivianuu.essentials.android.prefs
 
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
-import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.data.DataStore
@@ -58,9 +57,6 @@ class PrefModule<T : Any>(private val default: () -> T) {
         }.decode()
     }
   }
-
-  @Provide
-  fun initialOrDefault(initial: () -> @Initial T = default): @InitialOrDefault T = initial()
 }
 
 @Provide val prefsDataStoreModule =

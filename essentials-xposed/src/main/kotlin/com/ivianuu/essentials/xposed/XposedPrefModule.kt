@@ -11,7 +11,6 @@ import android.content.SharedPreferences
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
-import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.catch
@@ -132,9 +131,6 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       .distinctUntilChanged()
       .flowOn(ioCoroutineContext)
   }
-
-  @Provide
-  fun initialOrDefault(initial: () -> @Initial T = default): @InitialOrDefault T = initial()
 
   private fun prefsChangedAction(packageName: ModulePackageName) =
     "${packageName}.PREFS_CHANGED"
