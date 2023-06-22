@@ -14,14 +14,14 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
-import com.ivianuu.essentials.compose.getValue
-import com.ivianuu.essentials.compose.refOf
-import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.injekt.Provide
@@ -39,7 +39,7 @@ import com.ivianuu.injekt.Provide
 
   val animatedInsets = if (!animate) targetInsets else {
     val animation = remember(targetInsets) { Animatable(0f) }
-    var lastInsets by remember { refOf(targetInsets) }
+    var lastInsets by remember { mutableStateOf(targetInsets) }
     LaunchedEffect(animation) {
       guarantee(
         block = {
