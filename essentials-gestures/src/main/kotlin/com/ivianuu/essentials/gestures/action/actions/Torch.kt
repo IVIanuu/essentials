@@ -16,10 +16,7 @@ import com.ivianuu.injekt.Provide
 
 @Provide object TorchActionId : ActionId("torch")
 
-@Provide fun torchAction(
-  resources: Resources,
-  torchManager: TorchManager
-) = Action(
+@Provide fun torchAction(resources: Resources, torchManager: TorchManager) = Action(
   id = TorchActionId,
   title = resources(R.string.es_action_torch),
   icon = {

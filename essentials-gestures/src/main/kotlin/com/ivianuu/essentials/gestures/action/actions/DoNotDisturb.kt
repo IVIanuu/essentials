@@ -25,10 +25,7 @@ import kotlinx.coroutines.flow.onStart
 
 @Provide object DoNotDisturbAction : ActionId("do_not_disturb")
 
-@Provide fun doNotDisturbAction(
-  icon: DoNotDisturbIcon,
-  resources: Resources
-) = Action(
+@Provide fun doNotDisturbAction(icon: DoNotDisturbIcon, resources: Resources) = Action(
   id = DoNotDisturbAction,
   title = resources(R.string.es_action_do_not_disturb),
   icon = icon,

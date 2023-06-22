@@ -14,13 +14,11 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.Flow
 
 @Provide object AutoRotationActionId : ActionId("auto_rotation")
 
@@ -31,21 +29,19 @@ import kotlinx.coroutines.flow.Flow
   id = AutoRotationActionId,
   title = resources(R.string.es_action_auto_rotation),
   permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
-  icon = autoRotation.data.autoRotationIcon()
+  icon = {
+    val enabled = autoRotation.data.collectAsState(1).value == 1
+    Icon(
+      if (enabled) R.drawable.es_ic_screen_rotation
+      else R.drawable.es_ic_screen_lock_rotation
+    )
+  }
 )
 
 @Provide fun autoRotationActionExecutor(
   rotationSetting: DataStore<AutoRotation>,
 ) = ActionExecutor<AutoRotationActionId> {
   rotationSetting.updateData { if (this != 1) 1 else 0 }
-}
-
-private fun Flow<AutoRotation>.autoRotationIcon() = ActionIcon {
-  val enabled = collectAsState(1).value == 1
-  Icon(
-    if (enabled) R.drawable.es_ic_screen_rotation
-    else R.drawable.es_ic_screen_lock_rotation
-  )
 }
 
 @Tag annotation class AutoRotationTag
