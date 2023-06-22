@@ -16,7 +16,10 @@ fun Modifier.consumeGestures(consume: Boolean = true): Modifier {
       while (true) {
         awaitPointerEvent(pass = PointerEventPass.Initial)
           .changes
-          .forEach { it.consume() }
+          .forEach {
+            if (it.pressed != it.previousPressed)
+              it.consume()
+          }
       }
     }
   }
