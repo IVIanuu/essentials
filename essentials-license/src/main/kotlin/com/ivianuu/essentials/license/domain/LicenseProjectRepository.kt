@@ -20,12 +20,12 @@ interface LicenceProjectRepository {
 
 @Provide class LicenceProjectRepositoryImpl(
   private val appContext: AppContext,
-  private val coroutineContext: IOCoroutineContext,
+  private val ioCoroutineContext: IOCoroutineContext,
   private val json: Json
 ) : LicenceProjectRepository {
   override val licenseProjects: Flow<List<Project>> = flow {
     emit(
-      withContext(coroutineContext) {
+      withContext(ioCoroutineContext) {
         appContext.resources.assets.open(LICENSE_JSON_FILE_NAME)
           .readBytes()
           .let { String(it) }

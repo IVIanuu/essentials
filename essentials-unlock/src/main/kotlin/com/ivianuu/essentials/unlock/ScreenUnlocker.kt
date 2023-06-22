@@ -13,18 +13,18 @@ import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.DefaultCoroutineContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.UUID
 import kotlin.collections.set
 
 fun interface ScreenUnlocker : suspend () -> Boolean
 
 @Provide fun screenUnlocker(
   context: AppContext,
-  coroutineContext: DefaultCoroutineContext,
+  defaultCoroutineContext: DefaultCoroutineContext,
   keyguardManager: @SystemService KeyguardManager,
   logger: Logger
 ) = ScreenUnlocker {
-  withContext(coroutineContext) {
+  withContext(defaultCoroutineContext) {
     logger.log { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
     if (!keyguardManager.isKeyguardLocked) {
       logger.log { "already unlocked" }

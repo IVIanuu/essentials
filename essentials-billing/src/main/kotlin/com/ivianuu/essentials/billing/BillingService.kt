@@ -61,7 +61,7 @@ interface BillingService {
   private val appUiStarter: AppUiStarter,
   private val appForegroundState: Flow<AppForegroundState>,
   private val billingClient: BillingClient,
-  private val coroutineContext: IOCoroutineContext,
+  private val ioCoroutineContext: IOCoroutineContext,
   private val logger: Logger,
   private val refreshes: MutableSharedFlow<BillingRefresh>,
   private val scope: ScopedCoroutineScope<AppScope>
@@ -180,7 +180,7 @@ interface BillingService {
       .also { logger.log { "got purchase $it for $sku" } }
 
   internal suspend fun <R> withConnection(block: suspend BillingService.() -> R): R? =
-    withContext(scope.coroutineContext + coroutineContext) {
+    withContext(scope.coroutineContext + ioCoroutineContext) {
       ensureConnected()
       block()
     }

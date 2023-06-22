@@ -23,7 +23,7 @@ fun interface BroadcastsFactory {
 
 @Provide fun broadcastsFactory(
   appContext: AppContext,
-  coroutineContext: MainCoroutineContext
+  mainCoroutineContext: MainCoroutineContext
 ) = BroadcastsFactory { actions ->
   callbackFlow<Intent> {
     val broadcastReceiver = object : BroadcastReceiver() {
@@ -40,5 +40,5 @@ fun interface BroadcastsFactory {
       }
     }
   }
-    .flowOn(coroutineContext)
+    .flowOn(mainCoroutineContext)
 }

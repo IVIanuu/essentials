@@ -18,12 +18,12 @@ interface Shell {
   suspend fun run(vararg commands: String): Result<List<String>, Throwable>
 }
 
-@Provide class ShellImpl(private val coroutineContext: IOCoroutineContext) : Shell {
-  override suspend fun isAvailable() = withContext(coroutineContext) {
+@Provide class ShellImpl(private val ioCoroutineContext: IOCoroutineContext) : Shell {
+  override suspend fun isAvailable() = withContext(ioCoroutineContext) {
     catch { SU.available() }.getOrElse { false }
   }
 
-  override suspend fun run(vararg commands: String) = withContext(coroutineContext) {
+  override suspend fun run(vararg commands: String) = withContext(ioCoroutineContext) {
     catch { SU.run(commands)!! }
   }
 }

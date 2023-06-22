@@ -44,9 +44,9 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
   @SuppressLint("WorldReadableFiles")
   @Provide fun dataStore(
     appContext: AppContext,
-    coroutineContext: IOCoroutineContext,
     coroutineScope: ScopedCoroutineScope<AppScope>,
     jsonFactory: () -> Json,
+    ioCoroutineContext: IOCoroutineContext,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,
     scope: Scope<AppScope>,
@@ -71,13 +71,13 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       } ?: initial()
     }
 
-    val actor = coroutineScope.actor(coroutineContext)
+    val actor = coroutineScope.actor(ioCoroutineContext)
 
     return object : DataStore<T> {
       override val data: Flow<T> = callbackFlow {
         val listener = scope.scoped {
           SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-            launch(coroutineContext) {
+            launch(ioCoroutineContext) {
               appContext.sendBroadcast(Intent(prefsChangedAction(packageName)))
               send(readData())
             }
@@ -88,7 +88,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       }
         .onStart { emit(readData()) }
         .distinctUntilChanged()
-        .flowOn(coroutineContext)
+        .flowOn(ioCoroutineContext)
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
 
       @SuppressLint("ApplySharedPref")
@@ -105,8 +105,8 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
 
   @Provide fun xposedPrefFlow(
     broadcastsFactory: BroadcastsFactory,
-    coroutineContext: IOCoroutineContext,
     jsonFactory: () -> Json,
+    ioCoroutineContext: IOCoroutineContext,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,
     serializerFactory: () -> KSerializer<T>
@@ -130,7 +130,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       .onStart<Any?> { emit(Unit) }
       .map { readData() }
       .distinctUntilChanged()
-      .flowOn(coroutineContext)
+      .flowOn(ioCoroutineContext)
   }
 
   @Provide

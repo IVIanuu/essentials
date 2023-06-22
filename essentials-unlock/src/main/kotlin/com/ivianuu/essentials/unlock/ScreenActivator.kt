@@ -13,18 +13,18 @@ import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.DefaultCoroutineContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.UUID
 import kotlin.collections.set
 
 fun interface ScreenActivator : suspend () -> Boolean
 
 @Provide fun screenActivator(
   context: AppContext,
-  coroutineContext: DefaultCoroutineContext,
+  defaultCoroutineContext: DefaultCoroutineContext,
   logger: Logger,
   powerManager: @SystemService PowerManager
 ) = ScreenActivator {
-  withContext(coroutineContext) {
+  withContext(defaultCoroutineContext) {
     logger.log { "on request is off ? ${!powerManager.isInteractive}" }
     if (powerManager.isInteractive) {
       logger.log { "already on" }

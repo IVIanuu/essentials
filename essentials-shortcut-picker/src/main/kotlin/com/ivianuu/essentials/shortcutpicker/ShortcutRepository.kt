@@ -31,7 +31,7 @@ interface ShortcutRepository {
 @Provide class ShortcutRepositoryImpl(
   private val broadcastsFactory: BroadcastsFactory,
   private val context: AppContext,
-  private val coroutineContext: IOCoroutineContext,
+  private val ioCoroutineContext: IOCoroutineContext,
   private val packageManager: PackageManager
 ) : ShortcutRepository {
   override val shortcuts: Flow<List<Shortcut>> = broadcastsFactory(
@@ -42,7 +42,7 @@ interface ShortcutRepository {
   )
     .onStart<Any?> { emit(Unit) }
     .mapLatest {
-      withContext(coroutineContext) {
+      withContext(ioCoroutineContext) {
         val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
         packageManager.queryIntentActivities(shortcutsIntent, 0)
           .parMap { resolveInfo ->
@@ -66,7 +66,7 @@ interface ShortcutRepository {
     }
     .distinctUntilChanged()
 
-  override suspend fun extractShortcut(shortcutRequestResult: Intent) = withContext(coroutineContext) {
+  override suspend fun extractShortcut(shortcutRequestResult: Intent) = withContext(ioCoroutineContext) {
     val intent =
       shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
     val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!

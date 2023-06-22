@@ -24,7 +24,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
 
 @Provide fun executeActionUseCase(
   closeSystemDialogs: CloseSystemDialogsUseCase,
-  coroutineContext: DefaultCoroutineContext,
+  defaultCoroutineContext: DefaultCoroutineContext,
   logger: Logger,
   permissionManager: PermissionManager,
   repository: ActionRepository,
@@ -32,7 +32,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
   screenUnlocker: ScreenUnlocker,
   toaster: Toaster
 ) = ExecuteActionUseCase { id ->
-  withContext(coroutineContext) {
+  withContext(defaultCoroutineContext) {
     catch {
       logger.log { "execute $id" }
       val action = repository.getAction(id)

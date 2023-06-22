@@ -49,7 +49,7 @@ class BillingServiceTest {
             )
         }
       },
-      coroutineContext = dispatcher,
+      ioCoroutineContext = dispatcher,
       refreshes = MutableSharedFlow()
     )
     var ran = false
@@ -76,7 +76,7 @@ class BillingServiceTest {
           )
         }
       },
-      coroutineContext = dispatcher,
+      ioCoroutineContext = dispatcher,
       refreshes = MutableSharedFlow()
     )
     var ran = false
@@ -90,7 +90,7 @@ class BillingServiceTest {
 
     val service = BillingServiceImpl(
       billingClient = TestBillingClient { refreshes.tryEmit(BillingRefresh) }.withTestSku(),
-      coroutineContext = dispatcher
+      ioCoroutineContext = dispatcher
     )
     service.purchase(TestSku).shouldBeTrue()
   }

@@ -33,8 +33,8 @@ interface ForegroundActivityMarker
 
 @Provide fun foregroundActivityWorker(
   activity: ComponentActivity,
-  coroutineContext: MainCoroutineContext,
   foregroundScopeFactory: () -> Scope<AppForegroundScope>,
+  mainCoroutineContext: MainCoroutineContext,
   state: MutableStateFlow<ForegroundActivity>
 ) = ScopeWorker<UiScope> worker@{
   if (activity !is ForegroundActivityMarker) return@worker
@@ -52,7 +52,7 @@ interface ForegroundActivityMarker
     }
   }
 
-  withContext(coroutineContext) {
+  withContext(mainCoroutineContext) {
     activity.lifecycle.addObserver(observer)
     onCancel { activity.lifecycle.removeObserver(observer) }
   }

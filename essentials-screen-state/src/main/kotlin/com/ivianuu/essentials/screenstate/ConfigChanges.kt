@@ -18,7 +18,7 @@ class ConfigChange
 
 @Provide fun configChanges(
   appContext: AppContext,
-  coroutineContext: MainCoroutineContext,
+  mainCoroutineContext: MainCoroutineContext,
 ): Flow<ConfigChange> = callbackFlow {
   val callbacks = object : ComponentCallbacks2 {
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -33,4 +33,4 @@ class ConfigChange
   }
   appContext.registerComponentCallbacks(callbacks)
   awaitClose { appContext.unregisterComponentCallbacks(callbacks) }
-}.flowOn(coroutineContext)
+}.flowOn(mainCoroutineContext)

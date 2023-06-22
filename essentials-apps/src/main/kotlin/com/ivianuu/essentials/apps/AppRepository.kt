@@ -32,7 +32,7 @@ interface AppRepository {
 
 @Provide class AppRepositoryImpl(
   private val broadcastsFactory: BroadcastsFactory,
-  private val coroutineContext: IOCoroutineContext,
+  private val ioCoroutineContext: IOCoroutineContext,
   private val packageManager: PackageManager
 ) : AppRepository {
   override val installedApps: Flow<List<AppInfo>> = flow {
@@ -44,7 +44,7 @@ interface AppRepository {
     )
       .onStart<Any?> { emit(Unit) }
       .map {
-        withContext(coroutineContext) {
+        withContext(ioCoroutineContext) {
           packageManager.getInstalledApplications(0)
             .parMap {
               AppInfo(
@@ -69,7 +69,7 @@ interface AppRepository {
   )
     .onStart<Any?> { emit(Unit) }
     .map {
-      withContext(coroutineContext) {
+      withContext(ioCoroutineContext) {
         val applicationInfo = catch {
           packageManager.getApplicationInfo(packageName, 0)
         }.getOrNull() ?: return@withContext null
@@ -84,7 +84,7 @@ interface AppRepository {
   )
     .onStart<Any?> { emit(Unit) }
     .map {
-      withContext(coroutineContext) {
+      withContext(ioCoroutineContext) {
         catch { packageManager.getApplicationInfo(packageName, 0) }
           .fold(success = { true }, failure = { false })
       }

@@ -31,15 +31,15 @@ interface ActionRepository {
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>>,
   private val actionSettings: () -> Map<String, () -> @ActionSettingsKey<ActionId> Screen<Unit>>,
   private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
-  private val coroutineContext: DefaultCoroutineContext,
+  private val defaultCoroutineContext: DefaultCoroutineContext,
   private val resources: Resources,
   private val toaster: Toaster
 ) : ActionRepository {
-  override suspend fun getAllActions() = withContext(coroutineContext) {
+  override suspend fun getAllActions() = withContext(defaultCoroutineContext) {
     actions().values.map { it() }
   }
 
-  override suspend fun getAction(id: String) = withContext(coroutineContext) {
+  override suspend fun getAction(id: String) = withContext(defaultCoroutineContext) {
     actions()[id]
       ?.invoke()
       ?: actionFactories()
@@ -54,7 +54,7 @@ interface ActionRepository {
       )
   }
 
-  override suspend fun getActionExecutor(id: String) = withContext(coroutineContext) {
+  override suspend fun getActionExecutor(id: String) = withContext(defaultCoroutineContext) {
     actionsExecutors()[id]
       ?.invoke()
       ?: actionFactories()
@@ -68,8 +68,8 @@ interface ActionRepository {
   }
 
   override suspend fun getActionSettingsKey(id: String) =
-    withContext(coroutineContext) { actionSettings()[id]?.invoke() }
+    withContext(defaultCoroutineContext) { actionSettings()[id]?.invoke() }
 
   override suspend fun getActionPickerDelegates() =
-    withContext(coroutineContext) { actionPickerDelegates().map { it() } }
+    withContext(defaultCoroutineContext) { actionPickerDelegates().map { it() } }
 }
