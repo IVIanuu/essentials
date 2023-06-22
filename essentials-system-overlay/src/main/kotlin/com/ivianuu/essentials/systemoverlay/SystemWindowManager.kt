@@ -78,15 +78,15 @@ fun Modifier.systemWindowTrigger() = composed {
   }
 
   onGloballyPositioned { coords ->
-    var changed = false
+    var dirty = false
 
     layoutParams.apply {
       if (width != coords.size.width) {
-        changed = true
+        dirty = true
         width = coords.size.width
       }
       if (height != coords.size.height) {
-        changed = true
+        dirty = true
         height = coords.size.height
       }
 
@@ -96,16 +96,16 @@ fun Modifier.systemWindowTrigger() = composed {
 
       val newX = positionInWindow.x.roundToInt() + ownerLoc[0]
       if (x != newX) {
-        changed = true
+        dirty = true
         x = newX
       }
       val newY = positionInWindow.y.roundToInt() + ownerLoc[1]
       if (y != newY) {
-        changed = true
+        dirty = true
         y = newY
       }
 
-      if (changed)
+      if (dirty)
         systemWindowManager.windowManager.addOrUpdateView(triggerView, layoutParams)
     }
   }
