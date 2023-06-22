@@ -90,7 +90,7 @@ inline fun <V> catch(@BuilderInference block: ResultControl<Throwable>.() -> V):
     e.nonFatalOrThrow().err()
   }
 
-inline fun <V, reified T> catchT(@BuilderInference block: ResultControl<Throwable>.() -> V): Result<V, T> =
+inline fun <V, reified T> catchT(@BuilderInference block: ResultControl<T>.() -> V): Result<V, T> =
   try {
     block(ResultControlImpl.cast()).ok()
   } catch (e: Throwable) {
