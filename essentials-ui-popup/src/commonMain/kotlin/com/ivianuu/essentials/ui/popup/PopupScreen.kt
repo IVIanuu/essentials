@@ -24,9 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.getValue
-import com.ivianuu.essentials.compose.refOf
-import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.animation.animationElement
 import com.ivianuu.essentials.ui.animation.materialFadeIn
 import com.ivianuu.essentials.ui.animation.materialFadeOut
@@ -47,7 +44,7 @@ class PopupScreen(
 ) : OverlayScreen<Unit>
 
 @Provide fun popupUi(navigator: Navigator, screen: PopupScreen) = Ui<PopupScreen, Unit> {
-  var previousConstraints by remember { refOf<Constraints?>(null) }
+  var previousConstraints by remember { mutableStateOf<Constraints?>(null) }
 
   BoxWithConstraints {
     if (previousConstraints != null && constraints != previousConstraints)
@@ -57,7 +54,7 @@ class PopupScreen(
 
     previousConstraints = constraints
 
-    var dismissed by remember { refOf(false) }
+    var dismissed by remember { mutableStateOf(false) }
 
     val dismiss: (Boolean) -> Unit = action { cancelled ->
       if (!dismissed) {

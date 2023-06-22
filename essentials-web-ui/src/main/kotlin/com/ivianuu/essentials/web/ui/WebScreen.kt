@@ -15,14 +15,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.getValue
-import com.ivianuu.essentials.compose.refOf
-import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.material.AppBarStyle
 import com.ivianuu.essentials.ui.material.LocalAppBarStyle
@@ -42,7 +42,7 @@ class WebScreen(val title: String, val url: String) : Screen<Unit>
   navigator: Navigator,
   screen: WebScreen
 ) = Ui<WebScreen, Unit> {
-  var webViewRef: WebView? by remember { refOf(null) }
+  var webViewRef: WebView? by remember { mutableStateOf(null) }
   DisposableEffect(true) {
     onDispose {
       webViewRef?.destroy()
