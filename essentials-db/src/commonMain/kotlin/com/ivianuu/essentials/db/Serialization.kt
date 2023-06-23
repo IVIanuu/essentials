@@ -30,51 +30,30 @@ class OneLevelEmittingEncoder(
     else encodeString(embeddedFormat.encodeToString(serializer, value))
   }
 
-  override fun encodeBoolean(value: Boolean) {
-    encodeInt(if (value) 1 else 0)
-  }
+  override fun encodeBoolean(value: Boolean) = encodeInt(if (value) 1 else 0)
 
-  override fun encodeByte(value: Byte) {
-    consumer(value.toString())
-  }
+  override fun encodeByte(value: Byte) = consumer(value.toString())
 
-  override fun encodeChar(value: Char) {
-    consumer(value.toString())
-  }
+  override fun encodeChar(value: Char) = consumer(value.toString())
 
-  override fun encodeDouble(value: Double) {
-    consumer(value.toString())
-  }
+  override fun encodeDouble(value: Double) = consumer(value.toString())
 
-  override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int) {
+  override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int) =
     consumer(enumDescriptor.getElementName(index))
-  }
 
-  override fun encodeFloat(value: Float) {
-    consumer(value.toString())
-  }
+  override fun encodeFloat(value: Float) = consumer(value.toString())
 
   override fun encodeInline(inlineDescriptor: SerialDescriptor): Encoder = this
 
-  override fun encodeInt(value: Int) {
-    consumer(value.toString())
-  }
+  override fun encodeInt(value: Int) = consumer(value.toString())
 
-  override fun encodeLong(value: Long) {
-    consumer(value.toString())
-  }
+  override fun encodeLong(value: Long) = consumer(value.toString())
 
-  override fun encodeNull() {
-    consumer("NULL")
-  }
+  override fun encodeNull() = consumer("NULL")
 
-  override fun encodeShort(value: Short) {
-    consumer(value.toString())
-  }
+  override fun encodeShort(value: Short) = consumer(value.toString())
 
-  override fun encodeString(value: String) {
-    consumer(value)
-  }
+  override fun encodeString(value: String) = consumer(value)
 }
 
 class CursorDecoder(
@@ -111,7 +90,7 @@ class CursorDecoder(
   override fun <T : Any> decodeNullableSerializableValue(deserializer: DeserializationStrategy<T?>): T? =
     if (cursor.isNull(index)) null.also { index++ } else decodeSerializableValue(deserializer)
 
-  override fun decodeBoolean(): Boolean = decodeLong() == 1L
+  override fun decodeBoolean(): Boolean = decodeInt() == 1
 
   override fun decodeByte(): Byte = decodeLong().toByte()
 
@@ -134,8 +113,7 @@ class CursorDecoder(
 
   override fun decodeNull(): Nothing? = null.also { index++ }
 
-  override fun decodeShort(): Short =
-    decodeLong().toShort()
+  override fun decodeShort(): Short = decodeLong().toShort()
 
   override fun decodeString(): String =
     cursor.getString(cursor.getColumnIndex(descriptor.getElementName(index++)))!!

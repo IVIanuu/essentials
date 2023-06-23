@@ -8,4 +8,5 @@ import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-fun <T> infiniteEmptyFlow(): Flow<T> = flow { awaitCancellation() }
+private val InfiniteEmptyFlow = flow<Nothing> { awaitCancellation() }
+fun <T> infiniteEmptyFlow(): Flow<T> = InfiniteEmptyFlow
