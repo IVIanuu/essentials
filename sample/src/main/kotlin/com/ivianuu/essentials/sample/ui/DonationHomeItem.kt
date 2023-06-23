@@ -10,7 +10,7 @@ import com.ivianuu.essentials.donation.DonationScreen
 import com.ivianuu.injekt.Provide
 import org.json.JSONObject
 
-@Provide val donationHomeItem = HomeItem("Donation") { DonationScreen }
+@Provide val donationHomeItem = HomeItem("Donation") { DonationScreen() }
 
 private fun SkuDetails(
   sku: Sku,

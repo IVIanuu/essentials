@@ -27,8 +27,8 @@
 
     <string name="es_secure_settings_step_1_title">Enable Developer options</string>
     <string name="es_secure_settings_step_1_content">1) Click \"Open about phone\"\n2) Click \"Build Number\" multiple times until the \"Developer options\" are active</string>
-    <string name="open_phone_info">Open about phone</string>
-    <string name="open_phone_info_failed">Couldn\'t open phone! Please open phone info manually</string>
+    <string name="es_open_phone_info">Open about phone</string>
+    <string name="es_open_phone_info_failed">Couldn\'t open phone! Please open phone info manually</string>
 
     <string name="es_secure_settings_step_2_title">Enable USB debugging</string>
     <string name="es_secure_settings_step_2_content">1) Click \"Open developer options\"\n4) Enable \"USB debugging\"</string>

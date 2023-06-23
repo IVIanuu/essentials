@@ -81,7 +81,7 @@ class WriteSecureSettingsPcInstructionsScreen(
               onClick = model.continueStep,
               enabled = model.canContinueStep
             ) { Text(R.string.es_continue) }
-            OutlinedButton(onClick = model.openPhoneInfo) { Text(R.string.open_phone_info) }
+            OutlinedButton(onClick = model.openPhoneInfo) { Text(R.string.es_open_phone_info) }
         }
       )
     }
@@ -235,18 +235,21 @@ typealias AdbEnabled = @AdbEnabledTag Int
     },
     openPhoneInfo = action {
       race(
-        { developerModeSetting.data.first { it != 0 } },
         {
           navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
-            ?.onFailure { toaster(R.string.open_phone_info_failed) }
-        }
+            ?.onFailure { toaster(R.string.es_open_phone_info_failed) }
+        },
+        { developerModeSetting.data.first { it != 0 } }
       )
       appUiStarter()
     },
     openDeveloperSettings = action {
       race(
-        { adbEnabledSetting.data.first { it != 0 } },
-        { navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) }
+        {
+          navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)))
+            ?.onFailure { toaster(R.string.open_developer_settings) }
+        },
+        { adbEnabledSetting.data.first { it != 0 } }
       )
       appUiStarter()
     }
