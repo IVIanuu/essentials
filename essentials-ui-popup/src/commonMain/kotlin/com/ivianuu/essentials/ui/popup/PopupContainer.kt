@@ -18,14 +18,14 @@ import androidx.compose.ui.unit.dp
 @Composable fun PopupContainer(content: @Composable () -> Unit) {
   Surface(
     modifier = Modifier
-      .padding(8.dp)
-      .animateContentSize(),
+      .padding(8.dp),
     elevation = 8.dp,
     shape = MaterialTheme.shapes.medium
   ) {
     Column(
       modifier = Modifier
         .verticalScroll(rememberScrollState())
+        .animateContentSize()
         .padding(top = 8.dp, bottom = 8.dp)
     ) {
       content()

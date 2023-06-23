@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -18,11 +19,13 @@ import androidx.compose.ui.unit.dp
 ) {
   Surface(
     modifier = modifier
-      .animateContentSize()
       .widthIn(min = 280.dp, max = 356.dp),
     color = MaterialTheme.colors.surface,
     elevation = 24.dp,
-    shape = MaterialTheme.shapes.medium,
-    content = content
-  )
+    shape = MaterialTheme.shapes.medium
+  ) {
+    Box(
+      modifier = Modifier.animateContentSize()
+    ) { content() }
+  }
 }
