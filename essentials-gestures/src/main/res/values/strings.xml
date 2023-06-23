@@ -15,7 +15,7 @@
     <string name="es_action_back">Back</string>
     <string name="es_action_camera">Camera</string>
     <string name="es_action_home">Home</string>
-    <string name="es_action_last_app">Last app (native)</string>
+    <string name="es_action_last_app">Last app</string>
     <string name="es_action_lock_screen">Lock screen</string>
     <string name="es_action_media_play_pause">Media play/pause</string>
     <string name="es_action_media_skip_next">Media skip to next</string>
