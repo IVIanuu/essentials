@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 
-object DonationScreen : DialogScreen<Unit>
+class DonationScreen : DialogScreen<Unit>
 
 data class Donation(val sku: Sku, val iconRes: Int)
 

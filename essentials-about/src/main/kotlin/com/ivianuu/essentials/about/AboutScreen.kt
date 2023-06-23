@@ -156,7 +156,7 @@ data class AboutModel(
     email = email,
     privacyPolicyUrl = privacyPolicyUrl,
     showDonate = donations != null,
-    donate = action { navigator.push(DonationScreen) },
+    donate = action { navigator.push(DonationScreen()) },
     openLicenses = action { navigator.push(LicenseScreen()) },
     rate = action { rateUseCases.rateOnPlay() },
     openMoreApps = action {

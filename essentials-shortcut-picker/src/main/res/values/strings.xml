@@ -4,6 +4,5 @@
 
 <resources>
     <string name="es_title_shortcut_picker">Pick an shortcut</string>
-    <string name="es_failed_to_load_shortcuts">Failed to load shortcuts!</string>
     <string name="es_failed_to_pick_shortcut">Failed to pick shortcut!</string>
 </resources>

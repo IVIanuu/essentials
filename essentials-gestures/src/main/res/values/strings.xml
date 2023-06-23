@@ -10,26 +10,17 @@
 
     <!-- Actions -->
     <string name="es_action_app">App</string>
-    <string name="es_action_app_shortcut">App shortcut</string>
     <string name="es_action_assistant">Assistant</string>
     <string name="es_action_auto_rotation">Auto rotation</string>
     <string name="es_action_back">Back</string>
-    <string name="es_action_bluetooth">Bluetooth</string>
     <string name="es_action_camera">Camera</string>
-    <string name="es_action_do_not_disturb">Do not disturb</string>
     <string name="es_action_home">Home</string>
-    <string name="es_action_input_method">Input method</string>
-    <string name="es_action_keycode">Keycode</string>
-    <string name="es_action_keycode_suffix">Keycode: %s</string>
-    <string name="es_action_kill_current_app">Kill foreground app</string>
     <string name="es_action_last_app">Last app (native)</string>
     <string name="es_action_lock_screen">Lock screen</string>
     <string name="es_action_media_play_pause">Media play/pause</string>
     <string name="es_action_media_skip_next">Media skip to next</string>
     <string name="es_action_media_skip_previous">Media skip to previous</string>
     <string name="es_action_media_stop">Media stop</string>
-    <string name="es_action_menu">Menu</string>
-    <string name="es_action_none">None</string>
     <string name="es_action_notifications">Notifications</string>
     <string name="es_action_power_dialog">Power dialog</string>
     <string name="es_action_quick_settings">Quick settings</string>
@@ -39,15 +30,10 @@
     <string name="es_action_shortcut">Shortcut</string>
     <string name="es_action_split_screen">Split screen</string>
     <string name="es_action_torch">Flashlight</string>
-    <string name="es_action_volume">Volume</string>
-    <string name="es_action_wifi">WiFi</string>
 
     <string name="es_error_action">Error please reconfigure this action</string>
 
     <!-- Floating windows -->
-    <string name="es_floating_window_picker_title">Floating window</string>
-    <string name="es_floating_window_picker_content">Would you like to open \"%s\" in a floating window? This is can only be done if the Xposed Framework module \"Floating Windows\" is installed.</string>
-    <string name="es_floating_windows_not_installed">Floating Windows app not installed! Please install and try again.</string>
 
     <!-- Media -->
     <string name="es_media_app_settings_ui_title">Media action settings</string>
@@ -55,7 +41,6 @@
     <string name="es_pref_media_app_summary">Define the target app for the media actions (current: %s)</string>
 
     <!-- Keycode -->
-    <string name="es_keycode_label">Keycode..</string>
 
     <string name="es_unknown_action_name">Unknown</string>
     <string name="es_activity_not_found">Failed to launch screen!</string>

@@ -41,7 +41,5 @@
     <string name="es_secure_settings_step_4_content">1) On your PC click \"Interactive shell\" in the left panel\n2) In the terminal window type the command below and hit the enter button</string>
 
     <string name="es_secure_settings_no_root">Your device is not rooted you have to use your PC to grant permissions</string>
-
-    <string name="es_secure_settings_permission_denied">Permission denied! Make sure to follow the steps above</string>
     <string name="es_secure_settings_permission_granted">Permission granted! Where good to go now</string>
 </resources>

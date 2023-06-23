@@ -12,6 +12,4 @@
 
     <string name="es_backup_error">Failed to backup your data!</string>
     <string name="es_restore_error">Failed to restore your data!</string>
-
-    <string name="es_share_backup">Share backup</string>
 </resources>

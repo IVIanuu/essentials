@@ -29,6 +29,6 @@ import kotlinx.coroutines.delay
   globalActionExecutor: GlobalActionExecutor
 ) = ActionExecutor<LastAppActionId> {
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
-  delay(250)
+  delay(150)
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

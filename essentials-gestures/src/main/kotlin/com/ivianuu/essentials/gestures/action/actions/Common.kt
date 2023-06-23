@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.catch
@@ -25,7 +24,6 @@ import com.ivianuu.essentials.gestures.action.ui.LocalActionIconSizeModifier
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
@@ -52,22 +50,6 @@ fun staticActionIcon(id: Int) = ActionIcon {
 }
 
 operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
-
-fun interface ActionRootCommandRunner {
-  suspend operator fun invoke(command: String)
-}
-
-@Provide fun actionRootCommandRunner(
-  shell: Shell,
-  resources: Resources,
-  toaster: Toaster
-) = ActionRootCommandRunner { command ->
-  shell.run(command)
-    .onFailure {
-      it.printStackTrace()
-      toaster(R.string.es_no_root)
-    }
-}
 
 fun interface ActionIntentSender {
   operator fun invoke(intent: Intent, options: Bundle?)
