@@ -28,11 +28,12 @@
     <string name="es_secure_settings_step_1_title">Enable Developer options</string>
     <string name="es_secure_settings_step_1_content">1) Click \"Open about phone\"\n2) Click \"Build Number\" multiple times until the \"Developer options\" are active</string>
     <string name="es_open_phone_info">Open about phone</string>
-    <string name="es_open_phone_info_failed">Couldn\'t open phone! Please open phone info manually</string>
+    <string name="es_open_phone_info_failed">Couldn\'t open phone! Please open manually</string>
 
     <string name="es_secure_settings_step_2_title">Enable USB debugging</string>
     <string name="es_secure_settings_step_2_content">1) Click \"Open developer options\"\n4) Enable \"USB debugging\"</string>
-    <string name="open_developer_settings">Open developer options</string>
+    <string name="es_open_developer_settings">Open developer options</string>
+    <string name="es_open_developer_settings_failed">Couldn\'t open developer options! Please open manually</string>
 
     <string name="es_secure_settings_step_3_title">Connect your phone to WebADB</string>
     <string name="es_secure_settings_step_3_content">1) Open \"www.webadb.com\" on your PC\n2) Connect your phone with your PC\n3) On your PC click \"Start\"\n4) Click \"Add device\"\n3) Click *YOUR DEVICE*\n4) Click \"Connect\" on the pop up\n5) Click \"Connect\" next to the \"Add device\" button\n6) On your phone click \"Allow\"</string>
