@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -59,7 +60,8 @@ class TabsScreen : Screen<Unit>
           }
         )
       }
-    }
+    },
+    maxTopBarSize = 56.dp + 48.dp + LocalInsets.current.top
   ) {
     HorizontalPager(pageCount = TabItems.size, state = pagerState) { page ->
       val color = TabItems[page]
