@@ -13,6 +13,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,8 +50,9 @@ object ChildNavGraph
     Column {
       (1..3).forEach { navigationIndex ->
         key(navigationIndex) {
+          val scope = rememberCoroutineScope()
           val navigator = remember {
-            Navigator(listOf(ChildNavigationItemScreen(navigationIndex, 0)))
+            Navigator(scope, listOf(ChildNavigationItemScreen(navigationIndex, 0)))
           }
 
           NavigatorContent(

@@ -10,6 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ivianuu.essentials.Result
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.err
 import com.ivianuu.essentials.ok
 import com.ivianuu.injekt.Provide
@@ -17,7 +18,7 @@ import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.UUID
 import kotlin.coroutines.resume
 import kotlin.reflect.KClass
 
@@ -27,7 +28,7 @@ interface IntentScreen : Screen<Result<ActivityResult, ActivityNotFoundException
   intentFactory: T,
   keyClass: KClass<K>
 ): Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>> =
-  (keyClass to intentFactory) as Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>>
+  (keyClass to intentFactory).cast()
 
 fun interface ScreenIntentFactory<T> {
   suspend operator fun invoke(screen: T): Intent
@@ -43,7 +44,7 @@ fun interface IntentAppUiStarter {
   intentFactories: () -> Map<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>>
 ) = ScreenInterceptor<Result<ActivityResult, Throwable>> handler@{ screen ->
   if (screen !is IntentScreen) return@handler null
-  val intentFactory = intentFactories()[screen::class as KClass<IntentScreen>]
+  val intentFactory = intentFactories()[screen::class.cast()]
     ?: return@handler null
   val intent = intentFactory(screen)
   return@handler {

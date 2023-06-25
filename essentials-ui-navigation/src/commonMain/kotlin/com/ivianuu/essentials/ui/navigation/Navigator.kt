@@ -10,14 +10,15 @@ import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
+import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlin.collections.set
 
 @Stable interface Navigator {
@@ -80,16 +81,19 @@ suspend fun Navigator.clear() {
 }
 
 fun Navigator(
+  scope: CoroutineScope,
   initialBackStack: List<Screen<*>> = emptyList(),
   screenInterceptors: List<ScreenInterceptor<*>> = emptyList()
 ): Navigator = NavigatorImpl(
   initialBackStack = initialBackStack,
-  screenInterceptors = screenInterceptors
+  screenInterceptors = screenInterceptors,
+  scope = scope
 )
 
 class NavigatorImpl(
   initialBackStack: List<Screen<*>>,
-  private val screenInterceptors: List<ScreenInterceptor<*>>
+  private val screenInterceptors: List<ScreenInterceptor<*>>,
+  scope: CoroutineScope
 ) : Navigator {
   private val _backStack = MutableStateFlow(initialBackStack)
   override val backStack: StateFlow<List<Screen<*>>> by this::_backStack
@@ -97,7 +101,7 @@ class NavigatorImpl(
   private val _results = EventFlow<Pair<Screen<*>, Any?>>()
   override val results: Flow<Pair<Screen<*>, Any?>> by this::_results
 
-  private val lock = Mutex()
+  private val actor = scope.actor()
 
   override suspend fun setBackStack(backStack: List<Screen<*>>, results: Map<Screen<*>, Any?>) {
     backStack.groupBy { it }
@@ -107,7 +111,7 @@ class NavigatorImpl(
         }
       }
 
-    lock.withLock {
+    actor.act {
       val finalResults = results.toMutableMap()
       _backStack.value = buildList {
         for (screen in backStack) {
@@ -116,6 +120,8 @@ class NavigatorImpl(
 
           val interceptedHandle =
             screenInterceptors.firstNotNullOfOrNull { it.cast<ScreenInterceptor<Any?>>()(screen) }
+
+          println("lol $interceptedHandle")
 
           if (interceptedHandle == null) {
             add(screen)
@@ -132,10 +138,12 @@ class NavigatorImpl(
   companion object {
     @Provide fun rootNavigator(
       rootScreen: RootScreen?,
-      screenInterceptors: List<ScreenInterceptor<*>>
+      screenInterceptors: List<ScreenInterceptor<*>>,
+      scope: ScopedCoroutineScope<UiScope>
     ): @Scoped<UiScope> Navigator = NavigatorImpl(
       initialBackStack = listOfNotNull(rootScreen),
-      screenInterceptors = screenInterceptors
+      screenInterceptors = screenInterceptors,
+      scope = scope
     )
 
     @Provide inline fun rootNavigatorService(crossinline navigator: () -> Navigator) =
