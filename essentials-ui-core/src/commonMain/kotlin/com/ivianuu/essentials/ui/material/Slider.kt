@@ -16,9 +16,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.Lerper
-import com.ivianuu.essentials.compose.getValue
-import com.ivianuu.essentials.compose.refOf
-import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -49,7 +46,7 @@ import kotlin.time.Duration
 
   var internalValue by remember(value) { mutableStateOf(value.toFloat()) }
 
-  var valueChangeJob: Job? by remember { refOf(null) }
+  var valueChangeJob: Job? by remember { mutableStateOf(null) }
   val scope = rememberCoroutineScope()
   androidx.compose.material.Slider(
     internalValue,
