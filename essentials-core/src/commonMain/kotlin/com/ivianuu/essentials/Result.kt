@@ -4,7 +4,9 @@
 
 package com.ivianuu.essentials
 
-sealed interface Result<out V, out E> {
+import androidx.compose.runtime.Stable
+
+@Stable sealed interface Result<out V, out E> {
   data class Success<V>(val value: V) : Result<V, Nothing>
   data class Failure<E>(val error: E) : Result<Nothing, E>
 }
