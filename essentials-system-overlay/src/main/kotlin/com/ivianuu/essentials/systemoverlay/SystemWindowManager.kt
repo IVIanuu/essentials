@@ -57,7 +57,7 @@ fun Modifier.systemWindowTrigger() = composed {
       gravity = Gravity.LEFT or Gravity.TOP
 
       type =
-        if (systemWindowManager.useAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+        if (systemWindowManager.canUseAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
         else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
       format = PixelFormat.TRANSLUCENT
 
@@ -116,7 +116,7 @@ fun Modifier.systemWindowTrigger() = composed {
   accessibilityWindowManager: AccessibilityWindowManager? = null,
   windowManager: @SystemService WindowManager
 ) : SystemWindowManager {
-  internal val useAccessibility = accessibilityWindowManager != null
+  internal val canUseAccessibility = accessibilityWindowManager != null
   internal val windowManager = accessibilityWindowManager ?: windowManager
 
   @Composable override fun SystemWindow(
@@ -141,7 +141,7 @@ fun Modifier.systemWindowTrigger() = composed {
           this.height = WindowManager.LayoutParams.WRAP_CONTENT
           gravity = Gravity.LEFT or Gravity.TOP
 
-          type = if (useAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+          type = if (canUseAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
           else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
 
           flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
@@ -151,6 +151,8 @@ fun Modifier.systemWindowTrigger() = composed {
               WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
 
           format = PixelFormat.TRANSLUCENT
+
+          state.interceptor(this)
         }
       )
       onDispose {
