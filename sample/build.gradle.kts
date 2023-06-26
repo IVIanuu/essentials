@@ -33,9 +33,7 @@ android {
 dependencies {
   implementation(project(":essentials-analytics-android"))
   implementation(project(":essentials-android"))
-  implementation(project(":essentials-android-core"))
-  implementation(project(":essentials-android-prefs"))
-  implementation(project(":essentials-android-settings"))
+  implementation(project(":essentials-android-data"))
   implementation(project(":essentials-android-util"))
   implementation(project(":essentials-about"))
   implementation(project(":essentials-accessibility"))

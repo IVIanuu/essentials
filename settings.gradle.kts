@@ -6,8 +6,6 @@ include(
   ":essentials-android",
   ":essentials-android-core",
   ":essentials-android-data",
-  ":essentials-android-prefs",
-  ":essentials-android-settings",
   ":essentials-android-test",
   ":essentials-android-util",
   ":essentials-app",

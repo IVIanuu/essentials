@@ -16,7 +16,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
   api(project(":essentials-accessibility"))
-  api(project(":essentials-android-settings"))
+  api(project(":essentials-android-data"))
   api(project(":essentials-android-util"))
   api(project(":essentials-apps"))
   api(project(":essentials-permission"))
