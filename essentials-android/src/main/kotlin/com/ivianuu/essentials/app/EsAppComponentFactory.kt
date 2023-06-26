@@ -16,8 +16,6 @@ import com.ivianuu.essentials.cast
 import kotlin.reflect.KClass
 
 class EsAppComponentFactory : AppComponentFactory() {
-  private lateinit var app: EsApp
-
   private val factories: Map<KClass<*>, Map<String, (Intent?) -> Any>> by lazy(LazyThreadSafetyMode.NONE) {
     app.appScope.service<AndroidComponentFactoryComponent>()
       .factories
@@ -53,4 +51,8 @@ class EsAppComponentFactory : AppComponentFactory() {
   override fun instantiateProvider(cl: ClassLoader, className: String): ContentProvider =
     factories[ContentProvider::class]?.get(className)?.invoke(null)?.cast()
       ?: super.instantiateProvider(cl, className)
+
+  companion object {
+    private lateinit var app: EsApp
+  }
 }
