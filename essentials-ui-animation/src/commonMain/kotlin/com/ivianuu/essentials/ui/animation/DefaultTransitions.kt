@@ -13,7 +13,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 
 fun ElementTransitionBuilder<*>.crossFade(
-  durationMillis: Int = DefaultMotionDuration,
+  durationMillis: Int = DefaultFadeInDuration,
   key: Any = ContentKey
 ) {
   key entersWith simpleFadeIn(durationMillis)
