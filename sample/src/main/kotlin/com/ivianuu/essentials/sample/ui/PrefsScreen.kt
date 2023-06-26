@@ -14,13 +14,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.ivianuu.essentials.colorpicker.ColorPickerScreen
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.PrefModule
 import com.ivianuu.essentials.ui.common.IconPlaceholder
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.common.interactive
+import com.ivianuu.essentials.ui.dialog.ColorPickerScreen
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListScreen
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListScreen
 import com.ivianuu.essentials.ui.dialog.TextInputScreen

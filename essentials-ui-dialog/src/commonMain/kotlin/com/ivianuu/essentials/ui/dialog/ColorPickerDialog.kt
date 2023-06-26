@@ -2,7 +2,7 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.colorpicker
+package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -54,7 +54,6 @@ import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.materialSharedAxisX
 import com.ivianuu.essentials.ui.animation.materialSharedAxisY
 import com.ivianuu.essentials.ui.common.CommonStrings
-import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.TextButton

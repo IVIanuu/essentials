@@ -16,7 +16,6 @@ include(
   ":essentials-broadcast",
   ":essentials-clipboard",
   ":essentials-coil",
-  ":essentials-color-picker",
   ":essentials-common",
   ":essentials-compiler-plugin",
   ":essentials-compose",
