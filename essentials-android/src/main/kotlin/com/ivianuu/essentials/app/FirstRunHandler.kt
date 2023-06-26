@@ -12,21 +12,18 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.Serializable
 
 @JvmInline value class IsFirstRun(val value: Boolean) {
   companion object {
     private val isFirstRun = CompletableDeferred<IsFirstRun>()
 
-    @Provide fun isFirstRun(pref: DataStore<FirstRunPrefs>) = flow {
-      if (!isFirstRun.isCompleted) {
+    @Provide suspend fun isFirstRun(pref: DataStore<FirstRunPrefs>): IsFirstRun {
+      if (!isFirstRun.isCompleted)
         isFirstRun.complete(IsFirstRun(pref.data.first().isFirstRun))
-      }
 
-      emit(isFirstRun.await())
+      return isFirstRun.await()
     }
   }
 }
@@ -41,11 +38,11 @@ fun interface FirstRunHandler {
 
 @Provide fun firstRunWorker(
   handlers: () -> List<FirstRunHandler>,
-  isFirstRun: Flow<IsFirstRun>,
+  isFirstRun: suspend () -> IsFirstRun,
   logger: Logger,
   pref: DataStore<FirstRunPrefs>
 ) = ScopeWorker<AppScope> {
-  if (!isFirstRun.first().value) return@ScopeWorker
+  if (!isFirstRun().value) return@ScopeWorker
 
   logger.log { "first run" }
 

@@ -8,7 +8,6 @@ import com.ivianuu.essentials.app.IsFirstRun
 import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.ui.navigation.UserflowBuilder
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 @JvmInline value class AppStartPremiumHintEnabled(val value: Boolean) {
@@ -27,7 +26,7 @@ fun interface PremiumHintUserflowBuilder : UserflowBuilder {
 
 @Provide fun premiumHintUserflowBuilder(
   enabled: AppStartPremiumHintEnabled,
-  isFirstRunFlow: Flow<IsFirstRun>,
+  isFirstRun: suspend () -> IsFirstRun,
   premiumVersionManager: PremiumVersionManager
 ): PremiumHintUserflowBuilder {
   var hintShown = false
@@ -36,12 +35,10 @@ fun interface PremiumHintUserflowBuilder : UserflowBuilder {
       return@PremiumHintUserflowBuilder emptyList()
 
     hintShown = true
-    val isFirstRun = isFirstRunFlow.first().value
-
     listOf(
       GoPremiumScreen(
-        showTryBasicOption = isFirstRun,
-        allowBackNavigation = !isFirstRun
+        showTryBasicOption = isFirstRun().value,
+        allowBackNavigation = !isFirstRun().value
       )
     )
   }
