@@ -7,8 +7,8 @@ package com.ivianuu.essentials.screenstate
 import android.content.ComponentCallbacks2
 import android.content.res.Configuration
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -18,7 +18,7 @@ object ConfigChange
 
 @Provide fun configChanges(
   appContext: AppContext,
-  mainCoroutineContext: MainCoroutineContext,
+  coroutineContexts: CoroutineContexts,
 ): Flow<ConfigChange> = callbackFlow {
   val callbacks = object : ComponentCallbacks2 {
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -33,4 +33,4 @@ object ConfigChange
   }
   appContext.registerComponentCallbacks(callbacks)
   awaitClose { appContext.unregisterComponentCallbacks(callbacks) }
-}.flowOn(mainCoroutineContext)
+}.flowOn(coroutineContexts.main)

@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestScreen
@@ -14,7 +15,6 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unsafeCast
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.DefaultCoroutineContext
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -34,7 +34,7 @@ interface PermissionManager {
 
 @Provide class PermissionManagerImpl(
   private val appUiStarter: AppUiStarter,
-  private val context: DefaultCoroutineContext,
+  private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val permissions: Map<TypeKey<Permission>, () -> Permission>,
   private val stateProviders: Map<TypeKey<Permission>, () -> PermissionStateProvider<Permission>>
@@ -52,27 +52,26 @@ interface PermissionManager {
           permissionRefreshes
             .onStart<Any?> { emit(Unit) }
             .map {
-              withContext(context) {
+              withContext(coroutineContexts.io) {
                 stateProvider(permission)
               }
             }
         }
     ) { states -> states.all { it } }
 
-  override suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean =
-    withContext(context) {
-      logger.log { "request permissions $permissions" }
+  override suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean {
+    logger.log { "request permissions $permissions" }
 
-      if (permissions.all { permissionState(listOf(it)).first() })
-        return@withContext true
+    if (permissions.all { permissionState(listOf(it)).first() })
+      return true
 
-      val result = appUiStarter()
-        .cast<UiScopeOwner>()
-        .uiScope
-        .navigator
-        .push(PermissionRequestScreen(permissions)) == true
+    val result = appUiStarter()
+      .cast<UiScopeOwner>()
+      .uiScope
+      .navigator
+      .push(PermissionRequestScreen(permissions)) == true
 
-      logger.log { "request permissions result $permissions -> $result" }
-      return@withContext result
-    }
+    logger.log { "request permissions result $permissions -> $result" }
+    return result
+  }
 }

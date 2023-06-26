@@ -5,12 +5,12 @@
 package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.staticActionIcon
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.DefaultCoroutineContext
 import kotlinx.coroutines.withContext
 
 interface ActionRepository {
@@ -31,15 +31,15 @@ interface ActionRepository {
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>>,
   private val actionSettings: () -> Map<String, () -> @ActionSettingsKey<ActionId> Screen<Unit>>,
   private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
-  private val defaultCoroutineContext: DefaultCoroutineContext,
+  private val coroutineContexts: CoroutineContexts,
   private val resources: Resources,
   private val toaster: Toaster
 ) : ActionRepository {
-  override suspend fun getAllActions() = withContext(defaultCoroutineContext) {
+  override suspend fun getAllActions() = withContext(coroutineContexts.computation) {
     actions().values.map { it() }
   }
 
-  override suspend fun getAction(id: String) = withContext(defaultCoroutineContext) {
+  override suspend fun getAction(id: String) = withContext(coroutineContexts.computation) {
     actions()[id]
       ?.invoke()
       ?: actionFactories()
@@ -54,7 +54,7 @@ interface ActionRepository {
       )
   }
 
-  override suspend fun getActionExecutor(id: String) = withContext(defaultCoroutineContext) {
+  override suspend fun getActionExecutor(id: String) = withContext(coroutineContexts.computation) {
     actionsExecutors()[id]
       ?.invoke()
       ?: actionFactories()
@@ -68,8 +68,8 @@ interface ActionRepository {
   }
 
   override suspend fun getActionSettingsKey(id: String) =
-    withContext(defaultCoroutineContext) { actionSettings()[id]?.invoke() }
+    withContext(coroutineContexts.computation) { actionSettings()[id]?.invoke() }
 
   override suspend fun getActionPickerDelegates() =
-    withContext(defaultCoroutineContext) { actionPickerDelegates().map { it() } }
+    withContext(coroutineContexts.computation) { actionPickerDelegates().map { it() } }
 }

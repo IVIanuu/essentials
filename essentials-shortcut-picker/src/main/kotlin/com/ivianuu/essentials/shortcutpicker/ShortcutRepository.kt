@@ -11,11 +11,11 @@ import android.graphics.Bitmap
 import androidx.core.graphics.drawable.toDrawable
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.mapLatest
@@ -29,9 +29,9 @@ interface ShortcutRepository {
 }
 
 @Provide class ShortcutRepositoryImpl(
+  private val appContext: AppContext,
   private val broadcastsFactory: BroadcastsFactory,
-  private val context: AppContext,
-  private val ioCoroutineContext: IOCoroutineContext,
+  private val coroutineContexts: CoroutineContexts,
   private val packageManager: PackageManager
 ) : ShortcutRepository {
   override val shortcuts: Flow<List<Shortcut>> = broadcastsFactory(
@@ -42,7 +42,7 @@ interface ShortcutRepository {
   )
     .onStart<Any?> { emit(Unit) }
     .mapLatest {
-      withContext(ioCoroutineContext) {
+      withContext(coroutineContexts.io) {
         val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
         packageManager.queryIntentActivities(shortcutsIntent, 0)
           .parMap { resolveInfo ->
@@ -66,7 +66,7 @@ interface ShortcutRepository {
     }
     .distinctUntilChanged()
 
-  override suspend fun extractShortcut(shortcutRequestResult: Intent) = withContext(ioCoroutineContext) {
+  override suspend fun extractShortcut(shortcutRequestResult: Intent) = withContext(coroutineContexts.io) {
     val intent =
       shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
     val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!
@@ -76,7 +76,7 @@ interface ShortcutRepository {
       shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
 
     @Suppress("DEPRECATION") val icon = when {
-      bitmapIcon != null -> bitmapIcon.toDrawable(context.resources)
+      bitmapIcon != null -> bitmapIcon.toDrawable(appContext.resources)
       iconResource != null -> {
         val resources =
           packageManager.getResourcesForApplication(iconResource.packageName)

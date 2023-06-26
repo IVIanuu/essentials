@@ -16,6 +16,7 @@ import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.RateLimiter
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
@@ -24,7 +25,6 @@ import com.ivianuu.essentials.seconds
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.util.ForegroundActivity
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -76,9 +76,9 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   private val adsEnabledStates: Flow<AdsEnabled>,
   private val id: FullScreenAdId,
   config: FullScreenAdConfig,
+  private val coroutineContexts: CoroutineContexts,
   private val foregroundActivities: Flow<ForegroundActivity>,
   private val logger: Logger,
-  private val mainCoroutineContext: MainCoroutineContext,
   private val scope: ScopedCoroutineScope<AppScope>
 ) : FullScreenAdManager {
   private val lock = Mutex()
@@ -118,7 +118,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   private suspend fun getOrCreateCurrentAd(): suspend () -> Boolean = lock.withLock {
     deferredAd?.takeUnless {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
-    } ?: scope.async(mainCoroutineContext) {
+    } ?: scope.async(coroutineContexts.main) {
       logger.log { "start loading ad" }
 
       val ad = suspendCoroutine<InterstitialAd> { cont ->
@@ -144,7 +144,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
         if (rateLimiter.tryAcquire()) {
           logger.log { "show ad" }
           lock.withLock { deferredAd = null }
-          withContext(mainCoroutineContext) {
+          withContext(coroutineContexts.main) {
             ad.show(foregroundActivities.first()!!)
           }
           true

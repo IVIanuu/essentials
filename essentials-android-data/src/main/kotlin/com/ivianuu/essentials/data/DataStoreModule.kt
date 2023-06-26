@@ -11,10 +11,10 @@ import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.Scoped
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
@@ -26,7 +26,7 @@ import java.io.OutputStream
 
 class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
   @Provide fun dataStore(
-    coroutineContext: IOCoroutineContext,
+    coroutineContexts: CoroutineContexts,
     initial: () -> @Initial T = default,
     json: Json,
     serializerFactory: () -> KSerializer<T>,
@@ -60,7 +60,7 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
         initial()
       },
       produceFile = { prefsDir().resolve(name) },
-      scope = scope.childCoroutineScope(coroutineContext)
+      scope = scope.childCoroutineScope(coroutineContexts.io)
     )
 
     return object : DataStore<T> {

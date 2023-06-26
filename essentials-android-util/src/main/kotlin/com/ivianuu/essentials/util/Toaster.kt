@@ -8,9 +8,9 @@ import android.widget.Toast
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.launch
 
 interface Toaster {
@@ -23,12 +23,12 @@ interface Toaster {
 
 @Provide class ToasterImpl(
   private val appContext: AppContext,
-  private val mainCoroutineContext: MainCoroutineContext,
+  private val coroutineContexts: CoroutineContexts,
   private val resources: Resources,
   private val scope: ScopedCoroutineScope<AppScope>
 ) : Toaster {
   override fun invoke(message: String) {
-    scope.launch(mainCoroutineContext) {
+    scope.launch(coroutineContexts.main) {
       Toast.makeText(
         appContext,
         message,

@@ -7,12 +7,12 @@ package com.ivianuu.essentials.apps
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.fold
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
@@ -32,7 +32,7 @@ interface AppRepository {
 
 @Provide class AppRepositoryImpl(
   private val broadcastsFactory: BroadcastsFactory,
-  private val ioCoroutineContext: IOCoroutineContext,
+  private val coroutineContexts: CoroutineContexts,
   private val packageManager: PackageManager
 ) : AppRepository {
   override val installedApps: Flow<List<AppInfo>> = flow {
@@ -44,7 +44,7 @@ interface AppRepository {
     )
       .onStart<Any?> { emit(Unit) }
       .map {
-        withContext(ioCoroutineContext) {
+        withContext(coroutineContexts.io) {
           packageManager.getInstalledApplications(0)
             .parMap {
               AppInfo(
@@ -69,7 +69,7 @@ interface AppRepository {
   )
     .onStart<Any?> { emit(Unit) }
     .map {
-      withContext(ioCoroutineContext) {
+      withContext(coroutineContexts.io) {
         val applicationInfo = catch {
           packageManager.getApplicationInfo(packageName, 0)
         }.getOrNull() ?: return@withContext null
@@ -84,7 +84,7 @@ interface AppRepository {
   )
     .onStart<Any?> { emit(Unit) }
     .map {
-      withContext(ioCoroutineContext) {
+      withContext(coroutineContexts.io) {
         catch { packageManager.getApplicationInfo(packageName, 0) }
           .fold(success = { true }, failure = { false })
       }

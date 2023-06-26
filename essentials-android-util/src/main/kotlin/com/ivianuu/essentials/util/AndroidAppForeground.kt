@@ -11,11 +11,11 @@ import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.app.AppForegroundScope
 import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -33,8 +33,8 @@ interface ForegroundActivityMarker
 
 @Provide fun foregroundActivityWorker(
   activity: ComponentActivity,
+  coroutineContexts: CoroutineContexts,
   foregroundScopeFactory: () -> Scope<AppForegroundScope>,
-  mainCoroutineContext: MainCoroutineContext,
   state: MutableStateFlow<ForegroundActivity>
 ) = ScopeWorker<UiScope> worker@{
   if (activity !is ForegroundActivityMarker) return@worker
@@ -52,7 +52,7 @@ interface ForegroundActivityMarker
     }
   }
 
-  withContext(mainCoroutineContext) {
+  withContext(coroutineContexts.main) {
     activity.lifecycle.addObserver(observer)
     onCancel { activity.lifecycle.removeObserver(observer) }
   }

@@ -14,6 +14,7 @@ import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.actAndReply
 import com.ivianuu.essentials.coroutines.actor
@@ -23,7 +24,6 @@ import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.IOCoroutineContext
 import de.robv.android.xposed.XSharedPreferences
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -43,9 +43,9 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
   @SuppressLint("WorldReadableFiles")
   @Provide fun dataStore(
     appContext: AppContext,
+    coroutineContexts: CoroutineContexts,
     coroutineScope: ScopedCoroutineScope<AppScope>,
     jsonFactory: () -> Json,
-    ioCoroutineContext: IOCoroutineContext,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,
     scope: Scope<AppScope>,
@@ -70,13 +70,13 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       } ?: initial()
     }
 
-    val actor = coroutineScope.actor(ioCoroutineContext)
+    val actor = coroutineScope.actor(coroutineContexts.io)
 
     return object : DataStore<T> {
       override val data: Flow<T> = callbackFlow {
         val listener = scope.scoped {
           SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-            launch(ioCoroutineContext) {
+            launch(coroutineContexts.io) {
               appContext.sendBroadcast(Intent(prefsChangedAction(packageName)))
               send(readData())
             }
@@ -87,7 +87,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       }
         .onStart { emit(readData()) }
         .distinctUntilChanged()
-        .flowOn(ioCoroutineContext)
+        .flowOn(coroutineContexts.io)
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
 
       @SuppressLint("ApplySharedPref")
@@ -104,8 +104,8 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
 
   @Provide fun xposedPrefFlow(
     broadcastsFactory: BroadcastsFactory,
+    coroutineContexts: CoroutineContexts,
     jsonFactory: () -> Json,
-    ioCoroutineContext: IOCoroutineContext,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,
     serializerFactory: () -> KSerializer<T>
@@ -129,7 +129,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       .onStart<Any?> { emit(Unit) }
       .map { readData() }
       .distinctUntilChanged()
-      .flowOn(ioCoroutineContext)
+      .flowOn(coroutineContexts.io)
   }
 
   private fun prefsChangedAction(packageName: ModulePackageName) =

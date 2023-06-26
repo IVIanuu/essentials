@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.license
 
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -19,12 +19,12 @@ interface LicenceProjectRepository {
 
 @Provide class LicenceProjectRepositoryImpl(
   private val appContext: AppContext,
-  private val ioCoroutineContext: IOCoroutineContext,
+  private val coroutineContexts: CoroutineContexts,
   private val json: Json
 ) : LicenceProjectRepository {
   override val licenseProjects: Flow<List<Project>> = flow {
     emit(
-      withContext(ioCoroutineContext) {
+      withContext(coroutineContexts.io) {
         appContext.resources.assets.open(LICENSE_JSON_FILE_NAME)
           .readBytes()
           .let { String(it) }

@@ -7,11 +7,11 @@ package com.ivianuu.essentials.db
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -193,12 +193,12 @@ class AndroidDb private constructor(
 
 @Provide class AndroidDbFactory(
   private val context: Context,
-  private val ioCoroutineContext: IOCoroutineContext
+  private val coroutineContexts: CoroutineContexts
 ) : DbFactory {
   override fun invoke(name: String, schema: Schema) = AndroidDb(
     name = name,
     schema = schema,
-    coroutineContext = ioCoroutineContext,
+    coroutineContext = coroutineContexts.io,
     context = context
   )
 }

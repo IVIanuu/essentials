@@ -11,11 +11,11 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.failure
 import com.ivianuu.essentials.success
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -40,7 +40,7 @@ fun interface IntentAppUiStarter {
 
 @Provide fun intentScreenInterceptor(
   appUiStarter: IntentAppUiStarter,
-  context: MainCoroutineContext,
+  coroutineContexts: CoroutineContexts,
   intentFactories: () -> Map<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>>
 ) = ScreenInterceptor<Result<ActivityResult, Throwable>> handler@{ screen ->
   if (screen !is IntentScreen) return@handler null
@@ -49,7 +49,7 @@ fun interface IntentAppUiStarter {
   val intent = intentFactory(screen)
   return@handler {
     val activity = appUiStarter()
-    withContext(context) {
+    withContext(coroutineContexts.main) {
       suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
         val launcher = activity.activityResultRegistry.register(
           UUID.randomUUID().toString(),

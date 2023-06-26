@@ -10,8 +10,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -23,7 +23,7 @@ fun interface BroadcastsFactory {
 
 @Provide fun broadcastsFactory(
   appContext: AppContext,
-  mainCoroutineContext: MainCoroutineContext
+  coroutineContexts: CoroutineContexts
 ) = BroadcastsFactory { actions ->
   callbackFlow<Intent> {
     val broadcastReceiver = object : BroadcastReceiver() {
@@ -40,5 +40,5 @@ fun interface BroadcastsFactory {
       }
     }
   }
-    .flowOn(mainCoroutineContext)
+    .flowOn(coroutineContexts.main)
 }

@@ -7,10 +7,10 @@ package com.ivianuu.essentials.data
 import android.content.ContentResolver
 import android.provider.Settings
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -29,7 +29,7 @@ class AndroidSettingModule<T : S, S>(
     adapter: AndroidSettingAdapter<S>,
     contentChangesFactory: ContentChangesFactory,
     contentResolver: ContentResolver,
-    ioCoroutineContext: IOCoroutineContext,
+    coroutineContexts: CoroutineContexts,
     scope: ScopedCoroutineScope<AppScope>
   ): DataStore<T> = object : DataStore<T> {
     override val data: Flow<T> = contentChangesFactory(
@@ -41,7 +41,7 @@ class AndroidSettingModule<T : S, S>(
     )
       .onStart { emit(Unit) }
       .map {
-        withContext(ioCoroutineContext) {
+        withContext(coroutineContexts.io) {
           adapter.get(contentResolver, name, type, defaultValue) as T
         }
       }
@@ -52,7 +52,9 @@ class AndroidSettingModule<T : S, S>(
       val currentValue = adapter.get(contentResolver, name, type, defaultValue) as T
       val newValue = transform(currentValue)
       if (currentValue != newValue)
-        adapter.set(contentResolver, name, type, newValue)
+        withContext(coroutineContexts.io) {
+          adapter.set(contentResolver, name, type, newValue)
+        }
       return newValue
     }
   }
