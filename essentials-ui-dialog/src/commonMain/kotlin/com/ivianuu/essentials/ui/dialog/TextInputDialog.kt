@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
@@ -35,28 +34,26 @@ import androidx.compose.ui.text.input.TextFieldValue
     icon = icon,
     title = title,
     content = {
-      Box {
-        val focusRequester = remember { FocusRequester() }
-        var textFieldValue by remember {
-          mutableStateOf(TextFieldValue(value, TextRange(value.length)))
-        }
-        textFieldValue = textFieldValue.copy(value)
-        TextField(
-          modifier = Modifier.focusRequester(focusRequester),
-          value = textFieldValue,
-          onValueChange = {
-            textFieldValue = it
-            onValueChange(it.text)
-          },
-          keyboardOptions = keyboardOptions,
-          textStyle = MaterialTheme.typography.subtitle1,
-          label = label ?: {}
-        )
+      val focusRequester = remember { FocusRequester() }
+      var textFieldValue by remember {
+        mutableStateOf(TextFieldValue(value, TextRange(value.length)))
+      }
+      textFieldValue = textFieldValue.copy(value)
+      TextField(
+        modifier = Modifier.focusRequester(focusRequester),
+        value = textFieldValue,
+        onValueChange = {
+          textFieldValue = it
+          onValueChange(it.text)
+        },
+        keyboardOptions = keyboardOptions,
+        textStyle = MaterialTheme.typography.subtitle1,
+        label = label ?: {}
+      )
 
-        DisposableEffect(true) {
-          focusRequester.requestFocus()
-          onDispose { }
-        }
+      DisposableEffect(true) {
+        focusRequester.requestFocus()
+        onDispose { }
       }
     },
     buttons = buttons
