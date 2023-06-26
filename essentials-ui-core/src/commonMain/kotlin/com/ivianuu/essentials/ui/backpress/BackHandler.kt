@@ -11,10 +11,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import com.ivianuu.essentials.coroutines.bracket
 
-@Composable fun BackHandler(
-  enabled: Boolean = true,
-  onBackPress: () -> Unit
-) {
+@Composable fun BackHandler(enabled: Boolean = true, onBackPress: () -> Unit) {
   val currentOnBack by rememberUpdatedState(onBackPress)
   val currentEnabled by rememberUpdatedState(enabled)
 
