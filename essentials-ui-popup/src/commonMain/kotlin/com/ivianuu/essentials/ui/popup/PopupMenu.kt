@@ -27,19 +27,16 @@ import com.ivianuu.essentials.ui.navigation.screen
   val screen = LocalScope.current.screen
 
   Box(
-    modifier = Modifier.widthIn(min = 200.dp)
+    modifier = Modifier
+      .widthIn(min = 200.dp)
       .height(48.dp)
       .clickable(onClick = action {
         navigator.pop(screen)
         onSelected()
-      }),
+      })
+      .padding(start = 16.dp, end = 16.dp),
     contentAlignment = Alignment.CenterStart
   ) {
-    Box(
-      modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-      contentAlignment = Alignment.CenterStart
-    ) {
-      content()
-    }
+    content()
   }
 }

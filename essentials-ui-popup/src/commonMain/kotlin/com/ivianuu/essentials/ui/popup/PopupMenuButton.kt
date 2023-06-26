@@ -8,7 +8,6 @@ import androidx.compose.foundation.Indication
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -19,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.TransformOrigin
@@ -31,6 +29,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.push
 
@@ -39,7 +38,7 @@ import com.ivianuu.essentials.ui.navigation.push
   onCancel: (() -> Unit)? = null,
   popupContent: @Composable () -> Unit
 ) {
-  Box(
+  Icon(
     modifier = Modifier
       .size(size = 40.dp)
       .popupClickable(
@@ -47,11 +46,11 @@ import com.ivianuu.essentials.ui.navigation.push
         onCancel = onCancel,
         popupContent = popupContent
       )
+      .center()
       .then(modifier),
-    contentAlignment = Alignment.Center
-  ) {
-    Icon(Icons.Default.MoreVert, null)
-  }
+    imageVector = Icons.Default.MoreVert,
+    contentDescription = null
+  )
 }
 
 @Composable fun Modifier.popupClickable(
