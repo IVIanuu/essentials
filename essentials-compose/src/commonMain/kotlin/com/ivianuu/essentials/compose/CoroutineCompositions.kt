@@ -26,7 +26,7 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-fun <T> compositionFlow(@Inject context: StateContext, body: @Composable () -> T): Flow<T> = channelFlow {
+fun <T> compositionFlow(@Inject context: StateCoroutineContext, body: @Composable () -> T): Flow<T> = channelFlow {
   launchComposition(
     emitter = { trySend(it) },
     body = body
@@ -35,7 +35,7 @@ fun <T> compositionFlow(@Inject context: StateContext, body: @Composable () -> T
 }
 
 fun <T> CoroutineScope.compositionStateFlow(
-  @Inject context: StateContext,
+  @Inject context: StateCoroutineContext,
   body: @Composable () -> T
 ): StateFlow<T> {
   var flow: MutableStateFlow<T>? = null
@@ -56,7 +56,7 @@ fun <T> CoroutineScope.compositionStateFlow(
 }
 
 fun <T> CoroutineScope.launchComposition(
-  @Inject context: StateContext,
+  @Inject context: StateCoroutineContext,
   emitter: (T) -> Unit = {},
   body: @Composable () -> T
 ): Job = launch(start = CoroutineStart.UNDISPATCHED) {
@@ -95,15 +95,15 @@ private object UnitApplier : AbstractApplier<Unit>(Unit) {
   override fun onClear() {}
 }
 
-@Tag annotation class StateContextTag {
+@Tag annotation class StateCoroutineContextTag {
   companion object {
-    @Provide val stateContext: StateContext by lazy {
+    @Provide val stateCoroutineContext: StateCoroutineContext by lazy {
       Dispatchers.Main + ImmediateFrameClock
     }
   }
 }
 
-typealias StateContext = @StateContextTag CoroutineContext
+typealias StateCoroutineContext = @StateCoroutineContextTag CoroutineContext
 
 private object ImmediateFrameClock : MonotonicFrameClock {
   override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R =
