@@ -4,13 +4,11 @@
 
 package com.ivianuu.essentials.ads
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -23,7 +21,8 @@ import com.google.android.gms.ads.AdView
 @Immutable data class AdBannerConfig(val id: String, val size: AdSize)
 
 @Composable fun AdBanner(config: AdBannerConfig) {
-  Box(
+  val backgroundColor = MaterialTheme.colors.surface
+  AndroidView(
     modifier = Modifier
       .height(
         with(LocalDensity.current) {
@@ -31,16 +30,13 @@ import com.google.android.gms.ads.AdView
         }
       )
       .fillMaxWidth(),
-    contentAlignment = Alignment.Center
-  ) {
-    val backgroundColor = MaterialTheme.colors.surface
-    AndroidView(factory = {
+    factory = {
       AdView(it).apply {
         setBackgroundColor(backgroundColor.toArgb())
         adUnitId = config.id
         adSize = config.size
         loadAd(AdRequest.Builder().build())
       }
-    })
-  }
+    }
+  )
 }
