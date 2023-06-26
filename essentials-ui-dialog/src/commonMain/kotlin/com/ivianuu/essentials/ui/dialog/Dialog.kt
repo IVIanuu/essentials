@@ -79,6 +79,7 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 
         Box(
           modifier = Modifier
+            .weight(1f, false)
             .padding(
               start = if (applyContentPadding) 24.dp else 0.dp,
               top = if (!hasHeader) 24.dp else 0.dp,
