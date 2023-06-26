@@ -11,8 +11,8 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.err
-import com.ivianuu.essentials.ok
+import com.ivianuu.essentials.failure
+import com.ivianuu.essentials.success
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.MainCoroutineContext
@@ -55,12 +55,12 @@ fun interface IntentAppUiStarter {
           UUID.randomUUID().toString(),
           ActivityResultContracts.StartActivityForResult()
         ) {
-          if (continuation.isActive) continuation.resume(it.ok())
+          if (continuation.isActive) continuation.resume(it.success())
         }
         try {
           launcher.launch(intent)
         } catch (e: ActivityNotFoundException) {
-          continuation.resume(e.err())
+          continuation.resume(e.failure())
         }
         continuation.invokeOnCancellation { launcher.unregister() }
       }

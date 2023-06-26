@@ -5,9 +5,8 @@
 package com.ivianuu.essentials.clipboard
 
 import android.content.ClipData
-import com.ivianuu.essentials.Err
-import com.ivianuu.essentials.Ok
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.fold
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
@@ -41,12 +40,7 @@ interface ClipboardRepository {
     catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
       .also { result ->
         if (showMessage) {
-          toaster(
-            when (result) {
-              is Ok -> R.string.copied_to_clipboard
-              is Err -> R.string.copy_to_clipboard_failed
-            }
-          )
+          toaster(result.fold({ R.string.copied_to_clipboard }, { R.string.copy_to_clipboard_failed }))
         }
       }
   }

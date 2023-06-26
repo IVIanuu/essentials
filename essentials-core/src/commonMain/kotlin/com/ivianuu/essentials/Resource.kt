@@ -20,38 +20,34 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-@Stable sealed interface Resource<out T>
+@Stable sealed interface Resource<out T> {
+  object Loading : Resource<Nothing> {
+    override fun toString(): String = "Loading"
+  }
 
-object Idle : Resource<Nothing> {
-  override fun toString(): String = "Idle"
+  data class Success<T>(val value: T) : Resource<T>
+
+  data class Error(val error: Throwable) : Resource<Nothing>
 }
 
-object Loading : Resource<Nothing> {
-  override fun toString(): String = "Loading"
-}
-
-data class Success<T>(val value: T) : Resource<T>
-
-data class Error(val error: Throwable) : Resource<Nothing>
-
-fun <T> Resource<T>.get(): T = if (this is Success) value else error("Called get() on a $this")
+fun <T> Resource<T>.get(): T = if (this is Resource.Success) value else error("Called get() on a $this")
 
 inline fun <T> Resource<T>.getOrElse(defaultValue: () -> T) =
-  if (this is Success) value else defaultValue()
+  if (this is Resource.Success) value else defaultValue()
 
 fun <T> Resource<T>.getOrNull() = getOrElse { null }
 
-val Resource<*>.shouldLoad: Boolean get() = this is Idle || this is Error
+val Resource<*>.shouldLoad: Boolean get() = this is Resource.Error
 
-val Resource<*>.isComplete: Boolean get() = this is Success || this is Error
+val Resource<*>.isComplete: Boolean get() = this is Resource.Success || this is Resource.Error
 
 inline fun <T, R> Resource<T>.map(transform: (T) -> R): Resource<R> = when (this) {
-  is Success -> Success(transform(value))
+  is Resource.Success -> Resource.Success(transform(value))
   else -> this as Resource<R>
 }
 
 inline fun <T, R> Resource<T>.flatMap(transform: (T) -> Resource<R>): Resource<R> = when (this) {
-  is Success -> transform(value)
+  is Resource.Success -> transform(value)
   else -> this as Resource<R>
 }
 
@@ -62,8 +58,8 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
 fun <T> Flow<Resource<T>>.unwrapResource(): Flow<T> = flow {
   collect {
     when (it) {
-      is Success -> emit(it.value)
-      is Error -> throw it.error
+      is Resource.Success -> emit(it.value)
+      is Resource.Error -> throw it.error
       else -> {}
     }
   }
@@ -71,22 +67,22 @@ fun <T> Flow<Resource<T>>.unwrapResource(): Flow<T> = flow {
 
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
   flow<Resource<T>> {
-    emit(Loading)
+    emit(Resource.Loading)
     catch {
-      block(FlowCollector<T> { value -> this@flow.emit(Success(value)) })
-    }.onFailure { emit(Error(it)) }
+      block(FlowCollector<T> { value -> this@flow.emit(Resource.Success(value)) })
+    }.onFailure { emit(Resource.Error(it)) }
   }
 
 fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
-  success = { Success(it) },
-  failure = { Error(it) }
+  success = { Resource.Success(it) },
+  failure = { Resource.Error(it) }
 )
 
 @Composable fun <T> Flow<T>.collectAsResourceState(
   vararg keys: Any?,
   context: CoroutineContext = EmptyCoroutineContext
 ): State<Resource<T>> {
-  val state = remember(*keys) { mutableStateOf<Resource<T>>(Idle) }
+  val state = remember(*keys) { mutableStateOf<Resource<T>>(Resource.Loading) }
 
   LaunchedEffect(this, context) {
     withContext(context) {

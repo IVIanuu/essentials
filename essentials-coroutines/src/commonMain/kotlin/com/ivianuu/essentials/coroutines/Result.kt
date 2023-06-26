@@ -4,28 +4,26 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.Err
-import com.ivianuu.essentials.Ok
 import com.ivianuu.essentials.Result
-import com.ivianuu.essentials.err
+import com.ivianuu.essentials.failure
 import com.ivianuu.essentials.nonFatalOrThrow
-import com.ivianuu.essentials.ok
+import com.ivianuu.essentials.success
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 fun <T> Flow<T>.catchResult(): Flow<Result<T, Throwable>> = flow {
   try {
-    this@catchResult.collect { emit(it.ok()) }
+    this@catchResult.collect { emit(it.success()) }
   } catch (e: Throwable) {
-    emit(e.nonFatalOrThrow().err())
+    emit(e.nonFatalOrThrow().failure())
   }
 }
 
 fun <T> Flow<Result<T, Throwable>>.unwrapResult(): Flow<T> = flow {
   this@unwrapResult.collect {
     when (it) {
-      is Ok -> emit(it.value)
-      is Err -> throw it.error
+      is Result.Success -> emit(it.value)
+      is Result.Failure -> throw it.error
     }
   }
 }
