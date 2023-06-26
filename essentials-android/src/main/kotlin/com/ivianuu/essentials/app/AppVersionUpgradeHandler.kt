@@ -33,7 +33,7 @@ fun interface AppVersionUpgradeHandler {
 
   if (appConfig.versionCode <= prefs.lastAppVersion) return@ScopeWorker
 
-  logger.log { "upgrade from app version ${prefs.lastAppVersion} to $appConfig.versionCode" }
+  logger.log { "upgrade from app version ${prefs.lastAppVersion} to ${appConfig.versionCode}" }
 
   handlers().parForEach { it(prefs.lastAppVersion, appConfig.versionCode) }
 
