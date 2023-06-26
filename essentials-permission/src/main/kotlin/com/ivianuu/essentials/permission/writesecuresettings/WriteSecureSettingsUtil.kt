@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable internal fun SecureSettingsHeader(text: String) {
   Text(
+    modifier = Modifier.padding(all = 16.dp),
     text = text,
-    style = MaterialTheme.typography.body2,
-    modifier = Modifier.padding(all = 16.dp)
+    style = MaterialTheme.typography.body2
   )
 }

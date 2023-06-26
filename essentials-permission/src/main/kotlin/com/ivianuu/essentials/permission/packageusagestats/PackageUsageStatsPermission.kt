@@ -29,8 +29,8 @@ abstract class PackageUsageStatsPermission(
     @Suppress("DEPRECATION")
     @Provide
     fun <P : PackageUsageStatsPermission> stateProvider(
+      appConfig: AppConfig,
       appOpsManager: @SystemService AppOpsManager,
-      appConfig: AppConfig
     ) = PermissionStateProvider<P> {
       appOpsManager.checkOpNoThrow(
         AppOpsManager.OPSTR_GET_USAGE_STATS,
@@ -39,13 +39,12 @@ abstract class PackageUsageStatsPermission(
       ) == AppOpsManager.MODE_ALLOWED
     }
 
-    @Provide fun <P : PackageUsageStatsPermission> intentFactory(
-      appConfig: AppConfig
-    ) = PermissionIntentFactory<P> {
-      Intent(
-        Settings.ACTION_USAGE_ACCESS_SETTINGS,
-        Uri.parse("package:${appConfig.packageName}")
-      )
-    }
+    @Provide fun <P : PackageUsageStatsPermission> intentFactory(appConfig: AppConfig) =
+      PermissionIntentFactory<P> {
+        Intent(
+          Settings.ACTION_USAGE_ACCESS_SETTINGS,
+          Uri.parse("package:${appConfig.packageName}")
+        )
+      }
   }
 }
