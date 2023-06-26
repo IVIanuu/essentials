@@ -13,10 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-@Composable fun DialogContainer(
-  modifier: Modifier = Modifier,
-  content: @Composable () -> Unit
-) {
+@Composable fun DialogContainer(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
   Surface(
     modifier = modifier
       .widthIn(min = 280.dp, max = 356.dp),

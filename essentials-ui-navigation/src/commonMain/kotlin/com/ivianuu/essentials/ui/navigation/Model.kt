@@ -14,8 +14,6 @@ import com.ivianuu.injekt.Provide
   }
 }
 
-inline fun <S> Model(
-  crossinline block: @Composable () -> S
-): Model<S> = object : Model<S> {
+inline fun <S> Model(crossinline block: @Composable () -> S): Model<S> = object : Model<S> {
   @Composable override fun invoke() = block()
 }
