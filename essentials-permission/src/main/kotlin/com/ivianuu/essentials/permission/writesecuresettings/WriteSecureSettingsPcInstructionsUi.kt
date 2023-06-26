@@ -22,10 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.android.settings.AndroidSettingModule
-import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.coroutines.race
+import com.ivianuu.essentials.data.AndroidSettingModule
+import com.ivianuu.essentials.data.AndroidSettingsType
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionManager

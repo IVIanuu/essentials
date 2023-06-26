@@ -5,10 +5,10 @@
 package com.ivianuu.essentials.rate
 
 import com.ivianuu.essentials.AppConfig
+import com.ivianuu.essentials.Clock
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
 import com.ivianuu.essentials.ui.navigation.Screen

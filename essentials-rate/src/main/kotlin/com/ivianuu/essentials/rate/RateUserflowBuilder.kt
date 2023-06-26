@@ -4,12 +4,12 @@
 
 package com.ivianuu.essentials.rate
 
+import com.ivianuu.essentials.Clock
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.days
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.time.Clock
-import com.ivianuu.essentials.time.days
-import com.ivianuu.essentials.time.milliseconds
+import com.ivianuu.essentials.milliseconds
 import com.ivianuu.essentials.ui.navigation.UserflowBuilder
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide

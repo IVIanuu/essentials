@@ -8,13 +8,13 @@ import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Eager
 import com.ivianuu.essentials.ads.AdsEnabled
-import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.data.PrefModule
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiScopeOwner

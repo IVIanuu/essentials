@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Resource
-import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppPickerScreen
 import com.ivianuu.essentials.apps.AppRepository
@@ -21,6 +20,7 @@ import com.ivianuu.essentials.apps.IntentAppPredicate
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.data.PrefModule
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.produceResourceState

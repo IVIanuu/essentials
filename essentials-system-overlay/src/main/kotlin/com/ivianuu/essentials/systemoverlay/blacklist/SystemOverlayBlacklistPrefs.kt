@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.systemoverlay.blacklist
 
-import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.data.PrefModule
 import com.ivianuu.injekt.Provide
 import kotlinx.serialization.Serializable
 

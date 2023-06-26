@@ -8,8 +8,8 @@ import android.provider.Settings
 import androidx.compose.material.Icon
 import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.android.settings.AndroidSettingModule
-import com.ivianuu.essentials.android.settings.AndroidSettingsType
+import com.ivianuu.essentials.data.AndroidSettingModule
+import com.ivianuu.essentials.data.AndroidSettingsType
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
