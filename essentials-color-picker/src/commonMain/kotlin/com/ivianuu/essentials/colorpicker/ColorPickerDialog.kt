@@ -55,9 +55,7 @@ import com.ivianuu.essentials.ui.animation.materialSharedAxisX
 import com.ivianuu.essentials.ui.animation.materialSharedAxisY
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.layout.SquareFit
 import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.layout.squared
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
@@ -289,19 +287,22 @@ private sealed interface ColorGridItem {
   onClick: () -> Unit,
   content: @Composable () -> Unit
 ) {
-  Box(
-    modifier = Modifier
-      .squared(SquareFit.FIT_WIDTH)
-      .padding(all = 4.dp)
-      .wrapContentSize(Alignment.Center)
-      .clickable(
-        onClick = onClick,
-        interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(bounded = false)
-      ),
-    contentAlignment = Alignment.Center
-  ) {
-    content()
+  BoxWithConstraints {
+    Box(
+      modifier = Modifier
+        .fillMaxWidth()
+        .height(maxWidth)
+        .padding(all = 4.dp)
+        .wrapContentSize(Alignment.Center)
+        .clickable(
+          onClick = onClick,
+          interactionSource = remember { MutableInteractionSource() },
+          indication = rememberRipple(bounded = false)
+        ),
+      contentAlignment = Alignment.Center
+    ) {
+      content()
+    }
   }
 }
 
