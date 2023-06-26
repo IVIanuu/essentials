@@ -63,7 +63,7 @@ import kotlinx.coroutines.flow.filter
 @Provide fun currentApp(
   accessibilityEvents: Flow<AccessibilityEvent>,
   scope: ScopedCoroutineScope<AppScope>
-): @Scoped<AppScope> Flow<CurrentApp?> = scope.compositionStateFlow {
+): @Scoped<AppScope> StateFlow<CurrentApp?> = scope.compositionStateFlow {
   produceState<CurrentApp?>(null) {
     accessibilityEvents
       .filter {
