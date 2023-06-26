@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.Lerper
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -37,6 +38,10 @@ import kotlin.time.Duration
   colors: SliderColors = SliderDefaults.colors(
     thumbColor = MaterialTheme.colors.secondary,
     activeTrackColor = MaterialTheme.colors.secondary,
+    activeTickColor = Color.Transparent,
+    inactiveTickColor = Color.Transparent,
+    disabledActiveTickColor = Color.Transparent,
+    disabledInactiveTickColor = Color.Transparent
   ),
   @Inject lerper: Lerper<T>,
   @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
@@ -53,8 +58,7 @@ import kotlin.time.Duration
     { newInternalValue ->
       internalValue = newInternalValue
       val newValue = internalValue.toValue()
-      if (newValue != value)
-        onValueChange?.invoke(newValue)
+      onValueChange?.invoke(newValue)
 
       valueChangeJob?.cancel()
       if (valueRestoreDuration < Duration.INFINITE) {
