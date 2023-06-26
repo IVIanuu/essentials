@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
   subtitle: (@Composable () -> Unit)? = null,
   leading: (@Composable () -> Unit)? = null,
   trailing: (@Composable () -> Unit)? = null,
-  contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+  contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
   textPadding: PaddingValues = PaddingValues(horizontal = 16.dp)
 ) {
   val minHeight = if (subtitle != null) {
