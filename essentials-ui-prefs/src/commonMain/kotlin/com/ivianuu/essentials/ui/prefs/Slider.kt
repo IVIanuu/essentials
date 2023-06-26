@@ -69,13 +69,11 @@ import kotlin.time.Duration
       value = value,
       onValueChange = { newValue ->
         internalValue = newValue
-        if (newValue != value)
-          onValueChange?.invoke(newValue)
+        onValueChange?.invoke(newValue)
       },
       onValueChangeFinished = onValueChangeFinished?.let {
         { newValue ->
-          if (newValue != value)
-            onValueChangeFinished(newValue)
+          onValueChangeFinished(newValue)
         }
       },
       stepPolicy = stepPolicy,
