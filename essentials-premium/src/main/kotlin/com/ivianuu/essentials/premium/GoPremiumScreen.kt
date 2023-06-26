@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
@@ -43,8 +45,9 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.ui.backpress.BackHandler
-import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.insets.InsetsPadding
+import com.ivianuu.essentials.ui.layout.align
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
@@ -158,100 +161,90 @@ class GoPremiumScreen(
 }
 
 @Composable fun PremiumUiFeatures(modifier: Modifier, features: List<AppFeature>) {
-  VerticalList(modifier) {
-    item {
-      Row(
-        modifier = Modifier
-          .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Column(
-          modifier = Modifier.padding(top = 32.dp),
-          horizontalAlignment = Alignment.CenterHorizontally
+  Row(
+    modifier = modifier
+      .fillMaxWidth()
+      .verticalScroll(rememberScrollState())
+  ) {
+    Column(
+      modifier = Modifier.padding(top = 32.dp),
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      features.forEach { feature ->
+        Box(
+          modifier = Modifier.height(48.dp),
+          contentAlignment = Alignment.Center
         ) {
-          features.forEach { feature ->
-            Box(
-              modifier = Modifier.height(48.dp),
-              contentAlignment = Alignment.Center
-            ) {
-              CompositionLocalProvider(
-                LocalContentColor provides MaterialTheme.colors.primary,
-                content = feature.icon
-              )
-            }
-          }
+          CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colors.primary,
+            content = feature.icon
+          )
         }
+      }
+    }
 
-        Column(
+    Column(
+      modifier = Modifier
+        .padding(start = 16.dp, top = 32.dp, end = 16.dp)
+        .weight(1f)
+    ) {
+      features.forEach {
+        Text(
           modifier = Modifier
-            .padding(start = 16.dp, top = 32.dp, end = 16.dp)
-            .weight(1f)
-        ) {
-          features.forEach {
-            Box(
-              modifier = Modifier.height(48.dp),
-              contentAlignment = Alignment.CenterStart
-            ) {
-              Text(
-                text = it.title,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.subtitle2
-              )
-            }
-          }
-        }
+            .height(48.dp)
+            .align(Alignment.CenterStart),
+          text = it.title,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+          style = MaterialTheme.typography.subtitle2
+        )
+      }
+    }
 
-        Column(
-          modifier = Modifier.padding(end = 16.dp),
-          verticalArrangement = Arrangement.Center,
-          horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-          Text(
-            modifier = Modifier.height(32.dp),
-            textResId = R.string.es_premium_title,
-            style = MaterialTheme.typography.button,
-            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
-          )
+    Column(
+      modifier = Modifier.padding(end = 16.dp),
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      Text(
+        modifier = Modifier.height(32.dp),
+        textResId = R.string.es_premium_title,
+        style = MaterialTheme.typography.button,
+        color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+      )
 
-          features.forEach { feature ->
-            Box(
-              modifier = Modifier.size(48.dp),
-              contentAlignment = Alignment.Center
-            ) {
-              Icon(
-                painterResId = if (feature.inPremium) R.drawable.es_ic_done
-                else R.drawable.es_ic_remove,
-                tint = MaterialTheme.colors.primary
-              )
-            }
-          }
-        }
+      features.forEach { feature ->
+        Icon(
+          modifier = Modifier
+            .size(48.dp)
+            .center(),
+          painterResId = if (feature.inPremium) R.drawable.es_ic_done
+          else R.drawable.es_ic_remove,
+          tint = MaterialTheme.colors.primary
+        )
+      }
+    }
 
-        Column(
-          verticalArrangement = Arrangement.Center,
-          horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-          Text(
-            modifier = Modifier.height(32.dp),
-            textResId = R.string.es_basic_title,
-            style = MaterialTheme.typography.button,
-            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
-          )
+    Column(
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      Text(
+        modifier = Modifier.height(32.dp),
+        textResId = R.string.es_basic_title,
+        style = MaterialTheme.typography.button,
+        color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+      )
 
-          features.forEach { feature ->
-            Box(
-              modifier = Modifier.size(48.dp),
-              contentAlignment = Alignment.Center
-            ) {
-              Icon(
-                painterResId = if (feature.inBasic) R.drawable.es_ic_done
-                else R.drawable.es_ic_remove,
-                tint = MaterialTheme.colors.primary
-              )
-            }
-          }
-        }
+      features.forEach { feature ->
+        Icon(
+          modifier = Modifier
+            .size(48.dp)
+            .center(),
+          painterResId = if (feature.inBasic) R.drawable.es_ic_done
+          else R.drawable.es_ic_remove,
+          tint = MaterialTheme.colors.primary
+        )
       }
     }
   }
