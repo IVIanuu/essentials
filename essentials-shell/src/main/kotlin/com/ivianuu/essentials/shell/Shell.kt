@@ -4,10 +4,11 @@
 
 package com.ivianuu.essentials.shell
 
-import com.ivianuu.essentials.Result
-import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.result.Result
+import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.getOrElse
+import com.ivianuu.essentials.resource.getOrElse
+import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.injekt.Provide
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext

@@ -34,17 +34,17 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.Resource
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.collectAsResourceState
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.getOrNull
-import com.ivianuu.essentials.map
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationService
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
-import com.ivianuu.essentials.recover
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.collectAsResourceState
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.getOrNull
+import com.ivianuu.essentials.result.map
+import com.ivianuu.essentials.result.recover
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
@@ -163,7 +163,9 @@ data class UiNotification(
   service: NotificationService
 ) = Model {
   NotificationsModel(
-    hasPermissions = permissionManager.permissionState(listOf(typeKeyOf<SampleNotificationsPermission>()))
+    hasPermissions = remember {
+      permissionManager.permissionState(listOf(typeKeyOf<SampleNotificationsPermission>()))
+    }
       .collectAsResourceState()
       .value,
     notifications = service.notifications
@@ -209,10 +211,7 @@ private fun StatusBarNotification.toUiNotification(
       .getOrNull()
   }
 
-  Image(
-    modifier = Modifier.size(24.dp),
-    bitmap = icon ?: return
-  )
+  Image(modifier = Modifier.size(24.dp), bitmap = icon ?: return)
 }
 
 @Provide object SampleNotificationsPermission : NotificationListenerPermission(

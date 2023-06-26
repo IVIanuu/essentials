@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.onSuccess
+import com.ivianuu.essentials.result.onFailure
+import com.ivianuu.essentials.result.onSuccess
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.Shell

@@ -2,9 +2,12 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials
+package com.ivianuu.essentials.result
 
 import androidx.compose.runtime.Stable
+import com.ivianuu.essentials.ControlException
+import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.nonFatalOrThrow
 
 @Stable sealed interface Result<out V, out E> {
   data class Success<V>(val value: V) : Result<V, Nothing>

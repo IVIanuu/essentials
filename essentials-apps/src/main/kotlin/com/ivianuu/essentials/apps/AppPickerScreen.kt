@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.ivianuu.essentials.Resource
-import com.ivianuu.essentials.collectAsResourceState
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.map
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.collectAsResourceState
+import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

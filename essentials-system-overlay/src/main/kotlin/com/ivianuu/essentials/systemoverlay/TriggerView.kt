@@ -8,9 +8,10 @@ import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.getOrElse
-import com.ivianuu.essentials.onFailure
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.resource.getOrElse
+import com.ivianuu.essentials.result.getOrElse
+import com.ivianuu.essentials.result.onFailure
 
 @SuppressLint("ViewConstructor")
 class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {

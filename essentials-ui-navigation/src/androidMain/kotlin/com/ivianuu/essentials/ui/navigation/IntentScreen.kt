@@ -9,11 +9,11 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.failure
-import com.ivianuu.essentials.success
+import com.ivianuu.essentials.result.Result
+import com.ivianuu.essentials.result.failure
+import com.ivianuu.essentials.result.success
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import kotlinx.coroutines.suspendCancellableCoroutine

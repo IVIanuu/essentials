@@ -4,7 +4,7 @@
 
 @file:Suppress("UNCHECKED_CAST")
 
-package com.ivianuu.essentials
+package com.ivianuu.essentials.resource
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,6 +12,10 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.result.Result
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.fold
+import com.ivianuu.essentials.result.onFailure
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll

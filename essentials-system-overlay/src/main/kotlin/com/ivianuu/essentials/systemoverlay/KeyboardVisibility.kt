@@ -10,9 +10,9 @@ import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService

@@ -15,12 +15,12 @@ import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
-import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.getOrElse
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

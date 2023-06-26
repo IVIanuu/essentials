@@ -9,8 +9,8 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import com.ivianuu.essentials.Result
-import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.result.Result
+import com.ivianuu.essentials.result.catch
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow

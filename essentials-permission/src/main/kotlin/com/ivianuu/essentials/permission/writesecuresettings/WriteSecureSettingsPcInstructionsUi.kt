@@ -27,7 +27,7 @@ import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.data.AndroidSettingModule
 import com.ivianuu.essentials.data.AndroidSettingsType
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.onFailure
+import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.common.SimpleListScreen

@@ -4,10 +4,10 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.Result
-import com.ivianuu.essentials.failure
+import com.ivianuu.essentials.result.Result
+import com.ivianuu.essentials.result.failure
 import com.ivianuu.essentials.nonFatalOrThrow
-import com.ivianuu.essentials.success
+import com.ivianuu.essentials.result.success
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

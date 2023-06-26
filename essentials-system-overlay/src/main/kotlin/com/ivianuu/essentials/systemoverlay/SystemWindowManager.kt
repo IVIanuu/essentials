@@ -36,7 +36,7 @@ import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalView
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
-import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.result.catch
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import kotlin.math.roundToInt

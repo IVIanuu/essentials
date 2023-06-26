@@ -7,9 +7,9 @@ package com.ivianuu.essentials.license
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.Resource
-import com.ivianuu.essentials.collectAsResourceState
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

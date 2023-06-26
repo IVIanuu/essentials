@@ -8,11 +8,11 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

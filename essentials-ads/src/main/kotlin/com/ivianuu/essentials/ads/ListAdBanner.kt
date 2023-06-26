@@ -8,9 +8,9 @@ import androidx.compose.runtime.collectAsState
 import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.LocalScope
-import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.navigation.screen
 import com.ivianuu.injekt.Provide

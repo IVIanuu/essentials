@@ -7,8 +7,8 @@ package com.ivianuu.essentials.ui.util
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.injekt.Provide
 import kotlinx.serialization.InjektSerializer
 import kotlinx.serialization.KSerializer

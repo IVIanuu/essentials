@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.clipboard
 
 import android.content.ClipData
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.fold
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService

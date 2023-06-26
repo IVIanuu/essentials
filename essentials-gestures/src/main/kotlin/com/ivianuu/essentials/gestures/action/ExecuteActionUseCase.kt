@@ -4,15 +4,15 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.Result
-import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.CloseSystemDialogsUseCase
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionManager
+import com.ivianuu.essentials.result.Result
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster

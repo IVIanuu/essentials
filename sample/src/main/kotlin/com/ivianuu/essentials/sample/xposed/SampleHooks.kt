@@ -7,8 +7,8 @@ package com.ivianuu.essentials.sample.xposed
 import android.app.Application
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.milliseconds
-import com.ivianuu.essentials.seconds
+import com.ivianuu.essentials.time.milliseconds
+import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.util.broadcastsFactory
 import com.ivianuu.essentials.xposed.Hooks
 import com.ivianuu.essentials.xposed.arg

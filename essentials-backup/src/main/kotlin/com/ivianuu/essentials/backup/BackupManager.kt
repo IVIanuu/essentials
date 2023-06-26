@@ -12,11 +12,11 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.data.DataDir
-import com.ivianuu.essentials.getOrNull
-import com.ivianuu.essentials.getOrThrow
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.processrestart.ProcessRestarter
+import com.ivianuu.essentials.result.getOrNull
+import com.ivianuu.essentials.result.getOrThrow
 import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push

@@ -6,13 +6,13 @@ package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
 import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.race
-import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.R
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push

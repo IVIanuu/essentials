@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.coroutines.timerFlow
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.seconds
+import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

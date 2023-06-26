@@ -14,9 +14,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.LocalScope
-import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.insets.InsetsPadding

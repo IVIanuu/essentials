@@ -17,7 +17,7 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.compose.compositionStateFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.onCancel
@@ -25,7 +25,7 @@ import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.onFailure
+import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.Toaster
