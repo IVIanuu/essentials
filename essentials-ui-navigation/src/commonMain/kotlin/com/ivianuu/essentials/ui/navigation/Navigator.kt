@@ -121,8 +121,6 @@ class NavigatorImpl(
           val interceptedHandle =
             screenInterceptors.firstNotNullOfOrNull { it.cast<ScreenInterceptor<Any?>>()(screen) }
 
-          println("lol $interceptedHandle")
-
           if (interceptedHandle == null) {
             add(screen)
           } else {
