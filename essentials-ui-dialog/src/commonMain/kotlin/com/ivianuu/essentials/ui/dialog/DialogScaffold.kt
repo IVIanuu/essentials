@@ -42,17 +42,14 @@ import com.ivianuu.essentials.ui.insets.InsetsPadding
       .then(modifier),
     contentAlignment = Alignment.Center
   ) {
-    InsetsPadding {
-      Box(
-        modifier = Modifier
-          .animationElement(DialogKey)
-          .pointerInput(true) { detectTapGestures { } }
-          .wrapContentSize(align = Alignment.Center)
-          .padding(all = 32.dp),
-        contentAlignment = Alignment.Center
-      ) {
-        dialog()
-      }
+    InsetsPadding(
+      modifier = Modifier
+        .animationElement(DialogKey)
+        .pointerInput(true) { detectTapGestures { } }
+        .wrapContentSize(align = Alignment.Center)
+        .padding(all = 32.dp)
+    ) {
+      dialog()
     }
   }
 }

@@ -21,8 +21,6 @@ import androidx.compose.ui.unit.dp
     elevation = 24.dp,
     shape = MaterialTheme.shapes.medium
   ) {
-    Box(
-      modifier = Modifier.animateContentSize()
-    ) { content() }
+    Box(modifier = Modifier.animateContentSize()) { content() }
   }
 }
