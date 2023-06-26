@@ -19,11 +19,11 @@ import kotlinx.serialization.Serializable
   companion object {
     private val isFirstRun = CompletableDeferred<IsFirstRun>()
 
-    @Provide suspend fun isFirstRun(pref: DataStore<FirstRunPrefs>): IsFirstRun {
+    @Provide fun isFirstRun(pref: DataStore<FirstRunPrefs>): suspend () -> IsFirstRun = {
       if (!isFirstRun.isCompleted)
         isFirstRun.complete(IsFirstRun(pref.data.first().isFirstRun))
 
-      return isFirstRun.await()
+      isFirstRun.await()
     }
   }
 }
