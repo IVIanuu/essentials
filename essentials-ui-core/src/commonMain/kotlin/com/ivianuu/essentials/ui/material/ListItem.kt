@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ContentAlpha
@@ -42,88 +41,74 @@ import androidx.compose.ui.unit.dp
     if (leading == null) 56.dp else 64.dp
   }
 
-  Box(
+  Row(
     modifier = modifier
       .defaultMinSize(minHeight = minHeight)
       .fillMaxWidth(),
-    contentAlignment = Alignment.CenterStart
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.Center
   ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-      // leading
-      if (leading != null) {
-        Box(
-          modifier = Modifier
-            .heightIn(minHeight),
-          contentAlignment = Alignment.CenterStart
-        ) {
-          Box(
-            modifier = Modifier
-              .padding(
-                start = contentPadding.calculateStartPadding(LocalLayoutDirection.current),
-                top = contentPadding.calculateTopPadding(),
-                bottom = contentPadding.calculateBottomPadding()
-              ),
-            contentAlignment = Alignment.Center
-          ) {
-            CompositionLocalProvider(
-              LocalContentAlpha provides ContentAlpha.high,
-              content = leading
-            )
-          }
-        }
-      }
-
-      // content
+    // leading
+    if (leading != null) {
       Box(
         modifier = Modifier
-          .weight(1f)
-          .padding(textPadding),
+          .heightIn(minHeight)
+          .padding(
+            start = contentPadding.calculateStartPadding(LocalLayoutDirection.current),
+            top = contentPadding.calculateTopPadding(),
+            bottom = contentPadding.calculateBottomPadding()
+          ),
         contentAlignment = Alignment.CenterStart
       ) {
-        Column(
-          modifier = Modifier
-            .padding(
-              top = contentPadding.calculateTopPadding(),
-              bottom = contentPadding.calculateBottomPadding()
-            ),
-          verticalArrangement = Arrangement.Center
-        ) {
-          if (title != null)
-            CompositionLocalProvider(
-              LocalTextStyle provides MaterialTheme.typography.subtitle1,
-              LocalContentAlpha provides ContentAlpha.high,
-              content = title
-            )
-          if (subtitle != null)
-            CompositionLocalProvider(
-              LocalTextStyle provides MaterialTheme.typography.body2,
-              LocalContentAlpha provides ContentAlpha.medium,
-              content = subtitle
-            )
-        }
+        CompositionLocalProvider(
+          LocalContentAlpha provides ContentAlpha.high,
+          content = leading
+        )
       }
+    }
 
-      // trailing
-      if (trailing != null) {
-        Box(
-          modifier = Modifier
-            .height(minHeight),
-          contentAlignment = Alignment.CenterEnd
-        ) {
-          Box(
-            modifier = Modifier.padding(
-              top = contentPadding.calculateTopPadding(),
-              end = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
-              bottom = contentPadding.calculateBottomPadding()
-            ),
-            contentAlignment = Alignment.Center
-          ) {
-            CompositionLocalProvider(
-              LocalContentAlpha provides ContentAlpha.high,
-              content = trailing
-            )
-          }
-        }
+    // content
+    Column(
+      modifier = Modifier
+        .weight(1f)
+        .padding(
+          top = contentPadding.calculateTopPadding(),
+          start = textPadding.calculateStartPadding(LocalLayoutDirection.current),
+          bottom = contentPadding.calculateBottomPadding(),
+          end = textPadding.calculateEndPadding(LocalLayoutDirection.current)
+        ),
+      verticalArrangement = Arrangement.Center
+    ) {
+      if (title != null)
+        CompositionLocalProvider(
+          LocalTextStyle provides MaterialTheme.typography.subtitle1,
+          LocalContentAlpha provides ContentAlpha.high,
+          content = title
+        )
+      if (subtitle != null)
+        CompositionLocalProvider(
+          LocalTextStyle provides MaterialTheme.typography.body2,
+          LocalContentAlpha provides ContentAlpha.medium,
+          content = subtitle
+        )
+    }
+
+    // trailing
+    if (trailing != null) {
+      Box(
+        modifier = Modifier
+          .heightIn(minHeight)
+          .padding(
+            top = contentPadding.calculateTopPadding(),
+            end = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
+            bottom = contentPadding.calculateBottomPadding()
+          ),
+        contentAlignment = Alignment.CenterEnd
+      ) {
+        CompositionLocalProvider(
+          LocalContentAlpha provides ContentAlpha.high,
+          content = trailing
+        )
       }
     }
   }
