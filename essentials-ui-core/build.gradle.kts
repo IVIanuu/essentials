@@ -37,7 +37,6 @@ kotlin {
         api(project(":essentials-compose"))
         api(project(":essentials-logging"))
         api(project(":essentials-serialization"))
-        api(project(":essentials-time"))
       }
     }
 

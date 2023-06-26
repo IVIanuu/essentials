@@ -16,7 +16,6 @@ kotlin {
         api(project(":essentials-coroutines"))
         api(project(":essentials-data"))
         api(project(":essentials-logging"))
-        api(project(":essentials-time"))
       }
     }
     named("jvmTest") {

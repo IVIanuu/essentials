@@ -14,7 +14,6 @@ kotlin {
     commonMain {
       dependencies {
         api(project(":essentials-core"))
-        api(project(":essentials-time"))
         api(Deps.Coroutines.core)
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)
