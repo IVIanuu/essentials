@@ -140,12 +140,10 @@ val DefaultAppBarElevation = 0.dp
   val navigator = LocalScope.current.navigator
   val screen = LocalScope.current.screen
   val canGoBack = remember { navigator.backStack.value.indexOf(screen) > 0 }
-  return when {
-    canGoBack -> ({
-      IconButton(onClick = action { navigator.pop(screen) }) {
-        Icon(Icons.Default.ArrowBack)
-      }
-    })
-    else -> null
-  }
+  return if (!canGoBack) null
+  else ({
+    IconButton(onClick = action { navigator.pop(screen) }) {
+      Icon(Icons.Default.ArrowBack)
+    }
+  })
 }
