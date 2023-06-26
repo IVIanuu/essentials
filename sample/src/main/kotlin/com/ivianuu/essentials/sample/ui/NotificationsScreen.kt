@@ -34,7 +34,9 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.Resource
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.collectAsResourceState
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.map
@@ -43,8 +45,6 @@ import com.ivianuu.essentials.notificationlistener.NotificationService
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.recover
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center

@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.Resource
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.gestures.R
@@ -23,8 +24,7 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.permission.PermissionManager
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.produceResourceState
+import com.ivianuu.essentials.produceResourceState
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

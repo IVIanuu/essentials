@@ -19,11 +19,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.resource.Error
-import com.ivianuu.essentials.resource.Idle
-import com.ivianuu.essentials.resource.Loading
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.Success
+import com.ivianuu.essentials.Error
+import com.ivianuu.essentials.Idle
+import com.ivianuu.essentials.Loading
+import com.ivianuu.essentials.Resource
+import com.ivianuu.essentials.Success
 import com.ivianuu.essentials.ui.animation.AnimatedContent
 import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
 import com.ivianuu.essentials.ui.animation.crossFade

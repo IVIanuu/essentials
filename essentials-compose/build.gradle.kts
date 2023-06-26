@@ -16,7 +16,6 @@ kotlin {
     commonMain {
       dependencies {
         api(project(":essentials-coroutines"))
-        api(project(":essentials-resource"))
         api(Deps.AtomicFu.runtime)
         api(Deps.Compose.runtime)
       }

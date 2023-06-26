@@ -44,7 +44,6 @@ include(
   ":essentials-process-restart",
   ":essentials-rate",
   ":essentials-recent-apps",
-  ":essentials-resource",
   ":essentials-rubik",
   ":essentials-screen-state",
   ":essentials-serialization",
