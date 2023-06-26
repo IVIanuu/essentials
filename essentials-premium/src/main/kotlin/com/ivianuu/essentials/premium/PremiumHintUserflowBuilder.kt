@@ -25,23 +25,24 @@ fun interface PremiumHintUserflowBuilder : UserflowBuilder {
   }
 }
 
-private var hintShown = false
-
 @Provide fun premiumHintUserflowBuilder(
   enabled: AppStartPremiumHintEnabled,
   isFirstRunFlow: Flow<IsFirstRun>,
   premiumVersionManager: PremiumVersionManager
-) = PremiumHintUserflowBuilder {
-  if (hintShown || !enabled.value || premiumVersionManager.isPremiumVersion.first())
-    return@PremiumHintUserflowBuilder emptyList()
+): PremiumHintUserflowBuilder {
+  var hintShown = false
+  return PremiumHintUserflowBuilder {
+    if (hintShown || !enabled.value || premiumVersionManager.isPremiumVersion.first())
+      return@PremiumHintUserflowBuilder emptyList()
 
-  hintShown = true
-  val isFirstRun = isFirstRunFlow.first().value
+    hintShown = true
+    val isFirstRun = isFirstRunFlow.first().value
 
-  listOf(
-    GoPremiumScreen(
-      showTryBasicOption = isFirstRun,
-      allowBackNavigation = !isFirstRun
+    listOf(
+      GoPremiumScreen(
+        showTryBasicOption = isFirstRun,
+        allowBackNavigation = !isFirstRun
+      )
     )
-  )
+  }
 }
