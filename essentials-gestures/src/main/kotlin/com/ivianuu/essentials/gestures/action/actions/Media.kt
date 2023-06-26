@@ -15,9 +15,9 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Resource
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.apps.AppPickerScreen
 import com.ivianuu.essentials.apps.AppRepository
-import com.ivianuu.essentials.apps.ui.IntentAppPredicate
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerScreen
+import com.ivianuu.essentials.apps.IntentAppPredicate
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore

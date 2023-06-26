@@ -2,11 +2,10 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.apps.ui
+package com.ivianuu.essentials.apps
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.injekt.Provide
 
 fun interface AppPredicate {

@@ -2,7 +2,7 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.apps.ui.checkableapps
+package com.ivianuu.essentials.apps
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -16,11 +16,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.Resource
 import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.AppRepository
-import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.apps.ui.AppPredicate
-import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.collectAsResourceState
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.compositionStateFlow

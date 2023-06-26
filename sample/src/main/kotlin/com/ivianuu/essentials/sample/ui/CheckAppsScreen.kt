@@ -7,9 +7,9 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsUi
+import com.ivianuu.essentials.apps.CheckableAppsParams
+import com.ivianuu.essentials.apps.CheckableAppsUi
+import com.ivianuu.essentials.apps.LaunchableAppPredicate
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.db.Db
 import com.ivianuu.essentials.db.DbFactory

@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -52,7 +51,7 @@ object RateScreen : DialogScreen<Unit>
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
           Image(
-            painter = rememberAsyncImagePainter(AppIcon(model.packageName)),
+            painter = rememberAsyncImagePainter(com.ivianuu.essentials.apps.AppIcon(model.packageName)),
             modifier = Modifier.size(96.dp)
           )
 

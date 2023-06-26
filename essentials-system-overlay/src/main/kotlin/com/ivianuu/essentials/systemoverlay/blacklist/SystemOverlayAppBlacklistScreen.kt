@@ -6,9 +6,9 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsUi
+import com.ivianuu.essentials.apps.CheckableAppsParams
+import com.ivianuu.essentials.apps.CheckableAppsUi
+import com.ivianuu.essentials.apps.DefaultAppPredicate
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.systemoverlay.R

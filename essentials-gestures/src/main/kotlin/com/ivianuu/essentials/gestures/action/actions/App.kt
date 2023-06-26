@@ -8,10 +8,10 @@ import android.content.pm.PackageManager
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.apps.AppIcon
+import com.ivianuu.essentials.apps.AppPickerScreen
 import com.ivianuu.essentials.apps.AppRepository
-import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerScreen
+import com.ivianuu.essentials.apps.LaunchableAppPredicate
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
 import com.ivianuu.essentials.gestures.action.Action

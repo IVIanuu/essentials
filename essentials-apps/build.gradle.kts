@@ -5,6 +5,7 @@
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
+  id("com.ivianuu.essentials.compose")
   kotlin("android")
 }
 
@@ -16,6 +17,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 dependencies {
   api(project(":essentials-android-util"))
   api(project(":essentials-broadcast"))
+  api(project(":essentials-coil"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")
