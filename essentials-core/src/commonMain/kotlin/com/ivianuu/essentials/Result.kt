@@ -4,8 +4,6 @@
 
 package com.ivianuu.essentials
 
-// todo maybe remove
-
 sealed interface Result<out V, out E>
 
 data class Ok<V>(val value: V) : Result<V, Nothing>
