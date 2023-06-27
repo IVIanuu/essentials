@@ -43,19 +43,9 @@ fun interface ActionIcon {
 
 abstract class ActionId(val value: String)
 
-@Provide fun <@Spread T : Action<I>, I : ActionId> actionBinding(
-  id: I,
-  provider: () -> T,
-): Pair<String, () -> Action<I>> = id.value to provider
-
 fun interface ActionExecutor<I : ActionId> {
   suspend operator fun invoke()
 }
-
-@Provide fun <@Spread T : ActionExecutor<I>, I : ActionId> actionExecutorBinding(
-  id: I,
-  provider: () -> T
-): Pair<String, () -> ActionExecutor<*>> = id.value to provider
 
 interface ActionFactory {
   suspend fun handles(id: String): Boolean
@@ -67,11 +57,6 @@ interface ActionFactory {
 
 @Tag annotation class ActionSettingsKey<I : ActionId>
 
-@Provide fun <@Spread T : @ActionSettingsKey<I> Screen<Unit>, I : ActionId> actionSettingsKeyBinding(
-  id: I,
-  provider: () -> T,
-): Pair<String, () -> @ActionSettingsKey<ActionId> Screen<Unit>> = id.value to provider
-
 interface ActionPickerDelegate {
   val baseId: String
   val title: String
@@ -79,6 +64,25 @@ interface ActionPickerDelegate {
   val icon: @Composable () -> Unit
 
   suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result?
+}
+
+object ActionModule {
+
+
+  @Provide fun <@Spread T : Action<I>, I : ActionId> actionBinding(
+    id: I,
+    provider: () -> T,
+  ): Pair<String, () -> Action<I>> = id.value to provider
+
+  @Provide fun <@Spread T : ActionExecutor<I>, I : ActionId> actionExecutorBinding(
+    id: I,
+    provider: () -> T
+  ): Pair<String, () -> ActionExecutor<*>> = id.value to provider
+
+  @Provide fun <@Spread T : @ActionSettingsKey<I> Screen<Unit>, I : ActionId> actionSettingsKeyBinding(
+    id: I,
+    provider: () -> T,
+  ): Pair<String, () -> @ActionSettingsKey<ActionId> Screen<Unit>> = id.value to provider
 }
 
 const val ACTION_DELIMITER = "=:="

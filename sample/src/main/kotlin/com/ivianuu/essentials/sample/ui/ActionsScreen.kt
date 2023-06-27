@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.coroutines.coroutineScope
 import com.ivianuu.essentials.gestures.action.ActionRepository
-import com.ivianuu.essentials.gestures.action.ExecuteActionUseCase
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerScreen
 import com.ivianuu.essentials.safeAs
 import com.ivianuu.essentials.ui.layout.center
@@ -31,7 +30,6 @@ class ActionsScreen : Screen<Unit>
 @Provide fun actionsUi(
   navigator: Navigator,
   repository: ActionRepository,
-  executeAction: ExecuteActionUseCase,
   toaster: Toaster
 ) = Ui<ActionsScreen, Unit> {
   Scaffold(
@@ -50,7 +48,7 @@ class ActionsScreen : Screen<Unit>
 
           toaster("Execute action ${action.title}")
 
-          executeAction(actionId)
+          repository.executeAction(actionId)
         }
       }
     ) { Text("Pick action") }
