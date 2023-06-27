@@ -6,6 +6,7 @@ plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
   kotlin("android")
+  kotlin("plugin.serialization")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -16,7 +17,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 dependencies {
   api(Deps.AndroidX.work)
   api(project(":essentials-android-core"))
-  api(Deps.Injekt.androidWork)
 }
 
 plugins.apply("com.vanniktech.maven.publish")
