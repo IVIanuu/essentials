@@ -95,7 +95,7 @@ import androidx.compose.ui.unit.dp
             .fillMaxWidth()
             .padding(
               start = 8.dp,
-              top = 8.dp,
+              top = 16.dp,
               end = 8.dp,
               bottom = 8.dp
             ),
