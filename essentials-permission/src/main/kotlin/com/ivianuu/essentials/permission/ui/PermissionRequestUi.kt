@@ -5,14 +5,11 @@
 package com.ivianuu.essentials.permission.ui
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
@@ -46,11 +43,7 @@ class PermissionRequestScreen(
             Text(it)
           }
         },
-        leading = {
-          Box(modifier = Modifier.size(40.dp)) {
-            permission.permission.icon?.invoke()
-          }
-        },
+        leading = { permission.permission.icon?.invoke() },
         trailing = { Switch(checked = permission.isGranted, null) }
       )
     }
