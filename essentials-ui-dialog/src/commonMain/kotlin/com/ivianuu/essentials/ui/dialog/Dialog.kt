@@ -21,7 +21,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.material.HorizontalDivider
 
 @Composable fun Dialog(
   modifier: Modifier = Modifier,
@@ -29,8 +28,6 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
   title: (@Composable () -> Unit)? = null,
   buttons: (@Composable () -> Unit)? = null,
   content: (@Composable () -> Unit)? = null,
-  showTopDivider: Boolean = false,
-  showBottomDivider: Boolean = false,
   applyContentPadding: Boolean = true,
 ) {
   DialogContainer(modifier = modifier) {
@@ -74,9 +71,6 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
         }
 
       if (content != null) {
-        if (hasHeader && showTopDivider)
-          HorizontalDivider()
-
         Box(
           modifier = Modifier
             .weight(1f, false)
@@ -96,15 +90,12 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
       }
 
       if (buttons != null) {
-        if (content != null && showBottomDivider)
-          HorizontalDivider()
-
         Row(
           modifier = Modifier
             .fillMaxWidth()
             .padding(
               start = 8.dp,
-              top = if (!showBottomDivider && content != null) 36.dp else 8.dp,
+              top = 8.dp,
               end = 8.dp,
               bottom = 8.dp
             ),
