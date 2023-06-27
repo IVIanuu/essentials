@@ -173,6 +173,7 @@ fun interface WorkInitializer : ScopeInitializer<AppScope>
         logger.log { "enqueue periodic work $workId -> $schedule" }
 
         workManager.cancelAllWorkByTag(WORK_ID_PREFIX + workId)
+
         workManager.enqueue(
           PeriodicWorkRequestBuilder<EsWorker>(schedule.interval.toJavaDuration())
             .addTag(WORK_ID_PREFIX + workId)
