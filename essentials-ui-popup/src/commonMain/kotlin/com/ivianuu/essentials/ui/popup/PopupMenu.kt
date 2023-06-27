@@ -6,9 +6,9 @@ package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.navigation.screen
 
   Box(
     modifier = Modifier
-      .widthIn(min = 200.dp)
+      .fillMaxWidth()
       .height(48.dp)
       .clickable(onClick = action {
         navigator.pop(screen)
