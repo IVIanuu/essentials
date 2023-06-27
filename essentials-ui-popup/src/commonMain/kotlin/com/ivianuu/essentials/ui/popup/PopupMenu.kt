@@ -19,10 +19,7 @@ import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.screen
 
-@Composable fun PopupMenuItem(
-  onSelected: () -> Unit,
-  content: @Composable () -> Unit,
-) {
+@Composable fun PopupMenuItem(onSelected: () -> Unit, content: @Composable () -> Unit) {
   val navigator = LocalScope.current.navigator
   val screen = LocalScope.current.screen
 
