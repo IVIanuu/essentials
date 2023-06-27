@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ContentAlpha
@@ -32,19 +31,19 @@ import androidx.compose.ui.unit.dp
   subtitle: (@Composable () -> Unit)? = null,
   leading: (@Composable () -> Unit)? = null,
   trailing: (@Composable () -> Unit)? = null,
-  contentPadding: PaddingValues = PaddingValues(all = 16.dp),
+  contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
   textPadding: PaddingValues = PaddingValues(horizontal = 16.dp)
 ) {
   val minHeight = if (subtitle != null) {
-    if (leading == null) 72.dp else 80.dp
+    if (leading == null) 64.dp else 72.dp
   } else {
-    if (leading == null) 56.dp else 64.dp
+    if (leading == null) 48.dp else 56.dp
   }
 
   Row(
-    modifier = modifier
+    modifier = Modifier
       .defaultMinSize(minHeight = minHeight)
-      .fillMaxWidth(),
+      .then(modifier),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Center
   ) {
