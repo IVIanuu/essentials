@@ -12,7 +12,6 @@ import androidx.work.ListenableWorker
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import androidx.work.await
@@ -32,13 +31,16 @@ import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.result.fold
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import kotlin.time.Duration
 import kotlin.time.toJavaDuration
+import androidx.work.WorkManager as AndroidWorkManager
 
 @Serializable abstract class WorkId(val value: String)
 
@@ -58,75 +60,82 @@ fun interface Worker<I : WorkId> {
   suspend operator fun invoke()
 }
 
-@JvmInline value class IsWorkerRunning<I : WorkId>(val value: Boolean)
+interface WorkManager {
+  fun <I : WorkId> isWorkerRunning(id: I): StateFlow<Boolean>
 
-fun interface WorkerRunner<I : WorkId> {
-  suspend operator fun invoke()
+  suspend fun <I : WorkId> runWorker(id: I)
 }
 
-@Provide fun <I : WorkId> workerRunner(
-  coroutineContexts: CoroutineContexts,
-  logger: Logger,
-  isWorkerRunning: MutableStateFlow<IsWorkerRunning<I>>,
-  scope: ScopedCoroutineScope<AppScope>,
-  worker: () -> Worker<I>,
-  workId: I
-) = WorkerRunner<I> {
-  withContext(scope.coroutineContext + coroutineContexts.computation) {
-    logger.log { "run worker ${workId.value}" }
-    guarantee(
-      block = {
-        isWorkerRunning.value = IsWorkerRunning(true)
-        worker()()
-      },
-      finalizer = {
-        if (it is ExitCase.Failure) it.failure.printStackTrace()
-        isWorkerRunning.value = IsWorkerRunning(false)
-        logger.log { "run worker end ${workId.value}" }
-      }
-    )
+@Provide @Scoped<AppScope> class WorkManagerImpl(
+  private val androidWorkManager: AndroidWorkManager,
+  private val coroutineContexts: CoroutineContexts,
+  private val logger: Logger,
+  private val scope: ScopedCoroutineScope<AppScope>,
+  private val workIds: List<WorkId>,
+  private val workers: Map<String, () -> Worker<*>>,
+) : WorkManager, SynchronizedObject() {
+  private val workerStates = mutableMapOf<String, MutableStateFlow<Boolean>>()
+
+  override fun <I : WorkId> isWorkerRunning(id: I) = synchronized(this) {
+    workerStates.getOrPut(id.value) { MutableStateFlow(false) }
   }
+
+  override suspend fun <I : WorkId> runWorker(id: I): Unit =
+    withContext(scope.coroutineContext + coroutineContexts.computation) {
+      if (id.value !in workIds.map { it.value }) {
+        logger.log { "no worker found for ${id.value}" }
+        androidWorkManager.cancelAllWorkByTag(WORK_ID_PREFIX + id.value)
+        return@withContext
+      }
+
+      logger.log { "run worker ${id.value}" }
+      val workerState = synchronized(this@WorkManagerImpl) {
+        workerStates.getOrPut(id.value) { MutableStateFlow(false) }
+      }
+      guarantee(
+        block = {
+          workerState.value = true
+          workers[id.value]!!.invoke().invoke()
+        },
+        finalizer = {
+          if (it is ExitCase.Failure) it.failure.printStackTrace()
+          workerState.value = false
+          logger.log { "run worker end ${id.value}" }
+        }
+      )
+    }
 }
 
 object WorkModule {
-  @Provide fun <@Spread T : WorkId> workerRunner(
-    id: T,
-    runner: () -> WorkerRunner<T>,
-  ): Pair<String, () -> WorkerRunner<*>> = id.value to runner
+  @Provide fun <@Spread I : WorkId> worker(
+    id: I,
+    worker: () -> Worker<I>,
+  ): Pair<String, () -> Worker<*>> = id.value to worker
 
-  @Provide val defaultWorkerRunners get() = emptyList<Pair<String, () -> WorkerRunner<*>>>()
+  @Provide val defaultWorkers get() = emptyList<Pair<String, () -> Worker<*>>>()
 
-  @Provide fun <@Spread T : WorkId> workSchedule(
-    id: T,
-    schedule: PeriodicWorkSchedule<T>,
+  @Provide fun <@Spread I : WorkId> workSchedule(
+    id: I,
+    schedule: PeriodicWorkSchedule<I>,
   ): Pair<String, PeriodicWorkSchedule<*>> = id.value to schedule
-
-  @Provide fun <@Spread T : WorkId> isWorkerRunning(id: T):
-      @Scoped<AppScope> MutableStateFlow<IsWorkerRunning<T>> =
-    MutableStateFlow(IsWorkerRunning(false))
 
   @Provide val defaultSchedules get() = emptyList<Pair<String, PeriodicWorkSchedule<*>>>()
 
-  @Provide fun workManager(context: AppContext) = WorkManager.getInstance(context)
+  @Provide fun androidWorkManager(context: AppContext) = AndroidWorkManager.getInstance(context)
+
+  @Provide val defaultWorkIds get() = emptyList<WorkId>()
 }
 
 @Provide class EsWorker(
   appContext: Context,
   params: WorkerParameters,
-  private val logger: Logger,
-  private val workerRunners: Map<String, () -> WorkerRunner<*>>,
   private val workManager: WorkManager
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
     val workId = tags.single { it.startsWith(WORK_ID_PREFIX) }.removePrefix(WORK_ID_PREFIX)
-
-    val runner = workerRunners[workId]?.invoke() ?: kotlin.run {
-      logger.log { "no worker found for $workId" }
-      workManager.cancelAllWorkByTag(WORK_ID_PREFIX + workId)
-      return Result.success()
-    }
-
-    return catch { runner() }.fold({ Result.success() }, { Result.retry() })
+    return catch {
+      workManager.runWorker(object : WorkId(workId) {})
+    }.fold({ Result.success() }, { Result.retry() })
   }
 }
 
@@ -145,7 +154,7 @@ object WorkModule {
 fun interface WorkInitializer : ScopeInitializer<AppScope>
 
 @Provide fun workInitializer(appContext: AppContext, workerFactory: WorkerFactory) = WorkInitializer {
-  WorkManager.initialize(
+  AndroidWorkManager.initialize(
     appContext,
     Configuration.Builder()
       .setWorkerFactory(workerFactory)
@@ -158,12 +167,12 @@ fun interface WorkInitializer : ScopeInitializer<AppScope>
   json: Json,
   logger: Logger,
   schedules: Map<String, PeriodicWorkSchedule<*>>,
-  workManager: WorkManager,
+  androidWorkManager: AndroidWorkManager,
 ) = ScopeWorker<AppScope> {
   withContext(coroutineContexts.computation) {
     schedules.forEach { (workId, schedule) ->
       val serializedSchedule = json.encodeToString(serializer<PeriodicWorkSchedule<WorkId>>(), schedule.cast())
-      val existingWork = workManager.getWorkInfosByTag(WORK_ID_PREFIX + workId).await()
+      val existingWork = androidWorkManager.getWorkInfosByTag(WORK_ID_PREFIX + workId).await()
       if (existingWork.none {
           (it.state == WorkInfo.State.RUNNING ||
               it.state == WorkInfo.State.ENQUEUED) &&
@@ -172,9 +181,9 @@ fun interface WorkInitializer : ScopeInitializer<AppScope>
         }) {
         logger.log { "enqueue periodic work $workId -> $schedule" }
 
-        workManager.cancelAllWorkByTag(WORK_ID_PREFIX + workId)
+        androidWorkManager.cancelAllWorkByTag(WORK_ID_PREFIX + workId)
 
-        workManager.enqueue(
+        androidWorkManager.enqueue(
           PeriodicWorkRequestBuilder<EsWorker>(schedule.interval.toJavaDuration())
             .addTag(WORK_ID_PREFIX + workId)
             .addTag(WORK_SCHEDULE_PREFIX + serializedSchedule)

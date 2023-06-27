@@ -18,33 +18,28 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.work.IsWorkerRunning
 import com.ivianuu.essentials.work.PeriodicWorkSchedule
 import com.ivianuu.essentials.work.WorkId
+import com.ivianuu.essentials.work.WorkManager
 import com.ivianuu.essentials.work.Worker
-import com.ivianuu.essentials.work.WorkerRunner
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.StateFlow
 
 @Provide val workHomeItem = HomeItem("Work") { WorkScreen() }
 
 class WorkScreen : Screen<Unit>
 
-@Provide fun workUi(
-  isRunning: StateFlow<IsWorkerRunning<SampleWorkId>>,
-  runner: WorkerRunner<SampleWorkId>
-) = Ui<WorkScreen, Unit> {
+@Provide fun workUi(workManager: WorkManager) = Ui<WorkScreen, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Work") }) }
   ) {
     Column {
-      if (isRunning.collectAsState().value.value)
+      if (workManager.isWorkerRunning(SampleWorkId).collectAsState().value)
         CircularProgressIndicator()
 
       Button(
         modifier = Modifier.center(),
-        onClick = action { runner() }
+        onClick = action { workManager.runWorker(SampleWorkId) }
       ) {
         Text("Run")
       }
