@@ -13,13 +13,11 @@ import androidx.compose.runtime.snapshots.Snapshot
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,15 +25,6 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
-
-suspend fun <T> composition(
-  @Inject context: StateCoroutineContext,
-  @BuilderInference body: @Composable ((T) -> Unit) -> Unit,
-): T = coroutineScope {
-  val result = CompletableDeferred<T>()
-  launchComposition { body { result.complete(it) } }
-  result.await()
-}
 
 fun <T> compositionFlow(@Inject context: StateCoroutineContext, body: @Composable () -> T): Flow<T> = channelFlow {
   launchComposition(
