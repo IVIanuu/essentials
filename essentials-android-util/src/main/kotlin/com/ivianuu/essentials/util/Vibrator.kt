@@ -5,8 +5,10 @@ import com.ivianuu.injekt.Provide
 import kotlin.time.Duration
 import android.os.Vibrator as AndroidVibrator
 
-interface Vibrator {
-  suspend operator fun invoke(duration: Duration, amplitude: Float = 1f)
+fun interface Vibrator {
+  suspend operator fun invoke(duration: Duration) = invoke(duration, 1f)
+
+  suspend operator fun invoke(duration: Duration, amplitude: Float)
 }
 
 @Provide class VibratorImpl(private val vibrator: AndroidVibrator) : Vibrator {
