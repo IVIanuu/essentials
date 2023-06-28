@@ -6,6 +6,7 @@ package com.ivianuu.essentials.sample.ui
 
 import android.app.NotificationManager
 import androidx.compose.material.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,8 +48,10 @@ class AppTrackerScreen : Screen<Unit>
   var isEnabled by remember { mutableStateOf(false) }
 
   if (isEnabled)
-    foregroundManager.Foreground {
-      AppTrackerNotification(currentApp.collectAsState(null).value)
+    LaunchedEffect(true) {
+      foregroundManager.startForeground {
+        AppTrackerNotification(currentApp.collectAsState(null).value)
+      }
     }
 
   Scaffold(

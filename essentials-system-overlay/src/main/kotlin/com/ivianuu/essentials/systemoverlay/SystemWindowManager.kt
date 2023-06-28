@@ -26,7 +26,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -36,16 +35,18 @@ import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalView
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
+import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
+import kotlinx.coroutines.awaitCancellation
 import kotlin.math.roundToInt
 
 interface SystemWindowManager {
-  @Composable fun SystemWindow(content: @Composable () -> Unit) =
-    SystemWindow(remember { SystemWindowState() }, content)
-
-  @Composable fun SystemWindow(state: SystemWindowState, content: @Composable () -> Unit)
+  suspend fun attachSystemWindow(
+    state: SystemWindowState = SystemWindowState(),
+    content: @Composable () -> Unit
+  ): Nothing
 }
 
 fun Modifier.systemWindowTrigger() = composed {
@@ -119,21 +120,18 @@ fun Modifier.systemWindowTrigger() = composed {
   internal val canUseAccessibility = accessibilityWindowManager != null
   internal val windowManager = accessibilityWindowManager ?: windowManager
 
-  @Composable override fun SystemWindow(
+  override suspend fun attachSystemWindow(
     state: SystemWindowState,
     content: @Composable () -> Unit
-  ) {
-    val updatedState by rememberUpdatedState(state)
-    val updatedContent by rememberUpdatedState(content)
-    val contentView = remember(this) {
+  ) = bracket(
+    acquire = {
       lateinit var contentView: View
       contentView = OverlayComposeView(appContext) {
-        Window(contentView, updatedState, updatedContent)
+        Window(contentView, state, content)
       }
       contentView
-    }
-
-    DisposableEffect(contentView) {
+    },
+    use = { contentView ->
       windowManager.addView(
         contentView,
         WindowManager.LayoutParams().apply {
@@ -155,12 +153,13 @@ fun Modifier.systemWindowTrigger() = composed {
           state.interceptor(this)
         }
       )
-      onDispose {
-        catch { windowManager.removeViewImmediate(contentView) }
-        contentView.dispose()
-      }
+      awaitCancellation()
+    },
+    { contentView, _ ->
+      catch { windowManager.removeViewImmediate(contentView) }
+      contentView.dispose()
     }
-  }
+  )
 
   @Composable private fun Window(
     contentView: View,

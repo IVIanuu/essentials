@@ -9,6 +9,7 @@ import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import kotlin.time.Duration
 
 interface SensorFactory {
@@ -22,11 +23,15 @@ fun SensorFactory.sensorEvents(sensorType: Int, samplingRate: Duration): Flow<Se
 
 @Provide class SensorFactoryImpl(
   private val sensorManager: @SystemService SensorManager,
+  private val wakeLockManager: WakeLockManager
 ) : SensorFactory {
   override fun sensor(type: Int): Sensor? = sensorManager.getDefaultSensor(type)
 
   override fun sensorEvents(sensor: Sensor, samplingRate: Duration): Flow<SensorEvent> =
     callbackFlow {
+      if (!sensor.isWakeUpSensor)
+        launch { wakeLockManager.acquire() }
+
       val listener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
           trySend(event)

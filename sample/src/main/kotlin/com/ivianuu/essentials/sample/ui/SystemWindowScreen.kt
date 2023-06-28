@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,14 +46,16 @@ class SystemWindowScreen : Screen<Unit>
     var showSystemWindow by remember { mutableStateOf(false) }
 
     if (showSystemWindow)
-      systemWindowManager.SystemWindow {
-        Box(
-          modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Red)
-            .systemWindowTrigger()
-            .clickable { showSystemWindow = false }
-        )
+      LaunchedEffect(true) {
+        systemWindowManager.attachSystemWindow {
+          Box(
+            modifier = Modifier
+              .fillMaxSize()
+              .background(Color.Red)
+              .systemWindowTrigger()
+              .clickable { showSystemWindow = false }
+          )
+        }
       }
 
     Button(

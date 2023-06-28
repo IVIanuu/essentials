@@ -7,11 +7,8 @@ package com.ivianuu.essentials.foreground
 import android.app.Notification
 import android.content.Intent
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.AppContext
@@ -24,16 +21,15 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.SourceKey
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 interface ForegroundManager {
-  @Composable fun Foreground(
+  suspend fun startForeground(
     @Inject foregroundId: ForegroundId,
-    notification: @Composable () -> Notification
-  )
+    notification: @Composable () -> Notification,
+  ): Nothing
 }
 
 @JvmInline value class ForegroundId(val value: Int) {
@@ -49,39 +45,28 @@ interface ForegroundManager {
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
   private val lock = Mutex()
 
-  @Composable override fun Foreground(
+  override suspend fun startForeground(
     @Inject foregroundId: ForegroundId,
-    notification: @Composable () -> Notification
-  ) {
-    val state = remember(this, foregroundId) {
+    notification: @Composable () -> Notification,
+  ) = bracket(
+    acquire = {
       ForegroundState(foregroundId.value, notification)
+        .also {
+          lock.withLock { states.value = states.value + it }
+          logger.log { "start foreground ${foregroundId.value} ${states.value}" }
+
+          ContextCompat.startForegroundService(
+            appContext,
+            Intent(appContext, ForegroundService::class.java)
+          )
+        }
+    },
+    release = { state, _ ->
+      state.seen.await()
+      lock.withLock { states.value = states.value - state }
+      logger.log { "stop foreground $foregroundId ${states.value}" }
     }
-    state.notification = notification
-
-    DisposableEffect(state) {
-      logger.log { "start foreground ${foregroundId.value} ${states.value}" }
-
-      ContextCompat.startForegroundService(
-        appContext,
-        Intent(appContext, ForegroundService::class.java)
-      )
-
-      onDispose {
-        logger.log { "stop foreground $foregroundId ${states.value}" }
-      }
-    }
-
-    LaunchedEffect(state) {
-      bracket(
-        acquire = { lock.withLock { states.value = states.value + state } },
-        use = {
-          state.seen.await()
-          awaitCancellation()
-        },
-        release = { _, _ -> lock.withLock { states.value = states.value - state } }
-      )
-    }
-  }
+  )
 
   internal class ForegroundState(val id: Int, notification: @Composable () -> Notification) {
     var notification by mutableStateOf(notification)
