@@ -14,10 +14,7 @@ fun interface Vibrator {
 @Provide class VibratorImpl(private val vibrator: AndroidVibrator) : Vibrator {
   override suspend fun invoke(duration: Duration, amplitude: Float) {
     vibrator.vibrate(
-      VibrationEffect.createOneShot(
-        duration.inWholeMilliseconds,
-        (255 * amplitude).toInt(),
-      )
+      VibrationEffect.createOneShot(duration.inWholeMilliseconds, (255 * amplitude).toInt())
     )
   }
 }
