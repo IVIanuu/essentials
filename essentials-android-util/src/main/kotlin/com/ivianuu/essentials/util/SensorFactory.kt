@@ -36,12 +36,7 @@ fun SensorFactory.sensorEvents(sensorType: Int, samplingRate: Duration): Flow<Se
         }
       }
 
-      sensorManager.registerListener(
-        listener,
-        sensor,
-        samplingRate.inWholeNanoseconds.toInt()
-      )
-
+      sensorManager.registerListener(listener, sensor, samplingRate.inWholeNanoseconds.toInt())
       awaitClose { sensorManager.unregisterListener(listener) }
     }
 }
