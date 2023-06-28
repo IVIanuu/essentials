@@ -8,16 +8,18 @@ import androidx.compose.foundation.Indication
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.minimumInteractiveComponentSize
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.TransformOrigin
@@ -29,7 +31,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.push
 
@@ -38,19 +39,21 @@ import com.ivianuu.essentials.ui.navigation.push
   onCancel: (() -> Unit)? = null,
   popupContent: @Composable () -> Unit
 ) {
-  Icon(
-    modifier = Modifier
-      .size(size = 40.dp)
+  Box(
+    modifier = modifier
+      .minimumInteractiveComponentSize()
       .popupClickable(
-        indication = rememberRipple(bounded = false),
+        indication = rememberRipple(bounded = false, radius = 24.dp),
         onCancel = onCancel,
         popupContent = popupContent
-      )
-      .center()
-      .then(modifier),
-    imageVector = Icons.Default.MoreVert,
-    contentDescription = null
-  )
+      ),
+    contentAlignment = Alignment.Center
+  ) {
+    Icon(
+      imageVector = Icons.Default.MoreVert,
+      contentDescription = null
+    )
+  }
 }
 
 @Composable fun Modifier.popupClickable(
