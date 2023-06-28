@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.app.ExtensionPoint
 import com.ivianuu.essentials.app.ExtensionPointRecord
 import com.ivianuu.essentials.ui.AppUiDecorator
@@ -55,7 +56,7 @@ fun interface ListDecoratorsProvider : AppUiDecorator
 @Composable fun VerticalList(
   modifier: Modifier = Modifier,
   state: LazyListState = rememberLazyListState(),
-  contentPadding: PaddingValues = localVerticalInsetsPadding(),
+  contentPadding: PaddingValues = localVerticalInsetsPadding(top = 8.dp, bottom = 8.dp),
   reverseLayout: Boolean = false,
   verticalArrangement: Arrangement.Vertical =
     if (!reverseLayout) Arrangement.Top else Arrangement.Bottom,
@@ -81,7 +82,7 @@ fun interface ListDecoratorsProvider : AppUiDecorator
 @Composable fun HorizontalList(
   modifier: Modifier = Modifier,
   state: LazyListState = rememberLazyListState(),
-  contentPadding: PaddingValues = localHorizontalInsetsPadding(),
+  contentPadding: PaddingValues = localHorizontalInsetsPadding(start = 8.dp, end = 8.dp),
   reverseLayout: Boolean = false,
   horizontalArrangement: Arrangement.Horizontal =
     if (!reverseLayout) Arrangement.Start else Arrangement.End,

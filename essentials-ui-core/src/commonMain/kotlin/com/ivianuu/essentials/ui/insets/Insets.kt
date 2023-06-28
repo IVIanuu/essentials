@@ -106,10 +106,25 @@ fun interface WindowInsetsProvider : AppUiDecorator
 
 @Provide expect val windowInsetsProvider: WindowInsetsProvider
 
-@Composable fun localHorizontalInsetsPadding() = LocalInsets.current.toPaddingValues()
+@Composable fun localHorizontalInsetsPadding(
+  start: Dp = 0.dp,
+  top: Dp = 0.dp,
+  end: Dp = 0.dp,
+  bottom: Dp = 0.dp
+) = LocalInsets.current.toPaddingValues(start, top, end, bottom)
 
-@Composable fun localVerticalInsetsPadding() = LocalInsets.current.toPaddingValues()
+@Composable fun localVerticalInsetsPadding(
+  start: Dp = 0.dp,
+  top: Dp = 0.dp,
+  end: Dp = 0.dp,
+  bottom: Dp = 0.dp
+) = LocalInsets.current.toPaddingValues(start, top, end, bottom)
 
-fun Insets.toPaddingValues() = PaddingValues(
-  start = left, top = top, end = right, bottom = bottom
+fun Insets.toPaddingValues(
+  start: Dp = 0.dp,
+  top: Dp = 0.dp,
+  end: Dp = 0.dp,
+  bottom: Dp = 0.dp
+) = PaddingValues(
+  start = left + start, top = this.top + top, end = right + end, bottom = this.bottom + bottom
 )
