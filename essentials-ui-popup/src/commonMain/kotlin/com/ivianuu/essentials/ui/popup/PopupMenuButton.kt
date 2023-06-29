@@ -86,7 +86,7 @@ import kotlinx.coroutines.launch
       scope.launch(start = CoroutineStart.UNDISPATCHED) {
         val windowCoords = coordinates!!.findRootCoordinates()
         val boundsInWindow = coordinates!!.boundsInWindow()
-        val isLeft = (position.x < windowCoords.size.width / 2)
+        val isLeft = (windowCoords.localPositionOf(coordinates!!, position).x < windowCoords.size.width / 2)
         val isTop = (boundsInWindow.center.y <
             windowCoords.size.height - (windowCoords.size.height / 10))
 
