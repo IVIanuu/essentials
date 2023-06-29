@@ -6,7 +6,6 @@ package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Icon
@@ -18,10 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
@@ -30,21 +31,29 @@ import androidx.compose.ui.layout.findRootCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.LocalScope
-import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.ui.common.clickableWithPosition
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.push
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.launch
 
 @Composable fun PopupMenuButton(
   modifier: Modifier = Modifier,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  enabled: Boolean = true,
   onCancel: (() -> Unit)? = null,
+  positionPicker: (LayoutCoordinates, Offset) -> Rect = { coordinates, _ -> coordinates.boundsInRoot() },
   popupContent: @Composable () -> Unit
 ) {
   Box(
     modifier = modifier
       .minimumInteractiveComponentSize()
       .popupClickable(
+        interactionSource = interactionSource,
         indication = rememberRipple(bounded = false, radius = 24.dp),
+        enabled = enabled,
         onCancel = onCancel,
+        positionPicker = positionPicker,
         popupContent = popupContent
       ),
     contentAlignment = Alignment.Center
@@ -57,28 +66,33 @@ import com.ivianuu.essentials.ui.navigation.push
 }
 
 @Composable fun Modifier.popupClickable(
-  indication: Indication = LocalIndication.current,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  indication: Indication? = LocalIndication.current,
+  enabled: Boolean = true,
   onCancel: (() -> Unit)? = null,
+  positionPicker: (LayoutCoordinates, Offset) -> Rect = { coordinates, _ -> coordinates.boundsInRoot() },
   popupContent: @Composable () -> Unit
-) = composed {
+): Modifier {
   val navigator = LocalScope.current.navigator
-
   var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
-  onGloballyPositioned { coordinates = it }
-    .clickable(
-      interactionSource = remember { MutableInteractionSource() },
+  val scope = rememberCoroutineScope()
+  return onGloballyPositioned { coordinates = it }
+    .clickableWithPosition(
+      interactionSource = interactionSource,
       indication = indication,
-      onClick = action {
+      enabled = enabled
+    ) { position ->
+      scope.launch(start = CoroutineStart.UNDISPATCHED) {
         val windowCoords = coordinates!!.findRootCoordinates()
         val boundsInWindow = coordinates!!.boundsInWindow()
-        val isLeft = (boundsInWindow.center.x < windowCoords.size.width / 2)
+        val isLeft = (position.x < windowCoords.size.width / 2)
         val isTop = (boundsInWindow.center.y <
             windowCoords.size.height - (windowCoords.size.height / 10))
 
         navigator.push(
           PopupScreen(
-            position = coordinates!!.boundsInRoot(),
+            position = positionPicker(coordinates!!, position),
             transformOrigin = TransformOrigin(
               if (isLeft) 0f else 1f,
               if (isTop) 0f else 1f
@@ -89,6 +103,5 @@ import com.ivianuu.essentials.ui.navigation.push
           }
         )
       }
-    )
+    }
 }
-
