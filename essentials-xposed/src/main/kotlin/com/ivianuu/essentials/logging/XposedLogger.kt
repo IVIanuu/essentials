@@ -4,15 +4,14 @@
 
 package com.ivianuu.essentials.logging
 
+import com.ivianuu.essentials.xposed.XposedConfig
 import com.ivianuu.injekt.Provide
 
-@Provide class XposedLogger(private val logTag: XposedLogTag) : Logger {
+@Provide class XposedLogger(private val config: XposedConfig) : Logger {
   override val isLoggingEnabled: LoggingEnabled
     get() = LoggingEnabled(true)
 
   override fun logMessage(priority: Logger.Priority, tag: String, message: String) {
-    println("${logTag.value}: [${priority.name}] $tag $message")
+    println("${config.modulePackageName}: [${priority.name}] $tag $message")
   }
 }
-
-@JvmInline value class XposedLogTag(val value: String)

@@ -16,8 +16,6 @@ interface MethodHookBuilder {
   fun before(block: MethodHookScope.() -> Unit)
 
   fun after(block: MethodHookScope.() -> Unit)
-
-  fun build(): XC_MethodHook
 }
 
 class MethodHookBuilderImpl : MethodHookBuilder {
@@ -34,7 +32,7 @@ class MethodHookBuilderImpl : MethodHookBuilder {
     after = block
   }
 
-  override fun build(): XC_MethodHook = HookImpl(priority, before, after)
+  fun build(): XC_MethodHook = HookImpl(priority, before, after)
 
   private class HookImpl(
     priority: Int,
@@ -64,9 +62,7 @@ fun MethodHookBuilder.replace(block: MethodHookScope.() -> Any?) {
   }
 }
 
-fun MethodHookBuilder.skip() {
-  replace { null }
-}
+fun MethodHookBuilder.skip() = replace { null }
 
 interface MethodHookScope {
   var result: Any?

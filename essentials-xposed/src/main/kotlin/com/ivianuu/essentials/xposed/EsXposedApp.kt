@@ -10,22 +10,25 @@ import com.ivianuu.injekt.Provide
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
-private lateinit var xposedScope: Scope<XposedScope>
-
 abstract class EsXposedApp : IXposedHookLoadPackage {
-  override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
-    @Provide val context = XposedContextImpl(lpparam)
+  override fun handleLoadPackage(@Provide lpparam: XC_LoadPackage.LoadPackageParam) {
     xposedScope = buildXposedScope()
-    xposedScope.service<XposedHooksComponent>().hooks().forEach { hooks ->
-      with(hooks) {
-        with(context) {
-          invoke()
+    xposedScope.service<XposedHooksComponent>().run {
+      hooks.forEach { hooks ->
+        with(hooks) {
+          with(this@run.config) {
+            invoke()
+          }
         }
       }
     }
   }
 
-  protected abstract fun buildXposedScope(
-    @Inject ctx: XposedContext
-  ): Scope<XposedScope>
+  protected abstract fun buildXposedScope(@Inject llparam: XC_LoadPackage.LoadPackageParam): Scope<XposedScope>
+
+  companion object {
+    private lateinit var xposedScope: Scope<XposedScope>
+  }
 }
+
+@JvmInline value class ModulePackageName(val value: String)

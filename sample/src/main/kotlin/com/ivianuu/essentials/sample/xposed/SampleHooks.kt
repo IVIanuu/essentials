@@ -76,7 +76,7 @@ private val FadeOutCurve = FadeCurve(
 var transitionDatas = emptyMap<String, TransitionData>()
 
 @Provide fun sampleHooks(logger: Logger) = Hooks {
-  if (packageName.value != "com.spotify.music") return@Hooks
+  if (packageName != "com.spotify.music") return@Hooks
 
   hookAllMethods(
     Application::class,

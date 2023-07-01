@@ -9,5 +9,7 @@ import com.ivianuu.injekt.Provide
 
 object XposedScope
 
-@Provide @Service<XposedScope>
-data class XposedHooksComponent(val hooks: () -> List<Hooks>)
+@Provide @Service<XposedScope> data class XposedHooksComponent(
+  val config: XposedConfig,
+  val hooks: List<Hooks>
+)

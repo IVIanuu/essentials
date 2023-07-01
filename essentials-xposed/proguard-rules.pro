@@ -1,4 +1,4 @@
--keep class com.ivianuu.essentials.xposed.XposedRunningUtilKt {
+-keep class com.ivianuu.essentials.xposed.XposedRunningKt {
   <methods>;
 }
 
