@@ -10,40 +10,50 @@ import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.injekt.Provide
 
-class DefaultIntentScreen(val intent: Intent) : IntentScreen
-
-@Provide val defaultIntentScreenIntentFactory = ScreenIntentFactory<DefaultIntentScreen> { it.intent }
-
-class AppInfoScreen(val packageName: String) : IntentScreen
-
-@Provide val appInfoScreenIntentFactory = ScreenIntentFactory<AppInfoScreen> { screen ->
-  Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-    this.data = "package:${screen.packageName}".toUri()
+class DefaultIntentScreen(val intent: Intent) : IntentScreen {
+  companion object {
+    @Provide val intentFactory = ScreenIntentFactory<DefaultIntentScreen> { it.intent }
   }
 }
 
-class AppScreen(val packageName: String) : IntentScreen
-
-@Provide fun appKeyIntentFactory(packageManager: PackageManager) = ScreenIntentFactory<AppScreen> { screen ->
-  packageManager.getLaunchIntentForPackage(screen.packageName)!!
+class AppInfoScreen(val packageName: String) : IntentScreen {
+  companion object {
+    @Provide val intentFactory = ScreenIntentFactory<AppInfoScreen> { screen ->
+      Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+        this.data = "package:${screen.packageName}".toUri()
+      }
+    }
+  }
 }
 
-class ShareScreen(val text: String) : IntentScreen
-
-@Provide val shareScreenIntentFactory = ScreenIntentFactory<ShareScreen> { key ->
-  Intent.createChooser(
-    Intent(Intent.ACTION_SEND).apply {
-      type = "text/plain"
-      putExtra(Intent.EXTRA_TEXT, key.text)
-    },
-    ""
-  )
+class AppScreen(val packageName: String) : IntentScreen {
+  companion object {
+    @Provide fun intentFactory(packageManager: PackageManager) = ScreenIntentFactory<AppScreen> { screen ->
+      packageManager.getLaunchIntentForPackage(screen.packageName)!!
+    }
+  }
 }
 
-class UrlScreen(val url: String) : IntentScreen
+class ShareScreen(val text: String) : IntentScreen {
+  companion object {
+    @Provide val intentFactory = ScreenIntentFactory<ShareScreen> { key ->
+      Intent.createChooser(
+        Intent(Intent.ACTION_SEND).apply {
+          type = "text/plain"
+          putExtra(Intent.EXTRA_TEXT, key.text)
+        },
+        ""
+      )
+    }
+  }
+}
 
-@Provide val urlScreenIntentFactory = ScreenIntentFactory<UrlScreen> { screen ->
-  Intent(Intent.ACTION_VIEW).apply { this.data = screen.url.toUri() }
+class UrlScreen(val url: String) : IntentScreen {
+  companion object {
+    @Provide val intentFactory = ScreenIntentFactory<UrlScreen> { screen ->
+      Intent(Intent.ACTION_VIEW).apply { this.data = screen.url.toUri() }
+    }
+  }
 }
 
 fun PlayStoreAppDetailsKey(packageName: String) =

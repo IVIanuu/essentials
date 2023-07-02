@@ -22,13 +22,15 @@ import java.util.UUID
 import kotlin.coroutines.resume
 import kotlin.reflect.KClass
 
-interface IntentScreen : Screen<Result<ActivityResult, ActivityNotFoundException>>
-
-@Provide fun <@Spread T : ScreenIntentFactory<K>, K : Any> intentKeyIntentFactory(
-  intentFactory: T,
-  keyClass: KClass<K>
-): Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>> =
-  (keyClass to intentFactory).cast()
+interface IntentScreen : Screen<Result<ActivityResult, ActivityNotFoundException>> {
+  companion object {
+    @Provide fun <@Spread T : ScreenIntentFactory<K>, K : Any> intentFactoryBinding(
+      intentFactory: T,
+      keyClass: KClass<K>
+    ): Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>> =
+      (keyClass to intentFactory).cast()
+  }
+}
 
 fun interface ScreenIntentFactory<T> {
   suspend operator fun invoke(screen: T): Intent

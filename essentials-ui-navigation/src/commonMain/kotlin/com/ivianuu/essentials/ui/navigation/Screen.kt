@@ -17,7 +17,7 @@ interface RootScreen : Screen<Unit>
 
 interface OverlayScreen<T> : Screen<T> {
   companion object {
-    @Provide fun <T : OverlayScreen<*>> overlayScreenConfig() =
+    @Provide fun <T : OverlayScreen<*>> screenConfig() =
       ScreenConfig<T>(opaque = true, transitionSpec = {
         if (isPush)
           ContentKey entersWith fadeIn()
