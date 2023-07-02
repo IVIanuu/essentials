@@ -16,9 +16,7 @@ fun String.toIso8601Duration(): Iso8601Duration = Iso8601Duration(
 )
 
 data class Iso8601Duration(val amount: Int, val unit: Unit) {
-  enum class Unit {
-    YEAR, MONTH, WEEK, DAY
-  }
+  enum class Unit { YEAR, MONTH, WEEK, DAY }
 }
 
 fun Iso8601Duration.toReadableString() = "$amount " + when (unit) {

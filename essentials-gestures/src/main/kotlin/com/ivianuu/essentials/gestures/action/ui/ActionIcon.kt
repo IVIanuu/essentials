@@ -29,6 +29,4 @@ val LocalActionImageSizeModifier = staticCompositionLocalOf { Modifier.size(40.d
 val LocalActionIconRotation = staticCompositionLocalOf { 0f }
 val LocalActionIconPosition = staticCompositionLocalOf { ActionIconPosition.LEFT }
 
-enum class ActionIconPosition {
-  LEFT, RIGHT
-}
+enum class ActionIconPosition { LEFT, RIGHT }

@@ -14,9 +14,7 @@ interface Logger {
 
   fun logMessage(priority: Priority = DEBUG, tag: String, message: String)
 
-  enum class Priority {
-    VERBOSE, DEBUG, INFO, WARN, ERROR, WTF
-  }
+  enum class Priority { VERBOSE, DEBUG, INFO, WARN, ERROR, WTF }
 }
 
 inline fun Logger.log(

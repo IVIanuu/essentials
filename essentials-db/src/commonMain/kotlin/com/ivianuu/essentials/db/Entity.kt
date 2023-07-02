@@ -89,12 +89,7 @@ data class Row(
   val isPrimaryKey: Boolean,
   val autoIncrement: Boolean
 ) {
-  enum class Type {
-    STRING,
-    INT,
-    BYTES,
-    DOUBLE
-  }
+  enum class Type { STRING, INT, BYTES, DOUBLE }
 }
 
 fun <T> T.toSqlColumnsAndArgsString(schema: Schema, @Inject key: TypeKey<T>): String = buildString {

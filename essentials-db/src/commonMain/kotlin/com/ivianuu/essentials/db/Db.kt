@@ -63,11 +63,7 @@ suspend fun <T> Db.insertAll(
   entities.forEach { insert(it, conflictStrategy) }
 }
 
-enum class InsertConflictStrategy {
-  REPLACE,
-  ABORT,
-  IGNORE
-}
+enum class InsertConflictStrategy { REPLACE, ABORT, IGNORE }
 
 fun <T> Db.selectAll(@Inject key: TypeKey<T>): Flow<List<T>> {
   val descriptor = schema.descriptor<T>()

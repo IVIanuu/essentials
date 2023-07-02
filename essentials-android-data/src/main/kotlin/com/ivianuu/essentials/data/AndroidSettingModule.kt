@@ -60,6 +60,4 @@ class AndroidSettingModule<T : S, S>(
   }
 }
 
-enum class AndroidSettingsType {
-  GLOBAL, SECURE, SYSTEM
-}
+enum class AndroidSettingsType { GLOBAL, SECURE, SYSTEM }

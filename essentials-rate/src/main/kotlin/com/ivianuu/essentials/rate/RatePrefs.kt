@@ -13,11 +13,7 @@ import kotlinx.serialization.Serializable
   val installTime: Long = 0L,
   val feedbackState: FeedbackState? = null
 ) {
-  enum class FeedbackState {
-    COMPLETED,
-    LATER,
-    NEVER
-  }
+  enum class FeedbackState { COMPLETED, LATER, NEVER }
 
   companion object {
     @Provide val prefModule = PrefModule { RatePrefs() }

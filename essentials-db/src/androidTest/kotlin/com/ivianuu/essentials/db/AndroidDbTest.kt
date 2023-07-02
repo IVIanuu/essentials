@@ -814,9 +814,7 @@ class AndroidDbTest {
     @PrimaryKey val enum: MyEnum
   )
 
-  enum class MyEnum {
-    A, B, C
-  }
+  enum class MyEnum { A, B, C }
 
   @Entity @Serializable data class MyEntity(
     @PrimaryKey val name: String,
