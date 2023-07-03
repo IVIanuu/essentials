@@ -58,7 +58,7 @@ import kotlin.time.Duration
     { newInternalValue ->
       internalValue = newInternalValue
       internalValueEraseJob?.cancel()
-      onValueChange?.invoke(newInternalValue.toValue())
+      onValueChange?.invoke(stepPolicy.stepValue(newInternalValue.toValue(), valueRange))
     },
     modifier,
     enabled,

@@ -75,10 +75,10 @@ import kotlinx.coroutines.launch
       onValueChange = { newValue ->
         internalValue = newValue
         internalValueEraseJob?.cancel()
-        onValueChange?.invoke(newValue)
+        onValueChange?.invoke(stepPolicy.stepValue(value, valueRange))
       },
       onValueChangeFinished = { newValue ->
-        onValueChangeFinished?.invoke(newValue)
+        onValueChangeFinished?.invoke(stepPolicy.stepValue(newValue, valueRange))
         internalValueEraseJob?.cancel()
         internalValueEraseJob = scope.launch {
           delay(1.seconds)
