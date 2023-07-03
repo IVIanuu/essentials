@@ -17,6 +17,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.Lerper
+import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.material.DefaultSliderRange
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
@@ -32,26 +34,28 @@ import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.StepPolicy
 import com.ivianuu.essentials.ui.material.stepValue
 import com.ivianuu.injekt.Inject
-import kotlin.time.Duration
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable fun <T : Comparable<T>> SliderListItem(
   value: T,
+  modifier: Modifier = Modifier,
   onValueChange: ((T) -> Unit)? = null,
   onValueChangeFinished: ((T) -> Unit)? = null,
   stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
-  valueRestoreDuration: Duration = Duration.INFINITE,
   title: (@Composable () -> Unit)? = null,
   subtitle: (@Composable () -> Unit)? = null,
   leading: (@Composable () -> Unit)? = null,
   valueText: @Composable ((T) -> Unit)? = null,
-  modifier: Modifier = Modifier,
   contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
   textPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
   sliderAdjustmentPadding: Dp = 8.dp,
   @Inject lerper: Lerper<T>,
   @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
 ) {
-  var internalValue by remember(value) { mutableStateOf(value) }
+  var internalValue: T? by remember { mutableStateOf(null) }
+  var internalValueEraseJob: Job? by remember { mutableStateOf(null) }
 
   val textPadding = PaddingValues(
     start = max(
@@ -64,21 +68,25 @@ import kotlin.time.Duration
   )
 
   @Composable fun SliderContent(modifier: Modifier = Modifier) {
+    val scope = rememberCoroutineScope()
     Slider(
       modifier = modifier,
-      value = value,
+      value = internalValue ?: value,
       onValueChange = { newValue ->
         internalValue = newValue
+        internalValueEraseJob?.cancel()
         onValueChange?.invoke(newValue)
       },
-      onValueChangeFinished = onValueChangeFinished?.let {
-        { newValue ->
-          onValueChangeFinished(newValue)
+      onValueChangeFinished = { newValue ->
+        onValueChangeFinished?.invoke(newValue)
+        internalValueEraseJob?.cancel()
+        internalValueEraseJob = scope.launch {
+          delay(1.seconds)
+          internalValue = null
         }
       },
       stepPolicy = stepPolicy,
-      valueRange = valueRange,
-      valueRestoreDuration = valueRestoreDuration
+      valueRange = valueRange
     )
   }
 
@@ -88,7 +96,7 @@ import kotlin.time.Duration
       contentAlignment = Alignment.CenterEnd
     ) {
       CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.body2) {
-        valueText!!(stepPolicy.stepValue(internalValue, valueRange))
+        valueText!!(stepPolicy.stepValue(internalValue ?: value, valueRange))
       }
     }
   }

@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.Lerper
+import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -28,11 +29,10 @@ import kotlin.time.Duration
 
 @Composable fun <T : Comparable<T>> Slider(
   value: T,
+  modifier: Modifier = Modifier,
   onValueChange: ((T) -> Unit)? = null,
   onValueChangeFinished: ((T) -> Unit)? = null,
   stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
-  valueRestoreDuration: Duration = Duration.INFINITE,
-  modifier: Modifier = Modifier,
   enabled: Boolean = true,
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   colors: SliderColors = SliderDefaults.colors(
@@ -49,32 +49,30 @@ import kotlin.time.Duration
   fun T.toFloat() = lerper.unlerp(valueRange.start, valueRange.endInclusive, this)
   fun Float.toValue() = lerper.lerp(valueRange.start, valueRange.endInclusive, this)
 
-  var internalValue by remember(value) { mutableStateOf(value.toFloat()) }
+  var internalValue: Float? by remember { mutableStateOf(null) }
+  var internalValueEraseJob: Job? by remember { mutableStateOf(null) }
 
-  var valueChangeJob: Job? by remember { mutableStateOf(null) }
   val scope = rememberCoroutineScope()
   androidx.compose.material.Slider(
-    internalValue,
+    internalValue ?: value.toFloat(),
     { newInternalValue ->
       internalValue = newInternalValue
-      val newValue = internalValue.toValue()
-      onValueChange?.invoke(newValue)
-
-      valueChangeJob?.cancel()
-      if (valueRestoreDuration < Duration.INFINITE) {
-        valueChangeJob = scope.launch {
-          delay(valueRestoreDuration)
-          internalValue = value.toFloat()
-        }
-      }
+      internalValueEraseJob?.cancel()
+      onValueChange?.invoke(newInternalValue.toValue())
     },
     modifier,
     enabled,
     0f..1f,
     remember(stepPolicy, valueRange) { stepPolicy(valueRange) },
-    onValueChangeFinished?.let {
-      {
-        onValueChangeFinished(stepPolicy.stepValue(internalValue.toValue(), valueRange))
+    {
+      if (internalValue == null) return@Slider
+
+      onValueChangeFinished?.invoke(stepPolicy.stepValue(internalValue!!.toValue(), valueRange))
+
+      internalValueEraseJob?.cancel()
+      internalValueEraseJob = scope.launch {
+        delay(1.seconds)
+        internalValue = null
       }
     },
     interactionSource,
