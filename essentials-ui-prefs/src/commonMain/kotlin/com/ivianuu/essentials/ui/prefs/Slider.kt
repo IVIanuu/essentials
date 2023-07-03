@@ -75,7 +75,7 @@ import kotlinx.coroutines.launch
       onValueChange = { newValue ->
         internalValue = newValue
         internalValueEraseJob?.cancel()
-        onValueChange?.invoke(stepPolicy.stepValue(value, valueRange))
+        onValueChange?.invoke(stepPolicy.stepValue(internalValue!!, valueRange))
       },
       onValueChangeFinished = { newValue ->
         onValueChangeFinished?.invoke(stepPolicy.stepValue(newValue, valueRange))
