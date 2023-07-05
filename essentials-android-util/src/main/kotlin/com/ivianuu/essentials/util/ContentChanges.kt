@@ -4,11 +4,9 @@
 
 package com.ivianuu.essentials.util
 
-import android.app.Application
 import android.content.ContentResolver
 import android.database.ContentObserver
 import android.net.Uri
-import android.os.Looper
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.channels.awaitClose
@@ -24,8 +22,8 @@ fun interface ContentChangesFactory {
   contentResolver: ContentResolver,
   coroutineContexts: CoroutineContexts,
 ) = ContentChangesFactory { uri ->
-  callbackFlow<Unit> {
-    val observer = object : ContentObserver(android.os.Handler(Looper.getMainLooper())) {
+  callbackFlow {
+    val observer = object : ContentObserver(null) {
       override fun onChange(selfChange: Boolean) {
         super.onChange(selfChange)
         trySend(Unit)
@@ -36,5 +34,3 @@ fun interface ContentChangesFactory {
   }.flowOn(coroutineContexts.main)
 }
 
-@Provide inline fun contentResolver(application: Application): ContentResolver =
-  application.contentResolver
