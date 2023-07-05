@@ -12,18 +12,13 @@ import kotlin.reflect.KClass
 
 data class TileModel<out T : AbstractFunTileService<*>>(
   val icon: Icon? = null,
-  val iconRes: Int? = null,
   val label: String? = null,
-  val labelRes: Int? = null,
   val description: String? = null,
-  val descriptionRes: Int? = null,
   val status: Status = Status.UNAVAILABLE,
   val onTileClicked: () -> Unit = {}
 ) {
   enum class Status { UNAVAILABLE, ACTIVE, INACTIVE }
 }
-
-fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.Status.INACTIVE
 
 object TileModelModule {
   @Provide inline fun <@Spread T : Model<TileModel<S>>, S : AbstractFunTileService<*>> element(
