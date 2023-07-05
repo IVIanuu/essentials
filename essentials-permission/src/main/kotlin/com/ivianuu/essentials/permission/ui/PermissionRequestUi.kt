@@ -4,14 +4,14 @@
 
 package com.ivianuu.essentials.permission.ui
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
@@ -45,36 +45,36 @@ class PermissionRequestScreen(
 @Provide val permissionRequestUi = Ui<PermissionRequestScreen, PermissionRequestModel> { model ->
   SimpleListScreen(R.string.es_request_permission_title) {
     items(model.permissionsToGrant) { permission ->
-      Card(
-        modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
-        elevation = 0.dp,
-        border = BorderStroke(1.dp, LocalContentColor.current.copy(alpha = 0.12f))
-      ) {
-        ListItem(
-          contentPadding = PaddingValues(start = 16.dp, end = 8.dp),
-          textPadding = PaddingValues(start = 16.dp),
-          title = { Text(permission.title) },
-          subtitle = permission.desc?.let { { Text(it) } },
-          leading = { permission.icon?.invoke() },
-          trailing = {
-            Row(horizontalArrangement = Arrangement.End) {
-              TextButton(
-                modifier = Modifier.width(56.dp),
-                onClick = { model.denyPermission(permission) }
-              ) {
-                Text(R.string.es_deny, maxLines = 1)
-              }
+      ListItem(
+        modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp)
+          .border(
+            1.dp,
+            LocalContentColor.current.copy(alpha = 0.12f),
+            RoundedCornerShape(8.dp)
+          ),
+        contentPadding = PaddingValues(start = 16.dp, end = 8.dp),
+        textPadding = PaddingValues(start = 16.dp),
+        title = { Text(permission.title) },
+        subtitle = permission.desc?.let { { Text(it) } },
+        leading = { permission.icon?.invoke() },
+        trailing = {
+          Row(horizontalArrangement = Arrangement.End) {
+            TextButton(
+              modifier = Modifier.width(56.dp),
+              onClick = { model.denyPermission(permission) }
+            ) {
+              Text(R.string.es_deny, maxLines = 1)
+            }
 
-              TextButton(
-                modifier = Modifier.width(56.dp),
-                onClick = { model.grantPermission(permission) }
-              ) {
-                Text(R.string.es_grant, maxLines = 1)
-              }
+            TextButton(
+              modifier = Modifier.width(56.dp),
+              onClick = { model.grantPermission(permission) }
+            ) {
+              Text(R.string.es_grant, maxLines = 1)
             }
           }
-        )
-      }
+        }
+      )
     }
   }
 }

@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.SimpleListScreen
@@ -89,12 +90,13 @@ data class HelpItem(
 ) {
   Column(
     modifier = Modifier
-      .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+      .padding(start = 8.dp, top = 8.dp, end = 8.dp)
       .border(
         1.dp,
         LocalContentColor.current.copy(alpha = 0.12f),
         RoundedCornerShape(8.dp)
       )
+      .clip(RoundedCornerShape(8.dp))
       .clickable(onClick = onToggleExpandedClick)
       .padding(16.dp)
       .animateContentSize()
