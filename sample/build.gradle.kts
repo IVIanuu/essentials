@@ -31,6 +31,8 @@ android {
 }
 
 dependencies {
+  implementation("androidx.glance:glance:1.0.0-beta01")
+  implementation("androidx.glance:glance-appwidget:1.0.0-beta01")
   implementation(project(":essentials-analytics-android"))
   implementation(project(":essentials-android"))
   implementation(project(":essentials-android-data"))

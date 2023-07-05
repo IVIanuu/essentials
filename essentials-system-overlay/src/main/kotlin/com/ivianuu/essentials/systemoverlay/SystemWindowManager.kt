@@ -35,11 +35,13 @@ import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalView
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 interface SystemWindowManager {
@@ -47,6 +49,20 @@ interface SystemWindowManager {
     state: SystemWindowState = SystemWindowState(),
     content: @Composable () -> Unit
   ): Nothing
+}
+
+class SystemWindowState(
+  width: Int = WindowManager.LayoutParams.MATCH_PARENT,
+  height: Int = WindowManager.LayoutParams.MATCH_PARENT,
+  x: Int = 0,
+  y: Int = 0,
+  interceptor: (WindowManager.LayoutParams) -> Unit = {}
+) {
+  var width by mutableStateOf(width)
+  var height by mutableStateOf(height)
+  var x by mutableStateOf(x)
+  var y by mutableStateOf(y)
+  var interceptor by mutableStateOf(interceptor)
 }
 
 fun Modifier.systemWindowTrigger() = composed {
@@ -83,12 +99,12 @@ fun Modifier.systemWindowTrigger() = composed {
 
     layoutParams.apply {
       if (width != coords.size.width) {
-        dirty = true
         width = coords.size.width
+        dirty = true
       }
       if (height != coords.size.height) {
-        dirty = true
         height = coords.size.height
+        dirty = true
       }
 
       val ownerLoc = intArrayOf(0, 0)
@@ -97,13 +113,13 @@ fun Modifier.systemWindowTrigger() = composed {
 
       val newX = positionInWindow.x.roundToInt() + ownerLoc[0]
       if (x != newX) {
-        dirty = true
         x = newX
+        dirty = true
       }
       val newY = positionInWindow.y.roundToInt() + ownerLoc[1]
       if (y != newY) {
-        dirty = true
         y = newY
+        dirty = true
       }
 
       if (dirty)
@@ -115,6 +131,7 @@ fun Modifier.systemWindowTrigger() = composed {
 @Provide class SystemWindowManagerImpl(
   private val appContext: AppContext,
   accessibilityWindowManager: AccessibilityWindowManager? = null,
+  private val coroutineContexts: CoroutineContexts,
   windowManager: @SystemService WindowManager
 ) : SystemWindowManager {
   internal val canUseAccessibility = accessibilityWindowManager != null
@@ -123,43 +140,45 @@ fun Modifier.systemWindowTrigger() = composed {
   override suspend fun attachSystemWindow(
     state: SystemWindowState,
     content: @Composable () -> Unit
-  ) = bracket(
-    acquire = {
-      lateinit var contentView: View
-      contentView = OverlayComposeView(appContext) {
-        Window(contentView, state, content)
-      }
-      contentView
-    },
-    use = { contentView ->
-      windowManager.addView(
-        contentView,
-        WindowManager.LayoutParams().apply {
-          this.width = WindowManager.LayoutParams.WRAP_CONTENT
-          this.height = WindowManager.LayoutParams.WRAP_CONTENT
-          gravity = Gravity.LEFT or Gravity.TOP
-
-          type = if (canUseAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
-          else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-
-          flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-              WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
-              WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-              WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
-              WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
-
-          format = PixelFormat.TRANSLUCENT
-
-          state.interceptor(this)
+  ) = withContext(coroutineContexts.main) {
+    bracket(
+      acquire = {
+        lateinit var contentView: View
+        contentView = OverlayComposeView(appContext) {
+          Window(contentView, state, content)
         }
-      )
-      awaitCancellation()
-    },
-    { contentView, _ ->
-      catch { windowManager.removeViewImmediate(contentView) }
-      contentView.dispose()
-    }
-  )
+        contentView
+      },
+      use = { contentView ->
+        windowManager.addView(
+          contentView,
+          WindowManager.LayoutParams().apply {
+            this.width = WindowManager.LayoutParams.WRAP_CONTENT
+            this.height = WindowManager.LayoutParams.WRAP_CONTENT
+            gravity = Gravity.LEFT or Gravity.TOP
+
+            type = if (canUseAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+            else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+
+            flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
+
+            format = PixelFormat.TRANSLUCENT
+
+            state.interceptor(this)
+          }
+        )
+        awaitCancellation()
+      },
+      { contentView, _ ->
+        catch { windowManager.removeViewImmediate(contentView) }
+        contentView.dispose()
+      }
+    )
+  }
 
   @Composable private fun Window(
     contentView: View,
@@ -192,20 +211,6 @@ fun Modifier.systemWindowTrigger() = composed {
       content = content
     )
   }
-}
-
-class SystemWindowState(
-  width: Int = WindowManager.LayoutParams.MATCH_PARENT,
-  height: Int = WindowManager.LayoutParams.MATCH_PARENT,
-  x: Int = 0,
-  y: Int = 0,
-  interceptor: (WindowManager.LayoutParams) -> Unit = {}
-) {
-  var width by mutableStateOf(width)
-  var height by mutableStateOf(height)
-  var x by mutableStateOf(x)
-  var y by mutableStateOf(y)
-  var interceptor by mutableStateOf(interceptor)
 }
 
 internal val LocalSystemWindowManager = staticCompositionLocalOf<SystemWindowManagerImpl> {
