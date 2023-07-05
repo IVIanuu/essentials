@@ -4,26 +4,24 @@
 
 package com.ivianuu.essentials.rubik
 
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.googlefonts.GoogleFont
+import com.ivianuu.essentials.font.GoogleFontProvider
 import com.ivianuu.essentials.ui.AppFont
 import com.ivianuu.injekt.Provide
 
 @Provide val Rubik: AppFont = FontFamily(
-  Font(R.font.rubik_light, FontWeight.Light, FontStyle.Normal),
-  Font(R.font.rubik_light_italic, FontWeight.Light, FontStyle.Italic),
-  Font(R.font.rubik_regular, FontWeight.Normal, FontStyle.Normal),
-  Font(R.font.rubik_regular_italic, FontWeight.Normal, FontStyle.Italic),
-  Font(R.font.rubik_medium, FontWeight.Medium, FontStyle.Normal),
-  Font(R.font.rubik_medium_italic, FontWeight.Medium, FontStyle.Italic),
-  Font(R.font.rubik_semi_bold, FontWeight.SemiBold, FontStyle.Normal),
-  Font(R.font.rubik_semi_bold_italic, FontWeight.SemiBold, FontStyle.Italic),
-  Font(R.font.rubik_bold, FontWeight.Bold, FontStyle.Normal),
-  Font(R.font.rubik_bold_italic, FontWeight.Bold, FontStyle.Italic),
-  Font(R.font.rubik_extra_bold, FontWeight.ExtraBold, FontStyle.Normal),
-  Font(R.font.rubik_extra_bold_italic, FontWeight.ExtraBold, FontStyle.Italic),
-  Font(R.font.rubik_black, FontWeight.Black, FontStyle.Normal),
-  Font(R.font.rubik_black_italic, FontWeight.Black, FontStyle.Italic)
+  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Light, FontStyle.Normal),
+  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Light, FontStyle.Italic),
+  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Normal, FontStyle.Normal),
+  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Normal, FontStyle.Italic),
+  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Medium, FontStyle.Normal),
+  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Medium, FontStyle.Italic),
+  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Bold, FontStyle.Normal),
+  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Bold, FontStyle.Italic),
+  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Black, FontStyle.Normal),
+  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Black, FontStyle.Italic),
 )

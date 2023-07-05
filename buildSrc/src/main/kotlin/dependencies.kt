@@ -67,6 +67,7 @@ object Deps {
     const val compilerVersion = "1.4.7"
     const val compiler = "org.jetbrains.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
+    const val googleFonts = "androidx.compose.ui:ui-text-google-fonts:$version"
     const val material = "org.jetbrains.compose.material:material:$version"
     const val runtime = "org.jetbrains.compose.runtime:runtime:$version"
   }
