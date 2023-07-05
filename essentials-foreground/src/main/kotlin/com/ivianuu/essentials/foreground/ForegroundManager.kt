@@ -7,9 +7,6 @@ package com.ivianuu.essentials.foreground
 import android.app.Notification
 import android.content.Intent
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
@@ -68,8 +65,7 @@ interface ForegroundManager {
     }
   )
 
-  internal class ForegroundState(val id: Int, notification: @Composable () -> Notification) {
-    var notification by mutableStateOf(notification)
+  internal class ForegroundState(val id: Int, val notification: @Composable () -> Notification) {
     val seen = CompletableDeferred<Unit>()
   }
 }

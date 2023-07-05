@@ -11,6 +11,7 @@ import android.os.IBinder
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.AppScope
@@ -38,15 +39,11 @@ import kotlinx.coroutines.delay
     logger.log { "start service" }
 
     job = scope.launchComposition {
-      val statesWithNotification = foregroundManager.states.collectAsState()
-        .value
-        .map {
-          key(it.id) {
-            it to it.notification()
-          }
-        }
+      val states by foregroundManager.states.collectAsState()
 
-      statesWithNotification.forEachIndexed { index, (state, notification) ->
+      states.forEachIndexed { index, state ->
+        val notification = key(state.id) { state.notification() }
+
         key(index) {
           DisposableEffect(state, notification) {
             logger.log { "update ${state.id}" }
@@ -64,7 +61,7 @@ import kotlinx.coroutines.delay
         }
       }
 
-      if (statesWithNotification.isEmpty())
+      if (states.isEmpty())
         LaunchedEffect(true) {
           onCancel(
             block = {
