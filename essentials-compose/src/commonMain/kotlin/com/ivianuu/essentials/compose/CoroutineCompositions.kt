@@ -7,7 +7,6 @@ package com.ivianuu.essentials.compose
 import androidx.compose.runtime.AbstractApplier
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
-import androidx.compose.runtime.MonotonicFrameClock
 import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.snapshots.Snapshot
 import com.ivianuu.injekt.Inject
@@ -15,7 +14,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -95,17 +93,10 @@ private object UnitApplier : AbstractApplier<Unit>(Unit) {
   override fun onClear() {}
 }
 
-@Tag annotation class StateCoroutineContextTag {
-  companion object {
-    @Provide val stateCoroutineContext: StateCoroutineContext by lazy {
-      Dispatchers.Main + ImmediateFrameClock
-    }
-  }
-}
+@Tag annotation class StateCoroutineContextTag
 
 typealias StateCoroutineContext = @StateCoroutineContextTag CoroutineContext
 
-private object ImmediateFrameClock : MonotonicFrameClock {
-  override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R =
-    onFrame(0L)
+expect object StateCoroutineContextModule {
+  @Provide val context: StateCoroutineContext
 }
