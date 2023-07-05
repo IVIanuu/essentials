@@ -16,7 +16,7 @@ data class TileModel<out T : AbstractFunTileService<*>>(
   val label: String? = null,
   val description: String? = null,
   val status: Status = Status.UNAVAILABLE,
-  val onTileClicked: () -> Unit = {}
+  val onClick: () -> Unit = {}
 ) {
   enum class Status { UNAVAILABLE, ACTIVE, INACTIVE }
 }
