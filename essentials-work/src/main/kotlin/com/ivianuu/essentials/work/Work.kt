@@ -8,19 +8,18 @@ import android.content.Context
 import androidx.work.Configuration
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ListenableWorker
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkInfo
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
-import androidx.work.await
+import androidx.work.workDataOf
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ExitCase
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
@@ -35,21 +34,18 @@ import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
 import kotlin.time.Duration
 import kotlin.time.toJavaDuration
 import androidx.work.WorkManager as AndroidWorkManager
 
-@Serializable abstract class WorkId(val value: String)
+abstract class WorkId(val value: String)
 
-@Serializable data class PeriodicWorkSchedule<I : WorkId>(
+data class PeriodicWorkSchedule<I : WorkId>(
   val interval: Duration,
   val constraints: WorkConstraints = WorkConstraints()
 )
 
-@Serializable data class WorkConstraints(
+data class WorkConstraints(
   val networkType: NetworkType = NetworkType.ANY,
   val requiresCharging: Boolean = false
 ) {
@@ -84,7 +80,7 @@ interface WorkManager {
     withContext(scope.coroutineContext + coroutineContexts.computation) {
       if (id.value !in workIds.map { it.value }) {
         logger.log { "no worker found for ${id.value}" }
-        androidWorkManager.cancelAllWorkByTag(WORK_ID_PREFIX + id.value)
+        androidWorkManager.cancelUniqueWork(id.value)
         return@withContext
       }
 
@@ -132,7 +128,7 @@ object WorkModule {
   private val workManager: WorkManager
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
-    val workId = tags.single { it.startsWith(WORK_ID_PREFIX) }.removePrefix(WORK_ID_PREFIX)
+    val workId = inputData.getString(WORK_ID) ?: return Result.failure()
     return catch {
       workManager.runWorker(object : WorkId(workId) {})
     }.fold({ Result.success() }, { Result.retry() })
@@ -164,49 +160,32 @@ fun interface WorkInitializer : ScopeInitializer<AppScope>
 
 @Provide fun periodicWorkScheduler(
   coroutineContexts: CoroutineContexts,
-  json: Json,
-  logger: Logger,
   schedules: Map<String, PeriodicWorkSchedule<*>>,
   androidWorkManager: AndroidWorkManager,
 ) = ScopeWorker<AppScope> {
   withContext(coroutineContexts.computation) {
     schedules.forEach { (workId, schedule) ->
-      val serializedSchedule = json.encodeToString(serializer<PeriodicWorkSchedule<WorkId>>(), schedule.cast())
-      val existingWork = androidWorkManager.getWorkInfosByTag(WORK_ID_PREFIX + workId).await()
-      if (existingWork.none {
-          (it.state == WorkInfo.State.RUNNING ||
-              it.state == WorkInfo.State.ENQUEUED) &&
-              it.tags.singleOrNull { it.startsWith(WORK_SCHEDULE_PREFIX) }
-                ?.removePrefix(WORK_SCHEDULE_PREFIX) == serializedSchedule
-        }) {
-        logger.log { "enqueue periodic work $workId -> $schedule" }
-
-        androidWorkManager.cancelAllWorkByTag(WORK_ID_PREFIX + workId)
-
-        androidWorkManager.enqueue(
-          PeriodicWorkRequestBuilder<EsWorker>(schedule.interval.toJavaDuration())
-            .addTag(WORK_ID_PREFIX + workId)
-            .addTag(WORK_SCHEDULE_PREFIX + serializedSchedule)
-            .setConstraints(
-              Constraints.Builder()
-                .setRequiresCharging(schedule.constraints.requiresCharging)
-                .setRequiredNetworkType(
-                  when (schedule.constraints.networkType) {
-                    WorkConstraints.NetworkType.ANY -> NetworkType.NOT_REQUIRED
-                    WorkConstraints.NetworkType.CONNECTED -> NetworkType.CONNECTED
-                    WorkConstraints.NetworkType.UNMETERED -> NetworkType.UNMETERED
-                  }
-                )
-                .build()
-            )
-            .build()
-        )
-      } else {
-        logger.log { "do not enqueue unchanged periodic work $workId -> $schedule" }
-      }
+      androidWorkManager.enqueueUniquePeriodicWork(
+        workId,
+        ExistingPeriodicWorkPolicy.UPDATE,
+        PeriodicWorkRequestBuilder<EsWorker>(schedule.interval.toJavaDuration())
+          .setConstraints(
+            Constraints.Builder()
+              .setRequiresCharging(schedule.constraints.requiresCharging)
+              .setRequiredNetworkType(
+                when (schedule.constraints.networkType) {
+                  WorkConstraints.NetworkType.ANY -> NetworkType.NOT_REQUIRED
+                  WorkConstraints.NetworkType.CONNECTED -> NetworkType.CONNECTED
+                  WorkConstraints.NetworkType.UNMETERED -> NetworkType.UNMETERED
+                }
+              )
+              .build()
+          )
+          .setInputData(workDataOf(WORK_ID to workId))
+          .build()
+      )
     }
   }
 }
 
-private const val WORK_ID_PREFIX = "work_id_"
-private const val WORK_SCHEDULE_PREFIX = "work_schedule_"
+private const val WORK_ID = "work_id"
