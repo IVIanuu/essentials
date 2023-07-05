@@ -13,15 +13,16 @@ import com.ivianuu.essentials.font.GoogleFontProvider
 import com.ivianuu.essentials.ui.AppFont
 import com.ivianuu.injekt.Provide
 
+private val googleFont = GoogleFont("Rubik")
 @Provide val Rubik: AppFont = FontFamily(
-  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Light, FontStyle.Normal),
-  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Light, FontStyle.Italic),
-  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Normal, FontStyle.Normal),
-  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Normal, FontStyle.Italic),
-  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Medium, FontStyle.Normal),
-  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Medium, FontStyle.Italic),
-  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Bold, FontStyle.Normal),
-  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Bold, FontStyle.Italic),
-  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Black, FontStyle.Normal),
-  Font(GoogleFont("Rubik"), GoogleFontProvider, FontWeight.Black, FontStyle.Italic),
+  Font(googleFont, GoogleFontProvider, FontWeight.Light, FontStyle.Normal),
+  Font(googleFont, GoogleFontProvider, FontWeight.Light, FontStyle.Italic),
+  Font(googleFont, GoogleFontProvider, FontWeight.Normal, FontStyle.Normal),
+  Font(googleFont, GoogleFontProvider, FontWeight.Normal, FontStyle.Italic),
+  Font(googleFont, GoogleFontProvider, FontWeight.Medium, FontStyle.Normal),
+  Font(googleFont, GoogleFontProvider, FontWeight.Medium, FontStyle.Italic),
+  Font(googleFont, GoogleFontProvider, FontWeight.Bold, FontStyle.Normal),
+  Font(googleFont, GoogleFontProvider, FontWeight.Bold, FontStyle.Italic),
+  Font(googleFont, GoogleFontProvider, FontWeight.Black, FontStyle.Normal),
+  Font(googleFont, GoogleFontProvider, FontWeight.Black, FontStyle.Italic),
 )
