@@ -4,12 +4,22 @@
 
 package com.ivianuu.essentials.permission.ui
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Card
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
@@ -17,7 +27,7 @@ import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Switch
+import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -34,31 +44,45 @@ class PermissionRequestScreen(
 
 @Provide val permissionRequestUi = Ui<PermissionRequestScreen, PermissionRequestModel> { model ->
   SimpleListScreen(R.string.es_request_permission_title) {
-    items(model.permissions) { permission ->
-      ListItem(
-        modifier = Modifier.clickable { model.grantPermission(permission) },
-        title = { Text(permission.permission.title) },
-        subtitle = permission.permission.desc?.let {
-          {
-            Text(it)
+    items(model.permissionsToGrant) { permission ->
+      Card(
+        modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
+        elevation = 0.dp,
+        border = BorderStroke(1.dp, LocalContentColor.current.copy(alpha = 0.12f))
+      ) {
+        ListItem(
+          contentPadding = PaddingValues(start = 16.dp, end = 8.dp),
+          textPadding = PaddingValues(start = 16.dp),
+          title = { Text(permission.title) },
+          subtitle = permission.desc?.let { { Text(it) } },
+          leading = { permission.icon?.invoke() },
+          trailing = {
+            Row(horizontalArrangement = Arrangement.End) {
+              TextButton(
+                modifier = Modifier.width(56.dp),
+                onClick = { model.denyPermission(permission) }
+              ) {
+                Text(R.string.es_deny, maxLines = 1)
+              }
+
+              TextButton(
+                modifier = Modifier.width(56.dp),
+                onClick = { model.grantPermission(permission) }
+              ) {
+                Text(R.string.es_grant, maxLines = 1)
+              }
+            }
           }
-        },
-        leading = { permission.permission.icon?.invoke() },
-        trailing = { Switch(checked = permission.isGranted, null) }
-      )
+        )
+      }
     }
   }
 }
 
 data class PermissionRequestModel(
-  val permissions: List<UiPermission<*>>,
-  val grantPermission: (UiPermission<*>) -> Unit
-)
-
-data class UiPermission<P : Permission>(
-  val permissionKey: TypeKey<P>,
-  val permission: P,
-  val isGranted: Boolean
+  val permissionsToGrant: List<Permission>,
+  val grantPermission: (Permission) -> Unit,
+  val denyPermission: (Permission) -> Unit
 )
 
 @Provide fun permissionRequestModel(
@@ -74,18 +98,21 @@ data class UiPermission<P : Permission>(
     navigator.pop(screen, true)
   }
 
+  val keysByPermission = screen.permissionsKeys.associateBy { permissionManager.permission(it) }
+
   PermissionRequestModel(
-    permissions = screen.permissionsKeys
-      .map { permissionKey ->
-        UiPermission(
-          permissionKey,
-          permissionManager.permission(permissionKey),
-          permissionManager.permissionState(listOf(permissionKey)).collectAsState(false).value
-        )
+    permissionsToGrant = screen.permissionsKeys
+      .map { permissionManager.permission(it) }
+      .filterNot {
+        key(keysByPermission[it]) {
+          remember { permissionManager.permissionState(listOf(keysByPermission[it]!!)) }
+            .collectAsState(false).value
+        }
       },
     grantPermission = action { permission ->
-      requestHandlers[permission.permissionKey]!!()(permission.permission)
+      requestHandlers[keysByPermission[permission]!!]!!()(permission)
       appUiStarter()
-    }
+    },
+    denyPermission = action { _ -> navigator.pop(screen, false) }
   )
 }
