@@ -87,7 +87,7 @@ abstract class AbstractFunTileService<T : Any>(
   override fun onClick() {
     super.onClick()
     logger.log { "$serviceClass on click" }
-    currentModel?.onTileClicked?.invoke()
+    currentModel?.onClick?.invoke()
   }
 
   override fun onStopListening() {
