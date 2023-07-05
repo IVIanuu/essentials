@@ -62,14 +62,12 @@ interface PermissionManager {
   override suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean {
     logger.log { "request permissions $permissions" }
 
-    if (permissions.all { permissionState(listOf(it)).first() })
-      return true
-
-    val result = appUiStarter()
-      .cast<UiScopeOwner>()
-      .uiScope
-      .navigator
-      .push(PermissionRequestScreen(permissions)) == true
+    val result = permissions.all { permissionState(listOf(it)).first() } ||
+        appUiStarter()
+          .cast<UiScopeOwner>()
+          .uiScope
+          .navigator
+          .push(PermissionRequestScreen(permissions)) == true
 
     logger.log { "request permissions result $permissions -> $result" }
     return result
