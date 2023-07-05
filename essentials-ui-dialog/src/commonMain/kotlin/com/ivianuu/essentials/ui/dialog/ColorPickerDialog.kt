@@ -48,12 +48,15 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.Strings
+import com.ivianuu.essentials.Strings_Cancel
+import com.ivianuu.essentials.Strings_Ok
 import com.ivianuu.essentials.safeAs
+import com.ivianuu.essentials.stringKeyOf
 import com.ivianuu.essentials.ui.animation.AnimatedContent
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.materialSharedAxisX
 import com.ivianuu.essentials.ui.animation.materialSharedAxisY
-import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.TextButton
@@ -61,7 +64,6 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.util.toColorOrNull
 import com.ivianuu.essentials.ui.util.toHexString
 import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
 
 @Composable fun ColorPickerDialog(
   modifier: Modifier = Modifier,
@@ -73,8 +75,7 @@ import com.ivianuu.injekt.Provide
   onCancel: () -> Unit,
   allowCustomArgb: Boolean = true,
   showAlphaSelector: Boolean = false,
-  @Inject colorPickerStrings: ColorPickerStrings,
-  @Inject commonStrings: CommonStrings
+  @Inject strings: Strings
 ) {
   var currentColor by remember { mutableStateOf(initialColor) }
   var currentScreen by remember { mutableStateOf(ColorPickerTab.COLORS) }
@@ -127,11 +128,11 @@ import com.ivianuu.injekt.Provide
             contentColor = currentColor
           )
         ) {
-          Text(otherScreen.title(colorPickerStrings))
+          Text(strings[otherScreen.title])
         }
       }
 
-      TextButton(onClick = onCancel) { Text(commonStrings.cancel) }
+      TextButton(onClick = onCancel) { Text(strings[Strings_Cancel]) }
 
       TextButton(
         onClick = { onColorSelected(currentColor) },
@@ -139,7 +140,7 @@ import com.ivianuu.injekt.Provide
           contentColor = currentColor
         )
       ) {
-        Text(commonStrings.ok)
+        Text(strings[Strings_Ok])
       }
     }
   )
@@ -453,18 +454,10 @@ private enum class ColorComponent(
   abstract fun apply(color: Color, value: Float): Color
 }
 
-private enum class ColorPickerTab(val title: ColorPickerStrings.() -> String) {
-  COLORS({ ColorsTabTitle }), EDITOR({ EditorTabTitle })
+private enum class ColorPickerTab(val title: Strings.Key0) {
+  COLORS(Strings_ColorsTabTitle), EDITOR(Strings_EditorTabTitle)
 }
 
-interface ColorPickerStrings {
-  val ColorPickerTitle: String
-  val ColorsTabTitle: String
-  val EditorTabTitle: String
-
-  @Provide object Impl : ColorPickerStrings {
-    override val ColorPickerTitle = "Pick a color"
-    override val ColorsTabTitle = "Colors"
-    override val EditorTabTitle = "Custom"
-  }
-}
+val Strings_ColorPickerTitle = stringKeyOf { "Pick a color" }
+val Strings_ColorsTabTitle = stringKeyOf { "Colors" }
+val Strings_EditorTabTitle = stringKeyOf { "Custom" }

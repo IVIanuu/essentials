@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.Strings
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.injekt.Provide
@@ -19,13 +20,16 @@ interface Toaster {
   operator fun invoke(messageRes: Int)
 
   operator fun invoke(messageRes: Int, vararg args: Any?)
+
+  operator fun invoke(messageKey: Strings.Key0)
 }
 
 @Provide class ToasterImpl(
   private val appContext: AppContext,
   private val coroutineContexts: CoroutineContexts,
   private val resources: Resources,
-  private val scope: ScopedCoroutineScope<AppScope>
+  private val scope: ScopedCoroutineScope<AppScope>,
+  private val strings: Strings
 ) : Toaster {
   override fun invoke(message: String) {
     scope.launch(coroutineContexts.main) {
@@ -41,4 +45,7 @@ interface Toaster {
 
   override fun invoke(messageRes: Int, vararg args: Any?) =
     invoke(resources<String>(messageRes, *args))
+
+  override fun invoke(messageKey: Strings.Key0) =
+    invoke(strings[messageKey])
 }
