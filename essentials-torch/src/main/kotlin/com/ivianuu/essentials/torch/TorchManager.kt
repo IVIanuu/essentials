@@ -4,11 +4,6 @@
 
 package com.ivianuu.essentials.torch
 
-import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Intent
 import android.hardware.camera2.CameraManager
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,6 +12,7 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Scoped
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.compositionStateFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.onCancel
@@ -26,14 +22,14 @@ import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.util.BroadcastsFactory
-import com.ivianuu.essentials.util.NotificationFactory
+import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.util.Notification
+import com.ivianuu.essentials.util.NotificationModel
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.context
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.serialization.Serializable
 
 interface TorchManager {
   val torchEnabled: StateFlow<Boolean>
@@ -42,12 +38,9 @@ interface TorchManager {
 }
 
 @Provide @Scoped<AppScope> class TorchManagerImpl(
-  private val broadcastsFactory: BroadcastsFactory,
   private val cameraManager: @SystemService CameraManager,
   private val foregroundManager: ForegroundManager,
   private val logger: Logger,
-  private val notificationFactory: NotificationFactory,
-  private val resources: Resources,
   scope: ScopedCoroutineScope<AppScope>,
   private val toaster: Toaster
 ) : TorchManager {
@@ -56,12 +49,7 @@ interface TorchManager {
     if (!_torchEnabled) return@compositionStateFlow _torchEnabled
 
     LaunchedEffect(true) {
-      foregroundManager.startForeground { createTorchNotification() }
-    }
-
-    LaunchedEffect(true) {
-      broadcastsFactory(ACTION_DISABLE_TORCH).first()
-      _torchEnabled = false
+      foregroundManager.startForeground(TorchNotification)
     }
 
     LaunchedEffect(true) {
@@ -87,28 +75,15 @@ interface TorchManager {
   override suspend fun updateTorchState(value: Boolean) {
     _torchEnabled = value
   }
+}
 
-  @SuppressLint("LaunchActivityFromNotification")
-  private fun createTorchNotification(): Notification = notificationFactory(
-    "torch",
-    resources(R.string.es_notif_channel_torch),
-    NotificationManager.IMPORTANCE_LOW
-  ) {
-    setAutoCancel(true)
-    setSmallIcon(R.drawable.es_ic_flashlight_on)
-    setContentTitle(resources(R.string.es_notif_title_torch))
-    setContentText(resources(R.string.es_notif_text_torch))
-    setContentIntent(
-      PendingIntent.getBroadcast(
-        context,
-        87,
-        Intent(ACTION_DISABLE_TORCH),
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-      )
-    )
-  }
+@Serializable object TorchNotification : Notification(channelId = "torch", importance = Importance.LOW)
 
-  private companion object {
-    private const val ACTION_DISABLE_TORCH = "com.ivianuu.essentials.torch.DISABLE_TORCH"
-  }
+@Provide fun torchNotificationModel(resources: Resources, torchManager: TorchManager) = Model {
+  NotificationModel<TorchNotification>(
+    icon = resources(R.drawable.es_ic_flashlight_on),
+    title = resources(R.string.es_notif_title_torch),
+    text = resources(R.string.es_notif_text_torch),
+    onClick = action { torchManager.updateTorchState(false) }
+  )
 }

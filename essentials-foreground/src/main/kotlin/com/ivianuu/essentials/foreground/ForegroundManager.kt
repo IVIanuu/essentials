@@ -4,12 +4,7 @@
 
 package com.ivianuu.essentials.foreground
 
-import android.app.Notification
 import android.content.Intent
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
@@ -17,25 +12,15 @@ import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Inject
+import com.ivianuu.essentials.util.Notification
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.SourceKey
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 interface ForegroundManager {
-  suspend fun startForeground(
-    @Inject foregroundId: ForegroundId,
-    notification: @Composable () -> Notification,
-  ): Nothing
-}
-
-@JvmInline value class ForegroundId(val value: Int) {
-  companion object {
-    @Provide fun default(sourceKey: SourceKey) = ForegroundId(sourceKey.hashCode())
-  }
+  suspend fun startForeground(notification: Notification): Nothing
 }
 
 @Provide @Scoped<AppScope> class ForegroundManagerImpl(
@@ -45,15 +30,12 @@ interface ForegroundManager {
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
   private val lock = Mutex()
 
-  override suspend fun startForeground(
-    @Inject foregroundId: ForegroundId,
-    notification: @Composable () -> Notification,
-  ) = bracket(
+  override suspend fun startForeground(notification: Notification) = bracket(
     acquire = {
-      ForegroundState(foregroundId.value, notification)
+      ForegroundState(notification)
         .also {
           lock.withLock { states.value = states.value + it }
-          logger.log { "start foreground ${foregroundId.value} ${states.value}" }
+          logger.log { "start foreground $notification ${states.value}" }
 
           ContextCompat.startForegroundService(
             appContext,
@@ -64,12 +46,11 @@ interface ForegroundManager {
     release = { state, _ ->
       state.seen.await()
       lock.withLock { states.value = states.value - state }
-      logger.log { "stop foreground $foregroundId ${states.value}" }
+      logger.log { "stop foreground $notification ${states.value}" }
     }
   )
 
-  internal class ForegroundState(val id: Int, notification: @Composable () -> Notification) {
-    var notification by mutableStateOf(notification)
+  internal class ForegroundState(val notification: Notification) {
     val seen = CompletableDeferred<Unit>()
   }
 }
