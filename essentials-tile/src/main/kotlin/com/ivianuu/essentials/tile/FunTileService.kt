@@ -22,53 +22,53 @@ import kotlin.reflect.KClass
 
 @Provide @AndroidComponent class FunTileService1(
   logger: Logger,
-  tileScopeFactory: (TileId) -> Scope<TileScope>
+  tileScopeFactory: (KClass<AbstractFunTileService<*>>) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService1>()
 
 @Provide @AndroidComponent class FunTileService2(
   logger: Logger,
-  tileScopeFactory: (TileId) -> Scope<TileScope>
+  tileScopeFactory: (KClass<AbstractFunTileService<*>>) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService2>()
 
 @Provide @AndroidComponent class FunTileService3(
   logger: Logger,
-  tileScopeFactory: (TileId) -> Scope<TileScope>
+  tileScopeFactory: (KClass<AbstractFunTileService<*>>) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService3>()
 
 @Provide @AndroidComponent class FunTileService4(
   logger: Logger,
-  tileScopeFactory: (TileId) -> Scope<TileScope>
+  tileScopeFactory: (KClass<AbstractFunTileService<*>>) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService4>()
 
 @Provide @AndroidComponent class FunTileService5(
   logger: Logger,
-  tileScopeFactory: (TileId) -> Scope<TileScope>
+  tileScopeFactory: (KClass<AbstractFunTileService<*>>) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService5>()
 
 @Provide @AndroidComponent class FunTileService6(
   logger: Logger,
-  tileScopeFactory: (TileId) -> Scope<TileScope>
+  tileScopeFactory: (KClass<AbstractFunTileService<*>>) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService6>()
 
 @Provide @AndroidComponent class FunTileService7(
   logger: Logger,
-  tileScopeFactory: (TileId) -> Scope<TileScope>
+  tileScopeFactory: (KClass<AbstractFunTileService<*>>) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService7>()
 
 @Provide @AndroidComponent class FunTileService8(
   logger: Logger,
-  tileScopeFactory: (TileId) -> Scope<TileScope>
+  tileScopeFactory: (KClass<AbstractFunTileService<*>>) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService8>()
 
 @Provide @AndroidComponent class FunTileService9(
   logger: Logger,
-  tileScopeFactory: (TileId) -> Scope<TileScope>
+  tileScopeFactory: (KClass<AbstractFunTileService<*>>) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService9>()
 
 abstract class AbstractFunTileService<T : Any>(
   @Inject private val logger: Logger,
   @Inject private val serviceClass: KClass<T>,
-  @Inject private val tileScopeFactory: (TileId) -> Scope<TileScope>
+  @Inject private val tileScopeFactory: (KClass<*>) -> Scope<TileScope>
 ) : TileService() {
   private var tileScope: Scope<TileScope>? = null
   private var currentModel: TileModel<*>? = null
@@ -76,7 +76,7 @@ abstract class AbstractFunTileService<T : Any>(
   override fun onStartListening() {
     super.onStartListening()
     logger.log { "$serviceClass on start listening" }
-    tileScope = tileScopeFactory(TileId(serviceClass))
+    tileScope = tileScopeFactory(serviceClass)
     val tileComponent = tileScope!!.service<TileComponent>()
     tileComponent
       .tileModel
@@ -114,14 +114,14 @@ abstract class AbstractFunTileService<T : Any>(
 }
 
 @Provide @Service<TileScope> data class TileComponent(
-  val tileId: TileId,
-  val tileModelRecords: List<Pair<TileId, Model<TileModel<*>>>>,
+  val tileClass: KClass<AbstractFunTileService<*>>,
+  val tileModelRecords: List<Pair<KClass<AbstractFunTileService<*>>, Model<TileModel<*>>>>,
   val coroutineScope: ScopedCoroutineScope<TileScope>,
   val scope: Scope<TileScope>
 ) {
   val tileModel = coroutineScope.compositionStateFlow {
-    tileModelRecords.toMap()[tileId]
+    tileModelRecords.toMap()[tileClass]
       ?.invoke()
-      ?: error("No tile found for $tileId in ${tileModelRecords.toMap()}")
+      ?: error("No tile found for $tileClass in ${tileModelRecords.toMap()}")
   }
 }

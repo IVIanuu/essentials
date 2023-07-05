@@ -9,17 +9,19 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.injekt.Provide
+import kotlin.reflect.KClass
 
 @Provide fun tileServiceDeclarationChecker(
   context: AppContext,
   packageManager: PackageManager,
-  tileIds: List<TileId>
+  tileIds: List<Pair<KClass<AbstractFunTileService<*>>, Model<TileModel<*>>>>
 ) = ScopeWorker<AppScope> {
-  for (tileId in tileIds) {
-    val intent = Intent(context, tileId.clazz.java)
+  for ((tileClass) in tileIds) {
+    val intent = Intent(context, tileClass.java)
     val resolveInfo = packageManager.queryIntentServices(intent, PackageManager.MATCH_DEFAULT_ONLY)
     if (resolveInfo.isEmpty())
-      throw IllegalStateException("A model for tile ${tileId.clazz} was provided but not declared in the manifest")
+      throw IllegalStateException("A model for tile $tileClass was provided but not declared in the manifest")
   }
 }

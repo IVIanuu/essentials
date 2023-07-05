@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
@@ -21,20 +22,12 @@ data class TileModel<out T : AbstractFunTileService<*>>(
 }
 
 object TileModelModule {
-  @Provide inline fun <@Spread T : Model<TileModel<S>>, S : AbstractFunTileService<*>> element(
+  @Provide fun <@Spread T : Model<TileModel<S>>, S : AbstractFunTileService<*>> element(
     serviceClass: KClass<S>,
     provider: T
-  ): Pair<TileId, Model<TileModel<*>>> = TileId(serviceClass) to provider as Model<TileModel<*>>
+  ): Pair<KClass<KClass<AbstractFunTileService<*>>>, Model<TileModel<*>>> = (serviceClass to provider).cast()
 
-  @Provide val defaultElements get() = emptyList<Pair<TileId, Model<TileModel<*>>>>()
-
-  @Provide inline fun <@Spread T : Model<TileModel<S>>, S : AbstractFunTileService<*>> tileId(
-    serviceClass: KClass<S>
-  ): TileId = TileId(serviceClass)
-
-  @Provide val defaultTileIds get() = emptyList<TileId>()
+  @Provide val defaultElements get() = emptyList<Pair<KClass<AbstractFunTileService<*>>, Model<TileModel<*>>>>()
 }
 
 object TileScope
-
-@JvmInline value class TileId(val clazz: KClass<*>)
