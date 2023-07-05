@@ -11,7 +11,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import kotlin.reflect.KClass
 
-data class TileModel<out T : AbstractFunTileService<*>>(
+data class TileModel<out T : EsTileService<*>>(
   val icon: Icon? = null,
   val label: String? = null,
   val description: String? = null,
@@ -22,12 +22,12 @@ data class TileModel<out T : AbstractFunTileService<*>>(
 }
 
 object TileModelModule {
-  @Provide fun <@Spread T : Model<TileModel<S>>, S : AbstractFunTileService<*>> element(
+  @Provide fun <@Spread T : Model<TileModel<S>>, S : EsTileService<*>> element(
     serviceClass: KClass<S>,
     provider: T
-  ): Pair<KClass<KClass<AbstractFunTileService<*>>>, Model<TileModel<*>>> = (serviceClass to provider).cast()
+  ): Pair<KClass<KClass<EsTileService<*>>>, Model<TileModel<*>>> = (serviceClass to provider).cast()
 
-  @Provide val defaultElements get() = emptyList<Pair<KClass<AbstractFunTileService<*>>, Model<TileModel<*>>>>()
+  @Provide val defaultElements get() = emptyList<Pair<KClass<EsTileService<*>>, Model<TileModel<*>>>>()
 }
 
 object TileScope
