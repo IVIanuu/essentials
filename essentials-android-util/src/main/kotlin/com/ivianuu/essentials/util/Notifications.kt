@@ -142,40 +142,27 @@ val AndroidNotification.tag: String?
         setOngoing(model.onGoing)
         setAutoCancel(model.autoDismiss)
 
-        model.onClick?.let {
-          setContentIntent(
-            PendingIntent.getBroadcast(
-              appContext,
-              0,
-              Intent("notification_action").apply {
-                `package` = appConfig.packageName
-                putExtra("notification_class", notification::class.java.name)
-                putExtra("notification", json.encodeToString(json.serializersModule.serializer(notification::class.java), notification))
-                putExtra("action_id", "full_screen")
-              },
-              PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-          )
-        }
+        fun actionIntent(id: String) = PendingIntent.getBroadcast(
+          appContext,
+          0,
+          Intent("notification_action").apply {
+            `package` = appConfig.packageName
+            putExtra("notification_class", notification::class.java.name)
+            putExtra("notification", json.encodeToString(json.serializersModule.serializer(notification::class.java), notification))
+            putExtra("action_id", id)
+          },
+          PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        model.onClick?.let { setContentIntent(actionIntent("full_screen")) }
 
         model.actions.forEach { action ->
           addAction(
             AndroidNotification.Action.Builder(
               action.icon,
               action.title,
-              PendingIntent.getBroadcast(
-                appContext,
-                0,
-                Intent("notification_action").apply {
-                  `package` = appConfig.packageName
-                  putExtra("notification_class", notification::class.java.name)
-                  putExtra("notification", json.encodeToString(json.serializersModule.serializer(notification::class.java), notification))
-                  putExtra("action_id", action.id.value)
-                },
-                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-              )
-            )
-              .build()
+              actionIntent(action.id.value)
+            ).build()
           )
         }
 
