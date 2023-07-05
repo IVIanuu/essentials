@@ -146,14 +146,14 @@ val AndroidNotification.tag: String?
           setContentIntent(
             PendingIntent.getBroadcast(
               appContext,
-              model.id.value.hashCode() + "full_screen".hashCode(),
+              0,
               Intent("notification_action").apply {
                 `package` = appConfig.packageName
                 putExtra("notification_class", notification::class.java.name)
                 putExtra("notification", json.encodeToString(json.serializersModule.serializer(notification::class.java), notification))
                 putExtra("action_id", "full_screen")
               },
-              PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+              PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
           )
         }
@@ -165,14 +165,14 @@ val AndroidNotification.tag: String?
               action.title,
               PendingIntent.getBroadcast(
                 appContext,
-                model.id.value.hashCode() + action.id.value.hashCode(),
+                0,
                 Intent("notification_action").apply {
                   `package` = appConfig.packageName
                   putExtra("notification_class", notification::class.java.name)
                   putExtra("notification", json.encodeToString(json.serializersModule.serializer(notification::class.java), notification))
                   putExtra("action_id", action.id.value)
                 },
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
               )
             )
               .build()
