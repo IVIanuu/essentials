@@ -30,11 +30,11 @@ fun interface DecorateAppUi {
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
     records
       .sortedWithLoadingOrder()
-      .fold({ it() }) { acc, element ->
+      .fold({ it() }) { acc, record ->
         { content ->
           acc {
-            logger.log { "decorate app ui ${element.key.value}" }
-            element.instance(content)
+            logger.log { "decorate app ui ${record.key.value}" }
+            record.instance(content)
           }
         }
       }

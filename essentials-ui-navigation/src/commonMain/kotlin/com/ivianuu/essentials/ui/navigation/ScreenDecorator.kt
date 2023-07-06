@@ -28,11 +28,11 @@ fun interface DecorateScreen {
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
     records
       .sortedWithLoadingOrder()
-      .fold({ it() }) { acc, element ->
+      .fold({ it() }) { acc, record ->
         { content ->
           acc {
-            logger.log { "decorate screen with ${element.key.value}" }
-            element.instance(content)
+            logger.log { "decorate screen with ${record.key.value}" }
+            record.instance(content)
           }
         }
       }

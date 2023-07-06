@@ -34,26 +34,26 @@ interface Permission {
 }
 
 object PermissionModule {
-  @Provide fun <@Spread T : Permission> permissionSetElement(
+  @Provide fun <@Spread T : Permission> permission(
     permissionKey: TypeKey<T>,
     permission: () -> T
   ): Pair<TypeKey<Permission>, () -> Permission> = permissionKey to permission
 
-  @Provide fun <@Spread T : Permission> requestHandler(
+  @Provide val defaultPermissions get() = emptyList<Pair<TypeKey<Permission>, () -> Permission>>()
+
+  @Provide fun <@Spread T : Permission> requestHandlerBinding(
     permissionKey: TypeKey<T>,
     requestHandler: () -> PermissionRequestHandler<T>
   ): Pair<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>> =
     (permissionKey to { requestHandler().intercept() }).cast()
+
+  @Provide val defaultRequestHandlers get() = emptyList<Pair<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>>()
 
   @Provide fun <@Spread T : Permission> stateProvider(
     permissionKey: TypeKey<T>,
     stateProvider: () -> PermissionStateProvider<T>
   ): Pair<TypeKey<Permission>, () -> PermissionStateProvider<Permission>> =
     (permissionKey to stateProvider).cast()
-
-  @Provide val defaultPermissions get() = emptyList<Pair<TypeKey<Permission>, () -> Permission>>()
-
-  @Provide val defaultRequestHandlers get() = emptyList<Pair<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>>()
 
   @Provide val defaultStateProviders get() = emptyList<Pair<TypeKey<Permission>, () -> PermissionStateProvider<Permission>>>()
 }
