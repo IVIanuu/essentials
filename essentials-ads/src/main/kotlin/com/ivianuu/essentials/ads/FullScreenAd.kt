@@ -21,7 +21,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.time.seconds
+import com.ivianuu.essentials.time.minutes
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.util.ForegroundActivity
 import com.ivianuu.injekt.Provide
@@ -51,7 +51,7 @@ interface FullScreenAdManager {
   suspend fun showAdIfLoaded(): Boolean
 }
 
-data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.seconds) {
+data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minutes) {
   companion object {
     @Provide fun final(
       adConfig: FullScreenAdConfig,
@@ -64,7 +64,7 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
 
 @Provide @Scoped<UiScope> class FullScreenAdManagerImpl(
   private val appContext: AppContext,
-  private val adsEnabledStates: Flow<AdsEnabled>,
+  private val adsEnabledFlow: Flow<AdsEnabled>,
   private val config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
   private val foregroundActivities: Flow<ForegroundActivity>,
@@ -82,13 +82,13 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
   }
 
   override suspend fun loadAd() = catch {
-    if (!adsEnabledStates.first().value) return@catch false
+    if (!adsEnabledFlow.first().value) return@catch false
     getOrCreateCurrentAd()
     true
   }
 
   override suspend fun loadAndShowAd() = catch {
-    if (!adsEnabledStates.first().value) return@catch false
+    if (!adsEnabledFlow.first().value) return@catch false
     getOrCreateCurrentAd()
       .also { preloadAd() }
       .invoke()
