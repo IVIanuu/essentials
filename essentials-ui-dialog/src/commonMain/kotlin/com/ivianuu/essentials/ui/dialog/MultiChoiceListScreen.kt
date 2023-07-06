@@ -9,10 +9,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.ivianuu.essentials.Strings
-import com.ivianuu.essentials.Strings_Cancel
-import com.ivianuu.essentials.Strings_Ok
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -29,9 +27,9 @@ class MultiChoiceListScreen<T : Any>(
 ) : DialogScreen<Set<T>>
 
 @Provide fun multiChoiceListUi(
+  commonStrings: CommonStrings,
   key: MultiChoiceListScreen<Any>,
-  navigator: Navigator,
-  strings: Strings
+  navigator: Navigator
 ) = Ui<MultiChoiceListScreen<Any>, Unit> {
   DialogScaffold {
     var selectedItems by remember { mutableStateOf(key.selectedItems) }
@@ -44,11 +42,11 @@ class MultiChoiceListScreen<T : Any>(
       title = key.title?.let { { Text(it) } },
       buttons = {
         TextButton(onClick = action { navigator.pop(key, null) }) {
-          Text(strings[Strings_Cancel])
+          Text(commonStrings.cancel)
         }
 
         TextButton(onClick = action { navigator.pop(key, selectedItems) }) {
-          Text(strings[Strings_Ok])
+          Text(commonStrings.ok)
         }
       }
     )

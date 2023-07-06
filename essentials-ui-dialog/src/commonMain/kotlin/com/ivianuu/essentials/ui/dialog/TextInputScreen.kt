@@ -10,10 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.ivianuu.essentials.Strings
-import com.ivianuu.essentials.Strings_Cancel
-import com.ivianuu.essentials.Strings_Ok
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -29,9 +27,9 @@ class TextInputScreen(
 ) : DialogScreen<String>
 
 @Provide fun textInputUi(
+  commonStrings: CommonStrings,
   navigator: Navigator,
-  screen: TextInputScreen,
-  strings: Strings
+  screen: TextInputScreen
 ) = Ui<TextInputScreen, Unit> {
   DialogScaffold {
     var currentValue by remember { mutableStateOf(screen.initial) }
@@ -43,7 +41,7 @@ class TextInputScreen(
       title = screen.title?.let { { Text(it) } },
       buttons = {
         TextButton(onClick = action { navigator.pop(screen, null) }) {
-          Text(strings[Strings_Cancel])
+          Text(commonStrings.cancel)
         }
 
         val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue) }
@@ -51,7 +49,7 @@ class TextInputScreen(
         TextButton(
           enabled = currentValueIsOk,
           onClick = action { navigator.pop(screen, currentValue) }
-        ) { Text(strings[Strings_Ok]) }
+        ) { Text(commonStrings.ok) }
       }
     )
   }

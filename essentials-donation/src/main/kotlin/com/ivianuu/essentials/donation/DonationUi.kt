@@ -17,15 +17,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.Strings
-import com.ivianuu.essentials.Strings_Cancel
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.produceResourceState
-import com.ivianuu.essentials.stringKeyOf
+import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.dialog.DialogScreen
@@ -58,11 +56,11 @@ data class Donation(val sku: Sku, val iconRes: Int)
   }
 }
 
-@Provide fun donationUi(strings: Strings) = Ui<DonationScreen, DonationModel> { model ->
+@Provide fun donationUi(commonStrings: CommonStrings) = Ui<DonationScreen, DonationModel> { model ->
   DialogScaffold {
     Dialog(
       applyContentPadding = false,
-      title = { Text(Strings_DonationTitle) },
+      title = { Text(R.string.es_donation_title) },
       content = {
         ResourceVerticalListFor(
           resource = model.skus,
@@ -83,7 +81,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
       },
       buttons = {
         TextButton(onClick = model.close) {
-          Text(Strings_Cancel)
+          Text(commonStrings.cancel)
         }
       }
     )
@@ -106,9 +104,6 @@ data class Donation(val sku: Sku, val iconRes: Int)
     }
   )
 }
-
-val Strings_DonationTitle = stringKeyOf { "Support development \uD83D\uDC9B" }
-val Strings_Donated = stringKeyOf { "Thanks for your support! \uD83D\uDC9B" }
 
 data class DonationModel(
   val skus: Resource<List<UiDonation>>,
@@ -150,7 +145,7 @@ data class UiDonation(
     purchase = action { donation ->
       if (billingService.purchase(donation.donation.sku, true, true)) {
         billingService.consumePurchase(donation.donation.sku)
-        toaster(Strings_Donated)
+        toaster(R.string.es_donation_thanks)
       }
     }
   )

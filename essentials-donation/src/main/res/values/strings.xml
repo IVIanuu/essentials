@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
+  -->
+
+<resources>
+    <string name="es_donation_title">Support development 💛</string>
+    <string name="es_donation_thanks">Thanks for your support! 💛</string>
+</resources>
