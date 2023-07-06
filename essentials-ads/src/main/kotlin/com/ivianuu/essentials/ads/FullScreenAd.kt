@@ -51,31 +51,21 @@ interface FullScreenAdManager {
   suspend fun showAdIfLoaded(): Boolean
 }
 
-@JvmInline value class FullScreenAdId(val value: String) {
+data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.seconds) {
   companion object {
-    @Provide fun default(
+    @Provide fun final(
+      adConfig: FullScreenAdConfig,
       appConfig: AppConfig,
-      resources: Resources
-    ) = FullScreenAdId(
-      resources(
-        if (appConfig.isDebug) R.string.es_test_ad_unit_id_interstitial
-        else R.string.es_full_screen_ad_unit_id
-      )
-    )
-  }
-}
-
-data class FullScreenAdConfig(val adsInterval: Duration) {
-  companion object {
-    @Provide val defaultConfig get() = FullScreenAdConfig(30.seconds)
+      resources: Resources,
+    ): @FinalAdConfig FullScreenAdConfig = if (!appConfig.isDebug) adConfig
+    else adConfig.copy(id = resources(R.string.es_test_ad_unit_id_full_screen))
   }
 }
 
 @Provide @Scoped<UiScope> class FullScreenAdManagerImpl(
   private val appContext: AppContext,
   private val adsEnabledStates: Flow<AdsEnabled>,
-  private val id: FullScreenAdId,
-  config: FullScreenAdConfig,
+  private val config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
   private val foregroundActivities: Flow<ForegroundActivity>,
   private val logger: Logger,
@@ -121,10 +111,10 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
     } ?: scope.async(coroutineContexts.main) {
       logger.log { "start loading ad" }
 
-      val ad = suspendCoroutine<InterstitialAd> { cont ->
+      val ad = suspendCoroutine { cont ->
         InterstitialAd.load(
           appContext,
-          id.value,
+          config.id,
           AdRequest.Builder().build(),
           object : InterstitialAdLoadCallback() {
             override fun onAdLoaded(ad: InterstitialAd) {

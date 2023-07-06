@@ -4,9 +4,5 @@
 
 <resources>
     <string name="es_test_ad_unit_id_banner">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="es_test_ad_unit_id_interstitial">ca-app-pub-3940256099942544/1033173712</string>
-
-    <string name="es_screen_ad_banner_ad_unit_id">@string/es_test_ad_unit_id_banner</string>
-    <string name="es_list_ad_banner_ad_unit_id">@string/es_test_ad_unit_id_banner</string>
-    <string name="es_full_screen_ad_unit_id">@string/es_test_ad_unit_id_interstitial</string>
+    <string name="es_test_ad_unit_id_full_screen">ca-app-pub-3940256099942544/1033173712</string>
 </resources>

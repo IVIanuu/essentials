@@ -8,7 +8,10 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.ads.AdsEnabled
+import com.ivianuu.essentials.ads.FullScreenAdConfig
 import com.ivianuu.essentials.ads.FullScreenAdManager
+import com.ivianuu.essentials.ads.ListAdBannerConfig
+import com.ivianuu.essentials.ads.ScreenAdBannerConfig
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -16,6 +19,10 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.MutableStateFlow
+
+@Provide val fullScreenAdConfig = FullScreenAdConfig("")
+@Provide val listAdBannerConfig = ListAdBannerConfig("")
+@Provide val screenAdBannerConfig = ScreenAdBannerConfig("")
 
 @Provide val adsHomeItem = HomeItem("Ads") { AdsScreen() }
 

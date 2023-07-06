@@ -8,12 +8,12 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.PrefModule
-import com.ivianuu.essentials.resource.getOrElse
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
@@ -66,16 +66,16 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
 
 private fun Navigator.launchEvents(
   @Inject isAdFeatureEnabled: IsAdFeatureEnabledUseCase
-): Flow<Unit> {
+): Flow<Screen<*>> {
   var lastBackStack = backStack.value
   return backStack
     .mapNotNull { currentBackStack ->
-      val launchedKeys = currentBackStack
+      val launchedScreens = currentBackStack
         .filter {
           it !in lastBackStack &&
               isAdFeatureEnabled(it::class, ScreenLaunchFullscreenAdFeature)
         }
-      (if (currentBackStack.size > 1 && launchedKeys.isNotEmpty()) Unit
+      (if (currentBackStack.size > 1 && launchedScreens.isNotEmpty()) launchedScreens.first()
       else null)
         .also { lastBackStack = currentBackStack }
     }

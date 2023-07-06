@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ads
 
 import androidx.compose.runtime.collectAsState
-import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.LocalScope
@@ -21,18 +20,16 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Tag annotation class ListAdBannerConfigTag {
   companion object {
-    @Provide fun default(
+    @Provide fun final(
+      adConfig: ListAdBannerConfig,
       appConfig: AppConfig,
-      resources: Resources
-    ) = ListAdBannerConfig(
-      id = resources(
-        if (appConfig.isDebug) R.string.es_test_ad_unit_id_banner
-        else R.string.es_list_ad_banner_ad_unit_id
-      ),
-      size = AdSize.LARGE_BANNER
-    )
+      resources: Resources,
+    ): @FinalAdConfig ListAdBannerConfig =
+      if (!appConfig.isDebug) adConfig
+      else adConfig.copy(id = resources(R.string.es_test_ad_unit_id_banner))
   }
 }
+
 typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
 
 fun interface ListAdBanner : ListDecorator
@@ -40,7 +37,7 @@ fun interface ListAdBanner : ListDecorator
 @Provide fun adBannerListDecorator(
   adsEnabled: StateFlow<AdsEnabled>,
   isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
-  config: ListAdBannerConfig? = null
+  config: @FinalAdConfig ListAdBannerConfig? = null
 ) = ListAdBanner decorator@{
   if (config != null && isVertical) {
     item(null) {

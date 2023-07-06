@@ -18,7 +18,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
-@Immutable data class AdBannerConfig(val id: String, val size: AdSize)
+@Immutable data class AdBannerConfig(val id: String, val size: AdSize = AdSize.LARGE_BANNER)
 
 @Composable fun AdBanner(config: AdBannerConfig) {
   val backgroundColor = MaterialTheme.colors.surface

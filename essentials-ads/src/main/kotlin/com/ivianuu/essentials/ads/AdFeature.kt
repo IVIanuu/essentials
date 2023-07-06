@@ -20,7 +20,7 @@ interface AdFeature
     @Provide fun <T : Screen<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<T> =
       AdFeatures(allFeatures)
 
-    @Provide fun <T : RootScreen> defaultRootKeyAdFeatures(allFeatures: List<AdFeature>): AdFeatures<T> =
+    @Provide fun <T : RootScreen> defaultRootAdFeatures(allFeatures: List<AdFeature>): AdFeatures<T> =
       AdFeatures(allFeatures.filter { it != ListAdBannerFeature })
 
     @Provide fun <T : OverlayScreen<*>> defaultOverlayAdFeatures(): AdFeatures<T> =
