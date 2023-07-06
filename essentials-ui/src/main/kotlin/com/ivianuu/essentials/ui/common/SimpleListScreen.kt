@@ -9,11 +9,10 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.Strings
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.injekt.Inject
 
 @Composable fun SimpleListScreen(
   title: String,
@@ -41,16 +40,15 @@ import com.ivianuu.injekt.Inject
 }
 
 @Composable inline fun SimpleListScreen(
-  titleKey: Strings.Key0,
+  titleRes: Int,
   modifier: Modifier = Modifier,
   noinline popupMenuContent: (@Composable () -> Unit)? = null,
   noinline floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
-  @Inject strings: Strings,
-  noinline content: LazyListScope.() -> Unit,
+  noinline content: LazyListScope.() -> Unit
 ) {
   SimpleListScreen(
-    strings[titleKey],
+    stringResource(titleRes),
     modifier,
     popupMenuContent,
     floatingActionButton,

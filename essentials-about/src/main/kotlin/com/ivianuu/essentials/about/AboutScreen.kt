@@ -9,7 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.Strings
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationScreen
@@ -17,7 +17,6 @@ import com.ivianuu.essentials.license.LicenseScreen
 import com.ivianuu.essentials.rate.DeveloperEmail
 import com.ivianuu.essentials.rate.FeedbackMailScreen
 import com.ivianuu.essentials.rate.RateUseCases
-import com.ivianuu.essentials.stringKeyOf
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Model
@@ -32,11 +31,11 @@ import com.ivianuu.injekt.Provide
 class AboutScreen : Screen<Unit>
 
 @Provide val aboutUi = Ui<AboutScreen, AboutModel> { model ->
-  SimpleListScreen("About") {
+  SimpleListScreen(R.string.es_about_title) {
     item {
       ListItem(
         leading = { Icon(R.drawable.es_ic_info) },
-        title = { Text("Version") },
+        title = { Text(R.string.es_about_version) },
         subtitle = { Text(model.version) }
       )
     }
@@ -45,8 +44,8 @@ class AboutScreen : Screen<Unit>
       ListItem(
         modifier = Modifier.clickable(onClick = model.rate),
         leading = { Icon(R.drawable.es_ic_star) },
-        title = { Text(Strings_Rate) },
-        subtitle = { Text(Strings_RateDesc) }
+        title = { Text(R.string.es_about_rate) },
+        subtitle = { Text(R.string.es_about_rate_desc) }
       )
     }
 
@@ -55,7 +54,7 @@ class AboutScreen : Screen<Unit>
         ListItem(
           modifier = Modifier.clickable(onClick = model.donate),
           leading = { Icon(R.drawable.es_ic_favorite) },
-          title = { Text(Strings_Donate) }
+          title = { Text(R.string.es_about_donate) }
         )
       }
     }
@@ -64,8 +63,8 @@ class AboutScreen : Screen<Unit>
       ListItem(
         modifier = Modifier.clickable(onClick = model.openMoreApps),
         leading = { Icon(R.drawable.es_ic_google_play) },
-        title = { Text(Strings_MoreApps) },
-        subtitle = { Text(Strings_MoreAppsDesc) }
+        title = { Text(R.string.es_about_more_apps) },
+        subtitle = { Text(R.string.es_about_more_apps_desc) }
       )
     }
 
@@ -73,8 +72,8 @@ class AboutScreen : Screen<Unit>
       ListItem(
         modifier = Modifier.clickable(onClick = model.openRedditPage),
         leading = { Icon(R.drawable.es_ic_reddit) },
-        title = { Text(Strings_Reddit) },
-        subtitle = { Text(Strings_RedditDesc) }
+        title = { Text(R.string.es_about_reddit) },
+        subtitle = { Text(R.string.es_about_reddit_desc) }
       )
     }
 
@@ -82,8 +81,8 @@ class AboutScreen : Screen<Unit>
       ListItem(
         modifier = Modifier.clickable(onClick = model.openGithubPage),
         leading = { Icon(R.drawable.es_ic_github) },
-        title = { Text(Strings_Github) },
-        subtitle = { Text(Strings_GithubDesc) }
+        title = { Text(R.string.es_about_github) },
+        subtitle = { Text(R.string.es_about_github_desc) }
       )
     }
 
@@ -91,8 +90,8 @@ class AboutScreen : Screen<Unit>
       ListItem(
         modifier = Modifier.clickable(onClick = model.openTwitterPage),
         leading = { Icon(R.drawable.es_ic_twitter) },
-        title = { Text(Strings_Twitter) },
-        subtitle = { Text(Strings_TwitterDesc) }
+        title = { Text(R.string.es_about_twitter) },
+        subtitle = { Text(R.string.es_about_twitter_desc) }
       )
     }
 
@@ -100,7 +99,7 @@ class AboutScreen : Screen<Unit>
       ListItem(
         modifier = Modifier.clickable(onClick = model.sendMail),
         leading = { Icon(R.drawable.es_ic_email) },
-        title = { Text(Strings_Feedback) },
+        title = { Text(R.string.es_about_feedback) },
         subtitle = { Text(model.email.value) }
       )
     }
@@ -118,25 +117,12 @@ class AboutScreen : Screen<Unit>
         ListItem(
           modifier = Modifier.clickable(onClick = model.openPrivacyPolicy),
           leading = { Icon(R.drawable.es_ic_policy) },
-          title = { Text("Privacy policy") }
+          title = { Text(R.string.es_about_privacy_policy) }
         )
       }
     }
   }
 }
-
-val Strings_Donate = stringKeyOf { "Support development" }
-val Strings_Rate = stringKeyOf { "Rate" }
-val Strings_RateDesc = stringKeyOf { "I'll be happy if you give me 5 stars" }
-val Strings_MoreApps = stringKeyOf { "More apps" }
-val Strings_MoreAppsDesc = stringKeyOf { "Check out my other apps on Google Play" }
-val Strings_Reddit = stringKeyOf { "Reddit" }
-val Strings_RedditDesc = stringKeyOf { "If you need help or have questions, my subreddit is a good place to go" }
-val Strings_Github = stringKeyOf { "Github" }
-val Strings_GithubDesc = stringKeyOf { "Check out my work on Github" }
-val Strings_Feedback = stringKeyOf { "Send feedback" }
-val Strings_Twitter = stringKeyOf { "Twitter" }
-val Strings_TwitterDesc = stringKeyOf { "Follow me on Twitter" }
 
 data class AboutModel(
   val version: String,
@@ -154,6 +140,8 @@ data class AboutModel(
   val sendMail: () -> Unit
 )
 
+@JvmInline value class PrivacyPolicyUrl(val value: String)
+
 @Provide fun aboutModel(
   appConfig: AppConfig,
   privacyPolicyUrl: PrivacyPolicyUrl? = null,
@@ -161,7 +149,7 @@ data class AboutModel(
   email: DeveloperEmail,
   navigator: Navigator,
   rateUseCases: RateUseCases,
-  strings: Strings
+  resources: Resources
 ) = Model {
   AboutModel(
     version = appConfig.versionName,
@@ -178,10 +166,13 @@ data class AboutModel(
     openGithubPage = action { navigator.push(UrlScreen("https://github.com/IVIanuu")) },
     openTwitterPage = action { navigator.push(UrlScreen("https://twitter.com/IVIanuu")) },
     openPrivacyPolicy = action {
-      navigator.push(WebScreen("Privacy policy", privacyPolicyUrl!!.value))
+      navigator.push(
+        WebScreen(
+          resources(R.string.es_about_privacy_policy),
+          privacyPolicyUrl!!.value
+        )
+      )
     },
     sendMail = action { navigator.push(FeedbackMailScreen) }
   )
 }
-
-@JvmInline value class PrivacyPolicyUrl(val value: String)
