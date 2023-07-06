@@ -5,6 +5,7 @@
 package com.ivianuu.essentials
 
 import android.content.Context
+import android.graphics.drawable.Icon
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Typeface
@@ -53,6 +54,8 @@ fun interface ResourceLoader<out T> {
     @Provide val drawable = ResourceLoader { context, id -> context.getDrawable(id)!! }
     @Provide val float =
       ResourceLoader { context, id -> ResourcesCompat.getFloat(context.resources, id) }
+    @Provide val icon =
+      ResourceLoader { context, id -> Icon.createWithResource(context, id) }
     @Provide val imageBitmap =
       ResourceLoader { context, id -> context.getDrawable(id)!!.toBitmap().toImageBitmap() }
     @Provide val typeface =
