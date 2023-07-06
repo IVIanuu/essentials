@@ -202,7 +202,7 @@ data class WriteSecureSettingsModel(
 @Tag annotation class DeveloperModeTag
 typealias DeveloperMode = @DeveloperModeTag Int
 
-@Provide val developerModeSetting = AndroidSettingModule<DeveloperMode, Int>(
+@Provide val developerModeSettingModule = AndroidSettingModule<DeveloperMode, Int>(
   Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,
   AndroidSettingsType.GLOBAL,
   0
@@ -211,18 +211,18 @@ typealias DeveloperMode = @DeveloperModeTag Int
 @Tag annotation class AdbEnabledTag
 typealias AdbEnabled = @AdbEnabledTag Int
 
-@Provide val adbEnabledSetting = AndroidSettingModule<AdbEnabled, Int>(
+@Provide val adbEnabledSettingModule = AndroidSettingModule<AdbEnabled, Int>(
   Settings.Global.ADB_ENABLED,
   AndroidSettingsType.GLOBAL,
   0
 )
 
 @Provide fun writeSecureSettingsPcInstructionsModel(
-  adbEnabledSetting: DataStore<AdbEnabled>,
+  adbEnabledDataStore: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   appConfig: AppConfig,
   navigator: Navigator,
-  developerModeSetting: DataStore<DeveloperMode>,
+  developerModeDataStore: DataStore<DeveloperMode>,
   permissionManager: PermissionManager,
   screen: WriteSecureSettingsScreen,
   shell: Shell,
@@ -234,8 +234,8 @@ typealias AdbEnabled = @AdbEnabledTag Int
   val canContinueStep = if (currentStep != completedStep) false
   else produceState(false, completedStep) {
     when (completedStep) {
-      1 -> developerModeSetting.data.map { it != 0 }.collect { value = it }
-      2 -> adbEnabledSetting.data.map { it != 0 }.collect { value = it }
+      1 -> developerModeDataStore.data.map { it != 0 }.collect { value = it }
+      2 -> adbEnabledDataStore.data.map { it != 0 }.collect { value = it }
       3 -> value = true
       4 -> while (true) {
         value = permissionManager.permissionState(listOf(screen.permissionKey)).first()
@@ -269,7 +269,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
           navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
             ?.onFailure { toaster(R.string.es_open_phone_info_failed) }
         },
-        { developerModeSetting.data.first { it != 0 } }
+        { developerModeDataStore.data.first { it != 0 } }
       )
       appUiStarter()
     },
@@ -279,7 +279,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
           navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)))
             ?.onFailure { toaster(R.string.es_open_developer_settings_failed) }
         },
-        { adbEnabledSetting.data.first { it != 0 } }
+        { adbEnabledDataStore.data.first { it != 0 } }
       )
       appUiStarter()
     },

@@ -23,14 +23,14 @@ import com.ivianuu.injekt.common.typeKeyOf
 @Provide object AutoRotationActionId : ActionId("auto_rotation")
 
 @Provide fun autoRotationAction(
-  autoRotation: DataStore<AutoRotation>,
+  autoRotationDataStore: DataStore<AutoRotation>,
   resources: Resources
 ) = Action(
   id = AutoRotationActionId,
   title = resources(R.string.es_action_auto_rotation),
   permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
   icon = {
-    val enabled = autoRotation.data.collectAsState(1).value == 1
+    val enabled = autoRotationDataStore.data.collectAsState(1).value == 1
     Icon(
       if (enabled) R.drawable.es_ic_screen_rotation
       else R.drawable.es_ic_screen_lock_rotation
@@ -39,9 +39,9 @@ import com.ivianuu.injekt.common.typeKeyOf
 )
 
 @Provide fun autoRotationActionExecutor(
-  rotationSetting: DataStore<AutoRotation>,
+  autoRotationDataStore: DataStore<AutoRotation>,
 ) = ActionExecutor<AutoRotationActionId> {
-  rotationSetting.updateData { if (this != 1) 1 else 0 }
+  autoRotationDataStore.updateData { if (this != 1) 1 else 0 }
 }
 
 @Tag annotation class AutoRotationTag
