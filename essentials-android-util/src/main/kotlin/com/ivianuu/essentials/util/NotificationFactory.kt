@@ -17,11 +17,16 @@ import com.ivianuu.injekt.android.SystemService
 
 fun interface NotificationFactory {
   operator fun invoke(
+    channel: NotificationChannel,
+    builder: NotificationCompat.Builder.() -> Unit
+  ): Notification
+
+  operator fun invoke(
     channelId: String,
     channelName: String,
     importance: Int,
     builder: NotificationCompat.Builder.() -> Unit
-  ): Notification
+  ): Notification = invoke(NotificationChannel(channelId, channelName, importance), builder)
 }
 
 inline val NotificationCompat.Builder.context: Context
@@ -31,16 +36,9 @@ inline val NotificationCompat.Builder.context: Context
   appContext: AppContext,
   appColors: AppColors,
   notificationManager: @SystemService NotificationManager
-) = NotificationFactory { channelId, channelName, importance, builder ->
-  notificationManager.createNotificationChannel(
-    NotificationChannel(
-      channelId,
-      channelName,
-      importance
-    )
-  )
-
-  NotificationCompat.Builder(appContext, channelId)
+) = NotificationFactory { channel, builder ->
+  notificationManager.createNotificationChannel(channel)
+  NotificationCompat.Builder(appContext, channel.id)
     .apply { color = appColors.primary.toArgb() }
     .apply(builder)
     .build()
