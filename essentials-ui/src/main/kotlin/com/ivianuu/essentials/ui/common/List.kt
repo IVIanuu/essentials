@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.app.ExtensionPoint
 import com.ivianuu.essentials.app.ExtensionPointRecord
+import com.ivianuu.essentials.app.sortedWithLoadingOrder
 import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.essentials.ui.insets.localHorizontalInsetsPadding
 import com.ivianuu.essentials.ui.insets.localVerticalInsetsPadding
@@ -44,11 +45,11 @@ val LocalListDecorators = staticCompositionLocalOf<() -> List<ExtensionPointReco
 
 fun interface ListDecoratorsProvider : AppUiDecorator
 
-@Provide fun listDecoratorsProvider(
-  decorators: () -> List<ExtensionPointRecord<ListDecorator>>
+@Provide inline fun listDecoratorsProvider(
+  crossinline decorators: () -> List<ExtensionPointRecord<ListDecorator>>
 ) = ListDecoratorsProvider { content ->
   CompositionLocalProvider(
-    LocalListDecorators provides decorators,
+    LocalListDecorators provides { decorators().sortedWithLoadingOrder() },
     content = content
   )
 }
@@ -111,7 +112,6 @@ private fun LazyListScope.decoratedContent(
   content: LazyListScope.() -> Unit
 ) {
   decorators
-    .reversed()
     .fold(content) { acc, record ->
       decorator@{
         with(record.instance) {
