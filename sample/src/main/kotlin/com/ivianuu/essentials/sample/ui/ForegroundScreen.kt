@@ -6,7 +6,6 @@ package com.ivianuu.essentials.sample.ui
 
 import android.annotation.SuppressLint
 import android.app.NotificationManager
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,8 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.coroutines.timerFlow
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
@@ -41,14 +38,12 @@ class ForegroundScreen : Screen<Unit>
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
   ) {
-    val primaryColor = MaterialTheme.colors.primary
     var isEnabled by remember { mutableStateOf(false) }
 
     if (isEnabled)
       LaunchedEffect(true) {
         foregroundManager.startForeground {
           ForegroundNotification(
-            primaryColor,
             remember { timerFlow(1.seconds) }.collectAsState(0).value
           )
         }
@@ -61,7 +56,6 @@ class ForegroundScreen : Screen<Unit>
 }
 
 private fun ForegroundNotification(
-  color: Color,
   count: Long,
   @Inject notificationFactory: NotificationFactory
 ) = notificationFactory(
@@ -72,5 +66,4 @@ private fun ForegroundNotification(
   setSmallIcon(R.drawable.ic_home)
   setContentTitle("Foreground")
   setContentText("Current progress $count")
-  setColor(color.toArgb())
 }

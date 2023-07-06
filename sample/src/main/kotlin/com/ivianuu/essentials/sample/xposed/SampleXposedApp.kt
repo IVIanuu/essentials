@@ -15,9 +15,8 @@ import com.ivianuu.injekt.inject
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 class SampleXposedApp : EsXposedApp() {
-  @Providers(".**")
   override fun buildXposedScope(@Inject llparam: XC_LoadPackage.LoadPackageParam): Scope<XposedScope> {
     @Provide val modulePackageName = ModulePackageName("com.ivianuu.essentials.sample")
-    return inject()
+    @Providers(".**") return inject()
   }
 }
