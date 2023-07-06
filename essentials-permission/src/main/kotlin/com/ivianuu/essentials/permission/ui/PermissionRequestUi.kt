@@ -98,11 +98,13 @@ data class PermissionRequestModel(
     navigator.pop(screen, true)
   }
 
-  val keysByPermission = screen.permissionsKeys.associateBy { permissionManager.permission(it) }
+  val keysByPermission = remember {
+    screen.permissionsKeys.associateBy { permissionManager.permission(it) }
+  }
 
   PermissionRequestModel(
-    permissionsToGrant = screen.permissionsKeys
-      .map { permissionManager.permission(it) }
+    permissionsToGrant = keysByPermission
+      .keys
       .filterNot {
         key(keysByPermission[it]) {
           remember { permissionManager.permissionState(listOf(keysByPermission[it]!!)) }
