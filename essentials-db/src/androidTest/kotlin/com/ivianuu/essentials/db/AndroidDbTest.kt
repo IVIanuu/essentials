@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.db
 
 import androidx.test.core.app.ApplicationProvider
-import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollectIn
 import io.kotest.assertions.throwables.shouldThrow
@@ -14,6 +13,7 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -152,7 +152,7 @@ class AndroidDbTest {
     var updates = 0
     db.query("SELECT * FROM MyEntity", null) {
       updates++
-    }.launch()
+    }.launchIn(this)
     advanceUntilIdle()
 
     updates shouldBe 1
@@ -181,7 +181,7 @@ class AndroidDbTest {
     var updates = 0
     db.query("SELECT * FROM MyEntity", "MyEntity") {
       updates++
-    }.launch()
+    }.launchIn(this)
     advanceUntilIdle()
 
     updates shouldBe 1
@@ -301,7 +301,7 @@ class AndroidDbTest {
       coroutineContext = coroutineContext
     )
 
-    val collector = db.selectAll<MyEntity>().testCollectIn()
+    val collector = db.selectAll<MyEntity>().testCollectIn(this)
 
     advanceUntilIdle()
 
