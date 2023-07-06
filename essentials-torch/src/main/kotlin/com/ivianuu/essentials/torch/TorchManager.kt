@@ -4,11 +4,7 @@
 
 package com.ivianuu.essentials.torch
 
-import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Intent
 import android.hardware.camera2.CameraManager
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,14 +22,16 @@ import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.util.BroadcastsFactory
+import com.ivianuu.essentials.torch.TorchManagerImpl.DisableTorchAction
 import com.ivianuu.essentials.util.NotificationFactory
+import com.ivianuu.essentials.util.RemoteAction
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.context
+import com.ivianuu.essentials.util.remoteActionOf
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.serialization.json.Json
 
 interface TorchManager {
   val torchEnabled: StateFlow<Boolean>
@@ -42,9 +40,9 @@ interface TorchManager {
 }
 
 @Provide @Scoped<AppScope> class TorchManagerImpl(
-  private val broadcastsFactory: BroadcastsFactory,
   private val cameraManager: @SystemService CameraManager,
   private val foregroundManager: ForegroundManager,
+  private val json: Json,
   private val logger: Logger,
   private val notificationFactory: NotificationFactory,
   private val resources: Resources,
@@ -57,11 +55,6 @@ interface TorchManager {
 
     LaunchedEffect(true) {
       foregroundManager.startForeground { createTorchNotification() }
-    }
-
-    LaunchedEffect(true) {
-      broadcastsFactory(ACTION_DISABLE_TORCH).first()
-      _torchEnabled = false
     }
 
     LaunchedEffect(true) {
@@ -88,27 +81,18 @@ interface TorchManager {
     _torchEnabled = value
   }
 
-  @SuppressLint("LaunchActivityFromNotification")
-  private fun createTorchNotification(): Notification = notificationFactory(
+  fun interface DisableTorchAction : RemoteAction<Any?>
+
+  @Provide fun disableTorchAction() = DisableTorchAction { _torchEnabled = false }
+
+  private fun createTorchNotification() = notificationFactory(
     "torch",
     resources(R.string.es_notif_channel_torch),
     NotificationManager.IMPORTANCE_LOW
   ) {
-    setAutoCancel(true)
     setSmallIcon(R.drawable.es_ic_flashlight_on)
     setContentTitle(resources(R.string.es_notif_title_torch))
     setContentText(resources(R.string.es_notif_text_torch))
-    setContentIntent(
-      PendingIntent.getBroadcast(
-        context,
-        87,
-        Intent(ACTION_DISABLE_TORCH),
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-      )
-    )
-  }
-
-  private companion object {
-    private const val ACTION_DISABLE_TORCH = "com.ivianuu.essentials.torch.DISABLE_TORCH"
+    setContentIntent(remoteActionOf<DisableTorchAction>(context))
   }
 }

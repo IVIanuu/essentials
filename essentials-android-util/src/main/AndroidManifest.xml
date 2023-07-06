@@ -6,4 +6,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <application>
+        <receiver
+            android:name="com.ivianuu.essentials.util.RemoteActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="execute_remote_action" />
+            </intent-filter>
+        </receiver>
+    </application>
 </manifest>
