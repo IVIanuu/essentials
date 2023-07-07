@@ -67,7 +67,6 @@ interface WorkManager {
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>,
-  private val workIds: List<WorkId>,
   private val workers: Map<String, () -> Worker<*>>,
 ) : WorkManager, SynchronizedObject() {
   private val workerStates = mutableMapOf<String, MutableStateFlow<Boolean>>()
@@ -78,7 +77,7 @@ interface WorkManager {
 
   override suspend fun <I : WorkId> runWorker(id: I): Unit =
     withContext(scope.coroutineContext + coroutineContexts.computation) {
-      if (id.value !in workIds.map { it.value }) {
+      if (id.value !in workers) {
         logger.log { "no worker found for ${id.value}" }
         androidWorkManager.cancelUniqueWork(id.value)
         return@withContext
@@ -118,8 +117,6 @@ object WorkModule {
   @Provide val defaultSchedules get() = emptyList<Pair<String, PeriodicWorkSchedule<*>>>()
 
   @Provide fun androidWorkManager(context: AppContext) = AndroidWorkManager.getInstance(context)
-
-  @Provide val defaultWorkIds get() = emptyList<WorkId>()
 }
 
 @Provide class EsWorker(
