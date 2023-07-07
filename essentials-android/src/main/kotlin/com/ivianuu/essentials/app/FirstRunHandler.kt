@@ -7,7 +7,7 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.PrefModule
+import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
@@ -53,6 +53,6 @@ fun interface FirstRunHandler {
 
 @Serializable data class FirstRunPrefs(val isFirstRun: Boolean = true) {
   companion object {
-    @Provide val prefModule = PrefModule { FirstRunPrefs() }
+    @Provide val prefModule = DataStoreModule("first_run_prefs") { FirstRunPrefs() }
   }
 }

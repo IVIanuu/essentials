@@ -8,7 +8,7 @@ import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.PrefModule
+import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
@@ -42,6 +42,6 @@ fun interface AppVersionUpgradeHandler {
 
 @Serializable data class AppVersionUpgradePrefs(val lastAppVersion: Int = 0) {
   companion object {
-    @Provide val prefModule = PrefModule { AppVersionUpgradePrefs() }
+    @Provide val prefModule = DataStoreModule("app_version_upgrade") { AppVersionUpgradePrefs() }
   }
 }

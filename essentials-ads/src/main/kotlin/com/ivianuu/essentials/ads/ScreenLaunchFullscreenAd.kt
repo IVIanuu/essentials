@@ -7,7 +7,7 @@ package com.ivianuu.essentials.ads
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.PrefModule
+import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.result.getOrElse
@@ -33,12 +33,12 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
 
 @Serializable data class ScreenLaunchPrefs(val screenLaunchCount: Int = 0) {
   companion object {
-    @Provide val prefModule = PrefModule { ScreenLaunchPrefs() }
+    @Provide val prefModule = DataStoreModule("screen_launch_prefs") { ScreenLaunchPrefs() }
   }
 }
 
 @Provide fun screenLaunchFullScreenObserver(
-  adsEnabled: StateFlow<AdsEnabled>,
+  adsEnabledFlow: StateFlow<AdsEnabled>,
   isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAdManager: FullScreenAdManager,
@@ -46,7 +46,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   navigator: Navigator,
   pref: DataStore<ScreenLaunchPrefs>
 ) = ScopeWorker<UiScope> {
-  adsEnabled
+  adsEnabledFlow
     .flatMapLatest {
       if (!it.value) infiniteEmptyFlow()
       else navigator.launchEvents()

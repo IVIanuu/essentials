@@ -14,7 +14,7 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.PrefModule
+import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiScopeOwner
@@ -55,7 +55,7 @@ interface PremiumVersionManager {
   private val billingService: BillingService,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
   private val logger: Logger,
-  private val pref: DataStore<PremiumPrefs>,
+  private val pref: DataStore<PremiumVersionPrefs>,
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
   private val scope: ScopedCoroutineScope<AppScope>,
@@ -129,9 +129,11 @@ typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
   .map { AdsEnabled(!it) }
   .stateIn(scope, SharingStarted.Eagerly, AdsEnabled(false))
 
-@Serializable data class PremiumPrefs(val wasPremiumVersion: Boolean = false) {
+@Serializable data class PremiumVersionPrefs(val wasPremiumVersion: Boolean = false) {
   companion object {
-    @Provide val prefModule = PrefModule { PremiumPrefs() }
+    @Provide val prefModule = DataStoreModule("premium_version_prefs") {
+      PremiumVersionPrefs()
+    }
   }
 }
 

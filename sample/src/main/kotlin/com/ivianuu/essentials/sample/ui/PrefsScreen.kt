@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.PrefModule
+import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.essentials.ui.common.IconPlaceholder
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.common.interactive
@@ -204,6 +204,6 @@ class PrefsScreen : Screen<Unit>
   val singleChoice: String = "C",
 ) {
   companion object {
-    @Provide val prefModule = PrefModule { SamplePrefs() }
+    @Provide val prefModule = DataStoreModule("sample_prefs") { SamplePrefs() }
   }
 }

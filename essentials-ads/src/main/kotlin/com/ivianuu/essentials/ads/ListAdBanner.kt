@@ -35,7 +35,7 @@ typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
 fun interface ListAdBanner : ListDecorator
 
 @Provide fun adBannerListDecorator(
-  adsEnabled: StateFlow<AdsEnabled>,
+  adsEnabledFlow: StateFlow<AdsEnabled>,
   isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: @FinalAdConfig ListAdBannerConfig? = null
 ) = ListAdBanner decorator@{
@@ -45,7 +45,7 @@ fun interface ListAdBanner : ListDecorator
         LocalScope.current.screen::class
       }.getOrNull()
       if ((screen == null || isAdFeatureEnabled(screen, ListAdBannerFeature)) &&
-        adsEnabled.collectAsState().value.value)
+        adsEnabledFlow.collectAsState().value.value)
         AdBanner(config)
     }
   }

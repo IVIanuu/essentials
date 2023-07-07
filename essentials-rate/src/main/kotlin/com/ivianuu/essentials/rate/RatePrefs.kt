@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.rate
 
-import com.ivianuu.essentials.data.PrefModule
+import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.injekt.Provide
 import kotlinx.serialization.Serializable
 
@@ -16,6 +16,6 @@ import kotlinx.serialization.Serializable
   enum class FeedbackState { COMPLETED, LATER, NEVER }
 
   companion object {
-    @Provide val prefModule = PrefModule { RatePrefs() }
+    @Provide val prefModule = DataStoreModule("rate_prefs") { RatePrefs() }
   }
 }

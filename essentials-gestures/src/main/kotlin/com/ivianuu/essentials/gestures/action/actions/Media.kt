@@ -19,7 +19,7 @@ import com.ivianuu.essentials.apps.IntentAppPredicate
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.PrefModule
+import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.getOrNull
@@ -69,7 +69,7 @@ private fun mediaIntentFor(
 
 @Serializable data class MediaActionPrefs(val mediaApp: String? = null) {
   companion object {
-    @Provide val prefModule = PrefModule { MediaActionPrefs() }
+    @Provide val prefModule = DataStoreModule("media_action_prefs") { MediaActionPrefs() }
   }
 }
 
