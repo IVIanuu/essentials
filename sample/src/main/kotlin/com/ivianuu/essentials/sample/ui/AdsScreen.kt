@@ -13,7 +13,9 @@ import com.ivianuu.essentials.ads.FullScreenAdManager
 import com.ivianuu.essentials.ads.ListAdBannerConfig
 import com.ivianuu.essentials.ads.ScreenAdBannerConfig
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.common.SimpleListScreen
+import com.ivianuu.essentials.ui.common.VerticalList
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
@@ -32,18 +34,20 @@ class AdsScreen : Screen<Unit>
   adsEnabled: MutableStateFlow<AdsEnabled>,
   fullScreenAd: FullScreenAdManager
 ) = Ui<AdsScreen, Unit> {
-  SimpleListScreen("Ads") {
-    item {
-      SwitchListItem(
-        value = adsEnabled.collectAsState().value.value,
-        onValueChange = { adsEnabled.value = AdsEnabled(it) },
-        title = { Text("Show ads") }
-      )
-    }
+  Scaffold(topBar = { TopAppBar(title = { Text("Ads") }) }) {
+    VerticalList {
+      item {
+        SwitchListItem(
+          value = adsEnabled.collectAsState().value.value,
+          onValueChange = { adsEnabled.value = AdsEnabled(it) },
+          title = { Text("Show ads") }
+        )
+      }
 
-    item {
-      Button(onClick = action { fullScreenAd.loadAndShowAd() }) {
-        Text("Show full screen ad")
+      item {
+        Button(onClick = action { fullScreenAd.loadAndShowAd() }) {
+          Text("Show full screen ad")
+        }
       }
     }
   }

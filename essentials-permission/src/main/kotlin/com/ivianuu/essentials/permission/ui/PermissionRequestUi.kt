@@ -25,9 +25,11 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.ui.common.SimpleListScreen
+import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TextButton
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
 import com.ivianuu.essentials.ui.navigation.Model
@@ -43,38 +45,40 @@ class PermissionRequestScreen(
 ) : CriticalUserFlowScreen<Boolean>
 
 @Provide val permissionRequestUi = Ui<PermissionRequestScreen, PermissionRequestModel> { model ->
-  SimpleListScreen(R.string.es_request_permission_title) {
-    items(model.permissionsToGrant) { permission ->
-      ListItem(
-        modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp)
-          .border(
-            1.dp,
-            LocalContentColor.current.copy(alpha = 0.12f),
-            RoundedCornerShape(8.dp)
-          ),
-        contentPadding = PaddingValues(start = 16.dp, end = 8.dp),
-        textPadding = PaddingValues(start = 16.dp),
-        title = { Text(permission.title) },
-        subtitle = permission.desc?.let { { Text(it) } },
-        leading = { permission.icon?.invoke() },
-        trailing = {
-          Row(horizontalArrangement = Arrangement.End) {
-            TextButton(
-              modifier = Modifier.width(56.dp),
-              onClick = { model.denyPermission(permission) }
-            ) {
-              Text(R.string.es_deny, maxLines = 1)
-            }
+  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_request_permission_title) }) }) {
+    VerticalList {
+      items(model.permissionsToGrant) { permission ->
+        ListItem(
+          modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp)
+            .border(
+              1.dp,
+              LocalContentColor.current.copy(alpha = 0.12f),
+              RoundedCornerShape(8.dp)
+            ),
+          contentPadding = PaddingValues(start = 16.dp, end = 8.dp),
+          textPadding = PaddingValues(start = 16.dp),
+          title = { Text(permission.title) },
+          subtitle = permission.desc?.let { { Text(it) } },
+          leading = { permission.icon?.invoke() },
+          trailing = {
+            Row(horizontalArrangement = Arrangement.End) {
+              TextButton(
+                modifier = Modifier.width(56.dp),
+                onClick = { model.denyPermission(permission) }
+              ) {
+                Text(R.string.es_deny, maxLines = 1)
+              }
 
-            TextButton(
-              modifier = Modifier.width(56.dp),
-              onClick = { model.grantPermission(permission) }
-            ) {
-              Text(R.string.es_grant, maxLines = 1)
+              TextButton(
+                modifier = Modifier.width(56.dp),
+                onClick = { model.grantPermission(permission) }
+              ) {
+                Text(R.string.es_grant, maxLines = 1)
+              }
             }
           }
-        }
-      )
+        )
+      }
     }
   }
 }

@@ -15,8 +15,10 @@ import com.ivianuu.essentials.donation.DonationScreen
 import com.ivianuu.essentials.rate.DeveloperEmail
 import com.ivianuu.essentials.rate.FeedbackMailScreen
 import com.ivianuu.essentials.rate.RateUseCases
-import com.ivianuu.essentials.ui.common.SimpleListScreen
+import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -28,86 +30,88 @@ import com.ivianuu.injekt.Provide
 class AboutScreen : Screen<Unit>
 
 @Provide val aboutUi = Ui<AboutScreen, AboutModel> { model ->
-  SimpleListScreen(R.string.es_about_title) {
-    item {
-      ListItem(
-        leading = { Icon(R.drawable.es_ic_info) },
-        title = { Text(R.string.es_about_version) },
-        subtitle = { Text(model.version) }
-      )
-    }
-
-    item {
-      ListItem(
-        modifier = Modifier.clickable(onClick = model.rate),
-        leading = { Icon(R.drawable.es_ic_star) },
-        title = { Text(R.string.es_about_rate) },
-        subtitle = { Text(R.string.es_about_rate_desc) }
-      )
-    }
-
-    if (model.showDonate) {
+  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_about_title) }) }) {
+    VerticalList {
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.donate),
-          leading = { Icon(R.drawable.es_ic_favorite) },
-          title = { Text(R.string.es_about_donate) }
+          leading = { Icon(R.drawable.es_ic_info) },
+          title = { Text(R.string.es_about_version) },
+          subtitle = { Text(model.version) }
         )
       }
-    }
 
-    item {
-      ListItem(
-        modifier = Modifier.clickable(onClick = model.openMoreApps),
-        leading = { Icon(R.drawable.es_ic_google_play) },
-        title = { Text(R.string.es_about_more_apps) },
-        subtitle = { Text(R.string.es_about_more_apps_desc) }
-      )
-    }
-
-    item {
-      ListItem(
-        modifier = Modifier.clickable(onClick = model.openRedditPage),
-        leading = { Icon(R.drawable.es_ic_reddit) },
-        title = { Text(R.string.es_about_reddit) },
-        subtitle = { Text(R.string.es_about_reddit_desc) }
-      )
-    }
-
-    item {
-      ListItem(
-        modifier = Modifier.clickable(onClick = model.openGithubPage),
-        leading = { Icon(R.drawable.es_ic_github) },
-        title = { Text(R.string.es_about_github) },
-        subtitle = { Text(R.string.es_about_github_desc) }
-      )
-    }
-
-    item {
-      ListItem(
-        modifier = Modifier.clickable(onClick = model.openTwitterPage),
-        leading = { Icon(R.drawable.es_ic_twitter) },
-        title = { Text(R.string.es_about_twitter) },
-        subtitle = { Text(R.string.es_about_twitter_desc) }
-      )
-    }
-
-    item {
-      ListItem(
-        modifier = Modifier.clickable(onClick = model.sendMail),
-        leading = { Icon(R.drawable.es_ic_email) },
-        title = { Text(R.string.es_about_feedback) },
-        subtitle = { Text(model.email.value) }
-      )
-    }
-
-    if (model.privacyPolicyUrl != null) {
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.openPrivacyPolicy),
-          leading = { Icon(R.drawable.es_ic_policy) },
-          title = { Text(R.string.es_about_privacy_policy) }
+          modifier = Modifier.clickable(onClick = model.rate),
+          leading = { Icon(R.drawable.es_ic_star) },
+          title = { Text(R.string.es_about_rate) },
+          subtitle = { Text(R.string.es_about_rate_desc) }
         )
+      }
+
+      if (model.showDonate) {
+        item {
+          ListItem(
+            modifier = Modifier.clickable(onClick = model.donate),
+            leading = { Icon(R.drawable.es_ic_favorite) },
+            title = { Text(R.string.es_about_donate) }
+          )
+        }
+      }
+
+      item {
+        ListItem(
+          modifier = Modifier.clickable(onClick = model.openMoreApps),
+          leading = { Icon(R.drawable.es_ic_google_play) },
+          title = { Text(R.string.es_about_more_apps) },
+          subtitle = { Text(R.string.es_about_more_apps_desc) }
+        )
+      }
+
+      item {
+        ListItem(
+          modifier = Modifier.clickable(onClick = model.openRedditPage),
+          leading = { Icon(R.drawable.es_ic_reddit) },
+          title = { Text(R.string.es_about_reddit) },
+          subtitle = { Text(R.string.es_about_reddit_desc) }
+        )
+      }
+
+      item {
+        ListItem(
+          modifier = Modifier.clickable(onClick = model.openGithubPage),
+          leading = { Icon(R.drawable.es_ic_github) },
+          title = { Text(R.string.es_about_github) },
+          subtitle = { Text(R.string.es_about_github_desc) }
+        )
+      }
+
+      item {
+        ListItem(
+          modifier = Modifier.clickable(onClick = model.openTwitterPage),
+          leading = { Icon(R.drawable.es_ic_twitter) },
+          title = { Text(R.string.es_about_twitter) },
+          subtitle = { Text(R.string.es_about_twitter_desc) }
+        )
+      }
+
+      item {
+        ListItem(
+          modifier = Modifier.clickable(onClick = model.sendMail),
+          leading = { Icon(R.drawable.es_ic_email) },
+          title = { Text(R.string.es_about_feedback) },
+          subtitle = { Text(model.email.value) }
+        )
+      }
+
+      if (model.privacyPolicyUrl != null) {
+        item {
+          ListItem(
+            modifier = Modifier.clickable(onClick = model.openPrivacyPolicy),
+            leading = { Icon(R.drawable.es_ic_policy) },
+            title = { Text(R.string.es_about_privacy_policy) }
+          )
+        }
       }
     }
   }

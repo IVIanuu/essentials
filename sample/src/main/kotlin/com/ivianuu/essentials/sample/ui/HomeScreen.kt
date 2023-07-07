@@ -19,9 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.common.SimpleListScreen
+import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RootScreen
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -42,41 +44,49 @@ import com.ivianuu.injekt.Provide
   toaster: Toaster
 ) = Ui<HomeScreen, Unit> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
-  SimpleListScreen(
-    title = "Home",
-    popupMenuContent = {
-      listOf("Option 1", "Option 2", "Option 3").forEach { title ->
-        PopupMenuItem(onSelected = { toaster("Selected $title") }) {
-          Text(title)
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = { Text("Home") },
+        actions = {
+          PopupMenuButton {
+            listOf("Option 1", "Option 2", "Option 3").forEach { title ->
+              PopupMenuItem(onSelected = { toaster("Selected $title") }) {
+                Text(title)
+              }
+            }
+          }
         }
-      }
+      )
     }
   ) {
-    items(finalItems) { item ->
-      val color = rememberSaveable(item) {
-        ColorPickerPalette.values()
-          .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
-          .shuffled()
-          .first()
-          .front
+    VerticalList {
+      items(finalItems) { item ->
+        val color = rememberSaveable(item) {
+          ColorPickerPalette.values()
+            .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
+            .shuffled()
+            .first()
+            .front
+        }
+
+        HomeItem(
+          item = item,
+          color = color,
+          onClick = action { navigator.push(item.screenFactory(color)) }
+        )
       }
 
-      HomeItem(
-        item = item,
-        color = color,
-        onClick = action { navigator.push(item.screenFactory(color)) }
-      )
-    }
-
-    item {
-      ListItem(
-        title = {
-          Text(
-            if (isXposedRunning.value) "Xposed is running"
-            else "Xposed is NOT running"
-          )
-        }
-      )
+      item {
+        ListItem(
+          title = {
+            Text(
+              if (isXposedRunning.value) "Xposed is running"
+              else "Xposed is NOT running"
+            )
+          }
+        )
+      }
     }
   }
 }

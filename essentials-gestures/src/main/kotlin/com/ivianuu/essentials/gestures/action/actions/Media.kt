@@ -24,8 +24,10 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.resource.produceResourceState
-import com.ivianuu.essentials.ui.common.SimpleListScreen
+import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -77,20 +79,22 @@ class MediaActionSettingsScreen : Screen<Unit>
 
 @Provide
 val mediaActionSettingsUi = Ui<MediaActionSettingsScreen, MediaActionSettingsModel> { model ->
-  SimpleListScreen(R.string.es_media_app_settings_ui_title) {
-    item {
-      ListItem(
-        modifier = Modifier.clickable(onClick = model.updateMediaApp),
-        title = { Text(R.string.es_pref_media_app) },
-        subtitle = {
-          Text(
-            stringResource(
-              R.string.es_pref_media_app_summary,
-              model.mediaApp.getOrNull()?.appName ?: stringResource(R.string.es_none)
+  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) }) }) {
+    VerticalList {
+      item {
+        ListItem(
+          modifier = Modifier.clickable(onClick = model.updateMediaApp),
+          title = { Text(R.string.es_pref_media_app) },
+          subtitle = {
+            Text(
+              stringResource(
+                R.string.es_pref_media_app_summary,
+                model.mediaApp.getOrNull()?.appName ?: stringResource(R.string.es_none)
+              )
             )
-          )
-        }
-      )
+          }
+        )
+      }
     }
   }
 }

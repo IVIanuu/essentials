@@ -34,8 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.common.SimpleListScreen
+import com.ivianuu.essentials.ui.common.VerticalList
+import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
@@ -59,24 +61,26 @@ data class HelpItem(
     )
   }
 
-  SimpleListScreen(R.string.es_help_title) {
-    categories.forEach { category ->
-      if (category.title != null) {
-        item {
-          Subheader { Text(category.title) }
+  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_help_title) }) }) {
+    VerticalList {
+      categories.forEach { category ->
+        if (category.title != null) {
+          item {
+            Subheader { Text(category.title) }
+          }
         }
-      }
 
-      category.items.forEach { item ->
-        item {
-          HelpItem(
-            item = item,
-            isExpanded = expandedItem == item,
-            onToggleExpandedClick = {
-              expandedItem = if (expandedItem != item) item
-              else null
-            }
-          )
+        category.items.forEach { item ->
+          item {
+            HelpItem(
+              item = item,
+              isExpanded = expandedItem == item,
+              onToggleExpandedClick = {
+                expandedItem = if (expandedItem != item) item
+                else null
+              }
+            )
+          }
         }
       }
     }
