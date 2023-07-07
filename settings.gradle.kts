@@ -30,7 +30,6 @@ include(
   ":essentials-gradle-plugin",
   ":essentials-help",
   ":essentials-ide-plugin",
-  ":essentials-license",
   ":essentials-logging",
   ":essentials-logging-android",
   ":essentials-notification-listener",

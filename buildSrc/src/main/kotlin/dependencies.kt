@@ -123,8 +123,6 @@ object Deps {
 
   const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
 
-  const val licenseGradlePlugin = "com.jaredsburrows:gradle-license-plugin:0.9.0"
-
   const val mockk = "io.mockk:mockk:1.12.8"
 
   const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.24.0"

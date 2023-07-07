@@ -13,7 +13,6 @@ import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationScreen
-import com.ivianuu.essentials.license.LicenseScreen
 import com.ivianuu.essentials.rate.DeveloperEmail
 import com.ivianuu.essentials.rate.FeedbackMailScreen
 import com.ivianuu.essentials.rate.RateUseCases
@@ -104,14 +103,6 @@ class AboutScreen : Screen<Unit>
       )
     }
 
-    item {
-      ListItem(
-        modifier = Modifier.clickable(onClick = model.openLicenses),
-        leading = { Icon(R.drawable.es_ic_assignment) },
-        title = { Text(R.string.es_licenses_title) }
-      )
-    }
-
     if (model.privacyPolicyUrl != null) {
       item {
         ListItem(
@@ -131,7 +122,6 @@ data class AboutModel(
   val showDonate: Boolean,
   val donate: () -> Unit,
   val rate: () -> Unit,
-  val openLicenses: () -> Unit,
   val openMoreApps: () -> Unit,
   val openRedditPage: () -> Unit,
   val openGithubPage: () -> Unit,
@@ -157,7 +147,6 @@ data class AboutModel(
     privacyPolicyUrl = privacyPolicyUrl,
     showDonate = donations != null,
     donate = action { navigator.push(DonationScreen()) },
-    openLicenses = action { navigator.push(LicenseScreen()) },
     rate = action { rateUseCases.rateOnPlay() },
     openMoreApps = action {
       navigator.push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
