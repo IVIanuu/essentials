@@ -8,6 +8,8 @@ import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
@@ -28,6 +30,62 @@ import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.essentials.ui.insets.localHorizontalInsetsPadding
 import com.ivianuu.essentials.ui.insets.localVerticalInsetsPadding
 import com.ivianuu.injekt.Provide
+
+@Composable fun VerticalList(
+  modifier: Modifier = Modifier,
+  state: LazyListState = rememberLazyListState(),
+  contentPadding: PaddingValues = localVerticalInsetsPadding(top = 8.dp, bottom = 8.dp),
+  reverseLayout: Boolean = false,
+  verticalArrangement: Arrangement.Vertical =
+    if (!reverseLayout) Arrangement.Top else Arrangement.Bottom,
+  horizontalAlignment: Alignment.Horizontal = Alignment.Start,
+  flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
+  userScrollEnabled: Boolean = true,
+  decorate: Boolean = true,
+  content: LazyListScope.() -> Unit
+) {
+  val decorators = if (decorate) remember(LocalListDecorators.current) else emptyList()
+  LazyColumn(
+    modifier = modifier.fillMaxHeight(),
+    state = state,
+    contentPadding = contentPadding,
+    reverseLayout = reverseLayout,
+    verticalArrangement = verticalArrangement,
+    horizontalAlignment = horizontalAlignment,
+    flingBehavior = flingBehavior,
+    userScrollEnabled = userScrollEnabled
+  ) {
+    decoratedContent(true, decorators, content)
+  }
+}
+
+@Composable fun HorizontalList(
+  modifier: Modifier = Modifier,
+  state: LazyListState = rememberLazyListState(),
+  contentPadding: PaddingValues = localHorizontalInsetsPadding(start = 8.dp, end = 8.dp),
+  reverseLayout: Boolean = false,
+  horizontalArrangement: Arrangement.Horizontal =
+    if (!reverseLayout) Arrangement.Start else Arrangement.End,
+  verticalAlignment: Alignment.Vertical = Alignment.Top,
+  flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
+  userScrollEnabled: Boolean = true,
+  decorate: Boolean = true,
+  content: LazyListScope.() -> Unit
+) {
+  val decorators = if (decorate) remember(LocalListDecorators.current) else emptyList()
+  LazyRow(
+    modifier = modifier.fillMaxWidth(),
+    state = state,
+    contentPadding = contentPadding,
+    reverseLayout = reverseLayout,
+    horizontalArrangement = horizontalArrangement,
+    verticalAlignment = verticalAlignment,
+    flingBehavior = flingBehavior,
+    userScrollEnabled = userScrollEnabled
+  ) {
+    decoratedContent(false, decorators, content)
+  }
+}
 
 fun interface ListDecorator : ExtensionPoint<ListDecorator> {
   operator fun ListDecoratorScope.invoke()
@@ -52,58 +110,6 @@ fun interface ListDecoratorsProvider : AppUiDecorator
     LocalListDecorators provides { decorators().sortedWithLoadingOrder() },
     content = content
   )
-}
-
-@Composable fun VerticalList(
-  modifier: Modifier = Modifier,
-  state: LazyListState = rememberLazyListState(),
-  contentPadding: PaddingValues = localVerticalInsetsPadding(top = 8.dp, bottom = 8.dp),
-  reverseLayout: Boolean = false,
-  verticalArrangement: Arrangement.Vertical =
-    if (!reverseLayout) Arrangement.Top else Arrangement.Bottom,
-  horizontalAlignment: Alignment.Horizontal = Alignment.Start,
-  flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
-  decorate: Boolean = true,
-  content: LazyListScope.() -> Unit
-) {
-  val decorators = if (decorate) remember(LocalListDecorators.current) else emptyList()
-  LazyColumn(
-    modifier = modifier,
-    state = state,
-    contentPadding = contentPadding,
-    reverseLayout = reverseLayout,
-    verticalArrangement = verticalArrangement,
-    horizontalAlignment = horizontalAlignment,
-    flingBehavior = flingBehavior
-  ) {
-    decoratedContent(true, decorators, content)
-  }
-}
-
-@Composable fun HorizontalList(
-  modifier: Modifier = Modifier,
-  state: LazyListState = rememberLazyListState(),
-  contentPadding: PaddingValues = localHorizontalInsetsPadding(start = 8.dp, end = 8.dp),
-  reverseLayout: Boolean = false,
-  horizontalArrangement: Arrangement.Horizontal =
-    if (!reverseLayout) Arrangement.Start else Arrangement.End,
-  verticalAlignment: Alignment.Vertical = Alignment.Top,
-  flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
-  decorate: Boolean = true,
-  content: LazyListScope.() -> Unit
-) {
-  val decorators = if (decorate) remember(LocalListDecorators.current) else emptyList()
-  LazyRow(
-    modifier = modifier,
-    state = state,
-    contentPadding = contentPadding,
-    reverseLayout = reverseLayout,
-    horizontalArrangement = horizontalArrangement,
-    verticalAlignment = verticalAlignment,
-    flingBehavior = flingBehavior
-  ) {
-    decoratedContent(false, decorators, content)
-  }
 }
 
 private fun LazyListScope.decoratedContent(
