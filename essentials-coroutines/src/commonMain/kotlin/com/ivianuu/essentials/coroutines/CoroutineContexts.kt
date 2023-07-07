@@ -9,6 +9,8 @@ data class CoroutineContexts(
   val computation: CoroutineContext,
   val io: CoroutineContext,
 ) {
+  constructor(coroutineContext: CoroutineContext) : this(coroutineContext, coroutineContext, coroutineContext)
+
   companion object {
     @Provide val default = CoroutineContexts(
       main = Dispatchers.Main,

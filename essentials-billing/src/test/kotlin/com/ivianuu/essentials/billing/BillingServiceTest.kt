@@ -10,12 +10,13 @@ import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingResult
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.AppForegroundState
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.NoopLogger
 import com.ivianuu.essentials.test.dispatcher
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.util.AppUiStarter
+import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.inject
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -39,21 +40,23 @@ class BillingServiceTest {
     @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()
 
     val context = BillingServiceImpl(
-      billingClient = mockk {
-        every { startConnection(any()) } answers {
-          arg<BillingClientStateListener>(0)
-            .onBillingSetupFinished(
-              BillingResult.newBuilder()
-                .setResponseCode(BillingClient.BillingResponseCode.OK)
-                .build()
-            )
+      billingClientFactory = {
+        mockk {
+          every { startConnection(any()) } answers {
+            arg<BillingClientStateListener>(0)
+              .onBillingSetupFinished(
+                BillingResult.newBuilder()
+                  .setResponseCode(BillingClient.BillingResponseCode.OK)
+                  .build()
+              )
+          }
         }
       },
-      ioCoroutineContext = dispatcher,
+      coroutineContexts = CoroutineContexts(dispatcher),
       refreshes = MutableSharedFlow()
     )
     var ran = false
-    context.withConnection { ran = true }
+    context.withBillingClient { ran = true }
     ran.shouldBeTrue()
   }
 
@@ -61,26 +64,28 @@ class BillingServiceTest {
     @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()
 
     val context = BillingServiceImpl(
-      billingClient = mockk {
-        every { startConnection(any()) } answers {
-          val listener = arg<BillingClientStateListener>(0)
-          listener.onBillingSetupFinished(
-            BillingResult.newBuilder()
-              .setResponseCode(BillingClient.BillingResponseCode.OK)
-              .build()
-          )
-          listener.onBillingSetupFinished(
-            BillingResult.newBuilder()
-              .setResponseCode(BillingClient.BillingResponseCode.OK)
-              .build()
-          )
+      billingClientFactory = {
+        mockk {
+          every { startConnection(any()) } answers {
+            val listener = arg<BillingClientStateListener>(0)
+            listener.onBillingSetupFinished(
+              BillingResult.newBuilder()
+                .setResponseCode(BillingClient.BillingResponseCode.OK)
+                .build()
+            )
+            listener.onBillingSetupFinished(
+              BillingResult.newBuilder()
+                .setResponseCode(BillingClient.BillingResponseCode.OK)
+                .build()
+            )
+          }
         }
       },
-      ioCoroutineContext = dispatcher,
+      coroutineContexts = CoroutineContexts(dispatcher),
       refreshes = MutableSharedFlow()
     )
     var ran = false
-    context.withConnection { ran = true }
+    context.withBillingClient { ran = true }
     ran.shouldBeTrue()
   }
 
@@ -89,8 +94,8 @@ class BillingServiceTest {
     @Provide val refreshes = EventFlow<BillingRefresh>()
 
     val service = BillingServiceImpl(
-      billingClient = TestBillingClient { refreshes.tryEmit(BillingRefresh) }.withTestSku(),
-      ioCoroutineContext = dispatcher
+      billingClientFactory = { TestBillingClient { refreshes.tryEmit(BillingRefresh) }.withTestSku() },
+      coroutineContexts = CoroutineContexts(dispatcher)
     )
     service.purchase(TestSku).shouldBeTrue()
   }

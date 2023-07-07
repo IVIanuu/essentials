@@ -6,8 +6,6 @@ package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.BillingClient
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,7 +13,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 @Provide fun billingClient(
   appContext: AppContext,
   refreshes: MutableSharedFlow<BillingRefresh>
-): @Scoped<AppScope> BillingClient = BillingClient
+): BillingClient = BillingClient
   .newBuilder(appContext)
   .enablePendingPurchases()
   .setListener { _, _ -> refreshes.tryEmit(BillingRefresh) }
