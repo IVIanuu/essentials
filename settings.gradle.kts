@@ -55,7 +55,6 @@ include(
   ":essentials-ui-popup",
   ":essentials-ui-prefs",
   ":essentials-unlock",
-  ":essentials-web-ui",
   ":essentials-work",
   ":essentials-xposed",
   ":essentials-xposed-provided",

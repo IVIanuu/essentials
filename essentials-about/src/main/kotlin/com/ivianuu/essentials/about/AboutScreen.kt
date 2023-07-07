@@ -9,7 +9,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationScreen
@@ -24,7 +23,6 @@ import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.UrlScreen
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.web.ui.WebScreen
 import com.ivianuu.injekt.Provide
 
 class AboutScreen : Screen<Unit>
@@ -138,8 +136,7 @@ data class AboutModel(
   donations: (() -> List<Donation>)? = null,
   email: DeveloperEmail,
   navigator: Navigator,
-  rateUseCases: RateUseCases,
-  resources: Resources
+  rateUseCases: RateUseCases
 ) = Model {
   AboutModel(
     version = appConfig.versionName,
@@ -154,14 +151,7 @@ data class AboutModel(
     openRedditPage = action { navigator.push(UrlScreen("https://www.reddit.com/r/manuelwrageapps")) },
     openGithubPage = action { navigator.push(UrlScreen("https://github.com/IVIanuu")) },
     openTwitterPage = action { navigator.push(UrlScreen("https://twitter.com/IVIanuu")) },
-    openPrivacyPolicy = action {
-      navigator.push(
-        WebScreen(
-          resources(R.string.es_about_privacy_policy),
-          privacyPolicyUrl!!.value
-        )
-      )
-    },
+    openPrivacyPolicy = action { navigator.push(UrlScreen(privacyPolicyUrl!!.value)) },
     sendMail = action { navigator.push(FeedbackMailScreen) }
   )
 }

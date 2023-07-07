@@ -19,7 +19,6 @@ dependencies {
   api(project(":essentials-donation"))
   api(project(":essentials-rate"))
   api(project(":essentials-ui"))
-  api(project(":essentials-web-ui"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")
