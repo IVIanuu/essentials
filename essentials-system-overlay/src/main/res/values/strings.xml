@@ -3,19 +3,6 @@
   -->
 
 <resources>
-    <string name="es_system_overlay_blacklist_title">Blacklist</string>
-
-    <string name="es_pref_system_overlay_app_blacklist">Disable %s in selected apps</string>
-
-    <string name="es_pref_disable_on_keyboard">Disable on keyboard</string>
-    <string name="es_pref_disable_on_keyboard_summary">Disables %s while the keyboard is open</string>
-
-    <string name="es_pref_disable_on_lock_screen">Disable on lock screen</string>
-    <string name="es_pref_disable_on_lock_screen_summary">Disables %s on the lock screen</string>
-
-    <string name="es_pref_disable_on_secure_screens">Disable on secure screens</string>
-    <string name="es_pref_disable_on_secure_screens_summary">Disables %s on screens like the permission or app installing screen</string>
-
     <string name="es_screen_edge_left">Left</string>
     <string name="es_screen_edge_top">Top</string>
     <string name="es_screen_edge_right">Right</string>
