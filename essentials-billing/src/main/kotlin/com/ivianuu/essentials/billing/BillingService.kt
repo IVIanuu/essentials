@@ -115,12 +115,12 @@ interface BillingService {
     }
     .onStart { emit(BillingRefresh) }
     .onEach { logger.log { "update is purchased for $sku" } }
-    .map { withBillingClient { getIsPurchased(sku) } ?: false }
+    .map { withBillingClient { it.getIsPurchased(sku) } ?: false }
     .distinctUntilChanged()
     .onEach { logger.log { "is purchased for $sku -> $it" } }
 
   override suspend fun getSkuDetails(sku: Sku): SkuDetails? = withBillingClient {
-    querySkuDetails(sku.toSkuDetailsParams())
+    it.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
       ?.firstOrNull { it.sku == sku.skuString }
       .also { logger.log { "got sku details $it for $sku" } }
@@ -130,12 +130,12 @@ interface BillingService {
     sku: Sku,
     acknowledge: Boolean,
     consumeOldPurchaseIfUnspecified: Boolean
-  ): Boolean = withBillingClient {
+  ): Boolean = withBillingClient { billingClient ->
     logger.log {
       "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
     }
     if (consumeOldPurchaseIfUnspecified) {
-      val oldPurchase = getPurchase(sku)
+      val oldPurchase = billingClient.getPurchase(sku)
       if (oldPurchase != null) {
         if (oldPurchase.purchaseState == Purchase.PurchaseState.UNSPECIFIED_STATE) {
           consumePurchase(sku)
@@ -152,25 +152,25 @@ interface BillingService {
       .setSkuDetails(skuDetails)
       .build()
 
-    val result = launchBillingFlow(activity, billingFlowParams)
+    val result = billingClient.launchBillingFlow(activity, billingFlowParams)
     if (result.responseCode != BillingClient.BillingResponseCode.OK)
       return@withBillingClient false
 
     refreshes.first()
 
-    val success = getIsPurchased(sku)
+    val success = billingClient.getIsPurchased(sku)
 
     return@withBillingClient if (success && acknowledge) acknowledgePurchase(sku) else success
   } ?: false
 
-  override suspend fun consumePurchase(sku: Sku): Boolean = withBillingClient {
-    val purchase = getPurchase(sku) ?: return@withBillingClient false
+  override suspend fun consumePurchase(sku: Sku): Boolean = withBillingClient { billingClient ->
+    val purchase = billingClient.getPurchase(sku) ?: return@withBillingClient false
 
     val consumeParams = ConsumeParams.newBuilder()
       .setPurchaseToken(purchase.purchaseToken)
       .build()
 
-    val result = consumePurchase(consumeParams)
+    val result = billingClient.consumePurchase(consumeParams)
 
     logger.log {
       "consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}"
@@ -181,8 +181,8 @@ interface BillingService {
     return@withBillingClient success
   } ?: false
 
-  override suspend fun acknowledgePurchase(sku: Sku): Boolean = withBillingClient {
-    val purchase = getPurchase(sku)
+  override suspend fun acknowledgePurchase(sku: Sku): Boolean = withBillingClient { billingClient ->
+    val purchase = billingClient.getPurchase(sku)
       ?: return@withBillingClient false
 
     if (purchase.isAcknowledged) return@withBillingClient true
@@ -191,7 +191,7 @@ interface BillingService {
       .setPurchaseToken(purchase.purchaseToken)
       .build()
 
-    val result = acknowledgePurchase(acknowledgeParams)
+    val result = billingClient.acknowledgePurchase(acknowledgeParams)
 
     logger.log {
       "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"
@@ -219,6 +219,6 @@ interface BillingService {
       .firstOrNull { sku.skuString in it.skus }
       .also { logger.log { "got purchase $it for $sku" } }
 
-  internal suspend fun <R> withBillingClient(block: suspend BillingClient.() -> R): R? =
+  internal suspend fun <R> withBillingClient(block: suspend (BillingClient) -> R): R? =
     billingClient.withResource(Unit) { block(it) }
 }
