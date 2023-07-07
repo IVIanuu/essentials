@@ -10,10 +10,10 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestScreen
 import com.ivianuu.essentials.ui.UiScopeOwner
+import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unsafeCast
-import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow

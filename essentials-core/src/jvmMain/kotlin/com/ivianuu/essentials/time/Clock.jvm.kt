@@ -5,5 +5,6 @@
 package com.ivianuu.essentials.time
 
 import com.ivianuu.injekt.Provide
+import kotlin.time.Duration.Companion.milliseconds
 
 @Provide actual val DefaultClock = Clock { System.currentTimeMillis().milliseconds }

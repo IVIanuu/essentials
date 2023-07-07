@@ -2,7 +2,7 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.gestures.action.ui.picker
+package com.ivianuu.essentials.gestures.action.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -21,7 +21,6 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionRepository
-import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.produceResourceState
@@ -86,7 +85,8 @@ sealed interface ActionPickerItem {
       ActionIcon(action = action, modifier = modifier)
     }
 
-    override suspend fun getResult(navigator: Navigator) = ActionPickerScreen.Result.Action(action.id)
+    override suspend fun getResult(navigator: Navigator) =
+      ActionPickerScreen.Result.Action(action.id)
   }
 
   class PickerDelegate(val delegate: ActionPickerDelegate) : ActionPickerItem {
@@ -132,7 +132,6 @@ sealed interface ActionPickerItem {
 }
 
 @Provide fun actionPickerModel(
-  filter: ActionFilter,
   navigator: Navigator,
   permissionManager: PermissionManager,
   repository: ActionRepository,
@@ -140,9 +139,7 @@ sealed interface ActionPickerItem {
   screen: ActionPickerScreen
 ) = Model {
   ActionPickerModel(
-    items = produceResourceState {
-      emit(getActionPickerItems(filter, screen))
-    }.value,
+    items = produceResourceState { emit(getActionPickerItems(screen)) }.value,
     openActionSettings = action { item -> navigator.push(item.settingsScreen!!) },
     pickAction = action { item ->
       val result = item.getResult(navigator) ?: return@action
@@ -157,7 +154,6 @@ sealed interface ActionPickerItem {
 }
 
 private suspend fun getActionPickerItems(
-  filter: ActionFilter,
   screen: ActionPickerScreen,
   @Inject repository: ActionRepository,
   @Inject resources: Resources
@@ -180,9 +176,7 @@ private suspend fun getActionPickerItems(
 
   val actionsAndDelegates = (
       (repository.getActionPickerDelegates()
-        .filter { filter(it.baseId) }
         .map { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
-        .filter { filter(it.id) }
         .map {
           ActionPickerItem.ActionItem(
             it,

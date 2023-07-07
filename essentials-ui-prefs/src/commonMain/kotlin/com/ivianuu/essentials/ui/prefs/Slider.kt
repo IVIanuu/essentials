@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.Lerper
-import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.material.DefaultSliderRange
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
@@ -37,6 +36,7 @@ import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 @Composable fun <T : Comparable<T>> SliderListItem(
   value: T,

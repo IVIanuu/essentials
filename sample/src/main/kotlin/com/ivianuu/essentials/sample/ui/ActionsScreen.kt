@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.coroutines.coroutineScope
 import com.ivianuu.essentials.gestures.action.ActionRepository
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerScreen
+import com.ivianuu.essentials.gestures.action.ui.ActionPickerScreen
 import com.ivianuu.essentials.safeAs
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button

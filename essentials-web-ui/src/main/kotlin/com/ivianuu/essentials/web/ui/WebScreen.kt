@@ -38,10 +38,7 @@ import com.ivianuu.injekt.Provide
 
 class WebScreen(val title: String, val url: String) : Screen<Unit>
 
-@Provide fun webUi(
-  navigator: Navigator,
-  screen: WebScreen
-) = Ui<WebScreen, Unit> {
+@Provide fun webUi(navigator: Navigator, screen: WebScreen) = Ui<WebScreen, Unit> {
   var webViewRef: WebView? by remember { mutableStateOf(null) }
   DisposableEffect(true) {
     onDispose {

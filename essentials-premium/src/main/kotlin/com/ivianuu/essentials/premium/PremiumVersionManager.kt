@@ -18,10 +18,10 @@ import com.ivianuu.essentials.data.PrefModule
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiScopeOwner
+import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unlock.ScreenUnlocker
-import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag

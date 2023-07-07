@@ -36,12 +36,12 @@ fun interface ScreenIntentFactory<T> {
   suspend operator fun invoke(screen: T): Intent
 }
 
-fun interface IntentAppUiStarter {
+fun interface AppUiStarter {
   suspend operator fun invoke(): ComponentActivity
 }
 
 @Provide fun intentScreenInterceptor(
-  appUiStarter: IntentAppUiStarter,
+  appUiStarter: AppUiStarter,
   coroutineContexts: CoroutineContexts,
   intentFactories: () -> Map<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>>
 ) = ScreenInterceptor<Result<ActivityResult, Throwable>> handler@{ screen ->

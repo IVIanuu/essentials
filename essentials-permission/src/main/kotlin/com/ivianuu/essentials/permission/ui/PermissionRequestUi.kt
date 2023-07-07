@@ -28,12 +28,12 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.TextButton
+import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.first

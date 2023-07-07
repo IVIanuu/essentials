@@ -20,11 +20,11 @@ import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
 @Provide @AndroidComponent class ForegroundService(
   private val foregroundManager: ForegroundManagerImpl,

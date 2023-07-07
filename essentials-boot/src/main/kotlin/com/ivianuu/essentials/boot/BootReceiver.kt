@@ -12,13 +12,22 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
-@Provide @AndroidComponent class StartupReceiver(
-  private val bootListeners: List<BootListener>,
+fun interface BootListener {
+  operator fun invoke()
+
+  companion object {
+    @Provide val defaultListeners get() = emptyList<BootListener>()
+  }
+}
+
+
+@Provide @AndroidComponent class BootReceiver(
+  private val bootListeners: () ->List<BootListener>,
   private val logger: Logger
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
     logger.log { "on system boot" }
-    bootListeners.forEach { it() }
+    bootListeners().forEach { it() }
   }
 }

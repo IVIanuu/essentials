@@ -16,7 +16,6 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.coroutines.timerFlow
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -25,6 +24,7 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import kotlin.time.Duration.Companion.seconds
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundScreen() }
 

@@ -21,8 +21,8 @@ import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
+import com.ivianuu.essentials.gestures.action.ui.ActionPickerScreen
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerScreen
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerScreen
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator

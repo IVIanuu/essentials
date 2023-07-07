@@ -38,6 +38,7 @@ import com.ivianuu.essentials.ui.material.OutlinedButton
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
 import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
 import com.ivianuu.essentials.ui.navigation.Model
@@ -46,7 +47,6 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.stepper.Step
-import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag

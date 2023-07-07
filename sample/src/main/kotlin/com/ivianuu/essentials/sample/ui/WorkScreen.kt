@@ -10,8 +10,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.time.hours
-import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -24,6 +22,8 @@ import com.ivianuu.essentials.work.WorkManager
 import com.ivianuu.essentials.work.Worker
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
 
 @Provide val workHomeItem = HomeItem("Work") { WorkScreen() }
 

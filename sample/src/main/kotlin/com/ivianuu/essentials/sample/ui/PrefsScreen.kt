@@ -32,7 +32,6 @@ import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.ColorListItem
-import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.ScaledPercentageUnitText
 import com.ivianuu.essentials.ui.prefs.SliderListItem
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
@@ -60,21 +59,11 @@ class PrefsScreen : Screen<Unit>
         title = { Text("Switch") }
       )
     }
+
     item {
       Subheader(modifier = Modifier.interactive(prefs.switch)) { Text("Category") }
     }
-    item {
-      RadioButtonListItem(
-        value = prefs.radioButton,
-        onValueChange = action { value ->
-          pref.updateData { copy(radioButton = value) }
-        },
-        modifier = Modifier.interactive(prefs.switch),
-        leading = { IconPlaceholder() },
-        title = { Text("Radio Button") },
-        subtitle = { Text("This is a radio button preference") }
-      )
-    }
+
     item {
       SliderListItem(
         value = prefs.slider,
@@ -88,6 +77,7 @@ class PrefsScreen : Screen<Unit>
         valueText = { Text(it.toString()) }
       )
     }
+
     item {
       SliderListItem(
         value = prefs.slider,
@@ -101,6 +91,7 @@ class PrefsScreen : Screen<Unit>
         valueText = { Text(it.toString()) }
       )
     }
+
     item {
       SliderListItem(
         value = prefs.steppedSlider,
@@ -116,11 +107,13 @@ class PrefsScreen : Screen<Unit>
         valueText = { ScaledPercentageUnitText(it) }
       )
     }
+
     item {
       Subheader(modifier = Modifier.interactive(prefs.switch)) {
         Text("Dialogs")
       }
     }
+
     item {
       ListItem(
         modifier = Modifier
@@ -143,6 +136,7 @@ class PrefsScreen : Screen<Unit>
         subtitle = { Text("This is a text input preference") }
       )
     }
+
     item {
       ColorListItem(
         value = prefs.color,
@@ -158,6 +152,7 @@ class PrefsScreen : Screen<Unit>
         subtitle = { Text("This is a color preference") }
       )
     }
+
     item {
       ListItem(
         modifier = Modifier
@@ -176,6 +171,7 @@ class PrefsScreen : Screen<Unit>
         subtitle = { Text("This is a multi select list preference") }
       )
     }
+
     item {
       ListItem(
         modifier = Modifier

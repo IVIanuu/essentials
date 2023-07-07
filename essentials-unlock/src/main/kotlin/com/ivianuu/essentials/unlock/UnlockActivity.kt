@@ -16,7 +16,6 @@ import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.CompletableDeferred
@@ -26,6 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.yield
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Requests a screen unlock

@@ -10,6 +10,7 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread

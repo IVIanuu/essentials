@@ -21,7 +21,6 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.time.minutes
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.util.ForegroundActivity
 import com.ivianuu.injekt.Provide
@@ -38,6 +37,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 interface FullScreenAdManager {
   suspend fun isAdLoaded(): Boolean

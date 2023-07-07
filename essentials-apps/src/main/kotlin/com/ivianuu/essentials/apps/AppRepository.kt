@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
@@ -26,8 +25,6 @@ interface AppRepository {
   val installedApps: Flow<List<AppInfo>>
 
   fun appInfo(packageName: String): Flow<AppInfo?>
-
-  fun isAppInstalled(packageName: String): Flow<Boolean>
 }
 
 @Provide class AppRepositoryImpl(
@@ -74,19 +71,6 @@ interface AppRepository {
           packageManager.getApplicationInfo(packageName, 0)
         }.getOrNull() ?: return@withContext null
         AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
-      }
-    }
-    .distinctUntilChanged()
-
-  override fun isAppInstalled(packageName: String) = broadcastsFactory(
-    Intent.ACTION_PACKAGE_ADDED,
-    Intent.ACTION_PACKAGE_REMOVED
-  )
-    .onStart<Any?> { emit(Unit) }
-    .map {
-      withContext(coroutineContexts.io) {
-        catch { packageManager.getApplicationInfo(packageName, 0) }
-          .fold(success = { true }, failure = { false })
       }
     }
     .distinctUntilChanged()

@@ -8,13 +8,13 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.Clock
-import com.ivianuu.essentials.time.days
-import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.navigation.UserflowBuilder
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.milliseconds
 
 fun interface RateUserflowBuilder : UserflowBuilder
 

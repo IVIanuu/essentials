@@ -17,7 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.Lerper
-import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -26,6 +25,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 @Composable fun <T : Comparable<T>> Slider(
   value: T,
