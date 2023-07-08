@@ -131,7 +131,7 @@ typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
 @Serializable data class PremiumVersionPrefs(val wasPremiumVersion: Boolean = false) {
   companion object {
-    @Provide val prefModule = DataStoreModule("premium_version_prefs") {
+    @Provide val dataStoreModule = DataStoreModule("premium_version_prefs") {
       PremiumVersionPrefs()
     }
   }

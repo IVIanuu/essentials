@@ -208,6 +208,6 @@ class PrefsScreen : Screen<Unit>
   val singleChoice: String = "C",
 ) {
   companion object {
-    @Provide val prefModule = DataStoreModule("sample_prefs") { SamplePrefs() }
+    @Provide val dataStoreModule = DataStoreModule("sample_prefs") { SamplePrefs() }
   }
 }

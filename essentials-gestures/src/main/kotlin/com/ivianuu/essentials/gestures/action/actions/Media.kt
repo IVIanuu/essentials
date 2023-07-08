@@ -71,7 +71,7 @@ private fun mediaIntentFor(
 
 @Serializable data class MediaActionPrefs(val mediaApp: String? = null) {
   companion object {
-    @Provide val prefModule = DataStoreModule("media_action_prefs") { MediaActionPrefs() }
+    @Provide val dataStoreModule = DataStoreModule("media_action_prefs") { MediaActionPrefs() }
   }
 }
 

@@ -42,6 +42,6 @@ fun interface AppVersionUpgradeHandler {
 
 @Serializable data class AppVersionUpgradePrefs(val lastAppVersion: Int = 0) {
   companion object {
-    @Provide val prefModule = DataStoreModule("app_version_upgrade") { AppVersionUpgradePrefs() }
+    @Provide val dataStoreModule = DataStoreModule("app_version_upgrade") { AppVersionUpgradePrefs() }
   }
 }

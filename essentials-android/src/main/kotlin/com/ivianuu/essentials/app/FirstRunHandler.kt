@@ -53,6 +53,6 @@ fun interface FirstRunHandler {
 
 @Serializable data class FirstRunPrefs(val isFirstRun: Boolean = true) {
   companion object {
-    @Provide val prefModule = DataStoreModule("first_run_prefs") { FirstRunPrefs() }
+    @Provide val dataStoreModule = DataStoreModule("first_run_prefs") { FirstRunPrefs() }
   }
 }
