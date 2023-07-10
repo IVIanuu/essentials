@@ -63,7 +63,7 @@ import com.ivianuu.injekt.Provide
     VerticalList {
       items(finalItems) { item ->
         val color = rememberSaveable(item) {
-          ColorPickerPalette.values()
+          ColorPickerPalette.entries
             .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
             .shuffled()
             .first()

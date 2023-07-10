@@ -14,7 +14,7 @@ import com.ivianuu.injekt.Provide
 
 class ColorPickerScreen(
   val initialColor: Color,
-  val colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
+  val colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.entries,
   val title: String? = null,
   val allowCustomArgb: Boolean = true,
   val showAlphaSelector: Boolean = false,

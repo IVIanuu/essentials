@@ -30,7 +30,7 @@ class DynamicSystemBarsScreen : Screen<Unit>
 @Provide val dynamicSystemBarsUi = Ui<DynamicSystemBarsScreen, Unit> {
   Box {
     val colors = rememberSaveable {
-      ColorPickerPalette.values()
+      ColorPickerPalette.entries
         .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
         .flatMap { it.colors }
         .shuffled()

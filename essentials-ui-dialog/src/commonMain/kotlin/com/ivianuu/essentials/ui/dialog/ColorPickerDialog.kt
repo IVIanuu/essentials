@@ -66,7 +66,7 @@ import com.ivianuu.injekt.Provide
 @Composable fun ColorPickerDialog(
   modifier: Modifier = Modifier,
   initialColor: Color,
-  colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
+  colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.entries,
   icon: (@Composable () -> Unit)? = null,
   title: (@Composable () -> Unit)? = null,
   onColorSelected: (Color) -> Unit,
@@ -318,7 +318,7 @@ private sealed interface ColorGridItem {
       onColorChanged = onColorChanged
     )
 
-    ColorComponent.values()
+    ColorComponent.entries
       .filter { it != ColorComponent.ALPHA || showAlphaSelector }
       .forEach { component ->
         key(component) {

@@ -32,7 +32,7 @@ import com.ivianuu.injekt.Provide
 class BottomNavigationScreen : Screen<Unit>
 
 @Provide val bottomNavigationUi = Ui<BottomNavigationScreen, Unit> {
-  var selectedItem by remember { mutableStateOf(BottomNavItem.values().first()) }
+  var selectedItem by remember { mutableStateOf(BottomNavItem.entries.first()) }
 
   Scaffold(
     topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
@@ -41,7 +41,7 @@ class BottomNavigationScreen : Screen<Unit>
         backgroundColor = MaterialTheme.colors.primary,
         elevation = 0.dp
       ) {
-        BottomNavItem.values().forEach { item ->
+        BottomNavItem.entries.forEach { item ->
           NavigationBarItem(
             alwaysShowLabel = false,
             selected = item == selectedItem,
