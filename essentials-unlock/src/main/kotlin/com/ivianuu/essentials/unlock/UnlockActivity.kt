@@ -13,11 +13,11 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.AndroidComponent
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.delay

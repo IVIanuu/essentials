@@ -9,10 +9,10 @@ import android.content.Intent
 import android.os.PowerManager
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.compose.compositionFlow
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

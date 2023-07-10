@@ -5,7 +5,6 @@
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
-  id("com.ivianuu.essentials.compose")
   kotlin("android")
 }
 
@@ -20,7 +19,6 @@ dependencies {
   api(Deps.AndroidX.Lifecycle.runtime)
 
   api(Deps.Coroutines.android)
-  api(Deps.Injekt.android)
   api(Deps.Injekt.core)
 
   api(project(":essentials-ui"))

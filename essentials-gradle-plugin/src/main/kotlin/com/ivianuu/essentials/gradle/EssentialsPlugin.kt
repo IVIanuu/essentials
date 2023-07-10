@@ -7,6 +7,7 @@ package com.ivianuu.essentials.gradle
 import com.google.auto.service.AutoService
 import com.ivianuu.injekt.gradle.InjektPlugin
 import org.gradle.api.Project
+import org.gradle.api.UnknownProjectException
 import org.gradle.api.provider.Provider
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
@@ -23,13 +24,25 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
 
   override fun apply(target: Project) {
     target.plugins.apply(InjektPlugin::class.java)
+    target.plugins.apply("com.ivianuu.injekt")
+    target.plugins.apply("kotlinx-atomicfu")
+    target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
+    target.plugins.apply("com.ivianuu.essentials.compose")
+    target.plugins.apply("com.google.devtools.ksp")
+    target.dependencies.add(
+      "ksp",
+      try {
+        target.project(":essentials-ksp")
+      } catch (e: UnknownProjectException) {
+        "com.ivianuu.essentials:essentials-ksp:${BuildConfig.VERSION}"
+      }
+    )
     target.extensions.add("essentials", EssentialsExtension(target))
   }
 
   override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> {
     kotlinCompilation.kotlinOptions.run {
       freeCompilerArgs = freeCompilerArgs + listOf(
-        "-Xuse-ir",
         "-Xskip-runtime-version-check",
         "-XXLanguage:+NewInference",
         "-Xskip-prerelease-check",
@@ -39,10 +52,7 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
         kotlinCompilation is KotlinJvmAndroidCompilation
       ) {
         (kotlinCompilation.kotlinOptions as KotlinJvmOptions).jvmTarget = "1.8"
-        freeCompilerArgs += listOf(
-          "-Xallow-jvm-ir-dependencies",
-          "-Xjvm-default=enable",
-        )
+        freeCompilerArgs += listOf("-Xallow-jvm-ir-dependencies")
       }
     }
     return kotlinCompilation.target.project.provider { emptyList() }

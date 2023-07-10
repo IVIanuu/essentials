@@ -10,12 +10,12 @@ import android.net.Uri
 import android.os.Process
 import android.provider.Settings
 import com.ivianuu.essentials.AppConfig
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.essentials.permission.intent.ShowFindPermissionHint
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 
 abstract class PackageUsageStatsPermission(
   override val title: String,

@@ -3,7 +3,6 @@
   -->
 
 <resources>
-
     <style name="Theme.Es" parent="@android:style/Theme.Material.NoActionBar" />
 
     <style name="Theme.Es.Translucent" parent="Theme.Es">

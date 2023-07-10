@@ -4,8 +4,8 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

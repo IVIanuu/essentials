@@ -6,10 +6,10 @@ package com.ivianuu.essentials.unlock
 
 import android.os.PowerManager
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.CompletableDeferred
 import java.util.UUID
 import kotlin.collections.set

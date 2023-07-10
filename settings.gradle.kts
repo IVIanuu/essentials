@@ -30,6 +30,7 @@ include(
   ":essentials-gradle-plugin",
   ":essentials-help",
   ":essentials-ide-plugin",
+  ":essentials-ksp",
   ":essentials-logging",
   ":essentials-logging-android",
   ":essentials-notification-listener",

@@ -5,11 +5,11 @@
 package com.ivianuu.essentials.clipboard
 
 import android.content.ClipData
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

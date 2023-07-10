@@ -6,9 +6,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
   kotlin("jvm")
-  kotlin("kapt")
-  kotlin("plugin.serialization")
   id("com.github.johnrengelman.shadow")
+  id("com.google.devtools.ksp")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
@@ -34,12 +33,12 @@ artifacts {
 dependencies {
   compileOnly(Deps.Kotlin.compilerEmbeddable)
   compileOnly(Deps.Injekt.compilerPlugin)
-  implementation(Deps.autoService)
-  kapt(Deps.autoService)
+  implementation(Deps.AutoService.annotations)
+  ksp(Deps.AutoService.processor)
   testImplementation(Deps.Injekt.compilerPlugin)
   testImplementation(Deps.junit)
   testImplementation(Deps.Kotlin.compilerEmbeddable)
-  testImplementation(Deps.kotlinCompileTesting)
+  testImplementation(Deps.KotlinCompileTesting.kotlinCompileTesting)
   testImplementation(Deps.kotestAssertions)
   testImplementation(project(":essentials-core"))
   testImplementation(project(":essentials-coroutines"))

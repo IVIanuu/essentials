@@ -4,7 +4,6 @@
 
 plugins {
   kotlin("multiplatform")
-  kotlin("plugin.serialization")
   id("com.ivianuu.essentials")
 }
 

@@ -6,7 +6,6 @@ plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
   kotlin("android")
-  kotlin("plugin.serialization")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -15,7 +14,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-  api(Deps.Injekt.android)
   api(Deps.AndroidX.dataStore)
   api(project(":essentials-android-core"))
   api(project(":essentials-android-util"))

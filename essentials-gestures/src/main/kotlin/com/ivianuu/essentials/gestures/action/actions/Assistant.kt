@@ -13,7 +13,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.essentials.SystemService
 
 @Provide object AssistantActionId : ActionId("assistant")
 

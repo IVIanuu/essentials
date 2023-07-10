@@ -7,12 +7,12 @@ package com.ivianuu.essentials.permission.notificationpolicy
 import android.app.NotificationManager
 import android.content.Intent
 import android.provider.Settings
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.essentials.permission.intent.ShowFindPermissionHint
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 
 abstract class NotificationPolicyPermission(
   override val title: String,

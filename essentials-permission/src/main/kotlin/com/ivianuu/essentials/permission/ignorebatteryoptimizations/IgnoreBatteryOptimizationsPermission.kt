@@ -10,11 +10,11 @@ import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.essentials.AppConfig
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 
 abstract class IgnoreBatteryOptimizationsPermission(
   override val title: String,

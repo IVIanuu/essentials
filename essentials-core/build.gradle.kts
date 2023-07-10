@@ -4,7 +4,6 @@
 plugins {
   kotlin("multiplatform")
   id("com.ivianuu.essentials")
-  id("com.ivianuu.essentials.compose")
 }
 
 kotlin {
@@ -13,8 +12,8 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
-        api(Deps.Compose.runtime)
         api(Deps.AtomicFu.runtime)
+        api(Deps.Compose.runtime)
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)
       }

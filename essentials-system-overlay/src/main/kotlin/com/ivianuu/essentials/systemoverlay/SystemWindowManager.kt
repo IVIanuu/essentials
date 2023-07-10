@@ -34,12 +34,12 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalView
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt

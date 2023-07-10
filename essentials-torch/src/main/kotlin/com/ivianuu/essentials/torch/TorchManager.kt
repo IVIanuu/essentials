@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Scoped
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.compose.compositionStateFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.onCancel
@@ -29,7 +30,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.context
 import com.ivianuu.essentials.util.remoteActionOf
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.json.Json
 

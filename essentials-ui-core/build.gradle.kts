@@ -5,8 +5,6 @@
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
-  id("com.ivianuu.essentials.compose")
-  id("kotlinx-atomicfu")
   kotlin("multiplatform")
 }
 
@@ -32,7 +30,6 @@ kotlin {
         api(Deps.Compose.foundation)
         api(Deps.Compose.material)
         api(Deps.Compose.runtime)
-        api(Deps.AtomicFu.runtime)
         api(project(":essentials-app"))
         api(project(":essentials-compose"))
         api(project(":essentials-logging"))
@@ -51,7 +48,6 @@ kotlin {
         api(Deps.Accompanist.pagerIndicators)
         api(Deps.AndroidX.Activity.compose)
         api(Deps.AndroidX.core)
-        api(Deps.Injekt.android)
       }
     }
 

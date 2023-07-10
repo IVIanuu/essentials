@@ -15,10 +15,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.compose.compositionFlow
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.Flow
 
 enum class DisplayRotation(val isPortrait: Boolean) {

@@ -5,8 +5,6 @@
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
-  id("com.ivianuu.essentials.compose")
-  id("kotlinx-atomicfu")
   kotlin("multiplatform")
 }
 
@@ -33,7 +31,6 @@ kotlin {
     commonMain {
       dependencies {
         api(project(":essentials-coroutines"))
-        api(Deps.AtomicFu.runtime)
         api(Deps.Compose.runtime)
       }
     }

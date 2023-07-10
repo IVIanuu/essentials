@@ -5,7 +5,6 @@ plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
   kotlin("multiplatform")
-  kotlin("plugin.serialization")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -29,7 +28,7 @@ kotlin {
         api(project(":essentials-serialization"))
       }
     }
-    named("androidTest") {
+    named("androidUnitTest") {
       dependencies {
         implementation(project(":essentials-android-test"))
       }

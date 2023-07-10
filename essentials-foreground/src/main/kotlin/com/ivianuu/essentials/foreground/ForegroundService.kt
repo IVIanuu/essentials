@@ -15,13 +15,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.compose.launchComposition
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds

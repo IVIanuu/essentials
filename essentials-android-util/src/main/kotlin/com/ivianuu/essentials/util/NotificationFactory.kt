@@ -11,9 +11,9 @@ import android.content.Context
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.ui.AppColors
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 
 fun interface NotificationFactory {
   operator fun invoke(

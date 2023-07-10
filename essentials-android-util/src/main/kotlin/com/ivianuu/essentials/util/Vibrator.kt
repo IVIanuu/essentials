@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.util
 
 import android.os.VibrationEffect
+import com.ivianuu.essentials.SystemService
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlin.time.Duration
 import android.os.Vibrator as AndroidVibrator
 

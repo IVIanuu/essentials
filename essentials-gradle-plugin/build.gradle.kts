@@ -5,8 +5,8 @@
 plugins {
   id("java-gradle-plugin")
   kotlin("jvm")
-  kotlin("kapt")
   id("com.github.gmazzo.buildconfig") version "3.0.2"
+  id("com.google.devtools.ksp")
 }
 
 gradlePlugin {
@@ -32,8 +32,8 @@ buildConfig {
 }
 
 dependencies {
-  implementation(Deps.autoService)
-  kapt(Deps.autoService)
+  implementation(Deps.AutoService.annotations)
+  ksp(Deps.AutoService.processor)
 
   implementation(Deps.Kotlin.gradlePlugin)
   implementation(Deps.Kotlin.gradlePluginApi)
@@ -44,6 +44,7 @@ dependencies {
   api(Deps.googlePlayServicesGradlePlugin)
   api(Deps.KotlinSerialization.gradlePlugin)
   api(Deps.Injekt.gradlePlugin)
+  api(Deps.Ksp.gradlePlugin)
 }
 
 plugins.apply("com.vanniktech.maven.publish")
