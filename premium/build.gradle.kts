@@ -1,0 +1,23 @@
+/*
+ * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
+ */
+plugins {
+  id("com.android.library")
+  id("com.ivianuu.essentials")
+  kotlin("android")
+}
+
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
+
+dependencies {
+  api(project(":ads"))
+  api(project(":android-util"))
+  api(project(":billing"))
+  api(project(":broadcast"))
+  api(project(":unlock"))
+  api(project(":ui"))
+}
+
+plugins.apply("com.vanniktech.maven.publish")
