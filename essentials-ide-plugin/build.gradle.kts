@@ -4,16 +4,14 @@
 
 plugins {
   kotlin("jvm")
-  id("org.jetbrains.intellij") version "1.11.0"
+  id("org.jetbrains.intellij") version "1.15.0"
 }
-
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
 intellij {
   pluginName.set("Essentials ide plugin")
   updateSinceUntilBuild.set(false)
   plugins.addAll("org.jetbrains.kotlin", "gradle", "gradle-java", "java")
-  localPath.set("/usr/local/bin/android-studio")
+  localPath.set("/home/manu/android-studio")
 }
 
 tasks {

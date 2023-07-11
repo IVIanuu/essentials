@@ -13,10 +13,10 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.Disposable
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.safeAs
-import com.ivianuu.injekt.common.Disposable
 import kotlinx.coroutines.CoroutineScope
 
 val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }

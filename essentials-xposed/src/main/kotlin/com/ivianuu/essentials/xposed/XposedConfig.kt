@@ -11,7 +11,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
 data class XposedConfig(
   val packageName: String,
   val processName: String,
-  @Provide val classLoader: ClassLoader,
+  @property:Provide val classLoader: ClassLoader,
   val appInfo: ApplicationInfo,
   val modulePackageName: String,
 ) {

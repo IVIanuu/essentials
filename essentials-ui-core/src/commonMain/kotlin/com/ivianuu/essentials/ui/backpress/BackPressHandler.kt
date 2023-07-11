@@ -5,9 +5,9 @@
 package com.ivianuu.essentials.ui.backpress
 
 import androidx.compose.runtime.staticCompositionLocalOf
+import com.ivianuu.essentials.Disposable
 import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Disposable
 
 interface BackPressHandler {
   val hasCallbacks: Boolean

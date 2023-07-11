@@ -42,7 +42,7 @@ interface TorchManager {
 @Provide @Scoped<AppScope> class TorchManagerImpl(
   private val cameraManager: @SystemService CameraManager,
   private val foregroundManager: ForegroundManager,
-  private val json: Json,
+  @property:Provide private val json: Json,
   private val logger: Logger,
   private val notificationFactory: NotificationFactory,
   private val resources: Resources,

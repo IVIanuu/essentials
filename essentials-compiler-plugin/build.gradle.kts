@@ -32,10 +32,10 @@ artifacts {
 
 dependencies {
   compileOnly(Deps.Kotlin.compilerEmbeddable)
-  compileOnly(Deps.Injekt.compilerPlugin)
+  compileOnly(Deps.Injekt.compiler)
   implementation(Deps.AutoService.annotations)
   ksp(Deps.AutoService.processor)
-  testImplementation(Deps.Injekt.compilerPlugin)
+  testImplementation(Deps.Injekt.compiler)
   testImplementation(Deps.junit)
   testImplementation(Deps.Kotlin.compilerEmbeddable)
   testImplementation(Deps.KotlinCompileTesting.kotlinCompileTesting)

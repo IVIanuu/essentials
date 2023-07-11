@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.db
 
+import com.ivianuu.essentials.Disposable
 import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.common.Disposable
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
