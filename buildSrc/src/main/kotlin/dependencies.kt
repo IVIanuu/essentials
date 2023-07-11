@@ -86,7 +86,7 @@ object Deps {
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.8.10"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1204"
+    "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1205"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"

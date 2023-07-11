@@ -45,4 +45,11 @@ allprojects {
       signAllPublications()
     }
   }
+
+  configurations.forEach {
+    it.resolutionStrategy.dependencySubstitution {
+      substitute(module("com.ivianuu.essentials:ksp")).using(project(":ksp"))
+      substitute(module("com.ivianuu.essentials:compiler")).using(project(":compiler"))
+    }
+  }
 }

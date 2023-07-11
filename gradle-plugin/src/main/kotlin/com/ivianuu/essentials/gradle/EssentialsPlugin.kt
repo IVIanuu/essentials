@@ -7,7 +7,6 @@ package com.ivianuu.essentials.gradle
 import com.google.auto.service.AutoService
 import com.ivianuu.injekt.gradle.InjektPlugin
 import org.gradle.api.Project
-import org.gradle.api.UnknownProjectException
 import org.gradle.api.provider.Provider
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
@@ -31,11 +30,7 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
     target.plugins.apply("com.google.devtools.ksp")
     target.dependencies.add(
       "ksp",
-      try {
-        target.project(":essentials-ksp")
-      } catch (e: UnknownProjectException) {
-        "com.ivianuu.essentials:essentials-ksp:${BuildConfig.VERSION}"
-      }
+      "com.ivianuu.essentials:ksp:${BuildConfig.VERSION}"
     )
     target.extensions.add("essentials", EssentialsExtension(target))
   }
@@ -62,7 +57,7 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
 
   override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
     groupId = "com.ivianuu.essentials",
-    artifactId = "essentials-compiler-plugin",
+    artifactId = "compiler",
     version = BuildConfig.VERSION
   )
 }
