@@ -25,42 +25,40 @@ fun RateLimiter(
 
 internal class RateLimiterImpl(
   private val clock: Clock,
-  eventsPerInterval: Int,
-  interval: Duration
+  private val eventsPerInterval: Int,
+  private val interval: Duration
 ) : RateLimiter {
   private val lock = Mutex()
-  private val permitDuration = interval / eventsPerInterval
 
-  private var cursor = clock()
+  private var remainingEvents = eventsPerInterval
+  private var intervalEnd = Duration.ZERO
 
-  override suspend fun acquire() {
+  override suspend fun acquire() = acquireInternal(onLimitExceeded = { null }, onPermit = { })
+
+  override suspend fun tryAcquire() = acquireInternal(onLimitExceeded = { false }, onPermit = { true })
+
+  private suspend inline fun <T : Any> acquireInternal(
+    onLimitExceeded: () -> T?,
+    onPermit: () -> T
+  ): T = lock.withLock {
     val now = clock()
 
-    val wakeUpTime = lock.withLock {
-      val base = if (cursor > now) cursor else now
-      cursor = base + permitDuration
-      base
+    when {
+      now >= intervalEnd -> enterNextInterval(now)
+      remainingEvents == 0 -> {
+        val result = onLimitExceeded()
+        if (result != null) return@withLock result
+        delay(intervalEnd - now)
+        enterNextInterval(clock())
+      }
+      else -> remainingEvents -= 1
     }
 
-    delay(wakeUpTime - now)
+    onPermit()
   }
 
-  override suspend fun tryAcquire(): Boolean {
-    val now = clock()
-
-    val wakeUpTime = lock.withLock {
-      if (cursor > now)
-        return false
-
-      val base = if (cursor > now) cursor else now
-      if (base > now)
-        return false
-      cursor = base + permitDuration
-      base
-    }
-
-    delay(wakeUpTime - now)
-
-    return true
+  private fun enterNextInterval(now: Duration) {
+    remainingEvents = eventsPerInterval - 1
+    intervalEnd = now + interval
   }
 }
