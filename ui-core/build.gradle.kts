@@ -29,7 +29,6 @@ kotlin {
       dependencies {
         api(Deps.Compose.foundation)
         api(Deps.Compose.material)
-        api(Deps.Compose.runtime)
         api(project(":app"))
         api(project(":compose"))
         api(project(":logging"))

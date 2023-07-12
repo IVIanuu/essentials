@@ -74,6 +74,7 @@ object Deps {
     const val googleFonts = "androidx.compose.ui:ui-text-google-fonts:$version"
     const val material = "org.jetbrains.compose.material:material:$version"
     const val runtime = "org.jetbrains.compose.runtime:runtime:$version"
+    const val runtimeSaveable = "org.jetbrains.compose.runtime:runtime-saveable:$version"
   }
 
   object Coroutines {

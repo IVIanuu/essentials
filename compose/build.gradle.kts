@@ -31,7 +31,6 @@ kotlin {
     commonMain {
       dependencies {
         api(project(":coroutines"))
-        api(Deps.Compose.runtime)
       }
     }
     named("jvmTest") {

@@ -13,7 +13,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/ja
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-  api(Deps.Compose.runtime)
+  api(project(":core"))
   api(Deps.Compose.googleFonts)
 }
 

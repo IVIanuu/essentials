@@ -15,10 +15,6 @@ kotlin {
         api(project(":compose"))
         api(project(":db"))
         api(project(":serialization"))
-        api(Deps.Compose.runtime)
-        api(Deps.Coroutines.core)
-        api(Deps.Injekt.core)
-        api(Deps.Injekt.common)
       }
     }
     named("jvmTest") {

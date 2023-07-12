@@ -13,9 +13,6 @@ kotlin {
     commonMain {
       dependencies {
         api(project(":core"))
-        api(Deps.Coroutines.core)
-        api(Deps.Injekt.core)
-        api(Deps.Injekt.common)
       }
     }
     named("jvmTest") {

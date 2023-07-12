@@ -14,6 +14,8 @@ kotlin {
       dependencies {
         api(Deps.AtomicFu.runtime)
         api(Deps.Compose.runtime)
+        api(Deps.Compose.runtimeSaveable)
+        api(Deps.Coroutines.core)
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)
       }

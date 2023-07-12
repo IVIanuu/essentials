@@ -19,7 +19,6 @@ dependencies {
   api(Deps.AndroidX.Lifecycle.runtime)
 
   api(Deps.Coroutines.android)
-  api(Deps.Injekt.core)
   api(project(":ui"))
 
   api(project(":common"))

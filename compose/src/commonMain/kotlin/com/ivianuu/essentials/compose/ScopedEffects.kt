@@ -17,13 +17,17 @@ import com.ivianuu.essentials.Disposable
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.safeAs
+import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.CoroutineScope
 
 val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }
 
-@Composable fun <T : Any> rememberScoped(vararg inputs: Any?, key: Any? = null, init: () -> T): T {
-  val scope = LocalScope.current
-
+@Composable fun <T : Any> rememberScoped(
+  vararg inputs: Any?,
+  key: Any? = null,
+  @Inject scope: Scope<*> = LocalScope.current,
+  init: () -> T
+): T {
   val finalKey = key ?: currentCompositeKeyHash
 
   val valueHolder = remember { scope.scoped(finalKey) { ScopedValueHolder() } }
@@ -57,6 +61,7 @@ private val Uninitialized = Any()
 @Composable fun <T> produceScopedState(
   initialValue: T,
   vararg keys: Any?,
+  @Inject scope: Scope<*> = LocalScope.current,
   producer: suspend ProduceStateScope<T>.() -> Unit
 ): State<T> {
   val state = rememberScoped { mutableStateOf(initialValue) }
