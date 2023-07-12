@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
-import androidx.compose.material.colors
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
 import com.ivianuu.essentials.ui.animation.fadeUpwards
+import com.ivianuu.essentials.ui.material.colors
 import com.ivianuu.essentials.ui.navigation.LocalScreenTransitionSpec
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.injekt.Provide

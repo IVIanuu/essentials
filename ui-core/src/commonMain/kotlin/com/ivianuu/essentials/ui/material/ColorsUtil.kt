@@ -1,5 +1,8 @@
-package androidx.compose.material
+package com.ivianuu.essentials.ui.material
 
+import androidx.compose.material.Colors
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import com.ivianuu.essentials.Lerper

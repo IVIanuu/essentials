@@ -9,8 +9,8 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.result.getOrNull
+import com.ivianuu.essentials.serialization.InjektSerializer
 import com.ivianuu.injekt.Provide
-import kotlinx.serialization.InjektSerializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
