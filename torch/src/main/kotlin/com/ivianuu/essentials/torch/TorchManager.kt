@@ -54,7 +54,18 @@ interface TorchManager {
     if (!_torchEnabled) return@compositionStateFlow _torchEnabled
 
     LaunchedEffect(true) {
-      foregroundManager.startForeground { createTorchNotification() }
+      foregroundManager.startForeground {
+        notificationFactory(
+          "torch",
+          resources(R.string.es_notif_channel_torch),
+          NotificationManager.IMPORTANCE_LOW
+        ) {
+          setSmallIcon(R.drawable.es_ic_flashlight_on)
+          setContentTitle(resources(R.string.es_notif_title_torch))
+          setContentText(resources(R.string.es_notif_text_torch))
+          setContentIntent(remoteActionOf<DisableTorchAction>(context))
+        }
+      }
     }
 
     LaunchedEffect(true) {
@@ -84,15 +95,4 @@ interface TorchManager {
   fun interface DisableTorchAction : RemoteAction<Any?>
 
   @Provide fun disableTorchAction() = DisableTorchAction { _torchEnabled = false }
-
-  private fun createTorchNotification() = notificationFactory(
-    "torch",
-    resources(R.string.es_notif_channel_torch),
-    NotificationManager.IMPORTANCE_LOW
-  ) {
-    setSmallIcon(R.drawable.es_ic_flashlight_on)
-    setContentTitle(resources(R.string.es_notif_title_torch))
-    setContentText(resources(R.string.es_notif_text_torch))
-    setContentIntent(remoteActionOf<DisableTorchAction>(context))
-  }
 }
