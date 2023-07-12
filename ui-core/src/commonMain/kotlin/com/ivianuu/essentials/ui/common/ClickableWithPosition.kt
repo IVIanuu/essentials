@@ -22,22 +22,21 @@ import kotlinx.coroutines.launch
   onClick: ((Offset) -> Unit)? = null
 ): Modifier {
   val scope = rememberCoroutineScope()
-  return clickable(interactionSource, indication, enabled, null, null, onClick?.let {
-    {
-      scope.launch(start = CoroutineStart.UNDISPATCHED) {
-        val position = interactionSource.interactions
-          .mapNotNull {
-            when (it) {
-              is PressInteraction.Press -> it.pressPosition
-              is PressInteraction.Release -> it.press.pressPosition
-              is PressInteraction.Cancel -> it.press.pressPosition
-              else -> null
-            }
+  return clickable(interactionSource, indication, enabled, null, null) {
+    if (onClick == null) return@clickable
+    scope.launch(start = CoroutineStart.UNDISPATCHED) {
+      val position = interactionSource.interactions
+        .mapNotNull {
+          when (it) {
+            is PressInteraction.Press -> it.pressPosition
+            is PressInteraction.Release -> it.press.pressPosition
+            is PressInteraction.Cancel -> it.press.pressPosition
+            else -> null
           }
-          .first()
+        }
+        .first()
 
-        onClick(position)
-      }
+      onClick(position)
     }
-  })
+  }
 }
