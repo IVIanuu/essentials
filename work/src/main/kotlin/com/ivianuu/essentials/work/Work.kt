@@ -24,6 +24,7 @@ import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ExitCase
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.guarantee
+import com.ivianuu.essentials.coroutines.sharedComputation
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.result.catch
@@ -67,9 +68,28 @@ interface WorkManager {
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>,
-  private val workers: Map<String, () -> Worker<*>>,
+  private val workersMap: Map<String, () -> Worker<*>>,
 ) : WorkManager, SynchronizedObject() {
   private val workerStates = mutableMapOf<String, MutableStateFlow<Boolean>>()
+  private val sharedWorkers = scope.sharedComputation<WorkId, Unit> { id ->
+    logger.log { "run worker ${id.value}" }
+
+    val workerState = synchronized(this@WorkManagerImpl) {
+      workerStates.getOrPut(id.value) { MutableStateFlow(false) }
+    }
+
+    guarantee(
+      block = {
+        workerState.value = true
+        workersMap[id.value]!!.invoke().invoke()
+      },
+      finalizer = {
+        if (it is ExitCase.Failure) it.failure.printStackTrace()
+        workerState.value = false
+        logger.log { "run worker end ${id.value}" }
+      }
+    )
+  }
 
   override fun <I : WorkId> isWorkerRunning(id: I) = synchronized(this) {
     workerStates.getOrPut(id.value) { MutableStateFlow(false) }
@@ -77,27 +97,13 @@ interface WorkManager {
 
   override suspend fun <I : WorkId> runWorker(id: I): Unit =
     withContext(scope.coroutineContext + coroutineContexts.computation) {
-      if (id.value !in workers) {
+      if (id.value !in workersMap) {
         logger.log { "no worker found for ${id.value}" }
         androidWorkManager.cancelUniqueWork(id.value)
         return@withContext
       }
 
-      logger.log { "run worker ${id.value}" }
-      val workerState = synchronized(this@WorkManagerImpl) {
-        workerStates.getOrPut(id.value) { MutableStateFlow(false) }
-      }
-      guarantee(
-        block = {
-          workerState.value = true
-          workers[id.value]!!.invoke().invoke()
-        },
-        finalizer = {
-          if (it is ExitCase.Failure) it.failure.printStackTrace()
-          workerState.value = false
-          logger.log { "run worker end ${id.value}" }
-        }
-      )
+      sharedWorkers(id)
     }
 }
 

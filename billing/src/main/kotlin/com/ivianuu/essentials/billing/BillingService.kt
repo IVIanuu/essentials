@@ -21,11 +21,11 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.coroutines.RefCountedResource
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
-import com.ivianuu.essentials.coroutines.withResource
+import com.ivianuu.essentials.coroutines.sharedResource
+import com.ivianuu.essentials.coroutines.use
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.result.catch
@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -69,8 +70,8 @@ interface BillingService {
   private val refreshes: MutableSharedFlow<BillingRefresh>,
   scope: ScopedCoroutineScope<AppScope>
 ) : BillingService {
-  private val billingClient = RefCountedResource<Unit, BillingClient>(
-    timeout = 10.seconds,
+  private val billingClient = scope.childCoroutineScope(coroutineContexts.io).sharedResource(
+    sharingStarted = SharingStarted.WhileSubscribed(10.seconds.inWholeMilliseconds),
     create = {
       logger.log { "create client" }
       val client = billingClientFactory()
@@ -101,11 +102,10 @@ interface BillingService {
       client
         .also { logger.log { "client created" } }
      },
-    release = { _, billingClient ->
+    release = { billingClient ->
       logger.log { "release client" }
       catch { billingClient.endConnection() }
-    },
-    scope = scope.childCoroutineScope(coroutineContexts.io)
+    }
   )
 
   override fun isPurchased(sku: Sku): Flow<Boolean> = appForegroundState
@@ -115,11 +115,11 @@ interface BillingService {
     }
     .onStart { emit(BillingRefresh) }
     .onEach { logger.log { "update is purchased for $sku" } }
-    .map { withBillingClient { it.getIsPurchased(sku) } ?: false }
+    .map { billingClient.use { it.getIsPurchased(sku) } ?: false }
     .distinctUntilChanged()
     .onEach { logger.log { "is purchased for $sku -> $it" } }
 
-  override suspend fun getSkuDetails(sku: Sku): SkuDetails? = withBillingClient {
+  override suspend fun getSkuDetails(sku: Sku): SkuDetails? = billingClient.use {
     it.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
       ?.firstOrNull { it.sku == sku.skuString }
@@ -130,7 +130,7 @@ interface BillingService {
     sku: Sku,
     acknowledge: Boolean,
     consumeOldPurchaseIfUnspecified: Boolean
-  ): Boolean = withBillingClient { billingClient ->
+  ): Boolean = billingClient.use { billingClient ->
     logger.log {
       "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
     }
@@ -146,7 +146,7 @@ interface BillingService {
     val activity = appUiStarter()
 
     val skuDetails = getSkuDetails(sku)
-      ?: return@withBillingClient false
+      ?: return@use false
 
     val billingFlowParams = BillingFlowParams.newBuilder()
       .setSkuDetails(skuDetails)
@@ -154,17 +154,17 @@ interface BillingService {
 
     val result = billingClient.launchBillingFlow(activity, billingFlowParams)
     if (result.responseCode != BillingClient.BillingResponseCode.OK)
-      return@withBillingClient false
+      return@use false
 
     refreshes.first()
 
     val success = billingClient.getIsPurchased(sku)
 
-    return@withBillingClient if (success && acknowledge) acknowledgePurchase(sku) else success
-  } ?: false
+    return@use if (success && acknowledge) acknowledgePurchase(sku) else success
+  }
 
-  override suspend fun consumePurchase(sku: Sku): Boolean = withBillingClient { billingClient ->
-    val purchase = billingClient.getPurchase(sku) ?: return@withBillingClient false
+  override suspend fun consumePurchase(sku: Sku): Boolean = billingClient.use { billingClient ->
+    val purchase = billingClient.getPurchase(sku) ?: return@use false
 
     val consumeParams = ConsumeParams.newBuilder()
       .setPurchaseToken(purchase.purchaseToken)
@@ -178,14 +178,14 @@ interface BillingService {
 
     val success = result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
     if (success) refreshes.emit(BillingRefresh)
-    return@withBillingClient success
-  } ?: false
+    return@use success
+  }
 
-  override suspend fun acknowledgePurchase(sku: Sku): Boolean = withBillingClient { billingClient ->
+  override suspend fun acknowledgePurchase(sku: Sku): Boolean = billingClient.use { billingClient ->
     val purchase = billingClient.getPurchase(sku)
-      ?: return@withBillingClient false
+      ?: return@use false
 
-    if (purchase.isAcknowledged) return@withBillingClient true
+    if (purchase.isAcknowledged) return@use true
 
     val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
       .setPurchaseToken(purchase.purchaseToken)
@@ -199,8 +199,8 @@ interface BillingService {
 
     val success = result.responseCode == BillingClient.BillingResponseCode.OK
     if (success) refreshes.emit(BillingRefresh)
-    return@withBillingClient success
-  } ?: false
+    return@use success
+  }
 
   private suspend fun BillingClient.getIsPurchased(sku: Sku): Boolean {
     val purchase = getPurchase(sku) ?: return false
@@ -218,7 +218,4 @@ interface BillingService {
       .purchasesList
       .firstOrNull { sku.skuString in it.skus }
       .also { logger.log { "got purchase $it for $sku" } }
-
-  internal suspend fun <R> withBillingClient(block: suspend (BillingClient) -> R): R? =
-    billingClient.withResource(Unit) { block(it) }
 }
