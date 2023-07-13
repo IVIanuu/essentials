@@ -17,7 +17,6 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.compose.compositionFlow
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 
@@ -35,10 +34,9 @@ enum class DisplayRotation(val isPortrait: Boolean) {
   LANDSCAPE_RIGHT(false)
 }
 
-@Provide fun displayRotation(
+context((@SystemService WindowManager)) @Provide fun displayRotation(
   appContext: AppContext,
-  screenStates: Flow<ScreenState>,
-  windowManager: @SystemService WindowManager
+  screenStates: Flow<ScreenState>
 ): Flow<DisplayRotation> = compositionFlow {
   val screenState = screenStates.collectAsState(ScreenState.OFF).value
   var displayRotation by remember { mutableStateOf(getCurrentDisplayRotation()) }
@@ -57,9 +55,8 @@ enum class DisplayRotation(val isPortrait: Boolean) {
   displayRotation
 }
 
-private fun getCurrentDisplayRotation(
-  @Inject windowManager: @SystemService WindowManager,
-) = when (windowManager.defaultDisplay.rotation) {
+context((@SystemService WindowManager))
+private fun getCurrentDisplayRotation() = when (defaultDisplay.rotation) {
   Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
   Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT
   Surface.ROTATION_180 -> DisplayRotation.PORTRAIT_DOWN

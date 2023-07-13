@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.db
 
 import com.ivianuu.essentials.Disposable
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -31,16 +31,14 @@ interface Db : Disposable {
   fun <T> query(sql: String, tableName: String?, transform: (Cursor) -> T): Flow<T>
 }
 
-fun <T> Db.query(
+context(TypeKey<T>) fun <T> Db.query(
   sql: String,
-  tableName: String?,
-  @Inject key: TypeKey<T>
+  tableName: String?
 ): Flow<List<T>> = query(sql, tableName) { it.toList(schema) }
 
-suspend fun <T> Db.insert(
+context(TypeKey<T>) suspend fun <T> Db.insert(
   entity: T,
-  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
-  @Inject key: TypeKey<T>
+  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT
 ): Long {
   val descriptor = schema.descriptor<T>()
   return executeInsert(
@@ -55,17 +53,16 @@ suspend fun <T> Db.insert(
   )
 }
 
-suspend fun <T> Db.insertAll(
+context(TypeKey<T>) suspend fun <T> Db.insertAll(
   entities: List<T>,
-  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
-  @Inject key: TypeKey<T>
+  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT
 ) {
   entities.forEach { insert(it, conflictStrategy) }
 }
 
 enum class InsertConflictStrategy { REPLACE, ABORT, IGNORE }
 
-fun <T> Db.selectAll(@Inject key: TypeKey<T>): Flow<List<T>> {
+context(TypeKey<T>) fun <T> Db.selectAll(): Flow<List<T>> {
   val descriptor = schema.descriptor<T>()
   return query(
     "SELECT * FROM ${descriptor.tableName}",
@@ -73,7 +70,7 @@ fun <T> Db.selectAll(@Inject key: TypeKey<T>): Flow<List<T>> {
   )
 }
 
-fun <T> Db.selectById(id: Any, @Inject key: TypeKey<T>): Flow<T?> {
+context(TypeKey<T>) fun <T> Db.selectById(id: Any): Flow<T?> {
   val descriptor = schema.descriptor<T>()
   val primaryKeyRow = descriptor.rows.single { it.isPrimaryKey }
   return query<T>(
@@ -84,10 +81,8 @@ fun <T> Db.selectById(id: Any, @Inject key: TypeKey<T>): Flow<T?> {
     .map { it.singleOrNull() }
 }
 
-fun <T, S> Db.selectAllTransform(
-  @Inject key: TypeKey<T>,
-  transform: suspend (T?) -> S?
-): Flow<List<S>> = tableChanges
+context(TypeKey<T>)
+fun <T, S> Db.selectAllTransform(transform: suspend (T?) -> S?): Flow<List<S>> = tableChanges
   .onStart { emit(null) }
   .mapLatest {
     selectAll<T>()
@@ -96,16 +91,15 @@ fun <T, S> Db.selectAllTransform(
   }
   .distinctUntilChanged()
 
-fun <T, S> Db.selectTransform(
+context(TypeKey<T>) fun <T, S> Db.selectTransform(
   id: Any,
-  @Inject key: TypeKey<T>,
   transform: suspend (T?) -> S?
 ): Flow<S?> = tableChanges
   .onStart { emit(null) }
   .mapLatest { transform(selectById<T>(id).first()) }
   .distinctUntilChanged()
 
-suspend fun <T> Db.deleteById(vararg ids: Any, @Inject key: TypeKey<T>) {
+context(TypeKey<T>) suspend fun <T> Db.deleteById(vararg ids: Any) {
   val descriptor = schema.descriptor<T>()
   val primaryKeyRow = descriptor.rows.single { it.isPrimaryKey }
   execute(
@@ -115,7 +109,7 @@ suspend fun <T> Db.deleteById(vararg ids: Any, @Inject key: TypeKey<T>) {
   )
 }
 
-suspend fun <T> Db.deleteAll(@Inject key: TypeKey<T>) {
+context(TypeKey<T>) suspend fun <T> Db.deleteAll() {
   val tableName = schema.descriptor<T>().tableName
   execute("DELETE FROM $tableName", tableName)
 }
@@ -136,7 +130,7 @@ interface Cursor : Disposable {
   fun getColumnIndex(name: String): Int
 }
 
-fun <T> Cursor.toList(schema: Schema, @Inject key: TypeKey<T>): List<T> = buildList {
+context(TypeKey<T>) fun <T> Cursor.toList(schema: Schema): List<T> = buildList {
   while (next()) {
     val serializer = schema.descriptor<T>().serializer
     this += serializer.deserialize(
@@ -162,14 +156,12 @@ fun Db.tableNames(): Flow<List<String>> =
     }
   }
 
-suspend fun <T> Db.createTable(
-  @Inject descriptor: EntityDescriptor<T>,
-  tableName: String = descriptor.tableName
-) = execute(
+context(EntityDescriptor<T>)
+suspend fun <T> Db.createTable(tableName: String = this@EntityDescriptor.tableName) = execute(
   sql = buildString {
     append("CREATE TABLE IF NOT EXISTS $tableName")
     append("(")
-    descriptor.rows.forEachIndexed { index, row ->
+    rows.forEachIndexed { index, row ->
       append(row.name)
 
       when (row.type) {
@@ -188,7 +180,7 @@ suspend fun <T> Db.createTable(
       if (!row.isNullable)
         append(" NOT NULL")
 
-      if (index != descriptor.rows.lastIndex)
+      if (index != rows.lastIndex)
         append(",")
     }
     append(")")
@@ -202,7 +194,9 @@ suspend fun Db.dropTable(tableName: String) {
 
 suspend fun Db.dropAllAndRecreateTables() {
   tableNames().first().forEach { dropTable(it) }
-  schema.entities.forEach { createTable(it) }
+  schema.entities.forEach {
+    it.provide { createTable() }
+  }
 }
 
 fun interface DbFactory {

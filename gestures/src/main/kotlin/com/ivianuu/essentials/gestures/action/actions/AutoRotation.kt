@@ -27,7 +27,7 @@ import com.ivianuu.injekt.common.typeKeyOf
   resources: Resources
 ) = Action(
   id = AutoRotationActionId,
-  title = resources(R.string.es_action_auto_rotation),
+  title = resources.resource(R.string.es_action_auto_rotation),
   permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
   icon = {
     val enabled = autoRotationDataStore.data.collectAsState(1).value == 1

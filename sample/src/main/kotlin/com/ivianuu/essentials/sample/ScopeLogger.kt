@@ -13,20 +13,18 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 
-@Provide fun <N> scopeLogger(
-  scopeKey: TypeKey<N>,
-  logger: Logger
+context(Logger) @Provide fun <N> scopeLogger(
+  scopeKey: TypeKey<N>
 ) = ScopeWorker<N> {
-  logger.log { "${scopeKey.value} created worker" }
-  onCancel { logger.log { "${scopeKey.value} disposed worker" } }
+  log { "${scopeKey.value} created worker" }
+  onCancel { log { "${scopeKey.value} disposed worker" } }
 }
 
-@Provide fun <N> scopeLogger2(
-  scopeKey: TypeKey<N>,
-  logger: Logger
+context(Logger) @Provide fun <N> scopeLogger2(
+  scopeKey: TypeKey<N>
 ) = ScopeComposition<N> {
   DisposableEffect(true) {
-    logger.log { "${scopeKey.value} created composition" }
-    onDispose { logger.log { "${scopeKey.value} disposed composition" } }
+    log { "${scopeKey.value} created composition" }
+    onDispose { log { "${scopeKey.value} disposed composition" } }
   }
 }

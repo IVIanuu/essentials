@@ -7,10 +7,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import com.ivianuu.essentials.Lerper
 import com.ivianuu.essentials.ui.util.isDark
-import com.ivianuu.essentials.unlerp
 import com.ivianuu.injekt.Provide
 
-@Provide val ColorsLerper = Lerper<Colors>(
+context(Lerper<Float>) @Provide val ColorsLerper: Lerper<Colors> get() = Lerper(
   lerp = { start, stop, fraction ->
     Colors(
       isLight = if (fraction < 0.5) start.isLight else stop.isLight,

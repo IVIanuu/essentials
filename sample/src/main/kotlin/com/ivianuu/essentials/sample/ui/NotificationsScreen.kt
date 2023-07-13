@@ -57,7 +57,6 @@ import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.resource.ResourceBox
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 
@@ -168,7 +167,7 @@ data class UiNotification(
       permissionManager.permissionState(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }.collectAsResourceState().value,
     notifications = service.notifications
-      .map { it.toUiNotification() },
+      .map { it.toUiNotification(appContext) },
     requestPermissions = action {
       permissionManager.requestPermissions(listOf(typeKeyOf<SampleNotificationsPermission>()))
     },
@@ -182,13 +181,13 @@ data class UiNotification(
 }
 
 private fun StatusBarNotification.toUiNotification(
-  @Inject appContext: AppContext
+  appContext: AppContext
 ) = UiNotification(
   title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
     ?.toString() ?: "",
   text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
     ?.toString() ?: "",
-  icon = { NotificationIcon(notification) },
+  icon = { NotificationIcon(notification, appContext) },
   color = Color(notification.color),
   isClearable = isClearable,
   sbn = this
@@ -196,7 +195,7 @@ private fun StatusBarNotification.toUiNotification(
 
 @Composable private fun NotificationIcon(
   notification: Notification,
-  @Inject appContext: AppContext
+  appContext: AppContext
 ) {
   val icon by produceState<ImageBitmap?>(null) {
     value = catch {

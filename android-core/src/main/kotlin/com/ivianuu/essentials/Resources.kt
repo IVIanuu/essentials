@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials
 
-import android.content.Context
 import android.graphics.drawable.Icon
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
@@ -13,59 +12,50 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.context
 
 @Stable interface Resources {
-  operator fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T
+  context(ResourceLoader<T>) fun <T> resource(id: Int): T
 
-  operator fun <T> invoke(id: Int, vararg args: Any?, @Inject loader: ResourceLoaderWithArgs<T>): T
+  context(ResourceLoaderWithArgs<T>) fun <T> resourceWith(id: Int, vararg args: Any?): T
 }
 
-@Provide class ResourcesImpl(private val appContext: AppContext) : Resources {
-  override fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T = loader(appContext, id)
+context(AppContext) @Provide class ResourcesImpl : Resources {
+  context(ResourceLoader<T>) override fun <T> resource(id: Int): T =
+    this@ResourceLoader.load(id)
 
-  override fun <T> invoke(
-    id: Int,
-    vararg args: Any?,
-    @Inject loader: ResourceLoaderWithArgs<T>
-  ): T = loader(appContext, id, *args)
+  context(ResourceLoaderWithArgs<T>) override fun <T> resourceWith(id: Int, vararg args: Any?): T =
+    this@ResourceLoaderWithArgs.load(id, *args)
 }
 
 fun interface ResourceLoaderWithArgs<out T> {
-  operator fun invoke(context: Context, id: Int, vararg args: Any?): T
+  context(AppContext) fun load(id: Int, vararg args: Any?): T
 
-  companion object {
-    @Provide val string =
-      ResourceLoaderWithArgs { context, id, args -> context.getString(id, *args) }
+  @Provide companion object {
+    @Provide val string = ResourceLoaderWithArgs { id, args -> getString(id, *args) }
   }
 }
 
 fun interface ResourceLoader<out T> {
-  operator fun invoke(context: Context, id: Int): T
+  context(AppContext) fun load(id: Int): T
 
-  companion object {
-    @Provide val bitmap = ResourceLoader { context, id -> context.getDrawable(id)!!.toBitmap() }
-    @Provide val boolean = ResourceLoader { context, id -> context.resources.getBoolean(id) }
-    @Provide val color = ResourceLoader { context, id -> Color(context.getColor(id)) }
-    @Provide val dimension = ResourceLoader { context, id ->
-      (context.resources.getDimensionPixelOffset(id) / context.resources.displayMetrics.density).dp
+  @Provide companion object {
+    @Provide val bitmap = ResourceLoader { getDrawable(it)!!.toBitmap() }
+    @Provide val boolean = ResourceLoader { resources.getBoolean(it) }
+    @Provide val color = ResourceLoader { Color(getColor(it)) }
+    @Provide val dimension = ResourceLoader {
+      (resources.getDimensionPixelOffset(it) / resources.displayMetrics.density).dp
     }
-    @Provide val drawable = ResourceLoader { context, id -> context.getDrawable(id)!! }
-    @Provide val float =
-      ResourceLoader { context, id -> ResourcesCompat.getFloat(context.resources, id) }
-    @Provide val icon =
-      ResourceLoader { context, id -> Icon.createWithResource(context, id) }
-    @Provide val imageBitmap =
-      ResourceLoader { context, id -> context.getDrawable(id)!!.toBitmap().toImageBitmap() }
-    @Provide val typeface =
-      ResourceLoader { context, id -> Typeface(ResourcesCompat.getFont(context, id)!!) }
-    @Provide val frameworkTypeface =
-      ResourceLoader { context, id -> ResourcesCompat.getFont(context, id)!! }
-    @Provide val int = ResourceLoader { context, id -> context.resources.getInteger(id) }
-    @Provide val intArray = ResourceLoader { context, id -> context.resources.getIntArray(id) }
-    @Provide val string = ResourceLoader { context, id -> context.getString(id) }
-    @Provide val stringArray =
-      ResourceLoader { context, id -> context.resources.getStringArray(id) }
+    @Provide val drawable = ResourceLoader { getDrawable(it)!! }
+    @Provide val float = ResourceLoader { ResourcesCompat.getFloat(resources, it) }
+    @Provide val icon = ResourceLoader { Icon.createWithResource(context(), it) }
+    @Provide val imageBitmap = ResourceLoader { getDrawable(it)!!.toBitmap().toImageBitmap() }
+    @Provide val typeface = ResourceLoader { Typeface(ResourcesCompat.getFont(context(), it)!!) }
+    @Provide val frameworkTypeface = ResourceLoader {ResourcesCompat.getFont(context(), it)!! }
+    @Provide val int = ResourceLoader { resources.getInteger(it) }
+    @Provide val intArray = ResourceLoader { resources.getIntArray(it) }
+    @Provide val string = ResourceLoader { getString(it) }
+    @Provide val stringArray = ResourceLoader { resources.getStringArray(it) }
   }
 }

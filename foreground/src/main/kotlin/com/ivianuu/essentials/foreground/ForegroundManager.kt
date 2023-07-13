@@ -14,7 +14,6 @@ import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.SourceKey
 import kotlinx.coroutines.CompletableDeferred
@@ -23,34 +22,30 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 interface ForegroundManager {
-  suspend fun startForeground(
-    @Inject foregroundId: ForegroundId,
+  context(ForegroundId) suspend fun startForeground(
     notification: @Composable () -> Notification,
   ): Nothing
 }
 
-@JvmInline value class ForegroundId(val value: Int) {
-  companion object {
+@JvmInline value class ForegroundId(val foregroundId: Int) {
+  @Provide companion object {
     @Provide fun default(sourceKey: SourceKey) = ForegroundId(sourceKey.hashCode())
   }
 }
 
-@Provide @Scoped<AppScope> class ForegroundManagerImpl(
-  private val appContext: AppContext,
-  private val logger: Logger
+context(Logger) @Provide @Scoped<AppScope> class ForegroundManagerImpl(
+  private val appContext: AppContext
 ) : ForegroundManager {
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
   private val lock = Mutex()
 
-  override suspend fun startForeground(
-    @Inject foregroundId: ForegroundId,
-    notification: @Composable () -> Notification,
-  ) = bracket(
+  context(ForegroundId)
+  override suspend fun startForeground(notification: @Composable () -> Notification) = bracket(
     acquire = {
-      ForegroundState(foregroundId.value, notification)
+      ForegroundState(foregroundId, notification)
         .also {
           lock.withLock { states.value = states.value + it }
-          logger.log { "start foreground ${foregroundId.value} ${states.value}" }
+          log { "start foreground $foregroundId ${states.value}" }
 
           ContextCompat.startForegroundService(
             appContext,
@@ -61,7 +56,7 @@ interface ForegroundManager {
     release = { state, _ ->
       state.seen.await()
       lock.withLock { states.value = states.value - state }
-      logger.log { "stop foreground $foregroundId ${states.value}" }
+      log { "stop foreground $foregroundId ${states.value}" }
     }
   )
 

@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.util
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -18,20 +19,18 @@ import com.ivianuu.injekt.Provide
 fun interface NotificationFactory {
   operator fun invoke(
     channel: NotificationChannel,
-    builder: NotificationCompat.Builder.() -> Unit
+    builder: context(Context, NotificationCompat.Builder) () -> Unit
   ): Notification
 
   operator fun invoke(
     channelId: String,
     channelName: String,
     importance: Int,
-    builder: NotificationCompat.Builder.() -> Unit
+    builder: context(Context, NotificationCompat.Builder) () -> Unit
   ): Notification = invoke(NotificationChannel(channelId, channelName, importance), builder)
 }
 
-inline val NotificationCompat.Builder.context: Context
-  get() = @Suppress("RestrictedLint") mContext
-
+@SuppressLint("RestrictedApi")
 @Provide fun notificationFactory(
   appContext: AppContext,
   appColors: AppColors,
@@ -40,6 +39,6 @@ inline val NotificationCompat.Builder.context: Context
   notificationManager.createNotificationChannel(channel)
   NotificationCompat.Builder(appContext, channel.id)
     .apply { color = appColors.primary.toArgb() }
-    .apply(builder)
+    .apply { builder(mContext, this) }
     .build()
 }

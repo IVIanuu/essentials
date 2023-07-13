@@ -24,7 +24,7 @@ object FeedbackMailScreen : IntentScreen
     putExtra(Intent.EXTRA_EMAIL, arrayOf(email.value))
     putExtra(
       Intent.EXTRA_SUBJECT,
-      "Feedback for ${resources<String>(context.applicationInfo.labelRes)}"
+      "Feedback for ${resources.resource<String>(context.applicationInfo.labelRes)}"
     )
   }
 }

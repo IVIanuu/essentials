@@ -58,17 +58,16 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minu
       appConfig: AppConfig,
       resources: Resources,
     ): @FinalAdConfig FullScreenAdConfig = if (!appConfig.isDebug) adConfig
-    else adConfig.copy(id = resources(R.string.es_test_ad_unit_id_full_screen))
+    else adConfig.copy(id = resources.resource(R.string.es_test_ad_unit_id_full_screen))
   }
 }
 
-@Provide @Scoped<UiScope> class FullScreenAdManagerImpl(
+context(Logger) @Provide @Scoped<UiScope> class FullScreenAdManagerImpl(
   private val appContext: AppContext,
   private val adsEnabledFlow: Flow<AdsEnabled>,
   private val config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
   private val foregroundActivities: Flow<ForegroundActivity>,
-  private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>
 ) : FullScreenAdManager {
   private val lock = Mutex()
@@ -109,7 +108,7 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minu
     deferredAd?.takeUnless {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
     } ?: scope.async(coroutineContexts.main) {
-      logger.log { "start loading ad" }
+      log { "start loading ad" }
 
       val ad = suspendCoroutine { cont ->
         InterstitialAd.load(
@@ -128,18 +127,18 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minu
         )
       }
 
-      logger.log { "ad loaded" }
+      log { "ad loaded" }
 
       val result: suspend () -> Boolean = {
         if (rateLimiter.tryAcquire()) {
-          logger.log { "show ad" }
+          log { "show ad" }
           lock.withLock { deferredAd = null }
           withContext(coroutineContexts.main) {
             ad.show(foregroundActivities.first()!!)
           }
           true
         } else {
-          logger.log { "do not show ad due to rate limit" }
+          log { "do not show ad due to rate limit" }
           false
         }
       }

@@ -6,6 +6,7 @@ package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
 import com.ivianuu.essentials.AppConfig
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
@@ -32,17 +33,18 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
   permissionManager: PermissionManager,
+  resources: Resources,
   showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
   toaster: Toaster
 ) = PermissionRequestHandler<P> { permission ->
   race(
     {
       if (showFindPermissionHint.value)
-        toaster(R.string.es_find_app_here, appConfig.appName)
+        toaster.toast(resources.resourceWith<String>(R.string.es_find_app_here, appConfig.appName))
       // wait until user navigates back from the permission screen
       catch { navigator.push(DefaultIntentScreen(intentFactory(permission))) }
         .onFailure {
-          toaster(R.string.es_grant_permission_manually)
+          toaster.toast(R.string.es_grant_permission_manually)
         }
     },
     {

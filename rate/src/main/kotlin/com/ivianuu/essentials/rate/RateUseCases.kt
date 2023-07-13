@@ -27,9 +27,8 @@ interface RateUseCases {
   suspend fun showLater()
 }
 
-@Provide class RateUsecasesImpl(
+context(Clock) @Provide class RateUsecasesImpl(
   private val appConfig: AppConfig,
-  private val clock: Clock,
   private val screen: Screen<*>,
   private val navigator: Navigator,
   private val pref: DataStore<RatePrefs>
@@ -50,7 +49,7 @@ interface RateUseCases {
   }
 
   override suspend fun showLater() {
-    val now = clock()
+    val now = now()
     pref.updateData {
       copy(
         launchTimes = 0,

@@ -14,11 +14,9 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
 
 interface Toaster {
-  operator fun invoke(message: String)
+  fun toast(message: String)
 
-  operator fun invoke(messageRes: Int)
-
-  operator fun invoke(messageRes: Int, vararg args: Any?)
+  fun toast(messageRes: Int)
 }
 
 @Provide class ToasterImpl(
@@ -27,7 +25,7 @@ interface Toaster {
   private val resources: Resources,
   private val scope: ScopedCoroutineScope<AppScope>
 ) : Toaster {
-  override fun invoke(message: String) {
+  override fun toast(message: String) {
     scope.launch(coroutineContexts.main) {
       Toast.makeText(
         appContext,
@@ -37,8 +35,5 @@ interface Toaster {
     }
   }
 
-  override fun invoke(messageRes: Int) = invoke(resources<String>(messageRes))
-
-  override fun invoke(messageRes: Int, vararg args: Any?) =
-    invoke(resources<String>(messageRes, *args))
+  override fun toast(messageRes: Int) = toast(resources.resource<String>(messageRes))
 }

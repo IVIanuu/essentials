@@ -17,9 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.Lerper
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -27,7 +25,7 @@ import kotlin.math.absoluteValue
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-@Composable fun <T : Comparable<T>> Slider(
+context(Lerper<T>, DefaultSliderRange<T>) @Composable fun <T : Comparable<T>> Slider(
   value: T,
   modifier: Modifier = Modifier,
   onValueChange: ((T) -> Unit)? = null,
@@ -43,11 +41,10 @@ import kotlin.time.Duration.Companion.seconds
     disabledActiveTickColor = Color.Transparent,
     disabledInactiveTickColor = Color.Transparent
   ),
-  @Inject lerper: Lerper<T>,
-  @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
+  valueRange: ClosedRange<T> = defaultSliderRange
 ) {
-  fun T.toFloat() = lerper.unlerp(valueRange.start, valueRange.endInclusive, this)
-  fun Float.toValue() = lerper.lerp(valueRange.start, valueRange.endInclusive, this)
+  fun T.toFloat() = unlerp(defaultSliderRange.start, defaultSliderRange.endInclusive, this)
+  fun Float.toValue() = lerp(defaultSliderRange.start, defaultSliderRange.endInclusive, this)
 
   var internalValue: Float? by remember { mutableStateOf(null) }
   var internalValueEraseJob: Job? by remember { mutableStateOf(null) }
@@ -63,7 +60,7 @@ import kotlin.time.Duration.Companion.seconds
     modifier,
     enabled,
     0f..1f,
-    remember(stepPolicy, valueRange) { stepPolicy(valueRange) },
+    remember(stepPolicy, defaultSliderRange) { stepPolicy(defaultSliderRange) },
     {
       if (internalValue == null) return@Slider
 
@@ -80,12 +77,13 @@ import kotlin.time.Duration.Companion.seconds
   )
 }
 
-@Tag annotation class DefaultSliderRange {
-  companion object {
-    @Provide val double: @DefaultSliderRange ClosedRange<Double> = 0.0..1.0
-    @Provide val float: @DefaultSliderRange ClosedRange<Float> = 0f..1f
-    @Provide val int: @DefaultSliderRange ClosedRange<Int> = 0..100
-    @Provide val long: @DefaultSliderRange ClosedRange<Long> = 0L..100L
+@JvmInline
+value class DefaultSliderRange<T : Comparable<T>>(val defaultSliderRange: ClosedRange<T>) {
+  @Provide companion object {
+    @Provide val double get() = DefaultSliderRange(0.0..1.0)
+    @Provide val float get() = DefaultSliderRange(0f..1f)
+    @Provide val int get() = DefaultSliderRange(0..100)
+    @Provide val long get() = DefaultSliderRange(0L..100L)
   }
 }
 
@@ -115,20 +113,17 @@ fun incrementingStepPolicy(incValue: Duration): StepPolicy<Duration> = { valueRa
   (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
 }
 
-fun <T : Comparable<T>> StepPolicy<T>.stepValue(
-  value: T,
-  @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
-  @Inject lerper: Lerper<T>
-): T {
+context(Lerper<T>)
+fun <T : Comparable<T>> StepPolicy<T>.stepValue(value: T, valueRange: ClosedRange<T>): T {
   val steps = this@stepValue(valueRange)
   val stepFractions = (if (steps == 0) emptyList()
   else List(steps + 2) { it.toFloat() / (steps + 1) })
 
-  val valueFraction = lerper.unlerp(valueRange.start, valueRange.endInclusive, value)
+  val valueFraction = unlerp(valueRange.start, valueRange.endInclusive, value)
 
   val steppedFraction = stepFractions
     .minByOrNull { (it - valueFraction).absoluteValue }
     ?: valueFraction
 
-  return lerper.lerp(valueRange.start, valueRange.endInclusive, steppedFraction)
+  return lerp(valueRange.start, valueRange.endInclusive, steppedFraction)
 }

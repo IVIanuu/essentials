@@ -22,8 +22,7 @@ fun interface ScopeWorkerRunner<N> {
   operator fun invoke()
 }
 
-@Provide fun <N> scopeWorkerRunner(
-  logger: Logger,
+context(Logger) @Provide fun <N> scopeWorkerRunner(
   nameKey: TypeKey<N>,
   scope: ScopedCoroutineScope<N>,
   workers: () -> List<ExtensionPointRecord<ScopeWorker<N>>>
@@ -32,7 +31,7 @@ fun interface ScopeWorkerRunner<N> {
     guarantee(
       block = {
         supervisorScope {
-          logger.log { "${nameKey.value} run scope workers" }
+          log { "${nameKey.value} run scope workers" }
 
           workers()
             .sortedWithLoadingOrder()
@@ -45,7 +44,7 @@ fun interface ScopeWorkerRunner<N> {
       },
       finalizer = {
         if (it is ExitCase.Cancelled)
-          logger.log { "${nameKey.value} cancel scope workers" }
+          log { "${nameKey.value} cancel scope workers" }
       }
     )
   }

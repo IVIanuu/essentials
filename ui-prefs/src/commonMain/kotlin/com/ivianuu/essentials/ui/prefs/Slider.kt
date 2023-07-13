@@ -32,13 +32,12 @@ import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.StepPolicy
 import com.ivianuu.essentials.ui.material.stepValue
-import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-@Composable fun <T : Comparable<T>> SliderListItem(
+context(Lerper<T>, DefaultSliderRange<T>) @Composable fun <T : Comparable<T>> SliderListItem(
   value: T,
   modifier: Modifier = Modifier,
   onValueChange: ((T) -> Unit)? = null,
@@ -51,8 +50,7 @@ import kotlin.time.Duration.Companion.seconds
   contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
   textPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
   sliderAdjustmentPadding: Dp = 8.dp,
-  @Inject lerper: Lerper<T>,
-  @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
+  valueRange: ClosedRange<T> = defaultSliderRange
 ) {
   var internalValue: T? by remember { mutableStateOf(null) }
   var internalValueEraseJob: Job? by remember { mutableStateOf(null) }

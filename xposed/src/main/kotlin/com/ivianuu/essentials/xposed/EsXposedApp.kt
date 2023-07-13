@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.xposed
 
 import com.ivianuu.essentials.Scope
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.provide
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
@@ -15,16 +15,13 @@ abstract class EsXposedApp : IXposedHookLoadPackage {
     xposedScope = buildXposedScope()
     xposedScope.service<XposedHooksComponent>().run {
       hooks.forEach { hooks ->
-        with(hooks) {
-          with(this@run.config) {
-            invoke()
-          }
-        }
+        provide(config) { hooks() }
       }
     }
   }
 
-  protected abstract fun buildXposedScope(@Inject llparam: XC_LoadPackage.LoadPackageParam): Scope<XposedScope>
+  context(XC_LoadPackage.LoadPackageParam)
+  protected abstract fun buildXposedScope(): Scope<XposedScope>
 
   companion object {
     private lateinit var xposedScope: Scope<XposedScope>

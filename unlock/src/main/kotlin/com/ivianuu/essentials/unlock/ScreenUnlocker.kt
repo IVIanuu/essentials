@@ -16,14 +16,13 @@ import kotlin.collections.set
 
 fun interface ScreenUnlocker : suspend () -> Boolean
 
-@Provide fun screenUnlocker(
+context(Logger) @Provide fun screenUnlocker(
   context: AppContext,
-  keyguardManager: @SystemService KeyguardManager,
-  logger: Logger
+  keyguardManager: @SystemService KeyguardManager
 ) = ScreenUnlocker {
-  logger.log { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
+  log { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
   if (!keyguardManager.isKeyguardLocked) {
-    logger.log { "already unlocked" }
+    log { "already unlocked" }
     return@ScreenUnlocker true
   }
 
@@ -31,11 +30,11 @@ fun interface ScreenUnlocker : suspend () -> Boolean
   val requestId = UUID.randomUUID().toString()
   requestsById[requestId] = result
 
-  logger.log { "unlock screen $requestId" }
+  log { "unlock screen $requestId" }
 
   UnlockActivity.unlockScreen(context, requestId)
 
   return@ScreenUnlocker result.await().also {
-    logger.log { "unlock result $requestId -> $it" }
+    log { "unlock result $requestId -> $it" }
   }
 }

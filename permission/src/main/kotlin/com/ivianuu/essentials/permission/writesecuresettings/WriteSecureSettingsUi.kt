@@ -267,7 +267,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
       race(
         {
           navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
-            ?.onFailure { toaster(R.string.es_open_phone_info_failed) }
+            ?.onFailure { toaster.toast(R.string.es_open_phone_info_failed) }
         },
         { developerModeDataStore.data.first { it != 0 } }
       )
@@ -277,7 +277,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
       race(
         {
           navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)))
-            ?.onFailure { toaster(R.string.es_open_developer_settings_failed) }
+            ?.onFailure { toaster.toast(R.string.es_open_developer_settings_failed) }
         },
         { adbEnabledDataStore.data.first { it != 0 } }
       )
@@ -287,13 +287,13 @@ typealias AdbEnabled = @AdbEnabledTag Int
       shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
         .onSuccess {
           if (permissionManager.permissionState(listOf(screen.permissionKey)).first()) {
-            toaster(R.string.es_secure_settings_permission_granted)
+            toaster.toast(R.string.es_secure_settings_permission_granted)
             navigator.pop(screen)
           }
         }
         .onFailure {
           it.printStackTrace()
-          toaster(R.string.es_secure_settings_no_root)
+          toaster.toast(R.string.es_secure_settings_no_root)
         }
     }
   )

@@ -4,7 +4,6 @@ package com.ivianuu.essentials.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -21,14 +20,14 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
+context(StateCoroutineContext)
 fun <T> CoroutineScope.sharedComposition(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
-  @Inject context: StateCoroutineContext,
   body: @Composable () -> T
 ): @Composable () -> T {
   val sharedFlow = MutableSharedFlow<T>(1)
 
-  val delegateDispatcher = (coroutineContext + context)[CoroutineDispatcher]
+  val delegateDispatcher = (coroutineContext + this@StateCoroutineContext)[CoroutineDispatcher]
   val finalDispatcher = object : CoroutineDispatcher() {
     override fun dispatch(context: CoroutineContext, block: Runnable) =
       if (sharedFlow.replayCache.isEmpty() || delegateDispatcher == null)
@@ -37,7 +36,7 @@ fun <T> CoroutineScope.sharedComposition(
         delegateDispatcher.dispatch(context, block)
   }
 
-  @Provide val finalContext = context.plus(finalDispatcher)
+  @Provide val finalContext = this@StateCoroutineContext.plus(finalDispatcher)
 
   launch(finalContext, CoroutineStart.UNDISPATCHED) {
     sharingStarted.command(sharedFlow.subscriptionCount)

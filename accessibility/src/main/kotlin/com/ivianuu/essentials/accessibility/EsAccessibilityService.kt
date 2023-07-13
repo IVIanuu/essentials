@@ -19,24 +19,23 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-@Provide @AndroidComponent class EsAccessibilityService(
+context(Logger) @Provide @AndroidComponent class EsAccessibilityService(
   private val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>,
   private val accessibilityScopeFactory: (EsAccessibilityService) -> Scope<AccessibilityScope>,
-  private val logger: Logger,
   private val accessibilityServiceRef: MutableStateFlow<EsAccessibilityService?>
 ) : AccessibilityService() {
   private var accessibilityScope: Scope<AccessibilityScope>? = null
 
   override fun onServiceConnected() {
     super.onServiceConnected()
-    logger.log { "service connected" }
+    log { "service connected" }
     accessibilityServiceRef.value = this
     accessibilityScope = accessibilityScopeFactory(this)
     val accessibilityComponent = accessibilityScope!!
       .service<AccessibilityComponent>()
 
     val configs = accessibilityComponent.configs
-    logger.log { "update config from $configs" }
+    log { "update config from $configs" }
     serviceInfo = serviceInfo?.apply {
       eventTypes = configs
         .map { it.eventTypes }
@@ -59,7 +58,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
   }
 
   override fun onAccessibilityEvent(event: AccessibilityEvent) {
-    logger.log { "on accessibility event $event" }
+    log { "on accessibility event $event" }
     accessibilityEvents.tryEmit(
       AccessibilityEvent(
         type = event.eventType,
@@ -74,7 +73,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
   }
 
   override fun onUnbind(intent: Intent?): Boolean {
-    logger.log { "service disconnected" }
+    log { "service disconnected" }
     accessibilityScope?.dispose()
     accessibilityScope = null
     accessibilityServiceRef.value = null

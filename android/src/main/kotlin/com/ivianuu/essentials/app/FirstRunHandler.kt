@@ -36,15 +36,14 @@ fun interface FirstRunHandler {
   }
 }
 
-@Provide fun firstRunWorker(
+context(Logger) @Provide fun firstRunWorker(
   handlers: () -> List<FirstRunHandler>,
   isFirstRun: suspend () -> IsFirstRun,
-  logger: Logger,
   pref: DataStore<FirstRunPrefs>
 ) = ScopeWorker<AppScope> {
   if (!isFirstRun().value) return@ScopeWorker
 
-  logger.log { "first run" }
+  log { "first run" }
 
   handlers().parForEach { it() }
 

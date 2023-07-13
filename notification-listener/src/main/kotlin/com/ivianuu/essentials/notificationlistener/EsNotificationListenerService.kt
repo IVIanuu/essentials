@@ -19,8 +19,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-@Provide @AndroidComponent class EsNotificationListenerService(
-  private val logger: Logger,
+context(Logger) @Provide @AndroidComponent class EsNotificationListenerService(
   private val notificationScopeFactory: () -> Scope<NotificationScope>,
   private val notificationServiceRef: MutableStateFlow<EsNotificationListenerService?>
 ) : NotificationListenerService() {
@@ -34,7 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
 
   override fun onListenerConnected() {
     super.onListenerConnected()
-    logger.log { "listener connected" }
+    log { "listener connected" }
     this.notificationScope = notificationScopeFactory()
     notificationServiceRef.value = this
     updateNotifications()
@@ -42,27 +41,27 @@ import kotlinx.coroutines.flow.StateFlow
 
   override fun onNotificationPosted(sbn: StatusBarNotification) {
     super.onNotificationPosted(sbn)
-    logger.log { "notification posted $sbn" }
+    log { "notification posted $sbn" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.NotificationPosted(sbn))
   }
 
   override fun onNotificationRemoved(sbn: StatusBarNotification) {
     super.onNotificationRemoved(sbn)
-    logger.log { "notification removed $sbn" }
+    log { "notification removed $sbn" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.NotificationRemoved(sbn))
   }
 
   override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
     super.onNotificationRankingUpdate(rankingMap)
-    logger.log { "ranking update $rankingMap" }
+    log { "ranking update $rankingMap" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.RankingUpdate(rankingMap))
   }
 
   override fun onListenerDisconnected() {
-    logger.log { "listener disconnected" }
+    log { "listener disconnected" }
     notificationScope?.dispose()
     notificationScope = null
     notificationServiceRef.value = null

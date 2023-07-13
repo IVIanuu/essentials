@@ -23,17 +23,16 @@ fun interface AppVersionUpgradeHandler {
   }
 }
 
-@Provide fun appVersionUpgradeWorker(
+context(Logger) @Provide fun appVersionUpgradeWorker(
   appConfig: AppConfig,
   handlers: () -> List<AppVersionUpgradeHandler>,
-  logger: Logger,
   pref: DataStore<AppVersionUpgradePrefs>
 ) = ScopeWorker<AppScope> {
   val prefs = pref.data.first()
 
   if (appConfig.versionCode <= prefs.lastAppVersion) return@ScopeWorker
 
-  logger.log { "upgrade from app version ${prefs.lastAppVersion} to ${appConfig.versionCode}" }
+  log { "upgrade from app version ${prefs.lastAppVersion} to ${appConfig.versionCode}" }
 
   handlers().parForEach { it(prefs.lastAppVersion, appConfig.versionCode) }
 

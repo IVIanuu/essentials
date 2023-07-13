@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
@@ -23,13 +22,12 @@ interface Scope<N> : Disposable {
 
   fun <T> scoped(key: Any, compute: () -> T): T
 
-  fun <T> scoped(@Inject key: TypeKey<T>, compute: () -> T): T =
-    scoped(key.value, compute)
+  context(TypeKey<T>) fun <T> scoped(compute: () -> T): T = scoped(value, compute)
 
-  fun <T : Any> serviceOrNull(@Inject key: TypeKey<T>): T?
+  context(TypeKey<T>) fun <T : Any> serviceOrNull(): T?
 
-  fun <T : Any> service(@Inject key: TypeKey<T>): T =
-    serviceOrNull(key) ?: error("No service found for ${key.value} in ${name.value}")
+  context(TypeKey<T>) fun <T : Any> service(): T =
+    serviceOrNull() ?: error("No service found for $value in ${name.value}")
 }
 
 @Provide class ScopeImpl<N>(
@@ -72,9 +70,9 @@ interface Scope<N> : Disposable {
     }
   }
 
-  override fun <T : Any> serviceOrNull(@Inject key: TypeKey<T>): T? = services[key.value]?.let {
-    return it.get(this) as T
-  } ?: parent?.serviceOrNull(key)
+  context(TypeKey<T>) override fun <T : Any> serviceOrNull(): T? =
+    services[value]?.let { return it.get(this) as T }
+      ?: parent?.serviceOrNull()
 
   override fun <T> scoped(key: Any, compute: () -> T): T = synchronized(this) {
     checkDisposed()
@@ -111,15 +109,14 @@ interface ProvidedService<N, T> {
 
   fun get(scope: Scope<N>): T
 
-  companion object {
+  @Provide companion object {
     @Provide fun <N> defaultServices() = emptyList<ProvidedService<N, *>>()
 
-    inline operator fun <N, T> invoke(
-      @Inject key: TypeKey<T>,
+    context(TypeKey<T>) inline operator fun <N, T> invoke(
       crossinline factory: () -> T
     ): ProvidedService<N, T> = object : ProvidedService<N, T> {
       override val key: TypeKey<T>
-        get() = key
+        get() = this@TypeKey
 
       override fun get(scope: Scope<N>): T = factory()
     }
@@ -135,7 +132,7 @@ interface ScopeObserver {
 }
 
 @Tag annotation class Scoped<N> {
-  companion object {
+  @Provide companion object {
     @Provide inline fun <@Spread T : @Scoped<N> S, S : Any, N> scoped(
       crossinline init: () -> T,
       scope: Scope<N>,
@@ -145,9 +142,8 @@ interface ScopeObserver {
 }
 
 @Tag annotation class Service<N> {
-  companion object {
-    @Provide inline fun <@Spread T : @Service<N> S, S : Any, N> service(
-      key: TypeKey<S>,
+  @Provide companion object {
+    context(TypeKey<S>) @Provide inline fun <@Spread T : @Service<N> S, S : Any, N> service(
       crossinline factory: () -> T
     ) = ProvidedService<N, S>(factory = factory)
 
@@ -158,7 +154,7 @@ interface ScopeObserver {
 @Tag annotation class ParentScope
 
 @Tag annotation class Eager<N> {
-  companion object {
+  @Provide companion object {
     @Provide fun <@Spread T : @Eager<N> S, S : Any, N> scoped(value: T): @Scoped<N> S = value
 
     @Provide inline fun <@Spread T : @Eager<N> S, S : Any, N> service(

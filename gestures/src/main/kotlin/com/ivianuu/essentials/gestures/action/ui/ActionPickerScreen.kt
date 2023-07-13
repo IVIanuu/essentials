@@ -34,7 +34,6 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
 class ActionPickerScreen(
@@ -139,7 +138,7 @@ sealed interface ActionPickerItem {
   screen: ActionPickerScreen
 ) = Model {
   ActionPickerModel(
-    items = produceResourceState { emit(getActionPickerItems(screen)) }.value,
+    items = produceResourceState { emit(getActionPickerItems(screen, repository, resources)) }.value,
     openActionSettings = action { item -> navigator.push(item.settingsScreen!!) },
     pickAction = action { item ->
       val result = item.getResult(navigator) ?: return@action
@@ -155,21 +154,21 @@ sealed interface ActionPickerItem {
 
 private suspend fun getActionPickerItems(
   screen: ActionPickerScreen,
-  @Inject repository: ActionRepository,
-  @Inject resources: Resources
+  repository: ActionRepository,
+  resources: Resources
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
   if (screen.showDefaultOption) {
     specialOptions += ActionPickerItem.SpecialOption(
-      title = resources(R.string.es_default),
+      title = resources.resource(R.string.es_default),
       getResult = { ActionPickerScreen.Result.Default }
     )
   }
 
   if (screen.showNoneOption) {
     specialOptions += ActionPickerItem.SpecialOption(
-      title = resources(R.string.es_none),
+      title = resources.resource(R.string.es_none),
       getResult = { ActionPickerScreen.Result.None }
     )
   }

@@ -70,7 +70,7 @@ fun interface ActionIntentSender {
     ).send()
   }.onFailure {
     it.printStackTrace()
-    toaster(R.string.es_activity_not_found)
+    toaster.toast(R.string.es_activity_not_found)
   }
 }
 

@@ -21,9 +21,8 @@ fun interface DecorateScreen {
   @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
-@Provide fun decorateScreen(
-  records: List<ExtensionPointRecord<ScreenDecorator>>,
-  logger: Logger
+context(Logger) @Provide fun decorateScreen(
+  records: List<ExtensionPointRecord<ScreenDecorator>>
 ) = DecorateScreen { content ->
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
     records
@@ -31,14 +30,14 @@ fun interface DecorateScreen {
       .fold({ it() }) { acc, record ->
         { content ->
           acc {
-            logger.log { "decorate screen with ${record.key.value}" }
+            log { "decorate screen with ${record.key.value}" }
             record.instance(content)
           }
         }
       }
   }
 
-  logger.log { "decorate screen $content with combined $combinedDecorator" }
+  log { "decorate screen $content with combined $combinedDecorator" }
 
   combinedDecorator(content)
 }

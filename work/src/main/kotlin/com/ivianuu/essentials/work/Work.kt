@@ -63,16 +63,15 @@ interface WorkManager {
   suspend fun <I : WorkId> runWorker(id: I)
 }
 
-@Provide @Scoped<AppScope> class WorkManagerImpl(
+context(Logger) @Provide @Scoped<AppScope> class WorkManagerImpl(
   private val androidWorkManager: AndroidWorkManager,
   private val coroutineContexts: CoroutineContexts,
-  private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>,
   private val workersMap: Map<String, () -> Worker<*>>,
 ) : WorkManager, SynchronizedObject() {
   private val workerStates = mutableMapOf<String, MutableStateFlow<Boolean>>()
   private val sharedWorkers = scope.sharedComputation<WorkId, Unit> { id ->
-    logger.log { "run worker ${id.value}" }
+    log { "run worker ${id.value}" }
 
     val workerState = synchronized(this@WorkManagerImpl) {
       workerStates.getOrPut(id.value) { MutableStateFlow(false) }
@@ -86,7 +85,7 @@ interface WorkManager {
       finalizer = {
         if (it is ExitCase.Failure) it.failure.printStackTrace()
         workerState.value = false
-        logger.log { "run worker end ${id.value}" }
+        log { "run worker end ${id.value}" }
       }
     )
   }
@@ -98,7 +97,7 @@ interface WorkManager {
   override suspend fun <I : WorkId> runWorker(id: I): Unit =
     withContext(scope.coroutineContext + coroutineContexts.computation) {
       if (id.value !in workersMap) {
-        logger.log { "no worker found for ${id.value}" }
+        log { "no worker found for ${id.value}" }
         androidWorkManager.cancelUniqueWork(id.value)
         return@withContext
       }

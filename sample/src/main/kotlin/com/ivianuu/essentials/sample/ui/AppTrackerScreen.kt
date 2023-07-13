@@ -28,7 +28,6 @@ import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenScope
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.NotificationFactory
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
@@ -50,7 +49,7 @@ class AppTrackerScreen : Screen<Unit>
   if (isEnabled)
     LaunchedEffect(true) {
       foregroundManager.startForeground {
-        AppTrackerNotification(currentApp.collectAsState(null).value)
+        AppTrackerNotification(currentApp.collectAsState(null).value, notificationFactory)
       }
     }
 
@@ -73,7 +72,7 @@ class AppTrackerScreen : Screen<Unit>
 
 private fun AppTrackerNotification(
   currentApp: CurrentApp?,
-  @Inject notificationFactory: NotificationFactory
+  notificationFactory: NotificationFactory
 ) = notificationFactory("app_tracker", "App tracking", NotificationManager.IMPORTANCE_LOW) {
   setSmallIcon(R.mipmap.ic_launcher)
   setContentTitle("Current app: ${currentApp?.value}")

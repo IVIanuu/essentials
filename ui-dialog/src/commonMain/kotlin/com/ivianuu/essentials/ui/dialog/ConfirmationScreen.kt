@@ -11,14 +11,16 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.context
+import com.ivianuu.injekt.provide
 
-class ConfirmationScreen<T : Any>(
+context(UiRenderer<T>) class ConfirmationScreen<T : Any>(
   val items: List<T>,
-  val title: String,
-  @Inject val renderer: UiRenderer<T>,
-) : DialogScreen<T>
+  val title: String
+) : DialogScreen<T> {
+  val renderer = context<UiRenderer<T>>()
+}
 
 @Provide fun confirmationUi(
   key: ConfirmationScreen<Any>,
@@ -30,7 +32,7 @@ class ConfirmationScreen<T : Any>(
       buttons = {
         key.items.forEach { item ->
           TextButton(onClick = action { navigator.pop(key, item) }) {
-            Text(key.renderer(item))
+            key.renderer.provide { Text(item.render()) }
           }
         }
       }

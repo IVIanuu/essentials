@@ -40,7 +40,11 @@ interface ClipboardRepository {
     catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
       .also { result ->
         if (showMessage) {
-          toaster(result.fold({ R.string.copied_to_clipboard }, { R.string.copy_to_clipboard_failed }))
+          toaster.toast(
+            result.fold(
+              { R.string.copied_to_clipboard },
+              { R.string.copy_to_clipboard_failed })
+          )
         }
       }
   }

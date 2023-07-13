@@ -21,13 +21,12 @@ fun interface BootListener {
 }
 
 
-@Provide @AndroidComponent class BootReceiver(
-  private val bootListeners: () ->List<BootListener>,
-  private val logger: Logger
+context(Logger) @Provide @AndroidComponent class BootReceiver(
+  private val bootListeners: () -> List<BootListener>
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-    logger.log { "on system boot" }
+    log { "on system boot" }
     bootListeners().forEach { it() }
   }
 }

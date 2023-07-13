@@ -27,7 +27,6 @@ import com.ivianuu.essentials.torch.TorchManagerImpl.DisableTorchAction
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.RemoteAction
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.context
 import com.ivianuu.essentials.util.remoteActionOf
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.StateFlow
@@ -39,11 +38,9 @@ interface TorchManager {
   suspend fun updateTorchState(value: Boolean)
 }
 
-@Provide @Scoped<AppScope> class TorchManagerImpl(
+context(Json, Logger) @Provide @Scoped<AppScope> class TorchManagerImpl(
   private val cameraManager: @SystemService CameraManager,
   private val foregroundManager: ForegroundManager,
-  @property:Provide private val json: Json,
-  private val logger: Logger,
   private val notificationFactory: NotificationFactory,
   private val resources: Resources,
   scope: ScopedCoroutineScope<AppScope>,
@@ -57,13 +54,13 @@ interface TorchManager {
       foregroundManager.startForeground {
         notificationFactory(
           "torch",
-          resources(R.string.es_notif_channel_torch),
+          resources.resource(R.string.es_notif_channel_torch),
           NotificationManager.IMPORTANCE_LOW
         ) {
           setSmallIcon(R.drawable.es_ic_flashlight_on)
-          setContentTitle(resources(R.string.es_notif_title_torch))
-          setContentText(resources(R.string.es_notif_text_torch))
-          setContentIntent(remoteActionOf<DisableTorchAction>(context))
+          setContentTitle(resources.resource(R.string.es_notif_title_torch))
+          setContentText(resources.resource(R.string.es_notif_text_torch))
+          setContentIntent(remoteActionOf<DisableTorchAction>())
         }
       }
     }
@@ -71,16 +68,16 @@ interface TorchManager {
     LaunchedEffect(true) {
       catch {
         val cameraId = cameraManager.cameraIdList[0]
-        logger.log { "enable torch" }
+        log { "enable torch" }
         cameraManager.setTorchMode(cameraId, true)
         onCancel {
-          logger.log { "disable torch on cancel" }
+          log { "disable torch on cancel" }
           catch { cameraManager.setTorchMode(cameraId, false) }
           _torchEnabled = false
         }
       }.onFailure {
-        logger.log(priority = Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
-        toaster(R.string.es_failed_to_enable_torch)
+        log(priority = Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
+        toaster.toast(R.string.es_failed_to_enable_torch)
         _torchEnabled = false
       }
     }

@@ -23,9 +23,8 @@ fun interface DecorateAppUi {
   @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
-@Provide fun decorateAppUi(
-  records: List<ExtensionPointRecord<AppUiDecorator>>,
-  logger: Logger
+context(Logger) @Provide fun decorateAppUi(
+  records: List<ExtensionPointRecord<AppUiDecorator>>
 ) = DecorateAppUi { content ->
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
     records
@@ -33,14 +32,14 @@ fun interface DecorateAppUi {
       .fold({ it() }) { acc, record ->
         { content ->
           acc {
-            logger.log { "decorate app ui ${record.key.value}" }
+            log { "decorate app ui ${record.key.value}" }
             record.instance(content)
           }
         }
       }
   }
 
-  logger.log { "decorate app ui $content with combined $combinedDecorator" }
+  log { "decorate app ui $content with combined $combinedDecorator" }
 
   combinedDecorator(content)
 }

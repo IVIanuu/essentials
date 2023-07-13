@@ -43,14 +43,13 @@ import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
 @Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsScreen() }
 
 class DialogsScreen : Screen<Unit>
 
-@Provide fun dialogsUi(navigator: Navigator) = Ui<DialogsScreen, Unit> {
+context(Navigator) @Provide fun dialogsUi() = Ui<DialogsScreen, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Dialogs") }) }
   ) {
@@ -241,27 +240,25 @@ class DialogsScreen : Screen<Unit>
   }
 }
 
-@Composable private fun DialogCloseButton(
+context(Navigator) @Composable private fun DialogCloseButton(
   enabled: Boolean = true,
   onClick: () -> Unit = {},
-  text: String,
-  @Inject navigator: Navigator
+  text: String
 ) {
   TextButton(
     enabled = enabled,
     onClick = action {
       onClick()
-      navigator.popTop()
+      popTop()
     }
   ) {
     Text(text)
   }
 }
 
-@Composable private fun DialogLauncherButton(
+context(Navigator) @Composable private fun DialogLauncherButton(
   text: String,
   dismissible: Boolean = true,
-  @Inject navigator: Navigator,
   dialog: @Composable (() -> Unit) -> Unit
 ) {
   Spacer(Modifier.height(8.dp))
@@ -269,7 +266,7 @@ class DialogsScreen : Screen<Unit>
   val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
   Button(
     onClick = action {
-      navigator.push(
+      push(
         DialogLauncherScreen(dismissible) {
           dialog {
             if (dismissible)

@@ -7,11 +7,9 @@ package com.ivianuu.essentials.sample
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.essentials.injectWith
+import com.ivianuu.essentials.contextWith
 import com.ivianuu.essentials.logging.AndroidLogger
-import com.ivianuu.injekt.provider
 
 class SampleApp : EsApp() {
-  override fun buildAppScope(): Scope<AppScope> =
-    injectWith(provider(AndroidLogger::androidLogger))
+  override fun buildAppScope() = contextWith<_, Scope<AppScope>>(AndroidLogger::androidLogger)
 }

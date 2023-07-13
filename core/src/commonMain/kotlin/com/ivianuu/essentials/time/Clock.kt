@@ -8,7 +8,7 @@ import com.ivianuu.injekt.Provide
 import kotlin.time.Duration
 
 fun interface Clock {
-  operator fun invoke(): Duration
+  fun now(): Duration
 }
 
 @Provide expect val DefaultClock: Clock

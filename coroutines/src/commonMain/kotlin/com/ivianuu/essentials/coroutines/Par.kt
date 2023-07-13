@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -14,11 +13,10 @@ import kotlinx.coroutines.sync.withPermit
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-suspend fun <T> Iterable<suspend () -> T>.par(
-  context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency
+context(ConcurrencyContext)  suspend fun <T> Iterable<suspend () -> T>.par(
+  context: CoroutineContext = EmptyCoroutineContext
 ): List<T> = coroutineScope {
-  val semaphore = Semaphore(concurrency.value)
+  val semaphore = Semaphore(concurrency)
   map { block ->
     async(context) {
       semaphore.withPermit {
@@ -28,28 +26,25 @@ suspend fun <T> Iterable<suspend () -> T>.par(
   }.awaitAll()
 }
 
-suspend fun <T> par(
+context(ConcurrencyContext) suspend fun <T> par(
   vararg blocks: suspend () -> T,
-  context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency
-): List<T> = blocks.asIterable().par(context)
+  context: CoroutineContext = EmptyCoroutineContext
+): List<T> = blocks.asIterable().par()
 
-suspend fun <T, R> Iterable<T>.parMap(
+context(ConcurrencyContext) suspend fun <T, R> Iterable<T>.parMap(
   context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency,
   transform: suspend (T) -> R
-): List<R> = map { t -> suspend { transform(t) } }.par(context)
+): List<R> = map { t -> suspend { transform(t) } }.par()
 
-suspend fun <T> Iterable<T>.parForEach(
+context(ConcurrencyContext) suspend fun <T> Iterable<T>.parForEach(
   context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency,
   action: suspend (T) -> Unit
 ) {
   parMap(context) { action(it) }
 }
 
-inline class Concurrency(val value: Int)
+@JvmInline value class ConcurrencyContext(val concurrency: Int)
 
-expect object ConcurrencyModule {
-  @Provide val defaultConcurrency: Concurrency
+@Provide expect object ConcurrencyModule {
+  @Provide val defaultConcurrencyContext: ConcurrencyContext
 }

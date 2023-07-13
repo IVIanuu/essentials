@@ -14,7 +14,7 @@ import com.ivianuu.injekt.Provide
   var count by remember { mutableStateOf(0) }
 
   TileModel<EsTileService1>(
-    icon = resources(R.drawable.es_ic_flashlight_on),
+    icon = resources.resource(R.drawable.es_ic_flashlight_on),
     label = "Count $count",
     onClick = { count++ }
   )

@@ -75,7 +75,7 @@ data class ShortcutPickerModel(
         navigator.pop(screen, finalShortcut)
       }.onFailure {
         it.printStackTrace()
-        toaster(R.string.es_failed_to_pick_shortcut)
+        toaster.toast(R.string.es_failed_to_pick_shortcut)
       }
     }
   )

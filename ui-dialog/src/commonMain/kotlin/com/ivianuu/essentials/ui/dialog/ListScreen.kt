@@ -15,14 +15,14 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.context
+import com.ivianuu.injekt.provide
 
-class ListScreen<T : Any>(
-  val items: List<T>,
-  val title: String? = null,
-  @Inject val renderer: UiRenderer<T>,
-) : DialogScreen<T>
+context(UiRenderer<T>)
+class ListScreen<T : Any>(val items: List<T>, val title: String? = null) : DialogScreen<T> {
+  val renderer = context<UiRenderer<T>>()
+}
 
 @Provide fun listKeyUi(
   key: ListScreen<Any>,
@@ -38,7 +38,7 @@ class ListScreen<T : Any>(
               modifier = Modifier.clickable(onClick = action {
                 navigator.pop(key, item)
               }),
-              title = { Text(key.renderer(item)) },
+              title = { provide(key.renderer) { Text(item.render()) } },
             )
           }
         }

@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.injekt.Inject
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
 import java.lang.reflect.Method
@@ -106,20 +105,18 @@ inline fun hookMethod(
   block: MethodHookBuilder.() -> Unit
 ): XC_MethodHook.Unhook = XposedBridge.hookMethod(method, methodHook(block))
 
-inline fun <T : Any> hookAllMethods(
+context(KClass<T>) inline fun <T : Any> hookAllMethods(
   methodName: String,
-  @Inject hookClass: KClass<T>,
   block: MethodHookBuilder.() -> Unit
-): Set<XC_MethodHook.Unhook> = hookAllMethods(hookClass, methodName, block)
+): Set<XC_MethodHook.Unhook> = hookAllMethods(this@KClass, methodName, block)
 
-inline fun hookAllMethods(
+context(ClassLoader) inline fun hookAllMethods(
   className: String,
   methodName: String,
-  @Inject classLoader: ClassLoader,
   block: MethodHookBuilder.() -> Unit
-): Set<XC_MethodHook.Unhook> = hookAllMethods(classLoader.getClass(className), methodName, block)
+): Set<XC_MethodHook.Unhook> = hookAllMethods(getClass(className), methodName, block)
 
-inline fun hookAllMethods(
+@JvmName("hookAllMethodsImpl") inline fun hookAllMethods(
   hookClass: KClass<*>,
   methodName: String,
   block: MethodHookBuilder.() -> Unit
@@ -129,13 +126,16 @@ inline fun hookAllMethods(
   methodHook(block)
 )
 
-inline fun hookAllConstructors(
+context(ClassLoader) inline fun hookAllConstructors(
   className: String,
-  @Inject classLoader: ClassLoader,
   block: MethodHookBuilder.() -> Unit
-): Set<XC_MethodHook.Unhook> = hookAllConstructors(classLoader.getClass(className), block)
+): Set<XC_MethodHook.Unhook> = hookAllConstructors(getClass(className), block)
 
-inline fun <T : Any> hookAllConstructors(
-  @Inject hookClass: KClass<T>,
+context(KClass<T>) inline fun <T : Any> hookAllConstructors(
+  block: MethodHookBuilder.() -> Unit
+): Set<XC_MethodHook.Unhook> = hookAllConstructors(this@KClass, block)
+
+@JvmName("hookAllConstructorsImpl") inline fun hookAllConstructors(
+  hookClass: KClass<*>,
   block: MethodHookBuilder.() -> Unit
 ): Set<XC_MethodHook.Unhook> = XposedBridge.hookAllConstructors(hookClass.java, methodHook(block))

@@ -21,7 +21,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide fun searchAction(resources: Resources) = Action(
   id = SearchActionId,
-  title = resources(R.string.es_action_search),
+  title = resources.resource(R.string.es_action_search),
   icon = staticActionIcon(Icons.Default.Search),
   permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>())
 )

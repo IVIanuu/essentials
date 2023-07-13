@@ -6,7 +6,7 @@ package com.ivianuu.essentials.ui.animation
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
-import com.ivianuu.essentials.lerp
+import com.ivianuu.essentials.Lerper
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.asin
@@ -14,17 +14,10 @@ import kotlin.math.cos
 import kotlin.math.sign
 import kotlin.math.sin
 
-fun interval(
-  start: Float,
-  end: Float,
-  fraction: Float
-): Float = ((fraction - start) / (end - start)).coerceIn(0f, 1f)
+fun interval(start: Float, end: Float, fraction: Float): Float =
+  ((fraction - start) / (end - start)).coerceIn(0f, 1f)
 
-fun arcLerp(
-  start: Offset,
-  end: Offset,
-  fraction: Float
-): Offset {
+context(Lerper<Float>) fun arcLerp(start: Offset, end: Offset, fraction: Float): Offset {
   if (fraction == 0f) return start
   if (fraction == 1f) return end
   val delta = end - start

@@ -36,7 +36,7 @@ import kotlin.coroutines.resume
 
 @Provide fun cameraAction(resources: Resources) = Action(
   id = CameraActionId,
-  title = resources(R.string.es_action_camera),
+  title = resources.resource(R.string.es_action_camera),
   icon = staticActionIcon(R.drawable.es_ic_photo_camera),
   permissions = listOf(
     typeKeyOf<ActionAccessibilityPermission>(),
@@ -46,12 +46,11 @@ import kotlin.coroutines.resume
   closeSystemDialogs = true
 )
 
-@Provide fun cameraActionExecutor(
+context(Logger) @Provide fun cameraActionExecutor(
   accessibilityServiceRef: Flow<EsAccessibilityService?>,
   actionIntentSender: ActionIntentSender,
   cameraManager: @SystemService CameraManager,
   currentApp: Flow<CurrentApp?>,
-  logger: Logger,
   packageManager: PackageManager,
   screenState: Flow<ScreenState>
 ) = ActionExecutor<CameraActionId> {
@@ -98,7 +97,7 @@ import kotlin.coroutines.resume
     }
   else null
 
-  logger.log { "open camera with $frontFacing" }
+  log { "open camera with $frontFacing" }
 
   if (frontFacing != null)
     intent.addCameraFacingExtras(frontFacing)

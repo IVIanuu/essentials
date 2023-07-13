@@ -17,21 +17,21 @@ import com.ivianuu.injekt.Provide
 @Provide class ActionAccessibilityPermission(resources: Resources) :
   AccessibilityServicePermission(
     serviceClass = EsAccessibilityService::class,
-    title = resources(R.string.es_action_accessibility_permission_title),
-    desc = resources(R.string.es_action_accessibility_permission_desc),
+    title = resources.resource(R.string.es_action_accessibility_permission_title),
+    desc = resources.resource(R.string.es_action_accessibility_permission_desc),
     icon = Permission.Icon { Icon(R.drawable.es_ic_accessibility) }
   )
 
 @Provide class ActionSystemOverlayPermission(resources: Resources) :
   SystemOverlayPermission(
-    title = resources(R.string.es_action_system_overlay_permission_title),
-    desc = resources(R.string.es_action_system_overlay_permission_desc),
+    title = resources.resource(R.string.es_action_system_overlay_permission_title),
+    desc = resources.resource(R.string.es_action_system_overlay_permission_desc),
     icon = Permission.Icon { Icon(R.drawable.es_ic_adb) }
   )
 
 @Provide class ActionWriteSettingsPermission(resources: Resources) :
   WriteSettingsPermission(
-    title = resources(R.string.es_action_write_settings_permission_title),
-    desc = resources(R.string.es_action_write_settings_permission_desc),
+    title = resources.resource(R.string.es_action_write_settings_permission_title),
+    desc = resources.resource(R.string.es_action_write_settings_permission_desc),
     icon = Permission.Icon { Icon(R.drawable.es_ic_settings) }
   )

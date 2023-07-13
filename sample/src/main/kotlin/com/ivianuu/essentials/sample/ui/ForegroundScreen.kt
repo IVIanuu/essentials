@@ -22,7 +22,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.NotificationFactory
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlin.time.Duration.Companion.seconds
 
@@ -44,7 +43,8 @@ class ForegroundScreen : Screen<Unit>
       LaunchedEffect(true) {
         foregroundManager.startForeground {
           ForegroundNotification(
-            remember { timerFlow(1.seconds) }.collectAsState(0).value
+            remember { timerFlow(1.seconds) }.collectAsState(0).value,
+            notificationFactory
           )
         }
       }
@@ -57,7 +57,7 @@ class ForegroundScreen : Screen<Unit>
 
 private fun ForegroundNotification(
   count: Long,
-  @Inject notificationFactory: NotificationFactory
+  notificationFactory: NotificationFactory
 ) = notificationFactory(
   "foreground",
   "Foreground",

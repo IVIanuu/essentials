@@ -26,17 +26,16 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
-@Provide @AndroidComponent class ForegroundService(
+context(Logger) @Provide @AndroidComponent class ForegroundService(
   private val foregroundManager: ForegroundManagerImpl,
   private val notificationManager: @SystemService NotificationManager,
-  private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>
 ) : Service() {
   private var job: Job? = null
 
   override fun onCreate() {
     super.onCreate()
-    logger.log { "start service" }
+    log { "start service" }
 
     job = scope.launchComposition {
       val states by foregroundManager.states.collectAsState()
@@ -46,7 +45,7 @@ import kotlin.time.Duration.Companion.seconds
 
         key(index) {
           DisposableEffect(state, notification) {
-            logger.log { "update ${state.id}" }
+            log { "update ${state.id}" }
 
             if (index == 0) {
               startForeground(state.id, notification)
@@ -65,20 +64,20 @@ import kotlin.time.Duration.Companion.seconds
         LaunchedEffect(true) {
           onCancel(
             block = {
-              logger.log { "stop foreground" }
+              log { "stop foreground" }
               stopForeground(true)
-              logger.log { "dispatch delayed stop" }
+              log { "dispatch delayed stop" }
               delay(6.seconds)
               stopSelf()
             },
-            onCancel = { logger.log { "cancel delayed stop" } }
+            onCancel = { log { "cancel delayed stop" } }
           )
         }
     }
   }
 
   override fun onDestroy() {
-    logger.log { "stop service" }
+    log { "stop service" }
     job?.cancel()
     super.onDestroy()
   }

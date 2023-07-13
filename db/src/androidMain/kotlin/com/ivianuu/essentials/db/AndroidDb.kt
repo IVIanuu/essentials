@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.bracket
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +49,7 @@ class AndroidDb private constructor(
     schema: Schema,
     coroutineContext: CoroutineContext = Dispatchers.IO,
     // todo use context receiver once supported
-    @Inject context: Context
+    context: Context
   ) : this(
     schema,
     coroutineContext,

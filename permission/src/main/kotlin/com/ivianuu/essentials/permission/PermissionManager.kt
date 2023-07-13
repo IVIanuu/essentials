@@ -32,10 +32,9 @@ interface PermissionManager {
   suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean
 }
 
-@Provide class PermissionManagerImpl(
+context(Logger) @Provide class PermissionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val coroutineContexts: CoroutineContexts,
-  private val logger: Logger,
   private val permissions: Map<TypeKey<Permission>, () -> Permission>,
   private val stateProviders: Map<TypeKey<Permission>, () -> PermissionStateProvider<Permission>>
 ) : PermissionManager {
@@ -60,7 +59,7 @@ interface PermissionManager {
     ) { states -> states.all { it } }
 
   override suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean {
-    logger.log { "request permissions $permissions" }
+    log { "request permissions $permissions" }
 
     val result = permissions.all { permissionState(listOf(it)).first() } ||
         appUiStarter()
@@ -69,7 +68,7 @@ interface PermissionManager {
           .navigator
           .push(PermissionRequestScreen(permissions)) == true
 
-    logger.log { "request permissions result $permissions -> $result" }
+    log { "request permissions result $permissions -> $result" }
     return result
   }
 }

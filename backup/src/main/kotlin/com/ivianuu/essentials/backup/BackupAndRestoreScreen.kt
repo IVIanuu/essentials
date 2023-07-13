@@ -54,14 +54,14 @@ data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: ()
       catch { backupManager.createBackup() }
         .onFailure {
           it.printStackTrace()
-          toaster(R.string.es_backup_error)
+          toaster.toast(R.string.es_backup_error)
         }
     },
     restoreData = action {
       catch { backupManager.restoreBackup() }
         .onFailure {
           it.printStackTrace()
-          toaster(R.string.es_restore_error)
+          toaster.toast(R.string.es_restore_error)
         }
     }
   )

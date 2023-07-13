@@ -16,15 +16,17 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.context
+import com.ivianuu.injekt.provide
 
-class MultiChoiceListScreen<T : Any>(
+context(UiRenderer<T>) class MultiChoiceListScreen<T : Any>(
   val items: List<T>,
   val selectedItems: Set<T>,
-  val title: String? = null,
-  @Inject val renderable: UiRenderer<T>
-) : DialogScreen<Set<T>>
+  val title: String? = null
+) : DialogScreen<Set<T>> {
+  val renderer = context<UiRenderer<T>>()
+}
 
 @Provide fun multiChoiceListUi(
   commonStrings: CommonStrings,
@@ -38,7 +40,7 @@ class MultiChoiceListScreen<T : Any>(
       items = key.items,
       selectedItems = selectedItems,
       onSelectionsChanged = { selectedItems = it },
-      item = { Text(key.renderable(it)) },
+      item = { key.renderer.provide { Text(it.render()) } },
       title = key.title?.let { { Text(it) } },
       buttons = {
         TextButton(onClick = action { navigator.pop(key, null) }) {

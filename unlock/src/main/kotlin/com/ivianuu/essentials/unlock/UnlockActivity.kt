@@ -30,9 +30,8 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * Requests a screen unlock
  */
-@Provide @AndroidComponent class UnlockActivity(
+context(Logger) @Provide @AndroidComponent class UnlockActivity(
   private val keyguardManager: @SystemService KeyguardManager,
-  private val logger: Logger,
   private val powerManager: @SystemService PowerManager
 ) : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +49,7 @@ import kotlin.time.Duration.Companion.seconds
       return
     }
 
-    logger.log {
+    log {
       when (requestType) {
         REQUEST_TYPE_UNLOCK -> "unlock screen for $requestId"
         REQUEST_TYPE_SCREEN_ON -> "turn screen on $requestId"
@@ -61,7 +60,7 @@ import kotlin.time.Duration.Companion.seconds
     var hasResult = false
 
     fun finishWithResult(success: Boolean) {
-      logger.log { "finish with result $success" }
+      log { "finish with result $success" }
       hasResult = true
       requestsById.remove(requestId)?.complete(success)
       finish()
@@ -89,19 +88,19 @@ import kotlin.time.Duration.Companion.seconds
               KeyguardManager.KeyguardDismissCallback() {
               override fun onDismissSucceeded() {
                 super.onDismissSucceeded()
-                logger.log { "dismiss succeeded" }
+                log { "dismiss succeeded" }
                 finishWithResult(true)
               }
 
               override fun onDismissError() {
                 super.onDismissError()
-                logger.log { "dismiss error" }
+                log { "dismiss error" }
                 finishWithResult(true)
               }
 
               override fun onDismissCancelled() {
                 super.onDismissCancelled()
-                logger.log { "dismiss cancelled" }
+                log { "dismiss cancelled" }
                 finishWithResult(false)
               }
             }

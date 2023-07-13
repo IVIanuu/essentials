@@ -33,14 +33,13 @@ interface BackupManager {
   suspend fun restoreBackup()
 }
 
-@Provide class BackupManagerImpl(
+context(Logger) @Provide class BackupManagerImpl(
   private val backupDir: BackupDir,
   private val backupFiles: List<BackupFile>,
   private val appConfig: AppConfig,
   private val contentResolver: ContentResolver,
   private val coroutineContexts: CoroutineContexts,
   private val dataDir: DataDir,
-  private val logger: Logger,
   private val navigator: Navigator,
   private val processRestarter: ProcessRestarter,
   private val scope: ScopedCoroutineScope<AppScope>
@@ -65,7 +64,7 @@ interface BackupManager {
         .filterNot { it.absolutePath in BACKUP_BLACKLIST }
         .filter { it.exists() }
         .forEach { file ->
-          logger.log { "backup file $file" }
+          log { "backup file $file" }
           val entry = ZipEntry(file.relativeTo(dataDir).toString())
           zipOutputStream.putNextEntry(entry)
           file.inputStream().copyTo(zipOutputStream)
@@ -94,7 +93,7 @@ interface BackupManager {
     generateSequence { zipInputStream.nextEntry }
       .forEach { entry ->
         val file = dataDir.resolve(entry.name)
-        logger.log { "restore file $file" }
+        log { "restore file $file" }
         if (!file.exists()) {
           file.parentFile.mkdirs()
           file.createNewFile()

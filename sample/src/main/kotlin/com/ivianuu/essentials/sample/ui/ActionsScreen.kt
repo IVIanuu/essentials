@@ -46,7 +46,7 @@ class ActionsScreen : Screen<Unit>
 
           val action = repository.getAction(actionId)
 
-          toaster("Execute action ${action.title}")
+          toaster.toast("Execute action ${action.title}")
 
           repository.executeAction(actionId)
         }

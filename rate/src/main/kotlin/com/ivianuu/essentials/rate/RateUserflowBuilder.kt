@@ -9,7 +9,6 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.ui.navigation.UserflowBuilder
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 import kotlin.time.Duration
@@ -18,50 +17,46 @@ import kotlin.time.Duration.Companion.milliseconds
 
 fun interface RateUserflowBuilder : UserflowBuilder
 
-@Provide fun rateUserflowBuilder(
-  clock: Clock,
-  logger: Logger,
+context(Clock, Logger) @Provide fun rateUserflowBuilder(
   pref: DataStore<RatePrefs>,
-  schedule: RateUiSchedule = RateUiSchedule()
+  schedule: RateUiSchedule
 ) = RateUserflowBuilder {
   if (pref.data.first().installTime == 0L) {
-    val now = clock()
+    val now = now()
     pref.updateData { copy(installTime = now.inWholeNanoseconds) }
   }
 
   pref.updateData { copy(launchTimes = launchTimes.inc()) }
 
-  if (shouldShowRateDialog()) listOf(RateScreen)
+  if (shouldShowRateDialog(pref, schedule)) listOf(RateScreen)
   else emptyList()
 }
 
-private suspend fun shouldShowRateDialog(
-  @Inject clock: Clock,
-  @Inject logger: Logger,
-  @Inject pref: DataStore<RatePrefs>,
-  @Inject schedule: RateUiSchedule
+context(Clock, Logger) private suspend fun shouldShowRateDialog(
+  pref: DataStore<RatePrefs>,
+  schedule: RateUiSchedule
 ): Boolean {
   val prefs = pref.data.first()
 
   if (prefs.feedbackState == RatePrefs.FeedbackState.COMPLETED)
-    return false.also { logger.log { "show not: already completed" } }
+    return false.also { log { "show not: already completed" } }
 
   if (prefs.feedbackState == RatePrefs.FeedbackState.NEVER)
-    return false.also { logger.log { "show not: user selected never" } }
+    return false.also { log { "show not: user selected never" } }
 
   if (prefs.launchTimes < schedule.minLaunchTimes)
     return false.also {
-      logger.log { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
+      log { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
     }
 
-  val now = clock()
+  val now = now()
   val installedDuration = now - prefs.installTime.milliseconds
   if (installedDuration <= schedule.minInstallDuration)
     return false.also {
-      logger.log { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }
+      log { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }
     }
 
-  return true.also { logger.log { "show" } }
+  return true.also { log { "show" } }
 }
 
 data class RateUiSchedule(

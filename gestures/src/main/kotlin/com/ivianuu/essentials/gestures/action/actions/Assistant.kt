@@ -19,7 +19,7 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun assistantAction(resources: Resources) = Action(
   id = AssistantActionId,
-  title = resources(R.string.es_action_assistant),
+  title = resources.resource(R.string.es_action_assistant),
   closeSystemDialogs = true,
   turnScreenOn = true,
   icon = staticActionIcon(R.drawable.es_ic_google)

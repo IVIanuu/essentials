@@ -145,7 +145,7 @@ data class UiDonation(
     purchase = action { donation ->
       if (billingService.purchase(donation.donation.sku, true, true)) {
         billingService.consumePurchase(donation.donation.sku)
-        toaster(R.string.es_donation_thanks)
+        toaster.toast(R.string.es_donation_thanks)
       }
     }
   )

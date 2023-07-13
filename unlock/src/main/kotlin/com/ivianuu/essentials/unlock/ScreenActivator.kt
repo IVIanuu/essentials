@@ -16,14 +16,13 @@ import kotlin.collections.set
 
 fun interface ScreenActivator : suspend () -> Boolean
 
-@Provide fun screenActivator(
+context(Logger) @Provide fun screenActivator(
   appContext: AppContext,
-  logger: Logger,
   powerManager: @SystemService PowerManager
 ) = ScreenActivator {
-  logger.log { "on request is off ? ${!powerManager.isInteractive}" }
+  log { "on request is off ? ${!powerManager.isInteractive}" }
   if (powerManager.isInteractive) {
-    logger.log { "already on" }
+    log { "already on" }
     return@ScreenActivator true
   }
 
@@ -31,11 +30,11 @@ fun interface ScreenActivator : suspend () -> Boolean
   val requestId = UUID.randomUUID().toString()
   requestsById[requestId] = result
 
-  logger.log { "turn screen on $requestId" }
+  log { "turn screen on $requestId" }
 
   UnlockActivity.turnScreenOn(appContext, requestId)
 
   return@ScreenActivator result.await().also {
-    logger.log { "screen on result $requestId -> $it" }
+    log { "screen on result $requestId -> $it" }
   }
 }

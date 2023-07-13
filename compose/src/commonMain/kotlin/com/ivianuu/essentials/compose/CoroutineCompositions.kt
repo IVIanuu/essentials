@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
 import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.snapshots.Snapshot
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.CoroutineScope
@@ -24,7 +23,8 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-fun <T> compositionFlow(@Inject context: StateCoroutineContext, body: @Composable () -> T): Flow<T> = channelFlow {
+context(StateCoroutineContext)
+fun <T> compositionFlow(body: @Composable () -> T): Flow<T> = channelFlow {
   launchComposition(
     emitter = { trySend(it) },
     body = body
@@ -32,8 +32,8 @@ fun <T> compositionFlow(@Inject context: StateCoroutineContext, body: @Composabl
   awaitClose()
 }
 
+context(StateCoroutineContext)
 fun <T> CoroutineScope.compositionStateFlow(
-  @Inject context: StateCoroutineContext,
   body: @Composable () -> T
 ): StateFlow<T> {
   var flow: MutableStateFlow<T>? = null
@@ -53,14 +53,14 @@ fun <T> CoroutineScope.compositionStateFlow(
   return flow!!
 }
 
+context(StateCoroutineContext)
 fun <T> CoroutineScope.launchComposition(
   emitter: (T) -> Unit = {},
-  @Inject context: StateCoroutineContext,
   body: @Composable () -> T
 ): Job = launch(start = CoroutineStart.UNDISPATCHED) {
-  val recomposer = Recomposer(coroutineContext + context)
+  val recomposer = Recomposer(coroutineContext + this@StateCoroutineContext)
   val composition = Composition(UnitApplier, recomposer)
-  launch(context, CoroutineStart.UNDISPATCHED) {
+  launch(this@StateCoroutineContext, CoroutineStart.UNDISPATCHED) {
     recomposer.runRecomposeAndApplyChanges()
   }
 
@@ -68,7 +68,7 @@ fun <T> CoroutineScope.launchComposition(
   val snapshotHandle = Snapshot.registerGlobalWriteObserver {
     if (!applyScheduled) {
       applyScheduled = true
-      launch(context) {
+      launch(this@StateCoroutineContext) {
         applyScheduled = false
         Snapshot.sendApplyNotifications()
       }
@@ -97,6 +97,6 @@ private object UnitApplier : AbstractApplier<Unit>(Unit) {
 
 typealias StateCoroutineContext = @StateCoroutineContextTag CoroutineContext
 
-expect object StateCoroutineContextModule {
+@Provide expect object StateCoroutineContextModule {
   @Provide val context: StateCoroutineContext
 }

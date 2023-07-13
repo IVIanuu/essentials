@@ -18,16 +18,15 @@ fun interface ScopeCompositionRunner<N> {
   operator fun invoke()
 }
 
-@Provide fun <N> scopeCompositionRunner(
-  logger: Logger,
+context(Logger) @Provide fun <N> scopeCompositionRunner(
   nameKey: TypeKey<N>,
   scope: ScopedCoroutineScope<N>,
   compositions: () -> List<ExtensionPointRecord<ScopeComposition<N>>>
 ) = ScopeCompositionRunner<N> {
   scope.launchComposition {
     DisposableEffect(true) {
-      logger.log { "${nameKey.value} launch scope compositions" }
-      onDispose { logger.log { "${nameKey.value} dispose scope compositions" } }
+      log { "${nameKey.value} launch scope compositions" }
+      onDispose { log { "${nameKey.value} dispose scope compositions" } }
     }
 
     compositions()

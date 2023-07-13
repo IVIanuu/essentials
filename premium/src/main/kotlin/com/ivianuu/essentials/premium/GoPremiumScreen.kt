@@ -335,7 +335,7 @@ data class GoPremiumModel(
     goPremium = action {
       if (premiumVersionManager.purchasePremiumVersion()) {
         navigator.pop(screen, true)
-        toaster(R.string.es_premium_activated)
+        toaster.toast(R.string.es_premium_activated)
       }
     },
     tryBasicVersion = action {

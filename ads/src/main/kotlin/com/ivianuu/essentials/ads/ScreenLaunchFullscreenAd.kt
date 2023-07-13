@@ -14,7 +14,6 @@ import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,36 +36,33 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   }
 }
 
-@Provide fun screenLaunchFullScreenObserver(
+context(Logger) @Provide fun screenLaunchFullScreenObserver(
   adsEnabledFlow: StateFlow<AdsEnabled>,
   isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAdManager: FullScreenAdManager,
-  logger: Logger,
   navigator: Navigator,
   pref: DataStore<ScreenLaunchPrefs>
 ) = ScopeWorker<UiScope> {
   adsEnabledFlow
     .flatMapLatest {
       if (!it.value) infiniteEmptyFlow()
-      else navigator.launchEvents()
+      else navigator.launchEvents(isAdFeatureEnabled)
     }
     .collectLatest {
       val launchCount = pref
         .updateData { copy(screenLaunchCount = screenLaunchCount + 1) }
         .screenLaunchCount
-      logger.log { "screen launched $launchCount" }
+      log { "screen launched $launchCount" }
       if (launchCount >= config.screenLaunchToShowAdCount) {
-        logger.log { "try to show full screen ad $launchCount" }
+        log { "try to show full screen ad $launchCount" }
         if (fullScreenAdManager.loadAndShowAd().getOrElse { false })
           pref.updateData { copy(screenLaunchCount = 0) }
       }
     }
 }
 
-private fun Navigator.launchEvents(
-  @Inject isAdFeatureEnabled: IsAdFeatureEnabledUseCase
-): Flow<Screen<*>> {
+private fun Navigator.launchEvents(isAdFeatureEnabled: IsAdFeatureEnabledUseCase): Flow<Screen<*>> {
   var lastBackStack = backStack.value
   return backStack
     .mapNotNull { currentBackStack ->

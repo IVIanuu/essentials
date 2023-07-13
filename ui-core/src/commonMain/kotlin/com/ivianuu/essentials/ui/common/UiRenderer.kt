@@ -8,10 +8,10 @@ import androidx.compose.runtime.Stable
 import com.ivianuu.injekt.Provide
 
 @Stable fun interface UiRenderer<T> {
-  operator fun invoke(x: T): String
+  fun T.render(): String
 
   companion object {
-    @Provide fun <T : Enum<T>> enum() = UiRenderer<T> { it.name }
-    @Provide val string = UiRenderer<String> { it }
+    @Provide fun <T : Enum<T>> enum() = UiRenderer<T> { name }
+    @Provide val string = UiRenderer<String> { this }
   }
 }

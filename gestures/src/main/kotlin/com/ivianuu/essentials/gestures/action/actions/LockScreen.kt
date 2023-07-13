@@ -20,7 +20,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide fun lockScreenAction(resources: Resources) = Action(
   id = LockScreenActionId,
-  title = resources(R.string.es_action_lock_screen),
+  title = resources.resource(R.string.es_action_lock_screen),
   icon = staticActionIcon(R.drawable.es_ic_power_settings),
   permissions = listOf(typeKeyOf<ActionAccessibilityPermission>())
 )

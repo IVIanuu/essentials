@@ -15,16 +15,15 @@ import com.ivianuu.injekt.Provide
 
 interface UserflowBuilder : suspend () -> List<Screen<*>>, ExtensionPoint<UserflowBuilder>
 
-@Provide fun userflowBuilderWorker(
+context(Logger) @Provide fun userflowBuilderWorker(
   records: List<ExtensionPointRecord<UserflowBuilder>>,
-  logger: Logger,
   navigator: Navigator
 ) = ScopeWorker<UiScope> {
   val userflowScreens = records
     .sortedWithLoadingOrder()
     .flatMap { it.instance() }
 
-  logger.log { "Userflow -> $userflowScreens" }
+  log { "Userflow -> $userflowScreens" }
 
   if (userflowScreens.isEmpty()) return@ScopeWorker
 

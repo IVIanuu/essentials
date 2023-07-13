@@ -60,10 +60,9 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.util.toColorOrNull
 import com.ivianuu.essentials.ui.util.toHexString
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
-@Composable fun ColorPickerDialog(
+context(ColorPickerStrings, CommonStrings) @Composable fun ColorPickerDialog(
   modifier: Modifier = Modifier,
   initialColor: Color,
   colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.entries,
@@ -72,9 +71,7 @@ import com.ivianuu.injekt.Provide
   onColorSelected: (Color) -> Unit,
   onCancel: () -> Unit,
   allowCustomArgb: Boolean = true,
-  showAlphaSelector: Boolean = false,
-  @Inject colorPickerStrings: ColorPickerStrings,
-  @Inject commonStrings: CommonStrings
+  showAlphaSelector: Boolean = false
 ) {
   var currentColor by remember { mutableStateOf(initialColor) }
   var currentScreen by remember { mutableStateOf(ColorPickerTab.COLORS) }
@@ -127,11 +124,11 @@ import com.ivianuu.injekt.Provide
             contentColor = currentColor
           )
         ) {
-          Text(otherScreen.title(colorPickerStrings))
+          Text(otherScreen.title(this@ColorPickerStrings))
         }
       }
 
-      TextButton(onClick = onCancel) { Text(commonStrings.cancel) }
+      TextButton(onClick = onCancel) { Text(cancel) }
 
       TextButton(
         onClick = { onColorSelected(currentColor) },
@@ -139,7 +136,7 @@ import com.ivianuu.injekt.Provide
           contentColor = currentColor
         )
       ) {
-        Text(commonStrings.ok)
+        Text(ok)
       }
     }
   )
@@ -453,7 +450,7 @@ private enum class ColorComponent(
   abstract fun apply(color: Color, value: Float): Color
 }
 
-private enum class ColorPickerTab(val title: ColorPickerStrings.() -> String) {
+private enum class ColorPickerTab(val title: context(ColorPickerStrings) () -> String) {
   COLORS({ ColorsTabTitle }), EDITOR({ EditorTabTitle })
 }
 

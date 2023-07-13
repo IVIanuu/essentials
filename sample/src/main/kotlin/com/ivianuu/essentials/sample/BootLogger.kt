@@ -9,4 +9,4 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
-@Provide fun bootLogger(logger: Logger) = BootListener { logger.log { "booted!" } }
+context(Logger) @Provide fun bootLogger() = BootListener { log { "booted!" } }

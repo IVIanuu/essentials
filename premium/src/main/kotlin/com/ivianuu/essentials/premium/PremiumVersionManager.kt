@@ -50,11 +50,10 @@ interface PremiumVersionManager {
   suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
 }
 
-@Provide @Eager<AppScope> class PremiumVersionManagerImpl(
+context(Logger) @Provide @Eager<AppScope> class PremiumVersionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val billingService: BillingService,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
-  private val logger: Logger,
   private val pref: DataStore<PremiumVersionPrefs>,
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
@@ -76,7 +75,7 @@ interface PremiumVersionManager {
     .onEach { isPremiumVersion ->
       scope.launch {
         if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
-          logger.log { "handle premium version downgrade" }
+          log { "handle premium version downgrade" }
           downgradeHandlers().parForEach { it() }
         }
         pref.updateData {
@@ -95,7 +94,7 @@ interface PremiumVersionManager {
     if (isPremiumVersion.first()) return block()
 
     scope.launch {
-      toaster(com.ivianuu.essentials.premium.R.string.es_premium_version_hint)
+      toaster.toast(com.ivianuu.essentials.premium.R.string.es_premium_version_hint)
       if (!screenUnlocker()) return@launch
       appUiStarter()
         .cast<UiScopeOwner>()

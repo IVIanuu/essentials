@@ -12,15 +12,17 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.context
+import com.ivianuu.injekt.provide
 
-class SingleChoiceListScreen<T : Any>(
+context(UiRenderer<T>) class SingleChoiceListScreen<T : Any>(
   val items: List<T>,
   val selectedItem: T,
-  val title: String? = null,
-  @Inject val renderable: UiRenderer<T>
-) : DialogScreen<T>
+  val title: String? = null
+) : DialogScreen<T> {
+  val renderer = context<UiRenderer<T>>()
+}
 
 @Provide fun singleChoiceListUi(
   commonStrings: CommonStrings,
@@ -32,7 +34,7 @@ class SingleChoiceListScreen<T : Any>(
       items = key.items,
       selectedItem = key.selectedItem,
       onSelectionChanged = action { item -> navigator.pop(key, item) },
-      item = { Text(key.renderable(it)) },
+      item = { key.renderer.provide { Text(it.render()) } },
       title = key.title?.let { { Text(it) } },
       buttons = {
         TextButton(onClick = action { navigator.pop(key, null) }) {

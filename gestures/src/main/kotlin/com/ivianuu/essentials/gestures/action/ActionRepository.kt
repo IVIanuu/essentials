@@ -37,7 +37,7 @@ interface ActionRepository {
   suspend fun executeAction(id: String): Boolean
 }
 
-@Provide class ActionRepositoryImpl(
+context(Logger) @Provide class ActionRepositoryImpl(
   private val actions: () -> Map<String, () -> Action<*>>,
   private val actionFactories: () -> List<() -> ActionFactory>,
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>>,
@@ -45,7 +45,6 @@ interface ActionRepository {
   private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
   private val closeSystemDialogs: CloseSystemDialogsUseCase,
   private val coroutineContexts: CoroutineContexts,
-  private val logger: Logger,
   private val permissionManager: PermissionManager,
   private val screenActivator: ScreenActivator,
   private val screenUnlocker: ScreenUnlocker,
@@ -66,7 +65,7 @@ interface ActionRepository {
         ?.createAction(id)
       ?: Action(
         id = "error",
-        title = resources(R.string.es_error_action),
+        title = resources.resource(R.string.es_error_action),
         icon = staticActionIcon(R.drawable.es_ic_error)
       )
   }
@@ -80,7 +79,7 @@ interface ActionRepository {
         .firstOrNull { it.handles(id) }
         ?.createExecutor(id)
       ?: ActionExecutor {
-        toaster(R.string.es_error_action)
+        toaster.toast(R.string.es_error_action)
       }
   }
 
@@ -93,25 +92,25 @@ interface ActionRepository {
   override suspend fun executeAction(id: String): Boolean =
     withContext(coroutineContexts.computation) {
       catch {
-        logger.log { "execute $id" }
+        log { "execute $id" }
         val action = getAction(id)
 
         // check permissions
         if (!permissionManager.permissionState(action.permissions).first()) {
-          logger.log { "didn't had permissions for $id ${action.permissions}" }
+          log { "didn't had permissions for $id ${action.permissions}" }
           screenUnlocker()
           permissionManager.requestPermissions(action.permissions)
           return@catch false
         }
 
         if (action.turnScreenOn && !screenActivator()) {
-          logger.log { "couldn't turn screen on for $id" }
+          log { "couldn't turn screen on for $id" }
           return@catch false
         }
 
         // unlock screen
         if (action.unlockScreen && !screenUnlocker()) {
-          logger.log { "couldn't unlock screen for $id" }
+          log { "couldn't unlock screen for $id" }
           return@catch false
         }
 
@@ -119,14 +118,14 @@ interface ActionRepository {
         if (action.closeSystemDialogs)
           closeSystemDialogs()
 
-        logger.log { "fire $id" }
+        log { "fire $id" }
 
         // fire
         getActionExecutor(id)()
         return@catch true
       }.onFailure {
         it.printStackTrace()
-        toaster(R.string.es_action_execution_failed, id)
+        toaster.toast(resources.resourceWith<String>(R.string.es_action_execution_failed, id))
       }.getOrElse { false }
     }
 }

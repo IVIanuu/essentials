@@ -21,7 +21,7 @@ buildscript {
   dependencies {
     classpath(Deps.androidGradlePlugin)
     classpath(Deps.dokkaGradlePlugin)
-    classpath(Deps.essentialsGradlePlugin)
+    classpath(Deps.Essentials.gradlePlugin)
     classpath(Deps.Kotlin.gradlePlugin)
     classpath(Deps.mavenPublishGradlePlugin)
     classpath(Deps.shadowGradlePlugin)
@@ -46,10 +46,10 @@ allprojects {
     }
   }
 
-  configurations.forEach {
-    it.resolutionStrategy.dependencySubstitution {
-      substitute(module("com.ivianuu.essentials:ksp")).using(project(":ksp"))
-      substitute(module("com.ivianuu.essentials:compiler")).using(project(":compiler"))
+  configurations.configureEach {
+    resolutionStrategy.dependencySubstitution {
+      substitute(module("com.ivianuu.essentials:ksp:${Deps.Essentials.version}")).using(project(":ksp"))
+      substitute(module("com.ivianuu.essentials:compiler:${Deps.Essentials.version}")).using(project(":compiler"))
     }
   }
 }

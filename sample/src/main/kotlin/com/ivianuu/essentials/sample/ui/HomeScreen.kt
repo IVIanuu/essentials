@@ -51,7 +51,7 @@ import com.ivianuu.injekt.Provide
         actions = {
           PopupMenuButton {
             listOf("Option 1", "Option 2", "Option 3").forEach { title ->
-              PopupMenuItem(onSelected = { toaster("Selected $title") }) {
+              PopupMenuItem(onSelected = { toaster.toast("Selected $title") }) {
                 Text(title)
               }
             }

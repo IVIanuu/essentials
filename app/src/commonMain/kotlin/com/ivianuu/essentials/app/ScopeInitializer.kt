@@ -12,6 +12,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.provide
 
 interface ScopeInitializer<N> : () -> Unit, ExtensionPoint<ScopeInitializer<N>>
 
@@ -30,7 +31,9 @@ interface ScopeInitializer<N> : () -> Unit, ExtensionPoint<ScopeInitializer<N>>
     initializers(scope.cast())
       .sortedWithLoadingOrder()
       .forEach {
-        logger(scope.cast()).log { "${nameKey().value} initialize ${it.key.value}" }
+        provide(logger(scope.cast())) {
+          log { "${nameKey().value} initialize ${it.key.value}" }
+        }
         it.instance()
       }
     workerRunner(scope.cast())()

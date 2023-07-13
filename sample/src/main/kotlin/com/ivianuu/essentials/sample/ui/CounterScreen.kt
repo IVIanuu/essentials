@@ -55,7 +55,7 @@ data class CounterModel(val count: Int, val inc: () -> Unit, val dec: () -> Unit
     inc = action { count++ },
     dec = action {
       if (count > 0) count--
-      else toaster("Value cannot be less than 0!")
+      else toaster.toast("Value cannot be less than 0!")
     }
   )
 }

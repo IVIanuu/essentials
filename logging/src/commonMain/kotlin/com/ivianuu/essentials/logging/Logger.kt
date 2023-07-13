@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.logging
 
 import com.ivianuu.essentials.logging.Logger.Priority.DEBUG
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.SourceKey
 
@@ -17,13 +16,12 @@ interface Logger {
   enum class Priority { VERBOSE, DEBUG, INFO, WARN, ERROR, WTF }
 }
 
-inline fun Logger.log(
+context(Logger, LoggingTag) inline fun log(
   priority: Logger.Priority = DEBUG,
-  @Inject tag: LoggingTag,
   message: () -> String
 ) {
   if (isLoggingEnabled.value)
-    logMessage(priority, tag.value, message())
+    logMessage(priority, loggingTag, message())
 }
 
 expect fun Throwable.asLog(): String
@@ -42,10 +40,10 @@ object NoopLogger : Logger {
   }
 }
 
-inline class LoggingTag(val value: String) {
-  companion object {
+@JvmInline value class LoggingTag(val loggingTag: String) {
+  @Provide companion object {
     @Provide inline fun loggingTag(sourceKey: SourceKey) = LoggingTag(sourceKey.value)
   }
 }
 
-inline class LoggingEnabled(val value: Boolean)
+@JvmInline value class LoggingEnabled(val value: Boolean)

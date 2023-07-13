@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.first
 
 @Provide fun notificationsAction(resources: Resources) = Action(
   id = NotificationsActionId,
-  title = resources(R.string.es_action_notifications),
+  title = resources.resource(R.string.es_action_notifications),
   permissions = accessibilityActionPermissions,
   icon = staticActionIcon(Icons.Default.Notifications)
 )
