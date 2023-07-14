@@ -21,7 +21,7 @@ data class TileModel<out T : AbstractEsTileService<*>>(
   enum class Status { UNAVAILABLE, ACTIVE, INACTIVE }
 }
 
-object TileModelModule {
+@Provide object TileModelModule {
   @Provide fun <@Spread T : Model<TileModel<S>>, S : AbstractEsTileService<*>> tileModels(
     serviceClass: KClass<S>,
     model: () -> T

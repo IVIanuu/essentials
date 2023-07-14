@@ -146,7 +146,7 @@ import kotlin.reflect.KClass
   val screenScopeFactory: (@Service<ScreenScope> Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>,
   val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen
 ) {
-  companion object {
+  @Provide companion object {
     @Provide inline fun rootNavigationScreenContextComponent(
       crossinline componentFactory: () -> ScreenContextComponent<RootNavGraph>
     ) = object : ProvidedService<UiScope, ScreenContextComponent<RootNavGraph>> {

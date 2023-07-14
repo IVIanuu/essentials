@@ -81,7 +81,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
     return super.onUnbind(intent)
   }
 
-  companion object {
+  @Provide companion object {
     @Provide val accessibilityServiceRef = MutableStateFlow<EsAccessibilityService?>(null)
   }
 }

@@ -134,8 +134,8 @@ sealed interface ActionPickerItem {
 @Provide fun actionPickerModel(
   navigator: Navigator,
   permissionManager: PermissionManager,
-  repository: ActionRepository,
-  resources: Resources,
+  @Inject repository: ActionRepository,
+  @Inject resources: Resources,
   screen: ActionPickerScreen
 ) = Model {
   ActionPickerModel(

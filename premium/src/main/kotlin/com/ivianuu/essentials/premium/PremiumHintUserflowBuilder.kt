@@ -11,7 +11,7 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 
 @JvmInline value class AppStartPremiumHintEnabled(val value: Boolean) {
-  companion object {
+  @Provide companion object {
     @Provide val default get() = AppStartPremiumHintEnabled(true)
   }
 }

@@ -18,7 +18,7 @@ import kotlin.coroutines.CoroutineContext
 typealias ScopedCoroutineScope<N> = @ScopedCoroutineScopeTag<N> CoroutineScope
 
 @Tag annotation class ScopedCoroutineScopeTag<N> {
-  companion object {
+  @Provide companion object {
     @Provide fun <N> scope(
       context: ScopeCoroutineContext<N>
     ): @Scoped<N> ScopedCoroutineScope<N> = object : CoroutineScope, ScopeObserver {
@@ -36,7 +36,7 @@ typealias ScopedCoroutineScope<N> = @ScopedCoroutineScopeTag<N> CoroutineScope
 typealias ScopeCoroutineContext<N> = @ScopeCoroutineContextTag<N> CoroutineContext
 
 @Tag annotation class ScopeCoroutineContextTag<N> {
-  companion object {
+  @Provide companion object {
     @Provide inline fun <N> context(contexts: CoroutineContexts): ScopeCoroutineContext<N> =
       contexts.main
   }

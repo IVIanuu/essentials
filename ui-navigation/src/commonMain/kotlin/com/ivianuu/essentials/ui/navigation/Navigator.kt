@@ -133,7 +133,7 @@ class NavigatorImpl(
     }
   }
 
-  companion object {
+  @Provide companion object {
     @Provide fun rootNavigator(
       rootScreen: RootScreen?,
       screenInterceptors: List<ScreenInterceptor<*>>,

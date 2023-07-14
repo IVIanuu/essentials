@@ -11,7 +11,7 @@ interface Lerper<T> {
   fun lerp(start: T, stop: T, fraction: Float): T
   fun unlerp(start: T, stop: T, value: T): Float
 
-  companion object {
+  @Provide companion object {
     inline operator fun <T> invoke(
       crossinline lerp: (T, T, Float) -> T,
       crossinline unlerp: (T, T, T) -> Float

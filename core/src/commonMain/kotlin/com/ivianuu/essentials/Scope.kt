@@ -101,7 +101,7 @@ interface Scope<N> : Disposable {
     check(!_isDisposed) { "Cannot use a disposed scope" }
   }
 
-  companion object {
+  @Provide companion object {
     @PublishedApi internal val NULL = Any()
   }
 }
@@ -111,7 +111,7 @@ interface ProvidedService<N, T> {
 
   fun get(scope: Scope<N>): T
 
-  companion object {
+  @Provide companion object {
     @Provide fun <N> defaultServices() = emptyList<ProvidedService<N, *>>()
 
     inline operator fun <N, T> invoke(
@@ -135,7 +135,7 @@ interface ScopeObserver {
 }
 
 @Tag annotation class Scoped<N> {
-  companion object {
+  @Provide companion object {
     @Provide inline fun <@Spread T : @Scoped<N> S, S : Any, N> scoped(
       crossinline init: () -> T,
       scope: Scope<N>,
@@ -145,9 +145,9 @@ interface ScopeObserver {
 }
 
 @Tag annotation class Service<N> {
-  companion object {
+  @Provide companion object {
     @Provide inline fun <@Spread T : @Service<N> S, S : Any, N> service(
-      key: TypeKey<S>,
+      @Inject key: TypeKey<S>,
       crossinline factory: () -> T
     ) = ProvidedService<N, S>(factory = factory)
 
@@ -158,7 +158,7 @@ interface ScopeObserver {
 @Tag annotation class ParentScope
 
 @Tag annotation class Eager<N> {
-  companion object {
+  @Provide companion object {
     @Provide fun <@Spread T : @Eager<N> S, S : Any, N> scoped(value: T): @Scoped<N> S = value
 
     @Provide inline fun <@Spread T : @Eager<N> S, S : Any, N> service(

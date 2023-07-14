@@ -28,7 +28,7 @@ import kotlin.reflect.KClass
 }
 
 @Tag annotation class InjektSerializer {
-  companion object {
+  @Provide companion object {
     @Provide val defaultSerializers get() = emptyList<Pair<KClass<*>, KSerializer<*>>>()
 
     @Provide fun <@Spread T : @InjektSerializer KSerializer<S>, S : Any> serializerBinding(

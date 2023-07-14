@@ -35,7 +35,7 @@ import com.ivianuu.injekt.Provide
 fun interface ResourceLoaderWithArgs<out T> {
   operator fun invoke(context: Context, id: Int, vararg args: Any?): T
 
-  companion object {
+  @Provide companion object {
     @Provide val string =
       ResourceLoaderWithArgs { context, id, args -> context.getString(id, *args) }
   }
@@ -44,7 +44,7 @@ fun interface ResourceLoaderWithArgs<out T> {
 fun interface ResourceLoader<out T> {
   operator fun invoke(context: Context, id: Int): T
 
-  companion object {
+  @Provide companion object {
     @Provide val bitmap = ResourceLoader { context, id -> context.getDrawable(id)!!.toBitmap() }
     @Provide val boolean = ResourceLoader { context, id -> context.resources.getBoolean(id) }
     @Provide val color = ResourceLoader { context, id -> Color(context.getColor(id)) }

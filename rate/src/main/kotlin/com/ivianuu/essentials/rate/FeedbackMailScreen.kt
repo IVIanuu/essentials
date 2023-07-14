@@ -30,7 +30,7 @@ object FeedbackMailScreen : IntentScreen
 }
 
 @JvmInline value class DeveloperEmail(val value: String) {
-  companion object {
+  @Provide companion object {
     @Provide val defaultDeveloperEmail = DeveloperEmail("ivianuu@gmail.com")
   }
 }

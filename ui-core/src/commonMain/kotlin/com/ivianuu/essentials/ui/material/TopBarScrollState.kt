@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import com.ivianuu.injekt.Provide
 
 @Composable fun rememberTopBarScrollState(): TopBarScrollState =
   rememberSaveable(saver = TopBarScrollState.Saver) { TopBarScrollState() }
@@ -51,7 +52,7 @@ class TopBarScrollState(
     return Offset.Zero
   }
 
-  companion object {
+  @Provide companion object {
     val Saver: Saver<TopBarScrollState, *> = listSaver(
       save = { listOf(it.maxHeightOffset, it.heightOffset) },
       restore = { TopBarScrollState(it[0], it[1]) }

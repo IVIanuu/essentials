@@ -28,7 +28,7 @@ data class AppColors(
   val primary: Color,
   val secondary: Color
 ) {
-  companion object {
+  @Provide companion object {
     @Provide val default: AppColors
       get() = AppColors(primary = Color(0xFF6200EE), secondary = Color(0xFF03DAC6))
   }
@@ -41,7 +41,7 @@ typealias AppFont = @AppFontTag FontFamily
 typealias AppTypography = @AppTypographyTag Typography
 
 @Tag annotation class AppTypographyTag {
-  companion object {
+  @Provide companion object {
     @Provide fun default(font: AppFont? = null): AppTypography = Typography(
       h1 = TextStyle(
         fontSize = 57.sp,
@@ -127,7 +127,7 @@ typealias AppTypography = @AppTypographyTag Typography
 typealias AppShapes = @AppShapesTag Shapes
 
 @Tag annotation class AppShapesTag {
-  companion object {
+  @Provide companion object {
     @Provide val default: AppShapes
       get() = Shapes(
         small = RoundedCornerShape(12.dp),
@@ -140,7 +140,7 @@ typealias AppShapes = @AppShapesTag Shapes
 typealias AppScreenTransitionSpec = @AppTransitionScreenSpecTag ElementTransitionSpec<Screen<*>>
 
 @Tag annotation class AppTransitionScreenSpecTag {
-  companion object {
+  @Provide companion object {
     @Provide val default: AppScreenTransitionSpec
       get() = {
         fadeUpwards()

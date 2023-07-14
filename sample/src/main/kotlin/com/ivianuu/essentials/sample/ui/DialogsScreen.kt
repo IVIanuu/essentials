@@ -50,7 +50,7 @@ import com.ivianuu.injekt.Provide
 
 class DialogsScreen : Screen<Unit>
 
-@Provide fun dialogsUi(navigator: Navigator) = Ui<DialogsScreen, Unit> {
+@Provide fun dialogsUi(@Inject navigator: Navigator) = Ui<DialogsScreen, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Dialogs") }) }
   ) {

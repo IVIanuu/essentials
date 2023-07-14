@@ -107,7 +107,7 @@ interface WorkManager {
     }
 }
 
-object WorkModule {
+@Provide object WorkModule {
   @Provide fun <@Spread I : WorkId> worker(
     id: I,
     worker: () -> Worker<I>,

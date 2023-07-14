@@ -18,7 +18,7 @@ data class AppConfig(
   val deviceModel: String,
   val deviceManufacturer: String
 ) {
-  companion object {
+  @Provide companion object {
     @Provide fun androidAppConfig(appContext: AppContext): @Scoped<AppScope> AppConfig {
       val appInfo = appContext.applicationInfo
       val packageInfo = appContext.packageManager

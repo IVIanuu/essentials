@@ -20,7 +20,7 @@ abstract class SystemOverlayPermission(
   override val desc: String? = null,
   override val icon: Permission.Icon? = null
 ) : Permission {
-  companion object {
+  @Provide companion object {
     @Provide fun <P : SystemOverlayPermission> stateProvider(
       context: AppContext
     ) = PermissionStateProvider<P> { Settings.canDrawOverlays(context) }

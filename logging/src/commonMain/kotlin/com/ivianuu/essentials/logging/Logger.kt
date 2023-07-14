@@ -42,10 +42,10 @@ object NoopLogger : Logger {
   }
 }
 
-inline class LoggingTag(val value: String) {
-  companion object {
+@JvmInline value class LoggingTag(val value: String) {
+  @Provide companion object {
     @Provide inline fun loggingTag(sourceKey: SourceKey) = LoggingTag(sourceKey.value)
   }
 }
 
-inline class LoggingEnabled(val value: Boolean)
+@JvmInline value class LoggingEnabled(val value: Boolean)

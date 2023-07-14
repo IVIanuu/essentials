@@ -7,15 +7,15 @@ package com.ivianuu.essentials.xposed
 import com.ivianuu.injekt.Provide
 
 @JvmInline value class IsXposedRunning(val value: Boolean) {
-  companion object {
+  @Provide companion object {
     @Provide val default get() = IsXposedRunning(isXposedRunning())
   }
 }
 
 private fun isXposedRunning() = false
 
-@Provide fun xposedRunningHooks() = Hooks {
-  if (packageName == modulePackageName)
+@Provide fun xposedRunningHooks() = Hooks { config ->
+  if (config.packageName == config.modulePackageName)
     hookAllMethods(
       "com.ivianuu.essentials.xposed.XposedRunningKt",
       "isXposedRunning"

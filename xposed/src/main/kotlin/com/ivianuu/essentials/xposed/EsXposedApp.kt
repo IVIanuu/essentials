@@ -14,19 +14,13 @@ abstract class EsXposedApp : IXposedHookLoadPackage {
   override fun handleLoadPackage(@Provide lpparam: XC_LoadPackage.LoadPackageParam) {
     xposedScope = buildXposedScope()
     xposedScope.service<XposedHooksComponent>().run {
-      hooks.forEach { hooks ->
-        with(hooks) {
-          with(this@run.config) {
-            invoke()
-          }
-        }
-      }
+      hooks.forEach { it(config) }
     }
   }
 
   protected abstract fun buildXposedScope(@Inject llparam: XC_LoadPackage.LoadPackageParam): Scope<XposedScope>
 
-  companion object {
+  @Provide companion object {
     private lateinit var xposedScope: Scope<XposedScope>
   }
 }

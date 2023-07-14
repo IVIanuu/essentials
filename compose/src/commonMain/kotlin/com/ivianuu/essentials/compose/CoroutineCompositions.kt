@@ -97,6 +97,6 @@ private object UnitApplier : AbstractApplier<Unit>(Unit) {
 
 typealias StateCoroutineContext = @StateCoroutineContextTag CoroutineContext
 
-expect object StateCoroutineContextModule {
+@Provide expect object StateCoroutineContextModule {
   @Provide val context: StateCoroutineContext
 }

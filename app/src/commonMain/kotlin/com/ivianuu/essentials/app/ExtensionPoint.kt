@@ -16,7 +16,7 @@ data class ExtensionPointRecord<T : ExtensionPoint<*>>(
   val instance: T,
   val loadingOrder: LoadingOrder<T>
 ) {
-  companion object {
+  @Provide companion object {
     @Provide val loadingOrderDescriptor = object : LoadingOrder.Descriptor<ExtensionPointRecord<*>> {
       override fun key(x: ExtensionPointRecord<*>): TypeKey<*> = x.key
       override fun loadingOrder(x: ExtensionPointRecord<*>): LoadingOrder<*> = x.loadingOrder

@@ -66,7 +66,7 @@ interface ActionPickerDelegate {
   suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result?
 }
 
-object ActionModule {
+@Provide object ActionModule {
   @Provide fun <@Spread T : Action<I>, I : ActionId> actionBinding(
     id: I,
     provider: () -> T,

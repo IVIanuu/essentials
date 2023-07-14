@@ -159,7 +159,7 @@ data class UiNotification(
 )
 
 @Provide fun notificationsModel(
-  appContext: AppContext,
+  @Inject appContext: AppContext,
   permissionManager: PermissionManager,
   service: NotificationService
 ) = Model {

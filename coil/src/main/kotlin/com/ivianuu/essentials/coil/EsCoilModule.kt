@@ -17,7 +17,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import kotlin.reflect.KClass
 
-object EsCoilModule {
+@Provide object EsCoilModule {
   @Provide fun imageLoader(
     appContext: AppContext,
     decoderFactories: List<Decoder.Factory>,

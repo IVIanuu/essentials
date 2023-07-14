@@ -46,8 +46,8 @@ allprojects {
     }
   }
 
-  configurations.forEach {
-    it.resolutionStrategy.dependencySubstitution {
+  configurations.configureEach {
+    resolutionStrategy.dependencySubstitution {
       substitute(module("com.ivianuu.essentials:ksp")).using(project(":ksp"))
       substitute(module("com.ivianuu.essentials:compiler")).using(project(":compiler"))
     }

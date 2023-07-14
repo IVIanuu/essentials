@@ -23,7 +23,7 @@ abstract class AccessibilityServicePermission(
   override val desc: String? = null,
   override val icon: Permission.Icon? = null
 ) : Permission {
-  companion object {
+  @Provide companion object {
     @Provide fun <P : AccessibilityServicePermission> stateProvider(
       appContext: AppContext
     ) = PermissionStateProvider<P> provider@{

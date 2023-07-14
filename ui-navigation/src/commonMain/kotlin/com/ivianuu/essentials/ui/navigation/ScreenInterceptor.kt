@@ -9,7 +9,7 @@ import com.ivianuu.injekt.Provide
 fun interface ScreenInterceptor<R> {
   suspend operator fun invoke(screen: Screen<R>): (suspend () -> R?)?
 
-  companion object {
+  @Provide companion object {
     @Provide val defaultScreenInterceptors get() = emptyList<ScreenInterceptor<*>>()
   }
 }

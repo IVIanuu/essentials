@@ -10,7 +10,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import kotlin.reflect.KClass
 
-object ScreenModule {
+@Provide object ScreenModule {
   @Provide fun <@Spread T : Ui<S, *>, S : Screen<*>> rootNavGraphUiFactory(
     screenClass: KClass<S>,
     uiFactory: UiFactory<S>

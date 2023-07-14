@@ -21,7 +21,7 @@ abstract class IgnoreBatteryOptimizationsPermission(
   override val desc: String? = null,
   override val icon: Permission.Icon? = null
 ) : Permission {
-  companion object {
+  @Provide companion object {
     @Provide fun <P : IgnoreBatteryOptimizationsPermission> stateProvider(
       appConfig: AppConfig,
       powerManager: @SystemService PowerManager

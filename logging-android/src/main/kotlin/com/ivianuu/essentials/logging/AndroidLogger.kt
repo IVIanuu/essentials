@@ -18,9 +18,7 @@ import com.ivianuu.essentials.logging.Logger.Priority.WTF
 import com.ivianuu.injekt.Provide
 import kotlin.math.min
 
-@Provide class AndroidLogger(
-  override val isLoggingEnabled: LoggingEnabled
-) : Logger {
+@Provide class AndroidLogger(override val isLoggingEnabled: LoggingEnabled) : Logger {
   override fun logMessage(priority: Priority, tag: String, message: String) {
     var i = 0
     val length = message.length
@@ -30,25 +28,21 @@ import kotlin.math.min
       do {
         val end = min(newline, i + MAX_LOG_LENGTH)
         val part = message.substring(i, end)
-        logToLogcat(priority, tag, part)
+        when (priority) {
+          VERBOSE -> Log.v(tag, part)
+          DEBUG -> Log.d(tag, part)
+          INFO -> Log.i(tag, part)
+          WARN -> Log.w(tag, part)
+          ERROR -> Log.e(tag, part)
+          WTF -> Log.wtf(tag, part)
+        }
         i = end
       } while (i < newline)
       i++
     }
   }
 
-  private fun logToLogcat(priority: Priority, tag: String, part: String) {
-    when (priority) {
-      VERBOSE -> Log.v(tag, part)
-      DEBUG -> Log.d(tag, part)
-      INFO -> Log.i(tag, part)
-      WARN -> Log.w(tag, part)
-      ERROR -> Log.e(tag, part)
-      WTF -> Log.wtf(tag, part)
-    }
-  }
-
-  companion object {
+  @Provide companion object {
     private const val MAX_LOG_LENGTH = 4000
 
     @Provide inline fun androidLogger(

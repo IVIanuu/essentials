@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 ) {
   enum class FeedbackState { COMPLETED, LATER, NEVER }
 
-  companion object {
+  @Provide companion object {
     @Provide val dataStoreModule = DataStoreModule("rate_prefs") { RatePrefs() }
   }
 }

@@ -19,7 +19,7 @@ abstract class WriteSettingsPermission(
   override val desc: String? = null,
   override val icon: Permission.Icon? = null
 ) : Permission {
-  companion object {
+  @Provide companion object {
     @Provide fun <P : WriteSettingsPermission> stateProvider(
       appContext: AppContext
     ) = PermissionStateProvider<P> { Settings.System.canWrite(appContext) }

@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 
 @JvmInline value class IsFirstRun(val value: Boolean) {
-  companion object {
+  @Provide companion object {
     private val isFirstRun = CompletableDeferred<IsFirstRun>()
 
     @Provide fun isFirstRun(pref: DataStore<FirstRunPrefs>): suspend () -> IsFirstRun = {
@@ -31,7 +31,7 @@ import kotlinx.serialization.Serializable
 fun interface FirstRunHandler {
   suspend operator fun invoke()
 
-  companion object {
+  @Provide companion object {
     @Provide val defaultHandlers get() = emptyList<FirstRunHandler>()
   }
 }
@@ -52,7 +52,7 @@ fun interface FirstRunHandler {
 }
 
 @Serializable data class FirstRunPrefs(val isFirstRun: Boolean = true) {
-  companion object {
+  @Provide companion object {
     @Provide val dataStoreModule = DataStoreModule("first_run_prefs") { FirstRunPrefs() }
   }
 }

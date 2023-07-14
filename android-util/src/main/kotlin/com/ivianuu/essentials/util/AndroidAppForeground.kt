@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 @Tag annotation class ForegroundActivityTag {
-  companion object {
+  @Provide companion object {
     @Provide val foregroundActivityState = MutableStateFlow<ForegroundActivity>(null)
   }
 }

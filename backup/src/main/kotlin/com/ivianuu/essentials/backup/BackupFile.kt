@@ -11,7 +11,7 @@ import com.ivianuu.injekt.Tag
 import java.io.File
 
 @Tag annotation class BackupFileTag {
-  companion object {
+  @Provide companion object {
     @Provide fun backupPrefs(prefsDir: PrefsDir): BackupFile = prefsDir
 
     @Provide fun backupDatabases(dataDir: DataDir): BackupFile = dataDir.resolve("databases")
@@ -22,7 +22,7 @@ import java.io.File
 typealias BackupFile = @BackupFileTag File
 
 @Tag annotation class BackupDirTag {
-  companion object {
+  @Provide companion object {
     @Provide fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
   }
 }

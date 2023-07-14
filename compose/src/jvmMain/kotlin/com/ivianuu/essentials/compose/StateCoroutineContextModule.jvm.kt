@@ -4,7 +4,7 @@ import androidx.compose.runtime.MonotonicFrameClock
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.Dispatchers
 
-actual object StateCoroutineContextModule {
+@Provide actual object StateCoroutineContextModule {
   @Provide actual val context: StateCoroutineContext by lazy {
     Dispatchers.Main + ImmediateFrameClock
   }

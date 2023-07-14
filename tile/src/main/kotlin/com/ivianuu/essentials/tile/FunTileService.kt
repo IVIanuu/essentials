@@ -21,48 +21,48 @@ import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
 
 @Provide @AndroidComponent class EsTileService1(
-  logger: Logger,
-  tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
+  @Inject logger: Logger,
+  @Inject tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
 ) : AbstractEsTileService<EsTileService1>()
 
 @Provide @AndroidComponent class EsTileService2(
-  logger: Logger,
-  tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
+  @Inject logger: Logger,
+  @Inject tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
 ) : AbstractEsTileService<EsTileService2>()
 
 @Provide @AndroidComponent class EsTileService3(
-  logger: Logger,
-  tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
+  @Inject logger: Logger,
+  @Inject tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
 ) : AbstractEsTileService<EsTileService3>()
 
 @Provide @AndroidComponent class EsTileService4(
-  logger: Logger,
-  tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
+  @Inject logger: Logger,
+  @Inject tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
 ) : AbstractEsTileService<EsTileService4>()
 
 @Provide @AndroidComponent class EsTileService5(
-  logger: Logger,
-  tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
+  @Inject logger: Logger,
+  @Inject tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
 ) : AbstractEsTileService<EsTileService5>()
 
 @Provide @AndroidComponent class EsTileService6(
-  logger: Logger,
-  tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
+  @Inject logger: Logger,
+  @Inject tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
 ) : AbstractEsTileService<EsTileService6>()
 
 @Provide @AndroidComponent class EsTileService7(
-  logger: Logger,
-  tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
+  @Inject logger: Logger,
+  @Inject tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
 ) : AbstractEsTileService<EsTileService7>()
 
 @Provide @AndroidComponent class EsTileService8(
-  logger: Logger,
-  tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
+  @Inject logger: Logger,
+  @Inject tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
 ) : AbstractEsTileService<EsTileService8>()
 
 @Provide @AndroidComponent class EsTileService9(
-  logger: Logger,
-  tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
+  @Inject logger: Logger,
+  @Inject tileScopeFactory: (KClass<AbstractEsTileService<*>>) -> Scope<TileScope>
 ) : AbstractEsTileService<EsTileService9>()
 
 abstract class AbstractEsTileService<T : Any>(

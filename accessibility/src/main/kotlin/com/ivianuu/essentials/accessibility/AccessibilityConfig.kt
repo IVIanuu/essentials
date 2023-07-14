@@ -14,7 +14,7 @@ data class AccessibilityConfig(
   val feedbackType: Int = AccessibilityServiceInfo.FEEDBACK_GENERIC,
   val notificationTimeout: Long = 0L,
 ) {
-  companion object {
+  @Provide companion object {
     @Provide val defaultConfigs get() = emptyList<AccessibilityConfig>()
   }
 }

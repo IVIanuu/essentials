@@ -30,7 +30,7 @@ interface ForegroundManager {
 }
 
 @JvmInline value class ForegroundId(val value: Int) {
-  companion object {
+  @Provide companion object {
     @Provide fun default(sourceKey: SourceKey) = ForegroundId(sourceKey.hashCode())
   }
 }

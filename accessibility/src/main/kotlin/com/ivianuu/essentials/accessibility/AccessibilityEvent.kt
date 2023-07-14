@@ -13,7 +13,7 @@ data class AccessibilityEvent(
   val className: String?,
   val isFullScreen: Boolean,
 ) {
-  companion object {
+  @Provide companion object {
     @Provide val accessibilityEvents = EventFlow<AccessibilityEvent>()
   }
 }

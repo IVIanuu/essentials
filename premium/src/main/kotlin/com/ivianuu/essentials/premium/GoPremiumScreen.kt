@@ -72,7 +72,7 @@ class GoPremiumScreen(
   val showTryBasicOption: Boolean,
   val allowBackNavigation: Boolean = true
 ) : CriticalUserFlowScreen<Boolean> {
-  companion object {
+  @Provide companion object {
     @Provide fun adFeatures() = AdFeatures<GoPremiumScreen>(emptyList())
   }
 }

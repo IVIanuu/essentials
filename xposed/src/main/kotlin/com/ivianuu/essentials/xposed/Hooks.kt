@@ -4,12 +4,13 @@
 
 package com.ivianuu.essentials.xposed
 
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
 fun interface Hooks {
-  operator fun XposedConfig.invoke()
+  operator fun invoke(@Inject config: XposedConfig)
 
-  companion object {
+  @Provide companion object {
     @Provide val defaultHooks get() = emptyList<Hooks>()
   }
 }

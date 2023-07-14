@@ -43,7 +43,7 @@ class DonationScreen : DialogScreen<Unit>
 data class Donation(val sku: Sku, val iconRes: Int)
 
 @JvmInline value class Donations(val value: List<Donation>) {
-  companion object {
+  @Provide companion object {
     @Provide val default
       get() = Donations(
         listOf(

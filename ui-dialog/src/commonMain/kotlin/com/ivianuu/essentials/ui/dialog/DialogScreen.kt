@@ -13,7 +13,7 @@ import com.ivianuu.essentials.ui.navigation.ScreenConfig
 import com.ivianuu.injekt.Provide
 
 interface DialogScreen<T> : OverlayScreen<T> {
-  companion object {
+  @Provide companion object {
     @Provide fun <T : DialogScreen<*>> config() = ScreenConfig<T>(opaque = true) {
       if (isPush) {
         DialogKey entersWith materialFadeIn()

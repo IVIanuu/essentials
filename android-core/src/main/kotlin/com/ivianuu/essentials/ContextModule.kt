@@ -8,7 +8,7 @@ import android.content.ContentResolver
 import android.content.pm.PackageManager
 import com.ivianuu.injekt.Provide
 
-object ContextModule {
+@Provide object ContextModule {
   @Provide inline fun packageManager(appContext: AppContext): PackageManager =
     appContext.packageManager
 

@@ -10,7 +10,7 @@ import com.ivianuu.injekt.Provide
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 
-object JsonModule {
+@Provide object JsonModule {
   @Provide fun json(serializersModule: SerializersModule): @Scoped<AppScope> Json = Json {
     ignoreUnknownKeys = true
     this.serializersModule = serializersModule

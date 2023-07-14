@@ -24,7 +24,7 @@ abstract class NotificationListenerPermission(
   override val desc: String? = null,
   override val icon: Permission.Icon? = null
 ) : Permission {
-  companion object {
+  @Provide companion object {
     @Provide fun <P : NotificationListenerPermission> showFindPermissionHint() =
       ShowFindPermissionHint<P>(true)
 

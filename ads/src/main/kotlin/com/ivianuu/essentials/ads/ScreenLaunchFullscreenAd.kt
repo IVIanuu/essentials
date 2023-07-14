@@ -26,13 +26,13 @@ import kotlinx.serialization.Serializable
 @Provide object ScreenLaunchFullscreenAdFeature : AdFeature
 
 data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4) {
-  companion object {
+  @Provide companion object {
     @Provide val defaultConfig get() = ScreenLaunchFullscreenAdConfig()
   }
 }
 
 @Serializable data class ScreenLaunchPrefs(val screenLaunchCount: Int = 0) {
-  companion object {
+  @Provide companion object {
     @Provide val dataStoreModule = DataStoreModule("screen_launch_prefs") { ScreenLaunchPrefs() }
   }
 }

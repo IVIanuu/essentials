@@ -15,7 +15,7 @@ import com.ivianuu.injekt.Provide
 fun interface BootListener {
   operator fun invoke()
 
-  companion object {
+  @Provide companion object {
     @Provide val defaultListeners get() = emptyList<BootListener>()
   }
 }

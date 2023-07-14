@@ -14,7 +14,7 @@ interface WakeLockManager {
 }
 
 @JvmInline value class WakeLockId(val value: String) {
-  companion object {
+  @Provide companion object {
     @Provide fun default(sourceKey: SourceKey) = WakeLockId(sourceKey.value)
   }
 }

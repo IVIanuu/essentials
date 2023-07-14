@@ -13,6 +13,7 @@ import android.content.ContentProvider
 import android.content.Intent
 import com.ivianuu.essentials.AndroidComponentFactoryComponent
 import com.ivianuu.essentials.cast
+import com.ivianuu.injekt.Provide
 import kotlin.reflect.KClass
 
 class EsAppComponentFactory : AppComponentFactory() {
@@ -52,7 +53,7 @@ class EsAppComponentFactory : AppComponentFactory() {
     factories[ContentProvider::class]?.get(className)?.invoke(null)?.cast()
       ?: super.instantiateProvider(cl, className)
 
-  companion object {
+  @Provide companion object {
     private lateinit var app: EsApp
   }
 }

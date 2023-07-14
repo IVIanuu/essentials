@@ -14,7 +14,7 @@ import com.ivianuu.injekt.Tag
 import kotlin.reflect.KClass
 
 @Tag annotation class AndroidComponent {
-  companion object {
+  @Provide companion object {
     @Provide fun <@Spread T : @AndroidComponent S, S : Activity> activity(
       componentClass: KClass<T>,
       factory: (Intent?) -> T

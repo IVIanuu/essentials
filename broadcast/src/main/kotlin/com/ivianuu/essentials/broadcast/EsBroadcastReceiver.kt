@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 fun interface BroadcastHandler {
   suspend operator fun invoke(intent: Intent)
 
-  companion object {
+  @Provide companion object {
     inline operator fun invoke(
       action: String,
       crossinline handle: suspend (Intent) -> Unit

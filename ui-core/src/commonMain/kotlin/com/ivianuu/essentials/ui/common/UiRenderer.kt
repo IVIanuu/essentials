@@ -10,7 +10,7 @@ import com.ivianuu.injekt.Provide
 @Stable fun interface UiRenderer<T> {
   operator fun invoke(x: T): String
 
-  companion object {
+  @Provide companion object {
     @Provide fun <T : Enum<T>> enum() = UiRenderer<T> { it.name }
     @Provide val string = UiRenderer<String> { it }
   }

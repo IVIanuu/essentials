@@ -207,7 +207,7 @@ class PrefsScreen : Screen<Unit>
   val multiChoice: Set<String> = setOf("A", "B", "C"),
   val singleChoice: String = "C",
 ) {
-  companion object {
+  @Provide companion object {
     @Provide val dataStoreModule = DataStoreModule("sample_prefs") { SamplePrefs() }
   }
 }

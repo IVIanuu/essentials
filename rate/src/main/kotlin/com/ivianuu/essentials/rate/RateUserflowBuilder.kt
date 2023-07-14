@@ -19,10 +19,10 @@ import kotlin.time.Duration.Companion.milliseconds
 fun interface RateUserflowBuilder : UserflowBuilder
 
 @Provide fun rateUserflowBuilder(
-  clock: Clock,
-  logger: Logger,
-  pref: DataStore<RatePrefs>,
-  schedule: RateUiSchedule = RateUiSchedule()
+  @Inject clock: Clock,
+  @Inject logger: Logger,
+  @Inject pref: DataStore<RatePrefs>,
+  @Inject schedule: RateUiSchedule = RateUiSchedule()
 ) = RateUserflowBuilder {
   if (pref.data.first().installTime == 0L) {
     val now = clock()

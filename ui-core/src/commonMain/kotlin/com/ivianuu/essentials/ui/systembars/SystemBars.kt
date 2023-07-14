@@ -51,7 +51,7 @@ import com.ivianuu.injekt.Provide
 }
 
 fun interface RootSystemBarsStyle : AppUiDecorator {
-  companion object {
+  @Provide companion object {
     @Provide val impl = RootSystemBarsStyle { content ->
       Surface(
         modifier = Modifier
@@ -83,7 +83,7 @@ fun interface RootSystemBarsStyle : AppUiDecorator {
 }
 
 fun interface SystemBarManagerProvider : AppUiDecorator {
-  companion object {
+  @Provide companion object {
     @Provide val loadingOrder
       get() = LoadingOrder<SystemBarManagerProvider>()
         .after<WindowInsetsProvider>()

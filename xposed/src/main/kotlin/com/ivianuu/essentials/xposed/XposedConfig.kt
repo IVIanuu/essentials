@@ -15,7 +15,7 @@ data class XposedConfig(
   val appInfo: ApplicationInfo,
   val modulePackageName: String,
 ) {
-  companion object {
+  @Provide companion object {
     @Provide fun default(
       lpparam: XC_LoadPackage.LoadPackageParam,
       modulePackageName: ModulePackageName,

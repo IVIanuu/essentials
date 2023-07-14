@@ -74,7 +74,7 @@ import kotlinx.coroutines.flow.StateFlow
       .getOrElse { emptyList() }
   }
 
-  companion object {
+  @Provide companion object {
     @Provide val notificationListenerRef = MutableStateFlow<EsNotificationListenerService?>(null)
   }
 }

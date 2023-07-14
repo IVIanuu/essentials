@@ -133,7 +133,7 @@ private data class Item(
   val key: TypeKey<*>,
   val loadingOrder: LoadingOrder<Item> = LoadingOrder()
 ) {
-  companion object {
+  @Provide companion object {
     @Provide val descriptor = object : LoadingOrder.Descriptor<Item> {
       override fun key(item: Item) = item.key
       override fun loadingOrder(item: Item) = item.loadingOrder

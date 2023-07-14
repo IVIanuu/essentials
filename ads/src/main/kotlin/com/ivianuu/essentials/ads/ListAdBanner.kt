@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Provide object ListAdBannerFeature : AdFeature
 
 @Tag annotation class ListAdBannerConfigTag {
-  companion object {
+  @Provide companion object {
     @Provide fun final(
       adConfig: ListAdBannerConfig,
       appConfig: AppConfig,

@@ -5,7 +5,7 @@ import com.ivianuu.injekt.Tag
 import kotlin.reflect.KClass
 
 @Tag annotation class SystemService {
-  companion object {
+  @Provide companion object {
     @Provide fun <T : Any> systemService(clazz: KClass<T>, context: AppContext): @SystemService T =
       context.getSystemService(clazz.java)!!
   }

@@ -8,7 +8,7 @@ import com.ivianuu.injekt.Provide
 @Stable interface Model<out S> {
   @Composable operator fun invoke(): S
 
-  companion object {
+  @Provide companion object {
     @Provide fun unit() = Model {
     }
   }

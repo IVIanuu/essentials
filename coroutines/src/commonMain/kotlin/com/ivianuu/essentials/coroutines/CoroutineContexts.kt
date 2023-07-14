@@ -11,7 +11,7 @@ data class CoroutineContexts(
 ) {
   constructor(coroutineContext: CoroutineContext) : this(coroutineContext, coroutineContext, coroutineContext)
 
-  companion object {
+  @Provide companion object {
     @Provide val default = CoroutineContexts(
       main = Dispatchers.Main,
       computation = Dispatchers.Default,

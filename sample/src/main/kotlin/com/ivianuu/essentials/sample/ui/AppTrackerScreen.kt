@@ -41,7 +41,7 @@ class AppTrackerScreen : Screen<Unit>
 @Provide fun appTrackerUi(
   currentApp: Flow<CurrentApp?>,
   foregroundManager: ForegroundManager,
-  notificationFactory: NotificationFactory,
+  @Inject notificationFactory: NotificationFactory,
   permissionManager: PermissionManager,
   scope: ScopedCoroutineScope<ScreenScope>
 ) = Ui<AppTrackerScreen, Unit> {

@@ -18,7 +18,7 @@ import kotlinx.serialization.Serializable
 fun interface AppVersionUpgradeHandler {
   suspend operator fun invoke(lastAppVersion: Int, appVersion: Int)
 
-  companion object {
+  @Provide companion object {
     @Provide val defaultHandlers get() = emptyList<AppVersionUpgradeHandler>()
   }
 }
@@ -41,7 +41,7 @@ fun interface AppVersionUpgradeHandler {
 }
 
 @Serializable data class AppVersionUpgradePrefs(val lastAppVersion: Int = 0) {
-  companion object {
+  @Provide companion object {
     @Provide val dataStoreModule = DataStoreModule("app_version_upgrade") { AppVersionUpgradePrefs() }
   }
 }

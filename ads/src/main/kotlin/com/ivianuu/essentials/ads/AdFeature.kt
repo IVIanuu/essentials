@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
 interface AdFeature
 
 @JvmInline value class AdFeatures<T : Screen<*>>(val value: List<AdFeature>) {
-  companion object {
+  @Provide companion object {
     @Provide fun <T : Screen<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<T> =
       AdFeatures(allFeatures)
 

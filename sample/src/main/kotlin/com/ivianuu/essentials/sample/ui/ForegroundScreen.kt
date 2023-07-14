@@ -33,7 +33,7 @@ class ForegroundScreen : Screen<Unit>
 @SuppressLint("NewApi")
 @Provide fun foregroundUi(
   foregroundManager: ForegroundManager,
-  notificationFactory: NotificationFactory
+  @Inject notificationFactory: NotificationFactory
 ) = Ui<ForegroundScreen, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }

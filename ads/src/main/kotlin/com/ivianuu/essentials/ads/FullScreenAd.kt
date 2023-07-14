@@ -52,7 +52,7 @@ interface FullScreenAdManager {
 }
 
 data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minutes) {
-  companion object {
+  @Provide companion object {
     @Provide fun final(
       adConfig: FullScreenAdConfig,
       appConfig: AppConfig,

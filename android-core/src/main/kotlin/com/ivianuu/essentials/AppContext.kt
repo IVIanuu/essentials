@@ -10,7 +10,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 
 @Tag annotation class AppContextTag {
-  companion object {
+  @Provide companion object {
     @Provide fun appContext(app: Application): AppContext = app
   }
 }

@@ -23,7 +23,7 @@ interface Permission {
   interface Icon {
     @Composable operator fun invoke()
 
-    companion object {
+    @Provide companion object {
       inline operator fun invoke(crossinline icon: @Composable () -> Unit) = object : Icon {
         @Composable override fun invoke() {
           icon()
@@ -33,7 +33,7 @@ interface Permission {
   }
 }
 
-object PermissionModule {
+@Provide object PermissionModule {
   @Provide fun <@Spread T : Permission> permission(
     permissionKey: TypeKey<T>,
     permission: () -> T
@@ -80,7 +80,7 @@ private fun <P : Permission> PermissionRequestHandler<P>.intercept() = Permissio
 interface PermissionRevokeHandler : suspend (List<TypeKey<Permission>>) -> Unit {
   val permissions: List<TypeKey<Permission>>
 
-  companion object {
+  @Provide companion object {
     inline operator fun invoke(
       permissions: List<TypeKey<Permission>>,
       crossinline block: suspend (List<TypeKey<Permission>>) -> Unit

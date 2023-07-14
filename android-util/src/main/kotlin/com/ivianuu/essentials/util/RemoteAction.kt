@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
 interface RemoteAction<I : Any?> {
   suspend operator fun invoke()
 
-  companion object {
+  @Provide companion object {
     @Provide fun <@Spread T : RemoteAction<I>, I : Any?> binding(
       clazz: KClass<T>,
       factory: (I) -> T
@@ -56,7 +56,7 @@ fun <T : RemoteAction<I>, I : Any?> remoteActionOf(
 )
 
 fun interface StartAppRemoteAction : RemoteAction<Any?> {
-  companion object {
+  @Provide companion object {
     @Provide fun impl(appUiStarter: AppUiStarter) = StartAppRemoteAction {
       appUiStarter()
     }

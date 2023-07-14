@@ -17,7 +17,7 @@ abstract class RootPermission(
   override val desc: String? = null,
   override val icon: Permission.Icon? = null
 ) : Permission {
-  companion object {
+  @Provide companion object {
     @Provide fun <P : RootPermission> stateProvider(shell: Shell) =
       PermissionStateProvider<P> { shell.isAvailable() }
 

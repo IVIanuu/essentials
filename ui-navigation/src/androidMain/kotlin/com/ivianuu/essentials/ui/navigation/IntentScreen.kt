@@ -23,7 +23,7 @@ import kotlin.coroutines.resume
 import kotlin.reflect.KClass
 
 interface IntentScreen : Screen<Result<ActivityResult, ActivityNotFoundException>> {
-  companion object {
+  @Provide companion object {
     @Provide fun <@Spread T : ScreenIntentFactory<K>, K : Any> intentFactoryBinding(
       intentFactory: T,
       keyClass: KClass<K>
