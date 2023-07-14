@@ -29,6 +29,7 @@ import com.ivianuu.essentials.util.RemoteAction
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.context
 import com.ivianuu.essentials.util.remoteActionOf
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.json.Json
@@ -42,7 +43,7 @@ interface TorchManager {
 @Provide @Scoped<AppScope> class TorchManagerImpl(
   private val cameraManager: @SystemService CameraManager,
   private val foregroundManager: ForegroundManager,
-  @property:Provide private val json: Json,
+  @Inject private val json: Json,
   private val logger: Logger,
   private val notificationFactory: NotificationFactory,
   private val resources: Resources,
