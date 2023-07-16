@@ -39,7 +39,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
 
 @Provide fun screenLaunchFullScreenObserver(
   adsEnabledFlow: StateFlow<AdsEnabled>,
-  isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
+  @Inject isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAdManager: FullScreenAdManager,
   logger: Logger,
