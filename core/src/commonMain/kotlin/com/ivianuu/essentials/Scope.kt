@@ -137,9 +137,9 @@ interface ScopeObserver {
 @Tag annotation class Scoped<N> {
   @Provide companion object {
     @Provide inline fun <@Spread T : @Scoped<N> S, S : Any, N> scoped(
-      crossinline init: () -> T,
+      key: TypeKey<S>,
       scope: Scope<N>,
-      key: TypeKey<S>
+      crossinline init: () -> T,
     ): S = scope.scoped(key) { init() }
   }
 }
