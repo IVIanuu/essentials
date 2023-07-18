@@ -13,6 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingCommand
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
@@ -26,33 +27,50 @@ fun <T> CoroutineScope.sharedComposition(
   @Inject context: StateCoroutineContext,
   body: @Composable () -> T
 ): @Composable () -> T {
-  val sharedFlow = MutableSharedFlow<T>(1)
+  val shared = sharedComposition<Unit, T>(sharingStarted) { body() }
+  return { shared(Unit) }
+}
 
-  val delegateDispatcher = (coroutineContext + context)[CoroutineDispatcher]
-  val finalDispatcher = object : CoroutineDispatcher() {
-    override fun dispatch(context: CoroutineContext, block: Runnable) =
-      if (sharedFlow.replayCache.isEmpty() || delegateDispatcher == null)
-        block.run()
-      else
-        delegateDispatcher.dispatch(context, block)
-  }
+fun <K, T> CoroutineScope.sharedComposition(
+  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
+  @Inject context: StateCoroutineContext,
+  body: @Composable (K) -> T
+): @Composable (K) -> T {
+  val sharedFlows = mutableMapOf<K, SharedFlow<T>>()
 
-  @Provide val finalContext = context.plus(finalDispatcher)
+  return { key ->
+    val sharedFlow = sharedFlows.getOrPut(key) {
+      val sharedFlow = MutableSharedFlow<T>(1)
 
-  launch(finalContext, CoroutineStart.UNDISPATCHED) {
-    sharingStarted.command(sharedFlow.subscriptionCount)
-      .onStart { emit(SharingCommand.START) }
-      .distinctUntilChanged()
-      .collectLatest { command ->
-        if (command == SharingCommand.START)
-          coroutineScope {
-            launchComposition(
-              emitter = { sharedFlow.tryEmit(it) },
-              body = body
-            )
+      val delegateDispatcher = (coroutineContext + context)[CoroutineDispatcher]
+      val finalDispatcher = object : CoroutineDispatcher() {
+        override fun dispatch(context: CoroutineContext, block: Runnable) =
+          if (sharedFlow.replayCache.isEmpty() || delegateDispatcher == null)
+            block.run()
+          else
+            delegateDispatcher.dispatch(context, block)
+      }
+
+      @Provide val finalContext = context.plus(finalDispatcher)
+
+      launch(finalContext, CoroutineStart.UNDISPATCHED) {
+        sharingStarted.command(sharedFlow.subscriptionCount)
+          .onStart { emit(SharingCommand.START) }
+          .distinctUntilChanged()
+          .collectLatest { command ->
+            if (command == SharingCommand.START)
+              coroutineScope {
+                launchComposition(
+                  emitter = { sharedFlow.tryEmit(it) },
+                  body = body
+                )
+              }
           }
       }
-  }
 
-  return { sharedFlow.collectAsState(sharedFlow.replayCache.single()).value }
+      sharedFlow
+    }
+
+    sharedFlow.collectAsState(sharedFlow.replayCache.single()).value
+  }
 }
