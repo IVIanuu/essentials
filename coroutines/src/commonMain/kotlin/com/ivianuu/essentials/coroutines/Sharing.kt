@@ -113,22 +113,13 @@ fun <K, T> CoroutineScope.sharedResource(
 }
 
 suspend fun <K, T, R> (suspend (K) -> Releasable<T>).use(key: K, block: suspend (T) -> R): R =
-  bracket(
-    acquire = { invoke(key) },
-    use = { block(it.value) },
-    release = { (_, release), _ -> release() }
-  )
+  invoke(key).use(block)
 
 suspend fun <T, R> (suspend () -> Releasable<T>).use(block: suspend (T) -> R): R =
-  bracket(
-    acquire = { invoke() },
-    use = { block(it.value) },
-    release = { (_, release), _ -> release() }
-  )
+  invoke().use(block)
 
 suspend fun <T, R> Releasable<T>.use(block: suspend (T) -> R): R =
-  bracket(
-    acquire = { this },
-    use = { block(it.value) },
-    release = { (_, release), _ -> release() }
+  guarantee(
+    block = { block(value) },
+    finalizer = { release() }
   )
