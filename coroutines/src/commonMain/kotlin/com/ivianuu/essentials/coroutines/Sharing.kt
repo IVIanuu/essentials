@@ -19,6 +19,12 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.coroutines.resume
 
+fun <T> CoroutineScope.sharedFlow(
+  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
+  replay: Int = 0,
+  block: suspend FlowCollector<T>.() -> Unit
+): SharedFlow<T> = flow { block() }.shareIn(this, sharingStarted, replay)
+
 fun <K, T> CoroutineScope.sharedFlow(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   replay: Int = 0,
@@ -31,18 +37,16 @@ fun <K, T> CoroutineScope.sharedFlow(
       emitAll(
         mutex.withLock {
           map.getOrPut(key) {
-            flow { block(this, key) }
-              .shareIn(
-                this@sharedFlow,
-                { subs ->
-                  sharingStarted.command(subs)
-                    .onEach {
-                      if (it == SharingCommand.STOP_AND_RESET_REPLAY_CACHE)
-                        mutex.withLock { map.remove(key) }
-                    }
-                },
-                replay
-              )
+            sharedFlow<T>(
+              { subs ->
+                sharingStarted.command(subs)
+                  .onEach {
+                    if (it == SharingCommand.STOP_AND_RESET_REPLAY_CACHE)
+                      mutex.withLock { map.remove(key) }
+                  }
+              },
+              replay
+            ) { block(this, key) }
           }
         }
       )
