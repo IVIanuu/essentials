@@ -6,12 +6,10 @@ import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingCommand
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -37,16 +35,7 @@ fun <K, T> CoroutineScope.sharedFlow(
       emitAll(
         mutex.withLock {
           map.getOrPut(key) {
-            sharedFlow<T>(
-              { subs ->
-                sharingStarted.command(subs)
-                  .onEach {
-                    if (it == SharingCommand.STOP_AND_RESET_REPLAY_CACHE)
-                      mutex.withLock { map.remove(key) }
-                  }
-              },
-              replay
-            ) { block(this, key) }
+            sharedFlow<T>(sharingStarted, replay) { block(this, key) }
           }
         }
       )
