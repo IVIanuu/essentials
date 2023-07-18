@@ -20,7 +20,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlin.coroutines.resume
 
 fun <K, T> CoroutineScope.sharedFlow(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(),
+  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   replay: Int = 0,
   block: suspend FlowCollector<T>.(K) -> Unit
 ): (K) -> Flow<T> {
@@ -69,7 +69,7 @@ fun <T> CoroutineScope.sharedComputation(
 data class Releasable<T>(val value: T, val release: () -> Unit)
 
 fun <T> CoroutineScope.sharedResource(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(),
+  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   release: (suspend (T) -> Unit)? = null,
   create: suspend () -> T
 ): suspend () -> Releasable<T> {
@@ -81,7 +81,7 @@ fun <T> CoroutineScope.sharedResource(
 }
 
 fun <K, T> CoroutineScope.sharedResource(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(),
+  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   release: (suspend (K, T) -> Unit)? = null,
   create: suspend (K) -> T
 ): suspend (K) -> Releasable<T> {
@@ -113,10 +113,18 @@ fun <K, T> CoroutineScope.sharedResource(
 }
 
 suspend fun <K, T, R> (suspend (K) -> Releasable<T>).use(key: K, block: suspend (T) -> R): R =
-  invoke(key).use(block)
+  bracket(
+    acquire = { invoke(key) },
+    use = { block(it.value) },
+    release = { (_, release), _ -> release() }
+  )
 
 suspend fun <T, R> (suspend () -> Releasable<T>).use(block: suspend (T) -> R): R =
-  invoke().use(block)
+  bracket(
+    acquire = { invoke() },
+    use = { block(it.value) },
+    release = { (_, release), _ -> release() }
+  )
 
 suspend fun <T, R> Releasable<T>.use(block: suspend (T) -> R): R =
   bracket(
