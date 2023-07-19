@@ -5,9 +5,7 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material.DrawerDefaults
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -17,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -36,21 +33,13 @@ import com.ivianuu.essentials.ui.insets.LocalInsets
   floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
   isFloatingActionButtonDocked: Boolean = false,
-  drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
-  drawerShape: Shape = MaterialTheme.shapes.large,
-  drawerElevation: Dp = DrawerDefaults.Elevation,
   backgroundColor: Color = MaterialTheme.colors.background,
   applyInsets: Boolean = true,
   scrollTopBar: Boolean = topBar != null,
   maxTopBarSize: Dp = 56.dp + LocalInsets.current.top,
   content: @Composable () -> Unit
 ) {
-  InsetsPadding(
-    left = applyInsets,
-    top = false,
-    right = applyInsets,
-    bottom = false
-  ) {
+  InsetsPadding(left = applyInsets, top = false, right = applyInsets, bottom = false) {
     val topBarScrollState = if (!scrollTopBar) null
     else rememberTopBarScrollState()
       .also {
@@ -98,9 +87,6 @@ import com.ivianuu.essentials.ui.insets.LocalInsets
           ) else ({}),
       floatingActionButtonPosition = floatingActionButtonPosition,
       isFloatingActionButtonDocked = isFloatingActionButtonDocked,
-      drawerContent = drawerContent,
-      drawerShape = drawerShape,
-      drawerElevation = drawerElevation,
       backgroundColor = backgroundColor
     ) { bodyPadding ->
       val insets = if (applyInsets) LocalInsets.current else Insets()
