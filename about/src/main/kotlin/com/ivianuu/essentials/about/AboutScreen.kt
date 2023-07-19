@@ -49,7 +49,7 @@ class AboutScreen : Screen<Unit>
         )
       }
 
-      if (model.showDonate) {
+      if (model.showDonate)
         item {
           ListItem(
             modifier = Modifier.clickable(onClick = model.donate),
@@ -57,7 +57,6 @@ class AboutScreen : Screen<Unit>
             title = { Text(R.string.es_about_donate) }
           )
         }
-      }
 
       item {
         ListItem(
@@ -104,7 +103,7 @@ class AboutScreen : Screen<Unit>
         )
       }
 
-      if (model.privacyPolicyUrl != null) {
+      if (model.privacyPolicyUrl != null)
         item {
           ListItem(
             modifier = Modifier.clickable(onClick = model.openPrivacyPolicy),
@@ -112,7 +111,6 @@ class AboutScreen : Screen<Unit>
             title = { Text(R.string.es_about_privacy_policy) }
           )
         }
-      }
     }
   }
 }
