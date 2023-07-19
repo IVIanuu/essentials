@@ -37,7 +37,7 @@ import com.ivianuu.essentials.ui.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -51,9 +51,7 @@ import com.ivianuu.injekt.Provide
 class DialogsScreen : Screen<Unit>
 
 @Provide fun dialogsUi(@Inject navigator: Navigator) = Ui<DialogsScreen, Unit> {
-  Scaffold(
-    topBar = { TopAppBar(title = { Text("Dialogs") }) }
-  ) {
+  Scaffold(topBar = { AppBar { Text("Dialogs") } }) {
     VerticalList(
       modifier = Modifier.fillMaxSize(),
       horizontalAlignment = Alignment.CenterHorizontally,

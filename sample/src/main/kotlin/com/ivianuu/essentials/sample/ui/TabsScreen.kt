@@ -20,7 +20,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
@@ -33,33 +33,28 @@ class TabsScreen : Screen<Unit>
   val pagerState = rememberPagerState()
   Scaffold(
     topBar = {
-      Surface(
-        color = MaterialTheme.colors.primary,
-        elevation = 8.dp
-      ) {
-        TopAppBar(
-          title = { Text("Tabs") },
-          bottomContent = {
-            TabRow(
-              selectedTabIndex = pagerState.currentPage,
-              backgroundColor = MaterialTheme.colors.primary,
-              indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                  Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-                )
-              }
-            ) {
-              TabItems.indices.forEach { page ->
-                Tab(
-                  selected = pagerState.currentPage == page,
-                  onClick = action { pagerState.animateScrollToPage(page) },
-                  text = { Text("Item: $page") }
-                )
-              }
+      AppBar(
+        title = { Text("Tabs") },
+        bottomContent = {
+          TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            backgroundColor = MaterialTheme.colors.primary,
+            indicator = { tabPositions ->
+              TabRowDefaults.Indicator(
+                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+              )
+            }
+          ) {
+            TabItems.indices.forEach { page ->
+              Tab(
+                selected = pagerState.currentPage == page,
+                onClick = action { pagerState.animateScrollToPage(page) },
+                text = { Text("Item: $page") }
+              )
             }
           }
-        )
-      }
+        }
+      )
     },
     maxTopBarSize = 56.dp + 48.dp + LocalInsets.current.top
   ) {

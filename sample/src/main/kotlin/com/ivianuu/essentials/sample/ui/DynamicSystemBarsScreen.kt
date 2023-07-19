@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.systembars.systemBarStyle
@@ -53,7 +53,7 @@ class DynamicSystemBarsScreen : Screen<Unit>
       }
     }
 
-    TopAppBar(
+    AppBar(
       backgroundColor = Color.Transparent,
       elevation = 0.dp,
       title = { Text("Dynamic system bars") }

@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
@@ -49,7 +49,7 @@ class TextInputScreen : Screen<Unit>
 
   Scaffold(
     topBar = {
-      TopAppBar(
+      AppBar(
         title = {
           if (state.searchVisible) {
             val focusRequester = remember { FocusRequester() }

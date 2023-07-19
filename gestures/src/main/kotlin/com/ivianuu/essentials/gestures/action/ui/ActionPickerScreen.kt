@@ -26,7 +26,7 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.produceResourceState
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -50,7 +50,7 @@ class ActionPickerScreen(
 
 @Provide val actionPickerUi = Ui<ActionPickerScreen, ActionPickerModel> { model ->
   Scaffold(
-    topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
+    topBar = { AppBar { Text(R.string.es_action_picker_title) } }
   ) {
     ResourceVerticalListFor(model.items) { item ->
       ListItem(

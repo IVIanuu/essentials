@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -31,9 +31,7 @@ import com.ivianuu.injekt.Provide
 class CounterScreen : Screen<Unit>
 
 @Provide val counterUi = Ui<CounterScreen, CounterModel> { model ->
-  Scaffold(
-    topBar = { TopAppBar(title = { Text("Counter") }) }
-  ) {
+  Scaffold(topBar = { AppBar { Text("Counter") } }) {
     Column(
       modifier = Modifier.center(),
       verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),

@@ -17,7 +17,7 @@ import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenScope
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -41,9 +41,7 @@ class UnlockScreen : Screen<Unit>
   scope: ScopedCoroutineScope<ScreenScope>,
   toaster: Toaster
 ) = Ui<UnlockScreen, Unit> {
-  Scaffold(
-    topBar = { TopAppBar(title = { Text("Unlock") }) }
-  ) {
+  Scaffold(topBar = { AppBar { Text("Unlock") } }) {
     Column(
       modifier = Modifier.fillMaxSize(),
       verticalArrangement = Arrangement.Center,

@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenDecorator
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -35,7 +35,7 @@ import com.ivianuu.injekt.Provide
 class DecoratorsScreen : Screen<Unit>
 
 @Provide val decoratorsUi = Ui<DecoratorsScreen, Unit> {
-  Scaffold(topBar = { TopAppBar(title = { Text("Decorators") }) }) {
+  Scaffold(topBar = { AppBar { Text("Decorators") } }) {
     VerticalList {
       (1..10).forEach { itemIndex ->
         item {

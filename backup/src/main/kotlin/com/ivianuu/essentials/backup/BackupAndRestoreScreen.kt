@@ -14,7 +14,7 @@ import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -24,7 +24,7 @@ import com.ivianuu.injekt.Provide
 class BackupAndRestoreScreen : Screen<Unit>
 
 @Provide val backupAndRestoreUi = Ui<BackupAndRestoreScreen, BackupAndRestoreModel> { model ->
-  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_backup_and_restore_title) }) }) {
+  Scaffold(topBar = { AppBar { Text(R.string.es_backup_and_restore_title) } }) {
     VerticalList {
       item {
         ListItem(

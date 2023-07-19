@@ -25,7 +25,7 @@ import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Switch
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.ScreenScope
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.popup.PopupMenuItem
@@ -49,7 +49,7 @@ data class CheckableAppsParams(
   val model by models.collectAsState()
   Scaffold(
     topBar = {
-      TopAppBar(
+      AppBar(
         title = { Text(model.appBarTitle) },
         actions = {
           PopupMenuButton {

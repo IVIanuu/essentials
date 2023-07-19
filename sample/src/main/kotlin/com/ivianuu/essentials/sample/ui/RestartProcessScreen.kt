@@ -11,7 +11,7 @@ import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenScope
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -26,9 +26,7 @@ class RestartProcessScreen : Screen<Unit>
   processRestarter: ProcessRestarter,
   scope: ScopedCoroutineScope<ScreenScope>
 ) = Ui<RestartProcessScreen, Unit> {
-  Scaffold(
-    topBar = { TopAppBar(title = { Text("Restart process") }) }
-  ) {
+  Scaffold(topBar = { AppBar { Text("Restart process") } }) {
     Button(
       modifier = Modifier.center(),
       onClick = {

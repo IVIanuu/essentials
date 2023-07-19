@@ -42,21 +42,21 @@ enum class AppBarStyle { PRIMARY, SURFACE }
 
 val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
 
-@Composable fun TopAppBar(
+@Composable fun AppBar(
   modifier: Modifier = Modifier,
-  title: (@Composable () -> Unit)? = null,
-  leading: (@Composable () -> Unit)? = autoTopAppBarLeadingIcon(),
-  actions: (@Composable () -> Unit)? = null,
-  bottomContent: (@Composable () -> Unit)? = null,
   backgroundColor: Color = when (LocalAppBarStyle.current) {
     AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
     AppBarStyle.SURFACE -> MaterialTheme.colors.surface
   },
   contentColor: Color = guessingContentColorFor(backgroundColor),
   elevation: Dp = DefaultAppBarElevation,
-  applySystemBarStyle: Boolean = true
+  applySystemBarStyle: Boolean = true,
+  leading: (@Composable () -> Unit)? = autoTopAppBarLeadingIcon(),
+  actions: (@Composable () -> Unit)? = null,
+  bottomContent: (@Composable () -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
 ) {
-  TopAppBar(
+  BaseTopAppBar(
     modifier = modifier,
     backgroundColor = backgroundColor,
     contentColor = contentColor,
@@ -93,7 +93,7 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
   }
 }
 
-@Composable fun TopAppBar(
+@Composable fun BaseTopAppBar(
   modifier: Modifier = Modifier,
   backgroundColor: Color = when (LocalAppBarStyle.current) {
     AppBarStyle.PRIMARY -> MaterialTheme.colors.primary

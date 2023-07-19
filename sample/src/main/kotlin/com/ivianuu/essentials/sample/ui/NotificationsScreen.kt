@@ -52,7 +52,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -66,7 +66,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 class NotificationsScreen : Screen<Unit>
 
 @Provide val notificationsUi = Ui<NotificationsScreen, NotificationsModel> { model ->
-  Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
+  Scaffold(topBar = { AppBar { Text("Notifications") } }) {
     ResourceBox(model.hasPermissions) { hasPermission ->
       if (hasPermission) {
         NotificationsList(

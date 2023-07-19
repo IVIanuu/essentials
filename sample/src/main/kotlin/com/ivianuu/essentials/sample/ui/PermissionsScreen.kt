@@ -23,7 +23,7 @@ import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
@@ -36,9 +36,7 @@ class PermissionsScreen : Screen<Unit>
 @Provide fun permissionUi(
   permissionManager: PermissionManager
 ) = Ui<PermissionsScreen, Unit> {
-  Scaffold(
-    topBar = { TopAppBar(title = { Text("Permissions") }) }
-  ) {
+  Scaffold(topBar = { AppBar { Text("Permissions") } }) {
     Button(
       modifier = Modifier.center(),
       onClick = action {

@@ -18,7 +18,7 @@ import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -35,11 +35,9 @@ class AppPickerScreen(
 @Provide val appPickerUi = Ui<AppPickerScreen, AppPickerModel> { model ->
   Scaffold(
     topBar = {
-      TopAppBar(
-        title = {
-          Text(model.title ?: stringResource(R.string.es_title_app_picker))
-        }
-      )
+      AppBar {
+        Text(model.title ?: stringResource(R.string.es_title_app_picker))
+      }
     }
   ) {
     ResourceVerticalListFor(model.filteredApps) { app ->

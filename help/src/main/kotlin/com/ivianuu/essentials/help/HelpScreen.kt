@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
@@ -61,7 +61,7 @@ data class HelpItem(
     )
   }
 
-  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_help_title) }) }) {
+  Scaffold(topBar = { AppBar { Text(R.string.es_help_title) } }) {
     VerticalList {
       categories.forEach { category ->
         if (category.title != null) {

@@ -22,7 +22,7 @@ import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -37,7 +37,7 @@ import com.ivianuu.injekt.Provide
 class ShortcutPickerScreen : Screen<Shortcut>
 
 @Provide val shortcutPickerUi = Ui<ShortcutPickerScreen, ShortcutPickerModel> { model ->
-  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_shortcut_picker) }) }) {
+  Scaffold(topBar = { AppBar { Text(R.string.es_title_shortcut_picker) } }) {
     ResourceVerticalListFor(model.shortcuts) { shortcut ->
       ListItem(
         modifier = Modifier.clickable { model.pickShortcut(shortcut) },

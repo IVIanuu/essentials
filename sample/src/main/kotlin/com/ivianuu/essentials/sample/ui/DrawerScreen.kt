@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
@@ -22,7 +22,7 @@ class DrawerScreen : Screen<Unit>
 
 @Provide val drawerUi = Ui<DrawerScreen, Unit> {
   Scaffold(
-    topBar = { TopAppBar(title = { Text("Drawer") }) },
+    topBar = { AppBar { Text("Drawer") } },
     drawerContent = {
       Surface(color = Color.Blue) {
         Text(

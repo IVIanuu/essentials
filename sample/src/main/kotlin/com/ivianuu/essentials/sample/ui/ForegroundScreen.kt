@@ -18,7 +18,7 @@ import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.NotificationFactory
@@ -35,9 +35,7 @@ class ForegroundScreen : Screen<Unit>
   foregroundManager: ForegroundManager,
   @Inject notificationFactory: NotificationFactory
 ) = Ui<ForegroundScreen, Unit> {
-  Scaffold(
-    topBar = { TopAppBar(title = { Text("Foreground") }) }
-  ) {
+  Scaffold(topBar = { AppBar { Text("Foreground") } }) {
     var isEnabled by remember { mutableStateOf(false) }
 
     if (isEnabled)

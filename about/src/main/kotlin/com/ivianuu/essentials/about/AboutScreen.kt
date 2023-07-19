@@ -16,9 +16,9 @@ import com.ivianuu.essentials.rate.DeveloperEmail
 import com.ivianuu.essentials.rate.FeedbackMailScreen
 import com.ivianuu.essentials.rate.RateUseCases
 import com.ivianuu.essentials.ui.common.VerticalList
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -30,7 +30,7 @@ import com.ivianuu.injekt.Provide
 class AboutScreen : Screen<Unit>
 
 @Provide val aboutUi = Ui<AboutScreen, AboutModel> { model ->
-  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_about_title) }) }) {
+  Scaffold(topBar = { AppBar { Text(R.string.es_about_title) } }) {
     VerticalList {
       item {
         ListItem(

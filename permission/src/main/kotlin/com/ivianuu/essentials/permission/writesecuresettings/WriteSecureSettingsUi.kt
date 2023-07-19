@@ -37,7 +37,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
 import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
@@ -62,9 +62,7 @@ class WriteSecureSettingsScreen(
 @Provide val writeSecureSettingsUi =
   Ui<WriteSecureSettingsScreen, WriteSecureSettingsModel> { model ->
     Scaffold(
-      topBar = {
-        TopAppBar(title = { Text(R.string.es_secure_settings_title) })
-      },
+      topBar = { AppBar { Text(R.string.es_secure_settings_title) } },
       bottomBar = {
         Snackbar(
           modifier = Modifier.padding(16.dp),

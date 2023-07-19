@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
+@file:OptIn(ExperimentalStdlibApi::class)
 
 package com.ivianuu.essentials.compose
 
@@ -62,7 +62,7 @@ fun <K, T> CoroutineScope.sharedComposition(
               coroutineScope {
                 launchComposition(
                   emitter = { sharedFlow.tryEmit(it) },
-                  body = body
+                  body = { body(key) }
                 )
               }
           }

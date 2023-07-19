@@ -23,7 +23,7 @@ import com.ivianuu.essentials.systemoverlay.systemWindowTrigger
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenScope
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -40,9 +40,7 @@ class SystemWindowScreen : Screen<Unit>
   scope: ScopedCoroutineScope<ScreenScope>,
   systemWindowManager: SystemWindowManager
 ) = Ui<SystemWindowScreen, Unit> {
-  Scaffold(
-    topBar = { TopAppBar(title = { Text("System window") }) }
-  ) {
+  Scaffold(topBar = { AppBar { Text("System window") } }) {
     var showSystemWindow by remember { mutableStateOf(false) }
 
     if (showSystemWindow)
