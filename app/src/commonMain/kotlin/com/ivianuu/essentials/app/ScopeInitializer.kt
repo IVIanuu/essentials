@@ -20,7 +20,6 @@ interface ScopeInitializer<N> : () -> Unit, ExtensionPoint<ScopeInitializer<N>>
   crossinline nameKey: () -> TypeKey<N>,
   crossinline initializers: (Scope<N>) -> List<ExtensionPointRecord<ScopeInitializer<N>>>,
   crossinline workerRunner: (Scope<N>) -> ScopeWorkerRunner<N>,
-  crossinline compositionRunner: (Scope<N>) -> ScopeCompositionRunner<N>,
   crossinline logger: (Scope<N>) -> Logger
 ): ProvidedService<N, ScopeInitializerRunner> = object : ProvidedService<N, ScopeInitializerRunner>, ScopeObserver {
   override val key: TypeKey<ScopeInitializerRunner>
@@ -34,7 +33,6 @@ interface ScopeInitializer<N> : () -> Unit, ExtensionPoint<ScopeInitializer<N>>
         it.instance()
       }
     workerRunner(scope.cast())()
-    compositionRunner(scope.cast())()
   }
 
   override fun get(scope: Scope<N>) = ScopeInitializerRunner

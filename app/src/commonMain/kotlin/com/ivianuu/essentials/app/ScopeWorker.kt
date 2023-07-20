@@ -4,6 +4,8 @@
 
 package com.ivianuu.essentials.app
 
+import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.compose.launchComposition
 import com.ivianuu.essentials.coroutines.ExitCase
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.guarantee
@@ -11,11 +13,16 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
 fun interface ScopeWorker<N> : ExtensionPoint<ScopeWorker<N>> {
   suspend operator fun invoke()
+}
+
+fun <N> ScopeComposition(block: @Composable () -> Unit) = ScopeWorker<N> {
+  coroutineScope { launchComposition(block = block) }
 }
 
 fun interface ScopeWorkerRunner<N> {
