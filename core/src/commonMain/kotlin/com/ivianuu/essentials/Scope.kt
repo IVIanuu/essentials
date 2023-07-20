@@ -186,7 +186,7 @@ interface ScopeObserver<N> : ExtensionPoint<ScopeObserver<N>> {
       factory: () -> T
     ) = ProvidedService<N, S>(key, factory)
 
-    @Provide inline fun <@Spread T : @Service<N> S, S : Any, N> accessor(service: T): S = service
+    @Provide fun <@Spread T : @Service<N> S, S : Any, N> accessor(service: T): S = service
   }
 }
 
