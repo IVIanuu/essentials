@@ -12,8 +12,11 @@ import androidx.compose.material.icons.filled.Notifications
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.accessibility.AccessibilityScope
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.accessibility.accessibilityService
+import com.ivianuu.essentials.app.ScopeManager
+import com.ivianuu.essentials.app.awaitFirstActiveScope
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -21,8 +24,6 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
 @Provide object NotificationsActionId : ActionId("notifications")
 
@@ -37,10 +38,10 @@ import kotlinx.coroutines.flow.first
   closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
-  serviceFlow: Flow<EsAccessibilityService?>
+  scopeManager: ScopeManager
 ) = ActionExecutor<NotificationsActionId> {
   val targetState = catch {
-    val service = serviceFlow.first()!!
+    val service = scopeManager.awaitFirstActiveScope<AccessibilityScope>().accessibilityService
 
     val systemUiContext = context.createPackageContext(
       "com.android.systemui", 0

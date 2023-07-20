@@ -4,16 +4,16 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.accessibilityservice.AccessibilityService
+import com.ivianuu.essentials.app.ScopeManager
+import com.ivianuu.essentials.app.firstActiveScopeOrNull
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
 fun interface GlobalActionExecutor {
   suspend operator fun invoke(action: Int): Boolean
 }
 
-@Provide fun globalActionExecutor(service: Flow<AccessibilityService?>) =
+@Provide fun globalActionExecutor(scopeManager: ScopeManager) =
   GlobalActionExecutor { action ->
-    service.first()?.performGlobalAction(action) ?: false
+    scopeManager.firstActiveScopeOrNull<AccessibilityScope>()
+      ?.accessibilityService?.performGlobalAction(action) == true
   }

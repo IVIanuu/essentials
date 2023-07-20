@@ -4,6 +4,4 @@
 
 package com.ivianuu.essentials.app
 
-enum class AppForegroundState { FOREGROUND, BACKGROUND }
-
 object AppForegroundScope

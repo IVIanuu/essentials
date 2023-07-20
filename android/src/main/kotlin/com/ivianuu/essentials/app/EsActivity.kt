@@ -25,7 +25,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
 @Provide @AndroidComponent class EsActivity(
-  private val uiScopeFactory: (ComponentActivity) -> Scope<UiScope>
+  private val uiScopeFactory: (@Service<UiScope> ComponentActivity) -> Scope<UiScope>
 ) : ComponentActivity(), ForegroundActivityMarker, UiScopeOwner {
   override lateinit var uiScope: Scope<UiScope>
 
@@ -55,3 +55,5 @@ import kotlinx.coroutines.launch
   val appUi: AppUi,
   val decorateAppUi: DecorateAppUi
 )
+
+val Scope<*>.activity: ComponentActivity get() = service()

@@ -32,6 +32,8 @@ interface Scope<N> : Disposable {
     serviceOrNull(key) ?: error("No service found for ${key.value} in ${name.value}")
 }
 
+val Scope<*>.root: Scope<*> get() = parent?.root ?: this
+
 @Provide class ScopeImpl<N>(
   override val name: TypeKey<N>,
   override val parent: @ParentScope Scope<*>? = null,

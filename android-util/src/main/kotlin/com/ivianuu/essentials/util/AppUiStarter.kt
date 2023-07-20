@@ -8,17 +8,17 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.app.AppForegroundScope
+import com.ivianuu.essentials.app.ScopeManager
+import com.ivianuu.essentials.app.awaitFirstActiveScope
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 
 @Provide fun appUiStarter(
   appContext: AppContext,
   appConfig: AppConfig,
-  foregroundActivity: Flow<ForegroundActivity>,
   packageManager: PackageManager,
+  scopeManager: ScopeManager
 ) = AppUiStarter {
   val intent = packageManager.getLaunchIntentForPackage(appConfig.packageName)!!
   appContext.startActivity(
@@ -27,5 +27,5 @@ import kotlinx.coroutines.flow.first
     }
   )
 
-  foregroundActivity.filterNotNull().first()
+  scopeManager.awaitFirstActiveScope<AppForegroundScope>().service()
 }

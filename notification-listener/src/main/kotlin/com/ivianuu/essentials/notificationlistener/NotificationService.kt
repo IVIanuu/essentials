@@ -9,13 +9,15 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import com.ivianuu.essentials.app.ScopeManager
+import com.ivianuu.essentials.app.activeScopeOrNull
+import com.ivianuu.essentials.app.awaitFirstActiveScope
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 
 interface NotificationService {
@@ -32,22 +34,29 @@ interface NotificationService {
 }
 
 @Provide class NotificationServiceImpl(
-  private val ref: StateFlow<EsNotificationListenerService?>
+  private val scopeManager: ScopeManager
 ) : NotificationService {
   override val notificationEvents: Flow<NotificationEvent> =
-    ref.flatMapLatest { it?.events ?: emptyFlow() }
+    scopeManager.activeScopeOrNull<NotificationScope>()
+      .flatMapLatest { it?.notificationListenerService?.events ?: emptyFlow() }
 
   override val notifications: List<StatusBarNotification>
-    @Composable get() = ref.collectAsState().value?.notifications?.collectAsState()?.value ?: emptyList()
+    @Composable get() =
+      remember { scopeManager.activeScopeOrNull<NotificationScope>() }.collectAsState(null).value
+        ?.notificationListenerService?.notifications?.collectAsState()?.value ?: emptyList()
 
   override suspend fun openNotification(notification: Notification) =
     catch { notification.contentIntent.send() }
 
-  override suspend fun dismissNotification(key: String) =
-    catch { ref.first()!!.cancelNotification(key) }
+  override suspend fun dismissNotification(key: String) = catch {
+    scopeManager.awaitFirstActiveScope<NotificationScope>()
+      .notificationListenerService.cancelNotification(key)
+  }
 
-  override suspend fun dismissAllNotifications() =
-    catch { ref.first()!!.cancelAllNotifications() }
+  override suspend fun dismissAllNotifications() = catch {
+    scopeManager.awaitFirstActiveScope<NotificationScope>()
+      .notificationListenerService.cancelAllNotifications()
+  }
 }
 
 sealed interface NotificationEvent {

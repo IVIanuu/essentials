@@ -13,7 +13,10 @@ import android.os.Looper
 import android.provider.MediaStore
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.accessibility.AccessibilityScope
+import com.ivianuu.essentials.accessibility.accessibilityService
+import com.ivianuu.essentials.app.ScopeManager
+import com.ivianuu.essentials.app.firstActiveScopeOrNull
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
@@ -47,13 +50,13 @@ import kotlin.coroutines.resume
 )
 
 @Provide fun cameraActionExecutor(
-  accessibilityServiceRef: Flow<EsAccessibilityService?>,
   actionIntentSender: ActionIntentSender,
   cameraManager: @SystemService CameraManager,
   currentApp: Flow<CurrentApp?>,
   logger: Logger,
   packageManager: PackageManager,
-  screenState: Flow<ScreenState>
+  screenState: Flow<ScreenState>,
+  scopeManager: ScopeManager
 ) = ActionExecutor<CameraActionId> {
   val cameraApp = packageManager
     .resolveActivity(
@@ -76,7 +79,8 @@ import kotlin.coroutines.resume
   val frontFacing = if (frontCamera != null &&
     currentScreenState != ScreenState.OFF &&
     (currentScreenState == ScreenState.UNLOCKED ||
-        accessibilityServiceRef.first()?.rootInActiveWindow?.packageName != "com.android.systemui") &&
+        scopeManager.firstActiveScopeOrNull<AccessibilityScope>()
+          ?.accessibilityService?.rootInActiveWindow?.packageName != "com.android.systemui") &&
     cameraApp.activityInfo!!.packageName == currentApp.first()?.value
   )
     suspendCancellableCoroutine<Boolean> { cont ->

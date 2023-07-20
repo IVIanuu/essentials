@@ -22,7 +22,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.essentials.util.ForegroundActivity
+import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -65,9 +65,9 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minu
 @Provide @Scoped<UiScope> class FullScreenAdManagerImpl(
   private val appContext: AppContext,
   private val adsEnabledFlow: Flow<AdsEnabled>,
+  private val appUiStarter: AppUiStarter,
   private val config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
-  private val foregroundActivities: Flow<ForegroundActivity>,
   private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>
 ) : FullScreenAdManager {
@@ -135,7 +135,7 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minu
           logger.log { "show ad" }
           lock.withLock { deferredAd = null }
           withContext(coroutineContexts.main) {
-            ad.show(foregroundActivities.first()!!)
+            ad.show(appUiStarter())
           }
           true
         } else {

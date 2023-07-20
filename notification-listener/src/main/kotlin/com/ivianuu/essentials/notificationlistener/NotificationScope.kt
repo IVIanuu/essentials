@@ -4,4 +4,9 @@
 
 package com.ivianuu.essentials.notificationlistener
 
+import com.ivianuu.essentials.Scope
+
 object NotificationScope
+
+val Scope<*>.notificationListenerService: EsNotificationListenerService
+  get() = service()

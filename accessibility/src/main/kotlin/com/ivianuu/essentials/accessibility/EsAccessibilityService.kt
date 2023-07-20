@@ -17,20 +17,17 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Provide @AndroidComponent class EsAccessibilityService(
   private val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>,
-  private val accessibilityScopeFactory: (EsAccessibilityService) -> Scope<AccessibilityScope>,
-  private val logger: Logger,
-  private val accessibilityServiceRef: MutableStateFlow<EsAccessibilityService?>
+  private val accessibilityScopeFactory: (@Service<AccessibilityScope> EsAccessibilityService) -> Scope<AccessibilityScope>,
+  private val logger: Logger
 ) : AccessibilityService() {
   private var accessibilityScope: Scope<AccessibilityScope>? = null
 
   override fun onServiceConnected() {
     super.onServiceConnected()
     logger.log { "service connected" }
-    accessibilityServiceRef.value = this
     accessibilityScope = accessibilityScopeFactory(this)
     val accessibilityComponent = accessibilityScope!!
       .service<AccessibilityComponent>()
@@ -77,12 +74,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
     logger.log { "service disconnected" }
     accessibilityScope?.dispose()
     accessibilityScope = null
-    accessibilityServiceRef.value = null
     return super.onUnbind(intent)
-  }
-
-  @Provide companion object {
-    @Provide val accessibilityServiceRef = MutableStateFlow<EsAccessibilityService?>(null)
   }
 }
 
@@ -90,3 +82,4 @@ import kotlinx.coroutines.flow.MutableStateFlow
   val configs: List<AccessibilityConfig>,
   val coroutineScope: ScopedCoroutineScope<AccessibilityScope>
 )
+

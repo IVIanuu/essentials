@@ -8,6 +8,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -21,8 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Provide @AndroidComponent class EsNotificationListenerService(
   private val logger: Logger,
-  private val notificationScopeFactory: () -> Scope<NotificationScope>,
-  private val notificationServiceRef: MutableStateFlow<EsNotificationListenerService?>
+  private val notificationScopeFactory: (@Service<NotificationScope> EsNotificationListenerService) -> Scope<NotificationScope>
 ) : NotificationListenerService() {
   private val _notifications = MutableStateFlow(emptyList<StatusBarNotification>())
   internal val notifications: StateFlow<List<StatusBarNotification>> by this::_notifications
@@ -35,8 +35,7 @@ import kotlinx.coroutines.flow.StateFlow
   override fun onListenerConnected() {
     super.onListenerConnected()
     logger.log { "listener connected" }
-    this.notificationScope = notificationScopeFactory()
-    notificationServiceRef.value = this
+    this.notificationScope = notificationScopeFactory(this)
     updateNotifications()
   }
 
@@ -65,16 +64,11 @@ import kotlinx.coroutines.flow.StateFlow
     logger.log { "listener disconnected" }
     notificationScope?.dispose()
     notificationScope = null
-    notificationServiceRef.value = null
     super.onListenerDisconnected()
   }
 
   private fun updateNotifications() {
     _notifications.value = catch { activeNotifications!!.toList() }
       .getOrElse { emptyList() }
-  }
-
-  @Provide companion object {
-    @Provide val notificationListenerRef = MutableStateFlow<EsNotificationListenerService?>(null)
   }
 }

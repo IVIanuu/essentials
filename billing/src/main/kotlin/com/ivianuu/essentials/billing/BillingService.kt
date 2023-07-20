@@ -19,11 +19,12 @@ import com.android.billingclient.api.queryPurchasesAsync
 import com.android.billingclient.api.querySkuDetails
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.app.AppForegroundState
+import com.ivianuu.essentials.app.AppForegroundScope
+import com.ivianuu.essentials.app.ScopeManager
+import com.ivianuu.essentials.app.flowInScope
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.childCoroutineScope
-import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.coroutines.sharedResource
 import com.ivianuu.essentials.coroutines.use
 import com.ivianuu.essentials.logging.Logger
@@ -36,7 +37,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -63,12 +63,12 @@ interface BillingService {
 
 @Provide @Scoped<AppScope> class BillingServiceImpl(
   private val appUiStarter: AppUiStarter,
-  private val appForegroundState: Flow<AppForegroundState>,
   private val billingClientFactory: () -> BillingClient,
   coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val refreshes: MutableSharedFlow<BillingRefresh>,
-  scope: ScopedCoroutineScope<AppScope>
+  scope: ScopedCoroutineScope<AppScope>,
+  private val scopeManager: ScopeManager
 ) : BillingService {
   private val billingClient = scope.childCoroutineScope(coroutineContexts.io).sharedResource(
     sharingStarted = SharingStarted.WhileSubscribed(10.seconds.inWholeMilliseconds),
@@ -108,16 +108,14 @@ interface BillingService {
     }
   )
 
-  override fun isPurchased(sku: Sku): Flow<Boolean> = appForegroundState
-    .flatMapLatest {
-      if (it == AppForegroundState.BACKGROUND) infiniteEmptyFlow()
-      else refreshes.onStart { emit(BillingRefresh) }
-    }
-    .onStart { emit(BillingRefresh) }
-    .onEach { logger.log { "update is purchased for $sku" } }
-    .map { billingClient.use { it.getIsPurchased(sku) } ?: false }
-    .distinctUntilChanged()
-    .onEach { logger.log { "is purchased for $sku -> $it" } }
+  override fun isPurchased(sku: Sku): Flow<Boolean> = scopeManager.flowInScope<AppForegroundScope, _>(
+    refreshes.onStart { emit(BillingRefresh) }
+      .onStart { emit(BillingRefresh) }
+      .onEach { logger.log { "update is purchased for $sku" } }
+      .map { billingClient.use { it.getIsPurchased(sku) } }
+      .distinctUntilChanged()
+      .onEach { logger.log { "is purchased for $sku -> $it" } }
+  )
 
   override suspend fun getSkuDetails(sku: Sku): SkuDetails? = billingClient.use {
     it.querySkuDetails(sku.toSkuDetailsParams())
