@@ -101,8 +101,9 @@ val Scope<*>.root: Scope<*> get() = parent?.root ?: this
   override fun dispose() {
     synchronized(this) {
       if (!_isDisposed) {
-        _isDisposed = true
         _children.value.forEach { it.dispose() }
+
+        _isDisposed = true
 
         parentDisposable?.dispose()
 
