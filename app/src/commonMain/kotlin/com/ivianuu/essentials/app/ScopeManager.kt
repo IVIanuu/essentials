@@ -1,11 +1,12 @@
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.coroutineScope
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.root
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
@@ -70,16 +71,12 @@ suspend fun <N> ScopeManager.repeatInScope(@Inject name: TypeKey<N>, block: susp
   )
 }
 
-@Provide class ScopeManagerImpl(scope: Scope<*>) : ScopeManager {
-  private val _activeScopes = scope.root.scoped(ActiveScopesKey) {
-    MutableStateFlow<Set<Scope<*>>>(emptySet())
-  }
+@Provide @Scoped<AppScope> class ScopeManagerImpl : ScopeManager {
+  private val _activeScopes = MutableStateFlow<Set<Scope<*>>>(emptySet())
   override val activeScopes: StateFlow<Set<Scope<*>>> by this::_activeScopes
 
   @Provide fun <N> scopeHandler(scope: Scope<N>) = ScopeWorker<N> {
     _activeScopes.update { it + scope }
     onCancel { _activeScopes.update { it - scope } }
   }
-
-  private object ActiveScopesKey
 }
