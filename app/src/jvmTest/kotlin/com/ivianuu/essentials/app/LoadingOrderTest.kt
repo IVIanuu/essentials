@@ -4,6 +4,8 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.LoadingOrder
+import com.ivianuu.essentials.sortedWithLoadingOrder
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey

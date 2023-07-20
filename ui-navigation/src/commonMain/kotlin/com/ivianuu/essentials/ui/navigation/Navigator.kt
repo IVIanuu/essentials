@@ -5,9 +5,9 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Stable
-import com.ivianuu.essentials.ProvidedService
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
+import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
@@ -138,14 +138,11 @@ class NavigatorImpl(
       rootScreen: RootScreen?,
       screenInterceptors: List<ScreenInterceptor<*>>,
       scope: ScopedCoroutineScope<UiScope>
-    ): @Scoped<UiScope> Navigator = NavigatorImpl(
+    ): @Scoped<UiScope> @Service<UiScope> Navigator = NavigatorImpl(
       initialBackStack = listOfNotNull(rootScreen),
       screenInterceptors = screenInterceptors,
       scope = scope
     )
-
-    @Provide inline fun rootNavigatorService(crossinline navigator: () -> Navigator) =
-      ProvidedService<UiScope, Navigator>(factory = navigator)
   }
 }
 

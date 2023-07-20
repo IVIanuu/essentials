@@ -23,9 +23,9 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.app.ExtensionPoint
-import com.ivianuu.essentials.app.ExtensionPointRecord
-import com.ivianuu.essentials.app.sortedWithLoadingOrder
+import com.ivianuu.essentials.ExtensionPoint
+import com.ivianuu.essentials.ExtensionPointRecord
+import com.ivianuu.essentials.sortedWithLoadingOrder
 import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.essentials.ui.insets.localHorizontalInsetsPadding
 import com.ivianuu.essentials.ui.insets.localVerticalInsetsPadding

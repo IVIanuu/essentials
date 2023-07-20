@@ -5,12 +5,19 @@
 package com.ivianuu.essentials.app
 
 import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.ExtensionPoint
+import com.ivianuu.essentials.ExtensionPointRecord
+import com.ivianuu.essentials.LoadingOrder
+import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.ScopeObserver
 import com.ivianuu.essentials.compose.launchComposition
 import com.ivianuu.essentials.coroutines.ExitCase
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.sortedWithLoadingOrder
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.coroutineScope
@@ -25,35 +32,40 @@ fun <N> ScopeComposition(block: @Composable () -> Unit) = ScopeWorker<N> {
   coroutineScope { launchComposition(block = block) }
 }
 
-fun interface ScopeWorkerRunner<N> {
-  operator fun invoke()
+interface ScopeWorkerRunner<N> : ScopeObserver<N> {
+  @Provide companion object {
+    @Provide fun <N> loadingOrder(@Inject nameKey: TypeKey<N>) = LoadingOrder<ScopeWorkerRunner<N>>()
+      .after<ScopeInitializerRunner<N>>()
+  }
 }
 
 @Provide fun <N> scopeWorkerRunner(
+  coroutineScope: ScopedCoroutineScope<N>,
   logger: Logger,
   nameKey: TypeKey<N>,
-  scope: ScopedCoroutineScope<N>,
   workers: () -> List<ExtensionPointRecord<ScopeWorker<N>>>
-) = ScopeWorkerRunner<N> {
-  scope.launch {
-    guarantee(
-      block = {
-        supervisorScope {
-          logger.log { "${nameKey.value} run scope workers" }
+): ScopeWorkerRunner<N> = object : ScopeWorkerRunner<N> {
+  override fun onEnter(scope: Scope<N>) {
+    coroutineScope.launch {
+      guarantee(
+        block = {
+          supervisorScope {
+            logger.log { "${nameKey.value} run scope workers" }
 
-          workers()
-            .sortedWithLoadingOrder()
-            .forEach { record ->
-              launch {
-                record.instance()
+            workers()
+              .sortedWithLoadingOrder()
+              .forEach { record ->
+                launch {
+                  record.instance()
+                }
               }
-            }
+          }
+        },
+        finalizer = {
+          if (it is ExitCase.Cancelled)
+            logger.log { "${nameKey.value} cancel scope workers" }
         }
-      },
-      finalizer = {
-        if (it is ExitCase.Cancelled)
-          logger.log { "${nameKey.value} cancel scope workers" }
-      }
-    )
+      )
+    }
   }
 }

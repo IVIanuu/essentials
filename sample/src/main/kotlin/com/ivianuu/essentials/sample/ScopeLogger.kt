@@ -10,12 +10,12 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
-@Provide fun observer(logger: Logger): ScopeObserver = object : ScopeObserver {
-  override fun onEnter(scope: Scope<*>) {
+@Provide fun <N> observer(logger: Logger): ScopeObserver<N> = object : ScopeObserver<N> {
+  override fun onEnter(scope: Scope<N>) {
     logger.log { "${scope.name.value} on enter" }
   }
 
-  override fun onExit(scope: Scope<*>) {
+  override fun onExit(scope: Scope<N>) {
     logger.log { "${scope.name.value} on exit" }
   }
 

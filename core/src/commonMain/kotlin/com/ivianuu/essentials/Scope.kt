@@ -23,7 +23,7 @@ interface Scope<N> : Disposable {
 
   val isDisposed: Boolean
 
-  fun addObserver(observer: ScopeObserver): Disposable
+  fun addObserver(observer: ScopeObserver<*>): Disposable
 
   fun <T> scoped(key: Any, compute: () -> T): T
 
@@ -43,7 +43,7 @@ val Scope<*>.root: Scope<*> get() = parent?.root ?: this
 @Provide class ScopeImpl<N>(
   override val name: TypeKey<N>,
   override val parent: @ParentScope Scope<*>? = null,
-  observers: (Scope<N>, @ParentScope Scope<*>?) -> List<ScopeObserver>,
+  observers: (Scope<N>, @ParentScope Scope<*>?) -> List<ExtensionPointRecord<ScopeObserver<N>>>,
   services: (Scope<N>, @ParentScope Scope<*>?) -> List<ProvidedService<N, *>>
 ) : Scope<N>, SynchronizedObject() {
   @PublishedApi internal var _isDisposed = false
@@ -51,7 +51,7 @@ val Scope<*>.root: Scope<*> get() = parent?.root ?: this
     get() = synchronized(this) { _isDisposed }
 
   private val cache = hashMapOf<Any, Any?>()
-  private val observers = mutableListOf<ScopeObserver>()
+  private val observers = mutableListOf<ScopeObserver<*>>()
 
   private val services = buildMap {
     for (service in services(this@ScopeImpl, this@ScopeImpl))
@@ -62,39 +62,41 @@ val Scope<*>.root: Scope<*> get() = parent?.root ?: this
   override val children: StateFlow<Set<Scope<*>>> by this::_children
 
   init {
-    observers(this@ScopeImpl, this@ScopeImpl).forEach { addObserver(it) }
-
-    this.services.forEach {
-      if (it.value is ScopeObserver)
-        addObserver(it.value.cast())
-    }
+    observers(this@ScopeImpl, this@ScopeImpl)
+      .sortedWithLoadingOrder()
+      .forEach { addObserver(it.instance) }
   }
 
   private val parentDisposable = parent?.registerChild(this)
 
-  override fun addObserver(observer: ScopeObserver): Disposable {
+  override fun addObserver(observer: ScopeObserver<*>): Disposable {
     synchronized(observers) {
       checkDisposed()
       observers += observer
     }
 
-    observer.onEnter(this)
+    observer.cast<ScopeObserver<N>>().onEnter(this)
 
     return Disposable {
-      observer.onExit(this)
+      observer.cast<ScopeObserver<N>>().onExit(this)
       synchronized(observers) { observers -= observer }
     }
   }
 
   override fun <T : Any> serviceOrNull(@Inject key: TypeKey<T>): T? = services[key.value]?.let {
-    return it.get(this).unsafeCast()
+    return it.factory().unsafeCast()
   } ?: parent?.serviceOrNull(key)
 
   override fun <T> scoped(key: Any, compute: () -> T): T = synchronized(cache) {
     checkDisposed()
-    val value = cache.getOrPut(key) { compute() ?: NULL }
-    if (value is ScopeObserver)
-      addObserver(value)
+    val value = cache.getOrPut(key) {
+      compute()
+        .also {
+          if (it is ScopeObserver<*>)
+            addObserver(it)
+        }
+        ?: NULL
+    }
     (if (value !== NULL) value else null).unsafeCast()
   }
 
@@ -111,7 +113,7 @@ val Scope<*>.root: Scope<*> get() = parent?.root ?: this
           observers.toList()
             .also { observers.clear() }
         }.forEach {
-          it.onExit(this)
+          it.cast<ScopeObserver<N>>().onExit(this)
 
           synchronized(cache) {
             cache.values.toList()
@@ -143,31 +145,17 @@ val Scope<*>.root: Scope<*> get() = parent?.root ?: this
   }
 }
 
-interface ProvidedService<N, T> {
-  val key: TypeKey<T>
-
-  fun get(scope: Scope<N>): T
-
+data class ProvidedService<N, T>(val key: TypeKey<T>, val factory: () -> T) {
   @Provide companion object {
     @Provide fun <N> defaultServices() = emptyList<ProvidedService<N, *>>()
-
-    inline operator fun <N, T> invoke(
-      @Inject key: TypeKey<T>,
-      crossinline factory: () -> T
-    ): ProvidedService<N, T> = object : ProvidedService<N, T> {
-      override val key: TypeKey<T>
-        get() = key
-
-      override fun get(scope: Scope<N>): T = factory()
-    }
   }
 }
 
-interface ScopeObserver {
-  fun onEnter(scope: Scope<*>) {
+interface ScopeObserver<N> : ExtensionPoint<ScopeObserver<N>> {
+  fun onEnter(scope: Scope<N>) {
   }
 
-  fun onExit(scope: Scope<*>) {
+  fun onExit(scope: Scope<N>) {
   }
 
   fun onEnterChild(scope: Scope<*>) {
@@ -177,7 +165,7 @@ interface ScopeObserver {
   }
 
   companion object {
-    @Provide val defaultObservers get() = emptyList<ScopeObserver>()
+    @Provide fun <N> defaultObservers() = emptyList<ScopeObserver<N>>()
   }
 }
 
@@ -193,10 +181,10 @@ interface ScopeObserver {
 
 @Tag annotation class Service<N> {
   @Provide companion object {
-    @Provide inline fun <@Spread T : @Service<N> S, S : Any, N> service(
-      @Inject key: TypeKey<S>,
-      crossinline factory: () -> T
-    ) = ProvidedService<N, S>(factory = factory)
+    @Provide fun <@Spread T : @Service<N> S, S : Any, N> service(
+      key: TypeKey<S>,
+      factory: () -> T
+    ) = ProvidedService<N, S>(key, factory)
 
     @Provide inline fun <@Spread T : @Service<N> S, S : Any, N> accessor(service: T): S = service
   }
@@ -208,22 +196,13 @@ interface ScopeObserver {
   @Provide companion object {
     @Provide fun <@Spread T : @Eager<N> S, S : Any, N> scoped(value: T): @Scoped<N> S = value
 
-    @Provide inline fun <@Spread T : @Eager<N> S, S : Any, N> service(
+    @Provide inline fun <@Spread T : @Eager<N> S, S : Any, N> observer(
       key: TypeKey<S>,
       crossinline factory: () -> S
-    ): ProvidedService<N, S> = object : ProvidedService<N, @Initializer S>, ScopeObserver {
-      override val key: TypeKey<S>
-        get() = key
-
-      private var _value: Any? = null
-
-      override fun get(scope: Scope<N>): S = _value as S
-
-      override fun onEnter(scope: Scope<*>) {
-        _value = factory()
+    ): ScopeObserver<N> = object : ScopeObserver<N> {
+      override fun onEnter(scope: Scope<N>) {
+        factory()
       }
     }
-
-    @Tag private annotation class Initializer
   }
 }

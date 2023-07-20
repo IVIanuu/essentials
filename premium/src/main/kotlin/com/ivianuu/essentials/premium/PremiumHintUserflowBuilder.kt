@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.premium
 
+import com.ivianuu.essentials.LoadingOrder
 import com.ivianuu.essentials.app.IsFirstRun
-import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.ui.navigation.UserflowBuilder
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first

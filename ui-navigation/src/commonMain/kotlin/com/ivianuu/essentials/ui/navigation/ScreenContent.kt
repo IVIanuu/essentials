@@ -18,7 +18,6 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlin.reflect.KClass
 
@@ -147,13 +146,8 @@ import kotlin.reflect.KClass
   val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen
 ) {
   @Provide companion object {
-    @Provide inline fun rootNavigationScreenContextComponent(
-      crossinline componentFactory: () -> ScreenContextComponent<RootNavGraph>
-    ) = object : ProvidedService<UiScope, ScreenContextComponent<RootNavGraph>> {
-      override val key: TypeKey<ScreenContextComponent<RootNavGraph>>
-        get() = typeKeyOf()
-      override fun get(scope: Scope<UiScope>): ScreenContextComponent<RootNavGraph> =
-        componentFactory()
-    }
+    @Provide fun rootNavigationScreenContextComponent(
+      factory: () -> ScreenContextComponent<RootNavGraph>
+    ) = ProvidedService<UiScope, _>(typeKeyOf(), factory)
   }
 }

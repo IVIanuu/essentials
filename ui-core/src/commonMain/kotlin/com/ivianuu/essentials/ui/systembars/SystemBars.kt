@@ -21,7 +21,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
-import com.ivianuu.essentials.app.LoadingOrder
+import com.ivianuu.essentials.LoadingOrder
 import com.ivianuu.essentials.ui.AppThemeDecorator
 import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.essentials.ui.insets.WindowInsetsProvider
