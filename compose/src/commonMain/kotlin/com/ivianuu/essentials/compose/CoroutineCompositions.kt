@@ -24,17 +24,17 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-fun <T> compositionFlow(@Inject context: StateCoroutineContext, body: @Composable () -> T): Flow<T> = channelFlow {
+fun <T> compositionFlow(@Inject context: StateCoroutineContext, block: @Composable () -> T): Flow<T> = channelFlow {
   launchComposition(
     emitter = { trySend(it) },
-    body = body
+    block = block
   )
   awaitClose()
 }
 
 fun <T> CoroutineScope.compositionStateFlow(
   @Inject context: StateCoroutineContext,
-  body: @Composable () -> T
+  block: @Composable () -> T
 ): StateFlow<T> {
   var flow: MutableStateFlow<T>? = null
 
@@ -47,7 +47,7 @@ fun <T> CoroutineScope.compositionStateFlow(
         flow = MutableStateFlow(value)
       }
     },
-    body = body,
+    block = block,
   )
 
   return flow!!
@@ -56,7 +56,7 @@ fun <T> CoroutineScope.compositionStateFlow(
 fun <T> CoroutineScope.launchComposition(
   emitter: (T) -> Unit = {},
   @Inject context: StateCoroutineContext,
-  body: @Composable () -> T
+  block: @Composable () -> T
 ): Job = launch(start = CoroutineStart.UNDISPATCHED) {
   val recomposer = Recomposer(coroutineContext + context)
   val composition = Composition(UnitApplier, recomposer)
@@ -81,7 +81,7 @@ fun <T> CoroutineScope.launchComposition(
   }
 
   composition.setContent {
-    emitter(body())
+    emitter(block())
   }
 }
 

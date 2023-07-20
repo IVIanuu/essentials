@@ -9,7 +9,6 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,16 +24,16 @@ import kotlin.coroutines.CoroutineContext
 fun <T> CoroutineScope.sharedComposition(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   @Inject context: StateCoroutineContext,
-  body: @Composable () -> T
+  block: @Composable () -> T
 ): @Composable () -> T {
-  val shared = sharedComposition<Unit, T>(sharingStarted) { body() }
+  val shared = sharedComposition<Unit, T>(sharingStarted) { block() }
   return { shared(Unit) }
 }
 
 fun <K, T> CoroutineScope.sharedComposition(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   @Inject context: StateCoroutineContext,
-  body: @Composable (K) -> T
+  block: @Composable (K) -> T
 ): @Composable (K) -> T {
   val sharedFlows = mutableMapOf<K, SharedFlow<T>>()
 
@@ -62,7 +61,7 @@ fun <K, T> CoroutineScope.sharedComposition(
               coroutineScope {
                 launchComposition(
                   emitter = { sharedFlow.tryEmit(it) },
-                  body = { body(key) }
+                  block = { block(key) }
                 )
               }
           }
