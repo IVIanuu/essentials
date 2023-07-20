@@ -11,11 +11,15 @@ import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.atomicfu.locks.synchronized
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 interface Scope<N> : Disposable {
   val name: TypeKey<N>
 
   val parent: Scope<*>?
+
+  val children: StateFlow<Set<Scope<*>>>
 
   val isDisposed: Boolean
 
@@ -30,6 +34,8 @@ interface Scope<N> : Disposable {
 
   fun <T : Any> service(@Inject key: TypeKey<T>): T =
     serviceOrNull(key) ?: error("No service found for ${key.value} in ${name.value}")
+
+  fun registerChild(child: Scope<*>): Disposable
 }
 
 val Scope<*>.root: Scope<*> get() = parent?.root ?: this
@@ -37,6 +43,7 @@ val Scope<*>.root: Scope<*> get() = parent?.root ?: this
 @Provide class ScopeImpl<N>(
   override val name: TypeKey<N>,
   override val parent: @ParentScope Scope<*>? = null,
+  observers: (Scope<N>, @ParentScope Scope<*>?) -> List<ScopeObserver>,
   services: (Scope<N>, @ParentScope Scope<*>?) -> List<ProvidedService<N, *>>
 ) : Scope<N>, SynchronizedObject() {
   @PublishedApi internal var _isDisposed = false
@@ -51,15 +58,22 @@ val Scope<*>.root: Scope<*> get() = parent?.root ?: this
       this[service.key.value] = service
   }
 
+  private val _children = MutableStateFlow<Set<Scope<*>>>(emptySet())
+  override val children: StateFlow<Set<Scope<*>>> by this::_children
+
   init {
+    observers(this@ScopeImpl, this@ScopeImpl).forEach { addObserver(it) }
+
     this.services.forEach {
       if (it.value is ScopeObserver)
         addObserver(it.value.cast())
     }
   }
 
+  private val parentDisposable = parent?.registerChild(this)
+
   override fun addObserver(observer: ScopeObserver): Disposable {
-    synchronized(this) {
+    synchronized(observers) {
       checkDisposed()
       observers += observer
     }
@@ -67,35 +81,55 @@ val Scope<*>.root: Scope<*> get() = parent?.root ?: this
     observer.onEnter(this)
 
     return Disposable {
-      synchronized(this) {
-        observer.onExit(this)
-        observers -= observer
-      }
+      observer.onExit(this)
+      synchronized(observers) { observers -= observer }
     }
   }
 
   override fun <T : Any> serviceOrNull(@Inject key: TypeKey<T>): T? = services[key.value]?.let {
-    return it.get(this) as T
+    return it.get(this).unsafeCast()
   } ?: parent?.serviceOrNull(key)
 
-  override fun <T> scoped(key: Any, compute: () -> T): T = synchronized(this) {
+  override fun <T> scoped(key: Any, compute: () -> T): T = synchronized(cache) {
     checkDisposed()
     val value = cache.getOrPut(key) { compute() ?: NULL }
     if (value is ScopeObserver)
       addObserver(value)
-    (if (value !== NULL) value else null) as T
+    (if (value !== NULL) value else null).unsafeCast()
   }
 
   override fun dispose() {
     synchronized(this) {
       if (!_isDisposed) {
         _isDisposed = true
-        observers.toList().forEach { it.onExit(this) }
-        cache.values.toList().forEach {
-          if (it is ScopeObserver)
-            it.onExit(this)
+        _children.value.forEach { it.dispose() }
+
+        parentDisposable?.dispose()
+
+        synchronized(observers) {
+          observers.toList()
+            .also { observers.clear() }
+        }.forEach {
+          it.onExit(this)
+
+          synchronized(cache) {
+            cache.values.toList()
+              .also { cache.clear() }
+          }.forEach { cachedValue ->
+            if (cachedValue is Disposable)
+              cachedValue.dispose()
+          }
         }
       }
+    }
+  }
+
+  override fun registerChild(child: Scope<*>): Disposable {
+    synchronized(_children) { _children.value = _children.value + child }
+    synchronized(observers) { observers.toList() }.forEach { it.onEnterChild(child) }
+    return Disposable {
+      synchronized(observers) { observers.toList() }.forEach { it.onExitChild(child) }
+      synchronized(_children) { _children.value = _children.value - child }
     }
   }
 
@@ -133,6 +167,16 @@ interface ScopeObserver {
   }
 
   fun onExit(scope: Scope<*>) {
+  }
+
+  fun onEnterChild(scope: Scope<*>) {
+  }
+
+  fun onExitChild(scope: Scope<*>) {
+  }
+
+  companion object {
+    @Provide val defaultObservers get() = emptyList<ScopeObserver>()
   }
 }
 

@@ -4,29 +4,26 @@
 
 package com.ivianuu.essentials.sample
 
-import androidx.compose.runtime.DisposableEffect
-import com.ivianuu.essentials.app.ScopeComposition
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.onCancel
+import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.ScopeObserver
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.TypeKey
 
-@Provide fun <N> scopeLogger(
-  scopeKey: TypeKey<N>,
-  logger: Logger
-) = ScopeWorker<N> {
-  logger.log { "${scopeKey.value} created worker" }
-  onCancel { logger.log { "${scopeKey.value} disposed worker" } }
-}
+@Provide fun observer(logger: Logger): ScopeObserver = object : ScopeObserver {
+  override fun onEnter(scope: Scope<*>) {
+    logger.log { "${scope.name.value} on enter" }
+  }
 
-@Provide fun <N> scopeLogger2(
-  scopeKey: TypeKey<N>,
-  logger: Logger
-) = ScopeComposition<N> {
-  DisposableEffect(true) {
-    logger.log { "${scopeKey.value} created composition" }
-    onDispose { logger.log { "${scopeKey.value} disposed composition" } }
+  override fun onExit(scope: Scope<*>) {
+    logger.log { "${scope.name.value} on exit" }
+  }
+
+  override fun onEnterChild(scope: Scope<*>) {
+    logger.log { "${scope.parent!!.name.value} on enter child ${scope.name.value}" }
+  }
+
+  override fun onExitChild(scope: Scope<*>) {
+    logger.log { "${scope.parent!!.name.value} on exit child ${scope.name.value}" }
   }
 }
