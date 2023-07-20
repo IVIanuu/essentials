@@ -18,15 +18,15 @@ import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.queryPurchasesAsync
 import com.android.billingclient.api.querySkuDetails
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.AppForegroundScope
-import com.ivianuu.essentials.app.ScopeManager
-import com.ivianuu.essentials.app.flowInScope
+import com.ivianuu.essentials.coroutineScope
 import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.coroutines.sharedResource
 import com.ivianuu.essentials.coroutines.use
+import com.ivianuu.essentials.flowInScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.result.catch
@@ -67,10 +67,9 @@ interface BillingService {
   coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val refreshes: MutableSharedFlow<BillingRefresh>,
-  scope: ScopedCoroutineScope<AppScope>,
-  private val scopeManager: ScopeManager
+  private val scope: Scope<AppScope>
 ) : BillingService {
-  private val billingClient = scope.childCoroutineScope(coroutineContexts.io).sharedResource(
+  private val billingClient = scope.coroutineScope.childCoroutineScope(coroutineContexts.io).sharedResource(
     sharingStarted = SharingStarted.WhileSubscribed(10.seconds.inWholeMilliseconds),
     create = {
       logger.log { "create client" }
@@ -108,7 +107,7 @@ interface BillingService {
     }
   )
 
-  override fun isPurchased(sku: Sku): Flow<Boolean> = scopeManager.flowInScope<AppForegroundScope, _>(
+  override fun isPurchased(sku: Sku): Flow<Boolean> = scope.flowInScope<AppForegroundScope, _>(
     refreshes.onStart { emit(BillingRefresh) }
       .onStart { emit(BillingRefresh) }
       .onEach { logger.log { "update is purchased for $sku" } }

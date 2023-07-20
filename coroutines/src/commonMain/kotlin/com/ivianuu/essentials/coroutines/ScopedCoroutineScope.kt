@@ -6,7 +6,6 @@ package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.essentials.Disposable
 import com.ivianuu.essentials.ProvidedService
-import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -41,5 +40,3 @@ typealias ScopeCoroutineContext<N> = @ScopeCoroutineContextTag<N> CoroutineConte
     @Provide fun <N> context(contexts: CoroutineContexts): ScopeCoroutineContext<N> = contexts.main
   }
 }
-
-val Scope<*>.coroutineScope: CoroutineScope get() = service()

@@ -4,26 +4,16 @@
 
 package com.ivianuu.essentials.sample
 
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.ScopeObserver
+import com.ivianuu.essentials.allScopes
+import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
-@Provide fun <N> observer(logger: Logger): ScopeObserver<N> = object : ScopeObserver<N> {
-  override fun onEnter(scope: Scope<N>) {
-    logger.log { "${scope.name.value} on enter" }
-  }
-
-  override fun onExit(scope: Scope<N>) {
-    logger.log { "${scope.name.value} on exit" }
-  }
-
-  override fun onEnterChild(scope: Scope<*>) {
-    logger.log { "${scope.parent!!.name.value} on enter child ${scope.name.value}" }
-  }
-
-  override fun onExitChild(scope: Scope<*>) {
-    logger.log { "${scope.parent!!.name.value} on exit child ${scope.name.value}" }
+@Provide fun observer(logger: Logger, appScope: Scope<AppScope>) = ScopeWorker<AppScope> {
+  appScope.allScopes().collect { allScopes ->
+    logger.log { "active scopes ${allScopes.map { it.name.value }}" }
   }
 }

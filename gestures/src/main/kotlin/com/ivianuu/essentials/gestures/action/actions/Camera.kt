@@ -11,12 +11,12 @@ import android.hardware.camera2.CameraManager
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.accessibility.AccessibilityScope
 import com.ivianuu.essentials.accessibility.accessibilityService
-import com.ivianuu.essentials.app.ScopeManager
-import com.ivianuu.essentials.app.firstActiveScopeOrNull
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
@@ -27,6 +27,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.scopeOfOrNull
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
@@ -51,12 +52,12 @@ import kotlin.coroutines.resume
 
 @Provide fun cameraActionExecutor(
   actionIntentSender: ActionIntentSender,
+  appScope: Scope<AppScope>,
   cameraManager: @SystemService CameraManager,
   currentApp: Flow<CurrentApp?>,
   logger: Logger,
   packageManager: PackageManager,
-  screenState: Flow<ScreenState>,
-  scopeManager: ScopeManager
+  screenState: Flow<ScreenState>
 ) = ActionExecutor<CameraActionId> {
   val cameraApp = packageManager
     .resolveActivity(
@@ -79,7 +80,7 @@ import kotlin.coroutines.resume
   val frontFacing = if (frontCamera != null &&
     currentScreenState != ScreenState.OFF &&
     (currentScreenState == ScreenState.UNLOCKED ||
-        scopeManager.firstActiveScopeOrNull<AccessibilityScope>()
+        appScope.scopeOfOrNull<AccessibilityScope>().first()
           ?.accessibilityService?.rootInActiveWindow?.packageName != "com.android.systemui") &&
     cameraApp.activityInfo!!.packageName == currentApp.first()?.value
   )
