@@ -20,7 +20,7 @@ import com.android.billingclient.api.querySkuDetails
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.app.AppForegroundScope
+import com.ivianuu.essentials.app.AppVisibleScope
 import com.ivianuu.essentials.coroutineScope
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.childCoroutineScope
@@ -107,7 +107,7 @@ interface BillingService {
     }
   )
 
-  override fun isPurchased(sku: Sku): Flow<Boolean> = scope.flowInScope<AppForegroundScope, _>(
+  override fun isPurchased(sku: Sku): Flow<Boolean> = scope.flowInScope<AppVisibleScope, _>(
     refreshes.onStart { emit(BillingRefresh) }
       .onStart { emit(BillingRefresh) }
       .onEach { logger.log { "update is purchased for $sku" } }

@@ -8,7 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.app.AppForegroundScope
+import com.ivianuu.essentials.app.AppVisibleScope
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.onCancel
@@ -18,21 +18,21 @@ import kotlinx.coroutines.withContext
 
 interface ForegroundActivityMarker
 
-@Provide fun foregroundScopeWorker(
+@Provide fun appVisibleScopeWorker(
+  appVisibleScopeFactory: () -> Scope<AppVisibleScope>,
   activity: ComponentActivity,
   coroutineContexts: CoroutineContexts,
-  foregroundScopeFactory: () -> Scope<AppForegroundScope>
 ) = ScopeWorker<UiScope> worker@{
   if (activity !is ForegroundActivityMarker) return@worker
 
-  var foregroundScope: Scope<AppForegroundScope>? = null
+  var appVisibleScope: Scope<AppVisibleScope>? = null
   val observer = LifecycleEventObserver { _, _ ->
     if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-      if (foregroundScope == null)
-        foregroundScope = foregroundScopeFactory()
+      if (appVisibleScope == null)
+        appVisibleScope = appVisibleScopeFactory()
     } else {
-      foregroundScope?.dispose()
-      foregroundScope = null
+      appVisibleScope?.dispose()
+      appVisibleScope = null
     }
   }
 

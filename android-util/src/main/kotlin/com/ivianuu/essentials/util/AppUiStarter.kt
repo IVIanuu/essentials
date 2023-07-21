@@ -10,7 +10,7 @@ import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.app.AppForegroundScope
+import com.ivianuu.essentials.app.AppVisibleScope
 import com.ivianuu.essentials.scopeOf
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.injekt.Provide
@@ -29,5 +29,5 @@ import kotlinx.coroutines.flow.first
     }
   )
 
-  appScope.scopeOf<AppForegroundScope>().first().service()
+  appScope.scopeOf<AppVisibleScope>().first().service()
 }
