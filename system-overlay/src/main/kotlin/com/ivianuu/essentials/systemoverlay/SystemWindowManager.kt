@@ -34,8 +34,10 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalView
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
+import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.result.catch
@@ -50,6 +52,8 @@ interface SystemWindowManager {
     content: @Composable () -> Unit
   ): Nothing
 }
+
+data object SystemWindowScope
 
 class SystemWindowState(
   width: Int = WindowManager.LayoutParams.MATCH_PARENT,
@@ -132,6 +136,7 @@ fun Modifier.systemWindowTrigger() = composed {
   private val appContext: AppContext,
   accessibilityWindowManager: AccessibilityWindowManager? = null,
   private val coroutineContexts: CoroutineContexts,
+  private val systemWindowScopeFactory: () -> Scope<SystemWindowScope>,
   windowManager: @SystemService WindowManager
 ) : SystemWindowManager {
   internal val canUseAccessibility = accessibilityWindowManager != null
@@ -145,7 +150,13 @@ fun Modifier.systemWindowTrigger() = composed {
       acquire = {
         lateinit var contentView: View
         contentView = OverlayComposeView(appContext) {
-          Window(contentView, state, content)
+          val scope = remember(systemWindowScopeFactory)
+          DisposableEffect(true) {
+            onDispose { scope.dispose() }
+          }
+          CompositionLocalProvider(LocalScope provides scope) {
+            Window(contentView, state, content)
+          }
         }
         contentView
       },
