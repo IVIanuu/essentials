@@ -35,6 +35,8 @@ interface ForegroundManager {
   }
 }
 
+data object ForegroundScope
+
 @Provide @Scoped<AppScope> class ForegroundManagerImpl(
   private val appContext: AppContext,
   private val logger: Logger

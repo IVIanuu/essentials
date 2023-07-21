@@ -13,8 +13,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.compose.launchComposition
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
@@ -30,7 +32,8 @@ import kotlin.time.Duration.Companion.seconds
   private val foregroundManager: ForegroundManagerImpl,
   private val notificationManager: @SystemService NotificationManager,
   private val logger: Logger,
-  private val scope: ScopedCoroutineScope<AppScope>
+  private val scope: ScopedCoroutineScope<AppScope>,
+  private val foregroundScopeFactory: () -> Scope<ForegroundScope>
 ) : Service() {
   private var job: Job? = null
 
@@ -74,6 +77,12 @@ import kotlin.time.Duration.Companion.seconds
             onCancel = { logger.log { "cancel delayed stop" } }
           )
         }
+      else {
+        val foregroundScope = remember(foregroundScopeFactory)
+        DisposableEffect(true) {
+          onDispose { foregroundScope.dispose() }
+        }
+      }
     }
   }
 
