@@ -30,4 +30,4 @@ data class TileModel<out T : AbstractEsTileService<*>>(
   @Provide val defaultTileModels get() = emptyList<Pair<KClass<AbstractEsTileService<*>>, () -> Model<TileModel<*>>>>()
 }
 
-object TileScope
+data object TileScope

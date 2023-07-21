@@ -10,7 +10,7 @@ import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Provide
 
-@Provide object XposedScope {
+@Provide data object XposedScope {
   @Provide val appScope: Scope<AppScope> get() = cast()
 }
 

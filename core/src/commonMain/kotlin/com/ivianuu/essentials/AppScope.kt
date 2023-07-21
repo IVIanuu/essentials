@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials
 
-object AppScope
+data object AppScope
 
 interface AppScopeOwner {
   val appScope: Scope<AppScope>

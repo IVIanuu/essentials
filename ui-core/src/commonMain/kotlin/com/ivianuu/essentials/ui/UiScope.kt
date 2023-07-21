@@ -6,7 +6,7 @@ package com.ivianuu.essentials.ui
 
 import com.ivianuu.essentials.Scope
 
-object UiScope
+data object UiScope
 
 interface UiScopeOwner {
   val uiScope: Scope<UiScope>

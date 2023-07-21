@@ -4,4 +4,4 @@
 
 package com.ivianuu.essentials.app
 
-object AppVisibleScope
+data object AppVisibleScope

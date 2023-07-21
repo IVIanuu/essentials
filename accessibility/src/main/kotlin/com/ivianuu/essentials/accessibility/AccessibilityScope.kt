@@ -6,7 +6,7 @@ package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.essentials.Scope
 
-object AccessibilityScope
+data object AccessibilityScope
 
 val Scope<*>.accessibilityService: EsAccessibilityService
   get() = service()
