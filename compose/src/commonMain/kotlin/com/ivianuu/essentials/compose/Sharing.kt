@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 fun <T> CoroutineScope.sharedComposition(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
+  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0),
   @Inject context: StateCoroutineContext,
   block: @Composable () -> T
 ): @Composable () -> T {
@@ -31,7 +31,7 @@ fun <T> CoroutineScope.sharedComposition(
 }
 
 fun <K, T> CoroutineScope.sharedComposition(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
+  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0),
   @Inject context: StateCoroutineContext,
   block: @Composable (K) -> T
 ): @Composable (K) -> T {
