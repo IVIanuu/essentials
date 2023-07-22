@@ -58,7 +58,11 @@ fun Scope<*>.allScopes(): Flow<Set<Scope<*>>> = callbackFlow {
     val scopes = mutableSetOf<Scope<*>>()
 
     override fun onEnter(scope: Scope<Any>) {
-      if (synchronized(scopes) { scopes.add(scope) }) {
+      val addResult = synchronized(scopes) {
+        if (scopes.add(scope)) scopes.toSet()
+        else null
+      }
+      if (addResult != null) {
         launch {
           scope.children.collect { children ->
             children.forEach { child ->
@@ -67,13 +71,15 @@ fun Scope<*>.allScopes(): Flow<Set<Scope<*>>> = callbackFlow {
           }
         }
 
-        trySend(scopes.toSet())
+        trySend(addResult)
       }
     }
 
     override fun onExit(scope: Scope<Any>) {
-      synchronized(scopes) { scopes.remove(scope) }
-      trySend(scopes.toSet())
+      synchronized(scopes) {
+        if (scopes.remove(scope)) scopes.toSet()
+        else null
+      }?.let { trySend(it) }
     }
 
     fun install(scope: Scope<*>) {

@@ -64,7 +64,7 @@ import kotlin.time.Duration.Companion.seconds
         }
       }
 
-      if (states.isEmpty())
+      if (states.isEmpty()) {
         LaunchedEffect(true) {
           onCancel(
             block = {
@@ -77,7 +77,7 @@ import kotlin.time.Duration.Companion.seconds
             onCancel = { logger.log { "cancel delayed stop" } }
           )
         }
-      else {
+      } else {
         val foregroundScope = remember(foregroundScopeFactory)
         DisposableEffect(true) {
           onDispose { foregroundScope.dispose() }
