@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
 @Provide fun tileServiceDeclarationChecker(
   context: AppContext,
   packageManager: PackageManager,
-  tileBindings: List<Pair<KClass<AbstractEsTileService<*>>, () -> Model<TileModel<*>>>>
+  tileBindings: List<Pair<KClass<AbstractEsTileService>, () -> Model<TileModel<*>>>>
 ) = ScopeWorker<AppScope> {
   for ((tileClass) in tileBindings) {
     val intent = Intent(context, tileClass.java)

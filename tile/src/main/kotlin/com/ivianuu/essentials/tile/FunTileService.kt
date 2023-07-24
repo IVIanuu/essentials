@@ -22,61 +22,60 @@ import kotlin.reflect.KClass
 
 @Provide @AndroidComponent class EsTileService1(
   @Inject logger: Logger,
-  @Inject tileScopeFactory: (KClass<EsTileService1>) -> Scope<TileScope>
-) : AbstractEsTileService<EsTileService1>()
+  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService()
 
 @Provide @AndroidComponent class EsTileService2(
   @Inject logger: Logger,
-  @Inject tileScopeFactory: (KClass<EsTileService2>) -> Scope<TileScope>
-) : AbstractEsTileService<EsTileService2>()
+  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService()
 
 @Provide @AndroidComponent class EsTileService3(
   @Inject logger: Logger,
-  @Inject tileScopeFactory: (KClass<EsTileService3>) -> Scope<TileScope>
-) : AbstractEsTileService<EsTileService3>()
+  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService()
 
 @Provide @AndroidComponent class EsTileService4(
   @Inject logger: Logger,
-  @Inject tileScopeFactory: (KClass<EsTileService4>) -> Scope<TileScope>
-) : AbstractEsTileService<EsTileService4>()
+  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService()
 
 @Provide @AndroidComponent class EsTileService5(
   @Inject logger: Logger,
-  @Inject tileScopeFactory: (KClass<EsTileService5>) -> Scope<TileScope>
-) : AbstractEsTileService<EsTileService5>()
+  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService()
 
 @Provide @AndroidComponent class EsTileService6(
   @Inject logger: Logger,
-  @Inject tileScopeFactory: (KClass<EsTileService6>) -> Scope<TileScope>
-) : AbstractEsTileService<EsTileService6>()
+  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService()
 
 @Provide @AndroidComponent class EsTileService7(
   @Inject logger: Logger,
-  @Inject tileScopeFactory: (KClass<EsTileService7>) -> Scope<TileScope>
-) : AbstractEsTileService<EsTileService7>()
+  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService()
 
 @Provide @AndroidComponent class EsTileService8(
   @Inject logger: Logger,
-  @Inject tileScopeFactory: (KClass<EsTileService8>) -> Scope<TileScope>
-) : AbstractEsTileService<EsTileService8>()
+  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService()
 
 @Provide @AndroidComponent class EsTileService9(
   @Inject logger: Logger,
-  @Inject tileScopeFactory: (KClass<EsTileService9>) -> Scope<TileScope>
-) : AbstractEsTileService<EsTileService9>()
+  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService()
 
-abstract class AbstractEsTileService<T : AbstractEsTileService<T>>(
+abstract class AbstractEsTileService(
   @Inject private val logger: Logger,
-  @Inject private val serviceClass: KClass<T>,
-  @Inject private val tileScopeFactory: (KClass<T>) -> Scope<TileScope>
+  @Inject private val tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
 ) : TileService() {
   private var tileScope: Scope<TileScope>? = null
   private var currentModel: TileModel<*>? = null
 
   override fun onStartListening() {
     super.onStartListening()
-    logger.log { "$serviceClass on start listening" }
-    tileScope = tileScopeFactory(serviceClass)
+    logger.log { "${this::class} on start listening" }
+    tileScope = tileScopeFactory(this)
     val tileComponent = tileScope!!.service<TileComponent>()
     tileComponent
       .tileModel
@@ -86,14 +85,14 @@ abstract class AbstractEsTileService<T : AbstractEsTileService<T>>(
 
   override fun onClick() {
     super.onClick()
-    logger.log { "$serviceClass on click" }
+    logger.log { "${this::class} on click" }
     currentModel?.onClick?.invoke()
   }
 
   override fun onStopListening() {
     tileScope?.dispose()
     tileScope = null
-    logger.log { "$serviceClass on stop listening" }
+    logger.log { "${this::class} on stop listening" }
     super.onStopListening()
   }
 
@@ -114,12 +113,12 @@ abstract class AbstractEsTileService<T : AbstractEsTileService<T>>(
 }
 
 @Provide @Service<TileScope> data class TileComponent(
-  val tileClass: KClass<AbstractEsTileService<*>>,
-  val tileModelRecords: Map<KClass<AbstractEsTileService<*>>, () -> Model<TileModel<*>>>,
+  val tileService: AbstractEsTileService,
+  val tileModelRecords: Map<KClass<AbstractEsTileService>, () -> Model<TileModel<*>>>,
   val coroutineScope: ScopedCoroutineScope<TileScope>,
   val scope: Scope<TileScope>
 ) {
-  private val model = tileModelRecords[tileClass]?.invoke()
-    ?: error("No tile found for $tileClass in ${tileModelRecords.toMap()}")
+  private val model = tileModelRecords[tileService::class]?.invoke()
+    ?: error("No tile found for ${tileService::class} in ${tileModelRecords.toMap()}")
   val tileModel = coroutineScope.compositionStateFlow { model() }
 }
