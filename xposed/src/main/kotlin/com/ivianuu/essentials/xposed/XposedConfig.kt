@@ -19,7 +19,7 @@ data class XposedConfig(
     @Provide fun default(
       lpparam: XC_LoadPackage.LoadPackageParam,
       modulePackageName: ModulePackageName,
-    ): XposedConfig = XposedConfig(
+    ) = XposedConfig(
       packageName = lpparam.packageName,
       processName = lpparam.processName,
       classLoader = lpparam.classLoader,
