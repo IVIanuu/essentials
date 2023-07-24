@@ -10,7 +10,7 @@ import com.ivianuu.injekt.Provide
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
-abstract class EsXposedApp : IXposedHookLoadPackage {
+abstract class EsXposedInit : IXposedHookLoadPackage {
   override fun handleLoadPackage(@Provide lpparam: XC_LoadPackage.LoadPackageParam) {
     xposedScope = buildXposedScope()
     xposedScope.service<XposedHooksComponent>().run {

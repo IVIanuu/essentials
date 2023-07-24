@@ -11,7 +11,7 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Provide
 
 @Provide data object XposedScope {
-  @Provide val appScope: Scope<AppScope> get() = cast()
+  @Provide fun appScope(xposedScope: Scope<XposedScope>): Scope<AppScope> = xposedScope.cast()
 }
 
 @Provide @Service<XposedScope> data class XposedHooksComponent(
