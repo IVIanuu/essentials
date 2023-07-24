@@ -12,18 +12,8 @@ import com.ivianuu.injekt.common.TypeKey
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.atomicfu.locks.synchronized
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.launch
 
 interface Scope<N> : Disposable {
   val name: TypeKey<N>
@@ -52,89 +42,6 @@ interface Scope<N> : Disposable {
 val Scope<*>.root: Scope<*> get() = parent?.root ?: this
 
 val Scope<*>.coroutineScope: CoroutineScope get() = service()
-
-fun Scope<*>.allScopes(): Flow<Set<Scope<*>>> = callbackFlow {
-  val observer = object : ScopeObserver<Any>, SynchronizedObject() {
-    val scopes = mutableSetOf<Scope<*>>()
-
-    override fun onEnter(scope: Scope<Any>) {
-      val addResult = synchronized(scopes) {
-        if (scopes.add(scope)) scopes.toSet()
-        else null
-      }
-      if (addResult != null) {
-        launch {
-          scope.children.collect { children ->
-            children.forEach { child ->
-              install(child)
-            }
-          }
-        }
-
-        trySend(addResult)
-      }
-    }
-
-    override fun onExit(scope: Scope<Any>) {
-      synchronized(scopes) {
-        if (scopes.remove(scope)) scopes.toSet()
-        else null
-      }?.let { trySend(it) }
-    }
-
-    fun install(scope: Scope<*>) {
-      val disposable = scope.addObserver(this)
-      launch {
-        try {
-          awaitCancellation()
-        } finally {
-          disposable.dispose()
-        }
-      }
-    }
-  }
-
-  observer.install(this@allScopes)
-
-  awaitClose()
-}.distinctUntilChanged()
-
-fun <N> Scope<*>.allScopesOf(@Inject name: TypeKey<N>): Flow<Set<Scope<N>>> = allScopes()
-  .map { it.filterTo(mutableSetOf()) { it.name == name }.cast() }
-
-fun <N> Scope<*>.scopeOfOrNull(@Inject name: TypeKey<N>): Flow<Scope<N>?> = allScopesOf<N>()
-  .map { it.firstOrNull() }
-
-fun <N> Scope<*>.scopeOf(@Inject name: TypeKey<N>): Flow<Scope<N>> = allScopesOf<N>()
-  .mapNotNull { it.firstOrNull() }
-
-fun <N, T> Scope<*>.flowInScope(flow: Flow<T>, @Inject name: TypeKey<N>): Flow<T> = channelFlow {
-  repeatInScope<N> {
-    flow.collect { send(it) }
-  }
-}
-
-suspend fun <N> Scope<*>.repeatInScope(@Inject name: TypeKey<N>, block: suspend (Scope<N>) -> Unit) {
-  val jobs = mutableMapOf<Scope<*>, Job>()
-  try {
-    allScopesOf<N>().collect { scopes ->
-      jobs.keys.toList().forEach {
-        if (it !in scopes)
-          jobs.remove(it)?.cancel()
-      }
-
-      scopes.forEach { scope ->
-        jobs.getOrPut(scope) {
-          scope.coroutineScope.launch {
-            block(scope)
-          }
-        }
-      }
-    }
-  } finally {
-    jobs.values.forEach { it.cancel() }
-  }
-}
 
 @Provide class ScopeImpl<N>(
   override val name: TypeKey<N>,

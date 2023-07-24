@@ -10,8 +10,7 @@ import android.service.notification.StatusBarNotification
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.scopeOf
@@ -36,27 +35,27 @@ interface NotificationService {
 }
 
 @Provide class NotificationServiceImpl(
-  private val appScope: Scope<AppScope>
+  private val scopeManager: ScopeManager
 ) : NotificationService {
   override val notificationEvents: Flow<NotificationEvent> =
-    appScope.scopeOfOrNull<NotificationScope>()
+    scopeManager.scopeOfOrNull<NotificationScope>()
       .flatMapLatest { it?.notificationListenerService?.events ?: emptyFlow() }
 
   override val notifications: List<StatusBarNotification>
     @Composable get() =
-      remember { appScope.scopeOfOrNull<NotificationScope>() }.collectAsState(null).value
+      remember { scopeManager.scopeOfOrNull<NotificationScope>() }.collectAsState(null).value
         ?.notificationListenerService?.notifications?.collectAsState()?.value ?: emptyList()
 
   override suspend fun openNotification(notification: Notification) =
     catch { notification.contentIntent.send() }
 
   override suspend fun dismissNotification(key: String) = catch {
-    appScope.scopeOf<NotificationScope>().first()
+    scopeManager.scopeOf<NotificationScope>().first()
       .notificationListenerService.cancelNotification(key)
   }
 
   override suspend fun dismissAllNotifications() = catch {
-    appScope.scopeOf<NotificationScope>().first()
+    scopeManager.scopeOf<NotificationScope>().first()
       .notificationListenerService.cancelAllNotifications()
   }
 }

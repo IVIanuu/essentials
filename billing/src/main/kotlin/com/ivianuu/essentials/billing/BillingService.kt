@@ -19,6 +19,7 @@ import com.android.billingclient.api.queryPurchasesAsync
 import com.android.billingclient.api.querySkuDetails
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.AppVisibleScope
 import com.ivianuu.essentials.coroutineScope
@@ -67,7 +68,8 @@ interface BillingService {
   coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val refreshes: MutableSharedFlow<BillingRefresh>,
-  private val scope: Scope<AppScope>
+  private val scope: Scope<AppScope>,
+  private val scopeManager: ScopeManager
 ) : BillingService {
   private val billingClient = scope.coroutineScope.childCoroutineScope(coroutineContexts.io).sharedResource(
     sharingStarted = SharingStarted.WhileSubscribed(10.seconds.inWholeMilliseconds),
@@ -107,7 +109,7 @@ interface BillingService {
     }
   )
 
-  override fun isPurchased(sku: Sku): Flow<Boolean> = scope.flowInScope<AppVisibleScope, _>(
+  override fun isPurchased(sku: Sku): Flow<Boolean> = scopeManager.flowInScope<AppVisibleScope, _>(
     refreshes.onStart { emit(BillingRefresh) }
       .onStart { emit(BillingRefresh) }
       .onEach { logger.log { "update is purchased for $sku" } }

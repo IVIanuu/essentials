@@ -11,9 +11,8 @@ import android.hardware.camera2.CameraManager
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
-import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.accessibility.AccessibilityScope
 import com.ivianuu.essentials.accessibility.accessibilityService
@@ -52,12 +51,12 @@ import kotlin.coroutines.resume
 
 @Provide fun cameraActionExecutor(
   actionIntentSender: ActionIntentSender,
-  appScope: Scope<AppScope>,
   cameraManager: @SystemService CameraManager,
   currentApp: Flow<CurrentApp?>,
   logger: Logger,
   packageManager: PackageManager,
-  screenState: Flow<ScreenState>
+  scopeManager: ScopeManager,
+  screenState: Flow<ScreenState>,
 ) = ActionExecutor<CameraActionId> {
   val cameraApp = packageManager
     .resolveActivity(
@@ -80,7 +79,7 @@ import kotlin.coroutines.resume
   val frontFacing = if (frontCamera != null &&
     currentScreenState != ScreenState.OFF &&
     (currentScreenState == ScreenState.UNLOCKED ||
-        appScope.scopeOfOrNull<AccessibilityScope>().first()
+        scopeManager.scopeOfOrNull<AccessibilityScope>().first()
           ?.accessibilityService?.rootInActiveWindow?.packageName != "com.android.systemui") &&
     cameraApp.activityInfo!!.packageName == currentApp.first()?.value
   )

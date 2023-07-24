@@ -8,8 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.app.AppVisibleScope
 import com.ivianuu.essentials.scopeOf
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
@@ -19,8 +18,8 @@ import kotlinx.coroutines.flow.first
 @Provide fun appUiStarter(
   appContext: AppContext,
   appConfig: AppConfig,
-  appScope: Scope<AppScope>,
-  packageManager: PackageManager
+  packageManager: PackageManager,
+  scopeManager: ScopeManager,
 ) = AppUiStarter {
   val intent = packageManager.getLaunchIntentForPackage(appConfig.packageName)!!
   appContext.startActivity(
@@ -29,5 +28,5 @@ import kotlinx.coroutines.flow.first
     }
   )
 
-  appScope.scopeOf<AppVisibleScope>().first().service()
+  scopeManager.scopeOf<AppVisibleScope>().first().service()
 }
