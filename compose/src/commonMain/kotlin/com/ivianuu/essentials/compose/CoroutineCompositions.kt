@@ -55,9 +55,10 @@ fun <T> CoroutineScope.compositionStateFlow(
 
 fun <T> CoroutineScope.launchComposition(
   emitter: (T) -> Unit = {},
+  start: CoroutineStart = CoroutineStart.UNDISPATCHED,
   @Inject context: StateCoroutineContext,
   block: @Composable () -> T
-): Job = launch(start = CoroutineStart.UNDISPATCHED) {
+): Job = launch(start = start) {
   val recomposer = Recomposer(coroutineContext + context)
   val composition = Composition(UnitApplier, recomposer)
   launch(context, CoroutineStart.UNDISPATCHED) {
