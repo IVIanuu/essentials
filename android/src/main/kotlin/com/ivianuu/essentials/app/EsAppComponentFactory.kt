@@ -23,8 +23,7 @@ class EsAppComponentFactory : AppComponentFactory() {
   }
 
   override fun instantiateApplication(cl: ClassLoader, className: String): Application =
-    super.instantiateApplication(cl, className).cast<EsApp>()
-      .also { app = it }
+    super.instantiateApplication(cl, className).cast<EsApp>().also { app = it }
 
   override fun instantiateActivity(cl: ClassLoader, className: String, intent: Intent?): Activity =
     factories[className]?.invoke(intent)?.cast() ?: super.instantiateActivity(cl, className, intent)
