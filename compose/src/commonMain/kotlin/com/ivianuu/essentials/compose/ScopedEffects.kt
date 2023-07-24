@@ -30,7 +30,9 @@ val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }
 ): T {
   val finalKey = key ?: currentCompositeKeyHash
 
-  val valueHolder = remember { scope.scoped(finalKey) { ScopedValueHolder() } }
+  val valueHolder = remember(scope, finalKey) {
+    scope.scoped(finalKey) { ScopedValueHolder() }
+  }
 
   val value = remember(*inputs) {
     valueHolder.value
