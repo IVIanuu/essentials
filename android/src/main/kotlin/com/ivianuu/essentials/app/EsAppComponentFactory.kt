@@ -13,20 +13,13 @@ import android.content.ContentProvider
 import android.content.Intent
 import com.ivianuu.essentials.AndroidComponentFactoryComponent
 import com.ivianuu.essentials.cast
-import com.ivianuu.injekt.Provide
-import kotlin.reflect.KClass
 
 class EsAppComponentFactory : AppComponentFactory() {
-  private val factories: Map<KClass<*>, Map<String, (Intent?) -> Any>> by lazy(LazyThreadSafetyMode.NONE) {
+  private val factories: Map<String, (Intent?) -> Any> by lazy(LazyThreadSafetyMode.NONE) {
     app.appScope.service<AndroidComponentFactoryComponent>()
       .factories
-      .groupBy { it.first }
-      .mapValues { (_, factories) ->
-        factories
-          .map { it.second }
-          .toMap()
-          .mapKeys { it.key.java.name }
-      }
+      .toMap()
+      .mapKeys { it.key.java.name }
   }
 
   override fun instantiateApplication(cl: ClassLoader, className: String): Application =
@@ -34,26 +27,22 @@ class EsAppComponentFactory : AppComponentFactory() {
       .also { app = it }
 
   override fun instantiateActivity(cl: ClassLoader, className: String, intent: Intent?): Activity =
-    factories[Activity::class]?.get(className)?.invoke(intent)?.cast()
-      ?: super.instantiateActivity(cl, className, intent)
+    factories[className]?.invoke(intent)?.cast() ?: super.instantiateActivity(cl, className, intent)
 
   override fun instantiateService(cl: ClassLoader, className: String, intent: Intent?): Service =
-    factories[Service::class]?.get(className)?.invoke(intent)?.cast()
-      ?: super.instantiateService(cl, className, intent)
+    factories[className]?.invoke(intent)?.cast() ?: super.instantiateService(cl, className, intent)
 
   override fun instantiateReceiver(
     cl: ClassLoader,
     className: String,
     intent: Intent?
-  ): BroadcastReceiver =
-    factories[BroadcastReceiver::class]?.get(className)?.invoke(intent)?.cast()
-      ?: super.instantiateReceiver(cl, className, intent)
+  ): BroadcastReceiver = factories[className]?.invoke(intent)?.cast()
+    ?: super.instantiateReceiver(cl, className, intent)
 
   override fun instantiateProvider(cl: ClassLoader, className: String): ContentProvider =
-    factories[ContentProvider::class]?.get(className)?.invoke(null)?.cast()
-      ?: super.instantiateProvider(cl, className)
+    factories[className]?.invoke(null)?.cast() ?: super.instantiateProvider(cl, className)
 
-  @Provide companion object {
+  companion object {
     private lateinit var app: EsApp
   }
 }

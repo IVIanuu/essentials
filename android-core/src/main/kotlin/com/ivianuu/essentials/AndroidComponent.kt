@@ -18,31 +18,27 @@ import kotlin.reflect.KClass
     @Provide fun <@Spread T : @AndroidComponent S, S : Activity> activity(
       componentClass: KClass<T>,
       factory: (Intent?) -> T
-    ): Pair<KClass<*>, Pair<KClass<*>, (Intent?) -> Any>> =
-      Activity::class to (componentClass to factory)
+    ): Pair<KClass<*>, (Intent?) -> Any> = componentClass to factory
 
     @Provide fun <@Spread T : @AndroidComponent S, S : android.app.Service> service(
       componentClass: KClass<T>,
       factory: (Intent?) -> T
-    ): Pair<KClass<*>, Pair<KClass<*>, (Intent?) -> Any>> =
-      android.app.Service::class to (componentClass to factory)
+    ): Pair<KClass<*>, (Intent?) -> Any> = componentClass to factory
 
     @Provide fun <@Spread T : @AndroidComponent S, S : BroadcastReceiver> receiver(
       componentClass: KClass<T>,
       factory: (Intent?) -> T
-    ): Pair<KClass<*>, Pair<KClass<*>, (Intent?) -> Any>> =
-      BroadcastReceiver::class to (componentClass to factory)
+    ): Pair<KClass<*>, (Intent?) -> Any> = componentClass to factory
 
     @Provide fun <@Spread T : @AndroidComponent S, S : ContentProvider> provider(
       componentClass: KClass<T>,
       factory: (Intent?) -> T
-    ): Pair<KClass<*>, Pair<KClass<*>, (Intent?) -> Any>> =
-      ContentProvider::class to (componentClass to factory)
+    ): Pair<KClass<*>, (Intent?) -> Any> = componentClass to factory
 
-    @Provide val defaultAndroidComponents get() = emptyList<Pair<KClass<*>, Pair<KClass<*>, (Intent?) -> Any>>>()
+    @Provide val defaultAndroidComponents get() = emptyList<Pair<KClass<*>, (Intent?) -> Any>>()
   }
 }
 
 @Provide @Service<AppScope> class AndroidComponentFactoryComponent(
-  val factories: List<Pair<KClass<*>, Pair<KClass<*>, (Intent?) -> Any>>>
+  val factories: List<Pair<KClass<*>, (Intent?) -> Any>>
 )
