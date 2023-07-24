@@ -18,7 +18,7 @@ abstract class EsXposedInit : IXposedHookLoadPackage {
     }
   }
 
-  protected abstract fun buildXposedScope(@Inject llparam: XC_LoadPackage.LoadPackageParam): Scope<XposedScope>
+  protected abstract fun buildXposedScope(@Inject params: XC_LoadPackage.LoadPackageParam): Scope<XposedScope>
 
   @Provide companion object {
     private lateinit var xposedScope: Scope<XposedScope>

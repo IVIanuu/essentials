@@ -17,13 +17,13 @@ data class XposedConfig(
 ) {
   @Provide companion object {
     @Provide fun default(
-      lpparam: XC_LoadPackage.LoadPackageParam,
+      params: XC_LoadPackage.LoadPackageParam,
       modulePackageName: ModulePackageName,
     ) = XposedConfig(
-      packageName = lpparam.packageName,
-      processName = lpparam.processName,
-      classLoader = lpparam.classLoader,
-      appInfo = lpparam.appInfo,
+      packageName = params.packageName,
+      processName = params.processName,
+      classLoader = params.classLoader,
+      appInfo = params.appInfo,
       modulePackageName = modulePackageName.value
     )
   }
