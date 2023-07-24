@@ -6,19 +6,25 @@ import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-@Provide @Scoped<AppScope> class ScopeManager {
-  val activeScopes = MutableStateFlow<Set<Scope<*>>>(emptySet())
+interface ScopeManager {
+  val activeScopes: StateFlow<Set<Scope<*>>>
+}
+
+@Provide @Scoped<AppScope> class ScopeManagerImpl : ScopeManager {
+  private val _activeScopes = MutableStateFlow<Set<Scope<*>>>(emptySet())
+  override val activeScopes: StateFlow<Set<Scope<*>>> by this::_activeScopes
 
   @Provide fun <N> observer(): ScopeObserver<N> = object : ScopeObserver<N> {
-    override fun onEnter(scope: Scope<N>) = activeScopes.update { it + scope }
+    override fun onEnter(scope: Scope<N>) = _activeScopes.update { it + scope }
 
-    override fun onExit(scope: Scope<N>) = activeScopes.update { it - scope }
+    override fun onExit(scope: Scope<N>) = _activeScopes.update { it - scope }
   }
 }
 
