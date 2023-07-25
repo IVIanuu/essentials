@@ -12,8 +12,10 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ListenableWorker
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
+import androidx.work.await
 import androidx.work.workDataOf
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
@@ -163,32 +165,51 @@ fun interface WorkInitializer : ScopeInitializer<AppScope>
 
 @Provide fun periodicWorkScheduler(
   coroutineContexts: CoroutineContexts,
+  logger: Logger,
   schedules: Map<String, PeriodicWorkSchedule<*>>,
   androidWorkManager: AndroidWorkManager,
 ) = ScopeWorker<AppScope> {
   withContext(coroutineContexts.computation) {
     schedules.forEach { (workId, schedule) ->
-      androidWorkManager.enqueueUniquePeriodicWork(
-        workId,
-        ExistingPeriodicWorkPolicy.UPDATE,
-        PeriodicWorkRequestBuilder<EsWorker>(schedule.interval.toJavaDuration())
-          .setConstraints(
-            Constraints.Builder()
-              .setRequiresCharging(schedule.constraints.requiresCharging)
-              .setRequiredNetworkType(
-                when (schedule.constraints.networkType) {
-                  WorkConstraints.NetworkType.ANY -> NetworkType.NOT_REQUIRED
-                  WorkConstraints.NetworkType.CONNECTED -> NetworkType.CONNECTED
-                  WorkConstraints.NetworkType.UNMETERED -> NetworkType.UNMETERED
-                }
-              )
-              .build()
-          )
-          .setInputData(workDataOf(WORK_ID to workId))
-          .build()
-      )
+      val existingWork = androidWorkManager.getWorkInfosForUniqueWork(
+        workId
+      ).await()
+
+      val scheduleHash = SCHEDULE_HASH_PREFIX + schedule.toString().hashCode()
+
+      if (existingWork.any { existing ->
+          (existing.state == WorkInfo.State.ENQUEUED ||
+              existing.state == WorkInfo.State.RUNNING) &&
+              existing.tags.none { it == scheduleHash }
+      }) {
+        logger.log { "enqueue work $workId with $schedule" }
+
+        androidWorkManager.enqueueUniquePeriodicWork(
+          workId,
+          ExistingPeriodicWorkPolicy.UPDATE,
+          PeriodicWorkRequestBuilder<EsWorker>(schedule.interval.toJavaDuration())
+            .setConstraints(
+              Constraints.Builder()
+                .setRequiresCharging(schedule.constraints.requiresCharging)
+                .setRequiredNetworkType(
+                  when (schedule.constraints.networkType) {
+                    WorkConstraints.NetworkType.ANY -> NetworkType.NOT_REQUIRED
+                    WorkConstraints.NetworkType.CONNECTED -> NetworkType.CONNECTED
+                    WorkConstraints.NetworkType.UNMETERED -> NetworkType.UNMETERED
+                  }
+                )
+                .build()
+            )
+            .setInputData(workDataOf(WORK_ID to workId))
+            .addTag(scheduleHash)
+            .build()
+        )
+      } else {
+        logger.log { "do not reenqueue work $workId with $schedule" }
+      }
     }
   }
 }
 
 private const val WORK_ID = "work_id"
+private const val SCHEDULE_HASH_PREFIX = "schedule_hash_"
