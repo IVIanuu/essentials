@@ -67,8 +67,8 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.4.1"
-    const val compilerVersion = "1.5.0-dev-k1.9.0-6a60475e07f"
+    const val version = "1.4.3"
+    const val compilerVersion = "1.5.1"
     const val compiler = "org.jetbrains.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
     const val googleFonts = "androidx.compose.ui:ui-text-google-fonts:$version"
@@ -86,8 +86,7 @@ object Deps {
 
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.8.10"
 
-  const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1208"
+  const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1215"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"
