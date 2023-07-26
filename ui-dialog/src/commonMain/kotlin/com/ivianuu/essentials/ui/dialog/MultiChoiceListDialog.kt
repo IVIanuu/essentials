@@ -60,10 +60,7 @@ import com.ivianuu.essentials.ui.material.Switch
 ) {
   ListItem(
     modifier = Modifier.clickable { onCheckedChange(!checked) },
-    contentPadding = PaddingValues(
-      horizontal = 24.dp,
-      vertical = 16.dp
-    ),
+    trailingPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
     title = title,
     trailing = {
       Switch(

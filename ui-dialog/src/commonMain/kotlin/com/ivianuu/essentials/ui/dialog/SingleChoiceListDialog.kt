@@ -51,10 +51,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 ) {
   ListItem(
     modifier = Modifier.clickable(onClick = onSelect),
-    contentPadding = PaddingValues(
-      horizontal = 24.dp,
-      vertical = 16.dp
-    ),
+    trailingPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
     title = title,
     trailing = {
       RadioButton(

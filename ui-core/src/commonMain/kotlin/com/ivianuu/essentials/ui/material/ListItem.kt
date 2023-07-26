@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.ui.material
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 
@@ -31,8 +33,23 @@ import androidx.compose.ui.unit.dp
   subtitle: (@Composable () -> Unit)? = null,
   leading: (@Composable () -> Unit)? = null,
   trailing: (@Composable () -> Unit)? = null,
-  contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
-  textPadding: PaddingValues = PaddingValues(horizontal = 16.dp)
+  leadingPadding: PaddingValues = if (subtitle != null)
+    PaddingValues(horizontal = 16.dp, vertical = 16.dp)
+  else
+    PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+  leadingAlignment: Alignment = if (subtitle != null)
+    Alignment.TopCenter
+  else
+    Alignment.Center,
+  textPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
+  trailingPadding: PaddingValues = if (subtitle != null)
+    PaddingValues(horizontal = 16.dp, vertical = 16.dp)
+  else
+    PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+  trailingAlignment: Alignment = if (subtitle != null)
+    Alignment.TopCenter
+  else
+    Alignment.Center,
 ) {
   val minHeight = if (subtitle != null) {
     if (leading == null) 64.dp else 72.dp
@@ -41,9 +58,7 @@ import androidx.compose.ui.unit.dp
   }
 
   Row(
-    modifier = Modifier
-      .defaultMinSize(minHeight = minHeight)
-      .then(modifier),
+    modifier = modifier.heightIn(minHeight),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Center
   ) {
@@ -53,11 +68,11 @@ import androidx.compose.ui.unit.dp
         modifier = Modifier
           .heightIn(minHeight)
           .padding(
-            start = contentPadding.calculateStartPadding(LocalLayoutDirection.current),
-            top = contentPadding.calculateTopPadding(),
-            bottom = contentPadding.calculateBottomPadding()
+            start = leadingPadding.calculateStartPadding(LocalLayoutDirection.current),
+            top = leadingPadding.calculateTopPadding(),
+            bottom = leadingPadding.calculateBottomPadding()
           ),
-        contentAlignment = Alignment.CenterStart
+        contentAlignment = leadingAlignment
       ) {
         CompositionLocalProvider(
           LocalContentAlpha provides ContentAlpha.high,
@@ -66,16 +81,11 @@ import androidx.compose.ui.unit.dp
       }
     }
 
-    // content
+    // text
     Column(
       modifier = Modifier
         .weight(1f)
-        .padding(
-          top = contentPadding.calculateTopPadding(),
-          start = textPadding.calculateStartPadding(LocalLayoutDirection.current),
-          bottom = contentPadding.calculateBottomPadding(),
-          end = textPadding.calculateEndPadding(LocalLayoutDirection.current)
-        ),
+        .padding(textPadding),
       verticalArrangement = Arrangement.Center
     ) {
       if (title != null)
@@ -98,11 +108,11 @@ import androidx.compose.ui.unit.dp
         modifier = Modifier
           .heightIn(minHeight)
           .padding(
-            top = contentPadding.calculateTopPadding(),
-            end = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
-            bottom = contentPadding.calculateBottomPadding()
+            top = trailingPadding.calculateTopPadding(),
+            end = trailingPadding.calculateEndPadding(LocalLayoutDirection.current),
+            bottom = trailingPadding.calculateBottomPadding()
           ),
-        contentAlignment = Alignment.CenterEnd
+        contentAlignment = trailingAlignment
       ) {
         CompositionLocalProvider(
           LocalContentAlpha provides ContentAlpha.high,

@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.action
@@ -49,17 +50,18 @@ class PermissionRequestScreen(
     VerticalList {
       items(model.permissionsToGrant) { permission ->
         ListItem(
-          modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp)
+          modifier = Modifier
+            .padding(start = 8.dp, top = 8.dp, end = 8.dp)
             .border(
               1.dp,
               LocalContentColor.current.copy(alpha = 0.12f),
               RoundedCornerShape(8.dp)
             ),
-          contentPadding = PaddingValues(start = 16.dp, end = 8.dp),
           textPadding = PaddingValues(start = 16.dp),
           title = { Text(permission.title) },
           subtitle = permission.desc?.let { { Text(it) } },
           leading = { permission.icon?.invoke() },
+          leadingAlignment = Alignment.Center,
           trailing = {
             Row(horizontalArrangement = Arrangement.End) {
               TextButton(
@@ -76,7 +78,8 @@ class PermissionRequestScreen(
                 Text(R.string.es_grant, maxLines = 1)
               }
             }
-          }
+          },
+          trailingAlignment = Alignment.Center
         )
       }
     }
