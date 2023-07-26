@@ -34,7 +34,7 @@ import com.ivianuu.injekt.Provide
 @Composable fun VerticalList(
   modifier: Modifier = Modifier,
   state: LazyListState = rememberLazyListState(),
-  contentPadding: PaddingValues = localVerticalInsetsPadding(top = 8.dp, bottom = 8.dp),
+  contentPadding: PaddingValues = localVerticalInsetsPadding(),
   reverseLayout: Boolean = false,
   verticalArrangement: Arrangement.Vertical =
     if (!reverseLayout) Arrangement.Top else Arrangement.Bottom,
@@ -62,7 +62,7 @@ import com.ivianuu.injekt.Provide
 @Composable fun HorizontalList(
   modifier: Modifier = Modifier,
   state: LazyListState = rememberLazyListState(),
-  contentPadding: PaddingValues = localHorizontalInsetsPadding(start = 8.dp, end = 8.dp),
+  contentPadding: PaddingValues = localHorizontalInsetsPadding(),
   reverseLayout: Boolean = false,
   horizontalArrangement: Arrangement.Horizontal =
     if (!reverseLayout) Arrangement.Start else Arrangement.End,
