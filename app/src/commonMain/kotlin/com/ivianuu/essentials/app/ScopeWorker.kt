@@ -43,23 +43,24 @@ interface ScopeWorkerRunner<N> : ScopeObserver<N> {
   coroutineScope: ScopedCoroutineScope<N>,
   logger: Logger,
   nameKey: TypeKey<N>,
-  workers: () -> List<ExtensionPointRecord<ScopeWorker<N>>>
+  workersFactory: () -> List<ExtensionPointRecord<ScopeWorker<N>>>
 ): ScopeWorkerRunner<N> = object : ScopeWorkerRunner<N> {
   override fun onEnter(scope: Scope<N>) {
     coroutineScope.launch {
       guarantee(
         block = {
           supervisorScope {
-            logger.log { "${nameKey.value} run scope workers" }
-
-            workers()
+            val workers = workersFactory()
               .sortedWithLoadingOrder()
-              .forEach { record ->
-                launch {
-                  record.instance()
-                }
-              }
+
+            logger.log { "${nameKey.value} run scope workers ${workers.map { it.key.value }}" }
+
+            workers.forEach { record ->
+              launch { record.instance() }
+            }
           }
+
+          logger.log { "${nameKey.value} scope workers completed" }
         },
         finalizer = {
           if (it is ExitCase.Cancelled)
