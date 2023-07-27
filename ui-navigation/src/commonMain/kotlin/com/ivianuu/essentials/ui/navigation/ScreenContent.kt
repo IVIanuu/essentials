@@ -44,9 +44,9 @@ import kotlin.reflect.KClass
     context.content()
 
     DisposableEffect(true) {
-      context.isContentRemoved = true
+      context.isContentRemoved = false
       onDispose {
-        context.isContentRemoved = false
+        context.isContentRemoved = true
         if (!context.isContextRemoved)
           context.savedState[compositionKey] = savableStateRegistry.performSave()
         context.disposeIfNeeded()
@@ -69,8 +69,7 @@ import kotlin.reflect.KClass
   internal var savedState = mutableMapOf<Any, Map<String, List<Any?>>>()
 
   fun disposeIfNeeded() {
-    if (isDisposed) return
-    if (isContentRemoved || !isContextRemoved) return
+    if (isDisposed || !isContentRemoved || !isContextRemoved) return
     isDisposed = true
     scope.dispose()
   }
@@ -122,6 +121,7 @@ import kotlin.reflect.KClass
         currentModel = model()
 
         DisposableEffect(true) {
+          context.isContextRemoved = false
           onDispose {
             context.isContextRemoved = true
             context.disposeIfNeeded()
