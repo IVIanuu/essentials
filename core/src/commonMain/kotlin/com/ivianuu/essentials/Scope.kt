@@ -119,14 +119,14 @@ val Scope<*>.coroutineScope: CoroutineScope get() = service()
             .also { observers.clear() }
         }.forEach {
           it.cast<ScopeObserver<N>>().onExit(this)
+        }
 
-          synchronized(cache) {
-            cache.values.toList()
-              .also { cache.clear() }
-          }.forEach { cachedValue ->
-            if (cachedValue is Disposable)
-              cachedValue.dispose()
-          }
+        synchronized(cache) {
+          cache.values.toList()
+            .also { cache.clear() }
+        }.forEach { cachedValue ->
+          if (cachedValue is Disposable)
+            cachedValue.dispose()
         }
       }
     }
