@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ContentAlpha
@@ -24,7 +22,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 
 @Composable fun ListItem(
@@ -33,23 +30,9 @@ import androidx.compose.ui.unit.dp
   subtitle: (@Composable () -> Unit)? = null,
   leading: (@Composable () -> Unit)? = null,
   trailing: (@Composable () -> Unit)? = null,
-  leadingPadding: PaddingValues = if (subtitle != null)
-    PaddingValues(horizontal = 16.dp, vertical = 16.dp)
-  else
-    PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-  leadingAlignment: Alignment = if (subtitle != null)
-    Alignment.TopCenter
-  else
-    Alignment.Center,
+  leadingPadding: PaddingValues = PaddingValues(start = 16.dp),
   textPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
-  trailingPadding: PaddingValues = if (subtitle != null)
-    PaddingValues(horizontal = 16.dp, vertical = 16.dp)
-  else
-    PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-  trailingAlignment: Alignment = if (subtitle != null)
-    Alignment.TopCenter
-  else
-    Alignment.Center,
+  trailingPadding: PaddingValues = PaddingValues(end = 16.dp)
 ) {
   val minHeight = if (subtitle != null) {
     if (leading == null) 64.dp else 72.dp
@@ -59,20 +42,15 @@ import androidx.compose.ui.unit.dp
 
   Row(
     modifier = modifier.heightIn(minHeight),
-    verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Center
   ) {
     // leading
     if (leading != null) {
       Box(
         modifier = Modifier
-          .heightIn(minHeight)
-          .padding(
-            start = leadingPadding.calculateStartPadding(LocalLayoutDirection.current),
-            top = leadingPadding.calculateTopPadding(),
-            bottom = leadingPadding.calculateBottomPadding()
-          ),
-        contentAlignment = leadingAlignment
+          .height(minHeight)
+          .padding(leadingPadding),
+        contentAlignment = Alignment.Center
       ) {
         CompositionLocalProvider(
           LocalContentAlpha provides ContentAlpha.high,
@@ -85,6 +63,7 @@ import androidx.compose.ui.unit.dp
     Column(
       modifier = Modifier
         .weight(1f)
+        .align(Alignment.CenterVertically)
         .padding(textPadding),
       verticalArrangement = Arrangement.Center
     ) {
@@ -106,13 +85,9 @@ import androidx.compose.ui.unit.dp
     if (trailing != null) {
       Box(
         modifier = Modifier
-          .heightIn(minHeight)
-          .padding(
-            top = trailingPadding.calculateTopPadding(),
-            end = trailingPadding.calculateEndPadding(LocalLayoutDirection.current),
-            bottom = trailingPadding.calculateBottomPadding()
-          ),
-        contentAlignment = trailingAlignment
+          .height(minHeight)
+          .padding(trailingPadding),
+        contentAlignment = Alignment.Center
       ) {
         CompositionLocalProvider(
           LocalContentAlpha provides ContentAlpha.high,

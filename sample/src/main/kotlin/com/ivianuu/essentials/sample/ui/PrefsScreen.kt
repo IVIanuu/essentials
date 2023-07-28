@@ -58,7 +58,7 @@ class PrefsScreen : Screen<Unit>
           onValueChange = action { value ->
             pref.updateData { copy(switch = value) }
           },
-          leading = { IconPlaceholder() },
+          leading = { Icon(Icons.Default.ThumbUp) },
           title = { Text("Switch") }
         )
       }
@@ -102,7 +102,7 @@ class PrefsScreen : Screen<Unit>
             pref.updateData { copy(steppedSlider = value) }
           },
           modifier = Modifier.interactive(prefs.switch),
-          leading = { IconPlaceholder() },
+          leading = { Icon(Icons.Default.ThumbUp) },
           title = { Text("Stepped slider") },
           subtitle = { Text("This is a stepped slider preference") },
           stepPolicy = incrementingStepPolicy(0.05f),
@@ -134,7 +134,7 @@ class PrefsScreen : Screen<Unit>
               }
             )
             .interactive(prefs.switch),
-          leading = { IconPlaceholder() },
+          leading = { Icon(Icons.Default.ThumbUp) },
           title = { Text("Text input") },
           subtitle = { Text("This is a text input preference") }
         )
@@ -150,7 +150,7 @@ class PrefsScreen : Screen<Unit>
             pref.updateData { copy(color = newColor) }
           },
           modifier = Modifier.interactive(prefs.switch),
-          leading = { IconPlaceholder() },
+          leading = { Icon(Icons.Default.ThumbUp) },
           title = { Text("Color") },
           subtitle = { Text("This is a color preference") }
         )
@@ -169,7 +169,7 @@ class PrefsScreen : Screen<Unit>
               pref.updateData { copy(multiChoice = newItems) }
             })
             .interactive(prefs.switch),
-          leading = { IconPlaceholder() },
+          leading = { Icon(Icons.Default.ThumbUp) },
           title = { Text("Multi select list") },
           subtitle = { Text("This is a multi select list preference") }
         )
@@ -188,7 +188,7 @@ class PrefsScreen : Screen<Unit>
               pref.updateData { copy(singleChoice = newItem) }
             })
             .interactive(prefs.switch),
-          leading = { IconPlaceholder() },
+          leading = { Icon(Icons.Default.ThumbUp) },
           title = { Text("Single item list") },
           subtitle = { Text("This is a single item list preference") }
         )

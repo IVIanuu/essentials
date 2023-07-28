@@ -61,7 +61,6 @@ class PermissionRequestScreen(
           title = { Text(permission.title) },
           subtitle = permission.desc?.let { { Text(it) } },
           leading = { permission.icon?.invoke() },
-          leadingAlignment = Alignment.Center,
           trailing = {
             Row(horizontalArrangement = Arrangement.End) {
               TextButton(
@@ -78,8 +77,7 @@ class PermissionRequestScreen(
                 Text(R.string.es_grant, maxLines = 1)
               }
             }
-          },
-          trailingAlignment = Alignment.Center
+          }
         )
       }
     }
