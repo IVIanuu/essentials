@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable fun Subheader(modifier: Modifier = Modifier, text: @Composable () -> Unit) {
   Box(
-    modifier = Modifier.height(24.dp)
+    modifier = Modifier.height(48.dp)
       .fillMaxWidth()
       .padding(horizontal = 16.dp)
       .then(modifier),
