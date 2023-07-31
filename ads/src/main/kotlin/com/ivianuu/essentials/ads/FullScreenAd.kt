@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.ads
 
+import androidx.activity.ComponentActivity
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -12,7 +13,9 @@ import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.Scoped
+import com.ivianuu.essentials.app.AppVisibleScope
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.RateLimiter
@@ -21,6 +24,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.scopeOfOrNull
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.injekt.Provide
@@ -63,13 +67,14 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minu
 }
 
 @Provide @Scoped<UiScope> class FullScreenAdManagerImpl(
+  private val activity: ComponentActivity,
   private val appContext: AppContext,
   private val adsEnabledFlow: Flow<AdsEnabled>,
-  private val appUiStarter: AppUiStarter,
   private val config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
-  private val scope: ScopedCoroutineScope<AppScope>
+  private val scope: ScopedCoroutineScope<UiScope>,
+  private val scopeManager: ScopeManager
 ) : FullScreenAdManager {
   private val lock = Mutex()
   private var deferredAd: Deferred<suspend () -> Boolean>? = null
@@ -134,9 +139,10 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minu
         if (rateLimiter.tryAcquire()) {
           logger.log { "show ad" }
           lock.withLock { deferredAd = null }
-          withContext(coroutineContexts.main) {
-            ad.show(appUiStarter())
-          }
+          if (scopeManager.scopeOfOrNull<AppVisibleScope>().first() != null)
+            withContext(coroutineContexts.main) {
+              ad.show(activity)
+            }
           true
         } else {
           logger.log { "do not show ad due to rate limit" }
