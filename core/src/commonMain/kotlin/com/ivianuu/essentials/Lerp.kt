@@ -6,6 +6,8 @@ package com.ivianuu.essentials
 
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 interface Lerper<T> {
   fun lerp(start: T, stop: T, fraction: Float): T
@@ -38,7 +40,7 @@ interface Lerper<T> {
 
     @Provide val int = Lerper<Int>(
       lerp = { start, stop, fraction ->
-        (start * (1f - fraction) + stop * fraction).toInt()
+        (start * (1f - fraction) + stop * fraction).roundToInt()
       },
       unlerp = { start, stop, value ->
         unlerp(start.toFloat(), stop.toFloat(), value.toFloat())
@@ -47,7 +49,7 @@ interface Lerper<T> {
 
     @Provide val long = Lerper<Long>(
       lerp = { start, stop, fraction ->
-        (start * (1f - fraction) + stop * fraction).toLong()
+        (start * (1f - fraction) + stop * fraction).roundToLong()
       },
       unlerp = { start, stop, value ->
         unlerp(start.toFloat(), stop.toFloat(), value.toFloat())
