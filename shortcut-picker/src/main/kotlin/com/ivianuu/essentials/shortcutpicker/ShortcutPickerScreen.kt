@@ -20,9 +20,9 @@ import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.ui.image.toImageBitmap
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator

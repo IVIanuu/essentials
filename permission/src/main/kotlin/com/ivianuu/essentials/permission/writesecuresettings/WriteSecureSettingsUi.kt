@@ -33,11 +33,11 @@ import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.onSuccess
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.ui.common.VerticalList
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
 import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen

@@ -35,9 +35,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.VerticalList
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide

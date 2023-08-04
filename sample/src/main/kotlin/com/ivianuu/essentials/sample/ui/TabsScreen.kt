@@ -19,8 +19,8 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.AppBar
+import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide

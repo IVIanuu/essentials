@@ -11,7 +11,6 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.Scoped
@@ -26,7 +25,6 @@ import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.scopeOfOrNull
 import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async

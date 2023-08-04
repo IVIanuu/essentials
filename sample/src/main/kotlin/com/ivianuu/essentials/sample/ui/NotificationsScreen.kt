@@ -49,10 +49,10 @@ import com.ivianuu.essentials.result.recover
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui

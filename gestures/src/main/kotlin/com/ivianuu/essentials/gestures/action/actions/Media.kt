@@ -25,9 +25,9 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.resource.produceResourceState
 import com.ivianuu.essentials.ui.common.VerticalList
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen

@@ -19,9 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.animation.slideHorizontally
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.NavGraph
 import com.ivianuu.essentials.ui.navigation.Navigator

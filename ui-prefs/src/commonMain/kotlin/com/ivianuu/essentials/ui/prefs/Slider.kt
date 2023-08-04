@@ -5,12 +5,9 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material.LocalTextStyle

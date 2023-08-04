@@ -19,10 +19,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animation.AnimatedContent
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.NavigationBar
 import com.ivianuu.essentials.ui.material.NavigationBarItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide

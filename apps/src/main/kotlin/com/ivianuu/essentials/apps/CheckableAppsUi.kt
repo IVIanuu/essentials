@@ -22,10 +22,10 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Switch
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.ScreenScope
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.popup.PopupMenuItem

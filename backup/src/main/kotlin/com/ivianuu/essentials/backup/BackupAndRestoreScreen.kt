@@ -12,9 +12,9 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.ui.common.VerticalList
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui

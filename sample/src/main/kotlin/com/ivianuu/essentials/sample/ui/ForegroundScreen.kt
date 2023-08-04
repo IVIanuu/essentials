@@ -16,9 +16,9 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.coroutines.timerFlow
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.NotificationFactory

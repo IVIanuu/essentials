@@ -18,7 +18,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.action
@@ -27,10 +26,10 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.common.VerticalList
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
 import com.ivianuu.essentials.ui.navigation.Model

@@ -34,10 +34,10 @@ import com.ivianuu.essentials.ui.dialog.DialogScreen
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui

@@ -21,9 +21,9 @@ import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenDecorator
 import com.ivianuu.essentials.ui.navigation.Ui

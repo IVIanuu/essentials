@@ -21,9 +21,9 @@ import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.layout.center
+import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide

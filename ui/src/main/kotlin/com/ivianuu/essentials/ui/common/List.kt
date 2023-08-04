@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ExtensionPoint
 import com.ivianuu.essentials.ExtensionPointRecord
 import com.ivianuu.essentials.sortedWithLoadingOrder
