@@ -1,5 +1,12 @@
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.essentials.result.Result
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.failure
+import com.ivianuu.essentials.result.fold
+import com.ivianuu.essentials.result.get
+import com.ivianuu.essentials.result.getOrThrow
+import com.ivianuu.essentials.result.onSuccess
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.awaitCancellation
@@ -16,6 +23,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 fun <T> CoroutineScope.sharedFlow(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
@@ -47,8 +55,10 @@ fun <K, T> CoroutineScope.sharedComputation(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   block: suspend (K) -> T
 ): suspend (K) -> T {
-  val flows = sharedFlow<K, T>(sharingStarted, 1) { key -> emit(block(key)) }
-  return { flows(it).first() }
+  val flows = sharedFlow<K, Result<T, Throwable>>(sharingStarted, 1) { key ->
+    emit(catch { block(key) })
+  }
+  return { flows(it).first().getOrThrow() }
 }
 
 fun <T> CoroutineScope.sharedComputation(
@@ -78,15 +88,17 @@ fun <K, T> CoroutineScope.sharedResource(
   release: (suspend (K, T) -> Unit)? = null,
   create: suspend (K) -> T
 ): suspend (K) -> Releasable<T> {
-  val flows = sharedFlow(sharingStarted, 1) { key: K ->
-    val value = create(key)
+  val flows: (K) -> Flow<Result<T, Throwable>> = sharedFlow(sharingStarted, 1) { key: K ->
+    val value = catch { create(key) }
     bracket(
       acquire = { value },
       use = {
         emit(value)
         awaitCancellation()
       },
-      release = { _, _ -> release?.invoke(key, value) }
+      release = { _, _ ->
+        value.onSuccess { release?.invoke(key, it) }
+      }
     )
   }
 
@@ -95,7 +107,10 @@ fun <K, T> CoroutineScope.sharedResource(
       lateinit var job: Job
       job = launch(cont.context) {
         flows(key).collect { value ->
-          cont.resume(Releasable(value) { job.cancel() })
+          value.fold(
+            success = { cont.resume(Releasable(it) { job.cancel() }) },
+            failure = { cont.resumeWithException(it) }
+          )
           awaitCancellation()
         }
       }
