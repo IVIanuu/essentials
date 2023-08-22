@@ -6,7 +6,7 @@
 
 object Build {
   const val applicationId = "com.ivianuu.essentials.sample"
-  const val compileSdk = 33
+  const val compileSdk = 34
   const val minSdk = 28
   const val targetSdk = 31
   const val versionCode = 1
@@ -67,7 +67,7 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.4.3"
+    const val version = "1.5.0-beta02"
     const val compilerVersion = "1.5.1"
     const val compiler = "org.jetbrains.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
@@ -86,7 +86,7 @@ object Deps {
 
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.8.10"
 
-  const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1215"
+  const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1220"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"

@@ -30,7 +30,7 @@ import com.ivianuu.injekt.Provide
 class TabsScreen : Screen<Unit>
 
 @Provide val tabsUi = Ui<TabsScreen, Unit> {
-  val pagerState = rememberPagerState()
+  val pagerState = rememberPagerState { TabItems.size }
   Scaffold(
     topBar = {
       AppBar(
@@ -58,7 +58,7 @@ class TabsScreen : Screen<Unit>
     },
     maxTopBarSize = 56.dp + 48.dp + LocalInsets.current.top
   ) {
-    HorizontalPager(pageCount = TabItems.size, state = pagerState) { page ->
+    HorizontalPager(state = pagerState) { page ->
       val color = TabItems[page]
       Surface(color = color) {
         Text(
