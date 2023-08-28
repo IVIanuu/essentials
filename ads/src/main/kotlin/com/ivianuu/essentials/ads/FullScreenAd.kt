@@ -78,6 +78,10 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minu
   private var deferredAd: Deferred<suspend () -> Boolean>? = null
   private val rateLimiter = RateLimiter(1, config.adsInterval)
 
+  init {
+    scope.launch { preloadAd() }
+  }
+
   override suspend fun isAdLoaded() = getCurrentAd() != null
 
   override fun preloadAd() {
@@ -154,12 +158,3 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minu
 }
 
 class AdLoadingException(val error: LoadAdError) : RuntimeException()
-
-@Provide fun preloadFullScreenAdWorker(
-  adsEnabled: Flow<AdsEnabled>,
-  fullScreenAdManager: FullScreenAdManager
-) = ScopeWorker<UiScope> {
-  adsEnabled
-    .filter { it.value }
-    .collect { fullScreenAdManager.preloadAd() }
-}

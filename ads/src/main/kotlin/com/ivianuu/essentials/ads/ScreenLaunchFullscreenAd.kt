@@ -21,7 +21,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.Serializable
+import kotlin.time.Duration.Companion.seconds
 
 @Provide object ScreenLaunchFullscreenAdFeature : AdFeature
 
@@ -58,8 +60,10 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
       logger.log { "screen launched $launchCount" }
       if (launchCount >= config.screenLaunchToShowAdCount) {
         logger.log { "try to show full screen ad $launchCount" }
-        if (fullScreenAdManager.loadAndShowAd().getOrElse { false })
-          pref.updateData { copy(screenLaunchCount = 0) }
+        withTimeoutOrNull(1.seconds) {
+          if (fullScreenAdManager.loadAndShowAd().getOrElse { false })
+            pref.updateData { copy(screenLaunchCount = 0) }
+        }
       }
     }
 }
