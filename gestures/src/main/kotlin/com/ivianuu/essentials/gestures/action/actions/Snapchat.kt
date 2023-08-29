@@ -1,8 +1,10 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraManager
+import android.provider.MediaStore
 import android.view.accessibility.AccessibilityNodeInfo
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Resources
@@ -55,7 +57,9 @@ import kotlinx.coroutines.flow.first
   logger.log { "current app ${currentApp.first()}" }
 
   if (currentApp.first()?.value != "com.snapchat.android") {
-    val intent = packageManager.getLaunchIntentForPackage("com.snapchat.android")!!
+    val intent = Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE).apply {
+      `package` = "com.snapchat.android"
+    }
     actionIntentSender(intent, null)
   } else {
     val accessibilityService = scopeManager.scopeOfOrNull<AccessibilityScope>()
