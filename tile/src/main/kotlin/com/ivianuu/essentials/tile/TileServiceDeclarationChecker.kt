@@ -14,12 +14,12 @@ import com.ivianuu.injekt.Provide
 import kotlin.reflect.KClass
 
 @Provide fun tileServiceDeclarationChecker(
-  context: AppContext,
+  appContext: AppContext,
   packageManager: PackageManager,
   tileBindings: List<Pair<KClass<AbstractEsTileService>, () -> Model<TileModel<*>>>>
 ) = ScopeWorker<AppScope> {
   for ((tileClass) in tileBindings) {
-    val intent = Intent(context, tileClass.java)
+    val intent = Intent(appContext, tileClass.java)
     val resolveInfo = packageManager.queryIntentServices(intent, PackageManager.MATCH_DEFAULT_ONLY)
     if (resolveInfo.isEmpty())
       throw IllegalStateException("A model for tile $tileClass was provided but not declared in the manifest")

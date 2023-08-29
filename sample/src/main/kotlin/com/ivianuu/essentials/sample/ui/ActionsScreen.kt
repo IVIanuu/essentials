@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.LocalScope
@@ -21,7 +22,9 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 @Provide val actionsHomeItem = HomeItem("Actions") { ActionsScreen() }
 
@@ -34,21 +37,46 @@ class ActionsScreen : Screen<Unit>
 ) = Ui<ActionsScreen, Unit> {
   Scaffold(topBar = { AppBar { Text("Actions") } }) {
     val scope = LocalScope.current.coroutineScope
-    Button(
-      modifier = Modifier.center(),
-      onClick = {
-        scope.launch {
-          val actionId = navigator.push(ActionPickerScreen())
-            .safeAs<ActionPickerScreen.Result.Action>()
-            ?.actionId ?: return@launch
+    Column {
+      Button(
+        onClick = {
+          scope.launch {
+            val actionId = navigator.push(ActionPickerScreen())
+              .safeAs<ActionPickerScreen.Result.Action>()
+              ?.actionId ?: return@launch
 
-          val action = repository.getAction(actionId)
+            val action = repository.getAction(actionId)
 
-          toaster("Execute action ${action.title}")
+            delay(1.seconds)
 
-          repository.executeAction(actionId)
+            toaster("Execute action ${action.title}")
+
+            repository.executeAction(actionId)
+          }
         }
-      }
-    ) { Text("Pick action") }
+      ) { Text("Pick action") }
+
+      Button(
+        onClick = {
+          scope.launch {
+            val actionId = navigator.push(ActionPickerScreen())
+              .safeAs<ActionPickerScreen.Result.Action>()
+              ?.actionId ?: return@launch
+
+            val action = repository.getAction(actionId)
+
+            delay(1.seconds)
+
+            while (true) {
+              toaster("Execute action ${action.title}")
+
+              repository.executeAction(actionId)
+
+              delay(3.seconds)
+            }
+          }
+        }
+      ) { Text("Loop action") }
+    }
   }
 }

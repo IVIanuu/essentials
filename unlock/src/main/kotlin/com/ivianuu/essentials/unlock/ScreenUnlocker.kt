@@ -17,7 +17,7 @@ import kotlin.collections.set
 fun interface ScreenUnlocker : suspend () -> Boolean
 
 @Provide fun screenUnlocker(
-  context: AppContext,
+  appContext: AppContext,
   keyguardManager: @SystemService KeyguardManager,
   logger: Logger
 ) = ScreenUnlocker {
@@ -33,7 +33,7 @@ fun interface ScreenUnlocker : suspend () -> Boolean
 
   logger.log { "unlock screen $requestId" }
 
-  UnlockActivity.unlockScreen(context, requestId)
+  UnlockActivity.unlockScreen(appContext, requestId)
 
   return@ScreenUnlocker result.await().also {
     logger.log { "unlock result $requestId -> $it" }

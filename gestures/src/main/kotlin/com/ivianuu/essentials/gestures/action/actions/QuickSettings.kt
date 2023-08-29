@@ -39,15 +39,15 @@ import kotlinx.coroutines.flow.first
 @Provide
 @SuppressLint("NewApi")
 fun quickSettingsActionExecutor(
+  appContext: AppContext,
   closeSystemDialogs: CloseSystemDialogsUseCase,
-  context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
   scopeManager: ScopeManager,
 ) = ActionExecutor<QuickSettingsActionId> {
   val targetState = catch {
     val service = scopeManager.scopeOfOrNull<AccessibilityScope>().first()!!.accessibilityService
 
-    val systemUiContext = context.createPackageContext(
+    val systemUiContext = appContext.createPackageContext(
       "com.android.systemui", 0
     )
 

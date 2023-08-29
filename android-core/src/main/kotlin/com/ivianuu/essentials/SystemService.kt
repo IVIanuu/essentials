@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
 
 @Tag annotation class SystemService {
   @Provide companion object {
-    @Provide fun <T : Any> systemService(clazz: KClass<T>, context: AppContext): @SystemService T =
-      context.getSystemService(clazz.java)!!
+    @Provide fun <T : Any> systemService(clazz: KClass<T>, appContext: AppContext): @SystemService T =
+      appContext.getSystemService(clazz.java)!!
   }
 }

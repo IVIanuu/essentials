@@ -124,7 +124,7 @@ interface WorkManager {
 
   @Provide val defaultSchedules get() = emptyList<Pair<String, PeriodicWorkSchedule<*>>>()
 
-  @Provide fun androidWorkManager(context: AppContext) = AndroidWorkManager.getInstance(context)
+  @Provide fun androidWorkManager(appContext: AppContext) = AndroidWorkManager.getInstance(appContext)
 }
 
 @Provide class EsWorker(

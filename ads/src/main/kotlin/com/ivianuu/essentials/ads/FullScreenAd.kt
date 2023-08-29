@@ -40,6 +40,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 interface FullScreenAdManager {
   suspend fun isAdLoaded(): Boolean
@@ -53,7 +54,7 @@ interface FullScreenAdManager {
   suspend fun showAdIfLoaded(): Boolean
 }
 
-data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 1.minutes) {
+data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.seconds) {
   @Provide companion object {
     @Provide fun final(
       adConfig: FullScreenAdConfig,

@@ -22,8 +22,8 @@ abstract class SystemOverlayPermission(
 ) : Permission {
   @Provide companion object {
     @Provide fun <P : SystemOverlayPermission> stateProvider(
-      context: AppContext
-    ) = PermissionStateProvider<P> { Settings.canDrawOverlays(context) }
+      appContext: AppContext
+    ) = PermissionStateProvider<P> { Settings.canDrawOverlays(appContext) }
 
     @Provide fun <P : SystemOverlayPermission> showFindPermissionHint(
       appConfig: AppConfig

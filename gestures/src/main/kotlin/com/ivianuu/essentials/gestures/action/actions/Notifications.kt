@@ -36,15 +36,15 @@ import kotlinx.coroutines.flow.first
 )
 
 @Provide fun notificationsActionExecutor(
+  appContext: AppContext,
   closeSystemDialogs: CloseSystemDialogsUseCase,
-  context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
   scopeManager: ScopeManager,
 ) = ActionExecutor<NotificationsActionId> {
   val targetState = catch {
     val service = scopeManager.scopeOfOrNull<AccessibilityScope>().first()!!.accessibilityService
 
-    val systemUiContext = context.createPackageContext(
+    val systemUiContext = appContext.createPackageContext(
       "com.android.systemui", 0
     )
 
