@@ -339,17 +339,13 @@ data class GoPremiumModel(
       }
     },
     tryBasicVersion = action {
+      fullScreenAdManager.showAdIfLoaded()
       navigator.pop(screen, false)
-      withContext(NonCancellable) {
-        fullScreenAdManager.loadAndShowAd()
-      }
     },
     goBack = action {
       if (screen.allowBackNavigation) {
+        fullScreenAdManager.showAdIfLoaded()
         navigator.pop(screen, false)
-        withContext(NonCancellable) {
-          fullScreenAdManager.loadAndShowAd()
-        }
       }
     }
   )

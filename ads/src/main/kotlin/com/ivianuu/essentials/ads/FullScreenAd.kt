@@ -49,8 +49,6 @@ interface FullScreenAdManager {
 
   suspend fun loadAd(): Result<Boolean, Throwable>
 
-  suspend fun loadAndShowAd(): Result<Boolean, Throwable>
-
   suspend fun showAdIfLoaded(): Boolean
 }
 
@@ -80,7 +78,7 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
   private val rateLimiter = RateLimiter(1, config.adsInterval)
 
   init {
-    scope.launch { preloadAd() }
+    preloadAd()
   }
 
   override suspend fun isAdLoaded() = getCurrentAd() != null
@@ -95,18 +93,11 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
     true
   }
 
-  override suspend fun loadAndShowAd() = catch {
-    if (!adsEnabledFlow.first().value) return@catch false
-    getOrCreateCurrentAd()
+  override suspend fun showAdIfLoaded(): Boolean {
+    if (!adsEnabledFlow.first().value) return false
+    return (getCurrentAd()?.invoke() ?: false)
       .also { preloadAd() }
-      .invoke()
   }
-
-  override suspend fun showAdIfLoaded() = getCurrentAd()
-    ?.let {
-      it.invoke()
-        .also { preloadAd() }
-    } ?: false
 
   private suspend fun getCurrentAd(): (suspend () -> Boolean)? = lock.withLock {
     deferredAd?.takeUnless { it.isCompleted && it.getCompletionExceptionOrNull() != null }
@@ -142,11 +133,13 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
         if (rateLimiter.tryAcquire()) {
           logger.log { "show ad" }
           lock.withLock { deferredAd = null }
-          if (scopeManager.scopeOfOrNull<AppVisibleScope>().first() != null)
+          if (scopeManager.scopeOfOrNull<AppVisibleScope>().first() != null) {
             withContext(coroutineContexts.main) {
               ad.show(activity)
             }
-          true
+            true
+          } else
+            false
         } else {
           logger.log { "do not show ad due to rate limit" }
           false

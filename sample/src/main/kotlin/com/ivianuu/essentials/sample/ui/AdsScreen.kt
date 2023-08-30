@@ -45,7 +45,7 @@ class AdsScreen : Screen<Unit>
       }
 
       item {
-        Button(onClick = action { fullScreenAd.loadAndShowAd() }) {
+        Button(onClick = action { fullScreenAd.showAdIfLoaded() }) {
           Text("Show full screen ad")
         }
       }
