@@ -60,7 +60,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
       logger.log { "screen launched $launchCount" }
       if (launchCount >= config.screenLaunchToShowAdCount) {
         logger.log { "try to show full screen ad $launchCount" }
-        if (fullScreenAdManager.showAdIfLoaded())
+        if (fullScreenAdManager.loadAndShowAdWithTimeout().getOrElse { false })
           pref.updateData { copy(screenLaunchCount = 0) }
       }
     }

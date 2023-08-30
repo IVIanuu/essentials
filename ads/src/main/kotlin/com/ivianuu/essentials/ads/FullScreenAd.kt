@@ -35,6 +35,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -50,6 +51,8 @@ interface FullScreenAdManager {
   suspend fun loadAd(): Result<Boolean, Throwable>
 
   suspend fun showAdIfLoaded(): Boolean
+
+  suspend fun loadAndShowAdWithTimeout(): Result<Boolean, Throwable>
 }
 
 data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.seconds) {
@@ -78,7 +81,11 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
   private val rateLimiter = RateLimiter(1, config.adsInterval)
 
   init {
-    preloadAd()
+    scope.launch {
+      adsEnabledFlow
+        .filter { it.value }
+        .collect { loadAd() }
+    }
   }
 
   override suspend fun isAdLoaded() = getCurrentAd() != null
@@ -97,6 +104,11 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
     if (!adsEnabledFlow.first().value) return false
     return (getCurrentAd()?.invoke() ?: false)
       .also { preloadAd() }
+  }
+
+  override suspend fun loadAndShowAdWithTimeout() = catch {
+    if (!adsEnabledFlow.first().value) return@catch false
+    withTimeoutOrNull(1.seconds) { getOrCreateCurrentAd() }?.invoke() == true
   }
 
   private suspend fun getCurrentAd(): (suspend () -> Boolean)? = lock.withLock {

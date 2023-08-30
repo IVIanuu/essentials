@@ -22,10 +22,6 @@ import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.MutableStateFlow
 
-@Provide val fullScreenAdConfig = FullScreenAdConfig("")
-@Provide val listAdBannerConfig = ListAdBannerConfig("")
-@Provide val screenAdBannerConfig = ScreenAdBannerConfig("")
-
 @Provide val adsHomeItem = HomeItem("Ads") { AdsScreen() }
 
 class AdsScreen : Screen<Unit>
@@ -45,7 +41,7 @@ class AdsScreen : Screen<Unit>
       }
 
       item {
-        Button(onClick = action { fullScreenAd.showAdIfLoaded() }) {
+        Button(onClick = action { fullScreenAd.loadAndShowAdWithTimeout() }) {
           Text("Show full screen ad")
         }
       }
@@ -54,3 +50,6 @@ class AdsScreen : Screen<Unit>
 }
 
 @Provide val showAds = MutableStateFlow(AdsEnabled(false))
+@Provide val fullScreenAdConfig = FullScreenAdConfig("")
+@Provide val listAdBannerConfig = ListAdBannerConfig("")
+@Provide val screenAdBannerConfig = ScreenAdBannerConfig("")
