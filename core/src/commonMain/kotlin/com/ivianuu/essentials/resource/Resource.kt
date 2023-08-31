@@ -25,12 +25,8 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 @Stable sealed interface Resource<out T> {
-  object Loading : Resource<Nothing> {
-    override fun toString(): String = "Loading"
-  }
-
+  data object Loading : Resource<Nothing>
   data class Success<T>(val value: T) : Resource<T>
-
   data class Error(val error: Throwable) : Resource<Nothing>
 }
 
