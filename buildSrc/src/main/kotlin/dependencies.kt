@@ -86,7 +86,7 @@ object Deps {
 
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.8.10"
 
-  const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1220"
+  const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1226"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"
@@ -98,7 +98,7 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.3.10"
 
   object Injekt {
-    private const val version = "0.0.1-dev721"
+    private const val version = "0.0.1-dev722"
     const val common = "com.ivianuu.injekt:common:$version"
     const val core = "com.ivianuu.injekt:core:$version"
     const val compiler = "com.ivianuu.injekt:compiler:$version"
@@ -129,7 +129,7 @@ object Deps {
   }
 
   object Ksp {
-    const val version = "1.9.0-1.0.11"
+    const val version = "1.9.0-1.0.13"
     const val api = "com.google.devtools.ksp:symbol-processing-api:$version"
     const val gradlePlugin = "com.google.devtools.ksp:symbol-processing-gradle-plugin:$version"
     const val symbolProcessing = "com.google.devtools.ksp:symbol-processing:$version"
