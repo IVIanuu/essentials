@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.StateFlow
   override fun onListenerConnected() {
     super.onListenerConnected()
     logger.log { "listener connected" }
-    this.notificationScope = notificationScopeFactory(this)
+    notificationScope = notificationScopeFactory(this)
     updateNotifications()
   }
 
