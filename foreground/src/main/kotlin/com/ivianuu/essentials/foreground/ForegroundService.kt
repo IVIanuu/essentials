@@ -51,11 +51,8 @@ import kotlin.time.Duration.Companion.seconds
           DisposableEffect(state, notification) {
             logger.log { "update ${state.id}" }
 
-            if (index == 0) {
-              startForeground(state.id, notification)
-            } else {
-              notificationManager.notify(state.id, notification)
-            }
+            if (index == 0) startForeground(state.id, notification)
+            else notificationManager.notify(state.id, notification)
 
             state.seen.complete(Unit)
 
