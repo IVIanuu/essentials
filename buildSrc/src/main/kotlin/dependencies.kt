@@ -141,7 +141,7 @@ object Deps {
 
   const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.24.0"
 
-  const val playBillingKtx = "com.android.billingclient:billing-ktx:5.1.0"
+  const val playBillingKtx = "com.android.billingclient:billing-ktx:6.0.1"
 
   const val roboelectric = "org.robolectric:robolectric:4.10.3"
 

@@ -68,7 +68,7 @@ interface BillingService {
   coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val refreshes: MutableSharedFlow<BillingRefresh>,
-  private val scope: Scope<AppScope>,
+  scope: Scope<AppScope>,
   private val scopeManager: ScopeManager
 ) : BillingService {
   private val billingClient = scope.coroutineScope.childCoroutineScope(coroutineContexts.io).sharedResource(
