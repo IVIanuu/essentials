@@ -49,7 +49,7 @@ object Deps {
   }
 
   object AtomicFu {
-    private const val version = "0.21.0"
+    private const val version = "0.22.0"
     const val gradlePlugin = "org.jetbrains.kotlinx:atomicfu-gradle-plugin:$version"
     const val runtime = "org.jetbrains.kotlinx:atomicfu:$version"
   }
@@ -67,8 +67,8 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.5.0-beta02"
-    const val compilerVersion = "1.5.1"
+    const val version = "1.5.1"
+    const val compilerVersion = "1.5.2"
     const val compiler = "org.jetbrains.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
     const val googleFonts = "androidx.compose.ui:ui-text-google-fonts:$version"
@@ -78,7 +78,7 @@ object Deps {
   }
 
   object Coroutines {
-    private const val version = "1.7.2"
+    private const val version = "1.7.3"
     const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
     const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
     const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
@@ -86,7 +86,7 @@ object Deps {
 
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.8.10"
 
-  const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1226"
+  const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1228"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"
@@ -98,7 +98,7 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.3.10"
 
   object Injekt {
-    private const val version = "0.0.1-dev722"
+    private const val version = "0.0.1-dev723"
     const val common = "com.ivianuu.injekt:common:$version"
     const val core = "com.ivianuu.injekt:core:$version"
     const val compiler = "com.ivianuu.injekt:compiler:$version"
@@ -110,7 +110,7 @@ object Deps {
   const val kotestAssertions = "io.kotest:kotest-assertions-core:5.4.2"
 
   object Kotlin {
-    const val version = "1.9.0"
+    const val version = "1.9.10"
     const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
     const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
@@ -118,18 +118,18 @@ object Deps {
   }
 
   object KotlinCompileTesting {
-    private const val version = "0.3.0"
+    private const val version = "0.3.2"
     const val kotlinCompileTesting = "dev.zacsweers.kctfork:core:$version"
     const val ksp = "dev.zacsweers.kctfork:ksp:$version"
   }
 
   object KotlinSerialization {
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
-    const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
+    const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"
   }
 
   object Ksp {
-    const val version = "1.9.0-1.0.13"
+    const val version = "1.9.10-1.0.13"
     const val api = "com.google.devtools.ksp:symbol-processing-api:$version"
     const val gradlePlugin = "com.google.devtools.ksp:symbol-processing-gradle-plugin:$version"
     const val symbolProcessing = "com.google.devtools.ksp:symbol-processing:$version"

@@ -26,7 +26,7 @@ buildConfig {
   className("BuildConfig")
   packageName("com.ivianuu.essentials.gradle")
   buildConfigField("String", "VERSION", "\"${property("VERSION_NAME")}\"")
-  buildConfigField("String", "COMPOSE_GROUP_ID", "\"androidx.compose.compiler\"")
+  buildConfigField("String", "COMPOSE_GROUP_ID", "\"org.jetbrains.compose.compiler\"")
   buildConfigField("String", "COMPOSE_COMPILER_ARTIFACT_ID", "\"compiler\"")
   buildConfigField("String", "COMPOSE_COMPILER_VERSION", "\"${Deps.Compose.compilerVersion}\"")
 }
