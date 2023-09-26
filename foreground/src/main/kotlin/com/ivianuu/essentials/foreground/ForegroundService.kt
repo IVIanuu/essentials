@@ -55,40 +55,6 @@ import kotlin.time.Duration.Companion.seconds
     job = scope.launchComposition {
       val states by foregroundManager.states.collectAsState()
 
-      ((if (states.any { it.notification == null })
-        remember(states.any { it.notification == null }) {
-          listOf(
-            inject<ForegroundId>().value to notificationFactory(
-              "default_foreground",
-              "Foreground",
-              NotificationManager.IMPORTANCE_LOW
-            ) {
-              setContentTitle("${appConfig.appName} is running!")
-              setSmallIcon(R.drawable.es_ic_sync)
-              setContentIntent(remoteActionOf<StartAppRemoteAction>(context))
-            }
-          )
-        }
-      else emptyList()) + states
-        .mapNotNull { state ->
-          key(state.id) {
-            state.notification?.invoke()
-              ?.let { state.id to it }
-          }
-        })
-        .forEachIndexed { index, (id, notification) ->
-          key(id) {
-            DisposableEffect(index, id, notification) {
-              logger.log { "update $id" }
-
-              if (index == 0) startForeground(id, notification)
-              else notificationManager.notify(id, notification)
-
-              onDispose { notificationManager.cancel(id) }
-            }
-          }
-        }
-
       if (states.isEmpty()) {
         LaunchedEffect(true) {
           onCancel(
@@ -103,6 +69,40 @@ import kotlin.time.Duration.Companion.seconds
           )
         }
       } else {
+        ((if (states.any { it.notification == null })
+          remember(states.any { it.notification == null }) {
+            listOf(
+              inject<ForegroundId>().value to notificationFactory(
+                "default_foreground",
+                "Foreground",
+                NotificationManager.IMPORTANCE_LOW
+              ) {
+                setContentTitle("${appConfig.appName} is running!")
+                setSmallIcon(R.drawable.es_ic_sync)
+                setContentIntent(remoteActionOf<StartAppRemoteAction>(context))
+              }
+            )
+          }
+        else emptyList()) + states
+          .mapNotNull { state ->
+            key(state.id) {
+              state.notification?.invoke()
+                ?.let { state.id to it }
+            }
+          })
+          .forEachIndexed { index, (id, notification) ->
+            key(id) {
+              DisposableEffect(index, id, notification) {
+                logger.log { "update $id" }
+
+                if (index == 0) startForeground(id, notification)
+                else notificationManager.notify(id, notification)
+
+                onDispose { notificationManager.cancel(id) }
+              }
+            }
+          }
+
         LaunchedEffect(states) {
           states.forEach { it.seen.complete(Unit) }
         }
