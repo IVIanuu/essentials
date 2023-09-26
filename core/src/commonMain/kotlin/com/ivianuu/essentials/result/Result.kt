@@ -121,3 +121,5 @@ interface ResultControl<in A> {
 
   class ShortCircuitException(val error: Any?) : ControlException()
 }
+
+fun <V, E : Throwable> Result<V, E>.printErrors() = onFailure { it.printStackTrace() }

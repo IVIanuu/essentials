@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.result.onFailure
+import com.ivianuu.essentials.result.printErrors
 
 @SuppressLint("ViewConstructor")
 class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {
@@ -53,7 +54,7 @@ class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {
 
     // compose crashes in some situations
     return catch { delegate.dispatchTouchEvent(ev) }
-      .onFailure { it.printStackTrace() }
+      .printErrors()
       .getOrElse { false }
   }
 }

@@ -21,6 +21,7 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.result.onFailure
+import com.ivianuu.essentials.result.printErrors
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -65,7 +66,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       val serialized = sharedPrefs.getString("data", null)
       return serialized?.let {
         catch { json.decodeFromString(serializer, serialized) }
-          .onFailure { it.printStackTrace() }
+          .printErrors()
           .getOrNull()
       } ?: initial()
     }
