@@ -5,7 +5,10 @@
 package com.ivianuu.essentials.systemoverlay
 
 import androidx.compose.ui.Alignment
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.screenstate.DisplayRotation
+import com.ivianuu.essentials.ui.common.UiRenderer
+import com.ivianuu.injekt.Provide
 
 enum class ScreenEdge(
   val titleRes: Int,
@@ -97,4 +100,10 @@ enum class ScreenEdge(
   abstract fun rotate(rotation: DisplayRotation): ScreenEdge
 
   abstract fun rotate(rotation: DisplayRotation, position: Float): Pair<Float, Float>
+
+  @Provide companion object {
+    @Provide fun uiRenderer(resources: Resources) = UiRenderer<ScreenEdge> {
+      resources(it.titleRes)
+    }
+  }
 }
