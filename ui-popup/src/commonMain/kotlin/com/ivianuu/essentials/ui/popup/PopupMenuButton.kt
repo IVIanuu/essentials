@@ -53,9 +53,12 @@ import kotlinx.coroutines.launch
         indication = rememberRipple(bounded = false, radius = 24.dp),
         enabled = enabled,
         onCancel = onCancel,
-        positionPicker = positionPicker,
-        popupContent = popupContent
-      ),
+        positionPicker = positionPicker
+      ) {
+        PopupContainer {
+          popupContent()
+        }
+      },
     contentAlignment = Alignment.Center
   ) {
     Icon(
@@ -99,7 +102,7 @@ import kotlinx.coroutines.launch
             ),
             onCancel = onCancel
           ) {
-            PopupContainer(popupContent)
+            popupContent()
           }
         )
       }
