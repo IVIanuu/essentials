@@ -20,8 +20,6 @@ import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.dialog.ColorPickerScreen
-import com.ivianuu.essentials.ui.dialog.MultiChoiceListScreen
-import com.ivianuu.essentials.ui.dialog.SingleChoiceListScreen
 import com.ivianuu.essentials.ui.dialog.TextInputScreen
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
@@ -33,7 +31,9 @@ import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.ColorListItem
+import com.ivianuu.essentials.ui.prefs.MultiChoiceToggleButtonGroupListItem
 import com.ivianuu.essentials.ui.prefs.ScaledPercentageUnitText
+import com.ivianuu.essentials.ui.prefs.SingleChoiceToggleButtonGroupListItem
 import com.ivianuu.essentials.ui.prefs.SliderListItem
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
@@ -156,18 +156,13 @@ class PrefsScreen : Screen<Unit>
       }
 
       item {
-        ListItem(
-          modifier = Modifier
-            .clickable(onClick = action {
-              val newItems = navigator.push(
-                MultiChoiceListScreen(
-                  items = listOf("A", "B", "C"),
-                  selectedItems = prefs.multiChoice
-                )
-              ) ?: return@action
-              pref.updateData { copy(multiChoice = newItems) }
-            })
-            .interactive(prefs.switch),
+        MultiChoiceToggleButtonGroupListItem(
+          modifier = Modifier.interactive(prefs.switch),
+          values = listOf("A", "B", "C"),
+          selected = prefs.multiChoice,
+          onSelectionChanged = action { values ->
+            pref.updateData { copy(multiChoice = values) }
+          },
           leading = { Icon(Icons.Default.ThumbUp) },
           title = { Text("Multi select list") },
           subtitle = { Text("This is a multi select list preference") }
@@ -175,18 +170,13 @@ class PrefsScreen : Screen<Unit>
       }
 
       item {
-        ListItem(
-          modifier = Modifier
-            .clickable(onClick = action {
-              val newItem = navigator.push(
-                SingleChoiceListScreen(
-                  items = listOf("A", "B", "C"),
-                  selectedItem = prefs.singleChoice
-                )
-              ) ?: return@action
-              pref.updateData { copy(singleChoice = newItem) }
-            })
-            .interactive(prefs.switch),
+        SingleChoiceToggleButtonGroupListItem(
+          modifier = Modifier.interactive(prefs.switch),
+          values = listOf("A", "B", "C"),
+          selected = prefs.singleChoice,
+          onSelectionChanged = action { value ->
+            pref.updateData { copy(singleChoice = value) }
+          },
           leading = { Icon(Icons.Default.ThumbUp) },
           title = { Text("Single item list") },
           subtitle = { Text("This is a single item list preference") }

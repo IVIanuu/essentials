@@ -31,4 +31,3 @@ import com.ivianuu.essentials.ui.material.Switch
     }
   )
 }
-

@@ -12,12 +12,12 @@ import com.ivianuu.injekt.inject
   operator fun invoke(x: T): String
 
   @Provide companion object {
+    @Provide fun <T : Enum<T>> enum() = UiRenderer<T> { it.name }
+    @Provide val string = UiRenderer<String> { it }
     @Provide fun <T> collection(
       elementRenderer: UiRenderer<T>
     ) = UiRenderer<Collection<T>> { values ->
       values.joinToString(", ") { elementRenderer(it) }
     }
-    @Provide fun <T : Enum<T>> enum() = UiRenderer<T> { it.name }
-    @Provide val string = UiRenderer<String> { it }
   }
 }
