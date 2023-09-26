@@ -4,9 +4,19 @@
 
 package com.ivianuu.essentials.ui.common
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
 
-fun Modifier.interactive(interactive: Boolean): Modifier =
-  alpha(alpha = if (interactive) 1f else 0.5f)
+fun Modifier.interactive(
+  interactive: Boolean,
+  animateAlpha: Boolean = true
+): Modifier = composed {
+  val targetAlpha = if (interactive) 1f else 0.5f
+  alpha(
+    alpha = if (animateAlpha) animateFloatAsState(targetAlpha).value
+    else targetAlpha
+  )
     .consumeGestures(!interactive)
+}
