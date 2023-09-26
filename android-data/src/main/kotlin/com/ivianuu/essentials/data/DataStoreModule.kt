@@ -55,10 +55,6 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
           }
         }
       },
-      corruptionHandler = ReplaceFileCorruptionHandler {
-        it.printStackTrace()
-        initial()
-      },
       produceFile = { prefsDir().resolve(name) },
       scope = scope.childCoroutineScope(coroutineContexts.io)
     )
