@@ -6,11 +6,17 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.runtime.Stable
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.inject
 
-@Stable fun interface UiRenderer<T> {
+@Stable fun interface UiRenderer<in T> {
   operator fun invoke(x: T): String
 
   @Provide companion object {
+    @Provide fun <T> collection(
+      elementRenderer: UiRenderer<T>
+    ) = UiRenderer<Collection<T>> { values ->
+      values.joinToString(", ") { elementRenderer(it) }
+    }
     @Provide fun <T : Enum<T>> enum() = UiRenderer<T> { it.name }
     @Provide val string = UiRenderer<String> { it }
   }
