@@ -6,6 +6,7 @@ package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -16,20 +17,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-@Composable fun PopupContainer(content: @Composable () -> Unit) {
+@Composable fun PopupContainer(
+  modifier: Modifier = Modifier,
+  content: @Composable ColumnScope.() -> Unit,
+) {
   Surface(
-    modifier = Modifier.padding(8.dp),
+    modifier = modifier.padding(8.dp),
     elevation = 8.dp,
     shape = MaterialTheme.shapes.medium
   ) {
     Column(
       modifier = Modifier
-        .verticalScroll(rememberScrollState())
+        .widthIn(min = 112.dp, max = 200.dp)
         .animateContentSize()
-        .padding(top = 8.dp, bottom = 8.dp)
-        .widthIn(max = 200.dp)
-    ) {
-      content()
-    }
+        .verticalScroll(rememberScrollState())
+        .padding(top = 8.dp, bottom = 8.dp),
+      content = content
+    )
   }
 }
+
