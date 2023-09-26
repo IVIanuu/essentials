@@ -2,8 +2,10 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ButtonDefaults
@@ -31,6 +33,7 @@ import com.ivianuu.injekt.Inject
   leading: (@Composable () -> Unit)? = null,
   title: (@Composable () -> Unit)? = null,
   subtitle: (@Composable () -> Unit)? = null,
+  trailing: (@Composable () -> Unit)? = null,
 ) {
   BaseToggleButtonGroupListItem(
     values = values,
@@ -42,7 +45,33 @@ import com.ivianuu.injekt.Inject
     modifier = modifier,
     leading = leading,
     title = title,
-    subtitle = subtitle
+    subtitle = subtitle,
+    trailing = trailing
+  )
+}
+
+@Composable fun <T> OptionalChoiceToggleButtonGroupListItem(
+  values: Collection<T>,
+  selected: T?,
+  onSelectionChanged: (T?) -> Unit,
+  modifier: Modifier = Modifier,
+  @Inject renderer: UiRenderer<T>,
+  leading: (@Composable () -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  subtitle: (@Composable () -> Unit)? = null,
+  trailing: (@Composable () -> Unit)? = null,
+) {
+  BaseToggleButtonGroupListItem(
+    values = values,
+    isSelected = { it == selected },
+    onSelectionChangeRequest = {
+      onSelectionChanged(if (it != selected) it else null)
+    },
+    modifier = modifier,
+    leading = leading,
+    title = title,
+    subtitle = subtitle,
+    trailing = trailing
   )
 }
 
@@ -55,6 +84,7 @@ import com.ivianuu.injekt.Inject
   leading: (@Composable () -> Unit)? = null,
   title: (@Composable () -> Unit)? = null,
   subtitle: (@Composable () -> Unit)? = null,
+  trailing: (@Composable () -> Unit)? = null,
 ) {
   BaseToggleButtonGroupListItem(
     values = values,
@@ -68,7 +98,8 @@ import com.ivianuu.injekt.Inject
     modifier = modifier,
     leading = leading,
     title = title,
-    subtitle = subtitle
+    subtitle = subtitle,
+    trailing = trailing
   )
 }
 
@@ -81,12 +112,10 @@ import com.ivianuu.injekt.Inject
   leading: (@Composable () -> Unit)? = null,
   title: (@Composable () -> Unit)? = null,
   subtitle: (@Composable () -> Unit)? = null,
+  trailing: (@Composable () -> Unit)? = null,
 ) {
-  val minHeight = if (subtitle != null) 96.dp else 88.dp
-
   ListItem(
-    modifier = modifier
-      .heightIn(minHeight),
+    modifier = modifier,
     leading = leading,
     title = title,
     subtitle = {
@@ -95,8 +124,8 @@ import com.ivianuu.injekt.Inject
       Row(
         modifier = Modifier
           .fillMaxWidth()
-          .padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
+          .padding(top = 4.dp, bottom = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
       ) {
         values.forEach { value ->
           val targetBackgroundColor = if (isSelected(value)) MaterialTheme.colors.secondary
@@ -104,16 +133,23 @@ import com.ivianuu.injekt.Inject
           val backgroundColor by animateColorAsState(targetBackgroundColor)
           val contentColor by animateColorAsState(guessingContentColorFor(targetBackgroundColor))
           Button(
+            modifier = Modifier.height(32.dp),
             colors = ButtonDefaults.esButtonColors(
               backgroundColor = backgroundColor,
               contentColor = contentColor
             ),
-            onClick = { onSelectionChangeRequest(value) }
+            onClick = { onSelectionChangeRequest(value) },
+            forceMinSize = false,
+            contentPadding = PaddingValues(horizontal = 8.dp)
           ) {
-            Text(renderer(value))
+            Text(
+              text = renderer(value),
+              maxLines = 1
+            )
           }
         }
       }
-    }
+    },
+    trailing = trailing
   )
 }
