@@ -84,11 +84,6 @@ import kotlin.time.Duration.Companion.seconds
               if (index == 0) startForeground(id, notification)
               else notificationManager.notify(id, notification)
 
-              states
-                .singleOrNull { it.id == id }
-                ?.seen
-                ?.complete(Unit)
-
               onDispose { notificationManager.cancel(id) }
             }
           }
@@ -108,6 +103,10 @@ import kotlin.time.Duration.Companion.seconds
           )
         }
       } else {
+        LaunchedEffect(states) {
+          states.forEach { it.seen.complete(Unit) }
+        }
+
         val foregroundScope = remember(foregroundScopeFactory)
         DisposableEffect(true) {
           onDispose { foregroundScope.dispose() }
