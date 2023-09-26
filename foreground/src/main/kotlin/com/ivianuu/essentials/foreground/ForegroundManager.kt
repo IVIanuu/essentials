@@ -25,7 +25,7 @@ import kotlinx.coroutines.sync.withLock
 interface ForegroundManager {
   suspend fun startForeground(
     @Inject foregroundId: ForegroundId,
-    notification: @Composable () -> Notification,
+    notification: (@Composable () -> Notification)? = null,
   ): Nothing
 }
 
@@ -46,7 +46,7 @@ data object ForegroundScope
 
   override suspend fun startForeground(
     @Inject foregroundId: ForegroundId,
-    notification: @Composable () -> Notification,
+    notification: (@Composable () -> Notification)?,
   ) = bracket(
     acquire = {
       ForegroundState(foregroundId.value, notification)
@@ -67,7 +67,7 @@ data object ForegroundScope
     }
   )
 
-  internal class ForegroundState(val id: Int, val notification: @Composable () -> Notification) {
+  internal class ForegroundState(val id: Int, val notification: (@Composable () -> Notification)?) {
     val seen = CompletableDeferred<Unit>()
   }
 }

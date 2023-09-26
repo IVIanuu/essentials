@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.AndroidComponent
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.SystemService
@@ -23,13 +24,23 @@ import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.util.NotificationFactory
+import com.ivianuu.essentials.util.StartAppRemoteAction
+import com.ivianuu.essentials.util.context
+import com.ivianuu.essentials.util.remoteActionOf
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.serialization.json.Json
 import kotlin.time.Duration.Companion.seconds
 
 @Provide @AndroidComponent class ForegroundService(
+  private val appConfig: AppConfig,
   private val foregroundManager: ForegroundManagerImpl,
+  @Inject private val json: Json,
+  private val notificationFactory: NotificationFactory,
   private val notificationManager: @SystemService NotificationManager,
   private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>,
@@ -44,22 +55,44 @@ import kotlin.time.Duration.Companion.seconds
     job = scope.launchComposition {
       val states by foregroundManager.states.collectAsState()
 
-      states.forEachIndexed { index, state ->
-        val notification = key(state.id) { state.notification() }
+      ((if (states.any { it.notification == null })
+        remember(states.any { it.notification == null }) {
+          listOf(
+            inject<ForegroundId>().value to notificationFactory(
+              "default_foreground",
+              "Foreground",
+              NotificationManager.IMPORTANCE_LOW
+            ) {
+              setContentTitle("${appConfig.appName} is running!")
+              setSmallIcon(R.drawable.es_ic_sync)
+              setContentIntent(remoteActionOf<StartAppRemoteAction>(context))
+            }
+          )
+        }
+      else emptyList()) + states
+        .mapNotNull { state ->
+          key(state.id) {
+            state.notification?.invoke()
+              ?.let { state.id to it }
+          }
+        })
+        .forEachIndexed { index, (id, notification) ->
+          key(id) {
+            DisposableEffect(index, id, notification) {
+              logger.log { "update $id" }
 
-        key(index) {
-          DisposableEffect(state, notification) {
-            logger.log { "update ${state.id}" }
+              if (index == 0) startForeground(id, notification)
+              else notificationManager.notify(id, notification)
 
-            if (index == 0) startForeground(state.id, notification)
-            else notificationManager.notify(state.id, notification)
+              states
+                .singleOrNull { it.id == id }
+                ?.seen
+                ?.complete(Unit)
 
-            state.seen.complete(Unit)
-
-            onDispose { notificationManager.cancel(state.id) }
+              onDispose { notificationManager.cancel(id) }
+            }
           }
         }
-      }
 
       if (states.isEmpty()) {
         LaunchedEffect(true) {
