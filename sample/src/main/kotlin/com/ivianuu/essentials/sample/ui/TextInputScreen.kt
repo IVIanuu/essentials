@@ -36,7 +36,7 @@ import com.ivianuu.injekt.Provide
 
 class TextInputScreen : Screen<Unit>
 
-@Provide val textInputUi = Ui<TextInputScreen, Unit> { model ->
+@Provide val textInputUi = Ui<TextInputScreen, Unit> { state ->
   val state = remember { TextInputState() }
 
   if (!state.searchVisible) {

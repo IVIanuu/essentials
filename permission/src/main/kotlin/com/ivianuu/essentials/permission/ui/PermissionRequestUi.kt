@@ -32,7 +32,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -44,10 +44,10 @@ class PermissionRequestScreen(
   val permissionsKeys: List<TypeKey<Permission>>
 ) : CriticalUserFlowScreen<Boolean>
 
-@Provide val permissionRequestUi = Ui<PermissionRequestScreen, PermissionRequestModel> { model ->
+@Provide val permissionRequestUi = Ui<PermissionRequestScreen, PermissionRequestState> { state ->
   Scaffold(topBar = { AppBar { Text(R.string.es_request_permission_title) } }) {
     VerticalList {
-      items(model.permissionsToGrant) { permission ->
+      items(state.permissionsToGrant) { permission ->
         ListItem(
           modifier = Modifier
             .padding(start = 8.dp, top = 8.dp, end = 8.dp)
@@ -64,14 +64,14 @@ class PermissionRequestScreen(
             Row(horizontalArrangement = Arrangement.End) {
               TextButton(
                 modifier = Modifier.width(56.dp),
-                onClick = { model.denyPermission(permission) }
+                onClick = { state.denyPermission(permission) }
               ) {
                 Text(R.string.es_deny, maxLines = 1)
               }
 
               TextButton(
                 modifier = Modifier.width(56.dp),
-                onClick = { model.grantPermission(permission) }
+                onClick = { state.grantPermission(permission) }
               ) {
                 Text(R.string.es_grant, maxLines = 1)
               }
@@ -83,19 +83,19 @@ class PermissionRequestScreen(
   }
 }
 
-data class PermissionRequestModel(
+data class PermissionRequestState(
   val permissionsToGrant: List<Permission>,
   val grantPermission: (Permission) -> Unit,
   val denyPermission: (Permission) -> Unit
 )
 
-@Provide fun permissionRequestModel(
+@Provide fun permissionRequestPresenter(
   appUiStarter: AppUiStarter,
   navigator: Navigator,
   permissionManager: PermissionManager,
   requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>,
   screen: PermissionRequestScreen
-) = Model {
+) = Presenter {
   LaunchedEffect(true) {
     permissionManager.permissionState(screen.permissionsKeys)
       .first { it }
@@ -106,7 +106,7 @@ data class PermissionRequestModel(
     screen.permissionsKeys.associateBy { permissionManager.permission(it) }
   }
 
-  PermissionRequestModel(
+  PermissionRequestState(
     permissionsToGrant = keysByPermission
       .keys
       .filterNot {

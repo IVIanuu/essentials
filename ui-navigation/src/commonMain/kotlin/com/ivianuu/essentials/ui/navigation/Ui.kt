@@ -8,14 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 
 // todo make fun interface once compose is fixed
-@Stable interface Ui<S : Screen<*>, M> {
-  @Composable operator fun invoke(model: M)
+@Stable interface Ui<S : Screen<*>, T> {
+  @Composable operator fun invoke(state: T)
 }
 
-inline fun <S : Screen<*>, M> Ui(
-  crossinline block: @Composable (M) -> Unit
-): Ui<S, M> = object : Ui<S, M> {
-  @Composable override fun invoke(model: M) {
-    block(model)
+inline fun <S : Screen<*>, T> Ui(
+  crossinline block: @Composable (T) -> Unit
+): Ui<S, T> = object : Ui<S, T> {
+  @Composable override fun invoke(state: T) {
+    block(state)
   }
 }

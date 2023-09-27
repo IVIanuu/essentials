@@ -6,12 +6,12 @@ package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
 import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import kotlin.reflect.KClass
 
-data class TileModel<out T : AbstractEsTileService>(
+data class TileState<out T : AbstractEsTileService>(
   val icon: Icon? = null,
   val label: String? = null,
   val description: String? = null,
@@ -19,15 +19,15 @@ data class TileModel<out T : AbstractEsTileService>(
   val onClick: () -> Unit = {}
 ) {
   enum class Status { UNAVAILABLE, ACTIVE, INACTIVE }
-}
 
-@Provide object TileModelModule {
-  @Provide fun <@Spread T : Model<TileModel<S>>, S : AbstractEsTileService> tileModels(
-    serviceClass: KClass<S>,
-    model: () -> T
-  ): Pair<KClass<AbstractEsTileService>, () -> Model<TileModel<*>>> = (serviceClass to model).cast()
+  @Provide companion object {
+    @Provide fun <@Spread T : Presenter<TileState<S>>, S : AbstractEsTileService> tilePresenters(
+      serviceClass: KClass<S>,
+      presenter: () -> T
+    ): Pair<KClass<AbstractEsTileService>, () -> Presenter<TileState<*>>> = (serviceClass to presenter).cast()
 
-  @Provide val defaultTileModels get() = emptyList<Pair<KClass<AbstractEsTileService>, () -> Model<TileModel<*>>>>()
+    @Provide val defaultTilePresenters get() = emptyList<Pair<KClass<AbstractEsTileService>, () -> Presenter<TileState<*>>>>()
+  }
 }
 
 data object TileScope

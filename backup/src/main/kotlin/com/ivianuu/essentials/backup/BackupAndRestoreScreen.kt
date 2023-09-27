@@ -15,7 +15,7 @@ import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.Toaster
@@ -23,12 +23,12 @@ import com.ivianuu.injekt.Provide
 
 class BackupAndRestoreScreen : Screen<Unit>
 
-@Provide val backupAndRestoreUi = Ui<BackupAndRestoreScreen, BackupAndRestoreModel> { model ->
+@Provide val backupAndRestoreUi = Ui<BackupAndRestoreScreen, BackupAndRestoreState> { state ->
   Scaffold(topBar = { AppBar { Text(R.string.es_backup_and_restore_title) } }) {
     VerticalList {
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.backupData),
+          modifier = Modifier.clickable(onClick = state.backupData),
           leading = { Icon(R.drawable.es_ic_save) },
           title = { Text(R.string.es_pref_backup) },
           subtitle = { Text(R.string.es_pref_backup_summary) }
@@ -36,7 +36,7 @@ class BackupAndRestoreScreen : Screen<Unit>
       }
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.restoreData),
+          modifier = Modifier.clickable(onClick = state.restoreData),
           leading = { Icon(R.drawable.es_ic_restore) },
           title = { Text(R.string.es_pref_restore) },
           subtitle = { Text(R.string.es_pref_restore_summary) }
@@ -46,10 +46,10 @@ class BackupAndRestoreScreen : Screen<Unit>
   }
 }
 
-data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: () -> Unit)
+data class BackupAndRestoreState(val backupData: () -> Unit, val restoreData: () -> Unit)
 
-@Provide fun backupAndRestoreModel(backupManager: BackupManager, toaster: Toaster) = Model {
-  BackupAndRestoreModel(
+@Provide fun backupAndRestorePresenter(backupManager: BackupManager, toaster: Toaster) = Presenter {
+  BackupAndRestoreState(
     backupData = action {
       catch { backupManager.createBackup() }
         .onFailure {

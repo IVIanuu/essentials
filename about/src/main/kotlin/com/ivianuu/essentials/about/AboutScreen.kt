@@ -19,7 +19,7 @@ import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -29,30 +29,30 @@ import com.ivianuu.injekt.Provide
 
 class AboutScreen : Screen<Unit>
 
-@Provide val aboutUi = Ui<AboutScreen, AboutModel> { model ->
+@Provide val aboutUi = Ui<AboutScreen, AboutState> { state ->
   Scaffold(topBar = { AppBar { Text(R.string.es_about_title) } }) {
     VerticalList {
       item {
         ListItem(
           leading = { Icon(R.drawable.es_ic_info) },
           title = { Text(R.string.es_about_version) },
-          subtitle = { Text(model.version) }
+          subtitle = { Text(state.version) }
         )
       }
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.rate),
+          modifier = Modifier.clickable(onClick = state.rate),
           leading = { Icon(R.drawable.es_ic_star) },
           title = { Text(R.string.es_about_rate) },
           subtitle = { Text(R.string.es_about_rate_desc) }
         )
       }
 
-      if (model.showDonate)
+      if (state.showDonate)
         item {
           ListItem(
-            modifier = Modifier.clickable(onClick = model.donate),
+            modifier = Modifier.clickable(onClick = state.donate),
             leading = { Icon(R.drawable.es_ic_favorite) },
             title = { Text(R.string.es_about_donate) }
           )
@@ -60,7 +60,7 @@ class AboutScreen : Screen<Unit>
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.openMoreApps),
+          modifier = Modifier.clickable(onClick = state.openMoreApps),
           leading = { Icon(R.drawable.es_ic_google_play) },
           title = { Text(R.string.es_about_more_apps) },
           subtitle = { Text(R.string.es_about_more_apps_desc) }
@@ -69,7 +69,7 @@ class AboutScreen : Screen<Unit>
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.openRedditPage),
+          modifier = Modifier.clickable(onClick = state.openRedditPage),
           leading = { Icon(R.drawable.es_ic_reddit) },
           title = { Text(R.string.es_about_reddit) },
           subtitle = { Text(R.string.es_about_reddit_desc) }
@@ -78,7 +78,7 @@ class AboutScreen : Screen<Unit>
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.openGithubPage),
+          modifier = Modifier.clickable(onClick = state.openGithubPage),
           leading = { Icon(R.drawable.es_ic_github) },
           title = { Text(R.string.es_about_github) },
           subtitle = { Text(R.string.es_about_github_desc) }
@@ -87,7 +87,7 @@ class AboutScreen : Screen<Unit>
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.openTwitterPage),
+          modifier = Modifier.clickable(onClick = state.openTwitterPage),
           leading = { Icon(R.drawable.es_ic_twitter) },
           title = { Text(R.string.es_about_twitter) },
           subtitle = { Text(R.string.es_about_twitter_desc) }
@@ -96,17 +96,17 @@ class AboutScreen : Screen<Unit>
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.sendMail),
+          modifier = Modifier.clickable(onClick = state.sendMail),
           leading = { Icon(R.drawable.es_ic_email) },
           title = { Text(R.string.es_about_feedback) },
-          subtitle = { Text(model.email.value) }
+          subtitle = { Text(state.email.value) }
         )
       }
 
-      if (model.privacyPolicyUrl != null)
+      if (state.privacyPolicyUrl != null)
         item {
           ListItem(
-            modifier = Modifier.clickable(onClick = model.openPrivacyPolicy),
+            modifier = Modifier.clickable(onClick = state.openPrivacyPolicy),
             leading = { Icon(R.drawable.es_ic_policy) },
             title = { Text(R.string.es_about_privacy_policy) }
           )
@@ -115,7 +115,7 @@ class AboutScreen : Screen<Unit>
   }
 }
 
-data class AboutModel(
+data class AboutState(
   val version: String,
   val email: DeveloperEmail,
   val privacyPolicyUrl: PrivacyPolicyUrl?,
@@ -132,15 +132,15 @@ data class AboutModel(
 
 @JvmInline value class PrivacyPolicyUrl(val value: String)
 
-@Provide fun aboutModel(
+@Provide fun aboutPresenter(
   appConfig: AppConfig,
   privacyPolicyUrl: PrivacyPolicyUrl? = null,
   donations: (() -> List<Donation>)? = null,
   email: DeveloperEmail,
   navigator: Navigator,
   rateUseCases: RateUseCases
-) = Model {
-  AboutModel(
+) = Presenter {
+  AboutState(
     version = appConfig.versionName,
     email = email,
     privacyPolicyUrl = privacyPolicyUrl,

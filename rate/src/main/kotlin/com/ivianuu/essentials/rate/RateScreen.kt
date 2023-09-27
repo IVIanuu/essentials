@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.dialog.DialogScreen
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.replaceTop
@@ -41,7 +41,7 @@ import com.ivianuu.injekt.Provide
 
 object RateScreen : DialogScreen<Unit>
 
-@Provide val rateUi = Ui<RateScreen, RateModel> { model ->
+@Provide val rateUi = Ui<RateScreen, RateState> { state ->
   DialogScaffold(dismissible = false) {
     Dialog(
       content = {
@@ -51,7 +51,7 @@ object RateScreen : DialogScreen<Unit>
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
           Image(
-            painter = rememberAsyncImagePainter(com.ivianuu.essentials.apps.AppIcon(model.packageName)),
+            painter = rememberAsyncImagePainter(com.ivianuu.essentials.apps.AppIcon(state.packageName)),
             modifier = Modifier.size(96.dp)
           )
 
@@ -73,9 +73,9 @@ object RateScreen : DialogScreen<Unit>
                   .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false)
-                  ) { model.updateRating(currentRating) },
+                  ) { state.updateRating(currentRating) },
                 painterResId = R.drawable.es_ic_star,
-                tint = if (currentRating <= model.rating) MaterialTheme.colors.secondary
+                tint = if (currentRating <= state.rating) MaterialTheme.colors.secondary
                 else LocalContentColor.current.copy(alpha = 0.12f)
               )
             }
@@ -83,17 +83,17 @@ object RateScreen : DialogScreen<Unit>
         }
       },
       buttons = {
-        if (model.displayShowNever) {
-          TextButton(onClick = model.showNever) {
+        if (state.displayShowNever) {
+          TextButton(onClick = state.showNever) {
             Text(R.string.es_never)
           }
         }
 
-        TextButton(onClick = model.showLater) {
+        TextButton(onClick = state.showLater) {
           Text(R.string.es_later)
         }
 
-        TextButton(enabled = model.confirmEnabled, onClick = model.confirm) {
+        TextButton(enabled = state.confirmEnabled, onClick = state.confirm) {
           Text(R.string.es_confirm)
         }
       }
@@ -101,7 +101,7 @@ object RateScreen : DialogScreen<Unit>
   }
 }
 
-data class RateModel(
+data class RateState(
   val displayShowNever: Boolean,
   val packageName: String,
   val rating: Int,
@@ -113,13 +113,13 @@ data class RateModel(
   val confirmEnabled: Boolean get() = rating != 0
 }
 
-@Provide fun rateModel(
+@Provide fun ratePresenter(
   appConfig: AppConfig,
   navigator: Navigator,
   rateUseCases: RateUseCases
-) = Model {
+) = Presenter {
   var rating by remember { mutableStateOf(0) }
-  RateModel(
+  RateState(
     displayShowNever = produceState(false) { value = rateUseCases.shouldDisplayShowNever() }.value,
     packageName = appConfig.packageName,
     rating = rating,

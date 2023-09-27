@@ -27,7 +27,7 @@ import com.ivianuu.essentials.resource.produceResourceState
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -48,16 +48,16 @@ class ActionPickerScreen(
   }
 }
 
-@Provide val actionPickerUi = Ui<ActionPickerScreen, ActionPickerModel> { model ->
+@Provide val actionPickerUi = Ui<ActionPickerScreen, ActionPickerState> { state ->
   Scaffold(
     topBar = { AppBar { Text(R.string.es_action_picker_title) } }
   ) {
-    ResourceVerticalListFor(model.items) { item ->
+    ResourceVerticalListFor(state.items) { item ->
       ListItem(
-        modifier = Modifier.clickable { model.pickAction(item) },
+        modifier = Modifier.clickable { state.pickAction(item) },
         leading = { item.Icon(Modifier.size(24.dp)) },
         trailing = if (item.settingsScreen != null) ({
-          IconButton(onClick = { model.openActionSettings(item) }) {
+          IconButton(onClick = { state.openActionSettings(item) }) {
             Icon(R.drawable.es_ic_settings)
           }
         }) else null,
@@ -67,7 +67,7 @@ class ActionPickerScreen(
   }
 }
 
-data class ActionPickerModel(
+data class ActionPickerState(
   val items: Resource<List<ActionPickerItem>>,
   val openActionSettings: (ActionPickerItem) -> Unit,
   val pickAction: (ActionPickerItem) -> Unit
@@ -131,14 +131,14 @@ sealed interface ActionPickerItem {
   suspend fun getResult(navigator: Navigator): ActionPickerScreen.Result?
 }
 
-@Provide fun actionPickerModel(
+@Provide fun actionPickerPresenter(
   navigator: Navigator,
   permissionManager: PermissionManager,
   @Inject repository: ActionRepository,
   @Inject resources: Resources,
   screen: ActionPickerScreen
-) = Model {
-  ActionPickerModel(
+) = Presenter {
+  ActionPickerState(
     items = produceResourceState { emit(getActionPickerItems(screen)) }.value,
     openActionSettings = action { item -> navigator.push(item.settingsScreen!!) },
     pickAction = action { item ->

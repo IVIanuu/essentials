@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
 import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -60,14 +60,14 @@ class WriteSecureSettingsScreen(
 ) : CriticalUserFlowScreen<Boolean>
 
 @Provide val writeSecureSettingsUi =
-  Ui<WriteSecureSettingsScreen, WriteSecureSettingsModel> { model ->
+  Ui<WriteSecureSettingsScreen, WriteSecureSettingsState> { state ->
     Scaffold(
       topBar = { AppBar { Text(R.string.es_secure_settings_title) } },
       bottomBar = {
         Snackbar(
           modifier = Modifier.padding(16.dp),
           action = {
-            TextButton(onClick = model.grantPermissionsViaRoot) {
+            TextButton(onClick = state.grantPermissionsViaRoot) {
               Text(R.string.es_secure_settings_use_root_action)
             }
           }
@@ -88,9 +88,9 @@ class WriteSecureSettingsScreen(
         item {
           Step(
             step = 1,
-            isCompleted = model.completedStep > 1,
-            isCurrent = model.currentStep == 1,
-            onClick = { model.openStep(1) },
+            isCompleted = state.completedStep > 1,
+            isCurrent = state.currentStep == 1,
+            onClick = { state.openStep(1) },
             title = { Text(R.string.es_secure_settings_step_1_title) },
             content = {
               Text(
@@ -100,10 +100,10 @@ class WriteSecureSettingsScreen(
             },
             actions = {
               Button(
-                onClick = model.continueStep,
-                enabled = model.canContinueStep
+                onClick = state.continueStep,
+                enabled = state.canContinueStep
               ) { Text(R.string.es_continue) }
-              OutlinedButton(onClick = model.openPhoneInfo) { Text(R.string.es_open_phone_info) }
+              OutlinedButton(onClick = state.openPhoneInfo) { Text(R.string.es_open_phone_info) }
             }
           )
         }
@@ -111,9 +111,9 @@ class WriteSecureSettingsScreen(
         item {
           Step(
             step = 2,
-            isCompleted = model.completedStep > 2,
-            isCurrent = model.currentStep == 2,
-            onClick = { model.openStep(2) },
+            isCompleted = state.completedStep > 2,
+            isCurrent = state.currentStep == 2,
+            onClick = { state.openStep(2) },
             title = { Text(R.string.es_secure_settings_step_2_title) },
             content = {
               Text(
@@ -123,10 +123,10 @@ class WriteSecureSettingsScreen(
             },
             actions = {
               Button(
-                onClick = model.continueStep,
-                enabled = model.canContinueStep
+                onClick = state.continueStep,
+                enabled = state.canContinueStep
               ) { Text(R.string.es_continue) }
-              OutlinedButton(onClick = model.openDeveloperSettings) { Text(R.string.es_open_developer_settings) }
+              OutlinedButton(onClick = state.openDeveloperSettings) { Text(R.string.es_open_developer_settings) }
             }
           )
         }
@@ -134,15 +134,15 @@ class WriteSecureSettingsScreen(
         item {
           Step(
             step = 3,
-            isCompleted = model.completedStep > 3,
-            isCurrent = model.currentStep == 3,
-            onClick = { model.openStep(3) },
+            isCompleted = state.completedStep > 3,
+            isCurrent = state.currentStep == 3,
+            onClick = { state.openStep(3) },
             title = { Text(R.string.es_secure_settings_step_3_title) },
             content = { Text(R.string.es_secure_settings_step_3_content) },
             actions = {
               Button(
-                onClick = model.continueStep,
-                enabled = model.canContinueStep
+                onClick = state.continueStep,
+                enabled = state.canContinueStep
               ) { Text(R.string.es_continue) }
             }
           )
@@ -151,9 +151,9 @@ class WriteSecureSettingsScreen(
         item {
           Step(
             step = 4,
-            isCompleted = model.completedStep > 4,
-            isCurrent = model.currentStep == 4,
-            onClick = { model.openStep(4) },
+            isCompleted = state.completedStep > 4,
+            isCurrent = state.currentStep == 4,
+            onClick = { state.openStep(4) },
             title = { Text(R.string.es_secure_settings_step_4_title) },
             content = {
               Text(R.string.es_secure_settings_step_4_content)
@@ -166,14 +166,14 @@ class WriteSecureSettingsScreen(
                     RoundedCornerShape(4.dp)
                   )
                   .padding(4.dp),
-                text = model.adbCommand,
+                text = state.adbCommand,
                 style = MaterialTheme.typography.body2.copy(fontSize = 14.sp)
               )
             },
             actions = {
               Button(
-                onClick = model.continueStep,
-                enabled = model.canContinueStep
+                onClick = state.continueStep,
+                enabled = state.canContinueStep
               ) { Text(R.string.es_complete) }
             }
           )
@@ -182,7 +182,7 @@ class WriteSecureSettingsScreen(
     }
   }
 
-data class WriteSecureSettingsModel(
+data class WriteSecureSettingsState(
   val currentStep: Int,
   val completedStep: Int,
   val canContinueStep: Boolean,
@@ -215,7 +215,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   0
 )
 
-@Provide fun writeSecureSettingsPcInstructionsModel(
+@Provide fun writeSecureSettingsPcInstructionsPresenter(
   adbEnabledDataStore: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   appConfig: AppConfig,
@@ -225,7 +225,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   screen: WriteSecureSettingsScreen,
   shell: Shell,
   toaster: Toaster
-) = Model {
+) = Presenter {
   var currentStep by remember { mutableStateOf(1) }
   var completedStep by remember { mutableStateOf(1) }
 
@@ -243,7 +243,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     }
   }.value
 
-  WriteSecureSettingsModel(
+  WriteSecureSettingsState(
     packageName = appConfig.packageName,
     currentStep = currentStep,
     completedStep = completedStep,

@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.dialog.DialogScreen
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -56,14 +56,14 @@ data class Donation(val sku: Sku, val iconRes: Int)
   }
 }
 
-@Provide fun donationUi(commonStrings: CommonStrings) = Ui<DonationScreen, DonationModel> { model ->
+@Provide fun donationUi(commonStrings: CommonStrings) = Ui<DonationScreen, DonationState> { state ->
   DialogScaffold {
     Dialog(
       applyContentPadding = false,
       title = { Text(R.string.es_donation_title) },
       content = {
         ResourceVerticalListFor(
-          resource = model.skus,
+          resource = state.skus,
           loading = {
             CircularProgressIndicator(
               modifier = Modifier
@@ -75,12 +75,12 @@ data class Donation(val sku: Sku, val iconRes: Int)
         ) { donation ->
           Donation(
             donation = donation,
-            onClick = { model.purchase(donation) }
+            onClick = { state.purchase(donation) }
           )
         }
       },
       buttons = {
-        TextButton(onClick = model.close) {
+        TextButton(onClick = state.close) {
           Text(commonStrings.cancel)
         }
       }
@@ -105,7 +105,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
   )
 }
 
-data class DonationModel(
+data class DonationState(
   val skus: Resource<List<UiDonation>>,
   val close: () -> Unit,
   val purchase: (UiDonation) -> Unit
@@ -117,14 +117,14 @@ data class UiDonation(
   val price: String
 )
 
-@Provide fun donationModel(
+@Provide fun donationPresenter(
   billingService: BillingService,
   donations: Donations,
   navigator: Navigator,
   screen: DonationScreen,
   toaster: Toaster
-) = Model {
-  DonationModel(
+) = Presenter {
+  DonationState(
     skus = produceResourceState {
       emit(
         donations

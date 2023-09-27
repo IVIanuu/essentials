@@ -11,7 +11,7 @@ import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.dialog.DialogScreen
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.UrlScreen
@@ -21,25 +21,25 @@ import com.ivianuu.injekt.Provide
 
 object FeedbackScreen : DialogScreen<Unit>
 
-@Provide val feedbackUi = Ui<FeedbackScreen, FeedbackModel> { model ->
+@Provide val feedbackUi = Ui<FeedbackScreen, FeedbackState> { state ->
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(R.string.es_feedback_title) },
       content = { Text(R.string.es_feedback_content) },
       buttons = {
-        if (model.displayShowNever) {
-          TextButton(onClick = model.showNever) {
+        if (state.displayShowNever) {
+          TextButton(onClick = state.showNever) {
             Text(R.string.es_never)
           }
         }
-        TextButton(onClick = model.showLater) {
+        TextButton(onClick = state.showLater) {
           Text(R.string.es_later)
         }
 
-        TextButton(onClick = model.openReddit) {
+        TextButton(onClick = state.openReddit) {
           Text(R.string.es_open_reddit)
         }
-        TextButton(onClick = model.sendMail) {
+        TextButton(onClick = state.sendMail) {
           Text(R.string.es_send_mail)
         }
       }
@@ -47,7 +47,7 @@ object FeedbackScreen : DialogScreen<Unit>
   }
 }
 
-data class FeedbackModel(
+data class FeedbackState(
   val displayShowNever: Boolean,
   val showNever: () -> Unit,
   val showLater: () -> Unit,
@@ -55,12 +55,12 @@ data class FeedbackModel(
   val sendMail: () -> Unit
 )
 
-@Provide fun feedbackModel(
+@Provide fun feedbackPresenter(
   navigator: Navigator,
   rateUseCases: RateUseCases,
   screen: FeedbackScreen
-) = Model {
-  FeedbackModel(
+) = Presenter {
+  FeedbackState(
     displayShowNever = produceState(false) { value = rateUseCases.shouldDisplayShowNever() }.value,
     showNever = action { rateUseCases.showNever() },
     showLater = action { rateUseCases.showLater() },

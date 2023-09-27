@@ -17,11 +17,11 @@ import kotlin.reflect.KClass
   ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> UiFactory<Screen<*>>> =
     (screenClass to uiFactory).unsafeCast()
 
-  @Provide fun <@Spread T : Ui<S, M>, S : Screen<*>, M> rootNavGraphModelFactory(
+  @Provide fun <@Spread T : Ui<S, M>, S : Screen<*>, M> rootNavGraphPresenterFactory(
     screenClass: KClass<S>,
-    modelFactory: ModelFactory<S, M>
-  ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> ModelFactory<Screen<*>, *>> =
-    (screenClass to modelFactory).unsafeCast()
+    presenterFactory: PresenterFactory<S, M>
+  ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> PresenterFactory<Screen<*>, *>> =
+    (screenClass to presenterFactory).unsafeCast()
 
   @Provide fun <@Spread T : Ui<S, *>, S : Screen<*>> rootNavGraphConfigFactory(
     screenClass: KClass<S>,
@@ -35,11 +35,11 @@ import kotlin.reflect.KClass
   ): Pair<KClass<Screen<*>>, @NavGraph<N> UiFactory<Screen<*>>> =
     (screenClass to uiFactory).unsafeCast()
 
-  @Provide fun <@Spread T : @NavGraph<N> Ui<S, M>, N, S : Screen<*>, M> navGraphModelFactory(
+  @Provide fun <@Spread T : @NavGraph<N> Ui<S, M>, N, S : Screen<*>, M> navGraphPresenterFactory(
     screenClass: KClass<S>,
-    modelFactory: ModelFactory<S, M>
-  ): Pair<KClass<Screen<*>>, @NavGraph<N> ModelFactory<Screen<*>, *>> =
-    (screenClass to modelFactory).unsafeCast()
+    presenterFactory: PresenterFactory<S, M>
+  ): Pair<KClass<Screen<*>>, @NavGraph<N> PresenterFactory<Screen<*>, *>> =
+    (screenClass to presenterFactory).unsafeCast()
 
   @Provide fun <@Spread T : @NavGraph<N> Ui<S, *>, N, S : Screen<*>> navGraphConfigFactory(
     screenClass: KClass<S>,
@@ -50,6 +50,6 @@ import kotlin.reflect.KClass
 
 typealias UiFactory<S> = (Navigator, Scope<ScreenScope>, S) -> Ui<S, *>
 
-typealias ModelFactory<S, M> = (Navigator, Scope<ScreenScope>, S) -> Model<M>
+typealias PresenterFactory<S, M> = (Navigator, Scope<ScreenScope>, S) -> Presenter<M>
 
 typealias ScreenConfigFactory<S> = (Navigator, Scope<ScreenScope>, S) -> ScreenConfig<S>

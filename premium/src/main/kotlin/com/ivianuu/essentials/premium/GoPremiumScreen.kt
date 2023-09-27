@@ -52,14 +52,12 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.withContext
 
 data class AppFeature(
   val title: String,
@@ -77,8 +75,8 @@ class GoPremiumScreen(
   }
 }
 
-@Provide val goPremiumUi = Ui<GoPremiumScreen, GoPremiumModel> { model ->
-  BackHandler(onBackPress = model.goBack)
+@Provide val goPremiumUi = Ui<GoPremiumScreen, GoPremiumState> { state ->
+  BackHandler(onBackPress = state.goBack)
 
   Surface {
     InsetsPadding {
@@ -91,15 +89,15 @@ class GoPremiumScreen(
 
           Spacer(Modifier.height(32.dp))
 
-          PremiumUiFeatures(Modifier.weight(1f), model.features)
+          PremiumUiFeatures(Modifier.weight(1f), state.features)
 
           Spacer(Modifier.height(8.dp))
 
           PremiumUiFooter(
-            skuDetails = model.premiumSkuDetails.getOrNull(),
-            showTryBasicOption = model.showTryBasicOption,
-            onGoPremiumClick = model.goPremium,
-            onTryBasicVersionClick = model.tryBasicVersion
+            skuDetails = state.premiumSkuDetails.getOrNull(),
+            showTryBasicOption = state.showTryBasicOption,
+            onGoPremiumClick = state.goPremium,
+            onTryBasicVersionClick = state.tryBasicVersion
           )
         }
       } else {
@@ -113,17 +111,17 @@ class GoPremiumScreen(
             Spacer(Modifier.height(8.dp))
 
             PremiumUiFooter(
-              skuDetails = model.premiumSkuDetails.getOrNull(),
-              showTryBasicOption = model.showTryBasicOption,
-              onGoPremiumClick = model.goPremium,
-              onTryBasicVersionClick = model.tryBasicVersion
+              skuDetails = state.premiumSkuDetails.getOrNull(),
+              showTryBasicOption = state.showTryBasicOption,
+              onGoPremiumClick = state.goPremium,
+              onTryBasicVersionClick = state.tryBasicVersion
             )
           }
 
           Spacer(Modifier.width(16.dp))
 
           Column(modifier = Modifier.weight(1f)) {
-            PremiumUiFeatures(Modifier.weight(1f), model.features)
+            PremiumUiFeatures(Modifier.weight(1f), state.features)
           }
         }
       }
@@ -311,7 +309,7 @@ class GoPremiumScreen(
   }
 }
 
-data class GoPremiumModel(
+data class GoPremiumState(
   val features: List<AppFeature>,
   val premiumSkuDetails: Resource<SkuDetails>,
   val showTryBasicOption: Boolean,
@@ -320,15 +318,15 @@ data class GoPremiumModel(
   val goBack: () -> Unit
 )
 
-@Provide fun goPremiumModel(
+@Provide fun goPremiumPresenter(
   features: List<AppFeature>,
   fullScreenAdManager: FullScreenAdManager,
   navigator: Navigator,
   premiumVersionManager: PremiumVersionManager,
   screen: GoPremiumScreen,
   toaster: Toaster
-) = Model {
-  GoPremiumModel(
+) = Presenter {
+  GoPremiumState(
     features = features,
     premiumSkuDetails = premiumVersionManager.premiumSkuDetails.collectAsResourceState().value,
     showTryBasicOption = screen.showTryBasicOption,

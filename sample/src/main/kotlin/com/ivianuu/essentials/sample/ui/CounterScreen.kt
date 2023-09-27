@@ -20,7 +20,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.Toaster
@@ -30,25 +30,25 @@ import com.ivianuu.injekt.Provide
 
 class CounterScreen : Screen<Unit>
 
-@Provide val counterUi = Ui<CounterScreen, CounterModel> { model ->
+@Provide val counterUi = Ui<CounterScreen, CounterState> { state ->
   Scaffold(topBar = { AppBar { Text("Counter") } }) {
     Column(
       modifier = Modifier.center(),
       verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
-      Text(text = "Count: ${model.count}", style = MaterialTheme.typography.h3)
-      ExtendedFloatingActionButton(onClick = model.inc, text = { Text("Inc") })
-      ExtendedFloatingActionButton(onClick = model.dec, text = { Text("dec") })
+      Text(text = "Count: ${state.count}", style = MaterialTheme.typography.h3)
+      ExtendedFloatingActionButton(onClick = state.inc, text = { Text("Inc") })
+      ExtendedFloatingActionButton(onClick = state.dec, text = { Text("dec") })
     }
   }
 }
 
-data class CounterModel(val count: Int, val inc: () -> Unit, val dec: () -> Unit)
+data class CounterState(val count: Int, val inc: () -> Unit, val dec: () -> Unit)
 
-@Provide fun counterModel(toaster: Toaster) = Model {
+@Provide fun counterPresenter(toaster: Toaster) = Presenter {
   var count by remember { mutableStateOf(0) }
-  CounterModel(
+  CounterState(
     count = count,
     inc = action { count++ },
     dec = action {

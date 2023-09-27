@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -36,11 +36,11 @@ import com.ivianuu.injekt.Provide
 
 class ShortcutPickerScreen : Screen<Shortcut>
 
-@Provide val shortcutPickerUi = Ui<ShortcutPickerScreen, ShortcutPickerModel> { model ->
+@Provide val shortcutPickerUi = Ui<ShortcutPickerScreen, ShortcutPickerState> { state ->
   Scaffold(topBar = { AppBar { Text(R.string.es_title_shortcut_picker) } }) {
-    ResourceVerticalListFor(model.shortcuts) { shortcut ->
+    ResourceVerticalListFor(state.shortcuts) { shortcut ->
       ListItem(
-        modifier = Modifier.clickable { model.pickShortcut(shortcut) },
+        modifier = Modifier.clickable { state.pickShortcut(shortcut) },
         leading = {
           Image(
             modifier = Modifier.size(40.dp),
@@ -53,18 +53,18 @@ class ShortcutPickerScreen : Screen<Shortcut>
   }
 }
 
-data class ShortcutPickerModel(
+data class ShortcutPickerState(
   val shortcuts: Resource<List<Shortcut>>,
   val pickShortcut: (Shortcut) -> Unit
 )
 
-@Provide fun shortcutPickerModel(
+@Provide fun shortcutPickerPresenter(
   navigator: Navigator,
   repository: ShortcutRepository,
   screen: ShortcutPickerScreen,
   toaster: Toaster
-) = Model {
-  ShortcutPickerModel(
+) = Presenter {
+  ShortcutPickerState(
     shortcuts = repository.shortcuts.collectAsResourceState().value,
     pickShortcut = action { shortcut ->
       catch {

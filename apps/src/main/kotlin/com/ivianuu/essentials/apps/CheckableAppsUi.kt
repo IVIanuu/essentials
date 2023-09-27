@@ -45,24 +45,24 @@ data class CheckableAppsParams(
   val appBarTitle: String
 )
 
-@Provide fun checkableAppsScreen(models: StateFlow<CheckableAppsModel>) = CheckableAppsUi {
-  val model by models.collectAsState()
+@Provide fun checkableAppsScreen(presenter: StateFlow<CheckableAppsState>) = CheckableAppsUi {
+  val state by presenter.collectAsState()
   Scaffold(
     topBar = {
       AppBar(
-        title = { Text(model.appBarTitle) },
+        title = { Text(state.appBarTitle) },
         actions = {
           PopupMenuButton {
-            PopupMenuItem(onSelected = model.selectAll) { Text(R.string.es_select_all) }
-            PopupMenuItem(onSelected = model.deselectAll) { Text(R.string.es_deselect_all) }
+            PopupMenuItem(onSelected = state.selectAll) { Text(R.string.es_select_all) }
+            PopupMenuItem(onSelected = state.deselectAll) { Text(R.string.es_deselect_all) }
           }
         }
       )
     }
   ) {
-    ResourceVerticalListFor(model.checkableApps) { app ->
+    ResourceVerticalListFor(state.checkableApps) { app ->
       ListItem(
-        modifier = Modifier.clickable { model.updateAppCheckedState(app, !app.isChecked) },
+        modifier = Modifier.clickable { state.updateAppCheckedState(app, !app.isChecked) },
         title = { Text(app.info.appName) },
         leading = {
           Image(
@@ -81,7 +81,7 @@ data class CheckableAppsParams(
   }
 }
 
-data class CheckableAppsModel(
+data class CheckableAppsState(
   val allApps: Resource<List<AppInfo>>,
   val checkedApps: Set<String>,
   val appPredicate: AppPredicate,
@@ -104,11 +104,11 @@ data class CheckableAppsModel(
 
 data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 
-@Provide fun checkableAppsModel(
+@Provide fun checkableAppsPresenter(
   params: CheckableAppsParams,
   repository: AppRepository,
   scope: ScopedCoroutineScope<ScreenScope>
-): @Scoped<ScreenScope> StateFlow<CheckableAppsModel> = scope.compositionStateFlow {
+): @Scoped<ScreenScope> StateFlow<CheckableAppsState> = scope.compositionStateFlow {
   val checkedApps by params.checkedApps.collectAsState(emptySet())
   val allApps by repository.installedApps.collectAsResourceState()
 
@@ -117,7 +117,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
     params.onCheckedAppsChanged(newCheckedApps)
   }
 
-  CheckableAppsModel(
+  CheckableAppsState(
     allApps = allApps,
     appPredicate = params.appPredicate,
     appBarTitle = params.appBarTitle,

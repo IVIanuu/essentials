@@ -19,7 +19,7 @@ import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -32,17 +32,17 @@ class AppPickerScreen(
   val title: String? = null,
 ) : Screen<AppInfo>
 
-@Provide val appPickerUi = Ui<AppPickerScreen, AppPickerModel> { model ->
+@Provide val appPickerUi = Ui<AppPickerScreen, AppPickerState> { state ->
   Scaffold(
     topBar = {
       AppBar {
-        Text(model.title ?: stringResource(R.string.es_title_app_picker))
+        Text(state.title ?: stringResource(R.string.es_title_app_picker))
       }
     }
   ) {
-    ResourceVerticalListFor(model.filteredApps) { app ->
+    ResourceVerticalListFor(state.filteredApps) { app ->
       ListItem(
-        modifier = Modifier.clickable { model.pickApp(app) },
+        modifier = Modifier.clickable { state.pickApp(app) },
         title = { Text(app.appName) },
         leading = {
           Image(
@@ -55,7 +55,7 @@ class AppPickerScreen(
   }
 }
 
-data class AppPickerModel(
+data class AppPickerState(
   private val allApps: Resource<List<AppInfo>>,
   val appPredicate: AppPredicate,
   val title: String?,
@@ -65,12 +65,12 @@ data class AppPickerModel(
     .map { it.filter { appPredicate(it) } }
 }
 
-@Provide fun appPickerModel(
+@Provide fun appPickerPresenter(
   navigator: Navigator,
   repository: AppRepository,
   screen: AppPickerScreen
-) = Model {
-  AppPickerModel(
+) = Presenter {
+  AppPickerState(
     appPredicate = screen.appPredicate,
     title = screen.title,
     allApps = repository.installedApps.collectAsResourceState().value,

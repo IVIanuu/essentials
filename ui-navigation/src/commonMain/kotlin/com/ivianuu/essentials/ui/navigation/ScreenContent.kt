@@ -89,23 +89,23 @@ import kotlin.reflect.KClass
   navigator: Navigator = LocalScope.current.navigator,
   component: ScreenContextComponent<N>
 ): ScreenContext<S> {
-  var currentModel by remember { mutableStateOf<Any?>(null) }
+  var currentState by remember { mutableStateOf<Any?>(null) }
 
-  val (model, context) = remember {
+  val (presenter, context) = remember {
     val scope = component.screenScopeFactory(navigator, screen)
     val ui = component.uiFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
     checkNotNull(ui) { "No ui factory found for $screen" }
     val config = component.configFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
-    val model = component.modelFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
-    checkNotNull(model) { "No model found for $screen" }
+    val presenter = component.presenterFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
+    checkNotNull(presenter) { "No presenter found for $screen" }
     val decorateScreen = component.decorateScreenFactory(navigator, scope.cast(), screen)
-    model to ScreenContext(
+    presenter to ScreenContext(
       screen = screen,
       config = config.cast(),
       content = {
         decorateScreen {
           with(ui as Ui<S, Any>) {
-            with(currentModel as Any) {
+            with(currentState as Any) {
               invoke(this)
             }
           }
@@ -118,7 +118,7 @@ import kotlin.reflect.KClass
   ObserveScope(
     remember {
       {
-        currentModel = model()
+        currentState = presenter()
 
         DisposableEffect(true) {
           context.isContextRemoved = false
@@ -140,7 +140,7 @@ import kotlin.reflect.KClass
 
 @Provide data class ScreenContextComponent<N>(
   val uiFactories: Map<KClass<Screen<*>>, @NavGraph<N> UiFactory<Screen<*>>>,
-  val modelFactories: Map<KClass<Screen<*>>, @NavGraph<N> ModelFactory<Screen<*>, *>>,
+  val presenterFactories: Map<KClass<Screen<*>>, @NavGraph<N> PresenterFactory<Screen<*>, *>>,
   val configFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>>,
   val screenScopeFactory: (@Service<ScreenScope> Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>,
   val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen

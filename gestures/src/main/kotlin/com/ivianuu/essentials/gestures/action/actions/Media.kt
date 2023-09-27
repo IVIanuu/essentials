@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -78,18 +78,18 @@ private fun mediaIntentFor(
 class MediaActionSettingsScreen : Screen<Unit>
 
 @Provide
-val mediaActionSettingsUi = Ui<MediaActionSettingsScreen, MediaActionSettingsModel> { model ->
+val mediaActionSettingsUi = Ui<MediaActionSettingsScreen, MediaActionSettingsState> { state ->
   Scaffold(topBar = { AppBar { Text(R.string.es_media_app_settings_ui_title) } }) {
     VerticalList {
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.updateMediaApp),
+          modifier = Modifier.clickable(onClick = state.updateMediaApp),
           title = { Text(R.string.es_pref_media_app) },
           subtitle = {
             Text(
               stringResource(
                 R.string.es_pref_media_app_summary,
-                model.mediaApp.getOrNull()?.appName ?: stringResource(R.string.es_none)
+                state.mediaApp.getOrNull()?.appName ?: stringResource(R.string.es_none)
               )
             )
           }
@@ -99,18 +99,18 @@ val mediaActionSettingsUi = Ui<MediaActionSettingsScreen, MediaActionSettingsMod
   }
 }
 
-data class MediaActionSettingsModel(
+data class MediaActionSettingsState(
   val mediaApp: Resource<AppInfo?>,
   val updateMediaApp: () -> Unit
 )
 
-@Provide fun mediaActionSettingsModel(
+@Provide fun mediaActionSettingsPresenter(
   appRepository: AppRepository,
   navigator: Navigator,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
   pref: DataStore<MediaActionPrefs>
-) = Model {
-  MediaActionSettingsModel(
+) = Presenter {
+  MediaActionSettingsState(
     mediaApp = produceResourceState {
       pref.data
         .map { it.mediaApp }

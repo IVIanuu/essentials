@@ -53,7 +53,7 @@ import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.resource.ResourceBox
@@ -65,17 +65,17 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 class NotificationsScreen : Screen<Unit>
 
-@Provide val notificationsUi = Ui<NotificationsScreen, NotificationsModel> { model ->
+@Provide val notificationsUi = Ui<NotificationsScreen, NotificationsState> { state ->
   Scaffold(topBar = { AppBar { Text("Notifications") } }) {
-    ResourceBox(model.hasPermissions) { hasPermission ->
+    ResourceBox(state.hasPermissions) { hasPermission ->
       if (hasPermission) {
         NotificationsList(
-          notifications = model.notifications,
-          onNotificationClick = { model.openNotification(it) },
-          onDismissNotificationClick = { model.dismissNotification(it) }
+          notifications = state.notifications,
+          onNotificationClick = { state.openNotification(it) },
+          onDismissNotificationClick = { state.dismissNotification(it) }
         )
       } else {
-        NotificationPermissions(model.requestPermissions)
+        NotificationPermissions(state.requestPermissions)
       }
     }
   }
@@ -141,7 +141,7 @@ class NotificationsScreen : Screen<Unit>
   }
 }
 
-data class NotificationsModel(
+data class NotificationsState(
   val hasPermissions: Resource<Boolean>,
   val notifications: List<UiNotification>,
   val requestPermissions: () -> Unit,
@@ -158,12 +158,12 @@ data class UiNotification(
   val sbn: StatusBarNotification
 )
 
-@Provide fun notificationsModel(
+@Provide fun notificationsPresenter(
   @Inject appContext: AppContext,
   permissionManager: PermissionManager,
   service: NotificationService
-) = Model {
-  NotificationsModel(
+) = Presenter {
+  NotificationsState(
     hasPermissions = remember {
       permissionManager.permissionState(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }.collectAsResourceState().value,
