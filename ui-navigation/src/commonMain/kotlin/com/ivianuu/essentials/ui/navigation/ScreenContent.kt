@@ -146,7 +146,7 @@ import kotlin.reflect.KClass
   val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen
 ) {
   @Provide companion object {
-    @Provide fun rootNavigationScreenContextComponent(
+    @Provide fun rootService(
       factory: () -> ScreenContextComponent<RootNavGraph>
     ) = ProvidedService<UiScope, _>(typeKeyOf(), factory)
   }

@@ -115,8 +115,7 @@ abstract class AbstractEsTileService(
 @Provide @Service<TileScope> data class TileComponent(
   val tileService: AbstractEsTileService,
   val tilePresenterRecords: Map<KClass<AbstractEsTileService>, () -> Presenter<TileState<*>>>,
-  val coroutineScope: ScopedCoroutineScope<TileScope>,
-  val scope: Scope<TileScope>
+  val coroutineScope: ScopedCoroutineScope<TileScope>
 ) {
   private val presenter = tilePresenterRecords[tileService::class]?.invoke()
     ?: error("No tile found for ${tileService::class} in ${tilePresenterRecords.toMap()}")
