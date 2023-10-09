@@ -11,21 +11,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.ScopeManager
+import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.scopeOf
 import com.ivianuu.essentials.scopeOfOrNull
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 
 interface NotificationService {
   val notificationEvents: Flow<NotificationEvent>
-
-  val notifications: List<StatusBarNotification>
-    @Composable get
+  val notifications: Flow<List<StatusBarNotification>>
 
   suspend fun openNotification(notification: Notification): Result<Unit, Throwable>
 
@@ -41,10 +41,9 @@ interface NotificationService {
     scopeManager.scopeOfOrNull<NotificationScope>()
       .flatMapLatest { it?.notificationListenerService?.events ?: emptyFlow() }
 
-  override val notifications: List<StatusBarNotification>
-    @Composable get() =
-      remember { scopeManager.scopeOfOrNull<NotificationScope>() }.collectAsState(null).value
-        ?.notificationListenerService?.notifications?.collectAsState()?.value ?: emptyList()
+  override val notifications: Flow<List<StatusBarNotification>> =
+    scopeManager.scopeOfOrNull<NotificationScope>()
+      .flatMapLatest { it?.notificationListenerService?.notifications ?: emptyFlow() }
 
   override suspend fun openNotification(notification: Notification) =
     catch { notification.contentIntent.send() }

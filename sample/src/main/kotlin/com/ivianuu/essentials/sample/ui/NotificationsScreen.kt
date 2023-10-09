@@ -25,6 +25,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -60,6 +61,7 @@ import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
+import kotlinx.coroutines.flow.map
 
 @Provide val notificationsHomeItem = HomeItem("Notifications") { NotificationsScreen() }
 
@@ -69,74 +71,56 @@ class NotificationsScreen : Screen<Unit>
   Scaffold(topBar = { AppBar { Text("Notifications") } }) {
     ResourceBox(state.hasPermissions) { hasPermission ->
       if (hasPermission) {
-        NotificationsList(
-          notifications = state.notifications,
-          onNotificationClick = { state.openNotification(it) },
-          onDismissNotificationClick = { state.dismissNotification(it) }
-        )
+        if (state.notifications.isEmpty()) {
+          Text(
+            text = "No notifications",
+            style = MaterialTheme.typography.subtitle1,
+            modifier = Modifier.center()
+          )
+        } else {
+          LazyColumn {
+            items(state.notifications) { notification ->
+              ListItem(
+                modifier = Modifier.clickable { state.openNotification(notification) },
+                title = { Text(notification.title) },
+                subtitle = { Text(notification.text) },
+                leading = {
+                  Box(
+                    modifier = Modifier.size(40.dp)
+                      .background(
+                        color = notification.color,
+                        shape = CircleShape
+                      )
+                      .padding(all = 8.dp)
+                  ) {
+                    notification.icon()
+                  }
+                },
+                trailing = if (notification.isClearable) {
+                  {
+                    IconButton(onClick = { state.dismissNotification(notification) }) {
+                      Icon(R.drawable.es_ic_clear)
+                    }
+                  }
+                } else null
+              )
+            }
+          }
+        }
       } else {
-        NotificationPermissions(state.requestPermissions)
+        Column(
+          modifier = Modifier.fillMaxSize(),
+          verticalArrangement = Arrangement.Center,
+          horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+          Text(
+            text = "Permissions required",
+            style = MaterialTheme.typography.subtitle1
+          )
+          Spacer(Modifier.height(8.dp))
+          Button(onClick = state.requestPermissions) { Text("Request") }
+        }
       }
-    }
-  }
-}
-
-@Composable private fun NotificationsList(
-  onNotificationClick: (UiNotification) -> Unit,
-  onDismissNotificationClick: (UiNotification) -> Unit,
-  notifications: List<UiNotification>
-) {
-  if (notifications.isEmpty()) {
-    Text(
-      text = "No notifications",
-      style = MaterialTheme.typography.subtitle1,
-      modifier = Modifier.center()
-    )
-  } else {
-    LazyColumn {
-      items(notifications) { notification ->
-        ListItem(
-          modifier = Modifier.clickable { onNotificationClick(notification) },
-          title = { Text(notification.title) },
-          subtitle = { Text(notification.text) },
-          leading = {
-            Box(
-              modifier = Modifier.size(40.dp)
-                .background(
-                  color = notification.color,
-                  shape = CircleShape
-                )
-                .padding(all = 8.dp)
-            ) {
-              notification.icon()
-            }
-          },
-          trailing = if (notification.isClearable) {
-            {
-              IconButton(onClick = { onDismissNotificationClick(notification) }) {
-                Icon(R.drawable.es_ic_clear)
-              }
-            }
-          } else null
-        )
-      }
-    }
-  }
-}
-
-@Composable private fun NotificationPermissions(onRequestPermissionsClick: () -> Unit) {
-  Column(
-    modifier = Modifier.fillMaxSize(),
-    verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally
-  ) {
-    Text(
-      text = "Permissions required",
-      style = MaterialTheme.typography.subtitle1
-    )
-    Spacer(Modifier.height(8.dp))
-    Button(onClick = onRequestPermissionsClick) {
-      Text("Request")
     }
   }
 }
@@ -167,8 +151,12 @@ data class UiNotification(
     hasPermissions = remember {
       permissionManager.permissionState(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }.collectAsResourceState().value,
-    notifications = service.notifications
-      .map { it.toUiNotification() },
+    notifications = remember {
+      service.notifications
+        .map {
+          it.map { it.toUiNotification() }
+        }
+    }.collectAsState(emptyList()).value,
     requestPermissions = action {
       permissionManager.requestPermissions(listOf(typeKeyOf<SampleNotificationsPermission>()))
     },
