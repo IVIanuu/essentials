@@ -148,7 +148,7 @@ val Scope<*>.coroutineScope: CoroutineScope get() = service()
   }
 }
 
-data class ProvidedService<N, T>(@Inject val key: TypeKey<T>, val factory: () -> T) {
+data class ProvidedService<N, T>(val key: TypeKey<T>, val factory: () -> T) {
   @Provide companion object {
     @Provide fun <N> defaultServices() = emptyList<ProvidedService<N, *>>()
   }
