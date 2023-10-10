@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.result.catch
+import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.pop
@@ -137,12 +139,14 @@ private val DefaultAppBarHeight = 64.dp
 val DefaultAppBarElevation = 0.dp
 
 @Composable fun autoTopAppBarLeadingIcon(): (@Composable () -> Unit)? {
-  val navigator = LocalScope.current.navigator
-  val screen = LocalScope.current.screen
-  val canGoBack = remember { navigator.backStack.value.indexOf(screen) > 0 }
+  val navigator = catch { LocalScope.current.navigator }.getOrNull()
+  val screen = catch { LocalScope.current.screen }.getOrNull()
+  val canGoBack = remember {
+    navigator?.backStack?.value?.indexOf(screen)?.let { it > 0 } == true
+  }
   return if (!canGoBack) null
   else ({
-    IconButton(onClick = action { navigator.pop(screen) }) {
+    IconButton(onClick = action { navigator!!.pop(screen!!) }) {
       Icon(Icons.Default.ArrowBack)
     }
   })
