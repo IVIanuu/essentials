@@ -148,6 +148,6 @@ import kotlin.reflect.KClass
   @Provide companion object {
     @Provide fun rootService(
       factory: () -> ScreenContextComponent<RootNavGraph>
-    ) = ProvidedService<UiScope, _>(typeKeyOf(), factory)
+    ) = ProvidedService<UiScope, _>(factory = factory)
   }
 }

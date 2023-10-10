@@ -21,11 +21,12 @@ interface ScopeManager {
   private val _activeScopes = MutableStateFlow<Set<Scope<*>>>(emptySet())
   override val activeScopes: StateFlow<Set<Scope<*>>> by this::_activeScopes
 
-  @Provide fun <N> observer(): ScopeObserver<N> = object : ScopeObserver<N> {
-    override fun onEnter(scope: Scope<N>) = _activeScopes.update { it + scope }
+  private val _observer = object : ScopeObserver<Any?> {
+    override fun onEnter(scope: Scope<Any?>) = _activeScopes.update { it + scope }
 
-    override fun onExit(scope: Scope<N>) = _activeScopes.update { it - scope }
+    override fun onExit(scope: Scope<Any?>) = _activeScopes.update { it - scope }
   }
+  @Provide fun <N> observer(): ScopeObserver<N> = _observer.cast()
 }
 
 fun <N> ScopeManager.activeScopesOf(@Inject name: TypeKey<N>): Flow<Set<Scope<N>>> = activeScopes
