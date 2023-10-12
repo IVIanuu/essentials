@@ -67,7 +67,7 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.5.1"
+    const val version = "1.5.3"
     const val compilerVersion = "1.5.2"
     const val compiler = "org.jetbrains.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
