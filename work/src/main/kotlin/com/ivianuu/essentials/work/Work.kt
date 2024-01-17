@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.work
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.work.Configuration
 import androidx.work.Constraints
@@ -163,6 +164,7 @@ fun interface WorkInitializer : ScopeInitializer<AppScope>
   )
 }
 
+@SuppressLint("RestrictedApi")
 @Provide fun periodicWorkScheduler(
   coroutineContexts: CoroutineContexts,
   logger: Logger,
@@ -177,10 +179,10 @@ fun interface WorkInitializer : ScopeInitializer<AppScope>
 
       val scheduleHash = SCHEDULE_HASH_PREFIX + schedule.toString().hashCode()
 
-      if (existingWork.any { existing ->
+      if (existingWork.none { existing ->
           (existing.state == WorkInfo.State.ENQUEUED ||
               existing.state == WorkInfo.State.RUNNING) &&
-              existing.tags.none { it == scheduleHash }
+              existing.tags.any { it == scheduleHash }
       }) {
         logger.log { "enqueue work $workId with $schedule" }
 
