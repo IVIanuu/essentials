@@ -13,7 +13,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppScope
@@ -54,13 +56,14 @@ import kotlin.time.Duration.Companion.seconds
 
     job = scope.launchComposition {
       val states by foregroundManager.states.collectAsState()
+      var removeServiceNotification by remember(states) { mutableStateOf(true) }
 
       if (states.isEmpty()) {
-        LaunchedEffect(true) {
+        LaunchedEffect(true, removeServiceNotification) {
           onCancel(
             block = {
-              logger.log { "stop foreground" }
-              stopForeground(true)
+              logger.log { "stop foreground -> remove notification $removeServiceNotification" }
+              stopForeground(removeServiceNotification)
               logger.log { "dispatch delayed stop" }
               delay(6.seconds)
               stopSelf()
@@ -72,33 +75,44 @@ import kotlin.time.Duration.Companion.seconds
         ((if (states.any { it.notification == null })
           remember(states.any { it.notification == null }) {
             listOf(
-              inject<ForegroundId>().value to notificationFactory(
-                "default_foreground",
-                "Foreground",
-                NotificationManager.IMPORTANCE_LOW
-              ) {
-                setContentTitle("${appConfig.appName} is running!")
-                setSmallIcon(R.drawable.es_ic_sync)
-                setContentIntent(remoteActionOf<StartAppRemoteAction>(context))
-              }
+              Triple(
+                inject<ForegroundId>().value,
+                true,
+                notificationFactory(
+                  "default_foreground",
+                  "Foreground",
+                  NotificationManager.IMPORTANCE_LOW
+                ) {
+                  setContentTitle("${appConfig.appName} is running!")
+                  setSmallIcon(R.drawable.es_ic_sync)
+                  setContentIntent(remoteActionOf<StartAppRemoteAction>(context))
+                }
+              )
             )
           }
         else emptyList()) + states
           .mapNotNull { state ->
             key(state.id) {
               state.notification?.invoke()
-                ?.let { state.id to it }
+                ?.let { Triple(state.id, state.removeNotification, it) }
             }
           })
-          .forEachIndexed { index, (id, notification) ->
+          .forEachIndexed { index, (id, removeNotification, notification) ->
             key(id) {
               DisposableEffect(index, id, notification) {
                 logger.log { "update $id" }
 
-                if (index == 0) startForeground(id, notification)
-                else notificationManager.notify(id, notification)
-
-                onDispose { notificationManager.cancel(id) }
+                if (index == 0) {
+                  removeServiceNotification = removeNotification
+                  startForeground(id, notification)
+                  onDispose {  }
+                } else {
+                  notificationManager.notify(id, notification)
+                  onDispose {
+                    if (removeNotification)
+                      notificationManager.cancel(id)
+                  }
+                }
               }
             }
           }

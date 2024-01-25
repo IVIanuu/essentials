@@ -24,6 +24,7 @@ import kotlinx.coroutines.sync.withLock
 
 interface ForegroundManager {
   suspend fun startForeground(
+    removeNotification: Boolean = true,
     @Inject foregroundId: ForegroundId,
     notification: (@Composable () -> Notification)? = null,
   ): Nothing
@@ -45,11 +46,12 @@ data object ForegroundScope
   private val lock = Mutex()
 
   override suspend fun startForeground(
+    removeNotification: Boolean,
     @Inject foregroundId: ForegroundId,
     notification: (@Composable () -> Notification)?,
   ) = bracket(
     acquire = {
-      ForegroundState(foregroundId.value, notification)
+      ForegroundState(foregroundId.value, removeNotification, notification)
         .also {
           lock.withLock { states.value = states.value + it }
           logger.log { "start foreground ${foregroundId.value} ${states.value}" }
@@ -67,7 +69,11 @@ data object ForegroundScope
     }
   )
 
-  internal class ForegroundState(val id: Int, val notification: (@Composable () -> Notification)?) {
+  internal class ForegroundState(
+    val id: Int,
+    val removeNotification: Boolean,
+    val notification: (@Composable () -> Notification)?,
+  ) {
     val seen = CompletableDeferred<Unit>()
   }
 }

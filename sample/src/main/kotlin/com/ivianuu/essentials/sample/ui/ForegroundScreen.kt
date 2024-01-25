@@ -40,7 +40,7 @@ class ForegroundScreen : Screen<Unit>
 
     if (isEnabled)
       LaunchedEffect(true) {
-        foregroundManager.startForeground {
+        foregroundManager.startForeground(removeNotification = false) {
           ForegroundNotification(
             remember { timerFlow(1.seconds) }.collectAsState(0).value
           )
