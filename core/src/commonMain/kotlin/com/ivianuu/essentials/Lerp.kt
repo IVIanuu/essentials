@@ -8,6 +8,8 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 interface Lerper<T> {
   fun lerp(start: T, stop: T, fraction: Float): T
@@ -35,7 +37,20 @@ interface Lerper<T> {
       lerp = { start, stop, fraction ->
         start * (1.0 - fraction) + stop * fraction
       },
-      unlerp = { start, stop, value -> unlerp(start.toFloat(), stop.toFloat(), value.toFloat()) }
+      unlerp = { start, stop, value ->
+        (if (stop - start == 0.0) 0.0 else (value - start) / (stop - start)).coerceIn(0.0, 1.0)
+          .toFloat()
+      }
+    )
+
+    @Provide val duration = Lerper<Duration>(
+      lerp = { start, stop, fraction ->
+        lerp(start.inWholeMilliseconds, stop.inWholeMilliseconds, fraction)
+          .milliseconds
+      },
+      unlerp = { start, stop, value ->
+        unlerp(start.inWholeMilliseconds, stop.inWholeMilliseconds, value.inWholeMilliseconds)
+      }
     )
 
     @Provide val int = Lerper<Int>(
@@ -52,7 +67,7 @@ interface Lerper<T> {
         (start * (1f - fraction) + stop * fraction).roundToLong()
       },
       unlerp = { start, stop, value ->
-        unlerp(start.toFloat(), stop.toFloat(), value.toFloat())
+        unlerp(start.toDouble(), stop.toDouble(), value.toDouble())
       }
     )
   }
