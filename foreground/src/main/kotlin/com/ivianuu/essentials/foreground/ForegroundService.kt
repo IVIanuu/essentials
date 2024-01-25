@@ -56,7 +56,7 @@ import kotlin.time.Duration.Companion.seconds
 
     job = scope.launchComposition {
       val states by foregroundManager.states.collectAsState()
-      var removeServiceNotification by remember(states) { mutableStateOf(true) }
+      var removeServiceNotification by remember { mutableStateOf(true) }
 
       if (states.isEmpty()) {
         LaunchedEffect(true, removeServiceNotification) {

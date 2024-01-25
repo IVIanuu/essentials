@@ -4,8 +4,9 @@
 
 package com.ivianuu.essentials.ads
 
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import com.ivianuu.essentials.app.ScopeComposition
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.essentials.logging.Logger
@@ -47,21 +48,19 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   logger: Logger,
   navigator: Navigator,
   pref: DataStore<ScreenLaunchPrefs>
-) = ScopeWorker<UiScope> {
-  adsEnabledFlow
-    .flatMapLatest {
-      if (!it.value) infiniteEmptyFlow()
-      else navigator.launchEvents()
-    }
-    .collectLatest {
-      val launchCount = pref
-        .updateData { copy(screenLaunchCount = screenLaunchCount + 1) }
-        .screenLaunchCount
-      logger.log { "screen launched $launchCount" }
-      if (launchCount >= config.screenLaunchToShowAdCount) {
-        logger.log { "try to show full screen ad $launchCount" }
-        if (fullScreenAdManager.loadAndShowAdWithTimeout().getOrElse { false })
-          pref.updateData { copy(screenLaunchCount = 0) }
+) = ScopeComposition<UiScope> {
+  if (adsEnabledFlow.collectAsState().value.value)
+    LaunchedEffect(true) {
+      navigator.launchEvents().collectLatest {
+        val launchCount = pref
+          .updateData { copy(screenLaunchCount = screenLaunchCount + 1) }
+          .screenLaunchCount
+        logger.log { "screen launched $launchCount" }
+        if (launchCount >= config.screenLaunchToShowAdCount) {
+          logger.log { "try to show full screen ad $launchCount" }
+          if (fullScreenAdManager.loadAndShowAdWithTimeout().getOrElse { false })
+            pref.updateData { copy(screenLaunchCount = 0) }
+        }
       }
     }
 }
