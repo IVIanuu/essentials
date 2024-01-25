@@ -33,4 +33,3 @@ fun interface ContentChangesFactory {
     awaitClose { contentResolver.unregisterContentObserver(observer) }
   }.flowOn(coroutineContexts.main)
 }
-
