@@ -169,7 +169,7 @@ fun interface WorkInitializer : ScopeInitializer<AppScope>
   coroutineContexts: CoroutineContexts,
   logger: Logger,
   schedules: Map<String, PeriodicWorkSchedule<*>>,
-  androidWorkManager: AndroidWorkManager,
+  androidWorkManager: androidx.work.WorkManager,
 ) = ScopeWorker<AppScope> {
   withContext(coroutineContexts.computation) {
     schedules.forEach { (workId, schedule) ->
@@ -183,7 +183,7 @@ fun interface WorkInitializer : ScopeInitializer<AppScope>
           (existing.state == WorkInfo.State.ENQUEUED ||
               existing.state == WorkInfo.State.RUNNING) &&
               existing.tags.any { it == scheduleHash }
-      }) {
+        }) {
         logger.log { "enqueue work $workId with $schedule" }
 
         androidWorkManager.enqueueUniquePeriodicWork(
