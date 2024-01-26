@@ -124,8 +124,8 @@ import kotlin.time.Duration.Companion.seconds
           states.forEach { it.seen.complete(Unit) }
         }
 
-        val foregroundScope = remember(foregroundScopeFactory)
         DisposableEffect(true) {
+          val foregroundScope = foregroundScopeFactory()
           onDispose { foregroundScope.dispose() }
         }
       }
