@@ -63,7 +63,10 @@ import kotlin.time.Duration.Companion.seconds
           onCancel(
             block = {
               logger.log { "stop foreground -> remove notification $removeServiceNotification" }
-              stopForeground(removeServiceNotification)
+              stopForeground(
+                if (removeServiceNotification) STOP_FOREGROUND_REMOVE
+                else STOP_FOREGROUND_DETACH
+              )
               logger.log { "dispatch delayed stop" }
               delay(6.seconds)
               stopSelf()
