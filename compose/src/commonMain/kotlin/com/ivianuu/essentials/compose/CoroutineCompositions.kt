@@ -28,8 +28,7 @@ fun <T> compositionFlow(@Inject context: StateCoroutineContext, block: @Composab
   launchComposition(
     emitter = { trySend(it) },
     block = block
-  )
-  awaitClose()
+  ).join()
 }
 
 fun <T> CoroutineScope.compositionStateFlow(
