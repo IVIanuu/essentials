@@ -17,16 +17,18 @@ dependencies {
   api(Deps.AndroidX.Activity.activity)
   api(Deps.AndroidX.core)
   api(Deps.AndroidX.Lifecycle.runtime)
+  api(Deps.Compose.googleFonts)
 
   api(Deps.AndroidX.dataStore)
   api(Deps.superUser)
+  api(Deps.Coroutines.android)
+
+  api(Deps.Coil.coil)
+  api(Deps.Coil.coilCompose)
+
   api(project(":db"))
   api(project(":core"))
   api(project(":ui"))
-  testImplementation(project(":android-test"))
-
-  api(Deps.Coroutines.android)
-
   testImplementation(project(":android-test"))
 }
 

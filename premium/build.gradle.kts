@@ -15,7 +15,6 @@ dependencies {
   api(project(":ads"))
   api(project(":android"))
   api(project(":billing"))
-  api(project(":unlock"))
   api(project(":ui"))
 }
 

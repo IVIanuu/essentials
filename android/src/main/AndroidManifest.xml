@@ -31,6 +31,12 @@
             android:theme="@style/Theme.Es.Translucent"
             android:exported="true" />
 
+        <activity
+            android:name="com.ivianuu.essentials.unlock.UnlockActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
+            android:theme="@style/Theme.Es.Translucent"
+            android:exported="true" />
+
         <receiver
             android:name="com.ivianuu.essentials.util.RemoteActionReceiver"
             android:exported="false">

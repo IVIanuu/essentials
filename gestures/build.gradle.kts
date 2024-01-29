@@ -15,11 +15,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 dependencies {
   api(project(":accessibility"))
   api(project(":android"))
-  api(project(":apps"))
   api(project(":recent-apps"))
-  api(project(":shortcut-picker"))
   api(project(":torch"))
-  api(project(":unlock"))
   testImplementation(project(":android-test"))
 }
 

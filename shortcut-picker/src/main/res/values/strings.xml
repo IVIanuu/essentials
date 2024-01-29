@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
-  -->
-
-<resources>
-    <string name="es_title_shortcut_picker">Pick an shortcut</string>
-    <string name="es_failed_to_pick_shortcut">Failed to pick shortcut!</string>
-</resources>

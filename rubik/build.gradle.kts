@@ -14,7 +14,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
   api(project(":android"))
-  api(project(":font"))
   api(project(":ui"))
 }
 
