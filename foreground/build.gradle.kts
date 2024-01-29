@@ -15,7 +15,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
   api(project(":android"))
-  api(project(":logging"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

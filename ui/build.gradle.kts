@@ -29,10 +29,7 @@ kotlin {
       dependencies {
         api(Deps.Compose.foundation)
         api(Deps.Compose.material)
-        api(project(":app"))
-        api(project(":compose"))
-        api(project(":logging"))
-        api(project(":serialization"))
+        api(project(":core"))
       }
     }
 

@@ -4,6 +4,8 @@
 <manifest package="com.ivianuu.essentials.android"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
         android:appComponentFactory="com.ivianuu.essentials.app.EsAppComponentFactory"
         tools:replace="android:appComponentFactory">
@@ -22,6 +24,13 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.ivianuu.essentials.processrestart.ProcessRestartActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
+            android:process=":restartprocess"
+            android:theme="@style/Theme.Es.Translucent"
+            android:exported="true" />
+
         <receiver
             android:name="com.ivianuu.essentials.util.RemoteActionReceiver"
             android:exported="false">
@@ -29,5 +38,15 @@
                 <action android:name="execute_remote_action" />
             </intent-filter>
         </receiver>
+
+        <provider
+            android:name="com.ivianuu.essentials.backup.BackupFileProvider"
+            android:authorities="${applicationId}.backupprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/backup_paths" />
+        </provider>
     </application>
 </manifest>

@@ -19,15 +19,14 @@ dependencies {
   api(Deps.AndroidX.Lifecycle.runtime)
 
   api(Deps.AndroidX.dataStore)
+  api(Deps.superUser)
   api(project(":db"))
-  api(project(":data"))
-  api(project(":serialization"))
+  api(project(":core"))
+  api(project(":ui"))
   testImplementation(project(":android-test"))
 
   api(Deps.Coroutines.android)
-  api(project(":ui"))
 
-  api(project(":common"))
   testImplementation(project(":android-test"))
 }
 

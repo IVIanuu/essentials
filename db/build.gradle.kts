@@ -23,9 +23,7 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
-        api(project(":coroutines"))
         api(project(":core"))
-        api(project(":serialization"))
       }
     }
     named("androidUnitTest") {

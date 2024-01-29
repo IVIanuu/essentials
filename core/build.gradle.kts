@@ -2,14 +2,36 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 plugins {
-  kotlin("multiplatform")
+  id("com.android.library")
   id("com.ivianuu.essentials")
+  kotlin("multiplatform")
+}
+
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
+
+android {
+  sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
 
 kotlin {
   jvm()
+  android {
+    publishLibraryVariants("release")
+  }
 
   sourceSets {
+    val commonJvmMain = create("commonJvmMain") {
+      dependsOn(commonMain.get())
+    }
+
+    named("androidMain") {
+      dependsOn(commonJvmMain)
+      dependencies {
+        api(Deps.Compose.foundation)
+      }
+    }
+
     commonMain {
       dependencies {
         api(Deps.AtomicFu.runtime)
@@ -18,8 +40,14 @@ kotlin {
         api(Deps.Coroutines.core)
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)
+        api(Deps.KotlinSerialization.json)
       }
     }
+
+    named("jvmMain") {
+      dependsOn(commonJvmMain)
+    }
+
     named("jvmTest") {
       dependencies {
         implementation(project(":test"))
