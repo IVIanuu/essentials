@@ -73,10 +73,10 @@ val Scope<*>.coroutineScope: CoroutineScope get() = service()
   private val parentDisposable = parent?.registerChild(this)
 
   override fun addObserver(observer: ScopeObserver<*>): Disposable {
-    if (isDisposed) return Disposable.NoOp
+    if (isDisposed) return Disposable {}
 
     synchronized(observers) {
-      if (observer in observers) return Disposable.NoOp
+      if (observer in observers) return Disposable {}
       observers += observer
     }
 

@@ -13,10 +13,3 @@ interface DataStore<T> {
 
   suspend fun updateData(transform: T.() -> T): T
 }
-
-class TestDataStore<T>(initial: T) : DataStore<T> {
-  override val data = MutableStateFlow(initial)
-
-  override suspend fun updateData(transform: T.() -> T): T =
-    data.updateAndGet(transform)
-}

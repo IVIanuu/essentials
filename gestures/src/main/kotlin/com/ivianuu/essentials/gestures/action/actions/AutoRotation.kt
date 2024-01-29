@@ -7,6 +7,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.provider.Settings
 import androidx.compose.material.Icon
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.data.AndroidSettingModule
 import com.ivianuu.essentials.data.AndroidSettingsType
@@ -32,8 +33,11 @@ import com.ivianuu.injekt.common.typeKeyOf
   icon = {
     val enabled = autoRotationDataStore.data.collectAsState(1).value == 1
     Icon(
-      if (enabled) R.drawable.es_ic_screen_rotation
-      else R.drawable.es_ic_screen_lock_rotation
+      painterResource(
+        if (enabled) R.drawable.es_ic_screen_rotation
+        else R.drawable.es_ic_screen_lock_rotation
+      ),
+      null
     )
   }
 )

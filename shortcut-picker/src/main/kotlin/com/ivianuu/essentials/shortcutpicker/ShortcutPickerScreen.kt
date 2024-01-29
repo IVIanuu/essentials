@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.compose.action
@@ -37,14 +38,15 @@ import com.ivianuu.injekt.Provide
 class ShortcutPickerScreen : Screen<Shortcut>
 
 @Provide val shortcutPickerUi = Ui<ShortcutPickerScreen, ShortcutPickerState> { state ->
-  Scaffold(topBar = { AppBar { Text(R.string.es_title_shortcut_picker) } }) {
+  Scaffold(topBar = { AppBar { Text(stringResource(R.string.es_title_shortcut_picker)) } }) {
     ResourceVerticalListFor(state.shortcuts) { shortcut ->
       ListItem(
         modifier = Modifier.clickable { state.pickShortcut(shortcut) },
         leading = {
           Image(
             modifier = Modifier.size(40.dp),
-            painter = remember { BitmapPainter(shortcut.icon.toBitmap().toImageBitmap()) }
+            painter = remember { BitmapPainter(shortcut.icon.toBitmap().toImageBitmap()) },
+            contentDescription = null
           )
         },
         title = { Text(shortcut.name) }

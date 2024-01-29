@@ -16,6 +16,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppScope

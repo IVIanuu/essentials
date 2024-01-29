@@ -25,12 +25,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-fun <T> CoroutineScope.sharedFlow(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
-  replay: Int = 0,
-  block: suspend FlowCollector<T>.() -> Unit
-): SharedFlow<T> = flow { block() }.shareIn(this, sharingStarted, replay)
-
 fun <K, T> CoroutineScope.sharedFlow(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   replay: Int = 0,
@@ -43,7 +37,7 @@ fun <K, T> CoroutineScope.sharedFlow(
       emitAll(
         mutex.withLock {
           map.getOrPut(key) {
-            sharedFlow<T>(sharingStarted, replay) { block(this, key) }
+            flow { block(this, key) }.shareIn(this@sharedFlow, sharingStarted, replay)
           }
         }
       )
@@ -61,27 +55,7 @@ fun <K, T> CoroutineScope.sharedComputation(
   return { flows(it).first().getOrThrow() }
 }
 
-fun <T> CoroutineScope.sharedComputation(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
-  block: suspend () -> T
-): suspend () -> T {
-  val keyed = sharedComputation<Unit, T>(sharingStarted) { block() }
-  return { keyed(Unit) }
-}
-
 data class Releasable<T>(val value: T, val release: () -> Unit)
-
-fun <T> CoroutineScope.sharedResource(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
-  release: (suspend (T) -> Unit)? = null,
-  create: suspend () -> T
-): suspend () -> Releasable<T> {
-  val keyed = sharedResource<Unit, T>(
-    sharingStarted,
-    release?.let { { _, value -> release(value) } }
-  ) { create() }
-  return { keyed(Unit) }
-}
 
 fun <K, T> CoroutineScope.sharedResource(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
@@ -122,9 +96,6 @@ fun <K, T> CoroutineScope.sharedResource(
 
 suspend fun <K, T, R> (suspend (K) -> Releasable<T>).use(key: K, block: suspend (T) -> R): R =
   invoke(key).use(block)
-
-suspend fun <T, R> (suspend () -> Releasable<T>).use(block: suspend (T) -> R): R =
-  invoke().use(block)
 
 suspend fun <T, R> Releasable<T>.use(block: suspend (T) -> R): R =
   guarantee(

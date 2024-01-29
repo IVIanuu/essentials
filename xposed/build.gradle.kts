@@ -21,7 +21,6 @@ android {
 
 dependencies {
   api(project(":android"))
-  api(project(":broadcast"))
   compileOnly(project(":xposed-provided"))
 }
 

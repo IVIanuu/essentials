@@ -19,6 +19,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivianuu.essentials.AppConfig
@@ -62,24 +63,24 @@ class WriteSecureSettingsScreen(
 @Provide val writeSecureSettingsUi =
   Ui<WriteSecureSettingsScreen, WriteSecureSettingsState> { state ->
     Scaffold(
-      topBar = { AppBar { Text(R.string.es_secure_settings_title) } },
+      topBar = { AppBar { Text(stringResource(R.string.es_secure_settings_title)) } },
       bottomBar = {
         Snackbar(
           modifier = Modifier.padding(16.dp),
           action = {
             TextButton(onClick = state.grantPermissionsViaRoot) {
-              Text(R.string.es_secure_settings_use_root_action)
+              Text(stringResource(R.string.es_secure_settings_use_root_action))
             }
           }
         ) {
-          Text(R.string.es_secure_settings_use_root)
+          Text(stringResource(R.string.es_secure_settings_use_root))
         }
       }
     ) {
       VerticalList {
         item {
           Text(
-            R.string.es_secure_settings_desc,
+            stringResource(R.string.es_secure_settings_desc),
             modifier = Modifier.padding(all = 16.dp),
             style = MaterialTheme.typography.body2
           )
@@ -91,10 +92,10 @@ class WriteSecureSettingsScreen(
             isCompleted = state.completedStep > 1,
             isCurrent = state.currentStep == 1,
             onClick = { state.openStep(1) },
-            title = { Text(R.string.es_secure_settings_step_1_title) },
+            title = { Text(stringResource(R.string.es_secure_settings_step_1_title)) },
             content = {
               Text(
-                textResId = R.string.es_secure_settings_step_1_content,
+                text = stringResource(R.string.es_secure_settings_step_1_content),
                 style = MaterialTheme.typography.body2
               )
             },
@@ -102,8 +103,8 @@ class WriteSecureSettingsScreen(
               Button(
                 onClick = state.continueStep,
                 enabled = state.canContinueStep
-              ) { Text(R.string.es_continue) }
-              OutlinedButton(onClick = state.openPhoneInfo) { Text(R.string.es_open_phone_info) }
+              ) { Text(stringResource(R.string.es_continue)) }
+              OutlinedButton(onClick = state.openPhoneInfo) { Text(stringResource(R.string.es_open_phone_info)) }
             }
           )
         }
@@ -114,10 +115,10 @@ class WriteSecureSettingsScreen(
             isCompleted = state.completedStep > 2,
             isCurrent = state.currentStep == 2,
             onClick = { state.openStep(2) },
-            title = { Text(R.string.es_secure_settings_step_2_title) },
+            title = { Text(stringResource(R.string.es_secure_settings_step_2_title)) },
             content = {
               Text(
-                textResId = R.string.es_secure_settings_step_2_content,
+                text = stringResource(R.string.es_secure_settings_step_2_content),
                 style = MaterialTheme.typography.body2
               )
             },
@@ -125,8 +126,10 @@ class WriteSecureSettingsScreen(
               Button(
                 onClick = state.continueStep,
                 enabled = state.canContinueStep
-              ) { Text(R.string.es_continue) }
-              OutlinedButton(onClick = state.openDeveloperSettings) { Text(R.string.es_open_developer_settings) }
+              ) { Text(stringResource(R.string.es_continue)) }
+              OutlinedButton(onClick = state.openDeveloperSettings) {
+                Text(stringResource(R.string.es_open_developer_settings))
+              }
             }
           )
         }
@@ -137,13 +140,13 @@ class WriteSecureSettingsScreen(
             isCompleted = state.completedStep > 3,
             isCurrent = state.currentStep == 3,
             onClick = { state.openStep(3) },
-            title = { Text(R.string.es_secure_settings_step_3_title) },
-            content = { Text(R.string.es_secure_settings_step_3_content) },
+            title = { Text(stringResource(R.string.es_secure_settings_step_3_title)) },
+            content = { Text(stringResource(R.string.es_secure_settings_step_3_content)) },
             actions = {
               Button(
                 onClick = state.continueStep,
                 enabled = state.canContinueStep
-              ) { Text(R.string.es_continue) }
+              ) { Text(stringResource(R.string.es_continue)) }
             }
           )
         }
@@ -154,9 +157,9 @@ class WriteSecureSettingsScreen(
             isCompleted = state.completedStep > 4,
             isCurrent = state.currentStep == 4,
             onClick = { state.openStep(4) },
-            title = { Text(R.string.es_secure_settings_step_4_title) },
+            title = { Text(stringResource(R.string.es_secure_settings_step_4_title)) },
             content = {
-              Text(R.string.es_secure_settings_step_4_content)
+              Text(stringResource(R.string.es_secure_settings_step_4_content))
 
               Text(
                 modifier = Modifier
@@ -174,7 +177,7 @@ class WriteSecureSettingsScreen(
               Button(
                 onClick = state.continueStep,
                 enabled = state.canContinueStep
-              ) { Text(R.string.es_complete) }
+              ) { Text(stringResource(R.string.es_complete)) }
             }
           )
         }

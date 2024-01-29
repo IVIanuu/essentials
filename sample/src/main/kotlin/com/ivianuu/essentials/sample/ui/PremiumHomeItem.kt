@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Icon
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.premium.AppFeature
 import com.ivianuu.essentials.premium.GoPremiumScreen
@@ -24,43 +25,43 @@ import com.ivianuu.injekt.Provide
 @Provide val premiumFeature = listOf(
   AppFeature(
     title = "Sample feature 1",
-    icon = { Icon(R.drawable.es_ic_accessibility) },
+    icon = { Icon(painterResource(R.drawable.es_ic_accessibility), null) },
     inPremium = false,
     inBasic = true
   ),
   AppFeature(
     title = "Sample feature 2",
-    icon = { Icon(R.drawable.es_ic_notifications) },
+    icon = { Icon(painterResource(R.drawable.es_ic_notifications), null) },
     inPremium = true,
     inBasic = false
   ),
   AppFeature(
     title = "Sample feature 3",
-    icon = { Icon(R.drawable.es_ic_photo_album) },
+    icon = { Icon(painterResource(R.drawable.es_ic_photo_album), null) },
     inPremium = true,
     inBasic = false
   ),
   AppFeature(
     title = "Sample feature 4",
-    icon = { Icon(R.drawable.es_ic_adb) },
+    icon = { Icon(painterResource(R.drawable.es_ic_adb), null) },
     inPremium = true,
     inBasic = true
   ),
   AppFeature(
     title = "Sample feature 5",
-    icon = { Icon(R.drawable.es_ic_adb) },
+    icon = { Icon(painterResource(R.drawable.es_ic_adb), null) },
     inPremium = true,
     inBasic = true
   ),
   AppFeature(
     title = "Sample feature 6",
-    icon = { Icon(R.drawable.es_ic_adb) },
+    icon = { Icon(painterResource(R.drawable.es_ic_adb), null) },
     inPremium = true,
     inBasic = true
   ),
   AppFeature(
     title = "Sample feature 7",
-    icon = { Icon(R.drawable.es_ic_adb) },
+    icon = { Icon(painterResource(R.drawable.es_ic_adb), null) },
     inPremium = true,
     inBasic = true
   )

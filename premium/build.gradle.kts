@@ -13,9 +13,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
   api(project(":ads"))
-  api(project(":android-util"))
+  api(project(":android"))
   api(project(":billing"))
-  api(project(":broadcast"))
   api(project(":unlock"))
   api(project(":ui"))
 }

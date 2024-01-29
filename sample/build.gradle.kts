@@ -24,12 +24,10 @@ android {
 
 dependencies {
   implementation(project(":analytics-android"))
-  implementation(project(":android"))
-  implementation(project(":android-data"))
-  implementation(project(":android-util"))
   implementation(project(":about"))
   implementation(project(":accessibility"))
   implementation(project(":ads"))
+  implementation(project(":android"))
   implementation(project(":apps"))
   implementation(project(":backup"))
   implementation(project(":billing"))

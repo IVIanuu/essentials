@@ -13,8 +13,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-  api(project(":android-core"))
-  api(project(":android-data"))
+  api(project(":android"))
   api(project(":ui"))
   api(project(":process-restart"))
 }

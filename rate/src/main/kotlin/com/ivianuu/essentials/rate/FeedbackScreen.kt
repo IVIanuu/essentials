@@ -6,6 +6,7 @@ package com.ivianuu.essentials.rate
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.produceState
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -24,23 +25,23 @@ object FeedbackScreen : DialogScreen<Unit>
 @Provide val feedbackUi = Ui<FeedbackScreen, FeedbackState> { state ->
   DialogScaffold(dismissible = false) {
     Dialog(
-      title = { Text(R.string.es_feedback_title) },
-      content = { Text(R.string.es_feedback_content) },
+      title = { Text(stringResource(R.string.es_feedback_title)) },
+      content = { Text(stringResource(R.string.es_feedback_content)) },
       buttons = {
         if (state.displayShowNever) {
           TextButton(onClick = state.showNever) {
-            Text(R.string.es_never)
+            Text(stringResource(R.string.es_never))
           }
         }
         TextButton(onClick = state.showLater) {
-          Text(R.string.es_later)
+          Text(stringResource(R.string.es_later))
         }
 
         TextButton(onClick = state.openReddit) {
-          Text(R.string.es_open_reddit)
+          Text(stringResource(R.string.es_open_reddit))
         }
         TextButton(onClick = state.sendMail) {
-          Text(R.string.es_send_mail)
+          Text(stringResource(R.string.es_send_mail))
         }
       }
     )

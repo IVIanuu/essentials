@@ -47,7 +47,8 @@ class AppPickerScreen(
         leading = {
           Image(
             painter = rememberAsyncImagePainter(AppIcon(packageName = app.packageName)),
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(40.dp),
+            contentDescription = null
           )
         }
       )

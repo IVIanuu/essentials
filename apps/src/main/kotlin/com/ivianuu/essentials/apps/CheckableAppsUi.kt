@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.Scoped
@@ -53,8 +54,8 @@ data class CheckableAppsParams(
         title = { Text(state.appBarTitle) },
         actions = {
           PopupMenuButton {
-            PopupMenuItem(onSelected = state.selectAll) { Text(R.string.es_select_all) }
-            PopupMenuItem(onSelected = state.deselectAll) { Text(R.string.es_deselect_all) }
+            PopupMenuItem(onSelected = state.selectAll) { Text(stringResource(R.string.es_select_all)) }
+            PopupMenuItem(onSelected = state.deselectAll) { Text(stringResource(R.string.es_deselect_all)) }
           }
         }
       )
@@ -67,7 +68,8 @@ data class CheckableAppsParams(
         leading = {
           Image(
             painter = rememberAsyncImagePainter(AppIcon(packageName = app.info.packageName)),
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(40.dp),
+            contentDescription = null
           )
         },
         trailing = {

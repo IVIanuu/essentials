@@ -82,4 +82,3 @@ import kotlinx.coroutines.flow.MutableSharedFlow
   val configs: List<AccessibilityConfig>,
   val coroutineScope: ScopedCoroutineScope<AccessibilityScope>
 )
-

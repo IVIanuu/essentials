@@ -8,6 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.donation.Donation
@@ -30,12 +32,12 @@ import com.ivianuu.injekt.Provide
 class AboutScreen : Screen<Unit>
 
 @Provide val aboutUi = Ui<AboutScreen, AboutState> { state ->
-  Scaffold(topBar = { AppBar { Text(R.string.es_about_title) } }) {
+  Scaffold(topBar = { AppBar { Text(stringResource(R.string.es_about_title)) } }) {
     VerticalList {
       item {
         ListItem(
-          leading = { Icon(R.drawable.es_ic_info) },
-          title = { Text(R.string.es_about_version) },
+          leading = { Icon(painterResource(R.drawable.es_ic_info), null) },
+          title = { Text(stringResource(R.string.es_about_version)) },
           subtitle = { Text(state.version) }
         )
       }
@@ -43,9 +45,9 @@ class AboutScreen : Screen<Unit>
       item {
         ListItem(
           modifier = Modifier.clickable(onClick = state.rate),
-          leading = { Icon(R.drawable.es_ic_star) },
-          title = { Text(R.string.es_about_rate) },
-          subtitle = { Text(R.string.es_about_rate_desc) }
+          leading = { Icon(painterResource(R.drawable.es_ic_star), null) },
+          title = { Text(stringResource(R.string.es_about_rate)) },
+          subtitle = { Text(stringResource(R.string.es_about_rate_desc)) }
         )
       }
 
@@ -53,52 +55,52 @@ class AboutScreen : Screen<Unit>
         item {
           ListItem(
             modifier = Modifier.clickable(onClick = state.donate),
-            leading = { Icon(R.drawable.es_ic_favorite) },
-            title = { Text(R.string.es_about_donate) }
+            leading = { Icon(painterResource(R.drawable.es_ic_favorite), null) },
+            title = { Text(stringResource(R.string.es_about_donate)) }
           )
         }
 
       item {
         ListItem(
           modifier = Modifier.clickable(onClick = state.openMoreApps),
-          leading = { Icon(R.drawable.es_ic_google_play) },
-          title = { Text(R.string.es_about_more_apps) },
-          subtitle = { Text(R.string.es_about_more_apps_desc) }
+          leading = { Icon(painterResource(R.drawable.es_ic_google_play), null) },
+          title = { Text(stringResource(R.string.es_about_more_apps)) },
+          subtitle = { Text(stringResource(R.string.es_about_more_apps_desc)) }
         )
       }
 
       item {
         ListItem(
           modifier = Modifier.clickable(onClick = state.openRedditPage),
-          leading = { Icon(R.drawable.es_ic_reddit) },
-          title = { Text(R.string.es_about_reddit) },
-          subtitle = { Text(R.string.es_about_reddit_desc) }
+          leading = { Icon(painterResource(R.drawable.es_ic_reddit), null) },
+          title = { Text(stringResource(R.string.es_about_reddit)) },
+          subtitle = { Text(stringResource(R.string.es_about_reddit_desc)) }
         )
       }
 
       item {
         ListItem(
           modifier = Modifier.clickable(onClick = state.openGithubPage),
-          leading = { Icon(R.drawable.es_ic_github) },
-          title = { Text(R.string.es_about_github) },
-          subtitle = { Text(R.string.es_about_github_desc) }
+          leading = { Icon(painterResource(R.drawable.es_ic_github), null) },
+          title = { Text(stringResource(R.string.es_about_github)) },
+          subtitle = { Text(stringResource(R.string.es_about_github_desc)) }
         )
       }
 
       item {
         ListItem(
           modifier = Modifier.clickable(onClick = state.openTwitterPage),
-          leading = { Icon(R.drawable.es_ic_twitter) },
-          title = { Text(R.string.es_about_twitter) },
-          subtitle = { Text(R.string.es_about_twitter_desc) }
+          leading = { Icon(painterResource(R.drawable.es_ic_twitter), null) },
+          title = { Text(stringResource(R.string.es_about_twitter)) },
+          subtitle = { Text(stringResource(R.string.es_about_twitter_desc)) }
         )
       }
 
       item {
         ListItem(
           modifier = Modifier.clickable(onClick = state.sendMail),
-          leading = { Icon(R.drawable.es_ic_email) },
-          title = { Text(R.string.es_about_feedback) },
+          leading = { Icon(painterResource(R.drawable.es_ic_email), null) },
+          title = { Text(stringResource(R.string.es_about_feedback)) },
           subtitle = { Text(state.email.value) }
         )
       }
@@ -107,8 +109,8 @@ class AboutScreen : Screen<Unit>
         item {
           ListItem(
             modifier = Modifier.clickable(onClick = state.openPrivacyPolicy),
-            leading = { Icon(R.drawable.es_ic_policy) },
-            title = { Text(R.string.es_about_privacy_policy) }
+            leading = { Icon(painterResource(R.drawable.es_ic_policy), null) },
+            title = { Text(stringResource(R.string.es_about_privacy_policy)) }
           )
         }
     }

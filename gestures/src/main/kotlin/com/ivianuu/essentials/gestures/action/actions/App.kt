@@ -7,6 +7,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.pm.PackageManager
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.apps.AppIcon
 import com.ivianuu.essentials.apps.AppPickerScreen
@@ -72,7 +73,7 @@ import kotlinx.coroutines.flow.first
   override val title: String
     get() = resources(R.string.es_action_app)
   override val icon: @Composable () -> Unit
-    get() = { Icon(R.drawable.es_ic_apps) }
+    get() = { Icon(painterResource(R.drawable.es_ic_apps), null) }
 
   override suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result? {
     val app = navigator.push(AppPickerScreen(launchableAppPredicate)) ?: return null

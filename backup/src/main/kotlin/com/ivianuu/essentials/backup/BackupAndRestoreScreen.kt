@@ -8,6 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.result.onFailure
@@ -24,22 +26,22 @@ import com.ivianuu.injekt.Provide
 class BackupAndRestoreScreen : Screen<Unit>
 
 @Provide val backupAndRestoreUi = Ui<BackupAndRestoreScreen, BackupAndRestoreState> { state ->
-  Scaffold(topBar = { AppBar { Text(R.string.es_backup_and_restore_title) } }) {
+  Scaffold(topBar = { AppBar { Text(stringResource(R.string.es_backup_and_restore_title)) } }) {
     VerticalList {
       item {
         ListItem(
           modifier = Modifier.clickable(onClick = state.backupData),
-          leading = { Icon(R.drawable.es_ic_save) },
-          title = { Text(R.string.es_pref_backup) },
-          subtitle = { Text(R.string.es_pref_backup_summary) }
+          leading = { Icon(painterResource(R.drawable.es_ic_save), null) },
+          title = { Text(stringResource(R.string.es_pref_backup)) },
+          subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) }
         )
       }
       item {
         ListItem(
           modifier = Modifier.clickable(onClick = state.restoreData),
-          leading = { Icon(R.drawable.es_ic_restore) },
-          title = { Text(R.string.es_pref_restore) },
-          subtitle = { Text(R.string.es_pref_restore_summary) }
+          leading = { Icon(painterResource(R.drawable.es_ic_restore), null) },
+          title = { Text(stringResource(R.string.es_pref_restore)) },
+          subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) }
         )
       }
     }

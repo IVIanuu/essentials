@@ -21,15 +21,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-fun <T> CoroutineScope.sharedComposition(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0),
-  @Inject context: StateCoroutineContext,
-  block: @Composable () -> T
-): @Composable () -> T {
-  val shared = sharedComposition<Unit, T>(sharingStarted) { block() }
-  return { shared(Unit) }
-}
-
 fun <K, T> CoroutineScope.sharedComposition(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0),
   @Inject context: StateCoroutineContext,

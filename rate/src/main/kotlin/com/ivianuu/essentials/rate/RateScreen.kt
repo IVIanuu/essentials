@@ -25,9 +25,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.AppConfig
+import com.ivianuu.essentials.apps.AppIcon
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -51,12 +54,13 @@ object RateScreen : DialogScreen<Unit>
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
           Image(
-            painter = rememberAsyncImagePainter(com.ivianuu.essentials.apps.AppIcon(state.packageName)),
-            modifier = Modifier.size(96.dp)
+            painter = rememberAsyncImagePainter(AppIcon(state.packageName)),
+            modifier = Modifier.size(96.dp),
+            contentDescription = null
           )
 
           Text(
-            textResId = R.string.es_rate_title,
+            text = stringResource(R.string.es_rate_title),
             style = MaterialTheme.typography.h6,
             color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
           )
@@ -74,9 +78,10 @@ object RateScreen : DialogScreen<Unit>
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false)
                   ) { state.updateRating(currentRating) },
-                painterResId = R.drawable.es_ic_star,
+                painter = painterResource(R.drawable.es_ic_star),
                 tint = if (currentRating <= state.rating) MaterialTheme.colors.secondary
-                else LocalContentColor.current.copy(alpha = 0.12f)
+                else LocalContentColor.current.copy(alpha = 0.12f),
+                contentDescription = null
               )
             }
           }
@@ -85,16 +90,16 @@ object RateScreen : DialogScreen<Unit>
       buttons = {
         if (state.displayShowNever) {
           TextButton(onClick = state.showNever) {
-            Text(R.string.es_never)
+            Text(stringResource(R.string.es_never))
           }
         }
 
         TextButton(onClick = state.showLater) {
-          Text(R.string.es_later)
+          Text(stringResource(R.string.es_later))
         }
 
         TextButton(enabled = state.confirmEnabled, onClick = state.confirm) {
-          Text(R.string.es_confirm)
+          Text(stringResource(R.string.es_confirm))
         }
       }
     )

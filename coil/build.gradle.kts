@@ -16,7 +16,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 dependencies {
   api(Deps.Coil.coil)
   api(Deps.Coil.coilCompose)
-  api(project(":android-core"))
+  api(project(":android"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

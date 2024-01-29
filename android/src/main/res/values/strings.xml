@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="copied_to_clipboard">Copied to clipboard!</string>
+    <string name="copy_to_clipboard_failed">Couldn\'t copy to clipboard!</string>
+</resources>

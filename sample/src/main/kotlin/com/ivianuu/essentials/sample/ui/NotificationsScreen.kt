@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.AppContext
@@ -99,7 +100,7 @@ class NotificationsScreen : Screen<Unit>
                 trailing = if (notification.isClearable) {
                   {
                     IconButton(onClick = { state.dismissNotification(notification) }) {
-                      Icon(R.drawable.es_ic_clear)
+                      Icon(painterResource(R.drawable.es_ic_clear), null)
                     }
                   }
                 } else null
@@ -198,7 +199,11 @@ private fun StatusBarNotification.toUiNotification(
       .getOrNull()
   }
 
-  Image(modifier = Modifier.size(24.dp), bitmap = icon ?: return)
+  Image(
+    modifier = Modifier.size(24.dp),
+    bitmap = icon ?: return,
+    contentDescription = null
+  )
 }
 
 @Provide object SampleNotificationsPermission : NotificationListenerPermission(

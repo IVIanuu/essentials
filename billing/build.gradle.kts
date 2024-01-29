@@ -13,8 +13,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-  api(project(":android-core"))
-  api(project(":android-util"))
+  api(project(":android"))
   api(Deps.playBillingKtx)
   testImplementation(project(":android-test"))
 }

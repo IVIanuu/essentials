@@ -12,7 +12,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/an
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 dependencies {
-  api(project(":android-core"))
+  api(project(":android"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

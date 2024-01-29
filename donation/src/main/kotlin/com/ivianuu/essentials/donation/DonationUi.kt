@@ -16,6 +16,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
@@ -60,7 +62,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
   DialogScaffold {
     Dialog(
       applyContentPadding = false,
-      title = { Text(R.string.es_donation_title) },
+      title = { Text(stringResource(R.string.es_donation_title)) },
       content = {
         ResourceVerticalListFor(
           resource = state.skus,
@@ -94,7 +96,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
       .clickable(onClick = onClick)
       .padding(horizontal = 8.dp),
     title = { Text(donation.title) },
-    leading = { Icon(donation.donation.iconRes) },
+    leading = { Icon(painterResource(donation.donation.iconRes), null) },
     trailing = {
       Text(
         text = donation.price,

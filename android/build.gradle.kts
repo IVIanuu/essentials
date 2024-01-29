@@ -15,18 +15,20 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
   api(Deps.AndroidX.Activity.activity)
-  api(Deps.AndroidX.Activity.compose)
   api(Deps.AndroidX.core)
   api(Deps.AndroidX.Lifecycle.runtime)
 
-  api(Deps.Coroutines.android)
-  api(project(":common"))
+  api(Deps.AndroidX.dataStore)
+  api(project(":db"))
+  api(project(":data"))
+  api(project(":serialization"))
+  testImplementation(project(":android-test"))
 
-  api(project(":android-core"))
-  api(project(":android-data"))
-  api(project(":logging-android"))
-  api(project(":android-util"))
+  api(Deps.Coroutines.android)
   api(project(":ui"))
+
+  api(project(":common"))
+  testImplementation(project(":android-test"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

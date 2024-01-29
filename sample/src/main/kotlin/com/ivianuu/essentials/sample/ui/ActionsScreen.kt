@@ -6,13 +6,11 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.coroutineScope
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ui.ActionPickerScreen
 import com.ivianuu.essentials.safeAs
-import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold

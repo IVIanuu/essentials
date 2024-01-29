@@ -14,6 +14,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
@@ -50,7 +52,7 @@ class ActionPickerScreen(
 
 @Provide val actionPickerUi = Ui<ActionPickerScreen, ActionPickerState> { state ->
   Scaffold(
-    topBar = { AppBar { Text(R.string.es_action_picker_title) } }
+    topBar = { AppBar { Text(stringResource(R.string.es_action_picker_title)) } }
   ) {
     ResourceVerticalListFor(state.items) { item ->
       ListItem(
@@ -58,7 +60,7 @@ class ActionPickerScreen(
         leading = { item.Icon(Modifier.size(24.dp)) },
         trailing = if (item.settingsScreen != null) ({
           IconButton(onClick = { state.openActionSettings(item) }) {
-            Icon(R.drawable.es_ic_settings)
+            Icon(painterResource(R.drawable.es_ic_settings), null)
           }
         }) else null,
         title = { Text(item.title) }

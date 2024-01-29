@@ -33,6 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.AppBar
@@ -61,7 +63,7 @@ data class HelpItem(
     )
   }
 
-  Scaffold(topBar = { AppBar { Text(R.string.es_help_title) } }) {
+  Scaffold(topBar = { AppBar { Text(stringResource(R.string.es_help_title)) } }) {
     VerticalList {
       categories.forEach { category ->
         if (category.title != null) {
@@ -120,11 +122,12 @@ data class HelpItem(
 
       val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
       Icon(
-        painterResId = R.drawable.es_ic_expand_more,
+        painter = painterResource(R.drawable.es_ic_expand_more),
         modifier = Modifier
           .size(24.dp)
           .rotate(iconRotation),
-        tint = MaterialTheme.colors.primary
+        tint = MaterialTheme.colors.primary,
+        contentDescription = null
       )
     }
 

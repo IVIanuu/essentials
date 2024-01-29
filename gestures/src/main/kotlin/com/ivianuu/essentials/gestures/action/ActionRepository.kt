@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.gestures.action
 
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.gestures.R

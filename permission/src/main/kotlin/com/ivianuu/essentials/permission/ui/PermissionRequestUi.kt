@@ -19,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.permission.Permission
@@ -45,7 +46,7 @@ class PermissionRequestScreen(
 ) : CriticalUserFlowScreen<Boolean>
 
 @Provide val permissionRequestUi = Ui<PermissionRequestScreen, PermissionRequestState> { state ->
-  Scaffold(topBar = { AppBar { Text(R.string.es_request_permission_title) } }) {
+  Scaffold(topBar = { AppBar { Text(stringResource(R.string.es_request_permission_title)) } }) {
     VerticalList {
       items(state.permissionsToGrant) { permission ->
         ListItem(
@@ -66,14 +67,14 @@ class PermissionRequestScreen(
                 modifier = Modifier.width(56.dp),
                 onClick = { state.denyPermission(permission) }
               ) {
-                Text(R.string.es_deny, maxLines = 1)
+                Text(stringResource(R.string.es_deny), maxLines = 1)
               }
 
               TextButton(
                 modifier = Modifier.width(56.dp),
                 onClick = { state.grantPermission(permission) }
               ) {
-                Text(R.string.es_grant, maxLines = 1)
+                Text(stringResource(R.string.es_grant), maxLines = 1)
               }
             }
           }

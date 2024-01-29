@@ -5,20 +5,60 @@
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
-  kotlin("android")
+  kotlin("multiplatform")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
-dependencies {
-  api(project(":ui-animation"))
-  api(project(":ui-core"))
-  api(project(":ui-dialog"))
-  api(project(":ui-navigation"))
-  api(project(":ui-popup"))
-  api(project(":ui-prefs"))
+android {
+  sourceSets["main"].run {
+    manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    java.srcDirs("src/androidMain/java")
+  }
+}
+
+kotlin {
+  jvm()
+  android {
+    publishLibraryVariants("release")
+  }
+
+  sourceSets {
+    commonMain {
+      dependencies {
+        api(Deps.Compose.foundation)
+        api(Deps.Compose.material)
+        api(project(":app"))
+        api(project(":compose"))
+        api(project(":logging"))
+        api(project(":serialization"))
+      }
+    }
+
+    val commonJvmMain by creating
+
+    val androidMain by getting
+    androidMain.dependsOn(commonJvmMain)
+
+    named("androidMain") {
+      dependencies {
+        api(Deps.Accompanist.flowLayout)
+        api(Deps.Accompanist.pagerIndicators)
+        api(Deps.AndroidX.Activity.compose)
+        api(Deps.AndroidX.core)
+      }
+    }
+
+    val jvmMain by getting
+    jvmMain.dependsOn(commonJvmMain)
+
+    named("jvmTest") {
+      dependencies {
+        implementation(project(":test"))
+      }
+    }
+  }
 }
 
 plugins.apply("com.vanniktech.maven.publish")

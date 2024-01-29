@@ -6,6 +6,7 @@ package com.ivianuu.essentials.rate
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.produceState
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -22,16 +23,16 @@ object RateOnPlayScreen : DialogScreen<Unit>
 @Provide val rateOnPlayUi = Ui<RateOnPlayScreen, RateOnPlayState> { state ->
   DialogScaffold(dismissible = false) {
     Dialog(
-      title = { Text(R.string.es_rate_on_play_title) },
-      content = { Text(R.string.es_rate_on_play_content) },
+      title = { Text(stringResource(R.string.es_rate_on_play_title)) },
+      content = { Text(stringResource(R.string.es_rate_on_play_content)) },
       buttons = {
         if (state.displayShowNever) {
-          TextButton(onClick = state.showNever) { Text(R.string.es_never) }
+          TextButton(onClick = state.showNever) { Text(stringResource(R.string.es_never)) }
         }
 
-        TextButton(onClick = state.showLater) { Text(R.string.es_later) }
+        TextButton(onClick = state.showLater) { Text(stringResource(R.string.es_later)) }
 
-        TextButton(onClick = state.rate) { Text(R.string.es_rate) }
+        TextButton(onClick = state.rate) { Text(stringResource(R.string.es_rate)) }
       }
     )
   }

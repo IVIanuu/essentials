@@ -7,6 +7,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.os.Bundle
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.gestures.R

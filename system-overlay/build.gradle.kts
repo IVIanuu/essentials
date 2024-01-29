@@ -14,8 +14,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
   api(project(":accessibility"))
-  api(project(":android-data"))
-  api(project(":android-util"))
+  api(project(":android"))
   api(project(":apps"))
   api(project(":recent-apps"))
   api(project(":ui"))

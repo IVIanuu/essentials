@@ -6,6 +6,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.material.Icon
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -21,8 +22,11 @@ import com.ivianuu.injekt.Provide
   title = resources(R.string.es_action_torch),
   icon = {
     Icon(
-      if (torchManager.torchEnabled.collectAsState().value) R.drawable.es_ic_flashlight_on
-      else R.drawable.es_ic_flashlight_off
+      painterResource(
+        if (torchManager.torchEnabled.collectAsState().value) R.drawable.es_ic_flashlight_on
+        else R.drawable.es_ic_flashlight_off
+      ),
+      null
     )
   }
 )

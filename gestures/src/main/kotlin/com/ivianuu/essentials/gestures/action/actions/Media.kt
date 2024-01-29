@@ -79,12 +79,12 @@ class MediaActionSettingsScreen : Screen<Unit>
 
 @Provide
 val mediaActionSettingsUi = Ui<MediaActionSettingsScreen, MediaActionSettingsState> { state ->
-  Scaffold(topBar = { AppBar { Text(R.string.es_media_app_settings_ui_title) } }) {
+  Scaffold(topBar = { AppBar { Text(stringResource(R.string.es_media_app_settings_ui_title)) } }) {
     VerticalList {
       item {
         ListItem(
           modifier = Modifier.clickable(onClick = state.updateMediaApp),
-          title = { Text(R.string.es_pref_media_app) },
+          title = { Text(stringResource(R.string.es_pref_media_app)) },
           subtitle = {
             Text(
               stringResource(

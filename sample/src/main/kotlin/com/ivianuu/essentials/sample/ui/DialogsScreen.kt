@@ -95,7 +95,7 @@ class DialogsScreen : Screen<Unit>
         DialogLauncherButton(text = "With icon") {
           Dialog(
             title = { Text("With icon") },
-            icon = { Icon(Icons.Default.Settings) },
+            icon = { Icon(Icons.Default.Settings, null) },
             buttons = {
               DialogCloseButton(text = "OK")
             }

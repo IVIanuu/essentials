@@ -14,8 +14,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-  api(project(":android-util"))
-  api(project(":broadcast"))
+  api(project(":android"))
   api(project(":foreground"))
 }
 

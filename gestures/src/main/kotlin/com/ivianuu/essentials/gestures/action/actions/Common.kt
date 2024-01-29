@@ -11,7 +11,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
+import androidx.compose.material.contentColorFor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
@@ -31,21 +33,24 @@ import com.ivianuu.injekt.common.TypeKey
 fun staticActionImage(data: Any) = ActionIcon {
   Image(
     painter = rememberAsyncImagePainter(data),
-    modifier = LocalActionImageSizeModifier.current
+    modifier = LocalActionImageSizeModifier.current,
+    contentDescription = null
   )
 }
 
 fun staticActionIcon(icon: ImageVector) = ActionIcon {
   Icon(
     imageVector = icon,
-    modifier = LocalActionIconSizeModifier.current
+    modifier = LocalActionIconSizeModifier.current,
+    contentDescription = null
   )
 }
 
 fun staticActionIcon(id: Int) = ActionIcon {
   Icon(
-    painterResId = id,
-    modifier = LocalActionIconSizeModifier.current
+    painter = painterResource(id),
+    modifier = LocalActionIconSizeModifier.current,
+    contentDescription = null
   )
 }
 
