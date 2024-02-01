@@ -47,7 +47,11 @@ import com.ivianuu.injekt.Provide
 
 class HelpScreen : Screen<Unit>
 
-data class HelpCategory(val title: String? = null, val items: List<HelpItem>)
+data class HelpCategory(val title: String? = null, val items: List<HelpItem>) {
+  companion object {
+    @Provide val defaultCategories get() = emptyList<HelpCategory>()
+  }
+}
 
 data class HelpItem(
   val question: String,
