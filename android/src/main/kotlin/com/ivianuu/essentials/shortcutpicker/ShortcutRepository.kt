@@ -8,6 +8,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.toDrawable
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.coroutines.CoroutineContexts
@@ -30,7 +31,7 @@ interface ShortcutRepository {
 
 @Provide class ShortcutRepositoryImpl(
   private val appContext: AppContext,
-  private val broadcastsFactory: BroadcastsFactory,
+  broadcastsFactory: BroadcastsFactory,
   private val coroutineContexts: CoroutineContexts,
   private val packageManager: PackageManager
 ) : ShortcutRepository {
@@ -90,3 +91,5 @@ interface ShortcutRepository {
     Shortcut(intent, name, icon)
   }
 }
+
+data class Shortcut(val intent: Intent, val name: String, val icon: Drawable)

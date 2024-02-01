@@ -51,7 +51,10 @@ class BackupAndRestoreScreen : Screen<Unit>
 
 data class BackupAndRestoreState(val backupData: () -> Unit, val restoreData: () -> Unit)
 
-@Provide fun backupAndRestorePresenter(backupManager: BackupManager, toaster: Toaster) = Presenter {
+@Provide fun backupAndRestorePresenter(
+  backupManager: BackupManager,
+  toaster: Toaster,
+) = Presenter {
   BackupAndRestoreState(
     backupData = action {
       catch { backupManager.createBackup() }

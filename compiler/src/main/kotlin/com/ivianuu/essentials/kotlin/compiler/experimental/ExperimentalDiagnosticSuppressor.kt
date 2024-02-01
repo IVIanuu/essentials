@@ -17,14 +17,10 @@ class ExperimentalDiagnosticSuppressor : DiagnosticSuppressor {
   override fun isSuppressed(diagnostic: Diagnostic): Boolean =
     isSuppressed(diagnostic)
 
-  override fun isSuppressed(diagnostic: Diagnostic, bindingContext: BindingContext?): Boolean {
-    if (diagnostic.factory == Errors.OPT_IN_USAGE ||
-      diagnostic.factory == Errors.OPT_IN_USAGE_ERROR ||
-      diagnostic.factory == Errors.OPT_IN_USAGE_FUTURE_ERROR ||
-      diagnostic.factory == Errors.OPT_IN_OVERRIDE ||
-      diagnostic.factory == Errors.OPT_IN_OVERRIDE_ERROR)
-      return true
-
-    return false
-  }
+  override fun isSuppressed(diagnostic: Diagnostic, bindingContext: BindingContext?): Boolean =
+    diagnostic.factory == Errors.OPT_IN_USAGE ||
+        diagnostic.factory == Errors.OPT_IN_USAGE_ERROR ||
+        diagnostic.factory == Errors.OPT_IN_USAGE_FUTURE_ERROR ||
+        diagnostic.factory == Errors.OPT_IN_OVERRIDE ||
+        diagnostic.factory == Errors.OPT_IN_OVERRIDE_ERROR
 }

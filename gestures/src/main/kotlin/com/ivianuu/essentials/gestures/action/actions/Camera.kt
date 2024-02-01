@@ -27,7 +27,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.scopeOfOrNull
-import com.ivianuu.essentials.screenstate.ScreenState
+import com.ivianuu.essentials.util.ScreenState
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow

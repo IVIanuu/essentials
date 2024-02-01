@@ -7,7 +7,7 @@ package com.ivianuu.essentials.systemoverlay
 import androidx.compose.ui.Alignment
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.android.R
-import com.ivianuu.essentials.screenstate.DisplayRotation
+import com.ivianuu.essentials.util.DisplayRotation
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.injekt.Provide
 

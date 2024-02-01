@@ -2,7 +2,7 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.screenstate
+package com.ivianuu.essentials.util
 
 import android.app.KeyguardManager
 import android.content.Intent
@@ -11,7 +11,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.compose.compositionFlow
-import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
