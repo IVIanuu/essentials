@@ -20,10 +20,12 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 fun <K, T> CoroutineScope.sharedComposition(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0),
-  @Inject context: StateCoroutineContext,
+  context: CoroutineContext = EmptyCoroutineContext,
+  @Inject stateContext: StateCoroutineContext,
   block: @Composable (K) -> T
 ): @Composable (K) -> T {
   val sharedFlows = mutableMapOf<K, SharedFlow<T>>()
@@ -32,7 +34,9 @@ fun <K, T> CoroutineScope.sharedComposition(
     val sharedFlow = sharedFlows.getOrPut(key) {
       val sharedFlow = MutableSharedFlow<T>(1)
 
-      val delegateDispatcher = (coroutineContext + context)[CoroutineDispatcher]
+      val tmpContext = coroutineContext + stateContext + context
+
+      val delegateDispatcher = tmpContext[CoroutineDispatcher]
       val finalDispatcher = object : CoroutineDispatcher() {
         override fun dispatch(context: CoroutineContext, block: Runnable) =
           if (sharedFlow.replayCache.isEmpty() || delegateDispatcher == null)
@@ -41,7 +45,7 @@ fun <K, T> CoroutineScope.sharedComposition(
             delegateDispatcher.dispatch(context, block)
       }
 
-      @Provide val finalContext = context.plus(finalDispatcher)
+      @Provide val finalContext = tmpContext + finalDispatcher
 
       launch(finalContext, CoroutineStart.UNDISPATCHED) {
         sharingStarted.command(sharedFlow.subscriptionCount)
