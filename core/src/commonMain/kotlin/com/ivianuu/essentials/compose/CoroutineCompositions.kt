@@ -7,15 +7,17 @@ package com.ivianuu.essentials.compose
 import androidx.compose.runtime.AbstractApplier
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
+import androidx.compose.runtime.MonotonicFrameClock
 import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.snapshots.Snapshot
+import com.ivianuu.essentials.coroutines.RateLimiter
+import com.ivianuu.essentials.time.Clock
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,21 +25,29 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
-fun <T> compositionFlow(@Inject context: StateCoroutineContext, block: @Composable () -> T): Flow<T> = channelFlow {
+fun <T> compositionFlow(
+  context: CoroutineContext = EmptyCoroutineContext,
+  @Inject stateContext: StateCoroutineContext,
+  block: @Composable () -> T,
+): Flow<T> = channelFlow {
   launchComposition(
+    context = context,
     emitter = { trySend(it) },
     block = block
   ).join()
 }
 
 fun <T> CoroutineScope.compositionStateFlow(
-  @Inject context: StateCoroutineContext,
+  context: CoroutineContext = EmptyCoroutineContext,
+  @Inject stateContext: StateCoroutineContext,
   block: @Composable () -> T
 ): StateFlow<T> {
   var flow: MutableStateFlow<T>? = null
 
   launchComposition(
+    context = context,
     emitter = { value ->
       val outputFlow = flow
       if (outputFlow != null) {
@@ -55,12 +65,14 @@ fun <T> CoroutineScope.compositionStateFlow(
 fun <T> CoroutineScope.launchComposition(
   emitter: (T) -> Unit = {},
   start: CoroutineStart = CoroutineStart.UNDISPATCHED,
-  @Inject context: StateCoroutineContext,
+  context: CoroutineContext = EmptyCoroutineContext,
+  @Inject stateContext: StateCoroutineContext,
   block: @Composable () -> T
 ): Job = launch(start = start) {
-  val recomposer = Recomposer(coroutineContext + context)
+  val finalContext = coroutineContext + stateContext + context
+  val recomposer = Recomposer(finalContext)
   val composition = Composition(UnitApplier, recomposer)
-  launch(context, CoroutineStart.UNDISPATCHED) {
+  launch(finalContext, CoroutineStart.UNDISPATCHED) {
     recomposer.runRecomposeAndApplyChanges()
   }
 
@@ -68,7 +80,7 @@ fun <T> CoroutineScope.launchComposition(
   val snapshotHandle = Snapshot.registerGlobalWriteObserver {
     if (!applyScheduled) {
       applyScheduled = true
-      launch(context) {
+      launch(finalContext) {
         applyScheduled = false
         Snapshot.sendApplyNotifications()
       }
@@ -100,3 +112,11 @@ typealias StateCoroutineContext = @StateCoroutineContextTag CoroutineContext
 @Provide expect object StateCoroutineContextModule {
   @Provide val context: StateCoroutineContext
 }
+
+fun RateLimiter.asFrameClock(@Inject clock: Clock): MonotonicFrameClock =
+  object : MonotonicFrameClock {
+    override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R {
+      acquire()
+      return onFrame(clock().inWholeNanoseconds)
+    }
+  }

@@ -22,7 +22,9 @@ import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.SystemService
+import com.ivianuu.essentials.compose.asFrameClock
 import com.ivianuu.essentials.compose.launchComposition
+import com.ivianuu.essentials.coroutines.RateLimiter
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
@@ -55,7 +57,10 @@ import kotlin.time.Duration.Companion.seconds
     super.onCreate()
     logger.log { "start service" }
 
-    job = scope.launchComposition {
+    job = scope.launchComposition(
+      context = RateLimiter(1, 1.seconds)
+        .asFrameClock()
+    ) {
       val states by foregroundManager.states.collectAsState()
       var removeServiceNotification by remember { mutableStateOf(true) }
 
