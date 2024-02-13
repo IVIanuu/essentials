@@ -9,6 +9,7 @@ package com.ivianuu.essentials.compiler
 import com.ivianuu.essentials.kotlin.compiler.EssentialsCommandLineProcessor
 import com.ivianuu.essentials.kotlin.compiler.EssentialsComponentRegistrar
 import com.ivianuu.injekt.compiler.transform.dumpAllFiles
+import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
 import com.tschuchort.compiletesting.SourceFileAccessor
@@ -86,7 +87,7 @@ fun codegen(
   println("Result: ${result.exitCode} m: ${result.messages}")
   assertions(
     object : KotlinCompilationAssertionScope {
-      override val result: KotlinCompilation.Result
+      override val result: JvmCompilationResult
         get() = result
     }
   )
@@ -179,7 +180,7 @@ fun multiCodegen(
     }
   }
   object : KotlinCompilationAssertionScope {
-    override val result: KotlinCompilation.Result
+    override val result: JvmCompilationResult
       get() = results.last()
     override val classLoader: ClassLoader = URLClassLoader(
       results.flatMap { it.classLoader.urLs.toList() }
@@ -221,15 +222,15 @@ fun multiPlatformCodegen(
   }
   assertions(
     object : KotlinCompilationAssertionScope {
-      override val result: KotlinCompilation.Result
+      override val result: JvmCompilationResult
         get() = result
     }
   )
 }
 
 fun compilation(block: KotlinCompilation.() -> Unit = {}) = KotlinCompilation().apply {
-  compilerPlugins = listOf(EssentialsComponentRegistrar())
-  commandLineProcessors = listOf(EssentialsCommandLineProcessor())
+  componentRegistrars += listOf(EssentialsComponentRegistrar())
+  commandLineProcessors += listOf(EssentialsCommandLineProcessor())
   useIR = true
   jvmTarget = "1.8"
   verbose = false
@@ -246,7 +247,7 @@ fun KotlinCompilationAssertionScope.compilationShouldBeOk() {
 }
 
 interface KotlinCompilationAssertionScope {
-  val result: KotlinCompilation.Result
+  val result: JvmCompilationResult
   val classLoader: ClassLoader get() = result.classLoader
 }
 
