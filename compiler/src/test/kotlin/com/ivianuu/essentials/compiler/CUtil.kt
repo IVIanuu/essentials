@@ -33,7 +33,6 @@ fun source(
   contents = buildString {
     appendLine("package $packageFqName")
     appendLine()
-
     append(source)
   }
 )
