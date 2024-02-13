@@ -187,7 +187,7 @@ private fun StatusBarNotification.toUiNotification(
   notification: Notification,
   @Inject appContext: AppContext
 ) {
-  val icon by produceState<ImageBitmap?>(null) {
+  val icon = produceState<ImageBitmap?>(null) {
     value = catch {
       notification.smallIcon
         .loadDrawable(appContext)
@@ -197,11 +197,11 @@ private fun StatusBarNotification.toUiNotification(
     }
       .map { it?.toBitmap()?.toImageBitmap() }
       .getOrNull()
-  }
+  }.value ?: return
 
   Image(
     modifier = Modifier.size(24.dp),
-    bitmap = icon ?: return,
+    bitmap = icon,
     contentDescription = null
   )
 }
