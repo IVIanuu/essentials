@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 
       notificationTimeout = configs
         .map { it.notificationTimeout }
-        .maxOrNull() ?: 0L
+        .minOrNull() ?: 0L
 
       packageNames = null
     }
