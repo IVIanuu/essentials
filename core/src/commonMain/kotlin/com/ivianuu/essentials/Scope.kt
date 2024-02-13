@@ -161,7 +161,7 @@ interface ScopeObserver<N> : ExtensionPoint<ScopeObserver<N>> {
   fun onExit(scope: Scope<N>) {
   }
 
-  companion object {
+  @Provide companion object {
     @Provide fun <N> defaultObservers() = emptyList<ScopeObserver<N>>()
   }
 }
