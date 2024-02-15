@@ -26,7 +26,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -38,7 +37,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import arrow.core.Either
-import arrow.core.catch
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
