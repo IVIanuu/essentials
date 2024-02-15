@@ -22,7 +22,7 @@ class NavigatorTest {
   @Provide val logger = NoopLogger
 
   @Test fun testNavigator() = runCancellingBlockingTest {
-    val navigator = NavigatorImpl(initialBackStack = emptyList(), screenInterceptors = emptyList())
+    val navigator = Navigator()
 
     val collector = navigator.backStack
       .testCollectIn(this)
@@ -54,14 +54,14 @@ class NavigatorTest {
   object ScreenWithResult : Screen<String>
 
   @Test fun testReturnsResultOnPop() = runCancellingBlockingTest {
-    val navigator = NavigatorImpl(initialBackStack = emptyList(), screenInterceptors = emptyList())
+    val navigator = Navigator()
     val result = async { navigator.push(ScreenWithResult) }
     navigator.pop(ScreenWithResult, "b")
     result.await() shouldBe "b"
   }
 
   @Test fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
-    val navigator = NavigatorImpl(initialBackStack = emptyList(), screenInterceptors = emptyList())
+    val navigator = Navigator()
     val result = async { navigator.push(ScreenWithResult) }
     navigator.popTop()
     result.await() shouldBe null
