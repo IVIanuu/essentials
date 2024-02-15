@@ -58,7 +58,7 @@ private class AndroidSystemBarManager : SystemBarManager {
 
     val statusBarHitPointY = remember(density, windowInsets) {
       with(density) {
-        windowInsets.top.toPx()
+        windowInsets.top.toPx() / 2
       }
     }
 
@@ -85,9 +85,9 @@ private class AndroidSystemBarManager : SystemBarManager {
         val leftPadding = windowInsets.left.toPx()
         val rightPadding = windowInsets.right.toPx()
         when {
-          bottomPadding > 0f -> screenHeight - bottomPadding
-          leftPadding > 0f -> leftPadding
-          rightPadding > 0f -> screenWidth - rightPadding
+          bottomPadding > 0f -> screenHeight - bottomPadding / 2
+          leftPadding > 0f -> leftPadding / 2
+          rightPadding > 0f -> screenWidth - rightPadding / 2
           else -> 0f
         }
       }
