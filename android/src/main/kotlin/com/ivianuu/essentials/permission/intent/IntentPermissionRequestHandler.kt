@@ -44,7 +44,8 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
     },
     {
       // wait until user granted permission
-      permissionManager.permissionState(listOf(key)).first { it }
+      while (!permissionManager.permissionState(listOf(key)).first())
+        delay(100)
     }
   )
 }
