@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.dialog.ColorPickerScreen
+import com.ivianuu.essentials.ui.dialog.ConfirmationScreen
 import com.ivianuu.essentials.ui.dialog.ListScreen
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListScreen
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListScreen
@@ -28,6 +29,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
@@ -35,7 +37,10 @@ import com.ivianuu.injekt.Provide
 
 class DialogsScreen : Screen<Unit>
 
-@Provide fun dialogsUi(@Inject navigator: Navigator) = Ui<DialogsScreen, Unit> {
+@Provide fun dialogsUi(
+  navigator: Navigator,
+  toaster: Toaster
+) = Ui<DialogsScreen, Unit> {
   ScreenScaffold(topBar = { AppBar { Text("Dialogs") } }) {
     VerticalList(
       modifier = Modifier.fillMaxSize(),
@@ -101,6 +106,15 @@ class DialogsScreen : Screen<Unit>
             )?.let { current = it }
           }
         ) { Text("Text") }
+      }
+      item {
+        Button(
+          onClick = action {
+            navigator.push(
+              ConfirmationScreen(title = "Would you like to share your private data?")
+            )?.let { toaster("result = $it") }
+          }
+        ) { Text("Confirmation") }
       }
     }
   }
