@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
@@ -48,7 +49,6 @@ import com.ivianuu.essentials.recover
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
@@ -194,7 +194,7 @@ private fun StatusBarNotification.toUiNotification(
       notification.getLargeIcon()
         .loadDrawable(appContext)
     }
-      .map { it?.toBitmap()?.toImageBitmap() }
+      .map { it?.toBitmap()?.asImageBitmap() }
       .getOrNull()
   }.value ?: return
 
