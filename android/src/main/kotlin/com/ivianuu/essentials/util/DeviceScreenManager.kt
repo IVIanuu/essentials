@@ -1,19 +1,18 @@
-/*
- * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
- */
-
-package com.ivianuu.essentials.unlock
+package com.ivianuu.essentials.util
 
 import android.app.KeyguardManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.PowerManager
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.AndroidComponent
+import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.SystemService
+import com.ivianuu.essentials.compose.compositionFlow
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -21,15 +20,92 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.yield
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.seconds
 
-/**
- * Requests a screen unlock
- */
+interface DeviceScreenManager {
+  val screenState: Flow<ScreenState>
+
+  suspend fun turnScreenOn(): Boolean
+
+  suspend fun unlockScreen(): Boolean
+}
+
+enum class ScreenState(val isOn: Boolean) {
+  OFF(false), LOCKED(true), UNLOCKED(true)
+}
+
+@Provide class DeviceScreenManagerImpl(
+  private val appContext: AppContext,
+  private val broadcastsFactory: BroadcastsFactory,
+  private val keyguardManager: @SystemService KeyguardManager,
+  private val logger: Logger,
+  private val powerManager: @SystemService PowerManager
+) : DeviceScreenManager {
+  override val screenState: Flow<ScreenState> = compositionFlow {
+    remember {
+      broadcastsFactory(
+        Intent.ACTION_SCREEN_OFF,
+        Intent.ACTION_SCREEN_ON,
+        Intent.ACTION_USER_PRESENT
+      ).map { it.action }
+    }.collectAsState(null).value
+
+    if (powerManager.isInteractive) {
+      if (keyguardManager.isDeviceLocked) ScreenState.LOCKED
+      else ScreenState.UNLOCKED
+    } else {
+      ScreenState.OFF
+    }
+  }
+
+  override suspend fun turnScreenOn(): Boolean {
+    logger.log { "on request is off ? ${!powerManager.isInteractive}" }
+    if (powerManager.isInteractive) {
+      logger.log { "already on" }
+      return true
+    }
+
+    return startUnlockActivityForResult(REQUEST_TYPE_SCREEN_ON)
+  }
+
+  override suspend fun unlockScreen(): Boolean {
+    logger.log { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
+    if (!keyguardManager.isKeyguardLocked) {
+      logger.log { "already unlocked" }
+      return true
+    }
+
+    return startUnlockActivityForResult(REQUEST_TYPE_UNLOCK)
+  }
+
+  private suspend fun startUnlockActivityForResult(requestType: Int): Boolean {
+    val result = CompletableDeferred<Boolean>()
+    val requestId = UUID.randomUUID().toString()
+    requestsById[requestId] = result
+    appContext.startActivity(
+      Intent(appContext, UnlockActivity::class.java).apply {
+        putExtra(KEY_REQUEST_ID, requestId)
+        putExtra(KEY_REQUEST_TYPE, requestType)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      }
+    )
+    return result.await()
+  }
+}
+
+private const val KEY_REQUEST_ID = "request_id"
+private const val KEY_REQUEST_TYPE = "request_type"
+private const val REQUEST_TYPE_UNLOCK = 0
+private const val REQUEST_TYPE_SCREEN_ON = 1
+private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
+
 @Provide @AndroidComponent class UnlockActivity(
   private val keyguardManager: @SystemService KeyguardManager,
   private val logger: Logger,
@@ -122,33 +198,4 @@ import kotlin.time.Duration.Companion.seconds
       }
     }
   }
-
-  internal companion object {
-    private const val KEY_REQUEST_ID = "request_id"
-    private const val KEY_REQUEST_TYPE = "request_type"
-    private const val REQUEST_TYPE_UNLOCK = 0
-    private const val REQUEST_TYPE_SCREEN_ON = 1
-
-    fun unlockScreen(context: Context, requestId: String) {
-      context.startActivity(
-        Intent(context, UnlockActivity::class.java).apply {
-          putExtra(KEY_REQUEST_ID, requestId)
-          putExtra(KEY_REQUEST_TYPE, REQUEST_TYPE_UNLOCK)
-          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-      )
-    }
-
-    fun turnScreenOn(context: Context, requestId: String) {
-      context.startActivity(
-        Intent(context, UnlockActivity::class.java).apply {
-          putExtra(KEY_REQUEST_ID, requestId)
-          putExtra(KEY_REQUEST_TYPE, REQUEST_TYPE_SCREEN_ON)
-          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-      )
-    }
-  }
 }
-
-internal val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()

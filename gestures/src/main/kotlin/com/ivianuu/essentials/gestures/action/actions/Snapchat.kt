@@ -24,6 +24,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.scopeOfOrNull
+import com.ivianuu.essentials.util.DeviceScreenManager
 import com.ivianuu.essentials.util.ScreenState
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
@@ -51,8 +52,7 @@ import kotlinx.coroutines.flow.first
   currentApp: Flow<CurrentApp?>,
   logger: Logger,
   packageManager: PackageManager,
-  scopeManager: ScopeManager,
-  screenState: Flow<ScreenState>,
+  scopeManager: ScopeManager
 ) = ActionExecutor<SnapchatActionId> {
   logger.log { "current app ${currentApp.first()}" }
 

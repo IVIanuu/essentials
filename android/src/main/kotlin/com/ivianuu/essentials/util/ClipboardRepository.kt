@@ -2,13 +2,12 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.clipboard
+package com.ivianuu.essentials.util
 
 import android.content.ClipData
 import arrow.core.Either
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.android.R
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow

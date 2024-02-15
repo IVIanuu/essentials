@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.UiScopeOwner
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.unlock.ScreenUnlocker
+import com.ivianuu.essentials.util.DeviceScreenManager
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -53,13 +53,13 @@ interface PremiumVersionManager {
 @Provide @Eager<AppScope> class PremiumVersionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val billingService: BillingService,
+  private val deviceScreenManager: DeviceScreenManager,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
   private val logger: Logger,
   private val pref: DataStore<PremiumVersionPrefs>,
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
   private val scope: ScopedCoroutineScope<AppScope>,
-  private val screenUnlocker: ScreenUnlocker,
   private val toaster: Toaster
 ) : PremiumVersionManager {
   override val premiumSkuDetails: Flow<SkuDetails> =
@@ -96,7 +96,7 @@ interface PremiumVersionManager {
 
     scope.launch {
       toaster(com.ivianuu.essentials.premium.R.string.es_premium_version_hint)
-      if (!screenUnlocker()) return@launch
+      if (!deviceScreenManager.unlockScreen()) return@launch
       appUiStarter()
         .cast<UiScopeOwner>()
         .uiScope

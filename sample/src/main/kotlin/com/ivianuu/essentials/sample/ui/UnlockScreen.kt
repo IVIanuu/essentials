@@ -14,19 +14,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.util.ScreenState
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenScope
 import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.unlock.ScreenActivator
-import com.ivianuu.essentials.unlock.ScreenUnlocker
+import com.ivianuu.essentials.util.DeviceScreenManager
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -35,9 +32,7 @@ import kotlinx.coroutines.launch
 class UnlockScreen : Screen<Unit>
 
 @Provide fun unlockUi(
-  screenState: Flow<ScreenState>,
-  screenActivator: ScreenActivator,
-  screenUnlocker: ScreenUnlocker,
+  deviceScreenManager: DeviceScreenManager,
   scope: ScopedCoroutineScope<ScreenScope>,
   toaster: Toaster
 ) = Ui<UnlockScreen, Unit> {
@@ -51,9 +46,9 @@ class UnlockScreen : Screen<Unit>
         onClick = {
           scope.launch {
             toaster("Turn the screen off")
-            screenState.first { !it.isOn }
+            deviceScreenManager.screenState.first { !it.isOn }
             delay(1500)
-            val unlocked = screenUnlocker()
+            val unlocked = deviceScreenManager.unlockScreen()
             toaster("Screen unlocked $unlocked")
           }
         }
@@ -65,10 +60,10 @@ class UnlockScreen : Screen<Unit>
         onClick = {
           scope.launch {
             toaster("Turn the screen off")
-            screenState.first { !it.isOn }
+            deviceScreenManager.screenState.first { !it.isOn }
             delay(1500)
-            val activated = screenActivator()
-            toaster("Screen activated $activated")
+            val screenOn = deviceScreenManager.turnScreenOn()
+            toaster("Screen activated $screenOn")
           }
         }
       ) { Text("Activate") }

@@ -27,6 +27,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.scopeOfOrNull
+import com.ivianuu.essentials.util.DeviceScreenManager
 import com.ivianuu.essentials.util.ScreenState
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
@@ -53,10 +54,10 @@ import kotlin.coroutines.resume
   actionIntentSender: ActionIntentSender,
   cameraManager: @SystemService CameraManager,
   currentApp: Flow<CurrentApp?>,
+  deviceScreenManager: DeviceScreenManager,
   logger: Logger,
   packageManager: PackageManager,
-  scopeManager: ScopeManager,
-  screenState: Flow<ScreenState>,
+  scopeManager: ScopeManager
 ) = ActionExecutor<CameraActionId> {
   val cameraApp = packageManager
     .resolveActivity(
@@ -74,7 +75,7 @@ import kotlin.coroutines.resume
           CameraCharacteristics.LENS_FACING_FRONT
     }
 
-  val currentScreenState = screenState.first()
+  val currentScreenState = deviceScreenManager.screenState.first()
 
   val frontFacing = if (frontCamera != null &&
     currentScreenState != ScreenState.OFF &&

@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import androidx.compose.ui.res.painterResource
 import arrow.core.Either
 import arrow.core.getOrElse
 import com.ivianuu.essentials.Resources
@@ -16,8 +15,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.unlock.ScreenActivator
-import com.ivianuu.essentials.unlock.ScreenUnlocker
+import com.ivianuu.essentials.util.DeviceScreenManager
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
@@ -45,10 +43,9 @@ interface ActionRepository {
   private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
   private val closeSystemDialogs: CloseSystemDialogsUseCase,
   private val coroutineContexts: CoroutineContexts,
+  private val deviceScreenManager: DeviceScreenManager,
   private val logger: Logger,
   private val permissionManager: PermissionManager,
-  private val screenActivator: ScreenActivator,
-  private val screenUnlocker: ScreenUnlocker,
   private val resources: Resources,
   private val toaster: Toaster
 ) : ActionRepository {
@@ -99,18 +96,18 @@ interface ActionRepository {
         // check permissions
         if (!permissionManager.permissionState(action.permissions).first()) {
           logger.log { "didn't had permissions for $id ${action.permissions}" }
-          screenUnlocker()
+          deviceScreenManager.unlockScreen()
           permissionManager.requestPermissions(action.permissions)
           return@catch false
         }
 
-        if (action.turnScreenOn && !screenActivator()) {
+        if (action.turnScreenOn && !deviceScreenManager.turnScreenOn()) {
           logger.log { "couldn't turn screen on for $id" }
           return@catch false
         }
 
         // unlock screen
-        if (action.unlockScreen && !screenUnlocker()) {
+        if (action.unlockScreen && !deviceScreenManager.unlockScreen()) {
           logger.log { "couldn't unlock screen for $id" }
           return@catch false
         }

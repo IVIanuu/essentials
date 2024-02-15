@@ -37,10 +37,10 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 
 @Provide fun displayRotation(
   appContext: AppContext,
-  screenStates: Flow<ScreenState>,
+  deviceScreenManager: DeviceScreenManager,
   @Inject windowManager: @SystemService WindowManager
 ): Flow<DisplayRotation> = compositionFlow {
-  val screenState = screenStates.collectAsState(ScreenState.OFF).value
+  val screenState = deviceScreenManager.screenState.collectAsState(ScreenState.OFF).value
   var displayRotation by remember { mutableStateOf(getCurrentDisplayRotation()) }
 
   if (screenState.isOn)
