@@ -16,7 +16,6 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.painterResource
 import arrow.fx.coroutines.onCancel
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.AppConfig
@@ -27,19 +26,16 @@ import com.ivianuu.essentials.compose.asFrameClock
 import com.ivianuu.essentials.compose.launchComposition
 import com.ivianuu.essentials.coroutines.RateLimiter
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.RemoteActionFactory
 import com.ivianuu.essentials.util.StartAppRemoteAction
 import com.ivianuu.essentials.util.context
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.serialization.json.Json
 import kotlin.time.Duration.Companion.seconds
 
 @Provide @AndroidComponent class ForegroundService(
