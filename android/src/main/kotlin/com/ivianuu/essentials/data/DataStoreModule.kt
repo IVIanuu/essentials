@@ -7,9 +7,7 @@ package com.ivianuu.essentials.data
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
-import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
@@ -27,7 +25,6 @@ import java.io.OutputStream
 class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
   @Provide fun dataStore(
     coroutineContexts: CoroutineContexts,
-    initial: () -> @Initial T = default,
     json: Json,
     serializerFactory: () -> KSerializer<T>,
     prefsDir: () -> PrefsDir,
@@ -36,7 +33,7 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
     val androidDataStore = DataStoreFactory.create(
       object : Serializer<T> {
         override val defaultValue: T
-          get() = initial()
+          get() = default()
 
         private val serializer by lazy(serializerFactory)
 

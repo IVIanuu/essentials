@@ -11,7 +11,6 @@ import android.content.SharedPreferences
 import arrow.core.Either
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.CoroutineContexts
@@ -46,7 +45,6 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     coroutineContexts: CoroutineContexts,
     coroutineScope: ScopedCoroutineScope<AppScope>,
     jsonFactory: () -> Json,
-    initial: () -> @Initial T = default,
     scope: Scope<AppScope>,
     serializerFactory: () -> KSerializer<T>
   ): @Scoped<AppScope> DataStore<T> {
@@ -66,7 +64,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
         Either.catch { json.decodeFromString(serializer, serialized) }
           .printErrors()
           .getOrNull()
-      } ?: initial()
+      } ?: default()
     }
 
     val mutex = Mutex()
@@ -108,7 +106,6 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     config: XposedConfig,
     coroutineContexts: CoroutineContexts,
     jsonFactory: () -> Json,
-    initial: () -> @Initial T = default,
     serializerFactory: () -> KSerializer<T>
   ): XposedPrefFlow<T> {
     val sharedPrefs by lazy { XSharedPreferences(config.modulePackageName, prefName) }
@@ -122,7 +119,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       return serialized?.let {
         Either.catch { json.decodeFromString(serializer, serialized) }
           .getOrNull()
-      } ?: initial()
+      } ?: default()
     }
 
     return broadcastsFactory(prefsChangedAction(config.modulePackageName))
