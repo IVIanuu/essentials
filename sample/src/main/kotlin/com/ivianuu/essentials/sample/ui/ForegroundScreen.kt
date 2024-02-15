@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.ivianuu.essentials.coroutines.timerFlow
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.AppBar
@@ -24,6 +23,12 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.channels.ticker
+import kotlinx.coroutines.flow.fold
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.reduce
+import kotlinx.coroutines.flow.runningFold
 import kotlin.time.Duration.Companion.seconds
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundScreen() }
@@ -42,7 +47,11 @@ class ForegroundScreen : Screen<Unit>
       LaunchedEffect(true) {
         foregroundManager.startForeground(removeNotification = false) {
           ForegroundNotification(
-            remember { timerFlow(1.seconds) }.collectAsState(0).value
+            remember {
+              ticker(1000)
+                .receiveAsFlow()
+                .runningFold(0) { acc, _ -> acc.inc() }
+            }.collectAsState(0).value
           )
         }
       }
@@ -54,7 +63,7 @@ class ForegroundScreen : Screen<Unit>
 }
 
 private fun ForegroundNotification(
-  count: Long,
+  count: Int,
   @Inject notificationFactory: NotificationFactory
 ) = notificationFactory(
   "foreground",
