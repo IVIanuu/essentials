@@ -15,7 +15,7 @@ import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
-import com.ivianuu.essentials.ui.backpress.BackHandler
+import com.slack.circuit.foundation.internal.BackHandler
 import kotlin.collections.set
 
 @Composable fun NavigatorContent(
@@ -49,7 +49,7 @@ import kotlin.collections.set
       screenContexts[screen] = rememberScreenContext(screen, navigator, screenContextComponent)
 
       key(index) {
-        BackHandler(enabled = handleBack && index > 0, onBackPress = action {
+        BackHandler(enabled = handleBack && index > 0, onBack = action {
           navigator.pop(screen)
         })
       }

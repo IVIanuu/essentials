@@ -68,6 +68,8 @@ object Deps {
     const val processor = "dev.zacsweers.autoservice:auto-service-ksp:$version"
   }
 
+  const val circuitFoundation = "com.slack.circuit:circuit-foundation:0.19.1"
+
   object Coil {
     private const val version = "2.2.1"
     const val coil = "io.coil-kt:coil:$version"

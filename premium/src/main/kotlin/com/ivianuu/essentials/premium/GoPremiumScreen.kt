@@ -48,7 +48,6 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.collectAsResourceState
 import com.ivianuu.essentials.resource.getOrNull
-import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.layout.align
 import com.ivianuu.essentials.ui.layout.center
@@ -62,6 +61,7 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
+import com.slack.circuit.foundation.internal.BackHandler
 
 data class AppFeature(
   val title: String,
@@ -80,7 +80,7 @@ class GoPremiumScreen(
 }
 
 @Provide val goPremiumUi = Ui<GoPremiumScreen, GoPremiumState> { state ->
-  BackHandler(onBackPress = state.goBack)
+  BackHandler(onBack = state.goBack)
 
   Surface {
     InsetsPadding {

@@ -27,6 +27,7 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
+        api(Deps.circuitFoundation)
         api(Deps.Compose.foundation)
         api(Deps.Compose.material)
         api(project(":core"))

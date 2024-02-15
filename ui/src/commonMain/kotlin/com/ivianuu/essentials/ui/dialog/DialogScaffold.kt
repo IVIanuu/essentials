@@ -11,15 +11,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.ui.animation.animationElement
-import com.ivianuu.essentials.ui.backpress.BackHandler
-import com.ivianuu.essentials.ui.backpress.LocalBackPressHandler
 import com.ivianuu.essentials.ui.insets.InsetsPadding
+import com.ivianuu.essentials.ui.navigation.navigator
+import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.navigation.screen
+import com.slack.circuit.foundation.internal.BackHandler
+import kotlinx.coroutines.launch
 
 @Composable fun DialogScaffold(
   modifier: Modifier = Modifier,
@@ -56,6 +61,8 @@ import com.ivianuu.essentials.ui.insets.InsetsPadding
 
 private val defaultDismissRequestHandler: () -> Unit
   @Composable get() {
-    val backHandler = LocalBackPressHandler.current
-    return { backHandler.back() }
+    val navigator = LocalScope.current.navigator
+    val key = LocalScope.current.screen
+    val scope = rememberCoroutineScope()
+    return { scope.launch { navigator.pop(key) } }
   }
