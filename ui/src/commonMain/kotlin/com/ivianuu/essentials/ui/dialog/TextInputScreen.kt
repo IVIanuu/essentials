@@ -5,11 +5,19 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
@@ -32,23 +40,39 @@ class TextInputScreen(
   screen: TextInputScreen
 ) = Ui<TextInputScreen, Unit> {
   DialogScaffold {
-    var currentValue by remember { mutableStateOf(screen.initial) }
-    TextInputDialog(
-      value = currentValue,
-      onValueChange = { currentValue = it },
-      label = { Text(screen.label) },
-      keyboardOptions = screen.keyboardOptions,
+    var currentValue by remember {
+      mutableStateOf(TextFieldValue(screen.initial, TextRange(screen.initial.length)))
+    }
+
+    Dialog(
       title = screen.title?.let { { Text(it) } },
+      content = {
+        val focusRequester = remember { FocusRequester() }
+
+        TextField(
+          modifier = Modifier.focusRequester(focusRequester),
+          value = currentValue,
+          onValueChange = { currentValue = it },
+          keyboardOptions = screen.keyboardOptions,
+          textStyle = MaterialTheme.typography.subtitle1,
+          label = { Text(screen.label) }
+        )
+
+        DisposableEffect(true) {
+          focusRequester.requestFocus()
+          onDispose { }
+        }
+      },
       buttons = {
         TextButton(onClick = action { navigator.pop(screen, null) }) {
           Text(commonStrings.cancel)
         }
 
-        val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue) }
+        val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
 
         TextButton(
           enabled = currentValueIsOk,
-          onClick = action { navigator.pop(screen, currentValue) }
+          onClick = action { navigator.pop(screen, currentValue.text) }
         ) { Text(commonStrings.ok) }
       }
     )
