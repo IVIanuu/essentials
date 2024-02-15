@@ -20,6 +20,7 @@ class SharedTest {
     }
 
     parZip(
+      testScheduler,
       { shared(0) },
       {
         delay(5.milliseconds)
