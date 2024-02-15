@@ -20,8 +20,11 @@ import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 @JvmInline value class RecentApps(val values: List<String>)
 
@@ -40,17 +43,15 @@ import kotlinx.coroutines.flow.filter
     val newRecentApps = recentApps.toMutableList()
 
     // remove the app from the list
-    if (index != -1) {
+    if (index != -1)
       newRecentApps.removeAt(index)
-    }
 
     // add the package to the first position
     newRecentApps.add(0, currentApp)
 
     // make sure that were not getting bigger than the limit
-    while (newRecentApps.size > 10) {
+    while (newRecentApps.size > 10)
       newRecentApps.removeAt(newRecentApps.lastIndex)
-    }
 
     recentApps = newRecentApps
   }
@@ -63,19 +64,16 @@ import kotlinx.coroutines.flow.filter
 @Provide fun currentApp(
   accessibilityEvents: Flow<AccessibilityEvent>,
   scope: ScopedCoroutineScope<AppScope>
-): @Scoped<AppScope> StateFlow<CurrentApp?> = scope.compositionStateFlow {
-  produceState<CurrentApp?>(null) {
-    accessibilityEvents
-      .filter {
-        it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
-            it.isFullScreen &&
-            it.className != "android.inputmethodservice.SoftInputWindow" &&
-            it.packageName != null &&
-            it.packageName != "android"
-      }
-      .collect { value = CurrentApp(it.packageName!!) }
-  }.value
-}
+): @Scoped<AppScope> StateFlow<CurrentApp?> = accessibilityEvents
+  .filter {
+    it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
+        it.isFullScreen &&
+        it.className != "android.inputmethodservice.SoftInputWindow" &&
+        it.packageName != null &&
+        it.packageName != "android"
+  }
+  .map { CurrentApp(it.packageName!!) }
+  .stateIn(scope, SharingStarted.Lazily, null)
 
 @Provide val currentAppAccessibilityConfig: AccessibilityConfig
   get() = AccessibilityConfig(

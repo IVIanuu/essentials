@@ -11,11 +11,17 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
 @Provide object SerializationModule {
+  @Provide fun json(serializersModule: SerializersModule): @Scoped<AppScope> Json = Json {
+    ignoreUnknownKeys = true
+    this.serializersModule = serializersModule
+  }
+
   @Provide inline fun <reified T> kSerializer(): KSerializer<T> = serializer()
 
   @Provide fun serializersModule(

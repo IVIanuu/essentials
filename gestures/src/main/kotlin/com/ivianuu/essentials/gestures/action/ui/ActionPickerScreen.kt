@@ -45,8 +45,8 @@ class ActionPickerScreen(
 ) : Screen<ActionPickerScreen.Result> {
   sealed interface Result {
     data class Action(val actionId: String) : Result
-    object Default : Result
-    object None : Result
+    data object Default : Result
+    data object None : Result
   }
 }
 

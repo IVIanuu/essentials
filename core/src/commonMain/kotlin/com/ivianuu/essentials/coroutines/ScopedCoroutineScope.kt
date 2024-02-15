@@ -30,6 +30,8 @@ typealias ScopedCoroutineScope<N> = @ScopedCoroutineScopeTag<N> CoroutineScope
 
     @Provide fun <N> service(scope: () -> ScopedCoroutineScope<N>) =
       ProvidedService<N, CoroutineScope>(typeKeyOf(), scope)
+
+    @Provide fun coroutinesScope(scope: ScopedCoroutineScope<*>): CoroutineScope = scope
   }
 }
 
