@@ -18,9 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
 import com.ivianuu.essentials.ui.animation.fadeUpwards
-import com.ivianuu.essentials.ui.material.colors
 import com.ivianuu.essentials.ui.navigation.LocalScreenTransitionSpec
 import com.ivianuu.essentials.ui.navigation.Screen
+import com.ivianuu.essentials.ui.util.colors
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 

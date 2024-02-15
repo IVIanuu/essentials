@@ -28,7 +28,7 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.produceResourceState
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -51,7 +51,7 @@ class ActionPickerScreen(
 }
 
 @Provide val actionPickerUi = Ui<ActionPickerScreen, ActionPickerState> { state ->
-  Scaffold(
+  ScreenScaffold(
     topBar = { AppBar { Text(stringResource(R.string.es_action_picker_title)) } }
   ) {
     ResourceVerticalListFor(state.items) { item ->
@@ -91,7 +91,7 @@ sealed interface ActionPickerItem {
       ActionPickerScreen.Result.Action(action.id)
   }
 
-  class PickerDelegate(val delegate: ActionPickerDelegate) : ActionPickerItem {
+  class PickerDelegate(private val delegate: ActionPickerDelegate) : ActionPickerItem {
     override val title: String
       get() = delegate.title
 

@@ -32,9 +32,8 @@ import kotlinx.coroutines.launch
   onDismissRequest: () -> Unit = defaultDismissRequestHandler,
   dialog: @Composable () -> Unit,
 ) {
-  if (!dismissible) {
+  if (!dismissible)
     BackHandler { }
-  }
 
   Box(
     modifier = Modifier

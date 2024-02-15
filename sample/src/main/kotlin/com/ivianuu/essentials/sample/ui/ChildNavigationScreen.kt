@@ -21,7 +21,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.animation.slideHorizontally
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.NavGraph
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -42,7 +42,7 @@ object ChildNavGraph
 @Provide fun childNavigationUi(
   screenContextComponent: ScreenContextComponent<ChildNavGraph>
 ) = Ui<ChildNavigationScreen, Unit> {
-  Scaffold(topBar = { AppBar { Text("Child Navigation") } }) {
+  ScreenScaffold(topBar = { AppBar { Text("Child Navigation") } }) {
     Column {
       (1..3).forEach { navigationIndex ->
         key(navigationIndex) {

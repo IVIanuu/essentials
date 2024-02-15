@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.dialog.ColorPickerScreen
 import com.ivianuu.essentials.ui.dialog.TextInputScreen
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -49,7 +49,7 @@ class PrefsScreen : Screen<Unit>
   pref: DataStore<SamplePrefs>
 ) = Ui<PrefsScreen, Unit> {
   val prefs by pref.data.collectAsState(remember { SamplePrefs() })
-  Scaffold(topBar = { AppBar { Text("Prefs") } }) {
+  ScreenScaffold(topBar = { AppBar { Text("Prefs") } }) {
     VerticalList {
       item {
         SwitchListItem(

@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.animation.AnimatedContent
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.NavigationBar
 import com.ivianuu.essentials.ui.material.NavigationBarItem
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
@@ -35,7 +35,7 @@ class BottomNavigationScreen : Screen<Unit>
 @Provide val bottomNavigationUi = Ui<BottomNavigationScreen, Unit> {
   var selectedItem by remember { mutableStateOf(BottomNavItem.entries.first()) }
 
-  Scaffold(
+  ScreenScaffold(
     topBar = { AppBar { Text("Bottom navigation") } },
     bottomBar = {
       NavigationBar(

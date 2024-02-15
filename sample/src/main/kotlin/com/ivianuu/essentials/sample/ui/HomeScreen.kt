@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RootScreen
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -44,7 +44,7 @@ import com.ivianuu.injekt.Provide
   toaster: Toaster
 ) = Ui<HomeScreen, Unit> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
-  Scaffold(
+  ScreenScaffold(
     topBar = {
       AppBar(
         title = { Text("Home") },

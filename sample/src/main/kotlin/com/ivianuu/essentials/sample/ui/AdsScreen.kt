@@ -15,7 +15,7 @@ import com.ivianuu.essentials.ads.ScreenAdBannerConfig
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.AppBar
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
@@ -30,7 +30,7 @@ class AdsScreen : Screen<Unit>
   adsEnabled: MutableStateFlow<AdsEnabled>,
   fullScreenAd: FullScreenAdManager
 ) = Ui<AdsScreen, Unit> {
-  Scaffold(topBar = { AppBar { Text("Ads") } }) {
+  ScreenScaffold(topBar = { AppBar { Text("Ads") } }) {
     VerticalList {
       item {
         SwitchListItem(

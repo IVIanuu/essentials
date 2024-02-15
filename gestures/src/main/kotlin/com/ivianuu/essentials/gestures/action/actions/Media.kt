@@ -27,7 +27,7 @@ import com.ivianuu.essentials.resource.produceResourceState
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
@@ -79,7 +79,7 @@ class MediaActionSettingsScreen : Screen<Unit>
 
 @Provide
 val mediaActionSettingsUi = Ui<MediaActionSettingsScreen, MediaActionSettingsState> { state ->
-  Scaffold(topBar = { AppBar { Text(stringResource(R.string.es_media_app_settings_ui_title)) } }) {
+  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.es_media_app_settings_ui_title)) } }) {
     VerticalList {
       item {
         ListItem(

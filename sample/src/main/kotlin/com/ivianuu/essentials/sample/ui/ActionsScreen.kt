@@ -13,7 +13,7 @@ import com.ivianuu.essentials.gestures.action.ui.ActionPickerScreen
 import com.ivianuu.essentials.safeAs
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -33,7 +33,7 @@ class ActionsScreen : Screen<Unit>
   repository: ActionRepository,
   toaster: Toaster
 ) = Ui<ActionsScreen, Unit> {
-  Scaffold(topBar = { AppBar { Text("Actions") } }) {
+  ScreenScaffold(topBar = { AppBar { Text("Actions") } }) {
     val scope = LocalScope.current.coroutineScope
     Column {
       Button(

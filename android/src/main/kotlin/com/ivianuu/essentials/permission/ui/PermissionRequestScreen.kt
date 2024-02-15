@@ -29,7 +29,7 @@ import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
@@ -46,7 +46,7 @@ class PermissionRequestScreen(
 ) : CriticalUserFlowScreen<Boolean>
 
 @Provide val permissionRequestUi = Ui<PermissionRequestScreen, PermissionRequestState> { state ->
-  Scaffold(topBar = { AppBar { Text(stringResource(R.string.es_request_permission_title)) } }) {
+  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.es_request_permission_title)) } }) {
     VerticalList {
       items(state.permissionsToGrant) { permission ->
         ListItem(

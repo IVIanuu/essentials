@@ -18,7 +18,7 @@ import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
@@ -28,7 +28,7 @@ import com.ivianuu.injekt.Provide
 class TorchScreen : Screen<Unit>
 
 @Provide fun torchUi(torchManager: TorchManager) = Ui<TorchScreen, Unit> {
-  Scaffold(topBar = { AppBar { Text("Torch") } }) {
+  ScreenScaffold(topBar = { AppBar { Text("Torch") } }) {
     Column(
       modifier = Modifier.center(),
       horizontalAlignment = Alignment.CenterHorizontally

@@ -53,7 +53,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -68,7 +68,7 @@ import kotlinx.coroutines.flow.map
 class NotificationsScreen : Screen<Unit>
 
 @Provide val notificationsUi = Ui<NotificationsScreen, NotificationsState> { state ->
-  Scaffold(topBar = { AppBar { Text("Notifications") } }) {
+  ScreenScaffold(topBar = { AppBar { Text("Notifications") } }) {
     ResourceBox(state.hasPermissions) { hasPermission ->
       if (hasPermission) {
         if (state.notifications.isEmpty()) {

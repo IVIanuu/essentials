@@ -13,7 +13,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.work.PeriodicWorkSchedule
@@ -30,7 +30,7 @@ import kotlin.time.Duration.Companion.seconds
 class WorkScreen : Screen<Unit>
 
 @Provide fun workUi(workManager: WorkManager) = Ui<WorkScreen, Unit> {
-  Scaffold(topBar = { AppBar { Text("Work") } }) {
+  ScreenScaffold(topBar = { AppBar { Text("Work") } }) {
     Column {
       if (workManager.isWorkerRunning(SampleWorkId).collectAsState().value)
         CircularProgressIndicator()

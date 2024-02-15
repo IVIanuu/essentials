@@ -26,7 +26,7 @@ import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.navigation.ScreenScope
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
@@ -49,7 +49,7 @@ data class CheckableAppsParams(
 
 @Provide fun checkableAppsScreen(presenter: StateFlow<CheckableAppsState>) = CheckableAppsUi {
   val state by presenter.collectAsState()
-  Scaffold(
+  ScreenScaffold(
     topBar = {
       AppBar(
         title = { Text(state.appBarTitle) },

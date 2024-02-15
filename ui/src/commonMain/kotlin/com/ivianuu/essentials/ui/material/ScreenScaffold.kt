@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.insets.Insets
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
 
-@Composable fun Scaffold(
+@Composable fun ScreenScaffold(
   modifier: Modifier = Modifier,
   state: ScaffoldState = rememberScaffoldState(),
   topBar: (@Composable () -> Unit)? = null,

@@ -16,7 +16,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -26,7 +26,7 @@ import com.ivianuu.injekt.Provide
 class BackupAndRestoreScreen : Screen<Unit>
 
 @Provide val backupAndRestoreUi = Ui<BackupAndRestoreScreen, BackupAndRestoreState> { state ->
-  Scaffold(topBar = { AppBar { Text(stringResource(R.string.es_backup_and_restore_title)) } }) {
+  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.es_backup_and_restore_title)) } }) {
     VerticalList {
       item {
         ListItem(

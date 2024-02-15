@@ -20,7 +20,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.AppBar
-import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
@@ -31,7 +31,7 @@ class TabsScreen : Screen<Unit>
 
 @Provide val tabsUi = Ui<TabsScreen, Unit> {
   val pagerState = rememberPagerState { TabItems.size }
-  Scaffold(
+  ScreenScaffold(
     topBar = {
       AppBar(
         title = { Text("Tabs") },
