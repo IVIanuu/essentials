@@ -31,9 +31,9 @@ import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.util.NotificationFactory
+import com.ivianuu.essentials.util.RemoteActionFactory
 import com.ivianuu.essentials.util.StartAppRemoteAction
 import com.ivianuu.essentials.util.context
-import com.ivianuu.essentials.util.remoteActionOf
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.inject
@@ -45,12 +45,12 @@ import kotlin.time.Duration.Companion.seconds
 @Provide @AndroidComponent class ForegroundService(
   private val appConfig: AppConfig,
   private val foregroundManager: ForegroundManagerImpl,
-  @Inject private val json: Json,
   private val notificationFactory: NotificationFactory,
   private val notificationManager: @SystemService NotificationManager,
   private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>,
-  private val foregroundScopeFactory: () -> Scope<ForegroundScope>
+  private val foregroundScopeFactory: () -> Scope<ForegroundScope>,
+  private val remoteActionFactory: RemoteActionFactory
 ) : Service() {
   private var job: Job? = null
 
@@ -95,7 +95,7 @@ import kotlin.time.Duration.Companion.seconds
                 ) {
                   setContentTitle("${appConfig.appName} is running!")
                   setSmallIcon(R.drawable.es_ic_sync)
-                  setContentIntent(remoteActionOf<StartAppRemoteAction>(context))
+                  setContentIntent(remoteActionFactory<StartAppRemoteAction, _>(context))
                 }
               )
             )

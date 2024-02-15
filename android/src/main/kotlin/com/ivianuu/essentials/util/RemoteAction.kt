@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.AndroidComponent
+import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
@@ -30,30 +31,32 @@ interface RemoteAction<I : Any?> {
   }
 }
 
-fun <T : RemoteAction<Any?>> remoteActionOf(
-  context: Context,
-  @Inject actionClass: KClass<T>,
-  @Inject json: Json
-): PendingIntent = remoteActionOf<T, Any?>(context = context, input = null)
+interface RemoteActionFactory {
+  operator fun <T : RemoteAction<I>, I> invoke(
+    input: I? = null,
+    @Inject actionClass: KClass<T>,
+  ): PendingIntent
+}
 
-fun <T : RemoteAction<I>, I : Any?> remoteActionOf(
-  context: Context,
-  input: I? = null,
-  @Inject actionClass: KClass<T>,
-  @Inject json: Json
-): PendingIntent = PendingIntent.getBroadcast(
-  context,
-  0,
-  Intent("execute_remote_action").apply {
-    `package` = context.packageName
-    putExtra("action_class", actionClass.java.name)
-    if (input != null) {
-      putExtra("input_class", input!!::class.java)
-      putExtra("action_input", json.encodeToString(json.serializersModule.serializer(input!!::class.java), input))
-    }
-  },
-  PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-)
+@Provide class RemoteActionFactoryImpl(
+  private val appContext: AppContext,
+  private val json: Json
+) : RemoteActionFactory {
+  override fun <T : RemoteAction<I>, I> invoke(input: I?, @Inject actionClass: KClass<T>): PendingIntent =
+    PendingIntent.getBroadcast(
+      appContext,
+      0,
+      Intent("execute_remote_action").apply {
+        `package` = appContext.packageName
+        putExtra("action_class", actionClass.java.name)
+        if (input != null) {
+          putExtra("input_class", input!!::class.java)
+          putExtra("action_input", json.encodeToString(json.serializersModule.serializer(input!!::class.java), input))
+        }
+      },
+      PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+}
 
 fun interface StartAppRemoteAction : RemoteAction<Any?> {
   @Provide companion object {
