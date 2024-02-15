@@ -41,14 +41,11 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
         toaster(R.string.es_find_app_here, appConfig.appName)
       // wait until user navigates back from the permission screen
       catch { navigator.push(DefaultIntentScreen(intentFactory(permission))) }
-        .onFailure {
-          toaster(R.string.es_grant_permission_manually)
-        }
+        .onFailure { toaster(R.string.es_grant_permission_manually) }
     },
     {
       // wait until user granted permission
-      while (!permissionManager.permissionState(listOf(key)).first())
-        delay(100)
+      permissionManager.permissionState(listOf(key)).first { it }
     }
   )
 }
