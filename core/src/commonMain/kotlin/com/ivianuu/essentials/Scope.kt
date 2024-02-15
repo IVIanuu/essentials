@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials
 
+import androidx.compose.runtime.compositionLocalOf
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
@@ -203,3 +204,5 @@ interface ScopeObserver<N> : ExtensionPoint<ScopeObserver<N>> {
     }
   }
 }
+
+val LocalScope = compositionLocalOf<Scope<*>> { error("No provided scope") }

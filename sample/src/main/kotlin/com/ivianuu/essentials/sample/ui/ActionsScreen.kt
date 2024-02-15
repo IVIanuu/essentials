@@ -6,7 +6,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
-import com.ivianuu.essentials.compose.LocalScope
+import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.coroutineScope
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ui.ActionPickerScreen

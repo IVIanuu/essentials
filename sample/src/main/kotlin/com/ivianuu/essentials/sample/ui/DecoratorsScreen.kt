@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import arrow.core.Either
-import com.ivianuu.essentials.compose.LocalScope
+import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.insets.InsetsPadding

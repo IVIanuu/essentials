@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.compose.LocalScope
+import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.navigation.navigator

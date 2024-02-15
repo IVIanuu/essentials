@@ -30,7 +30,7 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.findRootCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.compose.LocalScope
+import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.ui.common.clickableWithPosition
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.push

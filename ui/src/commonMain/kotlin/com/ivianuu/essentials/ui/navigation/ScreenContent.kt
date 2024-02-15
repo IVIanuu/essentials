@@ -11,11 +11,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.setValue
+import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.ProvidedService
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf

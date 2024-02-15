@@ -36,10 +36,10 @@ import androidx.compose.ui.platform.LocalView
 import arrow.core.Either
 import arrow.fx.coroutines.bracketCase
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
-import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.awaitCancellation

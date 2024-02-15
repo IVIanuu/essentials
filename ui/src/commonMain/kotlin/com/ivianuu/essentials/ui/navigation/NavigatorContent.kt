@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.compose.LocalScope
+import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.ElementTransitionSpec

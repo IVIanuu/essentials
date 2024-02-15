@@ -11,9 +11,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.AndroidComponent
+import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Service
-import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.DecorateAppUi
 import com.ivianuu.essentials.ui.UiScope
