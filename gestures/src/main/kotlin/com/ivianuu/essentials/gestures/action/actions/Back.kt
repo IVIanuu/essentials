@@ -4,10 +4,9 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
-import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.accessibility.AccessibilityService
+import com.ivianuu.essentials.accessibility.AndroidAccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -23,7 +22,7 @@ import com.ivianuu.injekt.Provide
   icon = staticActionIcon(R.drawable.es_ic_action_back)
 )
 
-@Provide fun backActionExecutor(globalActionExecutor: GlobalActionExecutor) =
+@Provide fun backActionExecutor(accessibilityService: AccessibilityService) =
   ActionExecutor<BackActionId> {
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_BACK)
+    accessibilityService.performGlobalAction(AndroidAccessibilityService.GLOBAL_ACTION_BACK)
   }

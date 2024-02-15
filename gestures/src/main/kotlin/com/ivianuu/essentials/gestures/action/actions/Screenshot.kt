@@ -4,10 +4,10 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT
 import android.annotation.SuppressLint
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.accessibility.AccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
@@ -29,8 +29,8 @@ import kotlinx.coroutines.delay
 @SuppressLint("InlinedApi")
 @Provide
 fun screenshotActionExecutor(
-  globalActionExecutor: GlobalActionExecutor
+  accessibilityService: AccessibilityService
 ) = ActionExecutor<ScreenshotActionId> {
   delay(500)
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
+  accessibilityService.performGlobalAction(GLOBAL_ACTION_TAKE_SCREENSHOT)
 }

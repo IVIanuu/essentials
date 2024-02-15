@@ -4,10 +4,10 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN
 import android.annotation.SuppressLint
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.accessibility.AccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
@@ -28,7 +28,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 @SuppressLint("InlinedApi")
 @Provide
 fun lockScreenActionExecutor(
-  globalActionExecutor: GlobalActionExecutor
+  accessibilityService: AccessibilityService
 ) = ActionExecutor<LockScreenActionId> {
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
+  accessibilityService.performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
 }

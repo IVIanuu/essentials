@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.material.icons.Icons
@@ -16,7 +16,7 @@ import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityScope
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.accessibility.AccessibilityService
 import com.ivianuu.essentials.accessibility.accessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -36,9 +36,9 @@ import kotlinx.coroutines.flow.first
 )
 
 @Provide fun notificationsActionExecutor(
+  accessibilityService: AccessibilityService,
   appContext: AppContext,
   closeSystemDialogs: CloseSystemDialogsUseCase,
-  globalActionExecutor: GlobalActionExecutor,
   scopeManager: ScopeManager,
 ) = ActionExecutor<NotificationsActionId> {
   val targetState = Either.catch {
@@ -65,7 +65,7 @@ import kotlinx.coroutines.flow.first
   }.getOrElse { true }
 
   if (targetState)
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
+    accessibilityService.performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
   else
     closeSystemDialogs()
 }

@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
@@ -18,7 +18,8 @@ import arrow.core.Either
 import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.accessibility.AccessibilityService
+import com.ivianuu.essentials.accessibility.AndroidAccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ui.LocalActionIconSizeModifier
@@ -86,11 +87,11 @@ fun interface CloseSystemDialogsUseCase {
 fun closeSystemDialogsUseCase(
   appConfig: AppConfig,
   appContext: AppContext,
-  globalActionExecutor: GlobalActionExecutor,
+  accessibilityService: AccessibilityService,
 ) = CloseSystemDialogsUseCase {
   Either.catch {
     if (appConfig.sdk >= 31)
-      globalActionExecutor(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
+      accessibilityService.performGlobalAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
     else
       appContext.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
   }

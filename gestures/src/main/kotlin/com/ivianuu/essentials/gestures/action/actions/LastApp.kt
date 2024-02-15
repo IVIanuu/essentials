@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_RECENTS
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.accessibility.AccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -26,9 +26,9 @@ import kotlinx.coroutines.delay
 )
 
 @Provide fun lastAppActionExecutor(
-  globalActionExecutor: GlobalActionExecutor
+  accessibilityService: AccessibilityService
 ) = ActionExecutor<LastAppActionId> {
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
+  accessibilityService.performGlobalAction(GLOBAL_ACTION_RECENTS)
   delay(100)
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
+  accessibilityService.performGlobalAction(GLOBAL_ACTION_RECENTS)
 }

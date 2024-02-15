@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.annotation.SuppressLint
 import android.view.accessibility.AccessibilityNodeInfo
@@ -17,7 +17,7 @@ import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityScope
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.accessibility.AccessibilityService
 import com.ivianuu.essentials.accessibility.accessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -39,9 +39,9 @@ import kotlinx.coroutines.flow.first
 @Provide
 @SuppressLint("NewApi")
 fun quickSettingsActionExecutor(
+  accessibilityService: AccessibilityService,
   appContext: AppContext,
   closeSystemDialogs: CloseSystemDialogsUseCase,
-  globalActionExecutor: GlobalActionExecutor,
   scopeManager: ScopeManager,
 ) = ActionExecutor<QuickSettingsActionId> {
   val targetState = Either.catch {
@@ -68,7 +68,7 @@ fun quickSettingsActionExecutor(
   }.getOrElse { true }
 
   if (targetState)
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
+    accessibilityService.performGlobalAction(GLOBAL_ACTION_QUICK_SETTINGS)
   else
     closeSystemDialogs()
 }

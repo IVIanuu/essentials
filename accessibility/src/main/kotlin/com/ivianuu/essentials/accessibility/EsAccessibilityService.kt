@@ -4,25 +4,27 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
-import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.addFlag
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 @Provide @AndroidComponent class EsAccessibilityService(
-  private val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>,
   private val accessibilityScopeFactory: (@Service<AccessibilityScope> EsAccessibilityService) -> Scope<AccessibilityScope>,
   private val logger: Logger
-) : AccessibilityService() {
+) : AndroidAccessibilityService() {
+  private val _events = EventFlow<AccessibilityEvent>()
+  val events: Flow<AccessibilityEvent> by this::_events
+
   private var accessibilityScope: Scope<AccessibilityScope>? = null
 
   override fun onServiceConnected() {
@@ -55,9 +57,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
     }
   }
 
-  override fun onAccessibilityEvent(event: AccessibilityEvent) {
+  override fun onAccessibilityEvent(event: AndroidAccessibilityEvent) {
     logger.log { "on accessibility event $event" }
-    accessibilityEvents.tryEmit(
+    _events.tryEmit(
       AccessibilityEvent(
         type = event.eventType,
         packageName = event.packageName?.toString(),

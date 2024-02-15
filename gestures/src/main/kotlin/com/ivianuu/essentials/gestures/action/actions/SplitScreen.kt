@@ -4,9 +4,10 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.accessibility.AccessibilityService
+import com.ivianuu.essentials.accessibility.AndroidAccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -23,7 +24,7 @@ import com.ivianuu.injekt.Provide
 )
 
 @Provide fun splitScreenActionExecutor(
-  globalActionExecutor: GlobalActionExecutor
+  accessibilityService: AccessibilityService
 ) = ActionExecutor<SplitScreenActionId> {
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
+  accessibilityService.performGlobalAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
 }

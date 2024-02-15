@@ -4,11 +4,11 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_HOME
 import android.content.Intent
 import android.os.Build
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.accessibility.AccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -26,12 +26,12 @@ import com.ivianuu.injekt.Provide
 )
 
 @Provide fun homeActionExecutor(
+  accessibilityService: AccessibilityService,
   closeSystemDialogs: CloseSystemDialogsUseCase,
-  globalActionExecutor: GlobalActionExecutor,
   intentSender: ActionIntentSender
 ) = ActionExecutor<HomeActionId> {
   if (!needsHomeIntentWorkaround) {
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
+    accessibilityService.performGlobalAction(GLOBAL_ACTION_HOME)
   } else {
     closeSystemDialogs()
 

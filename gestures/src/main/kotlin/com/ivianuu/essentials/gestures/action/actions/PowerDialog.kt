@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_POWER_DIALOG
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.accessibility.AccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -23,7 +23,7 @@ import com.ivianuu.injekt.Provide
 )
 
 @Provide fun powerDialogActionExecutor(
-  globalActionExecutor: GlobalActionExecutor
+  accessibilityService: AccessibilityService
 ) = ActionExecutor<PowerDialogActionId> {
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
+  accessibilityService.performGlobalAction(GLOBAL_ACTION_POWER_DIALOG)
 }
