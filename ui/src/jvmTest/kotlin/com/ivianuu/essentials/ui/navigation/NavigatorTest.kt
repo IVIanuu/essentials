@@ -15,19 +15,16 @@ import kotlinx.coroutines.launch
 import org.junit.Test
 
 class NavigatorTest {
-  class ScreenA : Screen<Unit>
-  class ScreenB : Screen<Unit>
-  class ScreenC : Screen<Unit>
+  object ScreenA : Screen<Unit>
+  object ScreenB : Screen<Unit>
+  object ScreenC : Screen<Unit>
 
   @Provide val logger = NoopLogger
 
   @Test fun testNavigator() = runCancellingBlockingTest {
-    val navigator = NavigatorImpl(
-      screenInterceptors = emptyList(),
-      scope = this
-    )
+    val navigator = NavigatorImpl(initialBackStack = emptyList(), screenInterceptors = emptyList())
 
-    val collector = navigator._backStack
+    val collector = navigator.backStack
       .testCollectIn(this)
 
     launch { navigator.push(ScreenA) }
@@ -57,20 +54,14 @@ class NavigatorTest {
   object ScreenWithResult : Screen<String>
 
   @Test fun testReturnsResultOnPop() = runCancellingBlockingTest {
-    val navigator = NavigatorImpl(
-      screenInterceptors = emptyList(),
-      scope = this
-    )
+    val navigator = NavigatorImpl(initialBackStack = emptyList(), screenInterceptors = emptyList())
     val result = async { navigator.push(ScreenWithResult) }
     navigator.pop(ScreenWithResult, "b")
     result.await() shouldBe "b"
   }
 
   @Test fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
-    val navigator = NavigatorImpl(
-      screenInterceptors = emptyList(),
-      scope = this
-    )
+    val navigator = NavigatorImpl(initialBackStack = emptyList(), screenInterceptors = emptyList())
     val result = async { navigator.push(ScreenWithResult) }
     navigator.popTop()
     result.await() shouldBe null

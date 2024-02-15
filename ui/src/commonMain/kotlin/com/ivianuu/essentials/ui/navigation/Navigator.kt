@@ -82,19 +82,16 @@ suspend fun Navigator.clear() {
 }
 
 fun Navigator(
-  scope: CoroutineScope,
   initialBackStack: List<Screen<*>> = emptyList(),
   screenInterceptors: List<ScreenInterceptor<*>> = emptyList()
 ): Navigator = NavigatorImpl(
   initialBackStack = initialBackStack,
-  screenInterceptors = screenInterceptors,
-  scope = scope
+  screenInterceptors = screenInterceptors
 )
 
 class NavigatorImpl(
   initialBackStack: List<Screen<*>>,
-  private val screenInterceptors: List<ScreenInterceptor<*>>,
-  scope: CoroutineScope
+  private val screenInterceptors: List<ScreenInterceptor<*>>
 ) : Navigator {
   private val _backStack = MutableStateFlow(initialBackStack)
   override val backStack: StateFlow<List<Screen<*>>> by this::_backStack
@@ -137,12 +134,10 @@ class NavigatorImpl(
   @Provide companion object {
     @Provide fun rootNavigator(
       rootScreen: RootScreen?,
-      screenInterceptors: List<ScreenInterceptor<*>>,
-      scope: ScopedCoroutineScope<UiScope>
+      screenInterceptors: List<ScreenInterceptor<*>>
     ): @Scoped<UiScope> @Service<UiScope> Navigator = NavigatorImpl(
       initialBackStack = listOfNotNull(rootScreen),
-      screenInterceptors = screenInterceptors,
-      scope = scope
+      screenInterceptors = screenInterceptors
     )
   }
 }

@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import arrow.fx.coroutines.parZip
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.delay
@@ -18,18 +19,14 @@ class SharedTest {
       calls[key] = calls[key]?.inc() ?: 1
     }
 
-    par(
-      {
-        shared(0)
-      },
+    parZip(
+      { shared(0) },
       {
         delay(5.milliseconds)
         shared(0)
       },
-      {
-        shared(1)
-      }
-    )
+      { shared(1) }
+    ) { _, _, _ -> }
 
     calls[0] shouldBe 1
     calls[1] shouldBe 1
