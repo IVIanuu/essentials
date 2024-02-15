@@ -40,7 +40,6 @@ dependencies {
   testImplementation(Deps.Kotlin.compilerEmbeddable)
   testImplementation(Deps.KotlinCompileTesting.kotlinCompileTesting)
   testImplementation(Deps.kotestAssertions)
-  testImplementation(project(":core"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

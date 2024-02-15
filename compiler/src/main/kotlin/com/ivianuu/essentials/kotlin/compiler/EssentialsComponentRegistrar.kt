@@ -25,13 +25,3 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
     experimental(project)
   }
 }
-
-fun IrGenerationExtension.Companion.registerExtensionWithLoadingOrder(
-  project: Project,
-  loadingOrder: LoadingOrder,
-  extension: IrGenerationExtension,
-) {
-  project.extensionArea
-    .getExtensionPoint(IrGenerationExtension.extensionPointName)
-    .registerExtension(extension, loadingOrder, project)
-}
