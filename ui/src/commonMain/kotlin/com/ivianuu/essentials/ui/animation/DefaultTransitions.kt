@@ -11,6 +11,10 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import soup.compose.material.motion.MotionConstants.DefaultFadeInDuration
+import soup.compose.material.motion.MotionConstants.DefaultFadeOutDuration
+import soup.compose.material.motion.MotionConstants.DefaultMotionDuration
+import soup.compose.material.motion.animation.holdOut
 
 fun ElementTransitionBuilder<*>.crossFade(
   durationMillis: Int = DefaultFadeInDuration,
@@ -41,12 +45,12 @@ fun ElementTransitionBuilder<*>.fadeUpwards(
   if (isPush) {
     key entersWith
         slideInVertically(tween(durationMillis, easing = FastOutSlowInEasing)) { (it * 0.25f).toInt() } +
-        fadeIn(tween(durationMillis.forIncomingSharedAxis, durationMillis.forOutgoingSharedAxis, easing = LinearOutSlowInEasing))
+        fadeIn(tween(durationMillis.ForIncoming, durationMillis.ForOutgoing, easing = LinearOutSlowInEasing))
     key exitsWith holdOut(300)
   } else {
     key exitsWith
         slideOutVertically(tween(durationMillis, easing = FastOutLinearInEasing)) { (it * 0.25f).toInt() } +
-        fadeOut(tween(durationMillis.forOutgoingSharedAxis, easing = FastOutLinearInEasing))
+        fadeOut(tween(durationMillis.ForOutgoing, easing = FastOutLinearInEasing))
   }
 }
 

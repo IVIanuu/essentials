@@ -147,6 +147,8 @@ object Deps {
 
   const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
 
+  const val materialMotionCompose = "io.github.fornewid:material-motion-compose-core:0.12.3"
+
   const val mockk = "io.mockk:mockk:1.12.8"
 
   const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.24.0"

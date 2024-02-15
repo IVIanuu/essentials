@@ -1,5 +1,10 @@
 package com.ivianuu.essentials.ui.popup
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -24,9 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.ui.animation.ForFade
 import com.ivianuu.essentials.ui.animation.animationElement
-import com.ivianuu.essentials.ui.animation.materialFadeIn
-import com.ivianuu.essentials.ui.animation.materialFadeOut
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayScreen
@@ -34,6 +38,8 @@ import com.ivianuu.essentials.ui.navigation.ScreenConfig
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
+import soup.compose.material.motion.MotionConstants.DefaultFadeInDuration
+import soup.compose.material.motion.animation.materialFadeOut
 import kotlin.math.max
 
 class PopupScreen(
@@ -92,7 +98,19 @@ private val PopupKey = "popup"
   get() = ScreenConfig(opaque = true) {
     if (isPush) {
       PopupKey entersWith
-          materialFadeIn(transformOrigin = target!!.cast<PopupScreen>().transformOrigin)
+          fadeIn(
+            animationSpec = tween(
+              durationMillis = DefaultFadeInDuration.ForFade,
+              easing = LinearEasing
+            )
+          ) + scaleIn(
+        animationSpec = tween(
+          durationMillis = DefaultFadeInDuration,
+          easing = FastOutSlowInEasing
+        ),
+        initialScale = 0.8f,
+        transformOrigin = target!!.cast<PopupScreen>().transformOrigin
+      )
     } else {
       PopupKey exitsWith materialFadeOut()
     }
