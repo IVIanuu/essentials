@@ -13,7 +13,7 @@ import com.ivianuu.essentials.sortedWithLoadingOrder
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 
-interface UserflowBuilder : suspend () -> List<Screen<*>>, ExtensionPoint<UserflowBuilder>
+fun interface UserflowBuilder : suspend () -> List<Screen<*>>, ExtensionPoint<UserflowBuilder>
 
 @Provide fun userflowBuilderWorker(
   records: List<ExtensionPointRecord<UserflowBuilder>>,

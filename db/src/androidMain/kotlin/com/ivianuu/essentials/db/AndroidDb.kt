@@ -49,8 +49,7 @@ class AndroidDb private constructor(
     name: String,
     schema: Schema,
     coroutineContext: CoroutineContext = Dispatchers.IO,
-    // todo use context receiver once supported
-    @Inject context: Context
+    context: Context
   ) : this(
     schema,
     coroutineContext,
