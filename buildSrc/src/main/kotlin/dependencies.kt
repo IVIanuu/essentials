@@ -143,6 +143,8 @@ object Deps {
 
   const val playBillingKtx = "com.android.billingclient:billing-ktx:6.0.1"
 
+  const val processPhoenix = "com.jakewharton:process-phoenix:2.1.2"
+
   const val roboelectric = "org.robolectric:robolectric:4.10.3"
 
   const val shadowGradlePlugin = "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"

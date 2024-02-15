@@ -26,6 +26,8 @@ dependencies {
   api(Deps.Coil.coil)
   api(Deps.Coil.coilCompose)
 
+  api(Deps.processPhoenix)
+
   api(project(":db"))
   api(project(":core"))
   api(project(":ui"))

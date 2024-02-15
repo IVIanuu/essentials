@@ -9,9 +9,9 @@ import android.content.pm.PackageManager
 import com.ivianuu.injekt.Provide
 
 @Provide object ContextModule {
-  @Provide inline fun packageManager(appContext: AppContext): PackageManager =
+  @Provide fun packageManager(appContext: AppContext): PackageManager =
     appContext.packageManager
 
-  @Provide inline fun contentResolver(appContext: AppContext): ContentResolver =
+  @Provide fun contentResolver(appContext: AppContext): ContentResolver =
     appContext.contentResolver
 }

@@ -4,27 +4,17 @@
 
 package com.ivianuu.essentials.processrestart
 
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.pm.PackageManager
-import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
+import com.jakewharton.processphoenix.ProcessPhoenix
 
 fun interface ProcessRestarter {
   operator fun invoke()
 }
 
-@Provide fun processRestarter(
-  appContext: AppContext,
-  appConfig: AppConfig,
-  logger: Logger,
-  packageManager: PackageManager,
-) = ProcessRestarter {
-  val intent = packageManager.getLaunchIntentForPackage(appConfig.packageName)!!
-    .addFlags(FLAG_ACTIVITY_NEW_TASK)
-  logger.log { "restart process $intent" }
-  ProcessRestartActivity.launch(appContext, intent)
-  Runtime.getRuntime().exit(0)
+@Provide fun processRestarter(appContext: AppContext, logger: Logger) = ProcessRestarter {
+  logger.log { "restart process" }
+  ProcessPhoenix.triggerRebirth(appContext)
 }
