@@ -11,6 +11,7 @@ import android.util.Base64
 import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.Resources
@@ -25,7 +26,6 @@ import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.gestures.action.ui.ActionPickerScreen
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerScreen
-import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
@@ -40,7 +40,7 @@ import java.io.ByteArrayOutputStream
     val label = tmp[1]
 
     val iconBytes = Base64.decode(tmp[3], 0)
-    val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImageBitmap()
+    val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).asImageBitmap()
     return Action<ActionId>(
       id = id,
       title = label,

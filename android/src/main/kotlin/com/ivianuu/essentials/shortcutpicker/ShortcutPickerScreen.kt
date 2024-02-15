@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -19,7 +20,6 @@ import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.collectAsResourceState
-import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.ScreenScaffold
@@ -44,7 +44,7 @@ class ShortcutPickerScreen : Screen<Shortcut>
         leading = {
           Image(
             modifier = Modifier.size(40.dp),
-            painter = remember { BitmapPainter(shortcut.icon.toBitmap().toImageBitmap()) },
+            painter = remember { BitmapPainter(shortcut.icon.toBitmap().asImageBitmap()) },
             contentDescription = null
           )
         },

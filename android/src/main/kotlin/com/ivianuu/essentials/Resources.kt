@@ -8,11 +8,11 @@ import android.content.Context
 import android.graphics.drawable.Icon
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
@@ -57,7 +57,7 @@ fun interface ResourceLoader<out T> {
     @Provide val icon =
       ResourceLoader { context, id -> Icon.createWithResource(context, id) }
     @Provide val imageBitmap =
-      ResourceLoader { context, id -> context.getDrawable(id)!!.toBitmap().toImageBitmap() }
+      ResourceLoader { context, id -> context.getDrawable(id)!!.toBitmap().asImageBitmap() }
     @Provide val typeface =
       ResourceLoader { context, id -> Typeface(ResourcesCompat.getFont(context, id)!!) }
     @Provide val frameworkTypeface =
