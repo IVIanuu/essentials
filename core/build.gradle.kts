@@ -34,6 +34,9 @@ kotlin {
 
     commonMain {
       dependencies {
+        api(Deps.Arrow.core)
+        api(Deps.Arrow.fxCoroutines)
+        api(Deps.Arrow.resilience)
         api(Deps.AtomicFu.runtime)
         api(Deps.Compose.runtime)
         api(Deps.Compose.runtimeSaveable)
@@ -41,6 +44,7 @@ kotlin {
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)
         api(Deps.KotlinSerialization.json)
+        api(Deps.quiver)
       }
     }
 

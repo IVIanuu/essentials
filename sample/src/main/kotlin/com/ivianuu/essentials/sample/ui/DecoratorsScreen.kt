@@ -14,9 +14,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import arrow.core.Either
 import com.ivianuu.essentials.compose.LocalScope
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.insets.InsetsPadding
@@ -50,7 +49,7 @@ fun interface SampleListDecorator : ListDecorator
 
 @Provide val sampleListDecorator = SampleListDecorator {
   item(null) {
-    val screen = catch { LocalScope.current }.getOrNull()?.screen
+    val screen = Either.catch { LocalScope.current }.getOrNull()?.screen
     if (screen is DecoratorsScreen)
       Text("Sample decorator before content $screen")
   }
@@ -58,7 +57,7 @@ fun interface SampleListDecorator : ListDecorator
   content()
 
   item(null) {
-    val screen = catch { LocalScope.current }.getOrNull()?.screen
+    val screen = Either.catch { LocalScope.current }.getOrNull()?.screen
     if (screen is DecoratorsScreen)
       Text("Sample decorator after content $screen")
   }

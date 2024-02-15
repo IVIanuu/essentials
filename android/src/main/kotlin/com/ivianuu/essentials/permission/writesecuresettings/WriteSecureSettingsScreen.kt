@@ -22,16 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import arrow.fx.coroutines.raceN
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.data.AndroidSettingModule
 import com.ivianuu.essentials.data.AndroidSettingsType
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.permission.PermissionManager
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.onSuccess
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.AppBar
@@ -265,20 +263,20 @@ typealias AdbEnabled = @AdbEnabledTag Int
       completedStep = currentStep
     },
     openPhoneInfo = action {
-      race(
+      raceN(
         {
           navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
-            ?.onFailure { toaster(R.string.es_open_phone_info_failed) }
+            ?.onLeft { toaster(R.string.es_open_phone_info_failed) }
         },
         { developerModeDataStore.data.first { it != 0 } }
       )
       appUiStarter()
     },
     openDeveloperSettings = action {
-      race(
+      raceN(
         {
           navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)))
-            ?.onFailure { toaster(R.string.es_open_developer_settings_failed) }
+            ?.onLeft { toaster(R.string.es_open_developer_settings_failed) }
         },
         { adbEnabledDataStore.data.first { it != 0 } }
       )
@@ -286,13 +284,13 @@ typealias AdbEnabled = @AdbEnabledTag Int
     },
     grantPermissionsViaRoot = action {
       shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
-        .onSuccess {
+        .onRight {
           if (permissionManager.permissionState(listOf(screen.permissionKey)).first()) {
             toaster(R.string.es_secure_settings_permission_granted)
             navigator.pop(screen)
           }
         }
-        .onFailure {
+        .onLeft {
           it.printStackTrace()
           toaster(R.string.es_secure_settings_no_root)
         }

@@ -7,6 +7,7 @@ package com.ivianuu.essentials.backup
 import android.content.ContentResolver
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
+import app.cash.quiver.extensions.orThrow
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.CoroutineContexts
@@ -15,8 +16,6 @@ import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.processrestart.ProcessRestarter
-import com.ivianuu.essentials.result.getOrNull
-import com.ivianuu.essentials.result.getOrThrow
 import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
@@ -74,7 +73,7 @@ interface BackupManager {
 
       zipOutputStream.close()
 
-      navigator.push(ShareBackupFileScreen(backupFile.absolutePath))?.getOrThrow()
+      navigator.push(ShareBackupFileScreen(backupFile.absolutePath))?.orThrow()
     }
 
   override suspend fun restoreBackup() = withContext(scope.coroutineContext + coroutineContexts.io) {

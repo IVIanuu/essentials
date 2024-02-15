@@ -5,6 +5,8 @@
 package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.ui.res.painterResource
+import arrow.core.Either
+import arrow.core.getOrElse
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.gestures.R
@@ -13,9 +15,6 @@ import com.ivianuu.essentials.gestures.action.actions.staticActionIcon
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.PermissionManager
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.getOrElse
-import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
@@ -93,7 +92,7 @@ interface ActionRepository {
 
   override suspend fun executeAction(id: String): Boolean =
     withContext(coroutineContexts.computation) {
-      catch {
+      Either.catch {
         logger.log { "execute $id" }
         val action = getAction(id)
 
@@ -125,7 +124,7 @@ interface ActionRepository {
         // fire
         getActionExecutor(id)()
         return@catch true
-      }.onFailure {
+      }.onLeft {
         it.printStackTrace()
         toaster(R.string.es_action_execution_failed, id)
       }.getOrElse { false }

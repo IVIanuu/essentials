@@ -10,6 +10,8 @@ import android.annotation.SuppressLint
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import arrow.core.Either
+import arrow.core.getOrElse
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ScopeManager
@@ -21,8 +23,6 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.scopeOfOrNull
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
@@ -44,7 +44,7 @@ fun quickSettingsActionExecutor(
   globalActionExecutor: GlobalActionExecutor,
   scopeManager: ScopeManager,
 ) = ActionExecutor<QuickSettingsActionId> {
-  val targetState = catch {
+  val targetState = Either.catch {
     val service = scopeManager.scopeOfOrNull<AccessibilityScope>().first()!!.accessibilityService
 
     val systemUiContext = appContext.createPackageContext(

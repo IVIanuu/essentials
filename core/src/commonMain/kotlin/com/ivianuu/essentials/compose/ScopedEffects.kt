@@ -13,12 +13,13 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import arrow.fx.coroutines.onCancel
 import com.ivianuu.essentials.Disposable
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.safeAs
 import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.awaitCancellation
 
 val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }
 
@@ -71,7 +72,7 @@ private val Uninitialized = Any()
     producer(
       object : ProduceStateScope<T>, MutableState<T> by state, CoroutineScope by this {
         override suspend fun awaitDispose(onDispose: () -> Unit) =
-          onCancel { onDispose() }
+          onCancel({ awaitCancellation() }) { onDispose() }
       }
     )
   }

@@ -6,12 +6,12 @@ package com.ivianuu.essentials.ads
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import arrow.core.getOrElse
 import com.ivianuu.essentials.app.ScopeComposition
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Screen

@@ -5,6 +5,9 @@
 package com.ivianuu.essentials.app
 
 import androidx.compose.runtime.Composable
+import arrow.fx.coroutines.ExitCase
+import arrow.fx.coroutines.guarantee
+import arrow.fx.coroutines.guaranteeCase
 import com.ivianuu.essentials.ExtensionPoint
 import com.ivianuu.essentials.ExtensionPointRecord
 import com.ivianuu.essentials.LoadingOrder
@@ -12,9 +15,7 @@ import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.ScopeObserver
 import com.ivianuu.essentials.compose.StateCoroutineContext
 import com.ivianuu.essentials.compose.launchComposition
-import com.ivianuu.essentials.coroutines.ExitCase
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.sortedWithLoadingOrder
@@ -51,8 +52,8 @@ interface ScopeWorkerRunner<N> : ScopeObserver<N> {
 ): ScopeWorkerRunner<N> = object : ScopeWorkerRunner<N> {
   override fun onEnter(scope: Scope<N>) {
     coroutineScope.launch {
-      guarantee(
-        block = {
+      guaranteeCase(
+        fa = {
           supervisorScope {
             val workers = workersFactory()
               .sortedWithLoadingOrder()

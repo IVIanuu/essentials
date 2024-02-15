@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.app
 
+import arrow.fx.coroutines.parMap
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.essentials.logging.Logger
@@ -46,7 +46,7 @@ fun interface FirstRunHandler {
 
   logger.log { "first run" }
 
-  handlers().parForEach { it() }
+  handlers().parMap { it() }
 
   pref.updateData { copy(isFirstRun = false) }
 }

@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import arrow.core.Either
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Scoped
@@ -21,8 +22,6 @@ import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.torch.TorchManagerImpl.DisableTorchAction
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.RemoteAction
@@ -70,16 +69,16 @@ interface TorchManager {
     }
 
     LaunchedEffect(true) {
-      catch {
+      Either.catch {
         val cameraId = cameraManager.cameraIdList[0]
         logger.log { "enable torch" }
         cameraManager.setTorchMode(cameraId, true)
         onCancel {
           logger.log { "disable torch on cancel" }
-          catch { cameraManager.setTorchMode(cameraId, false) }
+          Either.catch { cameraManager.setTorchMode(cameraId, false) }
           _torchEnabled = false
         }
-      }.onFailure {
+      }.onLeft {
         logger.log(priority = Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
         toaster(R.string.es_failed_to_enable_torch)
         _torchEnabled = false

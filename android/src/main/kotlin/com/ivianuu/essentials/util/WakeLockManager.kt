@@ -1,13 +1,15 @@
 package com.ivianuu.essentials.util
 
 import android.os.PowerManager
+import arrow.fx.coroutines.bracketCase
 import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.coroutines.bracket
+import com.ivianuu.essentials.coroutines.bracketCase
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.SourceKey
+import kotlinx.coroutines.awaitCancellation
 
 interface WakeLockManager {
   suspend fun acquire(@Inject id: WakeLockId): Nothing
@@ -24,7 +26,7 @@ interface WakeLockManager {
   private val powerManager: @SystemService PowerManager
 ) : WakeLockManager {
   override suspend fun acquire(@Inject id: WakeLockId) =
-    bracket(
+    bracketCase(
       acquire = {
         logger.log { "${id.value} acquire" }
         powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, id.value)

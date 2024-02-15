@@ -5,11 +5,11 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.failure
-import com.ivianuu.essentials.result.success
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -18,7 +18,7 @@ import java.util.UUID
 import kotlin.coroutines.resume
 import kotlin.reflect.KClass
 
-interface IntentScreen : Screen<Result<ActivityResult, ActivityNotFoundException>> {
+interface IntentScreen : Screen<Either<ActivityNotFoundException, ActivityResult>> {
   @Provide companion object {
     @Provide fun <@Spread T : ScreenIntentFactory<K>, K : Any> intentFactoryBinding(
       intentFactory: T,
@@ -40,7 +40,7 @@ fun interface AppUiStarter {
   appUiStarter: AppUiStarter,
   coroutineContexts: CoroutineContexts,
   intentFactories: () -> Map<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>>
-) = ScreenInterceptor<Result<ActivityResult, Throwable>> handler@{ screen ->
+) = ScreenInterceptor<Either<Throwable, ActivityResult>> handler@{ screen ->
   if (screen !is IntentScreen) return@handler null
   val intentFactory = intentFactories()[screen::class.cast()]
     ?: return@handler null
@@ -48,17 +48,17 @@ fun interface AppUiStarter {
   return@handler {
     val activity = appUiStarter()
     withContext(coroutineContexts.main) {
-      suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
+      suspendCancellableCoroutine<Either<Throwable, ActivityResult>> { continuation ->
         val launcher = activity.activityResultRegistry.register(
           UUID.randomUUID().toString(),
           ActivityResultContracts.StartActivityForResult()
         ) {
-          if (continuation.isActive) continuation.resume(it.success())
+          if (continuation.isActive) continuation.resume(it.right())
         }
         try {
           launcher.launch(intent)
         } catch (e: ActivityNotFoundException) {
-          continuation.resume(e.failure())
+          continuation.resume(e.left())
         }
         continuation.invokeOnCancellation { launcher.unregister() }
       }

@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.app
 
+import arrow.fx.coroutines.parMap
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.DataStoreModule
 import com.ivianuu.essentials.logging.Logger
@@ -35,7 +35,7 @@ fun interface AppVersionUpgradeHandler {
 
   logger.log { "upgrade from app version ${prefs.lastAppVersion} to ${appConfig.versionCode}" }
 
-  handlers().parForEach { it(prefs.lastAppVersion, appConfig.versionCode) }
+  handlers().parMap { it(prefs.lastAppVersion, appConfig.versionCode) }
 
   pref.updateData { copy(lastAppVersion = appConfig.versionCode) }
 }

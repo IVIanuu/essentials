@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.billing
 
+import arrow.core.Either
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
@@ -30,7 +31,6 @@ import com.ivianuu.essentials.coroutines.use
 import com.ivianuu.essentials.flowInScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
@@ -105,7 +105,7 @@ interface BillingService {
      },
     release = { _, billingClient ->
       logger.log { "release client" }
-      catch { billingClient.endConnection() }
+      Either.catch { billingClient.endConnection() }
     }
   )
 

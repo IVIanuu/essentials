@@ -10,10 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import arrow.core.Either
 import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
@@ -57,15 +56,15 @@ data class BackupAndRestoreState(val backupData: () -> Unit, val restoreData: ()
 ) = Presenter {
   BackupAndRestoreState(
     backupData = action {
-      catch { backupManager.createBackup() }
-        .onFailure {
+      Either.catch { backupManager.createBackup() }
+        .onLeft {
           it.printStackTrace()
           toaster(R.string.es_backup_error)
         }
     },
     restoreData = action {
-      catch { backupManager.restoreBackup() }
-        .onFailure {
+      Either.catch { backupManager.restoreBackup() }
+        .onLeft {
           it.printStackTrace()
           toaster(R.string.es_restore_error)
         }

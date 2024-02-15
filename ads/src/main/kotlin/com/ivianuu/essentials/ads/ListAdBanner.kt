@@ -5,11 +5,10 @@
 package com.ivianuu.essentials.ads
 
 import androidx.compose.runtime.collectAsState
+import arrow.core.Either
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.LocalScope
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.navigation.screen
 import com.ivianuu.injekt.Provide
@@ -41,7 +40,7 @@ fun interface ListAdBanner : ListDecorator
 ) = ListAdBanner decorator@{
   if (config != null && isVertical) {
     item(null) {
-      val screen = catch {
+      val screen = Either.catch {
         LocalScope.current.screen::class
       }.getOrNull()
       if ((screen == null || isAdFeatureEnabled(screen, ListAdBannerFeature)) &&

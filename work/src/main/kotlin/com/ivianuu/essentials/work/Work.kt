@@ -18,20 +18,19 @@ import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import androidx.work.await
 import androidx.work.workDataOf
+import arrow.core.Either
+import arrow.fx.coroutines.ExitCase
+import arrow.fx.coroutines.guaranteeCase
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.coroutines.ExitCase
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.coroutines.sharedComputation
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.fold
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import kotlinx.atomicfu.locks.SynchronizedObject
@@ -81,8 +80,8 @@ interface WorkManager {
       workerStates.getOrPut(id.value) { MutableStateFlow(false) }
     }
 
-    guarantee(
-      block = {
+    guaranteeCase(
+      fa = {
         workerState.value = true
         workersMap[id.value]!!.invoke().invoke()
       },
@@ -135,7 +134,7 @@ interface WorkManager {
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
     val workId = inputData.getString(WORK_ID) ?: return Result.failure()
-    return catch {
+    return Either.catch {
       workManager.runWorker(object : WorkId(workId) {})
     }.fold({ Result.success() }, { Result.retry() })
   }

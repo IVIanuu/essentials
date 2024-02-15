@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
+import arrow.fx.coroutines.onCancel
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppScope
@@ -67,7 +68,7 @@ import kotlin.time.Duration.Companion.seconds
       if (states.isEmpty()) {
         LaunchedEffect(true, removeServiceNotification) {
           onCancel(
-            block = {
+            fa = {
               logger.log { "stop foreground -> remove notification $removeServiceNotification" }
               stopForeground(
                 if (removeServiceNotification) STOP_FOREGROUND_REMOVE

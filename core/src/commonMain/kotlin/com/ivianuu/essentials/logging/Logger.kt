@@ -36,7 +36,7 @@ object NoopLogger : Logger {
   }
 }
 
-@Provide class PrintingLogger(override val isLoggingEnabled: LoggingEnabled) : Logger {
+class PrintingLogger(override val isLoggingEnabled: LoggingEnabled) : Logger {
   override fun logMessage(priority: Logger.Priority, tag: String, message: String) {
     println("[${priority.name}] $tag $message")
   }

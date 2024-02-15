@@ -5,10 +5,10 @@
 package com.ivianuu.essentials.permission
 
 import androidx.compose.runtime.Composable
+import arrow.fx.coroutines.parMap
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
@@ -103,7 +103,7 @@ interface PermissionRevokeHandler : suspend (List<TypeKey<Permission>>) -> Unit 
   handlers: List<PermissionRevokeHandler>,
   permissionManager: PermissionManager
 ) = ScopeWorker<UiScope> {
-  handlers.parForEach { handler ->
+  handlers.parMap { handler ->
     val revokedPermissions = handler.permissions
       .filter { !permissionManager.permissionState(listOf(it)).first() }
     if (revokedPermissions.isNotEmpty())

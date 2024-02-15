@@ -48,6 +48,14 @@ object Deps {
     const val work = "androidx.work:work-runtime-ktx:2.8.1"
   }
 
+  object Arrow {
+    private const val version = "1.2.0"
+    const val atomic = "io.arrow-kt:arrow-atomic:$version"
+    const val core = "io.arrow-kt:arrow-core:$version"
+    const val fxCoroutines = "io.arrow-kt:arrow-fx-coroutines:$version"
+    const val resilience = "io.arrow-kt:arrow-resilience:$version"
+  }
+
   object AtomicFu {
     private const val version = "0.22.0"
     const val gradlePlugin = "org.jetbrains.kotlinx:atomicfu-gradle-plugin:$version"
@@ -144,6 +152,8 @@ object Deps {
   const val playBillingKtx = "com.android.billingclient:billing-ktx:6.0.1"
 
   const val processPhoenix = "com.jakewharton:process-phoenix:2.1.2"
+
+  const val quiver = "app.cash.quiver:lib:0.5.0"
 
   const val roboelectric = "org.robolectric:robolectric:4.10.3"
 

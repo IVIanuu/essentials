@@ -12,10 +12,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.fold
-import com.ivianuu.essentials.result.onFailure
+import arrow.core.Either
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
@@ -68,14 +65,14 @@ fun <T> Flow<Resource<T>>.unwrapResource(): Flow<T> = flow {
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
   flow<Resource<T>> {
     emit(Resource.Loading)
-    catch {
+    Either.catch {
       block(FlowCollector<T> { value -> this@flow.emit(Resource.Success(value)) })
-    }.onFailure { emit(Resource.Error(it)) }
+    }.onLeft { emit(Resource.Error(it)) }
   }
 
-fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
-  success = { Resource.Success(it) },
-  failure = { Resource.Error(it) }
+fun <V> Either<Throwable, V>.toResource(): Resource<V> = fold(
+  ifRight = { Resource.Success(it) },
+  ifLeft = { Resource.Error(it) }
 )
 
 @Composable fun <T> Flow<T>.collectAsResourceState(

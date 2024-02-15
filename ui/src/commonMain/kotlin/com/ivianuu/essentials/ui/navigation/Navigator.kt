@@ -11,7 +11,6 @@ import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +18,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.collections.set
 
 @Stable interface Navigator {
@@ -101,7 +102,7 @@ class NavigatorImpl(
   private val _results = EventFlow<Pair<Screen<*>, Any?>>()
   override val results: Flow<Pair<Screen<*>, Any?>> by this::_results
 
-  private val actor = scope.actor()
+  private val mutex = Mutex()
 
   override suspend fun setBackStack(backStack: List<Screen<*>>, results: Map<Screen<*>, Any?>) {
     backStack.groupBy { it }
@@ -111,7 +112,7 @@ class NavigatorImpl(
         }
       }
 
-    actor.act {
+    mutex.withLock {
       val finalResults = results.toMutableMap()
       _backStack.value = buildList {
         for (screen in backStack) {

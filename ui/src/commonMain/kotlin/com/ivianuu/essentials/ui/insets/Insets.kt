@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
-import com.ivianuu.essentials.coroutines.guarantee
+import arrow.fx.coroutines.guarantee
 import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.injekt.Provide
 
@@ -42,9 +42,7 @@ import com.ivianuu.injekt.Provide
     var lastInsets by remember { mutableStateOf(targetInsets) }
     LaunchedEffect(animation) {
       guarantee(
-        block = {
-          animation.animateTo(1f, animationSpec = tween(durationMillis = 150))
-        },
+        fa = { animation.animateTo(1f, animationSpec = tween(durationMillis = 150)) },
         finalizer = { lastInsets = lerp(lastInsets, targetInsets, animation.value) }
       )
     }

@@ -33,14 +33,14 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalView
+import arrow.core.Either
+import arrow.fx.coroutines.bracketCase
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.coroutines.bracket
-import com.ivianuu.essentials.result.catch
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.withContext
@@ -92,7 +92,7 @@ fun Modifier.systemWindowTrigger() = composed {
 
   DisposableEffect(true) {
     onDispose {
-      catch {
+      Either.catch {
         systemWindowManager.windowManager.removeViewImmediate(triggerView)
       }
     }
@@ -146,7 +146,7 @@ fun Modifier.systemWindowTrigger() = composed {
     state: SystemWindowState,
     content: @Composable () -> Unit
   ) = withContext(coroutineContexts.main) {
-    bracket(
+    bracketCase(
       acquire = {
         lateinit var contentView: View
         contentView = OverlayComposeView(appContext) {
@@ -185,7 +185,7 @@ fun Modifier.systemWindowTrigger() = composed {
         awaitCancellation()
       },
       { contentView, _ ->
-        catch { windowManager.removeViewImmediate(contentView) }
+        Either.catch { windowManager.removeViewImmediate(contentView) }
         contentView.dispose()
       }
     )
@@ -232,7 +232,7 @@ private fun WindowManager.addOrUpdateView(view: View, layoutParams: WindowManage
   if (view.isAttachedToWindow) {
     updateViewLayout(view, layoutParams)
   } else {
-    catch { removeViewImmediate(view) }
+    Either.catch { removeViewImmediate(view) }
     addView(view, layoutParams)
   }
 }

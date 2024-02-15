@@ -7,10 +7,10 @@ package com.ivianuu.essentials.broadcast
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import arrow.fx.coroutines.parMap
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
 
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     scope.launch {
-      handlers.parForEach { it(intent) }
+      handlers.parMap { it(intent) }
     }
   }
 }

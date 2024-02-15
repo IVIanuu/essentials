@@ -7,8 +7,7 @@ package com.ivianuu.essentials.ui.util
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.getOrNull
+import arrow.core.Either
 import com.ivianuu.essentials.serialization.InjektSerializer
 import com.ivianuu.injekt.Provide
 import kotlinx.serialization.KSerializer
@@ -24,11 +23,11 @@ val Color.isLight: Boolean get() = luminance() > 0.5f
 expect fun Color.toHexString(includeAlpha: Boolean = true): String
 
 fun Color.toHexStringOrNull(includeAlpha: Boolean = true): String? =
-  catch { toHexString() }.getOrNull()
+  Either.catch { toHexString() }.getOrNull()
 
 expect fun String.toColor(): Color
 
-fun String.toColorOrNull(): Color? = catch { toColor() }.getOrNull()
+fun String.toColorOrNull(): Color? = Either.catch { toColor() }.getOrNull()
 
 @Provide @InjektSerializer object ColorSerializer : KSerializer<Color> {
   override val descriptor =

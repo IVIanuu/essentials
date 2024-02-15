@@ -11,6 +11,7 @@ import android.hardware.camera2.CameraManager
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import arrow.core.Either
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.SystemService
@@ -25,7 +26,6 @@ import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
-import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.scopeOfOrNull
 import com.ivianuu.essentials.util.ScreenState
 import com.ivianuu.injekt.Provide
@@ -89,14 +89,14 @@ import kotlin.coroutines.resume
           super.onCameraAvailable(cameraId)
           cameraManager.unregisterAvailabilityCallback(this)
           if (cameraId == frontCamera)
-            catch { cont.resume(true) }
+            Either.catch { cont.resume(true) }
         }
 
         override fun onCameraUnavailable(cameraId: String) {
           super.onCameraUnavailable(cameraId)
           cameraManager.unregisterAvailabilityCallback(this)
           if (cameraId == frontCamera)
-            catch { cont.resume(false) }
+            Either.catch { cont.resume(false) }
         }
       }, Handler(Looper.getMainLooper()))
     }

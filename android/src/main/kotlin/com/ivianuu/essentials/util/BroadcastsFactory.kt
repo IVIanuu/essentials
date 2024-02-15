@@ -8,9 +8,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import arrow.core.Either
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.result.catch
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -35,7 +35,7 @@ fun interface BroadcastsFactory {
       actions.forEach { addAction(it) }
     })
     awaitClose {
-      catch {
+      Either.catch {
         appContext.unregisterReceiver(broadcastReceiver)
       }
     }

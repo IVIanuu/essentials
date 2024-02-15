@@ -10,10 +10,9 @@ import android.service.notification.StatusBarNotification
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import arrow.core.Either
 import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
-import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.scopeOf
 import com.ivianuu.essentials.scopeOfOrNull
 import com.ivianuu.injekt.Provide
@@ -27,11 +26,11 @@ interface NotificationService {
   val notificationEvents: Flow<NotificationEvent>
   val notifications: Flow<List<StatusBarNotification>>
 
-  suspend fun openNotification(notification: Notification): Result<Unit, Throwable>
+  suspend fun openNotification(notification: Notification): Either<Throwable, Unit>
 
-  suspend fun dismissNotification(key: String): Result<Unit, Throwable>
+  suspend fun dismissNotification(key: String): Either<Throwable, Unit>
 
-  suspend fun dismissAllNotifications(): Result<Unit, Throwable>
+  suspend fun dismissAllNotifications(): Either<Throwable, Unit>
 }
 
 @Provide class NotificationServiceImpl(
@@ -46,14 +45,14 @@ interface NotificationService {
       .flatMapLatest { it?.notificationListenerService?.notifications ?: emptyFlow() }
 
   override suspend fun openNotification(notification: Notification) =
-    catch { notification.contentIntent.send() }
+    Either.catch { notification.contentIntent.send() }
 
-  override suspend fun dismissNotification(key: String) = catch {
+  override suspend fun dismissNotification(key: String) = Either.catch {
     scopeManager.scopeOf<NotificationScope>().first()
       .notificationListenerService.cancelNotification(key)
   }
 
-  override suspend fun dismissAllNotifications() = catch {
+  override suspend fun dismissAllNotifications() = Either.catch {
     scopeManager.scopeOf<NotificationScope>().first()
       .notificationListenerService.cancelAllNotifications()
   }

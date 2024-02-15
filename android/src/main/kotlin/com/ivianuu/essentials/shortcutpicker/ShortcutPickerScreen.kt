@@ -14,13 +14,11 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import arrow.core.Either
 import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.collectAsResourceState
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.getOrNull
-import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.material.AppBar
 import com.ivianuu.essentials.ui.material.ListItem
@@ -70,13 +68,13 @@ data class ShortcutPickerState(
   ShortcutPickerState(
     shortcuts = repository.shortcuts.collectAsResourceState().value,
     pickShortcut = action { shortcut ->
-      catch {
+      Either.catch {
         val shortcutRequestResult = navigator.push(DefaultIntentScreen(shortcut.intent))
           ?.getOrNull()
           ?.data ?: return@catch
         val finalShortcut = repository.extractShortcut(shortcutRequestResult)
         navigator.pop(screen, finalShortcut)
-      }.onFailure {
+      }.onLeft {
         it.printStackTrace()
         toaster(R.string.es_failed_to_pick_shortcut)
       }

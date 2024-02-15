@@ -8,10 +8,9 @@ import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.getOrElse
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.printErrors
+import arrow.core.Either
+import arrow.core.getOrElse
+import com.ivianuu.essentials.printErrors
 
 @SuppressLint("ViewConstructor")
 class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {
@@ -53,7 +52,7 @@ class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {
     }
 
     // compose crashes in some situations
-    return catch { delegate.dispatchTouchEvent(ev) }
+    return Either.catch { delegate.dispatchTouchEvent(ev) }
       .printErrors()
       .getOrElse { false }
   }

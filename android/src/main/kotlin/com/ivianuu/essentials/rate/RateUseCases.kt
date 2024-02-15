@@ -4,11 +4,10 @@
 
 package com.ivianuu.essentials.rate
 
+import arrow.core.Either
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.printErrors
+import com.ivianuu.essentials.printErrors
 import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
@@ -36,7 +35,7 @@ interface RateUseCases {
   private val pref: DataStore<RatePrefs>
 ) : RateUseCases {
   override suspend fun rateOnPlay() {
-    catch {
+    Either.catch {
       navigator.push(PlayStoreAppDetailsKey(appConfig.packageName))
       pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
     }.printErrors()

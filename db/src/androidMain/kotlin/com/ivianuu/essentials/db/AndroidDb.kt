@@ -7,9 +7,9 @@ package com.ivianuu.essentials.db
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import arrow.fx.coroutines.bracketCase
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CoroutineScope
@@ -177,7 +177,7 @@ class AndroidDb private constructor(
       .onStart { emit(tableName) }
       .map {
         withTransactionOrDefaultContext {
-          bracket(
+          bracketCase(
             acquire = { AndroidCursor(database.rawQuery(sql, null)) },
             use = { transform(it) },
             release = { cursor, _ -> cursor.dispose() }

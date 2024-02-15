@@ -19,10 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import arrow.fx.coroutines.parMap
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.produceResourceState
 import com.ivianuu.essentials.ui.common.CommonStrings

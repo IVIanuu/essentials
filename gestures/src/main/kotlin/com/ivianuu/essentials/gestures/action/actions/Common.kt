@@ -14,6 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.contentColorFor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import arrow.core.Either
 import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
@@ -23,9 +24,6 @@ import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ui.LocalActionIconSizeModifier
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
@@ -65,7 +63,7 @@ fun interface ActionIntentSender {
   toaster: Toaster
 ) = ActionIntentSender { intent, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-  catch {
+  Either.catch {
     PendingIntent.getActivity(
       appContext,
       1000,
@@ -73,14 +71,14 @@ fun interface ActionIntentSender {
       PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
       options
     ).send()
-  }.onFailure {
+  }.onLeft {
     it.printStackTrace()
     toaster(R.string.es_activity_not_found)
   }
 }
 
 fun interface CloseSystemDialogsUseCase {
-  suspend operator fun invoke(): Result<Unit, Throwable>
+  suspend operator fun invoke(): Either<Throwable, Unit>
 }
 
 @SuppressLint("MissingPermission", "InlinedApi")
@@ -90,7 +88,7 @@ fun closeSystemDialogsUseCase(
   appContext: AppContext,
   globalActionExecutor: GlobalActionExecutor,
 ) = CloseSystemDialogsUseCase {
-  catch {
+  Either.catch {
     if (appConfig.sdk >= 31)
       globalActionExecutor(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
     else

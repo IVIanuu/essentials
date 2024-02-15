@@ -9,7 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
-import com.ivianuu.essentials.coroutines.bracket
+import arrow.fx.coroutines.bracketCase
 
 @Composable fun BackHandler(enabled: Boolean = true, onBackPress: () -> Unit) {
   val currentOnBack by rememberUpdatedState(onBackPress)
@@ -17,7 +17,7 @@ import com.ivianuu.essentials.coroutines.bracket
 
   val handler = LocalBackPressHandler.current
   LaunchedEffect(handler) {
-    bracket(
+    bracketCase(
       acquire = {
         handler.registerCallback(enabled) {
           currentOnBack()

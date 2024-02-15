@@ -29,10 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import arrow.core.Either
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.pop
@@ -139,8 +138,8 @@ private val DefaultAppBarHeight = 64.dp
 val DefaultAppBarElevation = 0.dp
 
 @Composable fun autoTopAppBarLeadingIcon(): (@Composable () -> Unit)? {
-  val navigator = catch { LocalScope.current.navigator }.getOrNull()
-  val screen = catch { LocalScope.current.screen }.getOrNull()
+  val navigator = Either.catch { LocalScope.current.navigator }.getOrNull()
+  val screen = Either.catch { LocalScope.current.screen }.getOrNull()
   val canGoBack = remember {
     navigator?.backStack?.value?.indexOf(screen)?.let { it > 0 } == true
   }

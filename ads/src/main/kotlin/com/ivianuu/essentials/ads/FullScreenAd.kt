@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ads
 
 import androidx.activity.ComponentActivity
+import arrow.core.Either
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -21,8 +22,6 @@ import com.ivianuu.essentials.coroutines.RateLimiter
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.catch
 import com.ivianuu.essentials.scopeOfOrNull
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
@@ -48,11 +47,11 @@ interface FullScreenAdManager {
 
   fun preloadAd()
 
-  suspend fun loadAd(): Result<Boolean, Throwable>
+  suspend fun loadAd(): Either<Throwable, Boolean>
 
   suspend fun showAdIfLoaded(): Boolean
 
-  suspend fun loadAndShowAdWithTimeout(): Result<Boolean, Throwable>
+  suspend fun loadAndShowAdWithTimeout(): Either<Throwable, Boolean>
 }
 
 data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.seconds) {
@@ -94,7 +93,7 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
     scope.launch { loadAd() }
   }
 
-  override suspend fun loadAd() = catch {
+  override suspend fun loadAd() = Either.catch {
     if (!adsEnabledFlow.first().value) return@catch false
     getOrCreateCurrentAd()
     true
@@ -106,7 +105,7 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
       .also { preloadAd() }
   }
 
-  override suspend fun loadAndShowAdWithTimeout() = catch {
+  override suspend fun loadAndShowAdWithTimeout() = Either.catch {
     if (!adsEnabledFlow.first().value) return@catch false
     withTimeoutOrNull(1.seconds) { getOrCreateCurrentAd() }?.invoke() == true
   }

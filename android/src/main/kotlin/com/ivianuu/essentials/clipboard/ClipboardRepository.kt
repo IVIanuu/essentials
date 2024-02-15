@@ -5,10 +5,9 @@
 package com.ivianuu.essentials.clipboard
 
 import android.content.ClipData
+import arrow.core.Either
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.android.R
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.channels.awaitClose
@@ -38,10 +37,10 @@ interface ClipboardRepository {
   }
 
   override suspend fun updateClipboardText(value: String, showMessage: Boolean) {
-    catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
+    Either.catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
       .also { result ->
         if (showMessage)
-          toaster(result.fold({ R.string.copied_to_clipboard }, { R.string.copy_to_clipboard_failed }))
+          toaster(result.fold({ R.string.copy_to_clipboard_failed }, { R.string.copied_to_clipboard }))
       }
   }
 }

@@ -1,12 +1,9 @@
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.failure
-import com.ivianuu.essentials.result.fold
-import com.ivianuu.essentials.result.get
-import com.ivianuu.essentials.result.getOrThrow
-import com.ivianuu.essentials.result.onSuccess
+import app.cash.quiver.extensions.orThrow
+import arrow.core.Either
+import arrow.fx.coroutines.bracketCase
+import arrow.fx.coroutines.guarantee
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.awaitCancellation
@@ -49,10 +46,10 @@ fun <K, T> CoroutineScope.sharedComputation(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   block: suspend (K) -> T
 ): suspend (K) -> T {
-  val flows = sharedFlow<K, Result<T, Throwable>>(sharingStarted, 1) { key ->
-    emit(catch { block(key) })
+  val flows = sharedFlow<K, Either<Throwable, T>>(sharingStarted, 1) { key ->
+    emit(Either.catch { block(key) })
   }
-  return { flows(it).first().getOrThrow() }
+  return { flows(it).first().orThrow() }
 }
 
 data class Releasable<T>(val value: T, val release: () -> Unit)
@@ -62,16 +59,16 @@ fun <K, T> CoroutineScope.sharedResource(
   release: (suspend (K, T) -> Unit)? = null,
   create: suspend (K) -> T
 ): suspend (K) -> Releasable<T> {
-  val flows: (K) -> Flow<Result<T, Throwable>> = sharedFlow(sharingStarted, 1) { key: K ->
-    val value = catch { create(key) }
-    bracket(
+  val flows: (K) -> Flow<Either<Throwable, T>> = sharedFlow(sharingStarted, 1) { key: K ->
+    val value = Either.catch { create(key) }
+    bracketCase(
       acquire = { value },
       use = {
         emit(value)
         awaitCancellation()
       },
       release = { _, _ ->
-        value.onSuccess { release?.invoke(key, it) }
+        value.onRight { release?.invoke(key, it) }
       }
     )
   }
@@ -82,8 +79,8 @@ fun <K, T> CoroutineScope.sharedResource(
       job = launch(cont.context) {
         flows(key).collect { value ->
           value.fold(
-            success = { cont.resume(Releasable(it) { job.cancel() }) },
-            failure = { cont.resumeWithException(it) }
+            ifLeft = { cont.resumeWithException(it) },
+            ifRight = { cont.resume(Releasable(it) { job.cancel() }) }
           )
           awaitCancellation()
         }
@@ -99,6 +96,6 @@ suspend fun <K, T, R> (suspend (K) -> Releasable<T>).use(key: K, block: suspend 
 
 suspend fun <T, R> Releasable<T>.use(block: suspend (T) -> R): R =
   guarantee(
-    block = { block(value) },
+    fa = { block(value) },
     finalizer = { release() }
   )

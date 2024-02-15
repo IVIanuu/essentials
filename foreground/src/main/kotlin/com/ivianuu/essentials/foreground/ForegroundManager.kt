@@ -8,16 +8,18 @@ import android.app.Notification
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
+import arrow.fx.coroutines.bracketCase
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.coroutines.bracket
+import com.ivianuu.essentials.coroutines.bracketCase
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.SourceKey
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -49,7 +51,7 @@ data object ForegroundScope
     removeNotification: Boolean,
     @Inject foregroundId: ForegroundId,
     notification: (@Composable () -> Notification)?,
-  ) = bracket(
+  ) = bracketCase(
     acquire = {
       ForegroundState(foregroundId.value, removeNotification, notification)
         .also {

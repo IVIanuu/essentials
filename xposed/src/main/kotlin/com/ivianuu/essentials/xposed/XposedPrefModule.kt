@@ -8,6 +8,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import arrow.core.Either
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
@@ -15,13 +16,8 @@ import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.coroutines.actAndReply
-import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.result.catch
-import com.ivianuu.essentials.result.getOrNull
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.printErrors
+import com.ivianuu.essentials.printErrors
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -37,6 +33,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
@@ -65,13 +63,13 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     fun readData(): T {
       val serialized = sharedPrefs.getString("data", null)
       return serialized?.let {
-        catch { json.decodeFromString(serializer, serialized) }
+        Either.catch { json.decodeFromString(serializer, serialized) }
           .printErrors()
           .getOrNull()
       } ?: initial()
     }
 
-    val actor = coroutineScope.actor(coroutineContexts.io)
+    val mutex = Mutex()
 
     return object : DataStore<T> {
       override val data: Flow<T> = callbackFlow {
@@ -92,13 +90,15 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
 
       @SuppressLint("ApplySharedPref")
-      override suspend fun updateData(transform: T.() -> T): T = actor.actAndReply<T> {
-        val previousData = readData()
-        val newData = transform(previousData)
-        sharedPrefs.edit()
-          .putString("data", json.encodeToString(serializer, newData))
-          .commit()
-        newData
+      override suspend fun updateData(transform: T.() -> T): T = mutex.withLock {
+        with(coroutineContexts.io) {
+          val previousData = readData()
+          val newData = transform(previousData)
+          sharedPrefs.edit()
+            .putString("data", json.encodeToString(serializer, newData))
+            .commit()
+          newData
+        }
       }
     }
   }
@@ -120,7 +120,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       sharedPrefs.reload()
       val serialized = sharedPrefs.getString("data", null)
       return serialized?.let {
-        catch { json.decodeFromString(serializer, serialized) }
+        Either.catch { json.decodeFromString(serializer, serialized) }
           .getOrNull()
       } ?: initial()
     }
