@@ -5,10 +5,12 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.LocalScope
@@ -42,10 +44,14 @@ import kotlin.collections.set
 ) {
   val backStack by navigator.backStack.collectAsState()
 
-  val screenContexts = remember { mutableMapOf<Screen<*>, ScreenContext<*>>() }
+  val screenContexts = remember { mutableStateMapOf<Screen<*>, ScreenContext<*>>() }
 
   backStack.forEachIndexed { index, screen ->
     key(screen) {
+      DisposableEffect(true) {
+        onDispose { screenContexts.remove(screen) }
+      }
+
       screenContexts[screen] = rememberScreenContext(screen, navigator, screenContextComponent)
 
       key(index) {
