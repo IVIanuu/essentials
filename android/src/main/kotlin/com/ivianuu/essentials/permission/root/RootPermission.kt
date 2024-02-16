@@ -25,7 +25,7 @@ abstract class RootPermission(
       shell: Shell,
       toaster: Toaster
     ) = PermissionRequestHandler<P> {
-      if (!shell.isAvailable()) toaster(R.string.es_no_root)
+      if (!shell.isAvailable()) toaster(R.string.no_root)
     }
   }
 }

@@ -61,24 +61,24 @@ class WriteSecureSettingsScreen(
 @Provide val writeSecureSettingsUi =
   Ui<WriteSecureSettingsScreen, WriteSecureSettingsState> { state ->
     ScreenScaffold(
-      topBar = { AppBar { Text(stringResource(R.string.es_secure_settings_title)) } },
+      topBar = { AppBar { Text(stringResource(R.string.secure_settings_title)) } },
       bottomBar = {
         Snackbar(
           modifier = Modifier.padding(16.dp),
           action = {
             TextButton(onClick = state.grantPermissionsViaRoot) {
-              Text(stringResource(R.string.es_secure_settings_use_root_action))
+              Text(stringResource(R.string.secure_settings_use_root_action))
             }
           }
         ) {
-          Text(stringResource(R.string.es_secure_settings_use_root))
+          Text(stringResource(R.string.secure_settings_use_root))
         }
       }
     ) {
       VerticalList {
         item {
           Text(
-            stringResource(R.string.es_secure_settings_desc),
+            stringResource(R.string.secure_settings_desc),
             modifier = Modifier.padding(all = 16.dp),
             style = MaterialTheme.typography.body2
           )
@@ -90,10 +90,10 @@ class WriteSecureSettingsScreen(
             isCompleted = state.completedStep > 1,
             isCurrent = state.currentStep == 1,
             onClick = { state.openStep(1) },
-            title = { Text(stringResource(R.string.es_secure_settings_step_1_title)) },
+            title = { Text(stringResource(R.string.secure_settings_step_1_title)) },
             content = {
               Text(
-                text = stringResource(R.string.es_secure_settings_step_1_content),
+                text = stringResource(R.string.secure_settings_step_1_content),
                 style = MaterialTheme.typography.body2
               )
             },
@@ -101,8 +101,8 @@ class WriteSecureSettingsScreen(
               Button(
                 onClick = state.continueStep,
                 enabled = state.canContinueStep
-              ) { Text(stringResource(R.string.es_continue)) }
-              OutlinedButton(onClick = state.openPhoneInfo) { Text(stringResource(R.string.es_open_phone_info)) }
+              ) { Text(stringResource(R.string._continue)) }
+              OutlinedButton(onClick = state.openPhoneInfo) { Text(stringResource(R.string.open_phone_info)) }
             }
           )
         }
@@ -113,10 +113,10 @@ class WriteSecureSettingsScreen(
             isCompleted = state.completedStep > 2,
             isCurrent = state.currentStep == 2,
             onClick = { state.openStep(2) },
-            title = { Text(stringResource(R.string.es_secure_settings_step_2_title)) },
+            title = { Text(stringResource(R.string.secure_settings_step_2_title)) },
             content = {
               Text(
-                text = stringResource(R.string.es_secure_settings_step_2_content),
+                text = stringResource(R.string.secure_settings_step_2_content),
                 style = MaterialTheme.typography.body2
               )
             },
@@ -124,9 +124,9 @@ class WriteSecureSettingsScreen(
               Button(
                 onClick = state.continueStep,
                 enabled = state.canContinueStep
-              ) { Text(stringResource(R.string.es_continue)) }
+              ) { Text(stringResource(R.string._continue)) }
               OutlinedButton(onClick = state.openDeveloperSettings) {
-                Text(stringResource(R.string.es_open_developer_settings))
+                Text(stringResource(R.string.open_developer_settings))
               }
             }
           )
@@ -138,13 +138,13 @@ class WriteSecureSettingsScreen(
             isCompleted = state.completedStep > 3,
             isCurrent = state.currentStep == 3,
             onClick = { state.openStep(3) },
-            title = { Text(stringResource(R.string.es_secure_settings_step_3_title)) },
-            content = { Text(stringResource(R.string.es_secure_settings_step_3_content)) },
+            title = { Text(stringResource(R.string.secure_settings_step_3_title)) },
+            content = { Text(stringResource(R.string.secure_settings_step_3_content)) },
             actions = {
               Button(
                 onClick = state.continueStep,
                 enabled = state.canContinueStep
-              ) { Text(stringResource(R.string.es_continue)) }
+              ) { Text(stringResource(R.string._continue)) }
             }
           )
         }
@@ -155,9 +155,9 @@ class WriteSecureSettingsScreen(
             isCompleted = state.completedStep > 4,
             isCurrent = state.currentStep == 4,
             onClick = { state.openStep(4) },
-            title = { Text(stringResource(R.string.es_secure_settings_step_4_title)) },
+            title = { Text(stringResource(R.string.secure_settings_step_4_title)) },
             content = {
-              Text(stringResource(R.string.es_secure_settings_step_4_content))
+              Text(stringResource(R.string.secure_settings_step_4_content))
 
               Text(
                 modifier = Modifier
@@ -175,7 +175,7 @@ class WriteSecureSettingsScreen(
               Button(
                 onClick = state.continueStep,
                 enabled = state.canContinueStep
-              ) { Text(stringResource(R.string.es_complete)) }
+              ) { Text(stringResource(R.string.complete)) }
             }
           )
         }
@@ -266,7 +266,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
       raceN(
         {
           navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
-            ?.onLeft { toaster(R.string.es_open_phone_info_failed) }
+            ?.onLeft { toaster(R.string.open_phone_info_failed) }
         },
         { developerModeDataStore.data.first { it != 0 } }
       )
@@ -276,7 +276,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
       raceN(
         {
           navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)))
-            ?.onLeft { toaster(R.string.es_open_developer_settings_failed) }
+            ?.onLeft { toaster(R.string.open_developer_settings_failed) }
         },
         { adbEnabledDataStore.data.first { it != 0 } }
       )
@@ -286,13 +286,13 @@ typealias AdbEnabled = @AdbEnabledTag Int
       shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
         .onRight {
           if (permissionManager.permissionState(listOf(screen.permissionKey)).first()) {
-            toaster(R.string.es_secure_settings_permission_granted)
+            toaster(R.string.secure_settings_permission_granted)
             navigator.pop(screen)
           }
         }
         .onLeft {
           it.printStackTrace()
-          toaster(R.string.es_secure_settings_no_root)
+          toaster(R.string.secure_settings_no_root)
         }
     }
   )

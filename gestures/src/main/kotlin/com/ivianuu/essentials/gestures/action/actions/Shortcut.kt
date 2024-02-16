@@ -72,9 +72,9 @@ import java.io.ByteArrayOutputStream
   override val baseId: String
     get() = BASE_ID
   override val title: String
-    get() = resources(R.string.es_action_shortcut)
+    get() = resources(R.string.action_shortcut)
   override val icon: @Composable () -> Unit
-    get() = { Icon(painterResource(R.drawable.es_ic_content_cut), null) }
+    get() = { Icon(painterResource(R.drawable.ic_content_cut), null) }
 
   override suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result? {
     val shortcut = navigator.push(ShortcutPickerScreen()) ?: return null

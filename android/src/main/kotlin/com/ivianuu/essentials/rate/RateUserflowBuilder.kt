@@ -22,7 +22,7 @@ fun interface RateUserflowBuilder : UserflowBuilder
   @Inject clock: Clock,
   @Inject logger: Logger,
   @Inject pref: DataStore<RatePrefs>,
-  @Inject schedule: RateUiSchedule = RateUiSchedule()
+  @Inject schedule: RateUiSchedule
 ) = RateUserflowBuilder {
   if (pref.data.first().installTime == 0L) {
     val now = clock()
@@ -67,4 +67,8 @@ private suspend fun shouldShowRateDialog(
 data class RateUiSchedule(
   val minInstallDuration: Duration = 14.days,
   val minLaunchTimes: Int = 10
-)
+) {
+  @Provide companion object {
+    @Provide val default get() = RateUiSchedule(Duration.INFINITE, Int.MIN_VALUE)
+  }
+}

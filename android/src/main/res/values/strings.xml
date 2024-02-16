@@ -4,81 +4,81 @@
 
 <resources>
     <!-- Backup -->
-    <string name="es_backup_and_restore_title">Backup / restore</string>
-    <string name="es_pref_backup">Backup</string>
-    <string name="es_pref_backup_summary">Export your data</string>
-    <string name="es_pref_restore">Restore</string>
-    <string name="es_pref_restore_summary">Restore your data</string>
+    <string name="backup_and_restore_title">Backup / restore</string>
+    <string name="pref_backup">Backup</string>
+    <string name="pref_backup_summary">Export your data</string>
+    <string name="pref_restore">Restore</string>
+    <string name="pref_restore_summary">Restore your data</string>
 
-    <string name="es_backup_error">Failed to backup your data!</string>
-    <string name="es_restore_error">Failed to restore your data!</string>
+    <string name="backup_error">Failed to backup your data!</string>
+    <string name="restore_error">Failed to restore your data!</string>
 
     <string name="copied_to_clipboard">Copied to clipboard!</string>
     <string name="copy_to_clipboard_failed">Couldn\'t copy to clipboard!</string>
 
-    <string name="es_no_root">Your device is not rooted!</string>
+    <string name="no_root">Your device is not rooted!</string>
 
-    <string name="es_request_permission_title">Permissions required</string>
-    <string name="es_granted">Allowed</string>
-    <string name="es_grant">Allow</string>
-    <string name="es_deny">Deny</string>
-    <string name="es_continue">Continue</string>
-    <string name="es_complete">Complete</string>
+    <string name="request_permission_title">Permissions required</string>
+    <string name="granted">Allowed</string>
+    <string name="grant">Allow</string>
+    <string name="deny">Deny</string>
+    <string name="_continue">Continue</string>
+    <string name="complete">Complete</string>
 
-    <string name="es_find_app_here">Find %s here</string>
-    <string name="es_grant_permission_manually">Couldn\'t open settings screen! Please grant the permission manually</string>
+    <string name="find_app_here">Find %s here</string>
+    <string name="grant_permission_manually">Couldn\'t open settings screen! Please grant the permission manually</string>
 
     <!-- Write secure settings -->
-    <string name="es_secure_settings_title">PC instructions</string>
-    <string name="es_secure_settings_desc">The WRITE_SECURE_SETTINGS permission can be granted from the browser on your PC! You don\'t have to install any drivers or programs.\nYou can grant the permission with a single click on rooted devices.</string>
+    <string name="secure_settings_title">PC instructions</string>
+    <string name="secure_settings_desc">The WRITE_SECURE_SETTINGS permission can be granted from the browser on your PC! You don\'t have to install any drivers or programs.\nYou can grant the permission with a single click on rooted devices.</string>
 
-    <string name="es_secure_settings_step_1_title">Enable Developer options</string>
-    <string name="es_secure_settings_step_1_content">1) Click \"Open about phone\"\n2) Click \"Build Number\" multiple times until the \"Developer options\" are active</string>
-    <string name="es_open_phone_info">Open about phone</string>
-    <string name="es_open_phone_info_failed">Couldn\'t open phone! Please open manually</string>
+    <string name="secure_settings_step_1_title">Enable Developer options</string>
+    <string name="secure_settings_step_1_content">1) Click \"Open about phone\"\n2) Click \"Build Number\" multiple times until the \"Developer options\" are active</string>
+    <string name="open_phone_info">Open about phone</string>
+    <string name="open_phone_info_failed">Couldn\'t open phone! Please open manually</string>
 
-    <string name="es_secure_settings_step_2_title">Enable USB debugging</string>
-    <string name="es_secure_settings_step_2_content">1) Click \"Open developer options\"\n4) Enable \"USB debugging\"</string>
-    <string name="es_open_developer_settings">Open developer options</string>
-    <string name="es_open_developer_settings_failed">Couldn\'t open developer options! Please open manually</string>
+    <string name="secure_settings_step_2_title">Enable USB debugging</string>
+    <string name="secure_settings_step_2_content">1) Click \"Open developer options\"\n4) Enable \"USB debugging\"</string>
+    <string name="open_developer_settings">Open developer options</string>
+    <string name="open_developer_settings_failed">Couldn\'t open developer options! Please open manually</string>
 
-    <string name="es_secure_settings_step_3_title">Connect your phone to WebADB</string>
-    <string name="es_secure_settings_step_3_content">1) Open \"www.webadb.com\" on your PC\n2) Connect your phone with your PC\n3) On your PC click \"Start\"\n4) Click \"Add device\"\n3) Click *YOUR DEVICE*\n4) Click \"Connect\" on the pop up\n5) Click \"Connect\" next to the \"Add device\" button\n6) On your phone click \"Allow\"</string>
+    <string name="secure_settings_step_3_title">Connect your phone to WebADB</string>
+    <string name="secure_settings_step_3_content">1) Open \"www.webadb.com\" on your PC\n2) Connect your phone with your PC\n3) On your PC click \"Start\"\n4) Click \"Add device\"\n3) Click *YOUR DEVICE*\n4) Click \"Connect\" on the pop up\n5) Click \"Connect\" next to the \"Add device\" button\n6) On your phone click \"Allow\"</string>
 
-    <string name="es_secure_settings_step_4_title">Grant permission</string>
-    <string name="es_secure_settings_step_4_content">1) On your PC click \"Interactive shell\" in the left panel\n2) In the terminal window type the command below and hit the enter button</string>
+    <string name="secure_settings_step_4_title">Grant permission</string>
+    <string name="secure_settings_step_4_content">1) On your PC click \"Interactive shell\" in the left panel\n2) In the terminal window type the command below and hit the enter button</string>
 
-    <string name="es_secure_settings_use_root_action">Grant</string>
-    <string name="es_secure_settings_use_root">Grant permission using root</string>
-    <string name="es_secure_settings_no_root">Your device is not rooted! Follow the steps above to grant permissions</string>
-    <string name="es_secure_settings_permission_granted">Permission granted!</string>
+    <string name="secure_settings_use_root_action">Grant</string>
+    <string name="secure_settings_use_root">Grant permission using root</string>
+    <string name="secure_settings_no_root">Your device is not rooted! Follow the steps above to grant permissions</string>
+    <string name="secure_settings_permission_granted">Permission granted!</string>
 
-    <string name="es_screen_edge_left">Left</string>
-    <string name="es_screen_edge_top">Top</string>
-    <string name="es_screen_edge_right">Right</string>
-    <string name="es_screen_edge_bottom">Bottom</string>
+    <string name="screen_edge_left">Left</string>
+    <string name="screen_edge_top">Top</string>
+    <string name="screen_edge_right">Right</string>
+    <string name="screen_edge_bottom">Bottom</string>
 
-    <string name="es_help_title">Help</string>
+    <string name="help_title">Help</string>
 
-    <string name="es_title_shortcut_picker">Pick an shortcut</string>
-    <string name="es_failed_to_pick_shortcut">Failed to pick shortcut!</string>
+    <string name="title_shortcut_picker">Pick an shortcut</string>
+    <string name="failed_to_pick_shortcut">Failed to pick shortcut!</string>
 
-    <string name="es_rate_title">How was your experience with this app?</string>
-    <string name="es_later">Later</string>
-    <string name="es_never">Do not show again</string>
-    <string name="es_confirm">Confirm</string>
+    <string name="rate_title">How was your experience with this app?</string>
+    <string name="later">Later</string>
+    <string name="never">Do not show again</string>
+    <string name="confirm">Confirm</string>
 
-    <string name="es_feedback_title">Give feedback</string>
-    <string name="es_feedback_content">I want to improve the app with your help. Do you want to send an email or post to my subreddit with your suggestions?</string>
-    <string name="es_open_reddit">Open subreddit</string>
-    <string name="es_send_mail">Send mail</string>
+    <string name="feedback_title">Give feedback</string>
+    <string name="feedback_content">I want to improve the app with your help. Do you want to send an email or post to my subreddit with your suggestions?</string>
+    <string name="open_reddit">Open subreddit</string>
+    <string name="send_mail">Send mail</string>
 
-    <string name="es_rate_on_play_title">Store rating 💛</string>
-    <string name="es_rate_on_play_content">If you enjoy using this app, would you mind taking a moment to rate it? I appreciate your support.</string>
-    <string name="es_rate">Rate</string>
+    <string name="rate_on_play_title">Store rating 💛</string>
+    <string name="rate_on_play_content">If you enjoy using this app, would you mind taking a moment to rate it? I appreciate your support.</string>
+    <string name="rate">Rate</string>
 
-    <string name="es_title_app_picker">Pick an app</string>
+    <string name="title_app_picker">Pick an app</string>
 
-    <string name="es_select_all">Select All</string>
-    <string name="es_deselect_all">Deselect All</string>
+    <string name="select_all">Select All</string>
+    <string name="deselect_all">Deselect All</string>
 </resources>

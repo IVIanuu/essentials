@@ -3,6 +3,6 @@
   -->
 
 <resources>
-    <string name="es_accessibility_service_desc">This is a desc</string>
-    <string name="es_accessibility_service_summary">This is a summary</string>
+    <string name="accessibility_service_desc">This is a desc</string>
+    <string name="accessibility_service_summary">This is a summary</string>
 </resources>

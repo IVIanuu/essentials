@@ -28,14 +28,14 @@ import com.ivianuu.injekt.common.typeKeyOf
   resources: Resources
 ) = Action(
   id = AutoRotationActionId,
-  title = resources(R.string.es_action_auto_rotation),
+  title = resources(R.string.action_auto_rotation),
   permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
   icon = {
     val enabled = autoRotationDataStore.data.collectAsState(1).value == 1
     Icon(
       painterResource(
-        if (enabled) R.drawable.es_ic_screen_rotation
-        else R.drawable.es_ic_screen_lock_rotation
+        if (enabled) R.drawable.ic_screen_rotation
+        else R.drawable.ic_screen_lock_rotation
       ),
       null
     )

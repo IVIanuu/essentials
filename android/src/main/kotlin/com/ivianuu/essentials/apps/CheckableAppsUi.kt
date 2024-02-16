@@ -55,8 +55,8 @@ data class CheckableAppsParams(
         title = { Text(state.appBarTitle) },
         actions = {
           PopupMenuButton {
-            PopupMenuItem(onSelected = state.selectAll) { Text(stringResource(R.string.es_select_all)) }
-            PopupMenuItem(onSelected = state.deselectAll) { Text(stringResource(R.string.es_deselect_all)) }
+            PopupMenuItem(onSelected = state.selectAll) { Text(stringResource(R.string.select_all)) }
+            PopupMenuItem(onSelected = state.deselectAll) { Text(stringResource(R.string.deselect_all)) }
           }
         }
       )

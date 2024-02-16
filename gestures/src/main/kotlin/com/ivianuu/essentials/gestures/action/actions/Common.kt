@@ -74,7 +74,7 @@ fun interface ActionIntentSender {
     ).send()
   }.onLeft {
     it.printStackTrace()
-    toaster(R.string.es_activity_not_found)
+    toaster(R.string.activity_not_found)
   }
 }
 

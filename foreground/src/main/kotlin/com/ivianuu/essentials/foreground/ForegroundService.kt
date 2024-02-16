@@ -90,8 +90,8 @@ import kotlin.time.Duration.Companion.seconds
                   NotificationManager.IMPORTANCE_LOW
                 ) {
                   setContentTitle("${appConfig.appName} is running!")
-                  setSmallIcon(R.drawable.es_ic_sync)
-                  setContentIntent(remoteActionFactory<StartAppRemoteAction, _>(context))
+                  setSmallIcon(R.drawable.ic_sync)
+                  setContentIntent(remoteActionFactory<StartAppRemoteAction, _>())
                 }
               )
             )

@@ -26,22 +26,22 @@ import com.ivianuu.injekt.Provide
 class BackupAndRestoreScreen : Screen<Unit>
 
 @Provide val backupAndRestoreUi = Ui<BackupAndRestoreScreen, BackupAndRestoreState> { state ->
-  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.es_backup_and_restore_title)) } }) {
+  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.backup_and_restore_title)) } }) {
     VerticalList {
       item {
         ListItem(
           modifier = Modifier.clickable(onClick = state.backupData),
-          leading = { Icon(painterResource(R.drawable.es_ic_save), null) },
-          title = { Text(stringResource(R.string.es_pref_backup)) },
-          subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) }
+          leading = { Icon(painterResource(R.drawable.ic_save), null) },
+          title = { Text(stringResource(R.string.pref_backup)) },
+          subtitle = { Text(stringResource(R.string.pref_backup_summary)) }
         )
       }
       item {
         ListItem(
           modifier = Modifier.clickable(onClick = state.restoreData),
-          leading = { Icon(painterResource(R.drawable.es_ic_restore), null) },
-          title = { Text(stringResource(R.string.es_pref_restore)) },
-          subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) }
+          leading = { Icon(painterResource(R.drawable.ic_restore), null) },
+          title = { Text(stringResource(R.string.pref_restore)) },
+          subtitle = { Text(stringResource(R.string.pref_restore_summary)) }
         )
       }
     }
@@ -59,14 +59,14 @@ data class BackupAndRestoreState(val backupData: () -> Unit, val restoreData: ()
       Either.catch { backupManager.createBackup() }
         .onLeft {
           it.printStackTrace()
-          toaster(R.string.es_backup_error)
+          toaster(R.string.backup_error)
         }
     },
     restoreData = action {
       Either.catch { backupManager.restoreBackup() }
         .onLeft {
           it.printStackTrace()
-          toaster(R.string.es_restore_error)
+          toaster(R.string.restore_error)
         }
     }
   )

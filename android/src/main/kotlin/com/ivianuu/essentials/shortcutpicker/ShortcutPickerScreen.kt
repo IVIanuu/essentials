@@ -37,7 +37,7 @@ import com.ivianuu.injekt.Provide
 class ShortcutPickerScreen : Screen<Shortcut>
 
 @Provide val shortcutPickerUi = Ui<ShortcutPickerScreen, ShortcutPickerState> { state ->
-  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.es_title_shortcut_picker)) } }) {
+  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.title_shortcut_picker)) } }) {
     ResourceVerticalListFor(state.shortcuts) { shortcut ->
       ListItem(
         modifier = Modifier.clickable { state.pickShortcut(shortcut) },
@@ -76,7 +76,7 @@ data class ShortcutPickerState(
         navigator.pop(screen, finalShortcut)
       }.onLeft {
         it.printStackTrace()
-        toaster(R.string.es_failed_to_pick_shortcut)
+        toaster(R.string.failed_to_pick_shortcut)
       }
     }
   )

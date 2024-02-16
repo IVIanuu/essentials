@@ -19,12 +19,12 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun torchAction(resources: Resources, torchManager: TorchManager) = Action(
   id = TorchActionId,
-  title = resources(R.string.es_action_torch),
+  title = resources(R.string.action_torch),
   icon = {
     Icon(
       painterResource(
-        if (torchManager.torchEnabled.collectAsState().value) R.drawable.es_ic_flashlight_on
-        else R.drawable.es_ic_flashlight_off
+        if (torchManager.torchEnabled.collectAsState().value) com.ivianuu.essentials.torch.R.drawable.ic_flashlight_on
+        else R.drawable.ic_flashlight_off
       ),
       null
     )

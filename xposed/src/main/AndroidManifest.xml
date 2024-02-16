@@ -2,8 +2,7 @@
   ~ Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
   -->
 
-<manifest package="com.ivianuu.essentials.xposed"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <meta-data
             android:name="xposedmodule"
@@ -13,12 +12,12 @@
             android:value="90" />
         <meta-data
             android:name="xposeddescription"
-            android:value="@string/es_xposed_desc" />
+            android:value="@string/xposed_desc" />
         <meta-data
             android:name="xposedsharedprefs"
             android:value="true" />
         <meta-data
             android:name="xposedscope"
-            android:resource="@array/es_xposed_module_scope" />
+            android:resource="@array/xposed_module_scope" />
     </application>
 </manifest>

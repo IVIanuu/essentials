@@ -2,20 +2,15 @@
   ~ Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ivianuu.essentials.notificationlistener">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
-
         <service
-            android:name=".EsNotificationListenerService"
+            android:name="com.ivianuu.essentials.notificationlistener.EsNotificationListenerService"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-
     </application>
-
 </manifest>

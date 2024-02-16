@@ -3,9 +3,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.ivianuu.essentials.work">
-
+    xmlns:tools="http://schemas.android.com/tools">
     <application>
         <provider
             android:name="androidx.startup.InitializationProvider"
@@ -18,5 +16,4 @@
                 tools:node="remove" />
     </provider>
     </application>
-
 </manifest>

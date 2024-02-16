@@ -52,7 +52,7 @@ class ActionPickerScreen(
 
 @Provide val actionPickerUi = Ui<ActionPickerScreen, ActionPickerState> { state ->
   ScreenScaffold(
-    topBar = { AppBar { Text(stringResource(R.string.es_action_picker_title)) } }
+    topBar = { AppBar { Text(stringResource(R.string.action_picker_title)) } }
   ) {
     ResourceVerticalListFor(state.items) { item ->
       ListItem(
@@ -60,7 +60,7 @@ class ActionPickerScreen(
         leading = { item.Icon(Modifier.size(24.dp)) },
         trailing = if (item.settingsScreen != null) ({
           IconButton(onClick = { state.openActionSettings(item) }) {
-            Icon(painterResource(R.drawable.es_ic_settings), null)
+            Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_settings), null)
           }
         }) else null,
         title = { Text(item.title) }
@@ -164,14 +164,14 @@ private suspend fun getActionPickerItems(
 
   if (screen.showDefaultOption) {
     specialOptions += ActionPickerItem.SpecialOption(
-      title = resources(R.string.es_default),
+      title = resources(R.string._default),
       getResult = { ActionPickerScreen.Result.Default }
     )
   }
 
   if (screen.showNoneOption) {
     specialOptions += ActionPickerItem.SpecialOption(
-      title = resources(R.string.es_none),
+      title = resources(R.string.none),
       getResult = { ActionPickerScreen.Result.None }
     )
   }

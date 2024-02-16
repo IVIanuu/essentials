@@ -24,16 +24,16 @@ object RateOnPlayScreen : DialogScreen<Unit>
 @Provide val rateOnPlayUi = Ui<RateOnPlayScreen, RateOnPlayState> { state ->
   DialogScaffold(dismissible = false) {
     Dialog(
-      title = { Text(stringResource(R.string.es_rate_on_play_title)) },
-      content = { Text(stringResource(R.string.es_rate_on_play_content)) },
+      title = { Text(stringResource(R.string.rate_on_play_title)) },
+      content = { Text(stringResource(R.string.rate_on_play_content)) },
       buttons = {
         if (state.displayShowNever) {
-          TextButton(onClick = state.showNever) { Text(stringResource(R.string.es_never)) }
+          TextButton(onClick = state.showNever) { Text(stringResource(R.string.never)) }
         }
 
-        TextButton(onClick = state.showLater) { Text(stringResource(R.string.es_later)) }
+        TextButton(onClick = state.showLater) { Text(stringResource(R.string.later)) }
 
-        TextButton(onClick = state.rate) { Text(stringResource(R.string.es_rate)) }
+        TextButton(onClick = state.rate) { Text(stringResource(R.string.rate)) }
       }
     )
   }

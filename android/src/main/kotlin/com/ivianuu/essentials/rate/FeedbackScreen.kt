@@ -26,23 +26,23 @@ object FeedbackScreen : DialogScreen<Unit>
 @Provide val feedbackUi = Ui<FeedbackScreen, FeedbackState> { state ->
   DialogScaffold(dismissible = false) {
     Dialog(
-      title = { Text(stringResource(R.string.es_feedback_title)) },
-      content = { Text(stringResource(R.string.es_feedback_content)) },
+      title = { Text(stringResource(R.string.feedback_title)) },
+      content = { Text(stringResource(R.string.feedback_content)) },
       buttons = {
         if (state.displayShowNever) {
           TextButton(onClick = state.showNever) {
-            Text(stringResource(R.string.es_never))
+            Text(stringResource(R.string.never))
           }
         }
         TextButton(onClick = state.showLater) {
-          Text(stringResource(R.string.es_later))
+          Text(stringResource(R.string.later))
         }
 
         TextButton(onClick = state.openReddit) {
-          Text(stringResource(R.string.es_open_reddit))
+          Text(stringResource(R.string.open_reddit))
         }
         TextButton(onClick = state.sendMail) {
-          Text(stringResource(R.string.es_send_mail))
+          Text(stringResource(R.string.send_mail))
         }
       }
     )

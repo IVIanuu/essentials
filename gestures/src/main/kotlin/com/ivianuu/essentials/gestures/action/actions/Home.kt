@@ -19,10 +19,10 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun homeAction(resources: Resources) = Action(
   id = HomeActionId,
-  title = resources(R.string.es_action_home),
+  title = resources(R.string.action_home),
   permissions = if (needsHomeIntentWorkaround) emptyList()
   else accessibilityActionPermissions,
-  icon = staticActionIcon(R.drawable.es_ic_action_home)
+  icon = staticActionIcon(R.drawable.ic_action_home)
 )
 
 @Provide fun homeActionExecutor(

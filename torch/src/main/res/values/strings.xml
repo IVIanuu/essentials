@@ -4,8 +4,8 @@
 
 <resources>
     <!-- Torch -->
-    <string name="es_notif_channel_torch">Flashlight</string>
-    <string name="es_notif_title_torch">Flashlight enabled</string>
-    <string name="es_notif_text_torch">Touch to disable</string>
-    <string name="es_failed_to_enable_torch">Failed to enable flashlight!</string>
+    <string name="notif_channel_torch">Flashlight</string>
+    <string name="notif_title_torch">Flashlight enabled</string>
+    <string name="notif_text_torch">Touch to disable</string>
+    <string name="failed_to_enable_torch">Failed to enable flashlight!</string>
 </resources>

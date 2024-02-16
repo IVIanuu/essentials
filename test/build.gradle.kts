@@ -7,8 +7,6 @@ plugins {
   id("com.ivianuu.essentials")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
-
 dependencies {
   api(Deps.AndroidX.Test.core)
   api(Deps.AndroidX.Test.junit)

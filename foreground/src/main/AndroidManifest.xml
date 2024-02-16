@@ -2,13 +2,11 @@
   ~ Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ivianuu.essentials.foreground">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <application>
         <service
-            android:name=".ForegroundService"
+            android:name="com.ivianuu.essentials.foreground.ForegroundService"
             android:exported="true" />
     </application>
 </manifest>

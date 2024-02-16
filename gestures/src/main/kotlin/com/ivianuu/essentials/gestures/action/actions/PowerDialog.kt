@@ -17,9 +17,9 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun powerDialogAction(resources: Resources) = Action(
   id = PowerDialogActionId,
-  title = resources(R.string.es_action_power_dialog),
+  title = resources(R.string.action_power_dialog),
   permissions = accessibilityActionPermissions,
-  icon = staticActionIcon(R.drawable.es_ic_power_settings_new)
+  icon = staticActionIcon(R.drawable.ic_power_settings_new)
 )
 
 @Provide fun powerDialogActionExecutor(

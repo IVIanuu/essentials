@@ -3,7 +3,7 @@
   -->
 
 <resources>
-    <array name="es_xposed_module_scope">
+    <array name="xposed_module_scope">
         <item>com.ivianuu.essentials.sample</item>
     </array>
 </resources>

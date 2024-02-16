@@ -18,11 +18,11 @@ import kotlinx.coroutines.delay
 
 @Provide fun lastAppAction(resources: Resources) = Action(
   id = LastAppActionId,
-  title = resources(R.string.es_action_last_app),
+  title = resources(R.string.action_last_app),
   permissions = accessibilityActionPermissions,
   unlockScreen = true,
   closeSystemDialogs = true,
-  icon = staticActionIcon(R.drawable.es_ic_repeat)
+  icon = staticActionIcon(R.drawable.ic_repeat)
 )
 
 @Provide fun lastAppActionExecutor(

@@ -61,7 +61,7 @@ object RateScreen : DialogScreen<Unit>
           )
 
           Text(
-            text = stringResource(R.string.es_rate_title),
+            text = stringResource(R.string.rate_title),
             style = MaterialTheme.typography.h6,
             color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
           )
@@ -79,7 +79,7 @@ object RateScreen : DialogScreen<Unit>
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false)
                   ) { state.updateRating(currentRating) },
-                painter = painterResource(R.drawable.es_ic_star),
+                painter = painterResource(R.drawable.ic_star),
                 tint = if (currentRating <= state.rating) MaterialTheme.colors.secondary
                 else LocalContentColor.current.copy(alpha = 0.12f),
                 contentDescription = null
@@ -91,16 +91,16 @@ object RateScreen : DialogScreen<Unit>
       buttons = {
         if (state.displayShowNever) {
           TextButton(onClick = state.showNever) {
-            Text(stringResource(R.string.es_never))
+            Text(stringResource(R.string.never))
           }
         }
 
         TextButton(onClick = state.showLater) {
-          Text(stringResource(R.string.es_later))
+          Text(stringResource(R.string.later))
         }
 
         TextButton(enabled = state.confirmEnabled, onClick = state.confirm) {
-          Text(stringResource(R.string.es_confirm))
+          Text(stringResource(R.string.confirm))
         }
       }
     )

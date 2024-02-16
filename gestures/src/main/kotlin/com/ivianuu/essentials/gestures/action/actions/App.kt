@@ -42,7 +42,7 @@ import kotlinx.coroutines.flow.first
     return Action<ActionId>(
       id = id,
       title = appRepository.appInfo(packageName).first()?.appName
-        ?: resources(R.string.es_unknown_action_name),
+        ?: resources(R.string.unknown_action_name),
       unlockScreen = true,
       closeSystemDialogs = true,
       enabled = true,
@@ -71,9 +71,9 @@ import kotlinx.coroutines.flow.first
   override val baseId: String
     get() = BASE_ID
   override val title: String
-    get() = resources(R.string.es_action_app)
+    get() = resources(R.string.action_app)
   override val icon: @Composable () -> Unit
-    get() = { Icon(painterResource(R.drawable.es_ic_apps), null) }
+    get() = { Icon(painterResource(R.drawable.ic_apps), null) }
 
   override suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result? {
     val app = navigator.push(AppPickerScreen(launchableAppPredicate)) ?: return null

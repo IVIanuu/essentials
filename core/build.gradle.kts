@@ -7,9 +7,6 @@ plugins {
   kotlin("multiplatform")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
-
 android {
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }

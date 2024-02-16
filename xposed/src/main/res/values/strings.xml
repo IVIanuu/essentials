@@ -4,5 +4,5 @@
   -->
 
 <resources>
-    <string name="es_xposed_desc">Description..</string>
+    <string name="xposed_desc">Description..</string>
 </resources>

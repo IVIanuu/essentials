@@ -17,9 +17,9 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun backAction(resources: Resources) = Action(
   id = BackActionId,
-  title = resources(R.string.es_action_back),
+  title = resources(R.string.action_back),
   permissions = accessibilityActionPermissions,
-  icon = staticActionIcon(R.drawable.es_ic_action_back)
+  icon = staticActionIcon(R.drawable.ic_action_back)
 )
 
 @Provide fun backActionExecutor(accessibilityService: AccessibilityService) =

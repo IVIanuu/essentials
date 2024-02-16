@@ -18,8 +18,8 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun skipNextMediaAction(resources: Resources) = Action(
   id = SkipNextActionId,
-  title = resources(R.string.es_action_media_skip_next),
-  icon = staticActionIcon(R.drawable.es_ic_skip_next)
+  title = resources(R.string.action_media_skip_next),
+  icon = staticActionIcon(R.drawable.ic_skip_next)
 )
 
 @Provide fun skipNextMediaActionExecutor(

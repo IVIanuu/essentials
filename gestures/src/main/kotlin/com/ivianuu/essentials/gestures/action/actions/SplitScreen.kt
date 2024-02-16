@@ -18,9 +18,9 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun splitScreenAction(resources: Resources) = Action(
   id = SplitScreenActionId,
-  title = resources(R.string.es_action_split_screen),
+  title = resources(R.string.action_split_screen),
   permissions = accessibilityActionPermissions,
-  icon = staticActionIcon(R.drawable.es_ic_view_agenda)
+  icon = staticActionIcon(R.drawable.ic_view_agenda)
 )
 
 @Provide fun splitScreenActionExecutor(

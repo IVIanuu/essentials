@@ -143,20 +143,20 @@ class GoPremiumScreen(
         .fillMaxWidth()
         .padding(16.dp)
         .size(36.dp),
-      painter = painterResource(R.drawable.es_ic_medal),
+      painter = painterResource(R.drawable.ic_medal),
       tint = MaterialTheme.colors.primary,
       contentDescription = null
     )
 
     Text(
-      text = stringResource(R.string.es_go_premium_title),
+      text = stringResource(R.string.go_premium_title),
       style = MaterialTheme.typography.h5,
       fontWeight = FontWeight.Bold
     )
 
     Text(
       modifier = Modifier.padding(top = 8.dp),
-      text = stringResource(R.string.es_go_premium_desc),
+      text = stringResource(R.string.go_premium_desc),
       style = MaterialTheme.typography.body2,
       color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
     )
@@ -211,7 +211,7 @@ class GoPremiumScreen(
     ) {
       Text(
         modifier = Modifier.height(32.dp),
-        text = stringResource(R.string.es_premium_title),
+        text = stringResource(R.string.premium_title),
         style = MaterialTheme.typography.button,
         color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
       )
@@ -222,7 +222,7 @@ class GoPremiumScreen(
             .size(48.dp)
             .center(),
           painter = if (feature.inPremium) rememberVectorPainter(Icons.Default.Done)
-          else painterResource(R.drawable.es_ic_remove),
+          else painterResource(R.drawable.ic_remove),
           tint = MaterialTheme.colors.primary,
           contentDescription = null
         )
@@ -235,7 +235,7 @@ class GoPremiumScreen(
     ) {
       Text(
         modifier = Modifier.height(32.dp),
-        text = stringResource(R.string.es_basic_title),
+        text = stringResource(R.string.basic_title),
         style = MaterialTheme.typography.button,
         color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
       )
@@ -246,7 +246,7 @@ class GoPremiumScreen(
             .size(48.dp)
             .center(),
           painter = if (feature.inBasic) rememberVectorPainter(Icons.Default.Done)
-          else painterResource(R.drawable.es_ic_remove),
+          else painterResource(R.drawable.ic_remove),
           tint = MaterialTheme.colors.primary,
           contentDescription = null
         )
@@ -268,17 +268,17 @@ class GoPremiumScreen(
     if (skuDetails != null) {
       Text(
         text = when (skuDetails.type.toSkuType()) {
-          Sku.Type.IN_APP -> stringResource(R.string.es_one_time_purchase_desc, skuDetails.price)
+          Sku.Type.IN_APP -> stringResource(R.string.one_time_purchase_desc, skuDetails.price)
           Sku.Type.SUBS -> {
             if (skuDetails.freeTrialPeriod.toIso8601Duration().amount == 0) {
               stringResource(
-                R.string.es_subscription_pricing_model_desc,
+                R.string.subscription_pricing_model_desc,
                 skuDetails.price,
                 skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()
               )
             } else {
               stringResource(
-                R.string.es_subscription_pricing_model_with_trial_desc,
+                R.string.subscription_pricing_model_with_trial_desc,
                 skuDetails.price,
                 skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString(),
                 skuDetails.freeTrialPeriod.toIso8601Duration().toReadableString()
@@ -299,7 +299,7 @@ class GoPremiumScreen(
       colors = ButtonDefaults.esButtonColors(backgroundColor = MaterialTheme.colors.primary),
       onClick = onGoPremiumClick
     ) {
-      Text(stringResource(R.string.es_go_premium_title))
+      Text(stringResource(R.string.go_premium_title))
     }
 
     if (showTryBasicOption) {
@@ -310,7 +310,7 @@ class GoPremiumScreen(
           .fillMaxWidth(),
         onClick = onTryBasicVersionClick
       ) {
-        Text(stringResource(R.string.es_try_basic_version))
+        Text(stringResource(R.string.try_basic_version))
       }
     }
   }
@@ -340,7 +340,7 @@ data class GoPremiumState(
     goPremium = action {
       if (premiumVersionManager.purchasePremiumVersion()) {
         navigator.pop(screen, true)
-        toaster(R.string.es_premium_activated)
+        toaster(R.string.premium_activated)
       }
     },
     tryBasicVersion = action {

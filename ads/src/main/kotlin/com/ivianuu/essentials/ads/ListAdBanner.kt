@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
       resources: Resources,
     ): @FinalAdConfig ListAdBannerConfig =
       if (!appConfig.isDebug) adConfig
-      else adConfig.copy(id = resources(R.string.es_test_ad_unit_id_banner))
+      else adConfig.copy(id = resources(R.string.test_ad_unit_id_banner))
   }
 }
 

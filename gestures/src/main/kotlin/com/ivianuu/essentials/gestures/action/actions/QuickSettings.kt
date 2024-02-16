@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.first
 
 @Provide fun quickSettingsAction(resources: Resources) = Action(
   id = QuickSettingsActionId,
-  title = resources(R.string.es_action_quick_settings),
+  title = resources(R.string.action_quick_settings),
   permissions = accessibilityActionPermissions,
   icon = staticActionIcon(Icons.Default.Settings)
 )

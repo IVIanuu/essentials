@@ -21,8 +21,8 @@ import kotlinx.coroutines.delay
 
 @Provide fun screenshotAction(resources: Resources) = Action(
   id = ScreenshotActionId,
-  title = resources(R.string.es_action_screenshot),
-  icon = staticActionIcon(R.drawable.es_ic_photo_album),
+  title = resources(R.string.action_screenshot),
+  icon = staticActionIcon(R.drawable.ic_photo_album),
   permissions = listOf(typeKeyOf<ActionAccessibilityPermission>())
 )
 

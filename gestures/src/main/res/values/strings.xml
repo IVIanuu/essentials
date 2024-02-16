@@ -4,59 +4,55 @@
 
 <resources>
     <!-- Action picker -->
-    <string name="es_action_picker_title">Pick an action</string>
-    <string name="es_none">None</string>
-    <string name="es_default">Default</string>
+    <string name="action_picker_title">Pick an action</string>
+    <string name="none">None</string>
+    <string name="_default">Default</string>
 
     <!-- Actions -->
-    <string name="es_action_app">App</string>
-    <string name="es_action_assistant">Assistant</string>
-    <string name="es_action_auto_rotation">Auto rotation</string>
-    <string name="es_action_back">Back</string>
-    <string name="es_action_camera">Camera</string>
-    <string name="es_action_home">Home</string>
-    <string name="es_action_last_app">Last app</string>
-    <string name="es_action_lock_screen">Lock screen</string>
-    <string name="es_action_media_play_pause">Media play/pause</string>
-    <string name="es_action_media_skip_next">Media skip to next</string>
-    <string name="es_action_media_skip_previous">Media skip to previous</string>
-    <string name="es_action_media_stop">Media stop</string>
-    <string name="es_action_notifications">Notifications</string>
-    <string name="es_action_power_dialog">Power dialog</string>
-    <string name="es_action_quick_settings">Quick settings</string>
-    <string name="es_action_recent_apps">Recent apps</string>
-    <string name="es_action_screenshot">Screenshot</string>
-    <string name="es_action_search">Search</string>
-    <string name="es_action_shortcut">Shortcut</string>
-    <string name="es_action_split_screen">Split screen</string>
-    <string name="es_action_torch">Flashlight</string>
+    <string name="action_app">App</string>
+    <string name="action_assistant">Assistant</string>
+    <string name="action_auto_rotation">Auto rotation</string>
+    <string name="action_back">Back</string>
+    <string name="action_camera">Camera</string>
+    <string name="action_home">Home</string>
+    <string name="action_last_app">Last app</string>
+    <string name="action_lock_screen">Lock screen</string>
+    <string name="action_media_play_pause">Media play/pause</string>
+    <string name="action_media_skip_next">Media skip to next</string>
+    <string name="action_media_skip_previous">Media skip to previous</string>
+    <string name="action_media_stop">Media stop</string>
+    <string name="action_notifications">Notifications</string>
+    <string name="action_power_dialog">Power dialog</string>
+    <string name="action_quick_settings">Quick settings</string>
+    <string name="action_recent_apps">Recent apps</string>
+    <string name="action_screenshot">Screenshot</string>
+    <string name="action_search">Search</string>
+    <string name="action_shortcut">Shortcut</string>
+    <string name="action_split_screen">Split screen</string>
+    <string name="action_torch">Flashlight</string>
 
-    <string name="es_error_action">Error please reconfigure this action</string>
-
-    <!-- Floating windows -->
+    <string name="error_action">Error please reconfigure this action</string>
 
     <!-- Media -->
-    <string name="es_media_app_settings_ui_title">Media action settings</string>
-    <string name="es_pref_media_app">Media app</string>
-    <string name="es_pref_media_app_summary">Define the target app for the media actions (current: %s)</string>
+    <string name="media_app_settings_ui_title">Media action settings</string>
+    <string name="pref_media_app">Media app</string>
+    <string name="pref_media_app_summary">Define the target app for the media actions (current: %s)</string>
 
     <!-- Keycode -->
-
-    <string name="es_unknown_action_name">Unknown</string>
-    <string name="es_activity_not_found">Failed to launch screen!</string>
-
-    <string name="es_action_execution_failed">Failed to execute action %s!</string>
+    <string name="unknown_action_name">Unknown</string>
+    <string name="activity_not_found">Failed to launch screen!</string>
+    <string name="action_execution_failed">Failed to execute action %s!</string>
 
     <!-- Permissions -->
-    <string name="es_action_accessibility_permission_title">Accessibility</string>
-    <string name="es_action_accessibility_permission_desc">Required to perform actions such as back, open notifications, or to switch the camera</string>
-    <string name="es_action_notification_policy_permission_title">Notification policy</string>
-    <string name="es_action_notification_policy_permission_desc">Required to change notification settings</string>
-    <string name="es_action_root_permission_title">Root</string>
-    <string name="es_action_system_overlay_permission_title">System overlay</string>
-    <string name="es_action_system_overlay_permission_desc">Required to open apps from the background</string>
-    <string name="es_action_write_secure_settings_permission_title">Write secure settings</string>
-    <string name="es_action_write_secure_settings_permission_desc">Required to change the navigation bar visibility</string>
-    <string name="es_action_write_settings_permission_title">Write settings</string>
-    <string name="es_action_write_settings_permission_desc">Required to change settings</string>
+    <string name="action_accessibility_permission_title">Accessibility</string>
+    <string name="action_accessibility_permission_desc">Required to perform actions such as back, open notifications, or to switch the camera</string>
+    <string name="action_notification_policy_permission_title">Notification policy</string>
+    <string name="action_notification_policy_permission_desc">Required to change notification settings</string>
+    <string name="action_root_permission_title">Root</string>
+    <string name="action_system_overlay_permission_title">System overlay</string>
+    <string name="action_system_overlay_permission_desc">Required to open apps from the background</string>
+    <string name="action_write_secure_settings_permission_title">Write secure settings</string>
+    <string name="action_write_secure_settings_permission_desc">Required to change the navigation bar visibility</string>
+    <string name="action_write_settings_permission_title">Write settings</string>
+    <string name="action_write_settings_permission_desc">Required to change settings</string>
 </resources>

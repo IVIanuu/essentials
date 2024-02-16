@@ -49,10 +49,10 @@ data class Donation(val sku: Sku, val iconRes: Int)
     @Provide val default
       get() = Donations(
         listOf(
-          Donation(Sku("donation_crossaint", Sku.Type.IN_APP), R.drawable.es_ic_bakery_dining),
-          Donation(Sku("donation_coffee_2", Sku.Type.IN_APP), R.drawable.es_ic_free_breakfast),
-          Donation(Sku("donation_burger_menu", Sku.Type.IN_APP), R.drawable.es_ic_lunch_dining),
-          Donation(Sku("donation_movie", Sku.Type.IN_APP), R.drawable.es_ic_popcorn)
+          Donation(Sku("donation_crossaint", Sku.Type.IN_APP), R.drawable.ic_bakery_dining),
+          Donation(Sku("donation_coffee_2", Sku.Type.IN_APP), R.drawable.ic_free_breakfast),
+          Donation(Sku("donation_burger_menu", Sku.Type.IN_APP), R.drawable.ic_lunch_dining),
+          Donation(Sku("donation_movie", Sku.Type.IN_APP), R.drawable.ic_popcorn)
         )
       )
   }
@@ -62,7 +62,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
   DialogScaffold {
     Dialog(
       applyContentPadding = false,
-      title = { Text(stringResource(R.string.es_donation_title)) },
+      title = { Text(stringResource(R.string.donation_title)) },
       content = {
         ResourceVerticalListFor(
           resource = state.skus,
@@ -147,7 +147,7 @@ data class UiDonation(
     purchase = action { donation ->
       if (billingService.purchase(donation.donation.sku, true, true)) {
         billingService.consumePurchase(donation.donation.sku)
-        toaster(R.string.es_donation_thanks)
+        toaster(R.string.donation_thanks)
       }
     }
   )

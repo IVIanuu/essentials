@@ -18,21 +18,21 @@ import com.ivianuu.injekt.Provide
 @Provide class ActionAccessibilityPermission(resources: Resources) :
   AccessibilityServicePermission(
     serviceClass = EsAccessibilityService::class,
-    title = resources(R.string.es_action_accessibility_permission_title),
-    desc = resources(R.string.es_action_accessibility_permission_desc),
-    icon = Permission.Icon { Icon(painterResource(R.drawable.es_ic_accessibility), null) }
+    title = resources(R.string.action_accessibility_permission_title),
+    desc = resources(R.string.action_accessibility_permission_desc),
+    icon = Permission.Icon { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_accessibility), null) }
   )
 
 @Provide class ActionSystemOverlayPermission(resources: Resources) :
   SystemOverlayPermission(
-    title = resources(R.string.es_action_system_overlay_permission_title),
-    desc = resources(R.string.es_action_system_overlay_permission_desc),
-    icon = Permission.Icon { Icon(painterResource(R.drawable.es_ic_adb), null) }
+    title = resources(R.string.action_system_overlay_permission_title),
+    desc = resources(R.string.action_system_overlay_permission_desc),
+    icon = Permission.Icon { Icon(painterResource(R.drawable.ic_adb), null) }
   )
 
 @Provide class ActionWriteSettingsPermission(resources: Resources) :
   WriteSettingsPermission(
-    title = resources(R.string.es_action_write_settings_permission_title),
-    desc = resources(R.string.es_action_write_settings_permission_desc),
-    icon = Permission.Icon { Icon(painterResource(R.drawable.es_ic_settings), null) }
+    title = resources(R.string.action_write_settings_permission_title),
+    desc = resources(R.string.action_write_settings_permission_desc),
+    icon = Permission.Icon { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_settings), null) }
   )

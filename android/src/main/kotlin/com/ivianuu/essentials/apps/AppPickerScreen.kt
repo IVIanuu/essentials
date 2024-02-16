@@ -37,7 +37,7 @@ class AppPickerScreen(
   ScreenScaffold(
     topBar = {
       AppBar {
-        Text(state.title ?: stringResource(R.string.es_title_app_picker))
+        Text(state.title ?: stringResource(R.string.title_app_picker))
       }
     }
   ) {

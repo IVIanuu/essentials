@@ -18,8 +18,8 @@ enum class ScreenEdge(
   val isOnSide: Boolean,
 ) {
   LEFT(
-    titleRes = R.string.es_screen_edge_left,
-    iconRes = R.drawable.es_ic_trigger_left,
+    titleRes = R.string.screen_edge_left,
+    iconRes = R.drawable.ic_trigger_left,
     alignment = Alignment.TopStart,
     isOnSide = true
   ) {
@@ -38,8 +38,8 @@ enum class ScreenEdge(
     }
   },
   TOP(
-    titleRes = R.string.es_screen_edge_top,
-    iconRes = R.drawable.es_ic_trigger_top,
+    titleRes = R.string.screen_edge_top,
+    iconRes = R.drawable.ic_trigger_top,
     alignment = Alignment.TopStart,
     isOnSide = false
   ) {
@@ -58,8 +58,8 @@ enum class ScreenEdge(
     }
   },
   RIGHT(
-    titleRes = R.string.es_screen_edge_right,
-    iconRes = R.drawable.es_ic_trigger_right,
+    titleRes = R.string.screen_edge_right,
+    iconRes = R.drawable.ic_trigger_right,
     alignment = Alignment.TopEnd,
     isOnSide = true
   ) {
@@ -78,8 +78,8 @@ enum class ScreenEdge(
     }
   },
   BOTTOM(
-    titleRes = R.string.es_screen_edge_bottom,
-    iconRes = R.drawable.es_ic_trigger_bottom,
+    titleRes = R.string.screen_edge_bottom,
+    iconRes = R.drawable.ic_trigger_bottom,
     alignment = Alignment.BottomStart,
     isOnSide = false
   ) {

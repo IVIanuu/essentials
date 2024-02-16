@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.first
 @Provide fun snapchatAction(resources: Resources) = Action(
   id = SnapchatActionId,
   title = "Snapchat",
-  icon = staticActionIcon(R.drawable.es_ic_photo_camera),
+  icon = staticActionIcon(R.drawable.ic_photo_camera),
   permissions = listOf(
     typeKeyOf<ActionAccessibilityPermission>(),
     typeKeyOf<ActionSystemOverlayPermission>()

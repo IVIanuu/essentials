@@ -2,12 +2,10 @@
   ~ Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ivianuu.essentials.accessibility">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <service
-            android:name=".EsAccessibilityService"
+            android:name="com.ivianuu.essentials.accessibility.EsAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:exported="true">
 
@@ -17,8 +15,7 @@
 
             <meta-data
                 android:name="android.accessibilityservice"
-                android:resource="@xml/es_accessibility_service_config" />
+                android:resource="@xml/accessibility_service_config" />
         </service>
     </application>
-
 </manifest>

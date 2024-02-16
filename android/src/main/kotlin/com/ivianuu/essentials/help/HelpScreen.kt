@@ -68,7 +68,7 @@ data class HelpItem(
     )
   }
 
-  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.es_help_title)) } }) {
+  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.help_title)) } }) {
     VerticalList {
       categories.forEach { category ->
         if (category.title != null) {
@@ -127,7 +127,7 @@ data class HelpItem(
 
       val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
       Icon(
-        painter = painterResource(R.drawable.es_ic_expand_more),
+        painter = painterResource(R.drawable.ic_expand_more),
         modifier = Modifier
           .size(24.dp)
           .rotate(iconRotation),

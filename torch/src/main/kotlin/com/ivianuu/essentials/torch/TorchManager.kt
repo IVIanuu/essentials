@@ -51,7 +51,7 @@ interface TorchManager {
         }
       }.onLeft {
         logger.log(priority = Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
-        toaster(R.string.es_failed_to_enable_torch)
+        toaster(R.string.failed_to_enable_torch)
         _torchEnabled = false
       }
     }

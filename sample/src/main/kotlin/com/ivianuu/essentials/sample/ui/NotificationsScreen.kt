@@ -97,7 +97,7 @@ class NotificationsScreen : Screen<Unit>
                 trailing = if (notification.isClearable) {
                   {
                     IconButton(onClick = { state.dismissNotification(notification) }) {
-                      Icon(painterResource(R.drawable.es_ic_clear), null)
+                      Icon(painterResource(com.ivianuu.essentials.gestures.R.drawable.ic_clear), null)
                     }
                   }
                 } else null

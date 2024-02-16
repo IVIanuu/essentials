@@ -63,8 +63,8 @@ interface ActionRepository {
         ?.createAction(id)
       ?: Action(
         id = "error",
-        title = resources(R.string.es_error_action),
-        icon = staticActionIcon(R.drawable.es_ic_error)
+        title = resources(R.string.error_action),
+        icon = staticActionIcon(R.drawable.ic_error)
       )
   }
 
@@ -77,7 +77,7 @@ interface ActionRepository {
         .firstOrNull { it.handles(id) }
         ?.createExecutor(id)
       ?: ActionExecutor {
-        toaster(R.string.es_error_action)
+        toaster(R.string.error_action)
       }
   }
 
@@ -123,7 +123,7 @@ interface ActionRepository {
         return@catch true
       }.onLeft {
         it.printStackTrace()
-        toaster(R.string.es_action_execution_failed, id)
+        toaster(R.string.action_execution_failed, id)
       }.getOrElse { false }
     }
 }

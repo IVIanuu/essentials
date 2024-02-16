@@ -46,7 +46,7 @@ class PermissionRequestScreen(
 ) : CriticalUserFlowScreen<Boolean>
 
 @Provide val permissionRequestUi = Ui<PermissionRequestScreen, PermissionRequestState> { state ->
-  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.es_request_permission_title)) } }) {
+  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.request_permission_title)) } }) {
     VerticalList {
       items(state.permissionsToGrant) { permission ->
         ListItem(
@@ -67,14 +67,14 @@ class PermissionRequestScreen(
                 modifier = Modifier.width(56.dp),
                 onClick = { state.denyPermission(permission) }
               ) {
-                Text(stringResource(R.string.es_deny), maxLines = 1)
+                Text(stringResource(R.string.deny), maxLines = 1)
               }
 
               TextButton(
                 modifier = Modifier.width(56.dp),
                 onClick = { state.grantPermission(permission) }
               ) {
-                Text(stringResource(R.string.es_grant), maxLines = 1)
+                Text(stringResource(R.string.grant), maxLines = 1)
               }
             }
           }

@@ -59,7 +59,7 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
       appConfig: AppConfig,
       resources: Resources,
     ): @FinalAdConfig FullScreenAdConfig = if (!appConfig.isDebug) adConfig
-    else adConfig.copy(id = resources(R.string.es_test_ad_unit_id_full_screen))
+    else adConfig.copy(id = resources(R.string.test_ad_unit_id_full_screen))
   }
 }
 

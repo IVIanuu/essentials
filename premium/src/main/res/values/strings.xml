@@ -3,14 +3,14 @@
   -->
 
 <resources>
-    <string name="es_go_premium_title">Go premium</string>
-    <string name="es_go_premium_desc">Unlock all features</string>
-    <string name="es_premium_title">Premium</string>
-    <string name="es_basic_title">Basic</string>
-    <string name="es_try_basic_version">Try limited version</string>
-    <string name="es_subscription_pricing_model_with_trial_desc">%s\/%s after %s free trial</string>
-    <string name="es_subscription_pricing_model_desc">%s\/%s</string>
-    <string name="es_one_time_purchase_desc">One time fee of %s</string>
-    <string name="es_premium_version_hint">This functionality is only available in the premium version!</string>
-    <string name="es_premium_activated">Premium version is now active!</string>
+    <string name="go_premium_title">Go premium</string>
+    <string name="go_premium_desc">Unlock all features</string>
+    <string name="premium_title">Premium</string>
+    <string name="basic_title">Basic</string>
+    <string name="try_basic_version">Try limited version</string>
+    <string name="subscription_pricing_model_with_trial_desc">%s\/%s after %s free trial</string>
+    <string name="subscription_pricing_model_desc">%s\/%s</string>
+    <string name="one_time_purchase_desc">One time fee of %s</string>
+    <string name="premium_version_hint">This functionality is only available in the premium version!</string>
+    <string name="premium_activated">Premium version is now active!</string>
 </resources>
