@@ -16,6 +16,7 @@ import com.ivianuu.essentials.ProvidedService
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.compose.ObserveScope
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
@@ -94,14 +95,15 @@ import kotlin.reflect.KClass
   val (presenter, context) = remember {
     val scope = component.screenScopeFactory(navigator, screen)
     val ui = component.uiFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
-    checkNotNull(ui) { "No ui factory found for $screen" }
+      ?: error("No ui factory found for $screen")
     val config = component.configFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
+      ?: error("No config found for $screen")
     val presenter = component.presenterFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
-    checkNotNull(presenter) { "No presenter found for $screen" }
+      ?: error("No presenter found for $screen")
     val decorateScreen = component.decorateScreenFactory(navigator, scope.cast(), screen)
     presenter to ScreenContext(
       screen = screen,
-      config = config.cast(),
+      config = config,
       content = {
         decorateScreen {
           with(ui as Ui<S, Any>) {
@@ -131,11 +133,7 @@ import kotlin.reflect.KClass
     }
   )
 
-  return context
-}
-
-@Composable private fun ObserveScope(body: @Composable () -> Unit) {
-  body()
+  return context.cast()
 }
 
 @Provide data class ScreenContextComponent<N>(
