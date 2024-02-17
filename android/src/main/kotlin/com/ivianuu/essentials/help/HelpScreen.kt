@@ -21,12 +21,12 @@ import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-class HelpScreen : Screen<Unit> {
+class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit> {
   @Provide companion object {
-    @Provide fun ui(categories: List<HelpCategory>) = Ui<HelpScreen, Unit> {
+    @Provide fun ui(screen: HelpScreen) = Ui<HelpScreen, Unit> {
       var expandedItem: HelpItem? by remember {
         mutableStateOf(
-          categories
+          screen.categories
             .flatMap { it.items }
             .firstOrNull()
         )
@@ -34,7 +34,7 @@ class HelpScreen : Screen<Unit> {
 
       ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.help_title)) } }) {
         VerticalList {
-          categories.forEach { category ->
+          screen.categories.forEach { category ->
             if (category.title != null) {
               item {
                 Subheader { Text(category.title) }
