@@ -14,14 +14,10 @@ import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.asLog
-import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.channels.awaitClose
