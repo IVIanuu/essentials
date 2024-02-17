@@ -22,11 +22,6 @@ import com.ivianuu.essentials.ui.material.*
     title = title,
     subtitle = subtitle,
     leading = leading,
-    trailing = {
-      Switch(
-        checked = value,
-        onCheckedChange = null
-      )
-    }
+    trailing = { Switch(checked = value, onCheckedChange = null) }
   )
 }
