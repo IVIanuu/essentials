@@ -131,7 +131,7 @@ class WriteSecureSettingsScreen(
                 OutlinedButton(onClick = scopedAction {
                   raceOf(
                     {
-                      navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
+                      navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).asScreen())
                         ?.onLeft { toaster(R.string.open_phone_info_failed) }
                     },
                     { developerModeDataStore.data.first { it != 0 } }
@@ -162,7 +162,7 @@ class WriteSecureSettingsScreen(
                 OutlinedButton(onClick = scopedAction {
                   raceOf(
                     {
-                      navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)))
+                      navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).asScreen())
                         ?.onLeft { toaster(R.string.open_developer_settings_failed) }
                     },
                     { adbEnabledDataStore.data.first { it != 0 } }

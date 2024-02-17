@@ -6,11 +6,13 @@ import android.provider.*
 import androidx.core.net.*
 import com.ivianuu.injekt.*
 
-class DefaultIntentScreen(val intent: Intent) : IntentScreen {
+class DefaultIntentScreen internal constructor(val intent: Intent) : IntentScreen {
   @Provide companion object {
     @Provide val intentFactory = ScreenIntentFactory<DefaultIntentScreen> { it.intent }
   }
 }
+
+fun Intent.asScreen(): IntentScreen = DefaultIntentScreen(this)
 
 class AppInfoScreen(val packageName: String) : IntentScreen {
   @Provide companion object {

@@ -37,7 +37,7 @@ class ShortcutPickerScreen : Screen<Shortcut> {
           ListItem(
             onClick = action {
               catch {
-                val shortcutRequestResult = navigator.push(DefaultIntentScreen(shortcut.intent))
+                val shortcutRequestResult = navigator.push(shortcut.intent.asScreen())
                   ?.getOrNull()
                   ?.data ?: return@catch
                 val finalShortcut = repository.extractShortcut(shortcutRequestResult)

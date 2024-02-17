@@ -7,6 +7,6 @@ package com.ivianuu.essentials.sample.ui
 import com.ivianuu.essentials.about.*
 import com.ivianuu.injekt.*
 
-@Provide val aboutHomeItem = HomeItem("About") { AboutScreen() }
-
-@Provide val privacyPolicy = PrivacyPolicyUrl("https://www.google.com")
+@Provide val aboutHomeItem = HomeItem("About") {
+  AboutScreen(privacyPolicyUrl = "https://www.google.com")
+}

@@ -34,7 +34,7 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
       if (showFindPermissionHint.value)
         toaster(R.string.find_app_here, appConfig.appName)
       // wait until user navigates back from the permission screen
-      catch { navigator.push(DefaultIntentScreen(intentFactory(permission))) }
+      catch { navigator.push(intentFactory(permission).asScreen()) }
         .printErrors()
         .onLeft { toaster(R.string.grant_permission_manually) }
     },

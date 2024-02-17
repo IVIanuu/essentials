@@ -64,14 +64,12 @@ import java.util.zip.*
 
   suspend fun restoreBackup() = withContext(scope.coroutineContext + coroutineContexts.io) {
     val uri = navigator.push(
-      DefaultIntentScreen(
-        Intent.createChooser(
-          Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "application/zip"
-          },
-          ""
-        )
-      )
+      Intent.createChooser(
+        Intent(Intent.ACTION_GET_CONTENT).apply {
+          type = "application/zip"
+        },
+        ""
+      ).asScreen()
     )?.getOrNull()?.data?.data ?: return@withContext
 
     val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!)

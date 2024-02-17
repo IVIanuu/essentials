@@ -30,7 +30,7 @@ abstract class RuntimePermission(
     ) = PermissionRequestHandler<P> { permission ->
       val contract = ActivityResultContracts.RequestPermission()
       val intent = contract.createIntent(appContext, permission.permissionName)
-      navigator.push(DefaultIntentScreen(intent))
+      navigator.push(intent.asScreen())
     }
   }
 }

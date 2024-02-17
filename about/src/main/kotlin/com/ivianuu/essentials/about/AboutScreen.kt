@@ -4,27 +4,26 @@
 
 package com.ivianuu.essentials.about
 
+import android.content.*
+import android.net.*
 import androidx.compose.material.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.donation.*
-import com.ivianuu.essentials.rate.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-class AboutScreen : Screen<Unit> {
+class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
   @Provide companion object {
     @Provide fun ui(
       appConfig: AppConfig,
-      privacyPolicyUrl: PrivacyPolicyUrl? = null,
       donations: (() -> List<Donation>)? = null,
-      email: DeveloperEmail,
       navigator: Navigator,
-      rateUseCases: RateUseCases
+      screen: AboutScreen
     ) = Ui<AboutScreen, Unit> {
       ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.about_title)) } }) {
         VerticalList {
@@ -38,7 +37,7 @@ class AboutScreen : Screen<Unit> {
 
           item {
             ListItem(
-              onClick = action { rateUseCases.rateOnPlay() },
+              onClick = action { navigator.push(PlayStoreAppDetailsKey(appConfig.packageName)) },
               leading = { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_star), null) },
               title = { Text(stringResource(R.string.about_rate)) },
               subtitle = { Text(stringResource(R.string.about_rate_desc)) }
@@ -78,9 +77,7 @@ class AboutScreen : Screen<Unit> {
 
           item {
             ListItem(
-              onClick = action {
-                navigator.push(UrlScreen("https://github.com/IVIanuu"))
-              },
+              onClick = action { navigator.push(UrlScreen("https://github.com/IVIanuu")) },
               leading = { Icon(painterResource(R.drawable.ic_github), null) },
               title = { Text(stringResource(R.string.about_github)) },
               subtitle = { Text(stringResource(R.string.about_github_desc)) }
@@ -89,9 +86,7 @@ class AboutScreen : Screen<Unit> {
 
           item {
             ListItem(
-              onClick = action {
-                navigator.push(UrlScreen("https://twitter.com/IVIanuu"))
-              },
+              onClick = action { navigator.push(UrlScreen("https://twitter.com/IVIanuu")) },
               leading = { Icon(painterResource(R.drawable.ic_twitter), null) },
               title = { Text(stringResource(R.string.about_twitter)) },
               subtitle = { Text(stringResource(R.string.about_twitter_desc)) }
@@ -99,19 +94,32 @@ class AboutScreen : Screen<Unit> {
           }
 
           item {
+            val email = "ivianuu@gmail.com"
             ListItem(
-              onClick = action { navigator.push(FeedbackMailScreen()) },
+              onClick = action {
+                navigator.push(
+                  Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:")
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+                    putExtra(
+                      Intent.EXTRA_SUBJECT,
+                      "Feedback for ${appConfig.appName} ${appConfig.versionName}"
+                    )
+                  }
+                    .asScreen()
+                )
+              },
               leading = { Icon(painterResource(R.drawable.ic_email), null) },
               title = { Text(stringResource(R.string.about_feedback)) },
-              subtitle = { Text(email.value) }
+              subtitle = { Text(email) }
             )
           }
 
-          if (privacyPolicyUrl != null)
+          if (screen.privacyPolicyUrl != null)
             item {
               ListItem(
                 onClick = action {
-                  navigator.push(UrlScreen(privacyPolicyUrl.value))
+                  navigator.push(UrlScreen(screen.privacyPolicyUrl))
                 },
                 leading = { Icon(painterResource(R.drawable.ic_policy), null) },
                 title = { Text(stringResource(R.string.about_privacy_policy)) }
@@ -122,5 +130,3 @@ class AboutScreen : Screen<Unit> {
     }
   }
 }
-
-@JvmInline value class PrivacyPolicyUrl(val value: String)
