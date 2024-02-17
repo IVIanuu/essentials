@@ -101,9 +101,7 @@ class AboutScreen : Screen<Unit> {
 
           item {
             ListItem(
-              modifier = Modifier.clickable(onClick = action {
-                navigator.push(FeedbackMailScreen)
-              }),
+              modifier = Modifier.clickable(onClick = action { navigator.push(FeedbackMailScreen()) }),
               leading = { Icon(painterResource(R.drawable.ic_email), null) },
               title = { Text(stringResource(R.string.about_feedback)) },
               subtitle = { Text(email.value) }

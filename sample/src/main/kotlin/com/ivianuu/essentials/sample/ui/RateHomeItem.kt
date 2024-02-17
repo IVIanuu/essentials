@@ -7,4 +7,4 @@ package com.ivianuu.essentials.sample.ui
 import com.ivianuu.essentials.rate.*
 import com.ivianuu.injekt.*
 
-@Provide val rateHomeItem = HomeItem("Rate") { RateScreen }
+@Provide val rateHomeItem = HomeItem("Rate") { RateScreen() }

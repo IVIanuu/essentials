@@ -14,45 +14,37 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-object RateOnPlayScreen : DialogScreen<Unit>
+class RateOnPlayScreen : DialogScreen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      navigator: Navigator,
+      rateUseCases: RateUseCases,
+      screen: RateOnPlayScreen
+    ) = Ui<RateOnPlayScreen, Unit> {
+      DialogScaffold(dismissible = false) {
+        Dialog(
+          title = { Text(stringResource(R.string.rate_on_play_title)) },
+          content = { Text(stringResource(R.string.rate_on_play_content)) },
+          buttons = {
+            if (produceState(false) { value = rateUseCases.shouldDisplayShowNever() }.value) {
+              TextButton(onClick = action {
+                rateUseCases.rateOnPlay()
+                navigator.pop(screen)
+              }) {
+                Text(stringResource(R.string.never))
+              }
+            }
 
-@Provide val rateOnPlayUi = Ui<RateOnPlayScreen, RateOnPlayState> { state ->
-  DialogScaffold(dismissible = false) {
-    Dialog(
-      title = { Text(stringResource(R.string.rate_on_play_title)) },
-      content = { Text(stringResource(R.string.rate_on_play_content)) },
-      buttons = {
-        if (state.displayShowNever) {
-          TextButton(onClick = state.showNever) { Text(stringResource(R.string.never)) }
-        }
+            TextButton(onClick =  action { rateUseCases.showLater() }) {
+              Text(stringResource(R.string.later))
+            }
 
-        TextButton(onClick = state.showLater) { Text(stringResource(R.string.later)) }
-
-        TextButton(onClick = state.rate) { Text(stringResource(R.string.rate)) }
+            TextButton(onClick = action { rateUseCases.showNever() }) {
+              Text(stringResource(R.string.rate))
+            }
+          }
+        )
       }
-    )
+    }
   }
-}
-
-data class RateOnPlayState(
-  val displayShowNever: Boolean,
-  val rate: () -> Unit,
-  val showLater: () -> Unit,
-  val showNever: () -> Unit,
-)
-
-@Provide fun rateOnPlayPresenter(
-  navigator: Navigator,
-  rateUseCases: RateUseCases,
-  screen: RateOnPlayScreen
-) = Presenter {
-  RateOnPlayState(
-    displayShowNever = produceState(false) { value = rateUseCases.shouldDisplayShowNever() }.value,
-    rate = action {
-      rateUseCases.rateOnPlay()
-      navigator.pop(screen)
-    },
-    showLater = action { rateUseCases.showLater() },
-    showNever = action { rateUseCases.showNever() }
-  )
 }

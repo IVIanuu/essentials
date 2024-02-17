@@ -29,37 +29,32 @@ fun interface RateUserflowBuilder : UserflowBuilder
 
   pref.updateData { copy(launchTimes = launchTimes.inc()) }
 
-  if (shouldShowRateDialog()) listOf(RateScreen)
+  suspend fun shouldShowRateDialog(): Boolean {
+    val prefs = pref.data.first()
+
+    if (prefs.feedbackState == RatePrefs.FeedbackState.COMPLETED)
+      return false.also { logger.log { "show not: already completed" } }
+
+    if (prefs.feedbackState == RatePrefs.FeedbackState.NEVER)
+      return false.also { logger.log { "show not: user selected never" } }
+
+    if (prefs.launchTimes < schedule.minLaunchTimes)
+      return false.also {
+        logger.log { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
+      }
+
+    val now = clock()
+    val installedDuration = now - prefs.installTime.milliseconds
+    if (installedDuration <= schedule.minInstallDuration)
+      return false.also {
+        logger.log { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }
+      }
+
+    return true.also { logger.log { "show" } }
+  }
+
+  if (shouldShowRateDialog()) listOf(RateScreen())
   else emptyList()
-}
-
-private suspend fun shouldShowRateDialog(
-  @Inject clock: Clock,
-  @Inject logger: Logger,
-  @Inject pref: DataStore<RatePrefs>,
-  @Inject schedule: RateUiSchedule
-): Boolean {
-  val prefs = pref.data.first()
-
-  if (prefs.feedbackState == RatePrefs.FeedbackState.COMPLETED)
-    return false.also { logger.log { "show not: already completed" } }
-
-  if (prefs.feedbackState == RatePrefs.FeedbackState.NEVER)
-    return false.also { logger.log { "show not: user selected never" } }
-
-  if (prefs.launchTimes < schedule.minLaunchTimes)
-    return false.also {
-      logger.log { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
-    }
-
-  val now = clock()
-  val installedDuration = now - prefs.installTime.milliseconds
-  if (installedDuration <= schedule.minInstallDuration)
-    return false.also {
-      logger.log { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }
-    }
-
-  return true.also { logger.log { "show" } }
 }
 
 data class RateUiSchedule(

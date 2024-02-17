@@ -14,58 +14,42 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-object FeedbackScreen : DialogScreen<Unit>
+class FeedbackScreen : DialogScreen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      navigator: Navigator,
+      rateUseCases: RateUseCases,
+      screen: FeedbackScreen
+    ) = Ui<FeedbackScreen, Unit> {
+      DialogScaffold(dismissible = false) {
+        Dialog(
+          title = { Text(stringResource(R.string.feedback_title)) },
+          content = { Text(stringResource(R.string.feedback_content)) },
+          buttons = {
+            if (produceState(false) { value = rateUseCases.shouldDisplayShowNever() }.value) {
+              TextButton(onClick = action { rateUseCases.showNever() }) {
+                Text(stringResource(R.string.never))
+              }
+            }
+            TextButton(onClick = action { rateUseCases.showLater() }) {
+              Text(stringResource(R.string.later))
+            }
 
-@Provide val feedbackUi = Ui<FeedbackScreen, FeedbackState> { state ->
-  DialogScaffold(dismissible = false) {
-    Dialog(
-      title = { Text(stringResource(R.string.feedback_title)) },
-      content = { Text(stringResource(R.string.feedback_content)) },
-      buttons = {
-        if (state.displayShowNever) {
-          TextButton(onClick = state.showNever) {
-            Text(stringResource(R.string.never))
+            TextButton(onClick = action {
+              navigator.push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
+              navigator.pop(screen)
+            }) {
+              Text(stringResource(R.string.open_reddit))
+            }
+            TextButton(onClick = action {
+              navigator.push(FeedbackMailScreen())
+              navigator.pop(screen)
+            }) {
+              Text(stringResource(R.string.send_mail))
+            }
           }
-        }
-        TextButton(onClick = state.showLater) {
-          Text(stringResource(R.string.later))
-        }
-
-        TextButton(onClick = state.openReddit) {
-          Text(stringResource(R.string.open_reddit))
-        }
-        TextButton(onClick = state.sendMail) {
-          Text(stringResource(R.string.send_mail))
-        }
+        )
       }
-    )
-  }
-}
-
-data class FeedbackState(
-  val displayShowNever: Boolean,
-  val showNever: () -> Unit,
-  val showLater: () -> Unit,
-  val openReddit: () -> Unit,
-  val sendMail: () -> Unit
-)
-
-@Provide fun feedbackPresenter(
-  navigator: Navigator,
-  rateUseCases: RateUseCases,
-  screen: FeedbackScreen
-) = Presenter {
-  FeedbackState(
-    displayShowNever = produceState(false) { value = rateUseCases.shouldDisplayShowNever() }.value,
-    showNever = action { rateUseCases.showNever() },
-    showLater = action { rateUseCases.showLater() },
-    openReddit = action {
-      navigator.push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
-      navigator.pop(screen)
-    },
-    sendMail = action {
-      navigator.push(FeedbackMailScreen)
-      navigator.pop(screen)
     }
-  )
+  }
 }

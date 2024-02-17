@@ -10,19 +10,21 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-object FeedbackMailScreen : IntentScreen
-
-@Provide fun feedbackMailKeyIntentFactory(
-  appConfig: AppConfig,
-  email: DeveloperEmail
-) = ScreenIntentFactory<FeedbackMailScreen> {
-  Intent(Intent.ACTION_SENDTO).apply {
-    data = Uri.parse("mailto:")
-    putExtra(Intent.EXTRA_EMAIL, arrayOf(email.value))
-    putExtra(
-      Intent.EXTRA_SUBJECT,
-      "Feedback for ${appConfig.appName} ${appConfig.versionName}"
-    )
+class FeedbackMailScreen : IntentScreen {
+  companion object {
+    @Provide fun screenIntentFactory(
+      appConfig: AppConfig,
+      email: DeveloperEmail
+    ) = ScreenIntentFactory<FeedbackMailScreen> {
+      Intent(Intent.ACTION_SENDTO).apply {
+        data = Uri.parse("mailto:")
+        putExtra(Intent.EXTRA_EMAIL, arrayOf(email.value))
+        putExtra(
+          Intent.EXTRA_SUBJECT,
+          "Feedback for ${appConfig.appName} ${appConfig.versionName}"
+        )
+      }
+    }
   }
 }
 
