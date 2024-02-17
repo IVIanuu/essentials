@@ -31,30 +31,37 @@ import com.ivianuu.injekt.Provide
 
 class AboutScreen : Screen<Unit>
 
-@Provide val aboutUi = Ui<AboutScreen, AboutState> { state ->
+@Provide fun aboutUi(
+  appConfig: AppConfig,
+  privacyPolicyUrl: PrivacyPolicyUrl? = null,
+  donations: (() -> List<Donation>)? = null,
+  email: DeveloperEmail,
+  navigator: Navigator,
+  rateUseCases: RateUseCases
+) = Ui<AboutScreen, Unit> {
   ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.about_title)) } }) {
     VerticalList {
       item {
         ListItem(
           leading = { Icon(painterResource(R.drawable.ic_info), null) },
           title = { Text(stringResource(R.string.about_version)) },
-          subtitle = { Text(state.version) }
+          subtitle = { Text(appConfig.versionName) }
         )
       }
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = state.rate),
+          modifier = Modifier.clickable(onClick = action { rateUseCases.rateOnPlay() }),
           leading = { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_star), null) },
           title = { Text(stringResource(R.string.about_rate)) },
           subtitle = { Text(stringResource(R.string.about_rate_desc)) }
         )
       }
 
-      if (state.showDonate)
+      if (donations != null)
         item {
           ListItem(
-            modifier = Modifier.clickable(onClick = state.donate),
+            modifier = Modifier.clickable(onClick = action { navigator.push(DonationScreen()) }),
             leading = { Icon(painterResource(R.drawable.ic_favorite), null) },
             title = { Text(stringResource(R.string.about_donate)) }
           )
@@ -62,7 +69,9 @@ class AboutScreen : Screen<Unit>
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = state.openMoreApps),
+          modifier = Modifier.clickable(onClick = action {
+            navigator.push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
+          }),
           leading = { Icon(painterResource(R.drawable.ic_google_play), null) },
           title = { Text(stringResource(R.string.about_more_apps)) },
           subtitle = { Text(stringResource(R.string.about_more_apps_desc)) }
@@ -71,7 +80,9 @@ class AboutScreen : Screen<Unit>
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = state.openRedditPage),
+          modifier = Modifier.clickable(onClick = action {
+            navigator.push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
+          }),
           leading = { Icon(painterResource(R.drawable.ic_reddit), null) },
           title = { Text(stringResource(R.string.about_reddit)) },
           subtitle = { Text(stringResource(R.string.about_reddit_desc)) }
@@ -80,7 +91,9 @@ class AboutScreen : Screen<Unit>
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = state.openGithubPage),
+          modifier = Modifier.clickable(onClick = action {
+            navigator.push(UrlScreen("https://github.com/IVIanuu"))
+          }),
           leading = { Icon(painterResource(R.drawable.ic_github), null) },
           title = { Text(stringResource(R.string.about_github)) },
           subtitle = { Text(stringResource(R.string.about_github_desc)) }
@@ -89,7 +102,9 @@ class AboutScreen : Screen<Unit>
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = state.openTwitterPage),
+          modifier = Modifier.clickable(onClick = action {
+            navigator.push(UrlScreen("https://twitter.com/IVIanuu"))
+          }),
           leading = { Icon(painterResource(R.drawable.ic_twitter), null) },
           title = { Text(stringResource(R.string.about_twitter)) },
           subtitle = { Text(stringResource(R.string.about_twitter_desc)) }
@@ -98,17 +113,21 @@ class AboutScreen : Screen<Unit>
 
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = state.sendMail),
+          modifier = Modifier.clickable(onClick = action {
+            navigator.push(FeedbackMailScreen)
+          }),
           leading = { Icon(painterResource(R.drawable.ic_email), null) },
           title = { Text(stringResource(R.string.about_feedback)) },
-          subtitle = { Text(state.email.value) }
+          subtitle = { Text(email.value) }
         )
       }
 
-      if (state.privacyPolicyUrl != null)
+      if (privacyPolicyUrl != null)
         item {
           ListItem(
-            modifier = Modifier.clickable(onClick = state.openPrivacyPolicy),
+            modifier = Modifier.clickable(onClick = action {
+              navigator.push(UrlScreen(privacyPolicyUrl.value))
+            }),
             leading = { Icon(painterResource(R.drawable.ic_policy), null) },
             title = { Text(stringResource(R.string.about_privacy_policy)) }
           )
@@ -117,45 +136,4 @@ class AboutScreen : Screen<Unit>
   }
 }
 
-data class AboutState(
-  val version: String,
-  val email: DeveloperEmail,
-  val privacyPolicyUrl: PrivacyPolicyUrl?,
-  val showDonate: Boolean,
-  val donate: () -> Unit,
-  val rate: () -> Unit,
-  val openMoreApps: () -> Unit,
-  val openRedditPage: () -> Unit,
-  val openGithubPage: () -> Unit,
-  val openTwitterPage: () -> Unit,
-  val openPrivacyPolicy: () -> Unit,
-  val sendMail: () -> Unit
-)
-
 @JvmInline value class PrivacyPolicyUrl(val value: String)
-
-@Provide fun aboutPresenter(
-  appConfig: AppConfig,
-  privacyPolicyUrl: PrivacyPolicyUrl? = null,
-  donations: (() -> List<Donation>)? = null,
-  email: DeveloperEmail,
-  navigator: Navigator,
-  rateUseCases: RateUseCases
-) = Presenter {
-  AboutState(
-    version = appConfig.versionName,
-    email = email,
-    privacyPolicyUrl = privacyPolicyUrl,
-    showDonate = donations != null,
-    donate = action { navigator.push(DonationScreen()) },
-    rate = action { rateUseCases.rateOnPlay() },
-    openMoreApps = action {
-      navigator.push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
-    },
-    openRedditPage = action { navigator.push(UrlScreen("https://www.reddit.com/r/manuelwrageapps")) },
-    openGithubPage = action { navigator.push(UrlScreen("https://github.com/IVIanuu")) },
-    openTwitterPage = action { navigator.push(UrlScreen("https://twitter.com/IVIanuu")) },
-    openPrivacyPolicy = action { navigator.push(UrlScreen(privacyPolicyUrl!!.value)) },
-    sendMail = action { navigator.push(FeedbackMailScreen) }
-  )
-}
