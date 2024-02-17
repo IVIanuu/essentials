@@ -20,19 +20,19 @@ import com.ivianuu.injekt.*
     serviceClass = EsAccessibilityService::class,
     title = resources(R.string.action_accessibility_permission_title),
     desc = resources(R.string.action_accessibility_permission_desc),
-    icon = Permission.Icon { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_accessibility), null) }
+    icon = { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_accessibility), null) }
   )
 
 @Provide class ActionSystemOverlayPermission(resources: Resources) :
   SystemOverlayPermission(
     title = resources(R.string.action_system_overlay_permission_title),
     desc = resources(R.string.action_system_overlay_permission_desc),
-    icon = Permission.Icon { Icon(painterResource(R.drawable.ic_adb), null) }
+    icon = { Icon(painterResource(R.drawable.ic_adb), null) }
   )
 
 @Provide class ActionWriteSettingsPermission(resources: Resources) :
   WriteSettingsPermission(
     title = resources(R.string.action_write_settings_permission_title),
     desc = resources(R.string.action_write_settings_permission_desc),
-    icon = Permission.Icon { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_settings), null) }
+    icon = { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_settings), null) }
   )

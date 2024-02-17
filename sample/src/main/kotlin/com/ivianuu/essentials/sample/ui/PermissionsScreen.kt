@@ -61,44 +61,44 @@ class PermissionsScreen : Screen<Unit> {
   permissionName = android.Manifest.permission.CAMERA,
   title = "Camera",
   desc = "This is a desc",
-  icon = Permission.Icon { Icon(Icons.Default.Menu, null) }
+  icon = { Icon(Icons.Default.Menu, null) }
 )
 
 @Provide object SamplePhonePermission : RuntimePermission(
   permissionName = android.Manifest.permission.CALL_PHONE,
   title = "Call phone",
   desc = "This is a desc",
-  icon = Permission.Icon { Icon(Icons.Default.Menu, null) }
+  icon = { Icon(Icons.Default.Menu, null) }
 )
 
 @Provide object SampleAccessibilityPermission : AccessibilityServicePermission(
   serviceClass = EsAccessibilityService::class,
   title = "Accessibility",
   desc = "This is a desc",
-  icon = Permission.Icon { Icon(Icons.Default.Menu, null) }
+  icon = { Icon(Icons.Default.Menu, null) }
 )
 
 @Provide object SampleNotificationListenerPermission : NotificationListenerPermission(
   serviceClass = EsNotificationListenerService::class,
   title = "Notification listener",
   desc = "This is a desc",
-  icon = Permission.Icon { Icon(Icons.Default.Menu, null) }
+  icon = { Icon(Icons.Default.Menu, null) }
 )
 
 @Provide object SampleSystemOverlayPermission : SystemOverlayPermission(
   title = "System overlay",
   desc = "This is a desc",
-  icon = Permission.Icon { Icon(Icons.Default.Menu, null) }
+  icon = { Icon(Icons.Default.Menu, null) }
 )
 
 @Provide object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission(
   title = "Write secure settings",
   desc = "This is a desc",
-  icon = Permission.Icon { Icon(Icons.Default.Menu, null) }
+  icon = { Icon(Icons.Default.Menu, null) }
 )
 
 @Provide object SampleWriteSettingsPermission : WriteSettingsPermission(
   title = "Write settings",
   desc = "This is a desc",
-  icon = Permission.Icon { Icon(Icons.Default.Menu, null) }
+  icon = { Icon(Icons.Default.Menu, null) }
 )

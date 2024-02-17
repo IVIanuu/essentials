@@ -7,6 +7,7 @@ package com.ivianuu.essentials.permission.notificationlistener
 import android.content.*
 import android.provider.*
 import android.service.notification.*
+import androidx.compose.runtime.*
 import androidx.core.app.*
 import androidx.core.os.*
 import com.ivianuu.essentials.*
@@ -19,7 +20,7 @@ abstract class NotificationListenerPermission(
   val serviceClass: KClass<out NotificationListenerService>,
   override val title: String,
   override val desc: String? = null,
-  override val icon: Permission.Icon? = null
+  override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   @Provide companion object {
     @Provide fun <P : NotificationListenerPermission> showFindPermissionHint() =
