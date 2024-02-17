@@ -6,15 +6,9 @@ import com.ivianuu.injekt.Provide
 import kotlin.time.Duration
 import android.os.Vibrator as AndroidVibrator
 
-fun interface Vibrator {
-  suspend operator fun invoke(duration: Duration) = invoke(duration, 1f)
-
-  suspend operator fun invoke(duration: Duration, amplitude: Float)
-}
-
-@Provide class VibratorImpl(private val vibrator: @SystemService AndroidVibrator) : Vibrator {
-  override suspend fun invoke(duration: Duration, amplitude: Float) {
-    vibrator.vibrate(
+@Provide class Vibrator(private val androidVibrator: @SystemService AndroidVibrator) {
+  suspend fun invoke(duration: Duration, amplitude: Float) {
+    androidVibrator.vibrate(
       VibrationEffect.createOneShot(duration.inWholeMilliseconds, (255 * amplitude).toInt())
     )
   }

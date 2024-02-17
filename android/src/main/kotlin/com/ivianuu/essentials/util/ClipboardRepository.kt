@@ -14,17 +14,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import android.content.ClipboardManager as AndroidClipboardManager
 
-interface ClipboardRepository {
-  val clipboardText: Flow<String?>
-
-  suspend fun updateClipboardText(value: String, showMessage: Boolean = true)
-}
-
-@Provide class ClipboardRepositoryImpl(
+@Provide class ClipboardRepository(
   private val androidClipboardManager: @SystemService AndroidClipboardManager,
   private val toaster: Toaster
-) : ClipboardRepository {
-  override val clipboardText: Flow<String?> = callbackFlow {
+) {
+  val clipboardText: Flow<String?> = callbackFlow {
     val listener = AndroidClipboardManager.OnPrimaryClipChangedListener {
       val current = androidClipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
       trySend(current)
@@ -35,7 +29,7 @@ interface ClipboardRepository {
     awaitClose { androidClipboardManager.removePrimaryClipChangedListener(listener) }
   }
 
-  override suspend fun updateClipboardText(value: String, showMessage: Boolean) {
+  suspend fun updateClipboardText(value: String, showMessage: Boolean) {
     Either.catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
       .also { result ->
         if (showMessage)

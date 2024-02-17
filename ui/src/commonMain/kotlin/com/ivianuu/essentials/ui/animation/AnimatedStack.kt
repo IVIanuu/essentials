@@ -119,7 +119,7 @@ import androidx.compose.ui.unit.LayoutDirection
       }
     }
 
-    ElementTransitionBuilderImpl(
+    ElementTransitionBuilder(
       initial,
       target,
       isPush,

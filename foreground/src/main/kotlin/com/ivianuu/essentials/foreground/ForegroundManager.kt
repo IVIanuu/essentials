@@ -8,7 +8,6 @@ import android.app.Notification
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
-import arrow.fx.coroutines.bracketCase
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
@@ -19,39 +18,22 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.SourceKey
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-interface ForegroundManager {
-  suspend fun startForeground(
-    removeNotification: Boolean = true,
-    @Inject foregroundId: ForegroundId,
-    notification: (@Composable () -> Notification)? = null,
-  ): Nothing
-}
-
-@JvmInline value class ForegroundId(val value: Int) {
-  @Provide companion object {
-    @Provide fun default(sourceKey: SourceKey) = ForegroundId(sourceKey.hashCode())
-  }
-}
-
-data object ForegroundScope
-
-@Provide @Scoped<AppScope> class ForegroundManagerImpl(
+@Provide @Scoped<AppScope> class ForegroundManager(
   private val appContext: AppContext,
   private val logger: Logger
-) : ForegroundManager {
+) {
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
   private val lock = Mutex()
 
-  override suspend fun startForeground(
-    removeNotification: Boolean,
+  suspend fun startForeground(
+    removeNotification: Boolean = true,
     @Inject foregroundId: ForegroundId,
     notification: (@Composable () -> Notification)?,
-  ) = bracketCase(
+  ): Nothing = bracketCase(
     acquire = {
       ForegroundState(foregroundId.value, removeNotification, notification)
         .also {
@@ -79,3 +61,12 @@ data object ForegroundScope
     val seen = CompletableDeferred<Unit>()
   }
 }
+
+@JvmInline value class ForegroundId(val value: Int) {
+  @Provide companion object {
+    @Provide fun default(sourceKey: SourceKey) = ForegroundId(sourceKey.hashCode())
+  }
+}
+
+data object ForegroundScope
+

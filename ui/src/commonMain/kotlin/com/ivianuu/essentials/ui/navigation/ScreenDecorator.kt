@@ -17,28 +17,26 @@ fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
   @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
-fun interface DecorateScreen {
-  @Composable operator fun invoke(content: @Composable () -> Unit)
-}
-
-@Provide fun decorateScreen(
-  records: List<ExtensionPointRecord<ScreenDecorator>>,
-  logger: Logger
-) = DecorateScreen { content ->
-  val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
-    records
-      .sortedWithLoadingOrder()
-      .fold({ it() }) { acc, record ->
-        { content ->
-          acc {
-            logger.log { "decorate screen with ${record.key.value}" }
-            record.instance(content)
+@Provide class DecorateScreen(
+  private val records: List<ExtensionPointRecord<ScreenDecorator>>,
+  private val logger: Logger
+) {
+  @Composable operator fun invoke(content: @Composable () -> Unit) {
+    val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
+      records
+        .sortedWithLoadingOrder()
+        .fold({ it() }) { acc, record ->
+          { content ->
+            acc {
+              logger.log { "decorate screen with ${record.key.value}" }
+              record.instance(content)
+            }
           }
         }
-      }
+    }
+
+    logger.log { "decorate screen $content with combined $combinedDecorator" }
+
+    combinedDecorator(content)
   }
-
-  logger.log { "decorate screen $content with combined $combinedDecorator" }
-
-  combinedDecorator(content)
 }

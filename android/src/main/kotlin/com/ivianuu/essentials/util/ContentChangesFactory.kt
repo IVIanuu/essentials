@@ -14,15 +14,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-fun interface ContentChangesFactory {
-  operator fun invoke(uri: Uri): Flow<Unit>
-}
-
-@Provide fun contentChangesFactory(
-  contentResolver: ContentResolver,
-  coroutineContexts: CoroutineContexts,
-) = ContentChangesFactory { uri ->
-  callbackFlow {
+@Provide class ContentChangesFactory(
+  private val contentResolver: ContentResolver,
+  private val coroutineContexts: CoroutineContexts,
+) {
+  operator fun invoke(uri: Uri): Flow<Unit> = callbackFlow {
     val observer = object : ContentObserver(null) {
       override fun onChange(selfChange: Boolean) {
         super.onChange(selfChange)

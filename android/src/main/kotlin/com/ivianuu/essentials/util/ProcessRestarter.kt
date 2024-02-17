@@ -10,11 +10,12 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.jakewharton.processphoenix.ProcessPhoenix
 
-fun interface ProcessRestarter {
-  operator fun invoke()
-}
-
-@Provide fun processRestarter(appContext: AppContext, logger: Logger) = ProcessRestarter {
-  logger.log { "restart process" }
-  ProcessPhoenix.triggerRebirth(appContext)
+@Provide class ProcessRestarter(
+  private val appContext: AppContext,
+  private val logger: Logger,
+) {
+  suspend operator fun invoke() {
+    logger.log { "restart process" }
+    ProcessPhoenix.triggerRebirth(appContext)
+  }
 }

@@ -50,17 +50,17 @@ import com.ivianuu.injekt.Provide
   onGloballyPositioned { style.bounds = it.boundsInWindow() }
 }
 
-fun interface RootSystemBarsStyle : AppUiDecorator {
-  @Provide companion object {
-    @Provide val impl = RootSystemBarsStyle { content ->
-      Surface(
-        modifier = Modifier
-          .fillMaxSize()
-          .systemBarStyle(zIndex = -1),
-        content = content
-      )
-    }
+@Provide class RootSystemBarsStyle : AppUiDecorator {
+  @Composable override fun invoke(content: @Composable () -> Unit) {
+    Surface(
+      modifier = Modifier
+        .fillMaxSize()
+        .systemBarStyle(zIndex = -1),
+      content = content
+    )
+  }
 
+  @Provide companion object {
     @Provide val loadingOrder
       get() = LoadingOrder<RootSystemBarsStyle>()
         .after<AppThemeDecorator>()
@@ -73,7 +73,6 @@ fun interface RootSystemBarsStyle : AppUiDecorator {
 
   fun unregisterStyle(style: SystemBarStyle)
 }
-
 
 @Stable class SystemBarStyle(barColor: Color, darkIcons: Boolean, zIndex: Int) {
   var barColor by mutableStateOf(barColor)

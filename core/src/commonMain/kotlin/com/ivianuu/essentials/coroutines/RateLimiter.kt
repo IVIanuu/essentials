@@ -11,31 +11,19 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration
 
-interface RateLimiter {
-  suspend fun acquire()
-
-  suspend fun tryAcquire(): Boolean
-}
-
-fun RateLimiter(
-  eventsPerInterval: Int,
-  interval: Duration,
-  @Inject clock: Clock
-): RateLimiter = RateLimiterImpl(clock, eventsPerInterval, interval)
-
-internal class RateLimiterImpl(
-  private val clock: Clock,
+class RateLimiter(
   private val eventsPerInterval: Int,
-  private val interval: Duration
-) : RateLimiter {
+  private val interval: Duration,
+  @Inject private val clock: Clock,
+) {
   private val lock = Mutex()
 
   private var remainingEvents = eventsPerInterval
   private var intervalEnd = Duration.ZERO
 
-  override suspend fun acquire() = acquireInternal(onLimitExceeded = { null }, onPermit = { })
+  suspend fun acquire() = acquireInternal(onLimitExceeded = { null }, onPermit = { })
 
-  override suspend fun tryAcquire() = acquireInternal(onLimitExceeded = { false }, onPermit = { true })
+  suspend fun tryAcquire() = acquireInternal(onLimitExceeded = { false }, onPermit = { true })
 
   private suspend inline fun <T : Any> acquireInternal(
     onLimitExceeded: () -> T?,

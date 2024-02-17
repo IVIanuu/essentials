@@ -16,64 +16,36 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-interface Scope<N> : Disposable {
-  val name: TypeKey<N>
-
-  val parent: Scope<*>?
-
-  val children: StateFlow<Set<Scope<*>>>
-
-  val isDisposed: Boolean
-
-  fun addObserver(observer: ScopeObserver<*>): Disposable
-
-  fun <T> scoped(key: Any, compute: () -> T): T
-
-  fun <T> scoped(@Inject key: TypeKey<T>, compute: () -> T): T =
-    scoped(key.value, compute)
-
-  fun <T : Any> serviceOrNull(@Inject key: TypeKey<T>): T?
-
-  fun <T : Any> service(@Inject key: TypeKey<T>): T =
-    serviceOrNull(key) ?: error("No service found for ${key.value} in ${name.value}")
-
-  fun registerChild(child: Scope<*>): Disposable
-}
-
-val Scope<*>.root: Scope<*> get() = parent?.root ?: this
-
-val Scope<*>.coroutineScope: CoroutineScope get() = service()
-
-@Provide class ScopeImpl<N>(
-  override val name: TypeKey<N>,
-  override val parent: @ParentScope Scope<*>? = null,
+@Provide class Scope<N>(
+  val name: TypeKey<N>,
+  val parent: @ParentScope Scope<*>? = null,
   observers: (Scope<N>, @ParentScope Scope<*>?) -> List<ExtensionPointRecord<ScopeObserver<N>>>,
   services: (Scope<N>, @ParentScope Scope<*>?) -> List<ProvidedService<N, *>>
-) : Scope<N>, SynchronizedObject() {
+) : SynchronizedObject() {
   @PublishedApi internal var _isDisposed = false
-  override val isDisposed: Boolean
+  val isDisposed: Boolean
     get() = synchronized(this) { _isDisposed }
 
-  private val cache = hashMapOf<Any, Any?>()
+  @PublishedApi internal val cache = hashMapOf<Any, Any?>()
   private val observers = mutableListOf<ScopeObserver<*>>()
 
   private val services = buildMap {
-    for (service in services(this@ScopeImpl, this@ScopeImpl))
+    for (service in services(this@Scope, this@Scope))
       this[service.key.value] = service
   }
 
   private val _children = MutableStateFlow<Set<Scope<*>>>(emptySet())
-  override val children: StateFlow<Set<Scope<*>>> by this::_children
+  val children: StateFlow<Set<Scope<*>>> by this::_children
 
   init {
-    observers(this@ScopeImpl, this@ScopeImpl)
+    observers(this@Scope, this@Scope)
       .sortedWithLoadingOrder()
       .forEach { addObserver(it.instance) }
   }
 
   private val parentDisposable = parent?.registerChild(this)
 
-  override fun addObserver(observer: ScopeObserver<*>): Disposable {
+  fun addObserver(observer: ScopeObserver<*>): Disposable {
     if (isDisposed) return Disposable {}
 
     synchronized(observers) {
@@ -89,11 +61,14 @@ val Scope<*>.coroutineScope: CoroutineScope get() = service()
     }
   }
 
-  override fun <T : Any> serviceOrNull(@Inject key: TypeKey<T>): T? = services[key.value]?.let {
+  fun <T : Any> serviceOrNull(@Inject key: TypeKey<T>): T? = services[key.value]?.let {
     return it.factory().unsafeCast()
   } ?: parent?.serviceOrNull(key)
 
-  override fun <T> scoped(key: Any, compute: () -> T): T = synchronized(cache) {
+  fun <T : Any> service(@Inject key: TypeKey<T>): T =
+    serviceOrNull(key) ?: error("No service found for ${key.value} in ${name.value}")
+
+  inline fun <T> scoped(key: Any, compute: () -> T): T = synchronized(cache) {
     checkDisposed()
     val value = cache.getOrPut(key) {
       compute()
@@ -106,7 +81,10 @@ val Scope<*>.coroutineScope: CoroutineScope get() = service()
     (if (value !== NULL) value else null).unsafeCast()
   }
 
-  override fun dispose() {
+  inline fun <T> scoped(@Inject key: TypeKey<T>, compute: () -> T): T =
+    scoped(key.value, compute)
+
+  fun dispose() {
     synchronized(this) {
       if (!_isDisposed) {
         _children.value.forEach { it.dispose() }
@@ -133,14 +111,14 @@ val Scope<*>.coroutineScope: CoroutineScope get() = service()
     }
   }
 
-  override fun registerChild(child: Scope<*>): Disposable {
+  private fun registerChild(child: Scope<*>): Disposable {
     synchronized(_children) { _children.value = _children.value + child }
     return Disposable {
       synchronized(_children) { _children.value = _children.value - child }
     }
   }
 
-  private fun checkDisposed() {
+  @PublishedApi internal fun checkDisposed() {
     check(!_isDisposed) { "Cannot use a disposed scope" }
   }
 
@@ -148,6 +126,10 @@ val Scope<*>.coroutineScope: CoroutineScope get() = service()
     @PublishedApi internal val NULL = Any()
   }
 }
+
+val Scope<*>.root: Scope<*> get() = parent?.root ?: this
+
+val Scope<*>.coroutineScope: CoroutineScope get() = service()
 
 data class ProvidedService<N, T>(val key: TypeKey<T>, val factory: () -> T) {
   @Provide companion object {

@@ -40,32 +40,30 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 
-fun interface MediaActionSender {
-  suspend operator fun invoke(keycode: Int)
-}
+@Provide class MediaActionSender(
+  private val appContext: AppContext,
+  private val prefs: DataStore<MediaActionPrefs>
+) {
+  suspend operator fun invoke(keycode: Int) {
+    val currentPrefs = prefs.data.first()
+    appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
+    appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
+  }
 
-@Provide fun mediaActionSender(
-  appContext: AppContext,
-  prefs: DataStore<MediaActionPrefs>
-) = MediaActionSender { keycode ->
-  val currentPrefs = prefs.data.first()
-  appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
-  appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
-}
+  private fun mediaIntentFor(
+    keyEvent: Int,
+    keycode: Int,
+    prefs: MediaActionPrefs
+  ): Intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+    putExtra(
+      Intent.EXTRA_KEY_EVENT,
+      KeyEvent(keyEvent, keycode)
+    )
 
-private fun mediaIntentFor(
-  keyEvent: Int,
-  keycode: Int,
-  prefs: MediaActionPrefs
-): Intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
-  putExtra(
-    Intent.EXTRA_KEY_EVENT,
-    KeyEvent(keyEvent, keycode)
-  )
-
-  val mediaApp = prefs.mediaApp
-  if (mediaApp != null) {
-    `package` = mediaApp
+    val mediaApp = prefs.mediaApp
+    if (mediaApp != null) {
+      `package` = mediaApp
+    }
   }
 }
 

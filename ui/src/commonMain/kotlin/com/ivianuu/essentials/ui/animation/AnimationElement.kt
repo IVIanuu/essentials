@@ -30,38 +30,27 @@ internal val LocalElementAnimationScope = compositionLocalOf<ElementAnimationSco
   error("No scope found")
 }
 
-interface ElementTransitionBuilder<T> : Density {
-  val initial: T?
-  val target: T?
-  val isPush: Boolean
-
-  infix fun Any.entersWith(transition: EnterTransition)
-  infix fun Any.exitsWith(transition: ExitTransition)
-
-  fun containerSizeTransform(sizeTransform: SizeTransform?)
-}
-
-internal class ElementTransitionBuilderImpl<T>(
-  override val initial: T?,
-  override val target: T?,
-  override val isPush: Boolean,
+class ElementTransitionBuilder<T>(
+  val initial: T?,
+  val target: T?,
+  val isPush: Boolean,
   density: Density
-) : ElementTransitionBuilder<T>, Density by density {
+) : Density by density {
   val enterTransitions = mutableMapOf<Any, EnterTransition>()
   val exitTransitions = mutableMapOf<Any, ExitTransition>()
   var containerSizeTransform: SizeTransform? = SizeTransform()
 
-  override fun Any.entersWith(transition: EnterTransition) {
+  infix fun Any.entersWith(transition: EnterTransition) {
     enterTransitions[this] =
       enterTransitions.getOrPut(this) { EnterTransition.None } + transition
   }
 
-  override fun Any.exitsWith(transition: ExitTransition) {
+  infix fun Any.exitsWith(transition: ExitTransition) {
     exitTransitions[this] =
       exitTransitions.getOrPut(this) { ExitTransition.None } + transition
   }
 
-  override fun containerSizeTransform(sizeTransform: SizeTransform?) {
+  fun containerSizeTransform(sizeTransform: SizeTransform?) {
     containerSizeTransform = sizeTransform
   }
 }

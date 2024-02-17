@@ -40,30 +40,7 @@ import kotlin.coroutines.suspendCoroutine
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-interface FullScreenAdManager {
-  suspend fun isAdLoaded(): Boolean
-
-  fun preloadAd()
-
-  suspend fun loadAd(): Either<Throwable, Boolean>
-
-  suspend fun showAdIfLoaded(): Boolean
-
-  suspend fun loadAndShowAdWithTimeout(): Either<Throwable, Boolean>
-}
-
-data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.seconds) {
-  @Provide companion object {
-    @Provide fun final(
-      adConfig: FullScreenAdConfig,
-      appConfig: AppConfig,
-      resources: Resources,
-    ): @FinalAdConfig FullScreenAdConfig = if (!appConfig.isDebug) adConfig
-    else adConfig.copy(id = resources(R.string.test_ad_unit_id_full_screen))
-  }
-}
-
-@Provide @Scoped<UiScope> class FullScreenAdManagerImpl(
+@Provide @Scoped<UiScope> class FullScreenAdManager(
   private val activity: ComponentActivity,
   private val appContext: AppContext,
   private val adsEnabledFlow: Flow<AdsEnabled>,
@@ -72,7 +49,7 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
   private val logger: Logger,
   private val scope: ScopedCoroutineScope<UiScope>,
   private val scopeManager: ScopeManager
-) : FullScreenAdManager {
+) {
   private val lock = Mutex()
   private var deferredAd: Deferred<suspend () -> Boolean>? = null
   private val rateLimiter = RateLimiter(1, config.adsInterval)
@@ -85,25 +62,25 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
     }
   }
 
-  override suspend fun isAdLoaded() = getCurrentAd() != null
+  suspend fun isAdLoaded() = getCurrentAd() != null
 
-  override fun preloadAd() {
+  fun preloadAd() {
     scope.launch { loadAd() }
   }
 
-  override suspend fun loadAd() = Either.catch {
+  suspend fun loadAd() = Either.catch {
     if (!adsEnabledFlow.first().value) return@catch false
     getOrCreateCurrentAd()
     true
   }
 
-  override suspend fun showAdIfLoaded(): Boolean {
+  suspend fun showAdIfLoaded(): Boolean {
     if (!adsEnabledFlow.first().value) return false
     return (getCurrentAd()?.invoke() ?: false)
       .also { preloadAd() }
   }
 
-  override suspend fun loadAndShowAdWithTimeout() = Either.catch {
+  suspend fun loadAndShowAdWithTimeout() = Either.catch {
     if (!adsEnabledFlow.first().value) return@catch false
     withTimeoutOrNull(1.seconds) { getOrCreateCurrentAd() }?.invoke() == true
   }
@@ -158,6 +135,17 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
       result
     }.also { deferredAd = it }
   }.await()
+}
+
+data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.seconds) {
+  @Provide companion object {
+    @Provide fun final(
+      adConfig: FullScreenAdConfig,
+      appConfig: AppConfig,
+      resources: Resources,
+    ): @FinalAdConfig FullScreenAdConfig = if (!appConfig.isDebug) adConfig
+    else adConfig.copy(id = resources(R.string.test_ad_unit_id_full_screen))
+  }
 }
 
 class AdLoadingException(val error: LoadAdError) : RuntimeException()

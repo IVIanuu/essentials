@@ -15,29 +15,14 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.nanoseconds
 
-interface SensorFactory {
-  fun sensor(type: Int): Sensor?
 
-  fun sensorEvents(sensor: Sensor, samplingRate: Duration): Flow<SensorEvent>
-}
-
-data class SensorEvent(
-  var sensor: Sensor,
-  var timestamp: Duration = Duration.ZERO,
-  val values: FloatArray = floatArrayOf(),
-  var accuracy: Int = 0
-)
-
-fun SensorFactory.sensorEvents(sensorType: Int, samplingRate: Duration): Flow<SensorEvent> =
-  sensorEvents(sensor(sensorType)!!, samplingRate)
-
-@Provide class SensorFactoryImpl(
+@Provide class SensorFactory(
   private val sensorManager: @SystemService SensorManager,
   private val wakeLockManager: WakeLockManager,
-) : SensorFactory {
-  override fun sensor(type: Int): Sensor? = sensorManager.getDefaultSensor(type)
+) {
+  fun sensor(type: Int): Sensor? = sensorManager.getDefaultSensor(type)
 
-  override fun sensorEvents(sensor: Sensor, samplingRate: Duration): Flow<SensorEvent> =
+  fun sensorEvents(sensor: Sensor, samplingRate: Duration): Flow<SensorEvent> =
     callbackFlow {
       if (!sensor.isWakeUpSensor)
         launch { wakeLockManager.acquire() }
@@ -80,4 +65,14 @@ fun SensorFactory.sensorEvents(sensorType: Int, samplingRate: Duration): Flow<Se
         awaitClose { sensorManager.unregisterListener(listener) }
       }
     }
+
+  fun sensorEvents(sensorType: Int, samplingRate: Duration): Flow<SensorEvent> =
+    sensorEvents(sensor(sensorType)!!, samplingRate)
 }
+
+data class SensorEvent(
+  var sensor: Sensor,
+  var timestamp: Duration = Duration.ZERO,
+  val values: FloatArray = floatArrayOf(),
+  var accuracy: Int = 0
+)

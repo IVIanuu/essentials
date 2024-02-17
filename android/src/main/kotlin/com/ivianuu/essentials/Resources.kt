@@ -6,7 +6,6 @@ package com.ivianuu.essentials
 
 import android.content.Context
 import android.graphics.drawable.Icon
-import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.Typeface
@@ -16,16 +15,10 @@ import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
-@Stable interface Resources {
-  operator fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T
+@Provide class Resources(private val appContext: AppContext) {
+  operator fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T = loader(appContext, id)
 
-  operator fun <T> invoke(id: Int, vararg args: Any?, @Inject loader: ResourceLoaderWithArgs<T>): T
-}
-
-@Provide class ResourcesImpl(private val appContext: AppContext) : Resources {
-  override fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T = loader(appContext, id)
-
-  override fun <T> invoke(
+  operator fun <T> invoke(
     id: Int,
     vararg args: Any?,
     @Inject loader: ResourceLoaderWithArgs<T>

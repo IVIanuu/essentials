@@ -20,18 +20,12 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-interface AppRepository {
-  val installedApps: Flow<List<AppInfo>>
-
-  fun appInfo(packageName: String): Flow<AppInfo?>
-}
-
-@Provide class AppRepositoryImpl(
+@Provide class AppRepository(
   private val broadcastsFactory: BroadcastsFactory,
   private val coroutineContexts: CoroutineContexts,
   private val packageManager: PackageManager
-) : AppRepository {
-  override val installedApps: Flow<List<AppInfo>> = flow {
+) {
+  val installedApps: Flow<List<AppInfo>> = flow {
     merge(
       broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
       broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED),
@@ -57,7 +51,7 @@ interface AppRepository {
       .let { emitAll(it) }
   }
 
-  override fun appInfo(packageName: String) = broadcastsFactory(
+  fun appInfo(packageName: String) = broadcastsFactory(
     Intent.ACTION_PACKAGE_ADDED,
     Intent.ACTION_PACKAGE_REMOVED,
     Intent.ACTION_PACKAGE_CHANGED,

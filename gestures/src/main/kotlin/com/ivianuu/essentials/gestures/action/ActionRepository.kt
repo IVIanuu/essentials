@@ -21,21 +21,7 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
-interface ActionRepository {
-  suspend fun getAllActions(): List<Action<*>>
-
-  suspend fun getAction(id: String): Action<*>
-
-  suspend fun getActionExecutor(id: String): ActionExecutor<*>
-
-  suspend fun getActionSettingsKey(id: String): Screen<Unit>?
-
-  suspend fun getActionPickerDelegates(): List<ActionPickerDelegate>
-
-  suspend fun executeAction(id: String): Boolean
-}
-
-@Provide class ActionRepositoryImpl(
+@Provide class ActionRepository(
   private val actions: () -> Map<String, () -> Action<*>>,
   private val actionFactories: () -> List<() -> ActionFactory>,
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>>,
@@ -48,12 +34,12 @@ interface ActionRepository {
   private val permissionManager: PermissionManager,
   private val resources: Resources,
   private val toaster: Toaster
-) : ActionRepository {
-  override suspend fun getAllActions() = withContext(coroutineContexts.computation) {
+) {
+  suspend fun getAllActions() = withContext(coroutineContexts.computation) {
     actions().values.map { it() }
   }
 
-  override suspend fun getAction(id: String) = withContext(coroutineContexts.computation) {
+  suspend fun getAction(id: String) = withContext(coroutineContexts.computation) {
     actions()[id]
       ?.invoke()
       ?: actionFactories()
@@ -68,7 +54,7 @@ interface ActionRepository {
       )
   }
 
-  override suspend fun getActionExecutor(id: String) = withContext(coroutineContexts.computation) {
+  suspend fun getActionExecutor(id: String) = withContext(coroutineContexts.computation) {
     actionsExecutors()[id]
       ?.invoke()
       ?: actionFactories()
@@ -81,13 +67,13 @@ interface ActionRepository {
       }
   }
 
-  override suspend fun getActionSettingsKey(id: String) =
+  suspend fun getActionSettingsKey(id: String) =
     withContext(coroutineContexts.computation) { actionSettings()[id]?.invoke() }
 
-  override suspend fun getActionPickerDelegates() =
+  suspend fun getActionPickerDelegates() =
     withContext(coroutineContexts.computation) { actionPickerDelegates().map { it() } }
 
-  override suspend fun executeAction(id: String): Boolean =
+  suspend fun executeAction(id: String): Boolean =
     withContext(coroutineContexts.computation) {
       Either.catch {
         logger.log { "execute $id" }

@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.Stable
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.Service
@@ -20,13 +19,62 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import kotlin.collections.set
 
-@Stable interface Navigator {
-  val backStack: StateFlow<List<Screen<*>>>
-  val results: Flow<Pair<Screen<*>, Any?>>
+@Provide class Navigator(
+  private val scope: CoroutineScope,
+  initialBackStack: List<Screen<*>> = emptyList(),
+  private val screenInterceptors: List<ScreenInterceptor<*>> = emptyList(),
+) {
+  private val _backStack = MutableStateFlow(initialBackStack)
+  val backStack: StateFlow<List<Screen<*>>> by this::_backStack
 
-  suspend fun setBackStack(backStack: List<Screen<*>>, results: Map<Screen<*>, Any?> = emptyMap())
+  private val _results = EventFlow<Pair<Screen<*>, Any?>>()
+  val results: Flow<Pair<Screen<*>, Any?>> by this::_results
+
+  private val mutex = Mutex()
+
+  suspend fun setBackStack(backStack: List<Screen<*>>, results: Map<Screen<*>, Any?> = emptyMap()) {
+    backStack.groupBy { it }
+      .forEach {
+        check(it.value.size == 1) {
+          "Back stack cannot contain duplicates ${it.key} -> $backStack"
+        }
+      }
+
+    withContext(scope.coroutineContext) {
+      mutex.withLock {
+        val finalResults = results.toMutableMap()
+        _backStack.value = buildList {
+          for (screen in backStack) {
+            @Suppress("UNCHECKED_CAST")
+            screen as Screen<Any?>
+
+            val interceptedHandle =
+              screenInterceptors.firstNotNullOfOrNull { it.cast<ScreenInterceptor<Any?>>()(screen) }
+
+            if (interceptedHandle == null) add(screen)
+            else finalResults[screen] = interceptedHandle()
+          }
+        }
+
+        finalResults.forEach { _results.emit(it.key to it.value) }
+      }
+    }
+  }
+
+  @Provide companion object {
+    @Provide fun rootNavigator(
+      scope: ScopedCoroutineScope<UiScope>,
+      rootScreen: RootScreen?,
+      screenInterceptors: List<ScreenInterceptor<*>>,
+    ): @Scoped<UiScope> @Service<UiScope> Navigator = Navigator(
+      scope = scope,
+      initialBackStack = listOfNotNull(rootScreen),
+      screenInterceptors = screenInterceptors
+    )
+  }
 }
 
 suspend fun <R> Navigator.awaitResult(screen: Screen<R>): R? = results
@@ -79,67 +127,6 @@ suspend fun Navigator.popTo(screen: Screen<*>) {
 
 suspend fun Navigator.clear() {
   setBackStack(emptyList())
-}
-
-fun Navigator(
-  initialBackStack: List<Screen<*>> = emptyList(),
-  screenInterceptors: List<ScreenInterceptor<*>> = emptyList()
-): Navigator = NavigatorImpl(
-  initialBackStack = initialBackStack,
-  screenInterceptors = screenInterceptors
-)
-
-class NavigatorImpl(
-  initialBackStack: List<Screen<*>>,
-  private val screenInterceptors: List<ScreenInterceptor<*>>
-) : Navigator {
-  private val _backStack = MutableStateFlow(initialBackStack)
-  override val backStack: StateFlow<List<Screen<*>>> by this::_backStack
-
-  private val _results = EventFlow<Pair<Screen<*>, Any?>>()
-  override val results: Flow<Pair<Screen<*>, Any?>> by this::_results
-
-  private val mutex = Mutex()
-
-  override suspend fun setBackStack(backStack: List<Screen<*>>, results: Map<Screen<*>, Any?>) {
-    backStack.groupBy { it }
-      .forEach {
-        check(it.value.size == 1) {
-          "Back stack cannot contain duplicates ${it.key} -> $backStack"
-        }
-      }
-
-    mutex.withLock {
-      val finalResults = results.toMutableMap()
-      _backStack.value = buildList {
-        for (screen in backStack) {
-          @Suppress("UNCHECKED_CAST")
-          screen as Screen<Any?>
-
-          val interceptedHandle =
-            screenInterceptors.firstNotNullOfOrNull { it.cast<ScreenInterceptor<Any?>>()(screen) }
-
-          if (interceptedHandle == null) {
-            add(screen)
-          } else {
-            finalResults[screen] = interceptedHandle()
-          }
-        }
-      }
-
-      finalResults.forEach { _results.emit(it.key to it.value) }
-    }
-  }
-
-  @Provide companion object {
-    @Provide fun rootNavigator(
-      rootScreen: RootScreen?,
-      screenInterceptors: List<ScreenInterceptor<*>>
-    ): @Scoped<UiScope> @Service<UiScope> Navigator = NavigatorImpl(
-      initialBackStack = listOfNotNull(rootScreen),
-      screenInterceptors = screenInterceptors
-    )
-  }
 }
 
 val Scope<*>.navigator: Navigator get() = service()

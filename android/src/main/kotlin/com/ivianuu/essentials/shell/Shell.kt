@@ -11,18 +11,12 @@ import com.ivianuu.injekt.Provide
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
-interface Shell {
-  suspend fun isAvailable(): Boolean
-
-  suspend fun run(vararg commands: String): Either<Throwable, List<String>>
-}
-
-@Provide class ShellImpl(private val coroutineContexts: CoroutineContexts) : Shell {
-  override suspend fun isAvailable() = withContext(coroutineContexts.io) {
+@Provide class Shell(private val coroutineContexts: CoroutineContexts) {
+  suspend fun isAvailable() = withContext(coroutineContexts.io) {
     Either.catch { SU.available() }.getOrElse { false }
   }
 
-  override suspend fun run(vararg commands: String) = withContext(coroutineContexts.io) {
+  suspend fun run(vararg commands: String) = withContext(coroutineContexts.io) {
     Either.catch { SU.run(commands)!! }
   }
 }

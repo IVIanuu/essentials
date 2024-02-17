@@ -11,45 +11,21 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 
-interface Schema {
-  val version: Int
-
-  val embeddedFormat: StringFormat
-
-  val serializersModule: SerializersModule
-
-  val entities: List<EntityDescriptor<*>>
-
-  suspend fun create(db: Db)
-
-  suspend fun migrate(db: Db, from: Int, to: Int)
-
-  fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T>
-}
-
-fun Schema(
-  version: Int,
-  entities: List<EntityDescriptor<*>> = emptyList(),
-  migrations: List<Migration> = emptyList(),
-  serializersModule: SerializersModule = EmptySerializersModule(),
-  embeddedFormat: StringFormat = Json
-): Schema = SchemaImpl(version, entities, migrations, serializersModule, embeddedFormat)
-
-private class SchemaImpl(
-  override val version: Int,
-  override val entities: List<EntityDescriptor<*>>,
-  private val migrations: List<Migration>,
-  override val serializersModule: SerializersModule,
-  override val embeddedFormat: StringFormat
-) : Schema {
+class Schema(
+  val version: Int,
+  val entities: List<EntityDescriptor<*>> = emptyList(),
+  private val migrations: List<Migration> = emptyList(),
+  val serializersModule: SerializersModule = EmptySerializersModule(),
+  val embeddedFormat: StringFormat = Json,
+) {
   private val _entities = entities.associateBy { it.key.value }
 
-  override suspend fun create(db: Db) {
+  suspend fun create(db: Db) {
     _entities.values
       .forEach { db.createTable(it) }
   }
 
-  override suspend fun migrate(db: Db, from: Int, to: Int) {
+  suspend fun migrate(db: Db, from: Int, to: Int) {
     val migrationsToExecute = migrations
       .filter {
         (it.from == from || it.from == Migration.ANY_VERSION) &&
@@ -63,7 +39,7 @@ private class SchemaImpl(
     migrationsToExecute.forEach { it.execute(db, from, to) }
   }
 
-  override fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T> =
+  fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T> =
     _entities[key.value]?.let { it as EntityDescriptor<T> } ?: error("Unknown entity $key")
 }
 

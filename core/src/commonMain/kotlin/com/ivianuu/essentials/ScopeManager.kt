@@ -13,13 +13,9 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-interface ScopeManager {
-  val activeScopes: StateFlow<Set<Scope<*>>>
-}
-
-@Provide @Scoped<AppScope> class ScopeManagerImpl : ScopeManager {
+@Provide @Scoped<AppScope> class ScopeManager {
   private val _activeScopes = MutableStateFlow<Set<Scope<*>>>(emptySet())
-  override val activeScopes: StateFlow<Set<Scope<*>>> by this::_activeScopes
+  val activeScopes: StateFlow<Set<Scope<*>>> by this::_activeScopes
 
   private val _observer = object : ScopeObserver<Any?> {
     override fun onEnter(scope: Scope<Any?>) = _activeScopes.update { it + scope }

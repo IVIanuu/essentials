@@ -29,26 +29,14 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.seconds
 
-interface DeviceScreenManager {
-  val screenState: Flow<ScreenState>
-
-  suspend fun turnScreenOn(): Boolean
-
-  suspend fun unlockScreen(): Boolean
-}
-
-enum class ScreenState(val isOn: Boolean) {
-  OFF(false), LOCKED(true), UNLOCKED(true)
-}
-
-@Provide class DeviceScreenManagerImpl(
+@Provide class DeviceScreenManager(
   private val appContext: AppContext,
   private val broadcastsFactory: BroadcastsFactory,
   private val keyguardManager: @SystemService KeyguardManager,
   private val logger: Logger,
   private val powerManager: @SystemService PowerManager
-) : DeviceScreenManager {
-  override val screenState: Flow<ScreenState> = compositionFlow {
+) {
+  val screenState: Flow<ScreenState> = compositionFlow {
     remember {
       broadcastsFactory(
         Intent.ACTION_SCREEN_OFF,
@@ -65,7 +53,7 @@ enum class ScreenState(val isOn: Boolean) {
     }
   }
 
-  override suspend fun turnScreenOn(): Boolean {
+  suspend fun turnScreenOn(): Boolean {
     logger.log { "on request is off ? ${!powerManager.isInteractive}" }
     if (powerManager.isInteractive) {
       logger.log { "already on" }
@@ -75,7 +63,7 @@ enum class ScreenState(val isOn: Boolean) {
     return startUnlockActivityForResult(REQUEST_TYPE_SCREEN_ON)
   }
 
-  override suspend fun unlockScreen(): Boolean {
+  suspend fun unlockScreen(): Boolean {
     logger.log { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
     if (!keyguardManager.isKeyguardLocked) {
       logger.log { "already unlocked" }
@@ -98,6 +86,10 @@ enum class ScreenState(val isOn: Boolean) {
     )
     return result.await()
   }
+}
+
+enum class ScreenState(val isOn: Boolean) {
+  OFF(false), LOCKED(true), UNLOCKED(true)
 }
 
 private const val KEY_REQUEST_ID = "request_id"

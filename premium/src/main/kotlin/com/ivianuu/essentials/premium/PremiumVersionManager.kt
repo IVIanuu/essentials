@@ -38,19 +38,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
-interface PremiumVersionManager {
-  val premiumSkuDetails: Flow<SkuDetails>
-
-  val isPremiumVersion: Flow<Boolean>
-
-  suspend fun purchasePremiumVersion(): Boolean
-
-  suspend fun consumePremiumVersion(): Boolean
-
-  suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
-}
-
-@Provide @Eager<AppScope> class PremiumVersionManagerImpl(
+@Provide @Eager<AppScope> class PremiumVersionManager(
   private val appUiStarter: AppUiStarter,
   private val billingService: BillingService,
   private val deviceScreenManager: DeviceScreenManager,
@@ -61,11 +49,11 @@ interface PremiumVersionManager {
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
   private val scope: ScopedCoroutineScope<AppScope>,
   private val toaster: Toaster
-) : PremiumVersionManager {
-  override val premiumSkuDetails: Flow<SkuDetails> =
+) {
+  val premiumSkuDetails: Flow<SkuDetails> =
     flow { emit(billingService.getSkuDetails(premiumVersionSku)!!) }
 
-  override val isPremiumVersion: Flow<Boolean> = combine(
+  val isPremiumVersion: Flow<Boolean> = combine(
     billingService.isPurchased(premiumVersionSku),
     if (oldPremiumVersionSkus.isNotEmpty())
       combine(oldPremiumVersionSkus.map { billingService.isPurchased(it) }) {
@@ -86,12 +74,12 @@ interface PremiumVersionManager {
     }
     .shareIn(scope, SharingStarted.Eagerly, 1)
 
-  override suspend fun purchasePremiumVersion() =
+  suspend fun purchasePremiumVersion() =
     billingService.purchase(premiumVersionSku, true, true)
 
-  override suspend fun consumePremiumVersion() = billingService.consumePurchase(premiumVersionSku)
+  suspend fun consumePremiumVersion() = billingService.consumePurchase(premiumVersionSku)
 
-  override suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
+  suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
     if (isPremiumVersion.first()) return block()
 
     scope.launch {

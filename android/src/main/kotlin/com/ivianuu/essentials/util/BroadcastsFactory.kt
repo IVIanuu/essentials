@@ -17,15 +17,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-fun interface BroadcastsFactory {
-  operator fun invoke(vararg actions: String): Flow<Intent>
-}
-
-@Provide fun broadcastsFactory(
-  appContext: AppContext,
-  coroutineContexts: CoroutineContexts
-) = BroadcastsFactory { actions ->
-  callbackFlow<Intent> {
+@Provide class BroadcastsFactory(
+  private val appContext: AppContext,
+  private val coroutineContexts: CoroutineContexts
+) {
+  operator fun invoke(vararg actions: String): Flow<Intent> = callbackFlow {
     val broadcastReceiver = object : BroadcastReceiver() {
       override fun onReceive(context: Context, intent: Intent) {
         trySend(intent)

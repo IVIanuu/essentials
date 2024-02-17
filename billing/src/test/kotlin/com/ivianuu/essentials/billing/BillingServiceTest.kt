@@ -39,7 +39,7 @@ class BillingServiceTest {
   @Test fun testWithConnection() = runCancellingBlockingTest {
     @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()
 
-    val context = BillingServiceImpl(
+    val context = BillingService(
       billingClientFactory = {
         mockk {
           every { startConnection(any()) } answers {
@@ -63,7 +63,7 @@ class BillingServiceTest {
   @Test fun testWithConnectionWithMultipleCallsToFinish() = runCancellingBlockingTest {
     @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()
 
-    val context = BillingServiceImpl(
+    val context = BillingService(
       billingClientFactory = {
         mockk {
           every { startConnection(any()) } answers {
@@ -93,7 +93,7 @@ class BillingServiceTest {
     @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()
     @Provide val refreshes = EventFlow<BillingRefresh>()
 
-    val service = BillingServiceImpl(
+    val service = BillingService(
       billingClientFactory = { TestBillingClient { refreshes.tryEmit(BillingRefresh) }.withTestSku() },
       coroutineContexts = CoroutineContexts(dispatcher)
     )

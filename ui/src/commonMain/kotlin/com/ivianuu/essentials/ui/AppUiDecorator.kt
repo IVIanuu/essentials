@@ -19,30 +19,28 @@ fun interface AppUiDecorator : ExtensionPoint<AppUiDecorator> {
   @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
-fun interface DecorateAppUi {
-  @Composable operator fun invoke(content: @Composable () -> Unit)
-}
-
-@Provide fun decorateAppUi(
-  records: List<ExtensionPointRecord<AppUiDecorator>>,
-  logger: Logger
-) = DecorateAppUi { content ->
-  val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
-    records
-      .sortedWithLoadingOrder()
-      .fold({ it() }) { acc, record ->
-        { content ->
-          acc {
-            logger.log { "decorate app ui ${record.key.value}" }
-            record.instance(content)
+@Provide class DecorateAppUi(
+  private val records: List<ExtensionPointRecord<AppUiDecorator>>,
+  private val logger: Logger
+) {
+  @Composable operator fun invoke(content: @Composable () -> Unit) {
+    val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
+      records
+        .sortedWithLoadingOrder()
+        .fold({ it() }) { acc, record ->
+          { content ->
+            acc {
+              logger.log { "decorate app ui ${record.key.value}" }
+              record.instance(content)
+            }
           }
         }
-      }
+    }
+
+    logger.log { "decorate app ui $content with combined $combinedDecorator" }
+
+    combinedDecorator(content)
   }
-
-  logger.log { "decorate app ui $content with combined $combinedDecorator" }
-
-  combinedDecorator(content)
 }
 
 fun interface AppThemeDecorator : AppUiDecorator {

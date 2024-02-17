@@ -4,8 +4,11 @@
 
 package com.ivianuu.essentials.premium
 
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.LoadingOrder
+import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.IsFirstRun
+import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.UserflowBuilder
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
@@ -16,30 +19,27 @@ import kotlinx.coroutines.flow.first
   }
 }
 
-fun interface PremiumHintUserflowBuilder : UserflowBuilder {
-  companion object {
-    @Provide val loadingOrder: LoadingOrder<PremiumHintUserflowBuilder>
-      get() = LoadingOrder<PremiumHintUserflowBuilder>()
-        .last()
-  }
-}
+@Provide class PremiumHintUserflowBuilder(
+  private val enabled: AppStartPremiumHintEnabled,
+  private val isFirstRun: suspend () -> IsFirstRun,
+  private val premiumVersionManager: PremiumVersionManager
+) : UserflowBuilder {
+  private var hintShown = false
 
-@Provide fun premiumHintUserflowBuilder(
-  enabled: AppStartPremiumHintEnabled,
-  isFirstRun: suspend () -> IsFirstRun,
-  premiumVersionManager: PremiumVersionManager
-): PremiumHintUserflowBuilder {
-  var hintShown = false
-  return PremiumHintUserflowBuilder {
+  override suspend fun invoke(): List<Screen<*>> {
     if (hintShown || !enabled.value || premiumVersionManager.isPremiumVersion.first())
-      return@PremiumHintUserflowBuilder emptyList()
-
     hintShown = true
-    listOf(
+    return listOf(
       GoPremiumScreen(
         showTryBasicOption = isFirstRun().value,
         allowBackNavigation = !isFirstRun().value
       )
     )
+  }
+
+  companion object {
+    @Provide val loadingOrder: LoadingOrder<PremiumHintUserflowBuilder>
+      get() = LoadingOrder<PremiumHintUserflowBuilder>()
+        .last()
   }
 }

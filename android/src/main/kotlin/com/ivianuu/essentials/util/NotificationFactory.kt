@@ -15,11 +15,21 @@ import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.ui.AppColors
 import com.ivianuu.injekt.Provide
 
-fun interface NotificationFactory {
+@Provide class NotificationFactory(
+  private val appContext: AppContext,
+  private val appColors: AppColors,
+  private val notificationManager: @SystemService NotificationManager
+) {
   operator fun invoke(
     channel: NotificationChannel,
     builder: NotificationCompat.Builder.() -> Unit
-  ): Notification
+  ): Notification {
+    notificationManager.createNotificationChannel(channel)
+    return NotificationCompat.Builder(appContext, channel.id)
+      .apply { color = appColors.primary.toArgb() }
+      .apply(builder)
+      .build()
+  }
 
   operator fun invoke(
     channelId: String,
@@ -31,15 +41,3 @@ fun interface NotificationFactory {
 
 inline val NotificationCompat.Builder.context: Context
   get() = @Suppress("RestrictedLint") mContext
-
-@Provide fun notificationFactory(
-  appContext: AppContext,
-  appColors: AppColors,
-  notificationManager: @SystemService NotificationManager
-) = NotificationFactory { channel, builder ->
-  notificationManager.createNotificationChannel(channel)
-  NotificationCompat.Builder(appContext, channel.id)
-    .apply { color = appColors.primary.toArgb() }
-    .apply(builder)
-    .build()
-}

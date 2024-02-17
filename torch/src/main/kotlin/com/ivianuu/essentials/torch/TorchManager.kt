@@ -21,22 +21,15 @@ import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.StateFlow
 
-interface TorchManager {
-  val torchEnabled: StateFlow<Boolean>
-
-  suspend fun updateTorchState(value: Boolean)
-}
-
-@Provide @Scoped<AppScope> class TorchManagerImpl(
+@Provide @Scoped<AppScope> class TorchManager(
   private val cameraManager: @SystemService CameraManager,
   private val logger: Logger,
   scope: ScopedCoroutineScope<AppScope>,
   private val toaster: Toaster
-) : TorchManager {
+) {
   private var _torchEnabled by mutableStateOf(false)
-  override val torchEnabled = scope.compositionStateFlow {
+  val torchEnabled = scope.compositionStateFlow {
     if (!_torchEnabled) return@compositionStateFlow _torchEnabled
 
     LaunchedEffect(true) {
@@ -59,7 +52,7 @@ interface TorchManager {
     _torchEnabled
   }
 
-  override suspend fun updateTorchState(value: Boolean) {
+  suspend fun updateTorchState(value: Boolean) {
     _torchEnabled = value
   }
 }

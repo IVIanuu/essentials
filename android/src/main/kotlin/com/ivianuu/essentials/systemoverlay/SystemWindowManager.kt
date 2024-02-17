@@ -46,13 +46,6 @@ import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
-interface SystemWindowManager {
-  suspend fun attachSystemWindow(
-    state: SystemWindowState = SystemWindowState(),
-    content: @Composable () -> Unit
-  ): Nothing
-}
-
 data object SystemWindowScope
 
 class SystemWindowState(
@@ -132,20 +125,20 @@ fun Modifier.systemWindowTrigger() = composed {
   }
 }
 
-@Provide class SystemWindowManagerImpl(
+@Provide class SystemWindowManager(
   private val appContext: AppContext,
   accessibilityWindowManager: AccessibilityWindowManager? = null,
   private val coroutineContexts: CoroutineContexts,
   private val systemWindowScopeFactory: () -> Scope<SystemWindowScope>,
   windowManager: @SystemService WindowManager
-) : SystemWindowManager {
+) {
   internal val canUseAccessibility = accessibilityWindowManager != null
   internal val windowManager = accessibilityWindowManager ?: windowManager
 
-  override suspend fun attachSystemWindow(
-    state: SystemWindowState,
+  suspend fun attachSystemWindow(
+    state: SystemWindowState = SystemWindowState(),
     content: @Composable () -> Unit
-  ) = withContext(coroutineContexts.main) {
+  ): Nothing = withContext(coroutineContexts.main) {
     bracketCase(
       acquire = {
         lateinit var contentView: View
@@ -224,7 +217,7 @@ fun Modifier.systemWindowTrigger() = composed {
   }
 }
 
-internal val LocalSystemWindowManager = staticCompositionLocalOf<SystemWindowManagerImpl> {
+internal val LocalSystemWindowManager = staticCompositionLocalOf<SystemWindowManager> {
   throw IllegalStateException("No system window manager provided")
 }
 

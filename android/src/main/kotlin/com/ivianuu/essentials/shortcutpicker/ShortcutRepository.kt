@@ -22,19 +22,13 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-interface ShortcutRepository {
-  val shortcuts: Flow<List<Shortcut>>
-
-  suspend fun extractShortcut(shortcutRequestResult: Intent): Shortcut
-}
-
-@Provide class ShortcutRepositoryImpl(
+@Provide class ShortcutRepository(
   private val appContext: AppContext,
   broadcastsFactory: BroadcastsFactory,
   private val coroutineContexts: CoroutineContexts,
   private val packageManager: PackageManager
-) : ShortcutRepository {
-  override val shortcuts: Flow<List<Shortcut>> = broadcastsFactory(
+) {
+  val shortcuts: Flow<List<Shortcut>> = broadcastsFactory(
     Intent.ACTION_PACKAGE_ADDED,
     Intent.ACTION_PACKAGE_REMOVED,
     Intent.ACTION_PACKAGE_CHANGED,
@@ -66,7 +60,7 @@ interface ShortcutRepository {
     }
     .distinctUntilChanged()
 
-  override suspend fun extractShortcut(shortcutRequestResult: Intent) = withContext(coroutineContexts.io) {
+  suspend fun extractShortcut(shortcutRequestResult: Intent) = withContext(coroutineContexts.io) {
     val intent =
       shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
     val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!

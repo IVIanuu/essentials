@@ -46,23 +46,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.time.Duration.Companion.seconds
 
-interface BillingService {
-  fun isPurchased(sku: Sku): Flow<Boolean>
-
-  suspend fun getSkuDetails(sku: Sku): SkuDetails?
-
-  suspend fun purchase(
-    sku: Sku,
-    acknowledge: Boolean = true,
-    consumeOldPurchaseIfUnspecified: Boolean = true
-  ): Boolean
-
-  suspend fun consumePurchase(sku: Sku): Boolean
-
-  suspend fun acknowledgePurchase(sku: Sku): Boolean
-}
-
-@Provide @Scoped<AppScope> class BillingServiceImpl(
+@Provide @Scoped<AppScope> class BillingService(
   private val appUiStarter: AppUiStarter,
   private val billingClientFactory: () -> BillingClient,
   coroutineContexts: CoroutineContexts,
@@ -70,7 +54,7 @@ interface BillingService {
   private val refreshes: MutableSharedFlow<BillingRefresh>,
   scope: Scope<AppScope>,
   private val scopeManager: ScopeManager
-) : BillingService {
+) {
   private val billingClient = scope.coroutineScope.childCoroutineScope(coroutineContexts.io).sharedResource(
     sharingStarted = SharingStarted.WhileSubscribed(10.seconds.inWholeMilliseconds),
     create = { _: Unit ->
@@ -109,7 +93,7 @@ interface BillingService {
     }
   )
 
-  override fun isPurchased(sku: Sku): Flow<Boolean> = scopeManager.flowInScope<AppVisibleScope, _>(
+  fun isPurchased(sku: Sku): Flow<Boolean> = scopeManager.flowInScope<AppVisibleScope, _>(
     refreshes.onStart { emit(BillingRefresh) }
       .onStart { emit(BillingRefresh) }
       .onEach { logger.log { "update is purchased for $sku" } }
@@ -118,14 +102,14 @@ interface BillingService {
       .onEach { logger.log { "is purchased for $sku -> $it" } }
   )
 
-  override suspend fun getSkuDetails(sku: Sku): SkuDetails? = billingClient.use(Unit) {
+  suspend fun getSkuDetails(sku: Sku): SkuDetails? = billingClient.use(Unit) {
     it.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
       ?.firstOrNull { it.sku == sku.skuString }
       .also { logger.log { "got sku details $it for $sku" } }
   }
 
-  override suspend fun purchase(
+  suspend fun purchase(
     sku: Sku,
     acknowledge: Boolean,
     consumeOldPurchaseIfUnspecified: Boolean
@@ -162,7 +146,7 @@ interface BillingService {
     return@use if (success && acknowledge) acknowledgePurchase(sku) else success
   }
 
-  override suspend fun consumePurchase(sku: Sku): Boolean = billingClient.use(Unit) { billingClient ->
+  suspend fun consumePurchase(sku: Sku): Boolean = billingClient.use(Unit) { billingClient ->
     val purchase = billingClient.getPurchase(sku) ?: return@use false
 
     val consumeParams = ConsumeParams.newBuilder()
@@ -180,7 +164,7 @@ interface BillingService {
     return@use success
   }
 
-  override suspend fun acknowledgePurchase(sku: Sku): Boolean = billingClient.use(Unit) { billingClient ->
+  suspend fun acknowledgePurchase(sku: Sku): Boolean = billingClient.use(Unit) { billingClient ->
     val purchase = billingClient.getPurchase(sku)
       ?: return@use false
 

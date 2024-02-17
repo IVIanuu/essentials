@@ -7,7 +7,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.apps.CheckableAppsParams
+import com.ivianuu.essentials.apps.CheckableAppsScreen
 import com.ivianuu.essentials.apps.CheckableAppsUi
 import com.ivianuu.essentials.apps.LaunchableAppPredicate
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
@@ -34,14 +34,14 @@ import kotlinx.serialization.Serializable
 class CheckAppsScreen : Screen<Unit>
 
 @Provide fun checkAppsUi(
-  checkableAppsUi: (CheckableAppsParams) -> CheckableAppsUi,
+  checkableAppsUi: (CheckableAppsScreen) -> CheckableAppsUi,
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate,
   scope: ScopedCoroutineScope<ScreenScope>
 ) = Ui<CheckAppsScreen, Unit> {
   remember {
     checkableAppsUi(
-      CheckableAppsParams(
+      CheckableAppsScreen(
         db.selectAll<CheckedAppEntity>()
           .map { it.map { it.packageName }.toSet() },
         { checkedApps ->
@@ -59,7 +59,7 @@ class CheckAppsScreen : Screen<Unit>
         "Send check apps"
       )
     )
-  }()
+  }.Content()
 }
 
 @Tag private annotation class CheckApps

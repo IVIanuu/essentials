@@ -31,18 +31,11 @@ interface RemoteAction<I : Any?> {
   }
 }
 
-interface RemoteActionFactory {
-  operator fun <T : RemoteAction<I>, I> invoke(
-    input: I? = null,
-    @Inject actionClass: KClass<T>,
-  ): PendingIntent
-}
-
-@Provide class RemoteActionFactoryImpl(
+@Provide class RemoteActionFactory(
   private val appContext: AppContext,
   private val json: Json
-) : RemoteActionFactory {
-  override fun <T : RemoteAction<I>, I> invoke(input: I?, @Inject actionClass: KClass<T>): PendingIntent =
+) {
+  operator fun <T : RemoteAction<I>, I> invoke(input: I? = null, @Inject actionClass: KClass<T>): PendingIntent =
     PendingIntent.getBroadcast(
       appContext,
       0,
@@ -58,11 +51,9 @@ interface RemoteActionFactory {
     )
 }
 
-fun interface StartAppRemoteAction : RemoteAction<Any?> {
-  @Provide companion object {
-    @Provide fun impl(appUiStarter: AppUiStarter) = StartAppRemoteAction {
-      appUiStarter()
-    }
+@Provide class StartAppRemoteAction(private val appUiStarter: AppUiStarter) : RemoteAction<Any?> {
+  override suspend fun invoke() {
+    appUiStarter()
   }
 }
 

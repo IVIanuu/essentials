@@ -11,14 +11,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.compositionStateFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.collectAsResourceState
@@ -34,110 +33,75 @@ import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 
-fun interface CheckableAppsUi {
-  @Composable operator fun invoke()
-}
-
-data class CheckableAppsParams(
+data class CheckableAppsScreen(
   val checkedApps: Flow<Set<String>>,
   val onCheckedAppsChanged: (Set<String>) -> Unit,
   val appPredicate: AppPredicate,
   val appBarTitle: String
 )
 
-@Provide fun checkableAppsScreen(presenter: StateFlow<CheckableAppsState>) = CheckableAppsUi {
-  val state by presenter.collectAsState()
-  ScreenScaffold(
-    topBar = {
-      AppBar(
-        title = { Text(state.appBarTitle) },
-        actions = {
-          PopupMenuButton {
-            PopupMenuItem(onSelected = state.selectAll) { Text(stringResource(R.string.select_all)) }
-            PopupMenuItem(onSelected = state.deselectAll) { Text(stringResource(R.string.deselect_all)) }
-          }
-        }
-      )
-    }
-  ) {
-    ResourceVerticalListFor(state.checkableApps) { app ->
-      ListItem(
-        modifier = Modifier.clickable { state.updateAppCheckedState(app, !app.isChecked) },
-        title = { Text(app.info.appName) },
-        leading = {
-          Image(
-            painter = rememberAsyncImagePainter(AppIcon(packageName = app.info.packageName)),
-            modifier = Modifier.size(40.dp),
-            contentDescription = null
-          )
-        },
-        trailing = {
-          Switch(
-            checked = app.isChecked,
-            onCheckedChange = null
-          )
-        }
-      )
-    }
-  }
-}
-
-data class CheckableAppsState(
-  val allApps: Resource<List<AppInfo>>,
-  val checkedApps: Set<String>,
-  val appPredicate: AppPredicate,
-  val appBarTitle: String,
-  val updateAppCheckedState: (CheckableApp, Boolean) -> Unit,
-  val selectAll: () -> Unit,
-  val deselectAll: () -> Unit
+@Provide class CheckableAppsUi(
+  private val screen: CheckableAppsScreen,
+  private val repository: AppRepository
 ) {
-  val checkableApps = allApps
-    .map { it.filter { appPredicate(it) } }
-    .map { apps ->
-      apps.map { app ->
-        CheckableApp(
-          info = app,
-          isChecked = app.packageName in checkedApps
+  @Composable fun Content() {
+    val checkedApps by screen.checkedApps.collectAsState(emptySet())
+    val allApps by remember {
+      repository.installedApps
+        .map { it.filter { screen.appPredicate(it) } }
+    }.collectAsResourceState()
+
+    fun updateCheckedApps(transform: Set<String>.() -> Set<String>) {
+      val newCheckedApps = checkedApps.transform()
+      screen.onCheckedAppsChanged(newCheckedApps)
+    }
+
+    ScreenScaffold(
+      topBar = {
+        AppBar(
+          title = { Text(screen.appBarTitle) },
+          actions = {
+            PopupMenuButton {
+              PopupMenuItem(
+                onSelected = {
+                  updateCheckedApps {
+                    this + allApps.get().map { it.packageName }
+                  }
+                }
+              ) { Text(stringResource(R.string.select_all)) }
+              PopupMenuItem(
+                onSelected = {
+                  updateCheckedApps { emptySet() }
+                }
+              ) { Text(stringResource(R.string.deselect_all)) }
+            }
+          }
+        )
+      }
+    ) {
+      ResourceVerticalListFor(allApps) { app ->
+        val isChecked = app.packageName in checkedApps
+        ListItem(
+          modifier = Modifier.clickable {
+            updateCheckedApps {
+              if (isChecked) this + app.packageName
+              else this - app.packageName
+            }
+          },
+          title = { Text(app.appName) },
+          leading = {
+            Image(
+              painter = rememberAsyncImagePainter(AppIcon(packageName = app.packageName)),
+              modifier = Modifier.size(40.dp),
+              contentDescription = null
+            )
+          },
+          trailing = { Switch(checked = isChecked, onCheckedChange = null) }
         )
       }
     }
-}
-
-data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
-
-@Provide fun checkableAppsPresenter(
-  params: CheckableAppsParams,
-  repository: AppRepository,
-  scope: ScopedCoroutineScope<ScreenScope>
-): @Scoped<ScreenScope> StateFlow<CheckableAppsState> = scope.compositionStateFlow {
-  val checkedApps by params.checkedApps.collectAsState(emptySet())
-  val allApps by repository.installedApps.collectAsResourceState()
-
-  fun updateCheckedApps(transform: Set<String>.() -> Set<String>) {
-    val newCheckedApps = checkedApps.transform()
-    params.onCheckedAppsChanged(newCheckedApps)
   }
-
-  CheckableAppsState(
-    allApps = allApps,
-    appPredicate = params.appPredicate,
-    appBarTitle = params.appBarTitle,
-    checkedApps = checkedApps,
-    updateAppCheckedState = action { app, isChecked ->
-      updateCheckedApps {
-        if (isChecked) this + app.info.packageName
-        else this - app.info.packageName
-      }
-    },
-    selectAll = action {
-      updateCheckedApps {
-        this + allApps.get().map { it.packageName }
-      }
-    },
-    deselectAll = action {
-      updateCheckedApps { emptySet() }
-    }
-  )
 }

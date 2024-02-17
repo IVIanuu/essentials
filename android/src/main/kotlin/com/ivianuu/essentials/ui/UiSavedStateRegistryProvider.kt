@@ -9,9 +9,7 @@ import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import com.ivianuu.injekt.Provide
 
-fun interface SavableStateRegistryProvider : AppUiDecorator
-
-@Provide val savableStateRegistryProvider = SavableStateRegistryProvider { content ->
+@Provide val savableStateRegistryProvider = AppUiDecorator { content ->
   CompositionLocalProvider(
     LocalSaveableStateRegistry provides SaveableStateRegistry(emptyMap()) { true },
     content = content

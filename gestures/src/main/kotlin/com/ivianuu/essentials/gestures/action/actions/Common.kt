@@ -55,41 +55,34 @@ fun staticActionIcon(id: Int) = ActionIcon {
 
 operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
 
-fun interface ActionIntentSender {
-  operator fun invoke(intent: Intent, options: Bundle?)
-}
-
-@Provide fun actionIntentSender(
-  appContext: AppContext,
-  toaster: Toaster
-) = ActionIntentSender { intent, options ->
-  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-  Either.catch {
-    PendingIntent.getActivity(
-      appContext,
-      1000,
-      intent,
-      PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-      options
-    ).send()
-  }.onLeft {
-    it.printStackTrace()
-    toaster(R.string.activity_not_found)
+@Provide class ActionIntentSender(
+  private val appContext: AppContext,
+  private val toaster: Toaster
+) {
+  operator fun invoke(intent: Intent, options: Bundle?) {
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    Either.catch {
+      PendingIntent.getActivity(
+        appContext,
+        1000,
+        intent,
+        PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        options
+      ).send()
+    }.onLeft {
+      it.printStackTrace()
+      toaster(R.string.activity_not_found)
+    }
   }
 }
 
-fun interface CloseSystemDialogsUseCase {
-  suspend operator fun invoke(): Either<Throwable, Unit>
-}
-
-@SuppressLint("MissingPermission", "InlinedApi")
-@Provide
-fun closeSystemDialogsUseCase(
-  appConfig: AppConfig,
-  appContext: AppContext,
-  accessibilityService: AccessibilityService,
-) = CloseSystemDialogsUseCase {
-  Either.catch {
+@Provide class CloseSystemDialogsUseCase(
+  private val appConfig: AppConfig,
+  private val appContext: AppContext,
+  private val accessibilityService: AccessibilityService,
+) {
+  @SuppressLint("MissingPermission", "InlinedApi")
+  suspend operator fun invoke(): Either<Throwable, Unit> = Either.catch {
     if (appConfig.sdk >= 31)
       accessibilityService.performGlobalAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
     else

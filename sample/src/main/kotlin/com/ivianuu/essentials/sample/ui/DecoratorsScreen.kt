@@ -45,9 +45,7 @@ class DecoratorsScreen : Screen<Unit>
   }
 }
 
-fun interface SampleListDecorator : ListDecorator
-
-@Provide val sampleListDecorator = SampleListDecorator {
+@Provide val sampleListDecorator = ListDecorator {
   item(null) {
     val screen = Either.catch { LocalScope.current }.getOrNull()?.screen
     if (screen is DecoratorsScreen)
@@ -63,9 +61,7 @@ fun interface SampleListDecorator : ListDecorator
   }
 }
 
-fun interface SampleScreenDecorator : ScreenDecorator
-
-@Provide val sampleKeyUiDecorator = SampleScreenDecorator decorator@ { content ->
+@Provide val sampleKeyUiDecorator = ScreenDecorator decorator@ { content ->
   val screen = LocalScope.current.screen
   if (screen !is DecoratorsScreen) {
     content()

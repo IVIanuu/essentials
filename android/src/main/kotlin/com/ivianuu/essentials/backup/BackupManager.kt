@@ -26,13 +26,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-interface BackupManager {
-  suspend fun createBackup()
-
-  suspend fun restoreBackup()
-}
-
-@Provide class BackupManagerImpl(
+@Provide class BackupManager(
   private val backupDir: BackupDir,
   private val backupFiles: List<BackupFile>,
   private val appConfig: AppConfig,
@@ -43,8 +37,8 @@ interface BackupManager {
   private val navigator: Navigator,
   private val processRestarter: ProcessRestarter,
   private val scope: ScopedCoroutineScope<AppScope>
-) : BackupManager {
-  override suspend fun createBackup(): Unit =
+) {
+  suspend fun createBackup(): Unit =
     withContext(scope.coroutineContext + coroutineContexts.io) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
@@ -76,7 +70,7 @@ interface BackupManager {
       navigator.push(ShareBackupFileScreen(backupFile.absolutePath))?.orThrow()
     }
 
-  override suspend fun restoreBackup() = withContext(scope.coroutineContext + coroutineContexts.io) {
+  suspend fun restoreBackup() = withContext(scope.coroutineContext + coroutineContexts.io) {
     val uri = navigator.push(
       DefaultIntentScreen(
         Intent.createChooser(

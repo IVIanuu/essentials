@@ -17,39 +17,29 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 
-interface RateUseCases {
-  suspend fun rateOnPlay()
-
-  suspend fun shouldDisplayShowNever(): Boolean
-
-  suspend fun showNever()
-
-  suspend fun showLater()
-}
-
-@Provide class RateUsecasesImpl(
+@Provide class RateUseCases(
   private val appConfig: AppConfig,
   private val clock: Clock,
   private val screen: Screen<*>,
   private val navigator: Navigator,
   private val pref: DataStore<RatePrefs>
-) : RateUseCases {
-  override suspend fun rateOnPlay() {
+) {
+  suspend fun rateOnPlay() {
     Either.catch {
       navigator.push(PlayStoreAppDetailsKey(appConfig.packageName))
       pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
     }.printErrors()
   }
 
-  override suspend fun shouldDisplayShowNever(): Boolean =
+  suspend fun shouldDisplayShowNever(): Boolean =
     pref.data.first().feedbackState == RatePrefs.FeedbackState.LATER
 
-  override suspend fun showNever() {
+  suspend fun showNever() {
     pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.NEVER) }
     navigator.pop(screen)
   }
 
-  override suspend fun showLater() {
+  suspend fun showLater() {
     val now = clock()
     pref.updateData {
       copy(

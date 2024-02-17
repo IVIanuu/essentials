@@ -24,25 +24,17 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-interface PermissionManager {
-  fun <T : Permission> permission(key: TypeKey<T>): T
-
-  fun permissionState(permissions: List<TypeKey<Permission>>): Flow<Boolean>
-
-  suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean
-}
-
-@Provide class PermissionManagerImpl(
+@Provide class PermissionManager(
   private val appUiStarter: AppUiStarter,
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val permissions: Map<TypeKey<Permission>, () -> Permission>,
   private val stateProviders: Map<TypeKey<Permission>, () -> PermissionStateProvider<Permission>>
-) : PermissionManager {
-  override fun <T : Permission> permission(key: TypeKey<T>): T =
+) {
+  fun <T : Permission> permission(key: TypeKey<T>): T =
     permissions[key]!!().unsafeCast()
 
-  override fun permissionState(permissions: List<TypeKey<Permission>>): Flow<Boolean> =
+  fun permissionState(permissions: List<TypeKey<Permission>>): Flow<Boolean> =
     if (permissions.isEmpty()) flowOf(true)
     else combine(
       permissions
@@ -59,7 +51,7 @@ interface PermissionManager {
         }
     ) { states -> states.all { it } }
 
-  override suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean {
+  suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean {
     logger.log { "request permissions $permissions" }
 
     val result = permissions.all { permissionState(listOf(it)).first() } ||

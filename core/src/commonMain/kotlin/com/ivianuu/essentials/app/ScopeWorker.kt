@@ -37,19 +37,12 @@ fun <N> ScopeComposition(
   coroutineScope { launchComposition(block = block) }
 }
 
-interface ScopeWorkerRunner<N> : ScopeObserver<N> {
-  @Provide companion object {
-    @Provide fun <N> loadingOrder(@Inject nameKey: TypeKey<N>) = LoadingOrder<ScopeWorkerRunner<N>>()
-      .after<ScopeInitializerRunner<N>>()
-  }
-}
-
-@Provide fun <N> scopeWorkerRunner(
-  coroutineScope: ScopedCoroutineScope<N>,
-  logger: Logger,
-  nameKey: TypeKey<N>,
-  workersFactory: () -> List<ExtensionPointRecord<ScopeWorker<N>>>
-): ScopeWorkerRunner<N> = object : ScopeWorkerRunner<N> {
+@Provide class ScopeWorkerRunner<N>(
+  private val coroutineScope: ScopedCoroutineScope<N>,
+  private val logger: Logger,
+  private val nameKey: TypeKey<N>,
+  private val workersFactory: () -> List<ExtensionPointRecord<ScopeWorker<N>>>
+) : ScopeObserver<N> {
   override fun onEnter(scope: Scope<N>) {
     coroutineScope.launch {
       guaranteeCase(
@@ -73,5 +66,10 @@ interface ScopeWorkerRunner<N> : ScopeObserver<N> {
         }
       )
     }
+  }
+
+  @Provide companion object {
+    @Provide fun <N> loadingOrder(@Inject nameKey: TypeKey<N>) = LoadingOrder<ScopeWorkerRunner<N>>()
+      .after<ScopeInitializerRunner<N>>()
   }
 }

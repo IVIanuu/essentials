@@ -46,8 +46,9 @@ object ChildNavGraph
     Column {
       (1..3).forEach { navigationIndex ->
         key(navigationIndex) {
+          val scope = rememberCoroutineScope()
           val navigator = remember {
-            Navigator(listOf(ChildNavigationItemScreen(navigationIndex, 0)))
+            Navigator(scope, listOf(ChildNavigationItemScreen(navigationIndex, 0)))
           }
 
           NavigatorContent(

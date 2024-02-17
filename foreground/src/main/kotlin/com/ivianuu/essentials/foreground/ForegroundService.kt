@@ -31,7 +31,6 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.RemoteActionFactory
 import com.ivianuu.essentials.util.StartAppRemoteAction
-import com.ivianuu.essentials.util.context
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.inject
 import kotlinx.coroutines.Job
@@ -40,7 +39,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Provide @AndroidComponent class ForegroundService(
   private val appConfig: AppConfig,
-  private val foregroundManager: ForegroundManagerImpl,
+  private val foregroundManager: ForegroundManager,
   private val notificationFactory: NotificationFactory,
   private val notificationManager: @SystemService NotificationManager,
   private val logger: Logger,

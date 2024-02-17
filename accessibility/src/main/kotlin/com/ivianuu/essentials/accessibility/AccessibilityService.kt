@@ -11,26 +11,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 
-interface AccessibilityService {
+@Provide class AccessibilityService(private val scopeManager: ScopeManager) {
   val events: Flow<AccessibilityEvent>
-
-  suspend fun performGlobalAction(action: Int)
-}
-
-typealias AndroidAccessibilityService = android.accessibilityservice.AccessibilityService
-
-@Provide class AccessibilityServiceImpl(
-  private val scopeManager: ScopeManager
-) : AccessibilityService {
-  override val events: Flow<AccessibilityEvent>
     get() = scopeManager.scopeOfOrNull<AccessibilityScope>()
       .flatMapLatest { it?.accessibilityService?.events ?: infiniteEmptyFlow() }
 
-  override suspend fun performGlobalAction(action: Int) {
+  suspend fun performGlobalAction(action: Int) {
     scopeManager.scopeOf<AccessibilityScope>().first().accessibilityService
       .performGlobalAction(action)
   }
 }
+
+typealias AndroidAccessibilityEvent = android.view.accessibility.AccessibilityEvent
+typealias AndroidAccessibilityService = android.accessibilityservice.AccessibilityService
 
 data class AccessibilityEvent(
   val type: Int,
@@ -42,8 +35,6 @@ data class AccessibilityEvent(
     @Provide val accessibilityEvents = EventFlow<AccessibilityEvent>()
   }
 }
-
-typealias AndroidAccessibilityEvent = android.view.accessibility.AccessibilityEvent
 
 data class AccessibilityConfig(
   val eventTypes: Int = 0,

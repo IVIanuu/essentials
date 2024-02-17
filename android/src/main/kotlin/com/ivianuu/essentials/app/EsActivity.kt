@@ -19,14 +19,13 @@ import com.ivianuu.essentials.ui.DecorateAppUi
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.UiScopeOwner
 import com.ivianuu.essentials.ui.app.AppUi
-import com.ivianuu.essentials.util.ForegroundActivityMarker
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
 @Provide @AndroidComponent class EsActivity(
   private val uiScopeFactory: (@Service<UiScope> ComponentActivity) -> Scope<UiScope>
-) : ComponentActivity(), ForegroundActivityMarker, UiScopeOwner {
+) : ComponentActivity(), UiScopeOwner {
   override lateinit var uiScope: Scope<UiScope>
 
   override fun onCreate(savedInstanceState: Bundle?) {
