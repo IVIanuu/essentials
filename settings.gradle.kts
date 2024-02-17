@@ -22,7 +22,6 @@ include(
   ":rubik",
   ":sample",
   ":test",
-  ":torch",
   ":ui",
   ":work",
   ":xposed",

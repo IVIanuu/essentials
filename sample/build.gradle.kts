@@ -29,7 +29,6 @@ dependencies {
   implementation(project(":notification-listener"))
   implementation(project(":premium"))
   implementation(project(":rubik"))
-  implementation(project(":torch"))
   implementation(project(":work"))
   implementation(project(":xposed"))
   compileOnly(project(":xposed-provided"))

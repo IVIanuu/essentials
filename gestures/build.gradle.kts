@@ -12,7 +12,6 @@ dependencies {
   api(project(":accessibility"))
   api(project(":android"))
   api(project(":recent-apps"))
-  api(project(":torch"))
   testImplementation(project(":android-test"))
 }
 
