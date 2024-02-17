@@ -6,8 +6,6 @@ package com.ivianuu.essentials.billing
 
 import android.app.*
 import com.android.billingclient.api.*
-import com.android.billingclient.api.PriceChangeConfirmationListener
-import com.android.billingclient.api.PriceChangeFlowParams
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -51,17 +49,9 @@ class TestBillingClient(
   override fun launchBillingFlow(activity: Activity, params: BillingFlowParams): BillingResult {
     scope.launch {
       delay(10)
-      purchases = purchases + Purchase(sku = params.zze().first().cast<SkuDetails>().sku)
+      purchases = purchases + Purchase(sku = params.zze()!!.first().cast<SkuDetails>().sku)
     }
     return successResult()
-  }
-
-  override fun launchPriceChangeConfirmationFlow(
-    activity: Activity,
-    params: PriceChangeFlowParams,
-    listener: PriceChangeConfirmationListener
-  ) {
-    TODO()
   }
 
   override fun queryPurchasesAsync(
