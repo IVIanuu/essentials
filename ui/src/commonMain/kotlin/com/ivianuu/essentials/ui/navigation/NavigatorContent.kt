@@ -14,6 +14,8 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.LocalScope
+import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.ScopeObserver
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
@@ -48,16 +50,28 @@ import kotlin.collections.set
 
   backStack.forEachIndexed { index, screen ->
     key(screen) {
-      DisposableEffect(true) {
-        onDispose { screenContexts.remove(screen) }
-      }
-
       screenContexts[screen] = rememberScreenContext(screen, navigator, screenContextComponent)
 
       key(index) {
         BackHandler(enabled = handleBack && index > 0, onBack = action {
           navigator.pop(screen)
         })
+      }
+    }
+  }
+
+  // clean up removed contexts
+  screenContexts.forEach { (screen, screenContext) ->
+    key(screenContext) {
+      DisposableEffect(true) {
+        screenContext.scope.addObserver(
+          object : ScopeObserver<Any?> {
+            override fun onExit(scope: Scope<Any?>) {
+              screenContexts.remove(screen)
+            }
+          }
+        )
+        onDispose {  }
       }
     }
   }
