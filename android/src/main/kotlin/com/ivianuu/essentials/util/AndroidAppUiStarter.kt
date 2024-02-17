@@ -4,16 +4,14 @@
 
 package com.ivianuu.essentials.util
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ScopeManager
-import com.ivianuu.essentials.app.AppVisibleScope
-import com.ivianuu.essentials.scopeOf
-import com.ivianuu.essentials.ui.navigation.AppUiStarter
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.first
+import android.content.*
+import android.content.pm.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
+
 @Provide fun androidAppUiStarter(
   appContext: AppContext,
   appConfig: AppConfig,

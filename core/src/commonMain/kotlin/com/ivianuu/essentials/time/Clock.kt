@@ -5,8 +5,8 @@
 
 package com.ivianuu.essentials.time
 
-import com.ivianuu.injekt.Provide
-import kotlin.time.Duration
+import com.ivianuu.injekt.*
+import kotlin.time.*
 
 fun interface Clock {
   operator fun invoke(): Duration

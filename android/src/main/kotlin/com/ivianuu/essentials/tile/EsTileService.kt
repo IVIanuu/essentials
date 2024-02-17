@@ -4,21 +4,15 @@
 
 package com.ivianuu.essentials.tile
 
-import android.service.quicksettings.Tile
-import android.service.quicksettings.TileService
-import com.ivianuu.essentials.AndroidComponent
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.Service
-import com.ivianuu.essentials.compose.compositionStateFlow
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.ui.navigation.Presenter
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlin.reflect.KClass
+import android.service.quicksettings.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
+import kotlin.reflect.*
 
 @Provide @AndroidComponent class EsTileService1(
   @Inject logger: Logger,

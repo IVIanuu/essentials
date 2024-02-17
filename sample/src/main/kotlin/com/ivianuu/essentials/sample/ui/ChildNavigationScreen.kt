@@ -4,34 +4,18 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.animation.slideHorizontally
-import com.ivianuu.essentials.ui.material.AppBar
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.ScreenScaffold
-import com.ivianuu.essentials.ui.material.guessingContentColorFor
-import com.ivianuu.essentials.ui.navigation.NavGraph
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.NavigatorContent
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.ScreenContextComponent
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.popTop
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 class ChildNavigationScreen : Screen<Unit>
 

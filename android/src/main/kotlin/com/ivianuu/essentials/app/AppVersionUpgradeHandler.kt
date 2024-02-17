@@ -4,16 +4,13 @@
 
 package com.ivianuu.essentials.app
 
-import arrow.fx.coroutines.parMap
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.DataStoreModule
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.first
-import kotlinx.serialization.Serializable
+import arrow.fx.coroutines.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
+import kotlinx.serialization.*
 
 fun interface AppVersionUpgradeHandler {
   suspend operator fun invoke(lastAppVersion: Int, appVersion: Int)

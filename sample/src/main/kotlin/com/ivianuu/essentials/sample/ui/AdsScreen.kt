@@ -4,23 +4,16 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
-import com.ivianuu.essentials.ads.AdsEnabled
-import com.ivianuu.essentials.ads.FullScreenAdConfig
-import com.ivianuu.essentials.ads.FullScreenAdManager
-import com.ivianuu.essentials.ads.ListAdBannerConfig
-import com.ivianuu.essentials.ads.ScreenAdBannerConfig
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.common.VerticalList
-import com.ivianuu.essentials.ui.material.AppBar
-import com.ivianuu.essentials.ui.material.ScreenScaffold
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.MutableStateFlow
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.ads.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.prefs.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Provide val adsHomeItem = HomeItem("Ads") { AdsScreen() }
 

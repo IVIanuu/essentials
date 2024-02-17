@@ -4,25 +4,16 @@
 
 package com.ivianuu.essentials.permission
 
-import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.permission.ui.PermissionRequestScreen
-import com.ivianuu.essentials.ui.UiScopeOwner
-import com.ivianuu.essentials.ui.navigation.AppUiStarter
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.unsafeCast
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.withContext
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.permission.ui.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 @Provide class PermissionManager(
   private val appUiStarter: AppUiStarter,

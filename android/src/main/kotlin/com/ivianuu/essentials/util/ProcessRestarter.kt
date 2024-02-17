@@ -4,11 +4,10 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
-import com.jakewharton.processphoenix.ProcessPhoenix
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import com.jakewharton.processphoenix.*
 
 @Provide class ProcessRestarter(
   private val appContext: AppContext,

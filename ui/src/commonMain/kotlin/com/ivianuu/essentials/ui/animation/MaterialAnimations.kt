@@ -2,16 +2,7 @@ package com.ivianuu.essentials.ui.animation
 
 import soup.compose.material.motion.MotionConstants.DefaultMotionDuration
 import soup.compose.material.motion.MotionConstants.DefaultSlideDistance
-import soup.compose.material.motion.animation.materialFadeIn
-import soup.compose.material.motion.animation.materialFadeOut
-import soup.compose.material.motion.animation.materialFadeThroughIn
-import soup.compose.material.motion.animation.materialFadeThroughOut
-import soup.compose.material.motion.animation.materialSharedAxisXIn
-import soup.compose.material.motion.animation.materialSharedAxisXOut
-import soup.compose.material.motion.animation.materialSharedAxisYIn
-import soup.compose.material.motion.animation.materialSharedAxisYOut
-import soup.compose.material.motion.animation.materialSharedAxisZIn
-import soup.compose.material.motion.animation.materialSharedAxisZOut
+import soup.compose.material.motion.animation.*
 
 fun ElementTransitionBuilder<*>.materialFade(
   durationMillis: Int = DefaultMotionDuration,

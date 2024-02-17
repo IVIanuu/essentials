@@ -4,35 +4,15 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.Lerper
-import com.ivianuu.essentials.ui.material.DefaultSliderRange
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
-import com.ivianuu.essentials.ui.material.Slider
-import com.ivianuu.essentials.ui.material.StepPolicy
-import com.ivianuu.essentials.ui.material.stepValue
-import com.ivianuu.injekt.Inject
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
 @Composable fun <T : Comparable<T>> SliderListItem(

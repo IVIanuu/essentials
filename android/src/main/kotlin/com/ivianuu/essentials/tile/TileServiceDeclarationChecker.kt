@@ -4,14 +4,13 @@
 
 package com.ivianuu.essentials.tile
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.ui.navigation.Presenter
-import com.ivianuu.injekt.Provide
-import kotlin.reflect.KClass
+import android.content.*
+import android.content.pm.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 @Provide fun tileServiceDeclarationChecker(
   appContext: AppContext,

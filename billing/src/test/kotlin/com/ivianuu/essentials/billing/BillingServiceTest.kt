@@ -4,30 +4,22 @@
 
 package com.ivianuu.essentials.billing
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingResult
-import com.ivianuu.essentials.AppScope
+import androidx.test.ext.junit.runners.*
+import com.android.billingclient.api.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.AppForegroundState
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.logging.NoopLogger
-import com.ivianuu.essentials.test.dispatcher
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.ui.navigation.AppUiStarter
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.inject
-import io.kotest.matchers.booleans.shouldBeTrue
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.flowOf
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.test.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import io.kotest.matchers.booleans.*
+import io.mockk.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import org.junit.*
+import org.junit.runner.*
+import org.robolectric.annotation.*
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])

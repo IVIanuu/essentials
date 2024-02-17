@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.*
 
 fun interface ScreenInterceptor<R> {
   suspend operator fun invoke(screen: Screen<R>): (suspend () -> R?)?

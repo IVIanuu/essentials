@@ -4,11 +4,10 @@
 
 package com.ivianuu.essentials.coil
 
-import coil.Coil
-import coil.ImageLoader
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.app.ScopeInitializer
-import com.ivianuu.injekt.Provide
+import coil.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.injekt.*
 
 @Provide fun coilInitializer(imageLoaderFactory: () -> ImageLoader) =
   ScopeInitializer<AppScope> { Coil.setImageLoader(imageLoaderFactory) }

@@ -4,16 +4,15 @@
 
 package com.ivianuu.essentials.permission
 
-import androidx.compose.runtime.Composable
-import arrow.fx.coroutines.parMap
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.flow.first
+import androidx.compose.runtime.*
+import arrow.fx.coroutines.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 interface Permission {
   val title: String

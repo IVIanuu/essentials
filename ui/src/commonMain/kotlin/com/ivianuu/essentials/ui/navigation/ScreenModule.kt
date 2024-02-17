@@ -4,11 +4,9 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.unsafeCast
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import kotlin.reflect.KClass
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 @Provide object ScreenModule {
   @Provide fun <@Spread T : Ui<S, *>, S : Screen<*>> rootNavGraphUiFactory(

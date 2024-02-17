@@ -4,15 +4,10 @@
 
 package com.ivianuu.essentials.app
 
-import android.app.Activity
-import android.app.AppComponentFactory
-import android.app.Application
+import android.app.*
 import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.ContentProvider
-import android.content.Intent
-import com.ivianuu.essentials.AndroidComponentFactoryComponent
-import com.ivianuu.essentials.cast
+import android.content.*
+import com.ivianuu.essentials.*
 
 class EsAppComponentFactory : AppComponentFactory() {
   private val factories: Map<String, (Intent?) -> Any> by lazy(LazyThreadSafetyMode.NONE) {

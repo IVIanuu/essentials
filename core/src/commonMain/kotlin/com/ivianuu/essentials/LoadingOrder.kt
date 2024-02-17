@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 sealed interface LoadingOrder<T> {
   sealed interface Static<T> : LoadingOrder<T> {

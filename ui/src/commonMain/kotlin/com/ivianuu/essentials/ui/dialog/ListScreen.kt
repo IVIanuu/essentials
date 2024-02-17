@@ -4,19 +4,15 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.common.UiRenderer
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
+import androidx.compose.foundation.*
+import androidx.compose.foundation.lazy.*
+import androidx.compose.material.*
+import androidx.compose.ui.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 class ListScreen<T : Any>(
   val items: List<T>,

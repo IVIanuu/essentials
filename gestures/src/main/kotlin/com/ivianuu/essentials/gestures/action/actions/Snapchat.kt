@@ -1,35 +1,20 @@
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityServiceInfo
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.hardware.camera2.CameraManager
-import android.provider.MediaStore
-import android.view.accessibility.AccessibilityNodeInfo
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.ScopeManager
-import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.AccessibilityScope
-import com.ivianuu.essentials.accessibility.accessibilityService
-import com.ivianuu.essentials.accessibility.firstNodeOrNull
+import android.accessibilityservice.*
+import android.content.*
+import android.content.pm.*
+import android.hardware.camera2.*
+import android.provider.*
+import android.view.accessibility.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.recentapps.CurrentApp
-import com.ivianuu.essentials.scopeOfOrNull
-import com.ivianuu.essentials.util.DeviceScreenManager
-import com.ivianuu.essentials.util.ScreenState
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.recentapps.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 @Provide object SnapchatActionId : ActionId("snapchat")
 

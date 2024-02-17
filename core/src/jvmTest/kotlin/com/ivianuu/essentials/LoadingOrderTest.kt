@@ -1,11 +1,9 @@
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.common.typeKeyOf
-import io.kotest.matchers.collections.shouldContainInOrder
-import org.junit.Test
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import io.kotest.matchers.collections.*
+import org.junit.*
 
 private val aKey = typeKeyOf<A>()
 private val bKey = typeKeyOf<B>()

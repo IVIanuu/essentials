@@ -4,10 +4,10 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import io.kotest.matchers.shouldBe
-import org.junit.Test
-import kotlin.time.Duration
+import com.ivianuu.essentials.test.*
+import io.kotest.matchers.*
+import org.junit.*
+import kotlin.time.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 

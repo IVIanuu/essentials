@@ -4,26 +4,18 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.insets.LocalInsets
-import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.material.AppBar
-import com.ivianuu.essentials.ui.material.ScreenScaffold
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.injekt.Provide
+import androidx.compose.foundation.pager.*
+import androidx.compose.material.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.unit.*
+import com.google.accompanist.pager.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.insets.*
+import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 @Provide val tabsHomeItem = HomeItem("Tabs") { TabsScreen() }
 

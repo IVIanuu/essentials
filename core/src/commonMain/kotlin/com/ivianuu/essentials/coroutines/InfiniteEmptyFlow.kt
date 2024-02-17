@@ -4,9 +4,8 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 private val InfiniteEmptyFlow = flow<Nothing> { awaitCancellation() }
 fun <T> infiniteEmptyFlow(): Flow<T> = InfiniteEmptyFlow

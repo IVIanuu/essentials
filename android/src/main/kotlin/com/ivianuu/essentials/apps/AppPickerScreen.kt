@@ -4,28 +4,22 @@
 
 package com.ivianuu.essentials.apps
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.unit.*
+import coil.compose.*
 import com.ivianuu.essentials.android.R
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.resource.collectAsResourceState
-import com.ivianuu.essentials.ui.material.AppBar
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.ScreenScaffold
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.map
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 class AppPickerScreen(
   val appPredicate: AppPredicate = DefaultAppPredicate,

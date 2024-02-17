@@ -1,10 +1,8 @@
 package com.ivianuu.essentials.compose
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import com.ivianuu.essentials.LocalScope
-import com.ivianuu.essentials.coroutineScope
-import kotlinx.coroutines.launch
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
+import kotlinx.coroutines.*
 
 @Composable fun action(block: suspend () -> Unit): () -> Unit {
   val scope = rememberCoroutineScope()

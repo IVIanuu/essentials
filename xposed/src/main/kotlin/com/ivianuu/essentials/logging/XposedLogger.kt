@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.logging
 
-import com.ivianuu.essentials.xposed.XposedConfig
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.xposed.*
+import com.ivianuu.injekt.*
 
 @Provide class XposedLogger(private val config: XposedConfig) : Logger {
   override val isLoggingEnabled: LoggingEnabled

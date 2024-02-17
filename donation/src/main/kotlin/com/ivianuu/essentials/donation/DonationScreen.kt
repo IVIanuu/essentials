@@ -4,41 +4,26 @@
 
 package com.ivianuu.essentials.donation
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.unit.*
 import arrow.fx.coroutines.parMap
-import com.ivianuu.essentials.billing.BillingService
-import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.produceResourceState
-import com.ivianuu.essentials.ui.common.CommonStrings
-import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogScaffold
-import com.ivianuu.essentials.ui.dialog.DialogScreen
-import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.billing.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.Presenter
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 class DonationScreen : DialogScreen<Unit>
 

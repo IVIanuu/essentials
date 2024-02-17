@@ -4,22 +4,13 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import android.service.notification.NotificationListenerService
-import android.service.notification.StatusBarNotification
-import arrow.core.Either
-import arrow.core.getOrElse
-import com.ivianuu.essentials.AndroidComponent
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.Service
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import android.service.notification.*
+import arrow.core.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Provide @AndroidComponent class EsNotificationListenerService(
   private val logger: Logger,

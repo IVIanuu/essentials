@@ -4,24 +4,17 @@
 
 package com.ivianuu.essentials.app
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.addCallback
-import androidx.activity.compose.setContent
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.AndroidComponent
-import com.ivianuu.essentials.LocalScope
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.Service
-import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.ui.DecorateAppUi
-import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.essentials.ui.UiScopeOwner
-import com.ivianuu.essentials.ui.app.AppUi
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.launch
+import android.os.*
+import androidx.activity.*
+import androidx.activity.compose.*
+import androidx.compose.runtime.*
+import androidx.lifecycle.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.app.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Provide @AndroidComponent class EsActivity(
   private val uiScopeFactory: (@Service<UiScope> ComponentActivity) -> Scope<UiScope>

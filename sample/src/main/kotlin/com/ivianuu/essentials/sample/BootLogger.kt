@@ -4,9 +4,8 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.boot.BootListener
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.boot.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
 
 @Provide fun bootLogger(logger: Logger) = BootListener { logger.log { "booted!" } }

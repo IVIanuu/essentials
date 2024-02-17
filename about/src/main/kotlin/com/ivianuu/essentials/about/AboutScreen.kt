@@ -4,30 +4,18 @@
 
 package com.ivianuu.essentials.about
 
-import androidx.compose.foundation.clickable
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.donation.Donation
-import com.ivianuu.essentials.donation.DonationScreen
-import com.ivianuu.essentials.rate.DeveloperEmail
-import com.ivianuu.essentials.rate.FeedbackMailScreen
-import com.ivianuu.essentials.rate.RateUseCases
-import com.ivianuu.essentials.ui.common.VerticalList
-import com.ivianuu.essentials.ui.material.AppBar
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.ScreenScaffold
-import com.ivianuu.essentials.ui.navigation.Presenter
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.UrlScreen
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.injekt.Provide
+import androidx.compose.foundation.*
+import androidx.compose.material.*
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.donation.*
+import com.ivianuu.essentials.rate.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 class AboutScreen : Screen<Unit> {
   @Provide companion object {

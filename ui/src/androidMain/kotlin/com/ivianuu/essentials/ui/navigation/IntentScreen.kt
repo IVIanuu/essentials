@@ -1,22 +1,17 @@
 package com.ivianuu.essentials.ui.navigation
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import androidx.activity.ComponentActivity
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import arrow.core.Either
-import arrow.core.left
-import arrow.core.right
-import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
-import java.util.UUID
-import kotlin.coroutines.resume
-import kotlin.reflect.KClass
+import android.content.*
+import androidx.activity.*
+import androidx.activity.result.*
+import androidx.activity.result.contract.*
+import arrow.core.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import java.util.*
+import kotlin.coroutines.*
+import kotlin.reflect.*
 
 interface IntentScreen : Screen<Either<ActivityNotFoundException, ActivityResult>> {
   @Provide companion object {

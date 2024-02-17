@@ -4,14 +4,10 @@
 
 package com.ivianuu.essentials.sample.xposed
 
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.xposed.EsXposedInit
-import com.ivianuu.essentials.xposed.ModulePackageName
-import com.ivianuu.essentials.xposed.XposedScope
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.inject
-import de.robv.android.xposed.callbacks.XC_LoadPackage
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.xposed.*
+import com.ivianuu.injekt.*
+import de.robv.android.xposed.callbacks.*
 
 class SampleXposedInit : EsXposedInit() {
   override fun buildXposedScope(@Inject params: XC_LoadPackage.LoadPackageParam): Scope<XposedScope> {

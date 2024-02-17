@@ -4,12 +4,11 @@
 
 package com.ivianuu.essentials.tile
 
-import android.graphics.drawable.Icon
-import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.ui.navigation.Presenter
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import kotlin.reflect.KClass
+import android.graphics.drawable.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 data class TileState<out T : AbstractEsTileService>(
   val icon: Icon? = null,

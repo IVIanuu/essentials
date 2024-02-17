@@ -4,41 +4,21 @@
 
 package com.ivianuu.essentials.work
 
-import android.annotation.SuppressLint
-import android.content.Context
-import androidx.work.Configuration
-import androidx.work.Constraints
-import androidx.work.CoroutineWorker
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.ListenableWorker
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkInfo
-import androidx.work.WorkerFactory
-import androidx.work.WorkerParameters
-import androidx.work.await
-import androidx.work.workDataOf
-import arrow.core.Either
-import arrow.fx.coroutines.ExitCase
-import arrow.fx.coroutines.guaranteeCase
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.app.ScopeInitializer
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.coroutines.sharedComputation
+import android.annotation.*
+import android.content.*
+import androidx.work.*
+import arrow.fx.coroutines.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.*
 import kotlinx.atomicfu.locks.SynchronizedObject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.withContext
-import kotlin.time.Duration
-import kotlin.time.toJavaDuration
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlin.synchronized
+import kotlin.time.*
 import androidx.work.WorkManager as AndroidWorkManager
 
 abstract class WorkId(val value: String)

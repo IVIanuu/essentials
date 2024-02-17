@@ -4,11 +4,10 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.injekt.Inject
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XposedBridge
-import java.lang.reflect.Method
-import kotlin.reflect.KClass
+import com.ivianuu.injekt.*
+import de.robv.android.xposed.*
+import java.lang.reflect.*
+import kotlin.reflect.*
 
 class MethodHookBuilder {
   var priority: Int = XC_MethodHook.PRIORITY_DEFAULT

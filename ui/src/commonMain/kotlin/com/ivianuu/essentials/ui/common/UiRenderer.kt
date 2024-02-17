@@ -4,9 +4,8 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.runtime.Stable
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.inject
+import androidx.compose.runtime.*
+import com.ivianuu.injekt.*
 
 @Stable fun interface UiRenderer<in T> {
   operator fun invoke(x: T): String

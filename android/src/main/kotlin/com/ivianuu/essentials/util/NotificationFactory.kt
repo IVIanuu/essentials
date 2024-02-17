@@ -4,16 +4,13 @@
 
 package com.ivianuu.essentials.util
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import androidx.compose.ui.graphics.toArgb
-import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.ui.AppColors
-import com.ivianuu.injekt.Provide
+import android.app.*
+import android.content.*
+import androidx.compose.ui.graphics.*
+import androidx.core.app.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.*
 
 @Provide class NotificationFactory(
   @PublishedApi internal val appContext: AppContext,

@@ -4,16 +4,12 @@
 
 package com.ivianuu.essentials.systemoverlay
 
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.util.DisplayRotation
-import com.ivianuu.essentials.ui.layout.align
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.*
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.util.*
 
 data class TriggerGeometry(
   val width: Int,

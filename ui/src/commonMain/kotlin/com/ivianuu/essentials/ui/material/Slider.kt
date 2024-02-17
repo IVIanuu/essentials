@@ -4,27 +4,16 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.SliderColors
-import androidx.compose.material.SliderDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.ivianuu.essentials.Lerper
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.math.absoluteValue
-import kotlin.time.Duration
+import androidx.compose.foundation.interaction.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlin.math.*
+import kotlin.time.*
 import kotlin.time.Duration.Companion.seconds
 
 @Composable fun <T : Comparable<T>> Slider(

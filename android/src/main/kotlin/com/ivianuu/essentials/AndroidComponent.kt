@@ -4,14 +4,10 @@
 
 package com.ivianuu.essentials
 
-import android.app.Activity
-import android.content.BroadcastReceiver
-import android.content.ContentProvider
-import android.content.Intent
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.Tag
-import kotlin.reflect.KClass
+import android.app.*
+import android.content.*
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 @Tag annotation class AndroidComponent {
   @Provide companion object {

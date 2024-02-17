@@ -1,8 +1,7 @@
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import kotlin.reflect.KClass
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 @Tag annotation class SystemService {
   @Provide companion object {

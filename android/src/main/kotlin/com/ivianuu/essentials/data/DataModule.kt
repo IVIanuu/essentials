@@ -4,10 +4,9 @@
 
 package com.ivianuu.essentials.data
 
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import java.io.File
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import java.io.*
 
 @Tag annotation class DataDirTag {
   @Provide companion object {

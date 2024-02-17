@@ -1,19 +1,14 @@
 package com.ivianuu.essentials.util
 
-import android.hardware.Sensor
-import android.hardware.SensorEvent as AndroidSensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
-import android.hardware.TriggerEvent
-import android.hardware.TriggerEventListener
-import com.ivianuu.essentials.SystemService
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.launch
-import kotlin.time.Duration
+import android.hardware.*
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
+import kotlin.time.*
 import kotlin.time.Duration.Companion.nanoseconds
+import android.hardware.SensorEvent as AndroidSensorEvent
 
 
 @Provide class SensorFactory(

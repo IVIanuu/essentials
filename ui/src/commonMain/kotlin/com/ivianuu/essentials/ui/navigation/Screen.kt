@@ -4,12 +4,11 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.runtime.Stable
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.ui.animation.ContentKey
-import com.ivianuu.injekt.Provide
+import androidx.compose.animation.*
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.injekt.*
 
 @Stable interface Screen<T>
 

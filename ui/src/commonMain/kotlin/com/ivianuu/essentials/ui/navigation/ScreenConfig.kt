@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
+import com.ivianuu.essentials.ui.animation.*
 
 data class ScreenConfig<T : Screen<*>>(
   val enterTransitionSpec: (ElementTransitionSpec<Screen<*>>)? = null,

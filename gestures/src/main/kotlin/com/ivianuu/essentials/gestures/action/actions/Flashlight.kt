@@ -4,27 +4,20 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.hardware.camera2.CameraManager
-import android.hardware.camera2.CameraManager.TorchCallback
-import androidx.compose.material.Icon
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.CoroutineContexts
+import android.hardware.camera2.*
+import android.hardware.camera2.CameraManager.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
 
 @Provide object FlashlightActionId : ActionId("flashlight")
 

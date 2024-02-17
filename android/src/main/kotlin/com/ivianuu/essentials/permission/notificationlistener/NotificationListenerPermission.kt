@@ -4,19 +4,16 @@
 
 package com.ivianuu.essentials.permission.notificationlistener
 
-import android.content.Intent
-import android.provider.Settings
-import android.service.notification.NotificationListenerService
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.os.bundleOf
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
-import com.ivianuu.essentials.permission.intent.ShowFindPermissionHint
-import com.ivianuu.injekt.Provide
-import kotlin.reflect.KClass
+import android.content.*
+import android.provider.*
+import android.service.notification.*
+import androidx.core.app.*
+import androidx.core.os.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.intent.*
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 abstract class NotificationListenerPermission(
   val serviceClass: KClass<out NotificationListenerService>,

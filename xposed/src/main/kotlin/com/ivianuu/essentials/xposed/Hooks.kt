@@ -4,8 +4,7 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.*
 
 fun interface Hooks {
   operator fun invoke(@Inject config: XposedConfig)

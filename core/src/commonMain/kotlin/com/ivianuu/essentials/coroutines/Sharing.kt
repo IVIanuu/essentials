@@ -1,27 +1,13 @@
 package com.ivianuu.essentials.coroutines
 
-import app.cash.quiver.extensions.orThrow
-import arrow.core.Either
-import arrow.fx.coroutines.bracketCase
-import arrow.fx.coroutines.guarantee
-import com.ivianuu.essentials.catch
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
+import app.cash.quiver.extensions.*
+import arrow.core.*
+import arrow.fx.coroutines.*
+import com.ivianuu.essentials.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.*
+import kotlin.coroutines.*
 
 fun <K, T> CoroutineScope.sharedFlow(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),

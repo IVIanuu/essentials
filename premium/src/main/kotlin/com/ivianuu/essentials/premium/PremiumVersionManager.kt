@@ -4,39 +4,21 @@
 
 package com.ivianuu.essentials.premium
 
-import arrow.fx.coroutines.parMap
-import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Eager
-import com.ivianuu.essentials.ads.AdsEnabled
-import com.ivianuu.essentials.billing.BillingService
-import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.DataStoreModule
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.ui.UiScopeOwner
-import com.ivianuu.essentials.ui.navigation.AppUiStarter
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.util.DeviceScreenManager
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
+import arrow.fx.coroutines.*
+import com.android.billingclient.api.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ads.*
+import com.ivianuu.essentials.billing.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.serialization.*
 
 @Provide @Eager<AppScope> class PremiumVersionManager(
   private val appUiStarter: AppUiStarter,

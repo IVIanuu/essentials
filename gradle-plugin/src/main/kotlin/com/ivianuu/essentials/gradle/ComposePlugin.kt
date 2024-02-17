@@ -4,13 +4,10 @@
 
 package com.ivianuu.essentials.gradle
 
-import com.google.auto.service.AutoService
-import org.gradle.api.Project
-import org.gradle.api.provider.Provider
-import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
-import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
-import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
-import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
+import com.google.auto.service.*
+import org.gradle.api.*
+import org.gradle.api.provider.*
+import org.jetbrains.kotlin.gradle.plugin.*
 
 @AutoService(KotlinCompilerPluginSupportPlugin::class)
 open class ComposePlugin : KotlinCompilerPluginSupportPlugin {

@@ -1,15 +1,10 @@
 package com.ivianuu.essentials.accessibility
 
-import android.accessibilityservice.AccessibilityServiceInfo
-import com.ivianuu.essentials.ScopeManager
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
-import com.ivianuu.essentials.scopeOf
-import com.ivianuu.essentials.scopeOfOrNull
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
+import android.accessibilityservice.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Provide class AccessibilityService(private val scopeManager: ScopeManager) {
   val events: Flow<AccessibilityEvent>

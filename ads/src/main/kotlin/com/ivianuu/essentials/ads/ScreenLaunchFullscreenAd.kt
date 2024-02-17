@@ -4,27 +4,16 @@
 
 package com.ivianuu.essentials.ads
 
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import arrow.core.getOrElse
-import com.ivianuu.essentials.app.ScopeComposition
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.DataStoreModule
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.withTimeoutOrNull
-import kotlinx.serialization.Serializable
-import kotlin.time.Duration.Companion.seconds
+import androidx.compose.runtime.*
+import arrow.core.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
+import kotlinx.serialization.*
 
 @Provide object ScreenLaunchFullscreenAdFeature : AdFeature
 

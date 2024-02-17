@@ -4,27 +4,16 @@
 
 package com.ivianuu.essentials.app
 
-import androidx.compose.runtime.Composable
-import arrow.fx.coroutines.ExitCase
-import arrow.fx.coroutines.guarantee
-import arrow.fx.coroutines.guaranteeCase
-import com.ivianuu.essentials.ExtensionPoint
-import com.ivianuu.essentials.ExtensionPointRecord
-import com.ivianuu.essentials.LoadingOrder
+import androidx.compose.runtime.*
+import arrow.fx.coroutines.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.ScopeObserver
-import com.ivianuu.essentials.compose.StateCoroutineContext
-import com.ivianuu.essentials.compose.launchComposition
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.sortedWithLoadingOrder
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.*
 
 fun interface ScopeWorker<N> : ExtensionPoint<ScopeWorker<N>> {
   suspend operator fun invoke()

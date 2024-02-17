@@ -4,28 +4,20 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.common.CommonStrings
-import com.ivianuu.essentials.ui.common.UiRenderer
-import com.ivianuu.essentials.ui.material.ListItem
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 class MultiChoiceListScreen<T : Any>(
   val items: List<T>,

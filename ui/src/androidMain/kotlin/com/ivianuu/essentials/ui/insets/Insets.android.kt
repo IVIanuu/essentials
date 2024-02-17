@@ -4,14 +4,11 @@
 
 package com.ivianuu.essentials.ui.insets
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.imeAnimationTarget
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
-import com.ivianuu.injekt.Provide
-import kotlin.math.max
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.*
+import com.ivianuu.injekt.*
+import kotlin.math.*
 
 @Provide actual val windowInsetsProvider = WindowInsetsProvider { content ->
   val systemBarsInsets = WindowInsets.systemBars

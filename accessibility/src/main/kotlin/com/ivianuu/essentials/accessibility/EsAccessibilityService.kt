@@ -4,19 +4,13 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.accessibilityservice.AccessibilityServiceInfo
-import android.content.Intent
-import com.ivianuu.essentials.AndroidComponent
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.Service
-import com.ivianuu.essentials.addFlag
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import android.accessibilityservice.*
+import android.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Provide @AndroidComponent class EsAccessibilityService(
   private val accessibilityScopeFactory: (@Service<AccessibilityScope> EsAccessibilityService) -> Scope<AccessibilityScope>,

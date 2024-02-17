@@ -4,14 +4,9 @@
 
 package com.ivianuu.essentials.ads
 
-import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
-import com.ivianuu.essentials.ui.navigation.OverlayScreen
-import com.ivianuu.essentials.ui.navigation.RootScreen
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import kotlin.reflect.KClass
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 interface AdFeature
 

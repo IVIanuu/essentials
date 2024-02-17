@@ -4,29 +4,20 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS
-import android.accessibilityservice.AccessibilityServiceInfo
-import android.annotation.SuppressLint
-import android.view.accessibility.AccessibilityNodeInfo
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
-import arrow.core.Either
-import arrow.core.getOrElse
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.ScopeManager
-import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.AccessibilityScope
+import android.accessibilityservice.*
+import android.accessibilityservice.AccessibilityService.*
+import android.annotation.*
+import android.view.accessibility.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
+import arrow.core.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.accessibility.AccessibilityService
-import com.ivianuu.essentials.accessibility.accessibilityService
-import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.scopeOfOrNull
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Provide object QuickSettingsActionId : ActionId("quick_settings")
 

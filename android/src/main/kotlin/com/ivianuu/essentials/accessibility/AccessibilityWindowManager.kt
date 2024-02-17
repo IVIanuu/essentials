@@ -4,11 +4,10 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.accessibilityservice.AccessibilityService
-import android.view.WindowManager
-import androidx.core.content.getSystemService
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
+import android.accessibilityservice.*
+import android.view.*
+import androidx.core.content.*
+import com.ivianuu.injekt.*
 
 @Tag annotation class AccessibilityWindowManagerTag {
   @Provide companion object {

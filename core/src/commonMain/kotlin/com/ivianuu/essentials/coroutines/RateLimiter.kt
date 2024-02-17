@@ -4,12 +4,11 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.time.Clock
-import com.ivianuu.injekt.Inject
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlin.time.Duration
+import com.ivianuu.essentials.time.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.*
+import kotlin.time.*
 
 class RateLimiter(
   private val eventsPerInterval: Int,

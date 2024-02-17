@@ -1,13 +1,11 @@
 package com.ivianuu.essentials.util
 
-import android.os.PowerManager
-import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.coroutines.bracketCase
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.SourceKey
+import android.os.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 @Provide class WakeLockManager(
   private val logger: Logger,

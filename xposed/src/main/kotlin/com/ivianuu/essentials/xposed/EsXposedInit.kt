@@ -4,11 +4,10 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.essentials.Scope
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import de.robv.android.xposed.IXposedHookLoadPackage
-import de.robv.android.xposed.callbacks.XC_LoadPackage
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import de.robv.android.xposed.*
+import de.robv.android.xposed.callbacks.*
 
 abstract class EsXposedInit : IXposedHookLoadPackage {
   override fun handleLoadPackage(@Provide lpparam: XC_LoadPackage.LoadPackageParam) {

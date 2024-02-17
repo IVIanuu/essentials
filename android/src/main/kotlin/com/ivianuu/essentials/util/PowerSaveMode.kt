@@ -1,15 +1,10 @@
 package com.ivianuu.essentials.util
 
-import android.os.PowerManager
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import android.os.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @JvmInline value class PowerSaveMode(val value: Boolean) {
   @Provide companion object {

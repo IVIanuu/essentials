@@ -4,22 +4,13 @@
 
 package com.ivianuu.essentials.util
 
-import android.hardware.SensorManager
-import android.view.OrientationEventListener
-import android.view.Surface
-import android.view.WindowManager
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.compose.compositionFlow
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
+import android.hardware.*
+import android.view.*
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 enum class DisplayRotation(val isPortrait: Boolean) {
   // 0 degrees

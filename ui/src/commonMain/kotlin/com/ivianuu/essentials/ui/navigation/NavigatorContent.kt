@@ -4,22 +4,12 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.LocalScope
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.ScopeObserver
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.animation.AnimatedStack
-import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
-import com.slack.circuit.foundation.internal.BackHandler
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.animation.*
+import com.slack.circuit.foundation.internal.*
 import kotlin.collections.set
 
 @Composable fun NavigatorContent(

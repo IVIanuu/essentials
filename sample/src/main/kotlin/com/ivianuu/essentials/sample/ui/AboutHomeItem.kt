@@ -4,9 +4,8 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.about.AboutScreen
-import com.ivianuu.essentials.about.PrivacyPolicyUrl
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.about.*
+import com.ivianuu.injekt.*
 
 @Provide val aboutHomeItem = HomeItem("About") { AboutScreen() }
 

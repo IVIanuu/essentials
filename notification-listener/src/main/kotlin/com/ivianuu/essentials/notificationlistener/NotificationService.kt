@@ -4,19 +4,11 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import android.app.Notification
-import android.service.notification.NotificationListenerService
-import android.service.notification.StatusBarNotification
-import arrow.core.Either
-import com.ivianuu.essentials.ScopeManager
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.scopeOf
-import com.ivianuu.essentials.scopeOfOrNull
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
+import android.app.*
+import android.service.notification.*
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Provide class NotificationService(private val scopeManager: ScopeManager) {
   val notificationEvents: Flow<NotificationEvent> =

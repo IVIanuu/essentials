@@ -4,14 +4,11 @@
 
 package com.ivianuu.essentials.premium
 
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.LoadingOrder
-import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.app.IsFirstRun
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.UserflowBuilder
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @JvmInline value class AppStartPremiumHintEnabled(val value: Boolean) {
   @Provide companion object {

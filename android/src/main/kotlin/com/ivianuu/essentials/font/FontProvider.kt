@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.font
 
-import androidx.compose.ui.text.googlefonts.GoogleFont
+import androidx.compose.ui.text.googlefonts.*
 import com.ivianuu.essentials.android.R
 
 val GoogleFontProvider = GoogleFont.Provider(

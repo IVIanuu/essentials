@@ -4,12 +4,12 @@
 
 package com.ivianuu.essentials.systemoverlay
 
-import androidx.compose.ui.Alignment
-import com.ivianuu.essentials.Resources
+import androidx.compose.ui.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.android.R
-import com.ivianuu.essentials.util.DisplayRotation
-import com.ivianuu.essentials.ui.common.UiRenderer
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 enum class ScreenEdge(
   val titleRes: Int,

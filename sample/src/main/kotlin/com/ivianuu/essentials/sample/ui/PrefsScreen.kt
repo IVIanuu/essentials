@@ -4,41 +4,22 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.clickable
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.DataStoreModule
-import com.ivianuu.essentials.ui.common.VerticalList
-import com.ivianuu.essentials.ui.common.interactive
-import com.ivianuu.essentials.ui.dialog.ColorPickerScreen
-import com.ivianuu.essentials.ui.dialog.TextInputScreen
-import com.ivianuu.essentials.ui.material.AppBar
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.ScreenScaffold
-import com.ivianuu.essentials.ui.material.Subheader
-import com.ivianuu.essentials.ui.material.incrementingStepPolicy
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.ui.prefs.ColorListItem
-import com.ivianuu.essentials.ui.prefs.MultiChoiceToggleButtonGroupListItem
-import com.ivianuu.essentials.ui.prefs.ScaledPercentageUnitText
-import com.ivianuu.essentials.ui.prefs.SingleChoiceToggleButtonGroupListItem
-import com.ivianuu.essentials.ui.prefs.SliderListItem
-import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.injekt.Provide
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.Serializable
+import androidx.compose.foundation.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.prefs.*
+import com.ivianuu.injekt.*
+import kotlinx.serialization.*
 
 @Provide val prefsHomeItem = HomeItem("Prefs") { PrefsScreen() }
 

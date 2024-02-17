@@ -4,14 +4,13 @@
 
 package com.ivianuu.essentials.util
 
-import android.content.ContentResolver
-import android.database.ContentObserver
-import android.net.Uri
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import android.content.*
+import android.database.*
+import android.net.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.flowOn
 
 @Provide class ContentChangesFactory(

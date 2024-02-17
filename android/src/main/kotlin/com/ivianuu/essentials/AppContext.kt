@@ -4,10 +4,9 @@
 
 package com.ivianuu.essentials
 
-import android.app.Application
-import android.content.Context
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
+import android.app.*
+import android.content.*
+import com.ivianuu.injekt.*
 
 @Tag annotation class AppContextTag {
   @Provide companion object {

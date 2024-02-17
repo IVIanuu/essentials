@@ -4,24 +4,17 @@
 
 package com.ivianuu.essentials.permission.intent
 
-import android.content.Intent
-import arrow.core.Either
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.android.R
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionManager
-import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.printErrors
-import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
-import splitties.coroutines.raceOf
+import android.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.android.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import splitties.coroutines.*
 
 fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
 

@@ -4,11 +4,10 @@
 
 package com.ivianuu.essentials.coroutines
 
-import arrow.fx.coroutines.parZip
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.delay
-import org.junit.Test
+import com.ivianuu.essentials.test.*
+import io.kotest.matchers.*
+import kotlinx.coroutines.*
+import org.junit.*
 import kotlin.time.Duration.Companion.milliseconds
 
 class SharedTest {

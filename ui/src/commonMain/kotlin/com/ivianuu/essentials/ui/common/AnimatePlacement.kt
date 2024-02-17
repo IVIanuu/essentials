@@ -1,25 +1,12 @@
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector2D
-import androidx.compose.animation.core.FiniteAnimationSpec
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.VectorConverter
-import androidx.compose.animation.core.VisibilityThreshold
-import androidx.compose.animation.core.spring
-import androidx.compose.foundation.layout.offset
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.layout.onPlaced
-import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.round
-import kotlinx.coroutines.launch
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.layout.*
+import androidx.compose.ui.unit.*
+import kotlinx.coroutines.*
 
 fun Modifier.animatePlacement(
   animationSpec: FiniteAnimationSpec<IntOffset> = spring(

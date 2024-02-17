@@ -4,31 +4,26 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE
-import android.annotation.SuppressLint
-import android.app.PendingIntent
-import android.content.Intent
-import android.os.Bundle
-import androidx.compose.foundation.Image
-import androidx.compose.material.Icon
-import androidx.compose.material.contentColorFor
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import arrow.core.Either
-import coil.compose.rememberAsyncImagePainter
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.accessibility.AccessibilityService
-import com.ivianuu.essentials.accessibility.AndroidAccessibilityService
-import com.ivianuu.essentials.catch
+import android.accessibilityservice.AccessibilityService.*
+import android.annotation.*
+import android.app.*
+import android.content.*
+import android.os.*
+import androidx.compose.foundation.*
+import androidx.compose.material.*
+import androidx.compose.ui.graphics.vector.*
+import androidx.compose.ui.res.*
+import arrow.core.*
+import coil.compose.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.ui.LocalActionIconSizeModifier
-import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.ui.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 fun staticActionImage(data: Any) = ActionIcon {
   Image(

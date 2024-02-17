@@ -1,26 +1,14 @@
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.currentCompositeKeyHash
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
-import androidx.compose.runtime.saveable.SaveableStateRegistry
-import androidx.compose.runtime.setValue
-import com.ivianuu.essentials.LocalScope
-import com.ivianuu.essentials.ProvidedService
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.Service
-import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.compose.ObserveScope
-import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlin.reflect.KClass
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlin.reflect.*
 
 @Composable fun <S : Screen<*>> ScreenContent(screen: S) {
   ScreenContent(rememberScreenContext(screen))

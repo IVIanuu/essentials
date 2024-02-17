@@ -4,23 +4,16 @@
 
 package com.ivianuu.essentials.ui.systembars
 
-import android.os.Build
-import android.view.View
-import androidx.activity.ComponentActivity
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.core.view.WindowCompat
-import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.setFlag
-import com.ivianuu.essentials.ui.insets.LocalInsets
-import com.ivianuu.injekt.Provide
+import android.os.*
+import android.view.*
+import androidx.activity.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.*
+import androidx.core.view.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.insets.*
+import com.ivianuu.injekt.*
 
 @Provide actual val systemBarManagerProvider = SystemBarManagerProvider { content ->
   val systemBarManager = remember { AndroidSystemBarManager() }

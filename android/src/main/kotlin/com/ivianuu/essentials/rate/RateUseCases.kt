@@ -4,19 +4,12 @@
 
 package com.ivianuu.essentials.rate
 
-import arrow.core.Either
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.printErrors
-import com.ivianuu.essentials.time.Clock
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.time.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Provide class RateUseCases(
   private val appConfig: AppConfig,

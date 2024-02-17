@@ -4,12 +4,11 @@
 
 package com.ivianuu.essentials.rate
 
-import android.content.Intent
-import android.net.Uri
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.ui.navigation.IntentScreen
-import com.ivianuu.essentials.ui.navigation.ScreenIntentFactory
-import com.ivianuu.injekt.Provide
+import android.content.*
+import android.net.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 object FeedbackMailScreen : IntentScreen
 

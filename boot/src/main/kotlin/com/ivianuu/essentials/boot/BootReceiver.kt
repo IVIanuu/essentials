@@ -4,13 +4,10 @@
 
 package com.ivianuu.essentials.boot
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import com.ivianuu.essentials.AndroidComponent
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
+import android.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
 
 fun interface BootListener {
   operator fun invoke()

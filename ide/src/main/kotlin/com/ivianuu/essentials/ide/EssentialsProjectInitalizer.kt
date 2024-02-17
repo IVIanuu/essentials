@@ -4,18 +4,14 @@
 
 package com.ivianuu.essentials.ide
 
-import com.intellij.openapi.extensions.Extensions
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.ProjectManagerListener
-import com.ivianuu.essentials.kotlin.compiler.experimental.experimental
-import org.jetbrains.kotlin.builtins.isFunctionType
-import org.jetbrains.kotlin.diagnostics.Diagnostic
-import org.jetbrains.kotlin.diagnostics.DiagnosticWithParameters2
-import org.jetbrains.kotlin.resolve.diagnostics.DiagnosticSuppressor
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.utils.addToStdlib.UnsafeCastFunction
-import org.jetbrains.kotlin.utils.addToStdlib.cast
-import org.jetbrains.kotlin.utils.addToStdlib.safeAs
+import com.intellij.openapi.extensions.*
+import com.intellij.openapi.project.*
+import com.ivianuu.essentials.kotlin.compiler.experimental.*
+import org.jetbrains.kotlin.builtins.*
+import org.jetbrains.kotlin.diagnostics.*
+import org.jetbrains.kotlin.resolve.diagnostics.*
+import org.jetbrains.kotlin.types.*
+import org.jetbrains.kotlin.utils.addToStdlib.*
 
 class EssentialsProjectInitializer : ProjectManagerListener {
   @OptIn(UnsafeCastFunction::class)

@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.Dispatchers
-import kotlin.coroutines.CoroutineContext
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlin.coroutines.*
 
 data class CoroutineContexts(
   val main: CoroutineContext = Dispatchers.Main,

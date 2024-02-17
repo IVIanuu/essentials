@@ -4,32 +4,19 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.annotation.SuppressLint
-import android.app.NotificationManager
+import android.annotation.*
+import android.app.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import com.ivianuu.essentials.foreground.ForegroundManager
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.foreground.*
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.material.AppBar
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.ScreenScaffold
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.util.NotificationFactory
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.channels.ticker
-import kotlinx.coroutines.flow.fold
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.reduce
-import kotlinx.coroutines.flow.runningFold
-import kotlin.time.Duration.Companion.seconds
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundScreen() }
 

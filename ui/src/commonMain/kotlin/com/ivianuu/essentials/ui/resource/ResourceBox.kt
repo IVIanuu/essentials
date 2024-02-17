@@ -4,29 +4,18 @@
 
 package com.ivianuu.essentials.ui.resource
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.ui.animation.AnimatedContent
-import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
-import com.ivianuu.essentials.ui.animation.crossFade
-import com.ivianuu.essentials.ui.common.HorizontalList
-import com.ivianuu.essentials.ui.common.VerticalList
-import com.ivianuu.essentials.ui.layout.center
-import kotlin.reflect.KClass
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.layout.*
+import kotlin.reflect.*
 
 @Composable fun <T> ResourceVerticalListFor(
   resource: Resource<List<T>>,

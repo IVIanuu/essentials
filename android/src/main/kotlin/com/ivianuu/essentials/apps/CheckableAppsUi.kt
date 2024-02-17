@@ -4,37 +4,22 @@
 
 package com.ivianuu.essentials.apps
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.unit.*
+import coil.compose.*
 import com.ivianuu.essentials.android.R
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.collectAsResourceState
-import com.ivianuu.essentials.resource.get
-import com.ivianuu.essentials.resource.map
-import com.ivianuu.essentials.ui.material.AppBar
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.ScreenScaffold
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Switch
-import com.ivianuu.essentials.ui.navigation.ScreenScope
-import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.ui.popup.PopupMenuItem
-import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
+import com.ivianuu.essentials.ui.popup.*
+import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 data class CheckableAppsScreen(
   val checkedApps: Flow<Set<String>>,

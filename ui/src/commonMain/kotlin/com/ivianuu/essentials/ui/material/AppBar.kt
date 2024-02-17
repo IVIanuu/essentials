@@ -4,41 +4,20 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import arrow.core.Either
-import com.ivianuu.essentials.LocalScope
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.insets.InsetsPadding
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.ui.navigation.screen
-import com.ivianuu.essentials.ui.systembars.systemBarStyle
-import com.ivianuu.essentials.ui.util.isLight
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.insets.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.systembars.*
+import com.ivianuu.essentials.ui.util.*
 
 enum class AppBarStyle { PRIMARY, SURFACE }
 

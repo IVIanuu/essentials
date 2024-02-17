@@ -4,12 +4,10 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.ScopeManager
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
 
 @Provide fun observer(logger: Logger, scopeManager: ScopeManager) = ScopeWorker<AppScope> {
   scopeManager.activeScopes.collect { activeScopes ->

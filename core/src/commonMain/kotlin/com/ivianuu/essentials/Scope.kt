@@ -4,17 +4,12 @@
 
 package com.ivianuu.essentials
 
-import androidx.compose.runtime.compositionLocalOf
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.TypeKey
-import kotlinx.atomicfu.locks.SynchronizedObject
-import kotlinx.atomicfu.locks.synchronized
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.atomicfu.locks.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 @Provide class Scope<N>(
   val name: TypeKey<N>,

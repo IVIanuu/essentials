@@ -4,10 +4,9 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.alpha
+import androidx.compose.animation.core.*
+import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
 
 fun Modifier.interactive(
   interactive: Boolean,

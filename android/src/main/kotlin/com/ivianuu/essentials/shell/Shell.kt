@@ -4,13 +4,12 @@
 
 package com.ivianuu.essentials.shell
 
-import arrow.core.Either
-import arrow.core.getOrElse
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.injekt.Provide
-import eu.chainfire.libsuperuser.Shell.SU
-import kotlinx.coroutines.withContext
+import arrow.core.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import eu.chainfire.libsuperuser.Shell.*
+import kotlinx.coroutines.*
 
 @Provide class Shell(private val coroutineContexts: CoroutineContexts) {
   suspend fun isAvailable() = withContext(coroutineContexts.io) {

@@ -4,39 +4,20 @@
 
 package com.ivianuu.essentials.xposed
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import arrow.core.Either
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.printErrors
-import com.ivianuu.essentials.util.BroadcastsFactory
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import de.robv.android.xposed.XSharedPreferences
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.Json
+import android.annotation.*
+import android.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import de.robv.android.xposed.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.*
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 
 class XposedPrefModule<T : Any>(private val prefName: String, private val default: () -> T) {
   @SuppressLint("WorldReadableFiles")

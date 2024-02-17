@@ -4,14 +4,11 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.accessibility.AccessibilityService
-import com.ivianuu.essentials.accessibility.AndroidAccessibilityService
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.injekt.*
 
 @Provide object BackActionId : ActionId("back")
 

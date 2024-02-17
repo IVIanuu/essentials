@@ -4,6 +4,6 @@
 
 package com.ivianuu.essentials.ui.insets
 
-import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.*
 
 @Provide actual val windowInsetsProvider = WindowInsetsProvider { it() }

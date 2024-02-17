@@ -1,7 +1,7 @@
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Provide
-import kotlin.reflect.KClass
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 @Provide object CommonModule {
   @Provide fun <K, V> pairsToMap(pairs: List<Pair<K, V>>) = pairs.toMap()

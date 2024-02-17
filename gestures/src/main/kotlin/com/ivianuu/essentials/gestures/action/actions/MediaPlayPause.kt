@@ -4,17 +4,14 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.view.KeyEvent
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
-import com.ivianuu.essentials.Resources
+import android.view.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionSettingsKey
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 @Provide object PlayPauseActionId : ActionId("media_play_pause")
 

@@ -4,19 +4,12 @@
 
 package com.ivianuu.essentials.logging
 
-import android.util.Log
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.logging.Logger.Priority
-import com.ivianuu.essentials.logging.Logger.Priority.DEBUG
-import com.ivianuu.essentials.logging.Logger.Priority.ERROR
-import com.ivianuu.essentials.logging.Logger.Priority.INFO
-import com.ivianuu.essentials.logging.Logger.Priority.VERBOSE
-import com.ivianuu.essentials.logging.Logger.Priority.WARN
-import com.ivianuu.essentials.logging.Logger.Priority.WTF
-import com.ivianuu.injekt.Provide
-import kotlin.math.min
+import android.util.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.Logger.*
+import com.ivianuu.essentials.logging.Logger.Priority.*
+import com.ivianuu.injekt.*
+import kotlin.math.*
 
 @Provide class AndroidLogger(override val isLoggingEnabled: LoggingEnabled) : Logger {
   override fun logMessage(priority: Priority, tag: String, message: String) {

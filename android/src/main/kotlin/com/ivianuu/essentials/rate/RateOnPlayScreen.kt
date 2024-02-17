@@ -5,19 +5,14 @@
 package com.ivianuu.essentials.rate
 
 import androidx.compose.material.Text
-import androidx.compose.runtime.produceState
-import androidx.compose.ui.res.stringResource
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.*
 import com.ivianuu.essentials.android.R
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogScaffold
-import com.ivianuu.essentials.ui.dialog.DialogScreen
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.Presenter
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 object RateOnPlayScreen : DialogScreen<Unit>
 

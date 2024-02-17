@@ -1,6 +1,6 @@
 package com.ivianuu.essentials
 
-import arrow.core.Either
+import arrow.core.*
 
 inline fun <T> catch(block: () -> T) = Either.catch(f = block)
 

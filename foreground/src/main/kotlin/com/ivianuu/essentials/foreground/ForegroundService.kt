@@ -4,37 +4,20 @@
 
 package com.ivianuu.essentials.foreground
 
-import android.app.NotificationManager
+import android.app.*
 import android.app.Service
-import android.content.Intent
-import android.os.IBinder
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import arrow.fx.coroutines.onCancel
-import com.ivianuu.essentials.AndroidComponent
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.compose.asFrameClock
-import com.ivianuu.essentials.compose.launchComposition
+import android.content.*
+import android.os.*
+import androidx.compose.runtime.*
+import arrow.fx.coroutines.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.RateLimiter
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.util.NotificationFactory
-import com.ivianuu.essentials.util.RemoteActionFactory
-import com.ivianuu.essentials.util.StartAppRemoteAction
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.inject
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
 @Provide @AndroidComponent class ForegroundService(

@@ -4,16 +4,12 @@
 
 package com.ivianuu.essentials.permission.runtime
 
-import android.content.pm.PackageManager
-import androidx.activity.result.contract.ActivityResultContracts
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.injekt.Provide
+import android.content.pm.*
+import androidx.activity.result.contract.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 abstract class RuntimePermission(
   val permissionName: String,

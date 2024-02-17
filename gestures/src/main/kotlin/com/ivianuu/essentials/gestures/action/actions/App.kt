@@ -4,29 +4,19 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.pm.PackageManager
-import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.apps.AppIcon
-import com.ivianuu.essentials.apps.AppPickerScreen
-import com.ivianuu.essentials.apps.AppRepository
-import com.ivianuu.essentials.apps.LaunchableAppPredicate
+import android.content.pm.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
-import com.ivianuu.essentials.gestures.action.ui.ActionPickerScreen
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.ui.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 @Provide class AppActionFactory(
   private val appRepository: AppRepository,

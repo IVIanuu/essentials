@@ -4,12 +4,9 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.cast
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import kotlin.math.roundToInt
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import kotlin.math.*
 
 @Composable fun UnitText(value: Any, unit: ValueUnit) {
   Text(unit.format(value))

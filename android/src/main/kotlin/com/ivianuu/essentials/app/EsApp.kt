@@ -4,10 +4,8 @@
 
 package com.ivianuu.essentials.app
 
-import android.app.Application
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.AppScopeOwner
-import com.ivianuu.essentials.Scope
+import android.app.*
+import com.ivianuu.essentials.*
 
 abstract class EsApp : Application(), AppScopeOwner {
   override val appScope by lazy { buildAppScope() }

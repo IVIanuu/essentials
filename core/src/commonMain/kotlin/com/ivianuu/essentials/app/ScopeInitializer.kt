@@ -4,16 +4,11 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.ExtensionPoint
-import com.ivianuu.essentials.ExtensionPointRecord
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.ScopeObserver
-import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.sortedWithLoadingOrder
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 fun interface ScopeInitializer<N> : () -> Unit, ExtensionPoint<ScopeInitializer<N>>
 

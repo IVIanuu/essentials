@@ -4,24 +4,18 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
-import android.content.ComponentName
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import androidx.core.graphics.drawable.toDrawable
-import arrow.core.Either
-import arrow.fx.coroutines.parMap
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.util.BroadcastsFactory
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.withContext
+import android.content.*
+import android.content.pm.*
+import android.graphics.*
+import android.graphics.drawable.*
+import androidx.core.graphics.drawable.*
+import arrow.fx.coroutines.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 @Provide class ShortcutRepository(
   private val appContext: AppContext,

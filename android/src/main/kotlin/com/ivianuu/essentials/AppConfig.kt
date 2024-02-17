@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials
 
-import android.content.pm.ApplicationInfo
-import android.os.Build
-import com.ivianuu.injekt.Provide
+import android.content.pm.*
+import android.os.*
+import com.ivianuu.injekt.*
 
 data class AppConfig(
   val isDebug: Boolean,

@@ -4,23 +4,15 @@
 
 package com.ivianuu.essentials.data
 
-import androidx.datastore.core.CorruptionException
-import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.core.*
 import androidx.datastore.core.Serializer
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.coroutines.childCoroutineScope
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
-import kotlinx.serialization.json.encodeToStream
-import java.io.InputStream
-import java.io.OutputStream
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
+import java.io.*
 
 class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
   @Provide fun dataStore(

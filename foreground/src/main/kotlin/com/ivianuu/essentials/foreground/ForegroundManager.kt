@@ -4,23 +4,19 @@
 
 package com.ivianuu.essentials.foreground
 
-import android.app.Notification
-import android.content.Intent
-import androidx.compose.runtime.Composable
-import androidx.core.content.ContextCompat
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
+import android.app.*
+import android.content.*
+import androidx.compose.runtime.*
+import androidx.core.content.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.coroutines.bracketCase
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.SourceKey
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.*
 
 @Provide @Scoped<AppScope> class ForegroundManager(
   private val appContext: AppContext,

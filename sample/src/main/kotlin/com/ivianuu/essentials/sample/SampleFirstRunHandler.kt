@@ -4,10 +4,9 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.app.FirstRunHandler
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
 
 @Provide fun sampleFirstRunHandler(logger: Logger) = FirstRunHandler {
   logger.log { "hello" }

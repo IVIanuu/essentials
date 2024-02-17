@@ -4,22 +4,16 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.provider.Settings
-import androidx.compose.material.Icon
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.data.AndroidSettingModule
-import com.ivianuu.essentials.data.AndroidSettingsType
-import com.ivianuu.essentials.data.DataStore
+import android.provider.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 @Provide object AutoRotationActionId : ActionId("auto_rotation")
 

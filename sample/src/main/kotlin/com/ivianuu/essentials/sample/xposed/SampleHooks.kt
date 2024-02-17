@@ -4,14 +4,10 @@
 
 package com.ivianuu.essentials.sample.xposed
 
-import android.bluetooth.BluetoothGatt
-import android.bluetooth.BluetoothGattCharacteristic
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.xposed.Hooks
-import com.ivianuu.essentials.xposed.arg
-import com.ivianuu.essentials.xposed.hookAllMethods
-import com.ivianuu.injekt.Provide
+import android.bluetooth.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.xposed.*
+import com.ivianuu.injekt.*
 
 @Provide fun sampleHooks(logger: Logger) = Hooks { config ->
   logger.log { "hello ${config.packageName}" }

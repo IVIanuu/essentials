@@ -4,15 +4,12 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.view.KeyEvent
-import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionSettingsKey
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.injekt.Provide
+import android.view.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.gestures.*
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 @Provide object StopActionId : ActionId("media_stop")
 

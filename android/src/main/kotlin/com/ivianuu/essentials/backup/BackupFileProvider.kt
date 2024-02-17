@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.backup
 
-import androidx.core.content.FileProvider
-import com.ivianuu.essentials.AndroidComponent
-import com.ivianuu.injekt.Provide
+import androidx.core.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
 
 @Provide @AndroidComponent class BackupFileProvider : FileProvider()

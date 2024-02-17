@@ -4,16 +4,12 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.Disposable
-import com.ivianuu.essentials.ProvidedService
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scoped
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlin.coroutines.CoroutineContext
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.*
+import kotlin.coroutines.*
 
 typealias ScopedCoroutineScope<N> = @ScopedCoroutineScopeTag<N> CoroutineScope
 

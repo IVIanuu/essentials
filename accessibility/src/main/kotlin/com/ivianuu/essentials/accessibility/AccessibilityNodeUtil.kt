@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.accessibility
 
-import android.view.accessibility.AccessibilityNodeInfo
+import android.view.accessibility.*
 
 fun AccessibilityNodeInfo.firstNodeOrNull(
   predicate: (AccessibilityNodeInfo) -> Boolean

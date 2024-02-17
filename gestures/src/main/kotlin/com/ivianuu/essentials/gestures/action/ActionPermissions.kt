@@ -4,16 +4,16 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import androidx.compose.material.Icon
-import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import androidx.compose.material.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
-import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
-import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.accessibility.*
+import com.ivianuu.essentials.permission.systemoverlay.*
+import com.ivianuu.essentials.permission.writesettings.*
+import com.ivianuu.injekt.*
 
 @Provide class ActionAccessibilityPermission(resources: Resources) :
   AccessibilityServicePermission(

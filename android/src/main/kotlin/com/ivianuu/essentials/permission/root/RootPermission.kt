@@ -4,13 +4,11 @@
 
 package com.ivianuu.essentials.permission.root
 
-import com.ivianuu.essentials.android.R
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.android.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.shell.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 abstract class RootPermission(
   override val title: String,

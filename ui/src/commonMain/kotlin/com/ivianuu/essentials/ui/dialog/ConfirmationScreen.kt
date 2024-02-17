@@ -5,12 +5,10 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.material.Text
-import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 class ConfirmationScreen(val title: String) : DialogScreen<ConfirmationScreen.Result> {
   enum class Result { CONFIRMED, DENIED }

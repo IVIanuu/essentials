@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.ui.navigation
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.provider.Settings
-import androidx.core.net.toUri
-import com.ivianuu.injekt.Provide
+import android.content.*
+import android.content.pm.*
+import android.provider.*
+import androidx.core.net.*
+import com.ivianuu.injekt.*
 
 class DefaultIntentScreen(val intent: Intent) : IntentScreen {
   @Provide companion object {

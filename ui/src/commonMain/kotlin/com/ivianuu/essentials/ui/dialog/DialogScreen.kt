@@ -1,16 +1,12 @@
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import com.ivianuu.essentials.ui.animation.ForFade
-import com.ivianuu.essentials.ui.navigation.OverlayScreen
-import com.ivianuu.essentials.ui.navigation.ScreenConfig
-import com.ivianuu.injekt.Provide
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 import soup.compose.material.motion.MotionConstants.DefaultFadeOutDuration
-import soup.compose.material.motion.animation.materialFadeIn
-import soup.compose.material.motion.animation.materialFadeOut
+import soup.compose.material.motion.animation.*
 
 interface DialogScreen<T> : OverlayScreen<T> {
   @Provide companion object {

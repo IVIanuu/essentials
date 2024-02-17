@@ -1,8 +1,7 @@
 package com.ivianuu.essentials.coroutines
 
-import arrow.fx.coroutines.parMap
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
+import arrow.fx.coroutines.*
+import kotlin.coroutines.*
 
 suspend fun <T> par(
   vararg blocks: suspend () -> T,

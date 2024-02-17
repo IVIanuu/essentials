@@ -4,15 +4,13 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.logging.NoopLogger
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollectIn
-import com.ivianuu.injekt.Provide
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import org.junit.Test
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.test.*
+import com.ivianuu.injekt.*
+import io.kotest.matchers.*
+import io.kotest.matchers.collections.*
+import kotlinx.coroutines.*
+import org.junit.*
 
 class NavigatorTest {
   object ScreenA : Screen<Unit>

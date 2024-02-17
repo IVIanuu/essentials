@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.runtime.Stable
-import com.ivianuu.injekt.Provide
+import androidx.compose.runtime.*
+import com.ivianuu.injekt.*
 
 @Stable interface CommonStrings {
   val cancel: String

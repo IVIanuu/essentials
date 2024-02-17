@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.rate
 
-import com.ivianuu.essentials.data.DataStoreModule
-import com.ivianuu.injekt.Provide
-import kotlinx.serialization.Serializable
+import com.ivianuu.essentials.data.*
+import com.ivianuu.injekt.*
+import kotlinx.serialization.*
 
 @Serializable data class RatePrefs(
   val launchTimes: Int = 0,

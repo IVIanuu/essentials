@@ -4,34 +4,13 @@
 
 package com.ivianuu.essentials.billing
 
-import android.app.Activity
-import com.android.billingclient.api.AcknowledgePurchaseParams
-import com.android.billingclient.api.AcknowledgePurchaseResponseListener
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.ConsumeParams
-import com.android.billingclient.api.ConsumeResponseListener
-import com.android.billingclient.api.InAppMessageParams
-import com.android.billingclient.api.InAppMessageResponseListener
+import android.app.*
+import com.android.billingclient.api.*
 import com.android.billingclient.api.PriceChangeConfirmationListener
 import com.android.billingclient.api.PriceChangeFlowParams
-import com.android.billingclient.api.ProductDetailsResponseListener
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.PurchaseHistoryResponseListener
-import com.android.billingclient.api.PurchasesResponseListener
-import com.android.billingclient.api.QueryProductDetailsParams
-import com.android.billingclient.api.QueryPurchaseHistoryParams
-import com.android.billingclient.api.QueryPurchasesParams
-import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.SkuDetailsParams
-import com.android.billingclient.api.SkuDetailsResponseListener
-import com.ivianuu.essentials.cast
-import com.ivianuu.injekt.Inject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 class TestBillingClient(
   @Inject private val scope: CoroutineScope,

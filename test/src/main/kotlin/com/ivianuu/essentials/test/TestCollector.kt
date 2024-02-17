@@ -4,10 +4,8 @@
 
 package com.ivianuu.essentials.test
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 class TestCollector<T>(
   private val onEach: suspend (T) -> Unit = {}

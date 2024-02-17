@@ -4,25 +4,18 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Shapes
-import androidx.compose.material.Typography
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.ivianuu.essentials.ui.animation.ElementTransitionSpec
-import com.ivianuu.essentials.ui.animation.fadeUpwards
-import com.ivianuu.essentials.ui.navigation.LocalScreenTransitionSpec
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.util.colors
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
+import androidx.compose.foundation.*
+import androidx.compose.foundation.shape.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.text.*
+import androidx.compose.ui.text.font.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.util.*
+import com.ivianuu.injekt.*
 
 data class AppColors(
   val primary: Color,

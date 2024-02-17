@@ -4,14 +4,10 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import com.ivianuu.essentials.ExtensionPoint
-import com.ivianuu.essentials.ExtensionPointRecord
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.sortedWithLoadingOrder
-import com.ivianuu.injekt.Provide
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
 
 fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
   @Composable operator fun invoke(content: @Composable () -> Unit)

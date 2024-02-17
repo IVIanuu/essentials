@@ -4,9 +4,8 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 interface ExtensionPoint<T : ExtensionPoint<T>>
 

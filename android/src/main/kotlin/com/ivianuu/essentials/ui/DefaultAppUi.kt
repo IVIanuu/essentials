@@ -4,10 +4,9 @@
 
 package com.ivianuu.essentials.ui
 
-import com.ivianuu.essentials.ui.app.AppUi
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.NavigatorContent
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.app.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 @Provide fun defaultAppUi(navigator: Navigator) = AppUi {
   NavigatorContent(navigator = navigator)

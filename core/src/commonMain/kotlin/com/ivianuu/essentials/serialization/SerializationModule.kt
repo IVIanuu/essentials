@@ -4,17 +4,12 @@
 
 package com.ivianuu.essentials.serialization
 
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.cast
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.Tag
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.serializer
-import kotlin.reflect.KClass
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
+import kotlinx.serialization.modules.*
+import kotlin.reflect.*
 
 @Provide object SerializationModule {
   @Provide fun json(serializersModule: SerializersModule): @Scoped<AppScope> Json = Json {

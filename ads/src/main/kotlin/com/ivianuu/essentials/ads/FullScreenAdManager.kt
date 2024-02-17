@@ -4,41 +4,20 @@
 
 package com.ivianuu.essentials.ads
 
-import androidx.activity.ComponentActivity
-import arrow.core.Either
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.ScopeManager
-import com.ivianuu.essentials.Scoped
-import com.ivianuu.essentials.app.AppVisibleScope
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.coroutines.RateLimiter
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.scopeOfOrNull
-import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeoutOrNull
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
-import kotlin.time.Duration
+import androidx.activity.*
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.*
+import kotlin.coroutines.*
+import kotlin.time.*
 import kotlin.time.Duration.Companion.seconds
 
 @Provide @Scoped<UiScope> class FullScreenAdManager(

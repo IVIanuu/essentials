@@ -4,14 +4,11 @@
 
 package com.ivianuu.essentials.util
 
-import android.widget.Toast
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
+import android.widget.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Provide class Toaster(
   private val appContext: AppContext,

@@ -4,36 +4,25 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.toBitmap
-import arrow.core.Either
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.painter.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.unit.*
+import androidx.core.graphics.drawable.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.android.R
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.collectAsResourceState
-import com.ivianuu.essentials.ui.material.AppBar
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.ScreenScaffold
-import com.ivianuu.essentials.ui.navigation.DefaultIntentScreen
-import com.ivianuu.essentials.ui.navigation.Presenter
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 class ShortcutPickerScreen : Screen<Shortcut> {
   @Provide companion object {

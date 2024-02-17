@@ -4,11 +4,9 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import kotlin.math.roundToInt
-import kotlin.math.roundToLong
-import kotlin.time.Duration
+import com.ivianuu.injekt.*
+import kotlin.math.*
+import kotlin.time.*
 import kotlin.time.Duration.Companion.milliseconds
 
 interface Lerper<T> {

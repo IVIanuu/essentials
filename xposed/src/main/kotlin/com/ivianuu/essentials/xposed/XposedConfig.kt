@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.xposed
 
-import android.content.pm.ApplicationInfo
-import com.ivianuu.injekt.Provide
-import de.robv.android.xposed.callbacks.XC_LoadPackage
+import android.content.pm.*
+import com.ivianuu.injekt.*
+import de.robv.android.xposed.callbacks.*
 
 data class XposedConfig(
   val packageName: String,

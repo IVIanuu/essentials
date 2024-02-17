@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.*
 
 data object NotificationScope
 

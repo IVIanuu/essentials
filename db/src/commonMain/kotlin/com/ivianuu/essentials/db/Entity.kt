@@ -4,11 +4,10 @@
 
 package com.ivianuu.essentials.db
 
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.common.TypeKey
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialInfo
-import kotlinx.serialization.descriptors.PrimitiveKind
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.*
 
 interface EntityDescriptor<T> {
   val key: TypeKey<T>

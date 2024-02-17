@@ -4,25 +4,18 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import com.ivianuu.essentials.LocalScope
-import com.ivianuu.essentials.compose.scopedAction
-import com.ivianuu.essentials.coroutineScope
-import com.ivianuu.essentials.gestures.action.ActionRepository
-import com.ivianuu.essentials.gestures.action.ui.ActionPickerScreen
-import com.ivianuu.essentials.safeAs
-import com.ivianuu.essentials.ui.material.AppBar
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.ui.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.ScreenScaffold
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
 @Provide val actionsHomeItem = HomeItem("Actions") { ActionsScreen() }

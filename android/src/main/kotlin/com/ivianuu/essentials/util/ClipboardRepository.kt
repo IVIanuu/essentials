@@ -4,15 +4,12 @@
 
 package com.ivianuu.essentials.util
 
-import android.content.ClipData
-import arrow.core.Either
-import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.android.R
-import com.ivianuu.essentials.catch
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import android.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.android.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
 import android.content.ClipboardManager as AndroidClipboardManager
 
 @Provide class ClipboardRepository(

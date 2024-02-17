@@ -4,12 +4,11 @@
 
 package com.ivianuu.essentials.db
 
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.common.TypeKey
-import kotlinx.serialization.StringFormat
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.EmptySerializersModule
-import kotlinx.serialization.modules.SerializersModule
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
+import kotlinx.serialization.modules.*
 
 class Schema(
   val version: Int,

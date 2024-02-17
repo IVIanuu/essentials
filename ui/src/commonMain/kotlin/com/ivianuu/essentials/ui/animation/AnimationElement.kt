@@ -1,13 +1,10 @@
 package com.ivianuu.essentials.ui.animation
 
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.SizeTransform
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.unit.Density
+import androidx.compose.animation.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
+import kotlin.collections.set
 
 fun Modifier.animationElement(key: Any): Modifier = composed {
   with(LocalElementAnimationScope.current) {

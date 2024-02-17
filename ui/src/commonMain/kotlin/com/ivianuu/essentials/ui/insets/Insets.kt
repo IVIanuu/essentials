@@ -4,27 +4,14 @@
 
 package com.ivianuu.essentials.ui.insets
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.absolutePadding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.lerp
-import arrow.fx.coroutines.guarantee
-import com.ivianuu.essentials.ui.AppUiDecorator
-import com.ivianuu.injekt.Provide
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
+import arrow.fx.coroutines.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.*
 
 @Composable fun InsetsPadding(
   modifier: Modifier = Modifier,

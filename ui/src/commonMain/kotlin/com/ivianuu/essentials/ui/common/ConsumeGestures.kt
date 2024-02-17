@@ -4,9 +4,8 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.*
+import androidx.compose.ui.input.pointer.*
 
 fun Modifier.consumeGestures(consume: Boolean = true): Modifier = if (!consume) this
 else pointerInput(Unit) {

@@ -16,36 +16,19 @@
 
 package com.ivianuu.essentials.systemoverlay
 
-import android.graphics.PixelFormat
-import android.view.Gravity
-import android.view.View
-import android.view.WindowManager
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInWindow
-import androidx.compose.ui.platform.LocalView
-import arrow.core.Either
-import arrow.fx.coroutines.bracketCase
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.LocalScope
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.CoroutineContexts
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.withContext
-import kotlin.math.roundToInt
+import android.graphics.*
+import android.view.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.layout.*
+import androidx.compose.ui.platform.*
+import arrow.fx.coroutines.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.accessibility.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlin.math.*
 
 data object SystemWindowScope
 

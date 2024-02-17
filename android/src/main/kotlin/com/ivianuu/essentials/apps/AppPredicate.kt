@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.apps
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import com.ivianuu.injekt.Provide
+import android.content.*
+import android.content.pm.*
+import com.ivianuu.injekt.*
 
 fun interface AppPredicate {
   operator fun invoke(app: AppInfo): Boolean

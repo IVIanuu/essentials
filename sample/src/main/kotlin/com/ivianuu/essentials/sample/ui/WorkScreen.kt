@@ -4,24 +4,19 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.material.AppBar
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.ScreenScaffold
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.essentials.work.PeriodicWorkSchedule
-import com.ivianuu.essentials.work.WorkId
-import com.ivianuu.essentials.work.WorkManager
-import com.ivianuu.essentials.work.Worker
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.delay
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.work.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 

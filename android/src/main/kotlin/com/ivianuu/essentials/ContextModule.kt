@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials
 
-import android.content.ContentResolver
-import android.content.pm.PackageManager
-import com.ivianuu.injekt.Provide
+import android.content.*
+import android.content.pm.*
+import com.ivianuu.injekt.*
 
 @Provide object ContextModule {
   @Provide fun packageManager(appContext: AppContext): PackageManager =

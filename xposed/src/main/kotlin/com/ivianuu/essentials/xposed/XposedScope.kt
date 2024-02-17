@@ -4,11 +4,8 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.Service
-import com.ivianuu.essentials.cast
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
 
 @Provide data object XposedScope {
   @Provide fun appScope(xposedScope: Scope<XposedScope>): Scope<AppScope> = xposedScope.cast()

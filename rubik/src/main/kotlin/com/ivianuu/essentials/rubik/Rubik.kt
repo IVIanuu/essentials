@@ -4,14 +4,11 @@
 
 package com.ivianuu.essentials.rubik
 
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.googlefonts.Font
-import androidx.compose.ui.text.googlefonts.GoogleFont
-import com.ivianuu.essentials.font.GoogleFontProvider
-import com.ivianuu.essentials.ui.AppFont
-import com.ivianuu.injekt.Provide
+import androidx.compose.ui.text.font.*
+import androidx.compose.ui.text.googlefonts.*
+import com.ivianuu.essentials.font.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.*
 
 private val googleFont = GoogleFont("Rubik")
 @Provide val Rubik: AppFont = FontFamily(

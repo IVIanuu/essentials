@@ -4,15 +4,13 @@
 
 package com.ivianuu.essentials.backup
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.core.content.FileProvider
-import com.ivianuu.essentials.AppConfig
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ui.navigation.IntentScreen
-import com.ivianuu.essentials.ui.navigation.ScreenIntentFactory
-import com.ivianuu.injekt.Provide
-import java.io.File
+import android.content.*
+import android.content.pm.*
+import androidx.core.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import java.io.*
 
 class ShareBackupFileScreen(val backupFilePath: String) : IntentScreen
 

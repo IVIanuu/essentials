@@ -4,17 +4,13 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.annotation.SuppressLint
-import android.app.SearchManager
-import android.os.Bundle
-import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.SystemService
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.injekt.Provide
+import android.annotation.*
+import android.app.*
+import android.os.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.gestures.*
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.injekt.*
 
 @Provide object AssistantActionId : ActionId("assistant")
 
