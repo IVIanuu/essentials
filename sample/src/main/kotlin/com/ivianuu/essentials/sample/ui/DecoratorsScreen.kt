@@ -31,14 +31,16 @@ import com.ivianuu.injekt.Provide
 
 @Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsScreen() }
 
-class DecoratorsScreen : Screen<Unit>
-
-@Provide val decoratorsUi = Ui<DecoratorsScreen, Unit> {
-  ScreenScaffold(topBar = { AppBar { Text("Decorators") } }) {
-    VerticalList {
-      (1..10).forEach { itemIndex ->
-        item {
-          ListItem(title = { Text("Item $itemIndex") })
+class DecoratorsScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide val ui = Ui<DecoratorsScreen, Unit> {
+      ScreenScaffold(topBar = { AppBar { Text("Decorators") } }) {
+        VerticalList {
+          (1..10).forEach { itemIndex ->
+            item {
+              ListItem(title = { Text("Item $itemIndex") })
+            }
+          }
         }
       }
     }

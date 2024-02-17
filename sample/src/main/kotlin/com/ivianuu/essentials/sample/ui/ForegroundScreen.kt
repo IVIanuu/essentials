@@ -33,44 +33,41 @@ import kotlin.time.Duration.Companion.seconds
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundScreen() }
 
-class ForegroundScreen : Screen<Unit>
+class ForegroundScreen : Screen<Unit> {
+  @Provide companion object {
+    @SuppressLint("NewApi")
+    @Provide fun ui(
+      foregroundManager: ForegroundManager,
+      notificationFactory: NotificationFactory
+    ) = Ui<ForegroundScreen, Unit> {
+      ScreenScaffold(topBar = { AppBar { Text("Foreground") } }) {
+        var isEnabled by remember { mutableStateOf(false) }
 
-@SuppressLint("NewApi")
-@Provide fun foregroundUi(
-  foregroundManager: ForegroundManager,
-  @Inject notificationFactory: NotificationFactory
-) = Ui<ForegroundScreen, Unit> {
-  ScreenScaffold(topBar = { AppBar { Text("Foreground") } }) {
-    var isEnabled by remember { mutableStateOf(false) }
+        if (isEnabled)
+          LaunchedEffect(true) {
+            foregroundManager.startForeground(removeNotification = false) {
+              notificationFactory(
+                "foreground",
+                "Foreground",
+                NotificationManager.IMPORTANCE_LOW
+              ) {
+                setSmallIcon(R.drawable.ic_home)
+                setContentTitle("Foreground")
 
-    if (isEnabled)
-      LaunchedEffect(true) {
-        foregroundManager.startForeground(removeNotification = false) {
-          ForegroundNotification(
-            remember {
-              ticker(1000)
-                .receiveAsFlow()
-                .runningFold(0) { acc, _ -> acc.inc() }
-            }.collectAsState(0).value
-          )
+                val count = remember {
+                  ticker(1000)
+                    .receiveAsFlow()
+                    .runningFold(0) { acc, _ -> acc.inc() }
+                }.collectAsState(0).value
+                setContentText("Current progress $count")
+              }
+            }
+          }
+
+        Button(onClick = { isEnabled = !isEnabled }) {
+          Text(if (isEnabled) "Stop foreground" else "Start foreground")
         }
       }
-
-    Button(onClick = { isEnabled = !isEnabled }) {
-      Text(if (isEnabled) "Stop foreground" else "Start foreground")
     }
   }
-}
-
-private fun ForegroundNotification(
-  count: Int,
-  @Inject notificationFactory: NotificationFactory
-) = notificationFactory(
-  "foreground",
-  "Foreground",
-  NotificationManager.IMPORTANCE_LOW
-) {
-  setSmallIcon(R.drawable.ic_home)
-  setContentTitle("Foreground")
-  setContentText("Current progress $count")
 }

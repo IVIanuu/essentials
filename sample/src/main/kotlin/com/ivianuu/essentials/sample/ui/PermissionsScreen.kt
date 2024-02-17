@@ -31,29 +31,31 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsScreen() }
 
-class PermissionsScreen : Screen<Unit>
-
-@Provide fun permissionUi(
-  permissionManager: PermissionManager
-) = Ui<PermissionsScreen, Unit> {
-  ScreenScaffold(topBar = { AppBar { Text("Permissions") } }) {
-    Button(
-      modifier = Modifier.center(),
-      onClick = action {
-        permissionManager.requestPermissions(
-          listOf(
-            typeKeyOf<SampleCameraPermission>(),
-            typeKeyOf<SamplePhonePermission>(),
-            typeKeyOf<SampleAccessibilityPermission>(),
-            typeKeyOf<SampleNotificationListenerPermission>(),
-            typeKeyOf<SampleSystemOverlayPermission>(),
-            typeKeyOf<SampleWriteSecureSettingsPermission>(),
-            typeKeyOf<SampleWriteSettingsPermission>()
-          )
-        )
+class PermissionsScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      permissionManager: PermissionManager
+    ) = Ui<PermissionsScreen, Unit> {
+      ScreenScaffold(topBar = { AppBar { Text("Permissions") } }) {
+        Button(
+          modifier = Modifier.center(),
+          onClick = action {
+            permissionManager.requestPermissions(
+              listOf(
+                typeKeyOf<SampleCameraPermission>(),
+                typeKeyOf<SamplePhonePermission>(),
+                typeKeyOf<SampleAccessibilityPermission>(),
+                typeKeyOf<SampleNotificationListenerPermission>(),
+                typeKeyOf<SampleSystemOverlayPermission>(),
+                typeKeyOf<SampleWriteSecureSettingsPermission>(),
+                typeKeyOf<SampleWriteSettingsPermission>()
+              )
+            )
+          }
+        ) {
+          Text("Request")
+        }
       }
-    ) {
-      Text("Request")
     }
   }
 }

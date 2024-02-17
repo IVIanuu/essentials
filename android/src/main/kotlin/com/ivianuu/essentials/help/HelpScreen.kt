@@ -45,7 +45,110 @@ import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 
-class HelpScreen : Screen<Unit>
+class HelpScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(categories: List<HelpCategory>) = Ui<HelpScreen, Unit> {
+      var expandedItem: HelpItem? by remember {
+        mutableStateOf(
+          categories
+            .flatMap { it.items }
+            .firstOrNull()
+        )
+      }
+
+      ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.help_title)) } }) {
+        VerticalList {
+          categories.forEach { category ->
+            if (category.title != null) {
+              item {
+                Subheader { Text(category.title) }
+              }
+            }
+
+            category.items.forEach { item ->
+              item {
+                HelpItem(
+                  item = item,
+                  isExpanded = expandedItem == item,
+                  onToggleExpandedClick = {
+                    expandedItem = if (expandedItem != item) item
+                    else null
+                  }
+                )
+              }
+            }
+          }
+        }
+      }
+    }
+
+    @Composable private fun HelpItem(
+      item: HelpItem,
+      isExpanded: Boolean,
+      onToggleExpandedClick: () -> Unit
+    ) {
+      Column(
+        modifier = Modifier
+          .padding(start = 8.dp, top = 8.dp, end = 8.dp)
+          .border(
+            1.dp,
+            LocalContentColor.current.copy(alpha = 0.12f),
+            RoundedCornerShape(8.dp)
+          )
+          .clip(RoundedCornerShape(8.dp))
+          .clickable(onClick = onToggleExpandedClick)
+          .padding(16.dp)
+          .animateContentSize()
+      ) {
+        Row(
+          modifier = Modifier.fillMaxWidth(),
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          CompositionLocalProvider(
+            LocalTextStyle provides MaterialTheme.typography.subtitle1,
+            LocalContentAlpha provides ContentAlpha.high
+          ) {
+            Text(item.question)
+          }
+
+          Spacer(Modifier.weight(1f))
+
+          val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
+          Icon(
+            painter = painterResource(R.drawable.ic_expand_more),
+            modifier = Modifier
+              .size(24.dp)
+              .rotate(iconRotation),
+            tint = MaterialTheme.colors.primary,
+            contentDescription = null
+          )
+        }
+
+        if (isExpanded) {
+          CompositionLocalProvider(
+            LocalTextStyle provides MaterialTheme.typography.body2,
+            LocalContentAlpha provides ContentAlpha.medium
+          ) {
+            Text(
+              modifier = Modifier.padding(top = 8.dp),
+              text = item.answer
+            )
+          }
+
+          if (item.actions != null) {
+            Row(
+              modifier = Modifier.padding(top = 8.dp),
+              horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+              item.actions.invoke()
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
 data class HelpCategory(val title: String? = null, val items: List<HelpItem>) {
   companion object {
@@ -58,104 +161,3 @@ data class HelpItem(
   val answer: String,
   val actions: (@Composable () -> Unit)? = null
 )
-
-@Provide fun helpUi(categories: List<HelpCategory>) = Ui<HelpScreen, Unit> {
-  var expandedItem: HelpItem? by remember {
-    mutableStateOf(
-      categories
-        .flatMap { it.items }
-        .firstOrNull()
-    )
-  }
-
-  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.help_title)) } }) {
-    VerticalList {
-      categories.forEach { category ->
-        if (category.title != null) {
-          item {
-            Subheader { Text(category.title) }
-          }
-        }
-
-        category.items.forEach { item ->
-          item {
-            HelpItem(
-              item = item,
-              isExpanded = expandedItem == item,
-              onToggleExpandedClick = {
-                expandedItem = if (expandedItem != item) item
-                else null
-              }
-            )
-          }
-        }
-      }
-    }
-  }
-}
-
-@Composable private fun HelpItem(
-  item: HelpItem,
-  isExpanded: Boolean,
-  onToggleExpandedClick: () -> Unit
-) {
-  Column(
-    modifier = Modifier
-      .padding(start = 8.dp, top = 8.dp, end = 8.dp)
-      .border(
-        1.dp,
-        LocalContentColor.current.copy(alpha = 0.12f),
-        RoundedCornerShape(8.dp)
-      )
-      .clip(RoundedCornerShape(8.dp))
-      .clickable(onClick = onToggleExpandedClick)
-      .padding(16.dp)
-      .animateContentSize()
-  ) {
-    Row(
-      modifier = Modifier.fillMaxWidth(),
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      CompositionLocalProvider(
-        LocalTextStyle provides MaterialTheme.typography.subtitle1,
-        LocalContentAlpha provides ContentAlpha.high
-      ) {
-        Text(item.question)
-      }
-
-      Spacer(Modifier.weight(1f))
-
-      val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
-      Icon(
-        painter = painterResource(R.drawable.ic_expand_more),
-        modifier = Modifier
-          .size(24.dp)
-          .rotate(iconRotation),
-        tint = MaterialTheme.colors.primary,
-        contentDescription = null
-      )
-    }
-
-    if (isExpanded) {
-      CompositionLocalProvider(
-        LocalTextStyle provides MaterialTheme.typography.body2,
-        LocalContentAlpha provides ContentAlpha.medium
-      ) {
-        Text(
-          modifier = Modifier.padding(top = 8.dp),
-          text = item.answer
-        )
-      }
-
-      if (item.actions != null) {
-        Row(
-          modifier = Modifier.padding(top = 8.dp),
-          horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-          verticalAlignment = Alignment.CenterVertically
-        ) {
-          item.actions.invoke()
-        }
-      }
-    }
-  }
-}

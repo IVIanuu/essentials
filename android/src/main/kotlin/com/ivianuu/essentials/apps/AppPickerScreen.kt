@@ -30,34 +30,37 @@ import kotlinx.coroutines.flow.map
 class AppPickerScreen(
   val appPredicate: AppPredicate = DefaultAppPredicate,
   val title: String? = null,
-) : Screen<AppInfo>
-
-@Provide fun appPickerUi(
-  navigator: Navigator,
-  repository: AppRepository,
-  screen: AppPickerScreen
-) = Ui<AppPickerScreen, Unit> {
-  ScreenScaffold(
-    topBar = { AppBar { Text(screen.title ?: stringResource(R.string.title_app_picker)) } }
-  ) {
-    ResourceVerticalListFor(
-      remember {
-        repository.installedApps
-          .map { it.filter { screen.appPredicate(it) } }
-      }
-        .collectAsResourceState().value
-    ) { app ->
-      ListItem(
-        modifier = Modifier.clickable(onClick = action { navigator.pop(screen, app) }),
-        title = { Text(app.appName) },
-        leading = {
-          Image(
-            painter = rememberAsyncImagePainter(AppIcon(packageName = app.packageName)),
-            modifier = Modifier.size(40.dp),
-            contentDescription = null
+) : Screen<AppInfo> {
+  @Provide companion object {
+    @Provide fun ui(
+      navigator: Navigator,
+      repository: AppRepository,
+      screen: AppPickerScreen
+    ) = Ui<AppPickerScreen, Unit> {
+      ScreenScaffold(
+        topBar = { AppBar { Text(screen.title ?: stringResource(R.string.title_app_picker)) } }
+      ) {
+        ResourceVerticalListFor(
+          remember {
+            repository.installedApps
+              .map { it.filter { screen.appPredicate(it) } }
+          }
+            .collectAsResourceState().value
+        ) { app ->
+          ListItem(
+            modifier = Modifier.clickable(onClick = action { navigator.pop(screen, app) }),
+            title = { Text(app.appName) },
+            leading = {
+              Image(
+                painter = rememberAsyncImagePainter(AppIcon(packageName = app.packageName)),
+                modifier = Modifier.size(40.dp),
+                contentDescription = null
+              )
+            }
           )
         }
-      )
+      }
     }
   }
 }
+

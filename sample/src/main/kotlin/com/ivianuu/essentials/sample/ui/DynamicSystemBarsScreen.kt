@@ -25,38 +25,40 @@ import com.ivianuu.injekt.Provide
 
 @Provide val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsScreen() }
 
-class DynamicSystemBarsScreen : Screen<Unit>
-
-@Provide val dynamicSystemBarsUi = Ui<DynamicSystemBarsScreen, Unit> {
-  Box {
-    val colors = rememberSaveable {
-      ColorPickerPalette.entries
-        .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
-        .flatMap { it.colors }
-        .shuffled()
-    }
-    VerticalList(contentPadding = PaddingValues(0.dp)) {
-      // todo use items once fixed
-      for (color in colors) {
-        item {
-          Box(
-            modifier = Modifier
-              .fillMaxWidth()
-              .height(300.dp)
-              .background(color)
-              .systemBarStyle(
-                bgColor = Color.Black.copy(alpha = 0.2f),
-                darkIcons = color.isLight
-              )
-          )
+class DynamicSystemBarsScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide val ui = Ui<DynamicSystemBarsScreen, Unit> {
+      Box {
+        val colors = rememberSaveable {
+          ColorPickerPalette.entries
+            .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
+            .flatMap { it.colors }
+            .shuffled()
         }
+        VerticalList(contentPadding = PaddingValues(0.dp)) {
+          // todo use items once fixed
+          for (color in colors) {
+            item {
+              Box(
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .height(300.dp)
+                  .background(color)
+                  .systemBarStyle(
+                    bgColor = Color.Black.copy(alpha = 0.2f),
+                    darkIcons = color.isLight
+                  )
+              )
+            }
+          }
+        }
+
+        AppBar(
+          backgroundColor = Color.Transparent,
+          elevation = 0.dp,
+          title = { Text("Dynamic system bars") }
+        )
       }
     }
-
-    AppBar(
-      backgroundColor = Color.Transparent,
-      elevation = 0.dp,
-      title = { Text("Dynamic system bars") }
-    )
   }
 }

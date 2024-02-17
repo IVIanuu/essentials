@@ -26,55 +26,57 @@ import kotlin.time.Duration.Companion.seconds
 
 @Provide val actionsHomeItem = HomeItem("Actions") { ActionsScreen() }
 
-class ActionsScreen : Screen<Unit>
+class ActionsScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      navigator: Navigator,
+      repository: ActionRepository,
+      toaster: Toaster
+    ) = Ui<ActionsScreen, Unit> {
+      ScreenScaffold(topBar = { AppBar { Text("Actions") } }) {
+        val scope = LocalScope.current.coroutineScope
+        Column {
+          Button(
+            onClick = {
+              scope.launch {
+                val actionId = navigator.push(ActionPickerScreen())
+                  .safeAs<ActionPickerScreen.Result.Action>()
+                  ?.actionId ?: return@launch
 
-@Provide fun actionsUi(
-  navigator: Navigator,
-  repository: ActionRepository,
-  toaster: Toaster
-) = Ui<ActionsScreen, Unit> {
-  ScreenScaffold(topBar = { AppBar { Text("Actions") } }) {
-    val scope = LocalScope.current.coroutineScope
-    Column {
-      Button(
-        onClick = {
-          scope.launch {
-            val actionId = navigator.push(ActionPickerScreen())
-              .safeAs<ActionPickerScreen.Result.Action>()
-              ?.actionId ?: return@launch
+                val action = repository.getAction(actionId)
 
-            val action = repository.getAction(actionId)
+                delay(1.seconds)
 
-            delay(1.seconds)
+                toaster("Execute action ${action.title}")
 
-            toaster("Execute action ${action.title}")
-
-            repository.executeAction(actionId)
-          }
-        }
-      ) { Text("Pick action") }
-
-      Button(
-        onClick = {
-          scope.launch {
-            val actionId = navigator.push(ActionPickerScreen())
-              .safeAs<ActionPickerScreen.Result.Action>()
-              ?.actionId ?: return@launch
-
-            val action = repository.getAction(actionId)
-
-            delay(1.seconds)
-
-            while (true) {
-              toaster("Execute action ${action.title}")
-
-              repository.executeAction(actionId)
-
-              delay(3.seconds)
+                repository.executeAction(actionId)
+              }
             }
-          }
+          ) { Text("Pick action") }
+
+          Button(
+            onClick = {
+              scope.launch {
+                val actionId = navigator.push(ActionPickerScreen())
+                  .safeAs<ActionPickerScreen.Result.Action>()
+                  ?.actionId ?: return@launch
+
+                val action = repository.getAction(actionId)
+
+                delay(1.seconds)
+
+                while (true) {
+                  toaster("Execute action ${action.title}")
+
+                  repository.executeAction(actionId)
+
+                  delay(3.seconds)
+                }
+              }
+            }
+          ) { Text("Loop action") }
         }
-      ) { Text("Loop action") }
+      }
     }
   }
 }

@@ -33,39 +33,41 @@ import kotlinx.coroutines.launch
 
 @Provide val systemWindowHomeItem = HomeItem("System Window") { SystemWindowScreen() }
 
-class SystemWindowScreen : Screen<Unit>
+class SystemWindowScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      permissionManager: PermissionManager,
+      scope: ScopedCoroutineScope<ScreenScope>,
+      systemWindowManager: SystemWindowManager
+    ) = Ui<SystemWindowScreen, Unit> {
+      ScreenScaffold(topBar = { AppBar { Text("System window") } }) {
+        var showSystemWindow by remember { mutableStateOf(false) }
 
-@Provide fun systemWindowUi(
-  permissionManager: PermissionManager,
-  scope: ScopedCoroutineScope<ScreenScope>,
-  systemWindowManager: SystemWindowManager
-) = Ui<SystemWindowScreen, Unit> {
-  ScreenScaffold(topBar = { AppBar { Text("System window") } }) {
-    var showSystemWindow by remember { mutableStateOf(false) }
+        if (showSystemWindow)
+          LaunchedEffect(true) {
+            systemWindowManager.attachSystemWindow {
+              Box(
+                modifier = Modifier
+                  .fillMaxSize()
+                  .background(Color.Red)
+                  .systemWindowTrigger()
+                  .clickable { showSystemWindow = false }
+              )
+            }
+          }
 
-    if (showSystemWindow)
-      LaunchedEffect(true) {
-        systemWindowManager.attachSystemWindow {
-          Box(
-            modifier = Modifier
-              .fillMaxSize()
-              .background(Color.Red)
-              .systemWindowTrigger()
-              .clickable { showSystemWindow = false }
-          )
+        Button(
+          modifier = Modifier.center(),
+          onClick = {
+            scope.launch {
+              if (permissionManager.requestPermissions(listOf(typeKeyOf<SampleSystemOverlayPermission>())))
+                showSystemWindow = true
+            }
+          }
+        ) {
+          Text("Attach system window")
         }
       }
-
-    Button(
-      modifier = Modifier.center(),
-      onClick = {
-        scope.launch {
-          if (permissionManager.requestPermissions(listOf(typeKeyOf<SampleSystemOverlayPermission>())))
-            showSystemWindow = true
-        }
-      }
-    ) {
-      Text("Attach system window")
     }
   }
 }

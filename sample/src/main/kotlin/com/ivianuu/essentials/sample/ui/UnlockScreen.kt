@@ -29,44 +29,46 @@ import kotlinx.coroutines.launch
 
 @Provide val unlockHomeItem = HomeItem("Unlock") { UnlockScreen() }
 
-class UnlockScreen : Screen<Unit>
+class UnlockScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      deviceScreenManager: DeviceScreenManager,
+      scope: ScopedCoroutineScope<ScreenScope>,
+      toaster: Toaster
+    ) = Ui<UnlockScreen, Unit> {
+      ScreenScaffold(topBar = { AppBar { Text("Unlock") } }) {
+        Column(
+          modifier = Modifier.fillMaxSize(),
+          verticalArrangement = Arrangement.Center,
+          horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+          Button(
+            onClick = {
+              scope.launch {
+                toaster("Turn the screen off")
+                deviceScreenManager.screenState.first { !it.isOn }
+                delay(1500)
+                val unlocked = deviceScreenManager.unlockScreen()
+                toaster("Screen unlocked $unlocked")
+              }
+            }
+          ) { Text("Unlock") }
 
-@Provide fun unlockUi(
-  deviceScreenManager: DeviceScreenManager,
-  scope: ScopedCoroutineScope<ScreenScope>,
-  toaster: Toaster
-) = Ui<UnlockScreen, Unit> {
-  ScreenScaffold(topBar = { AppBar { Text("Unlock") } }) {
-    Column(
-      modifier = Modifier.fillMaxSize(),
-      verticalArrangement = Arrangement.Center,
-      horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-      Button(
-        onClick = {
-          scope.launch {
-            toaster("Turn the screen off")
-            deviceScreenManager.screenState.first { !it.isOn }
-            delay(1500)
-            val unlocked = deviceScreenManager.unlockScreen()
-            toaster("Screen unlocked $unlocked")
-          }
+          Spacer(Modifier.height(8.dp))
+
+          Button(
+            onClick = {
+              scope.launch {
+                toaster("Turn the screen off")
+                deviceScreenManager.screenState.first { !it.isOn }
+                delay(1500)
+                val screenOn = deviceScreenManager.turnScreenOn()
+                toaster("Screen activated $screenOn")
+              }
+            }
+          ) { Text("Activate") }
         }
-      ) { Text("Unlock") }
-
-      Spacer(Modifier.height(8.dp))
-
-      Button(
-        onClick = {
-          scope.launch {
-            toaster("Turn the screen off")
-            deviceScreenManager.screenState.first { !it.isOn }
-            delay(1500)
-            val screenOn = deviceScreenManager.turnScreenOn()
-            toaster("Screen activated $screenOn")
-          }
-        }
-      ) { Text("Activate") }
+      }
     }
   }
 }

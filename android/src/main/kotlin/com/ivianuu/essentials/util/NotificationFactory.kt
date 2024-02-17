@@ -16,22 +16,26 @@ import com.ivianuu.essentials.ui.AppColors
 import com.ivianuu.injekt.Provide
 
 @Provide class NotificationFactory(
-  private val appContext: AppContext,
+  @PublishedApi internal val appContext: AppContext,
   private val appColors: AppColors,
-  private val notificationManager: @SystemService NotificationManager
+  @PublishedApi internal val notificationManager: @SystemService NotificationManager
 ) {
-  operator fun invoke(
+  inline operator fun invoke(
     channel: NotificationChannel,
     builder: NotificationCompat.Builder.() -> Unit
   ): Notification {
     notificationManager.createNotificationChannel(channel)
     return NotificationCompat.Builder(appContext, channel.id)
-      .apply { color = appColors.primary.toArgb() }
+      .defaults()
       .apply(builder)
       .build()
   }
 
-  operator fun invoke(
+  @PublishedApi internal fun NotificationCompat.Builder.defaults() = apply {
+    color = appColors.primary.toArgb()
+  }
+
+  inline operator fun invoke(
     channelId: String,
     channelName: String,
     importance: Int,

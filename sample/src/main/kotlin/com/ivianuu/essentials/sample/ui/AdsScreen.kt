@@ -24,25 +24,27 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Provide val adsHomeItem = HomeItem("Ads") { AdsScreen() }
 
-class AdsScreen : Screen<Unit>
+class AdsScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      adsEnabled: MutableStateFlow<AdsEnabled>,
+      fullScreenAd: FullScreenAdManager
+    ) = Ui<AdsScreen, Unit> {
+      ScreenScaffold(topBar = { AppBar { Text("Ads") } }) {
+        VerticalList {
+          item {
+            SwitchListItem(
+              value = adsEnabled.collectAsState().value.value,
+              onValueChange = { adsEnabled.value = AdsEnabled(it) },
+              title = { Text("Show ads") }
+            )
+          }
 
-@Provide fun adsUi(
-  adsEnabled: MutableStateFlow<AdsEnabled>,
-  fullScreenAd: FullScreenAdManager
-) = Ui<AdsScreen, Unit> {
-  ScreenScaffold(topBar = { AppBar { Text("Ads") } }) {
-    VerticalList {
-      item {
-        SwitchListItem(
-          value = adsEnabled.collectAsState().value.value,
-          onValueChange = { adsEnabled.value = AdsEnabled(it) },
-          title = { Text("Show ads") }
-        )
-      }
-
-      item {
-        Button(onClick = action { fullScreenAd.loadAndShowAdWithTimeout() }) {
-          Text("Show full screen ad")
+          item {
+            Button(onClick = action { fullScreenAd.loadAndShowAdWithTimeout() }) {
+              Text("Show full screen ad")
+            }
+          }
         }
       }
     }

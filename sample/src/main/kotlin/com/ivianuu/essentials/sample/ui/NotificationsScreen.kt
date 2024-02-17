@@ -63,7 +63,11 @@ import kotlinx.coroutines.flow.map
 
 @Provide val notificationsHomeItem = HomeItem("Notifications") { NotificationsScreen() }
 
-class NotificationsScreen : Screen<Unit>
+class NotificationsScreen : Screen<Unit> {
+  companion object {
+
+  }
+}
 
 @Provide val notificationsUi = Ui<NotificationsScreen, NotificationsState> { state ->
   ScreenScaffold(topBar = { AppBar { Text("Notifications") } }) {

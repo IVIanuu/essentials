@@ -27,47 +27,49 @@ import com.ivianuu.injekt.Provide
 
 @Provide val tabsHomeItem = HomeItem("Tabs") { TabsScreen() }
 
-class TabsScreen : Screen<Unit>
+class TabsScreen : Screen<Unit> {
+  @Provide companion object {
+    private val TabItems = listOf(Color.Blue, Color.Red, Color.Magenta, Color.Green, Color.Cyan)
 
-@Provide val tabsUi = Ui<TabsScreen, Unit> {
-  val pagerState = rememberPagerState { TabItems.size }
-  ScreenScaffold(
-    topBar = {
-      AppBar(
-        title = { Text("Tabs") },
-        bottomContent = {
-          TabRow(
-            selectedTabIndex = pagerState.currentPage,
-            backgroundColor = MaterialTheme.colors.primary,
-            indicator = { tabPositions ->
-              TabRowDefaults.Indicator(
-                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-              )
+    @Provide val ui = Ui<TabsScreen, Unit> {
+      val pagerState = rememberPagerState { TabItems.size }
+      ScreenScaffold(
+        topBar = {
+          AppBar(
+            title = { Text("Tabs") },
+            bottomContent = {
+              TabRow(
+                selectedTabIndex = pagerState.currentPage,
+                backgroundColor = MaterialTheme.colors.primary,
+                indicator = { tabPositions ->
+                  TabRowDefaults.Indicator(
+                    Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                  )
+                }
+              ) {
+                TabItems.indices.forEach { page ->
+                  Tab(
+                    selected = pagerState.currentPage == page,
+                    onClick = action { pagerState.animateScrollToPage(page) },
+                    text = { Text("Item: $page") }
+                  )
+                }
+              }
             }
-          ) {
-            TabItems.indices.forEach { page ->
-              Tab(
-                selected = pagerState.currentPage == page,
-                onClick = action { pagerState.animateScrollToPage(page) },
-                text = { Text("Item: $page") }
-              )
-            }
+          )
+        },
+        maxTopBarSize = 56.dp + 48.dp + LocalInsets.current.top
+      ) {
+        HorizontalPager(state = pagerState) { page ->
+          val color = TabItems[page]
+          Surface(color = color) {
+            Text(
+              text = "Index: $page",
+              modifier = Modifier.center()
+            )
           }
         }
-      )
-    },
-    maxTopBarSize = 56.dp + 48.dp + LocalInsets.current.top
-  ) {
-    HorizontalPager(state = pagerState) { page ->
-      val color = TabItems[page]
-      Surface(color = color) {
-        Text(
-          text = "Index: $page",
-          modifier = Modifier.center()
-        )
       }
     }
   }
 }
-
-private val TabItems = listOf(Color.Blue, Color.Red, Color.Magenta, Color.Green, Color.Cyan)

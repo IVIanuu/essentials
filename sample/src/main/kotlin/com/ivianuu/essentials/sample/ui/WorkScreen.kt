@@ -27,19 +27,21 @@ import kotlin.time.Duration.Companion.seconds
 
 @Provide val workHomeItem = HomeItem("Work") { WorkScreen() }
 
-class WorkScreen : Screen<Unit>
+class WorkScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(workManager: WorkManager) = Ui<WorkScreen, Unit> {
+      ScreenScaffold(topBar = { AppBar { Text("Work") } }) {
+        Column {
+          if (workManager.isWorkerRunning(SampleWorkId).collectAsState().value)
+            CircularProgressIndicator()
 
-@Provide fun workUi(workManager: WorkManager) = Ui<WorkScreen, Unit> {
-  ScreenScaffold(topBar = { AppBar { Text("Work") } }) {
-    Column {
-      if (workManager.isWorkerRunning(SampleWorkId).collectAsState().value)
-        CircularProgressIndicator()
-
-      Button(
-        modifier = Modifier.center(),
-        onClick = action { workManager.runWorker(SampleWorkId) }
-      ) {
-        Text("Run")
+          Button(
+            modifier = Modifier.center(),
+            onClick = action { workManager.runWorker(SampleWorkId) }
+          ) {
+            Text("Run")
+          }
+        }
       }
     }
   }

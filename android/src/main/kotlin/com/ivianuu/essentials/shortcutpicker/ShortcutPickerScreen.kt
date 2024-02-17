@@ -34,50 +34,40 @@ import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 
-class ShortcutPickerScreen : Screen<Shortcut>
-
-@Provide val shortcutPickerUi = Ui<ShortcutPickerScreen, ShortcutPickerState> { state ->
-  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.title_shortcut_picker)) } }) {
-    ResourceVerticalListFor(state.shortcuts) { shortcut ->
-      ListItem(
-        modifier = Modifier.clickable { state.pickShortcut(shortcut) },
-        leading = {
-          Image(
-            modifier = Modifier.size(40.dp),
-            painter = remember { BitmapPainter(shortcut.icon.toBitmap().asImageBitmap()) },
-            contentDescription = null
+class ShortcutPickerScreen : Screen<Shortcut> {
+  @Provide companion object {
+    @Provide fun shortcutPickerUi(
+      navigator: Navigator,
+      repository: ShortcutRepository,
+      screen: ShortcutPickerScreen,
+      toaster: Toaster
+    ) = Ui<ShortcutPickerScreen, Unit> {
+      ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.title_shortcut_picker)) } }) {
+        ResourceVerticalListFor(repository.shortcuts.collectAsResourceState().value) { shortcut ->
+          ListItem(
+            modifier = Modifier.clickable(onClick = action {
+              Either.catch {
+                val shortcutRequestResult = navigator.push(DefaultIntentScreen(shortcut.intent))
+                  ?.getOrNull()
+                  ?.data ?: return@catch
+                val finalShortcut = repository.extractShortcut(shortcutRequestResult)
+                navigator.pop(screen, finalShortcut)
+              }.onLeft {
+                it.printStackTrace()
+                toaster(R.string.failed_to_pick_shortcut)
+              }
+            }),
+            leading = {
+              Image(
+                modifier = Modifier.size(40.dp),
+                painter = remember { BitmapPainter(shortcut.icon.toBitmap().asImageBitmap()) },
+                contentDescription = null
+              )
+            },
+            title = { Text(shortcut.name) }
           )
-        },
-        title = { Text(shortcut.name) }
-      )
-    }
-  }
-}
-
-data class ShortcutPickerState(
-  val shortcuts: Resource<List<Shortcut>>,
-  val pickShortcut: (Shortcut) -> Unit
-)
-
-@Provide fun shortcutPickerPresenter(
-  navigator: Navigator,
-  repository: ShortcutRepository,
-  screen: ShortcutPickerScreen,
-  toaster: Toaster
-) = Presenter {
-  ShortcutPickerState(
-    shortcuts = repository.shortcuts.collectAsResourceState().value,
-    pickShortcut = action { shortcut ->
-      Either.catch {
-        val shortcutRequestResult = navigator.push(DefaultIntentScreen(shortcut.intent))
-          ?.getOrNull()
-          ?.data ?: return@catch
-        val finalShortcut = repository.extractShortcut(shortcutRequestResult)
-        navigator.pop(screen, finalShortcut)
-      }.onLeft {
-        it.printStackTrace()
-        toaster(R.string.failed_to_pick_shortcut)
+        }
       }
     }
-  )
+  }
 }

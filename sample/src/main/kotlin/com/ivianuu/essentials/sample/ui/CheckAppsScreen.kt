@@ -31,35 +31,37 @@ import kotlinx.serialization.Serializable
 
 @Provide val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsScreen() }
 
-class CheckAppsScreen : Screen<Unit>
-
-@Provide fun checkAppsUi(
-  checkableAppsUi: (CheckableAppsScreen) -> CheckableAppsUi,
-  db: @CheckApps Db,
-  launchableAppPredicate: LaunchableAppPredicate,
-  scope: ScopedCoroutineScope<ScreenScope>
-) = Ui<CheckAppsScreen, Unit> {
-  remember {
-    checkableAppsUi(
-      CheckableAppsScreen(
-        db.selectAll<CheckedAppEntity>()
-          .map { it.map { it.packageName }.toSet() },
-        { checkedApps ->
-          scope.launch {
-            db.transaction {
-              db.deleteAll<CheckedAppEntity>()
-              db.insertAll(
-                checkedApps
-                  .map { CheckedAppEntity(it) }
-              )
-            }
-          }
-        },
-        launchableAppPredicate,
-        "Send check apps"
-      )
-    )
-  }.Content()
+class CheckAppsScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      checkableAppsUi: (CheckableAppsScreen) -> CheckableAppsUi,
+      db: @CheckApps Db,
+      launchableAppPredicate: LaunchableAppPredicate,
+      scope: ScopedCoroutineScope<ScreenScope>
+    ) = Ui<CheckAppsScreen, Unit> {
+      remember {
+        checkableAppsUi(
+          CheckableAppsScreen(
+            db.selectAll<CheckedAppEntity>()
+              .map { it.map { it.packageName }.toSet() },
+            { checkedApps ->
+              scope.launch {
+                db.transaction {
+                  db.deleteAll<CheckedAppEntity>()
+                  db.insertAll(
+                    checkedApps
+                      .map { CheckedAppEntity(it) }
+                  )
+                }
+              }
+            },
+            launchableAppPredicate,
+            "Send check apps"
+          )
+        )
+      }.Content()
+    }
+  }
 }
 
 @Tag private annotation class CheckApps

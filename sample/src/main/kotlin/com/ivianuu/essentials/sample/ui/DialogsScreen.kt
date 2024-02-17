@@ -35,86 +35,88 @@ import com.ivianuu.injekt.Provide
 
 @Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsScreen() }
 
-class DialogsScreen : Screen<Unit>
-
-@Provide fun dialogsUi(
-  navigator: Navigator,
-  toaster: Toaster
-) = Ui<DialogsScreen, Unit> {
-  ScreenScaffold(topBar = { AppBar { Text("Dialogs") } }) {
-    VerticalList(
-      modifier = Modifier.fillMaxSize(),
-      horizontalAlignment = Alignment.CenterHorizontally,
-      verticalArrangement = Arrangement.Center
-    ) {
-      item {
-        Button(
-          onClick = action {
-            navigator.push(
-              ListScreen(
-                (1..100).toList()
-              ) { it.toString() }
-            )
+class DialogsScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      navigator: Navigator,
+      toaster: Toaster
+    ) = Ui<DialogsScreen, Unit> {
+      ScreenScaffold(topBar = { AppBar { Text("Dialogs") } }) {
+        VerticalList(
+          modifier = Modifier.fillMaxSize(),
+          horizontalAlignment = Alignment.CenterHorizontally,
+          verticalArrangement = Arrangement.Center
+        ) {
+          item {
+            Button(
+              onClick = action {
+                navigator.push(
+                  ListScreen(
+                    (1..100).toList()
+                  ) { it.toString() }
+                )
+              }
+            ) { Text("List") }
           }
-        ) { Text("List") }
-      }
-      item {
-        val items = listOf(1, 2, 3, 4, 5)
-        var selected by remember { mutableStateOf(1) }
-        Button(
-          onClick = action {
-            navigator.push(
-              SingleChoiceListScreen(
-                items = items,
-                selected = selected
-              ) { it.toString() }
-            )?.let { selected = it }
+          item {
+            val items = listOf(1, 2, 3, 4, 5)
+            var selected by remember { mutableStateOf(1) }
+            Button(
+              onClick = action {
+                navigator.push(
+                  SingleChoiceListScreen(
+                    items = items,
+                    selected = selected
+                  ) { it.toString() }
+                )?.let { selected = it }
+              }
+            ) { Text("Single choice") }
           }
-        ) { Text("Single choice") }
-      }
-      item {
-        val items = listOf("A", "B", "C")
-        var selected by remember { mutableStateOf(items.toSet()) }
-        Button(
-          onClick = action {
-            navigator.push(
-              MultiChoiceListScreen(
-                items = items,
-                selected = selected
-              )
-            )?.let { selected = it }
+          item {
+            val items = listOf("A", "B", "C")
+            var selected by remember { mutableStateOf(items.toSet()) }
+            Button(
+              onClick = action {
+                navigator.push(
+                  MultiChoiceListScreen(
+                    items = items,
+                    selected = selected
+                  )
+                )?.let { selected = it }
+              }
+            ) { Text("Multi choice") }
           }
-        ) { Text("Multi choice") }
-      }
-      item {
-        val primaryColor = MaterialTheme.colors.primary
-        var currentColor by remember { mutableStateOf(primaryColor) }
-        Button(
-          onClick = action {
-            navigator.push(
-              ColorPickerScreen(initialColor = currentColor)
-            )?.let { currentColor = it }
+          item {
+            val primaryColor = MaterialTheme.colors.primary
+            var currentColor by remember { mutableStateOf(primaryColor) }
+            Button(
+              onClick = action {
+                navigator.push(
+                  ColorPickerScreen(initialColor = currentColor)
+                )?.let { currentColor = it }
+              }
+            ) { Text("Color choice") }
           }
-        ) { Text("Color choice") }
-      }
-      item {
-        var current by remember { mutableStateOf("") }
-        Button(
-          onClick = action {
-            navigator.push(
-              TextInputScreen(initial = current)
-            )?.let { current = it }
+          item {
+            var current by remember { mutableStateOf("") }
+            Button(
+              onClick = action {
+                navigator.push(
+                  TextInputScreen(initial = current)
+                )?.let { current = it }
+              }
+            ) { Text("Text") }
           }
-        ) { Text("Text") }
-      }
-      item {
-        Button(
-          onClick = action {
-            navigator.push(
-              ConfirmationScreen(title = "Would you like to share your private data?")
-            )?.let { toaster("result = $it") }
+          item {
+            Button(
+              onClick = action {
+                navigator.push(
+                  ConfirmationScreen(title = "Would you like to share your private data?")
+                )?.let { toaster("result = $it") }
+              }
+            ) { Text("Confirmation") }
           }
-        ) { Text("Confirmation") }
+        }
       }
     }
   }

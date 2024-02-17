@@ -12,6 +12,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -48,32 +49,72 @@ class ActionPickerScreen(
     data object Default : Result
     data object None : Result
   }
-}
 
-@Provide val actionPickerUi = Ui<ActionPickerScreen, ActionPickerState> { state ->
-  ScreenScaffold(
-    topBar = { AppBar { Text(stringResource(R.string.action_picker_title)) } }
-  ) {
-    ResourceVerticalListFor(state.items) { item ->
-      ListItem(
-        modifier = Modifier.clickable { state.pickAction(item) },
-        leading = { item.Icon(Modifier.size(24.dp)) },
-        trailing = if (item.settingsScreen != null) ({
-          IconButton(onClick = { state.openActionSettings(item) }) {
-            Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_settings), null)
-          }
-        }) else null,
-        title = { Text(item.title) }
-      )
+  @Provide companion object {
+    @Provide fun ui(
+      navigator: Navigator,
+      permissionManager: PermissionManager,
+      @Inject repository: ActionRepository,
+      @Inject resources: Resources,
+      screen: ActionPickerScreen
+    ) = Ui<ActionPickerScreen, Unit> {
+      val items by produceResourceState {
+        val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
+
+        if (screen.showDefaultOption) {
+          specialOptions += ActionPickerItem.SpecialOption(
+            title = resources(R.string._default),
+            getResult = { Result.Default }
+          )
+        }
+
+        if (screen.showNoneOption) {
+          specialOptions += ActionPickerItem.SpecialOption(
+            title = resources(R.string.none),
+            getResult = { Result.None }
+          )
+        }
+
+        val actionsAndDelegates = (
+            (repository.getActionPickerDelegates()
+              .map { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
+              .map {
+                ActionPickerItem.ActionItem(
+                  it,
+                  repository.getActionSettingsKey(it.id)
+                )
+              })
+            )
+          .sortedBy { it.title }
+
+        emit(specialOptions + actionsAndDelegates)
+      }
+
+      ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.action_picker_title)) } }) {
+        ResourceVerticalListFor(items) { item ->
+          ListItem(
+            modifier = Modifier.clickable(onClick = action {
+              val result = item.getResult(navigator) ?: return@action
+              if (result is ActionPickerScreen.Result.Action) {
+                val action = repository.getAction(result.actionId)
+                if (!permissionManager.requestPermissions(action.permissions))
+                  return@action
+              }
+              navigator.pop(screen, result)
+            }),
+            leading = { item.Icon(Modifier.size(24.dp)) },
+            trailing = if (item.settingsScreen != null) ({
+              IconButton(onClick = action { navigator.push(item.settingsScreen!!) }) {
+                Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_settings), null)
+              }
+            }) else null,
+            title = { Text(item.title) }
+          )
+        }
+      }
     }
   }
 }
-
-data class ActionPickerState(
-  val items: Resource<List<ActionPickerItem>>,
-  val openActionSettings: (ActionPickerItem) -> Unit,
-  val pickAction: (ActionPickerItem) -> Unit
-)
 
 sealed interface ActionPickerItem {
   class ActionItem(
@@ -131,62 +172,4 @@ sealed interface ActionPickerItem {
   @Composable fun Icon(modifier: Modifier)
 
   suspend fun getResult(navigator: Navigator): ActionPickerScreen.Result?
-}
-
-@Provide fun actionPickerPresenter(
-  navigator: Navigator,
-  permissionManager: PermissionManager,
-  @Inject repository: ActionRepository,
-  @Inject resources: Resources,
-  screen: ActionPickerScreen
-) = Presenter {
-  ActionPickerState(
-    items = produceResourceState { emit(getActionPickerItems(screen)) }.value,
-    openActionSettings = action { item -> navigator.push(item.settingsScreen!!) },
-    pickAction = action { item ->
-      val result = item.getResult(navigator) ?: return@action
-      if (result is ActionPickerScreen.Result.Action) {
-        val action = repository.getAction(result.actionId)
-        if (!permissionManager.requestPermissions(action.permissions))
-          return@action
-      }
-      navigator.pop(screen, result)
-    }
-  )
-}
-
-private suspend fun getActionPickerItems(
-  screen: ActionPickerScreen,
-  @Inject repository: ActionRepository,
-  @Inject resources: Resources
-): List<ActionPickerItem> {
-  val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
-
-  if (screen.showDefaultOption) {
-    specialOptions += ActionPickerItem.SpecialOption(
-      title = resources(R.string._default),
-      getResult = { ActionPickerScreen.Result.Default }
-    )
-  }
-
-  if (screen.showNoneOption) {
-    specialOptions += ActionPickerItem.SpecialOption(
-      title = resources(R.string.none),
-      getResult = { ActionPickerScreen.Result.None }
-    )
-  }
-
-  val actionsAndDelegates = (
-      (repository.getActionPickerDelegates()
-        .map { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
-        .map {
-          ActionPickerItem.ActionItem(
-            it,
-            repository.getActionSettingsKey(it.id)
-          )
-        })
-      )
-    .sortedBy { it.title }
-
-  return specialOptions + actionsAndDelegates
 }

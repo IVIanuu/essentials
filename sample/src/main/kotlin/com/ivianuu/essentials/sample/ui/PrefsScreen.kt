@@ -42,145 +42,147 @@ import kotlinx.serialization.Serializable
 
 @Provide val prefsHomeItem = HomeItem("Prefs") { PrefsScreen() }
 
-class PrefsScreen : Screen<Unit>
-
-@Provide fun prefsUi(
-  navigator: Navigator,
-  pref: DataStore<SamplePrefs>
-) = Ui<PrefsScreen, Unit> {
-  val prefs by pref.data.collectAsState(remember { SamplePrefs() })
-  ScreenScaffold(topBar = { AppBar { Text("Prefs") } }) {
-    VerticalList {
-      item {
-        SwitchListItem(
-          value = prefs.switch,
-          onValueChange = action { value ->
-            pref.updateData { copy(switch = value) }
-          },
-          leading = { Icon(Icons.Default.ThumbUp, null) },
-          title = { Text("Switch") }
-        )
-      }
-
-      item {
-        Subheader(modifier = Modifier.interactive(prefs.switch)) { Text("Category") }
-      }
-
-      item {
-        SliderListItem(
-          value = prefs.slider,
-          onValueChangeFinished = action { value ->
-            pref.updateData { copy(slider = value) }
-          },
-          modifier = Modifier.interactive(prefs.switch),
-          leading = { Icon(Icons.Default.ThumbUp, null) },
-          title = { Text("Slider") },
-          valueRange = 0..100,
-          valueText = { Text(it.toString()) }
-        )
-      }
-
-      item {
-        SliderListItem(
-          value = prefs.slider,
-          onValueChangeFinished = action { value ->
-            pref.updateData { copy(slider = value) }
-          },
-          modifier = Modifier.interactive(prefs.switch),
-          leading = { Icon(Icons.Default.ThumbUp, null) },
-          title = { Text("Slider") },
-          valueRange = 0..100,
-          valueText = { Text(it.toString()) }
-        )
-      }
-
-      item {
-        SliderListItem(
-          value = prefs.steppedSlider,
-          onValueChangeFinished = action { value ->
-            pref.updateData { copy(steppedSlider = value) }
-          },
-          modifier = Modifier.interactive(prefs.switch),
-          leading = { Icon(Icons.Default.ThumbUp, null) },
-          title = { Text("Stepped slider") },
-          subtitle = { Text("This is a stepped slider preference") },
-          stepPolicy = incrementingStepPolicy(0.05f),
-          valueRange = 0.75f..1.5f,
-          valueText = { ScaledPercentageUnitText(it) }
-        )
-      }
-
-      item {
-        Subheader(modifier = Modifier.interactive(prefs.switch)) {
-          Text("Dialogs")
-        }
-      }
-
-      item {
-        ListItem(
-          modifier = Modifier
-            .clickable(
-              onClick = action {
-                val newTextInput = navigator.push(
-                  TextInputScreen(
-                    initial = prefs.textInput,
-                    label = "Input",
-                    title = "Text input",
-                    predicate = { it.isNotEmpty() }
-                  )
-                ) ?: return@action
-                pref.updateData { copy(textInput = newTextInput) }
-              }
+class PrefsScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      navigator: Navigator,
+      pref: DataStore<SamplePrefs>
+    ) = Ui<PrefsScreen, Unit> {
+      val prefs by pref.data.collectAsState(remember { SamplePrefs() })
+      ScreenScaffold(topBar = { AppBar { Text("Prefs") } }) {
+        VerticalList {
+          item {
+            SwitchListItem(
+              value = prefs.switch,
+              onValueChange = action { value ->
+                pref.updateData { copy(switch = value) }
+              },
+              leading = { Icon(Icons.Default.ThumbUp, null) },
+              title = { Text("Switch") }
             )
-            .interactive(prefs.switch),
-          leading = { Icon(Icons.Default.ThumbUp, null) },
-          title = { Text("Text input") },
-          subtitle = { Text("This is a text input preference") }
-        )
-      }
+          }
 
-      item {
-        ColorListItem(
-          value = prefs.color,
-          onValueChangeRequest = action {
-            val newColor = navigator.push(
-              ColorPickerScreen(initialColor = prefs.color)
-            ) ?: return@action
-            pref.updateData { copy(color = newColor) }
-          },
-          modifier = Modifier.interactive(prefs.switch),
-          leading = { Icon(Icons.Default.ThumbUp, null) },
-          title = { Text("Color") },
-          subtitle = { Text("This is a color preference") }
-        )
-      }
+          item {
+            Subheader(modifier = Modifier.interactive(prefs.switch)) { Text("Category") }
+          }
 
-      item {
-        MultiChoiceToggleButtonGroupListItem(
-          modifier = Modifier.interactive(prefs.switch),
-          values = listOf("A", "B", "C"),
-          selected = prefs.multiChoice,
-          onSelectionChanged = action { values ->
-            pref.updateData { copy(multiChoice = values) }
-          },
-          leading = { Icon(Icons.Default.ThumbUp, null) },
-          title = { Text("Multi select list") },
-          subtitle = { Text("This is a multi select list preference") }
-        )
-      }
+          item {
+            SliderListItem(
+              value = prefs.slider,
+              onValueChangeFinished = action { value ->
+                pref.updateData { copy(slider = value) }
+              },
+              modifier = Modifier.interactive(prefs.switch),
+              leading = { Icon(Icons.Default.ThumbUp, null) },
+              title = { Text("Slider") },
+              valueRange = 0..100,
+              valueText = { Text(it.toString()) }
+            )
+          }
 
-      item {
-        SingleChoiceToggleButtonGroupListItem(
-          modifier = Modifier.interactive(prefs.switch),
-          values = listOf("A", "B", "C"),
-          selected = prefs.singleChoice,
-          onSelectionChanged = action { value ->
-            pref.updateData { copy(singleChoice = value) }
-          },
-          leading = { Icon(Icons.Default.ThumbUp, null) },
-          title = { Text("Single item list") },
-          subtitle = { Text("This is a single item list preference") }
-        )
+          item {
+            SliderListItem(
+              value = prefs.slider,
+              onValueChangeFinished = action { value ->
+                pref.updateData { copy(slider = value) }
+              },
+              modifier = Modifier.interactive(prefs.switch),
+              leading = { Icon(Icons.Default.ThumbUp, null) },
+              title = { Text("Slider") },
+              valueRange = 0..100,
+              valueText = { Text(it.toString()) }
+            )
+          }
+
+          item {
+            SliderListItem(
+              value = prefs.steppedSlider,
+              onValueChangeFinished = action { value ->
+                pref.updateData { copy(steppedSlider = value) }
+              },
+              modifier = Modifier.interactive(prefs.switch),
+              leading = { Icon(Icons.Default.ThumbUp, null) },
+              title = { Text("Stepped slider") },
+              subtitle = { Text("This is a stepped slider preference") },
+              stepPolicy = incrementingStepPolicy(0.05f),
+              valueRange = 0.75f..1.5f,
+              valueText = { ScaledPercentageUnitText(it) }
+            )
+          }
+
+          item {
+            Subheader(modifier = Modifier.interactive(prefs.switch)) {
+              Text("Dialogs")
+            }
+          }
+
+          item {
+            ListItem(
+              modifier = Modifier
+                .clickable(
+                  onClick = action {
+                    val newTextInput = navigator.push(
+                      TextInputScreen(
+                        initial = prefs.textInput,
+                        label = "Input",
+                        title = "Text input",
+                        predicate = { it.isNotEmpty() }
+                      )
+                    ) ?: return@action
+                    pref.updateData { copy(textInput = newTextInput) }
+                  }
+                )
+                .interactive(prefs.switch),
+              leading = { Icon(Icons.Default.ThumbUp, null) },
+              title = { Text("Text input") },
+              subtitle = { Text("This is a text input preference") }
+            )
+          }
+
+          item {
+            ColorListItem(
+              value = prefs.color,
+              onValueChangeRequest = action {
+                val newColor = navigator.push(
+                  ColorPickerScreen(initialColor = prefs.color)
+                ) ?: return@action
+                pref.updateData { copy(color = newColor) }
+              },
+              modifier = Modifier.interactive(prefs.switch),
+              leading = { Icon(Icons.Default.ThumbUp, null) },
+              title = { Text("Color") },
+              subtitle = { Text("This is a color preference") }
+            )
+          }
+
+          item {
+            MultiChoiceToggleButtonGroupListItem(
+              modifier = Modifier.interactive(prefs.switch),
+              values = listOf("A", "B", "C"),
+              selected = prefs.multiChoice,
+              onSelectionChanged = action { values ->
+                pref.updateData { copy(multiChoice = values) }
+              },
+              leading = { Icon(Icons.Default.ThumbUp, null) },
+              title = { Text("Multi select list") },
+              subtitle = { Text("This is a multi select list preference") }
+            )
+          }
+
+          item {
+            SingleChoiceToggleButtonGroupListItem(
+              modifier = Modifier.interactive(prefs.switch),
+              values = listOf("A", "B", "C"),
+              selected = prefs.singleChoice,
+              onSelectionChanged = action { value ->
+                pref.updateData { copy(singleChoice = value) }
+              },
+              leading = { Icon(Icons.Default.ThumbUp, null) },
+              title = { Text("Single item list") },
+              subtitle = { Text("This is a single item list preference") }
+            )
+          }
+        }
       }
     }
   }

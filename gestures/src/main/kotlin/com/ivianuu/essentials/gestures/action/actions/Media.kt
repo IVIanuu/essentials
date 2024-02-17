@@ -73,56 +73,46 @@ import kotlinx.serialization.Serializable
   }
 }
 
-class MediaActionSettingsScreen : Screen<Unit>
-
-@Provide
-val mediaActionSettingsUi = Ui<MediaActionSettingsScreen, MediaActionSettingsState> { state ->
-  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.media_app_settings_ui_title)) } }) {
-    VerticalList {
-      item {
-        ListItem(
-          modifier = Modifier.clickable(onClick = state.updateMediaApp),
-          title = { Text(stringResource(R.string.pref_media_app)) },
-          subtitle = {
-            Text(
-              stringResource(
-                R.string.pref_media_app_summary,
-                state.mediaApp.getOrNull()?.appName ?: stringResource(R.string.none)
-              )
+class MediaActionSettingsScreen : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      appRepository: AppRepository,
+      navigator: Navigator,
+      intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
+      pref: DataStore<MediaActionPrefs>
+    ) = Ui<MediaActionSettingsScreen, Unit> {
+      ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.media_app_settings_ui_title)) } }) {
+        VerticalList {
+          item {
+            ListItem(
+              modifier = Modifier.clickable(onClick = action {
+                val newMediaApp = navigator.push(
+                  AppPickerScreen(
+                    intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
+                  )
+                )
+                if (newMediaApp != null)
+                  pref.updateData { copy(mediaApp = newMediaApp.packageName) }
+              }),
+              title = { Text(stringResource(R.string.pref_media_app)) },
+              subtitle = {
+                val mediaApp = produceResourceState {
+                  pref.data
+                    .map { it.mediaApp }
+                    .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
+                    .let { emitAll(it) }
+                }.value
+                Text(
+                  stringResource(
+                    R.string.pref_media_app_summary,
+                    mediaApp.getOrNull()?.appName ?: stringResource(R.string.none)
+                  )
+                )
+              }
             )
           }
-        )
+        }
       }
     }
   }
-}
-
-data class MediaActionSettingsState(
-  val mediaApp: Resource<AppInfo?>,
-  val updateMediaApp: () -> Unit
-)
-
-@Provide fun mediaActionSettingsPresenter(
-  appRepository: AppRepository,
-  navigator: Navigator,
-  intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
-  pref: DataStore<MediaActionPrefs>
-) = Presenter {
-  MediaActionSettingsState(
-    mediaApp = produceResourceState {
-      pref.data
-        .map { it.mediaApp }
-        .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
-        .let { emitAll(it) }
-    }.value,
-    updateMediaApp = action {
-      val newMediaApp = navigator.push(
-        AppPickerScreen(
-          intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
-        )
-      )
-      if (newMediaApp != null)
-        pref.updateData { copy(mediaApp = newMediaApp.packageName) }
-    }
-  )
 }

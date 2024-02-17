@@ -68,46 +68,48 @@ object ChildNavGraph
 data class ChildNavigationItemScreen(
   val navigationIndex: Int,
   val index: Int
-) : Screen<Unit>
+) : Screen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(
+      navigator: Navigator,
+      screen: ChildNavigationItemScreen
+    ): @NavGraph<ChildNavGraph> Ui<ChildNavigationItemScreen, Unit> = Ui {
+      val color = Colors.shuffled().first()
 
-@Provide fun childNavigationItemUi(
-  navigator: Navigator,
-  screen: ChildNavigationItemScreen
-): @NavGraph<ChildNavGraph> Ui<ChildNavigationItemScreen, Unit> = Ui {
-  val color = Colors.shuffled().first()
-
-  Surface(
-    color = color,
-    contentColor = guessingContentColorFor(color)
-  ) {
-    Row(
-      modifier = Modifier
-        .fillMaxSize(),
-      horizontalArrangement = Arrangement.Center,
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      Text("${screen.navigationIndex} ${screen.index}")
-
-      Button(
-        enabled = screen.index > 0,
-        onClick = action { navigator.popTop() }
+      Surface(
+        color = color,
+        contentColor = guessingContentColorFor(color)
       ) {
-        Text("Previous")
-      }
+        Row(
+          modifier = Modifier
+            .fillMaxSize(),
+          horizontalArrangement = Arrangement.Center,
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          Text("${screen.navigationIndex} ${screen.index}")
 
-      Button(onClick = action {
-        navigator.push(screen.copy(index = screen.index.inc()))
-      }) {
-        Text("Next")
+          Button(
+            enabled = screen.index > 0,
+            onClick = action { navigator.popTop() }
+          ) {
+            Text("Previous")
+          }
+
+          Button(onClick = action {
+            navigator.push(screen.copy(index = screen.index.inc()))
+          }) {
+            Text("Next")
+          }
+        }
       }
     }
+
+    private val Colors = listOf(
+      Color.Red,
+      Color.Green,
+      Color.Blue,
+      Color.Magenta,
+      Color.Cyan
+    )
   }
 }
-
-private val Colors = listOf(
-  Color.Red,
-  Color.Green,
-  Color.Blue,
-  Color.Magenta,
-  Color.Cyan
-)
