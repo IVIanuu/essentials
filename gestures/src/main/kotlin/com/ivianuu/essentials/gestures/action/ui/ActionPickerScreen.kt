@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.gestures.action.ui
 
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -41,41 +40,36 @@ class ActionPickerScreen(
       screen: ActionPickerScreen
     ) = Ui<ActionPickerScreen, Unit> {
       val items by produceResourceState {
-        val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
-
-        if (screen.showDefaultOption) {
-          specialOptions += ActionPickerItem.SpecialOption(
-            title = resources(R.string._default),
-            getResult = { Result.Default }
-          )
-        }
-
-        if (screen.showNoneOption) {
-          specialOptions += ActionPickerItem.SpecialOption(
-            title = resources(R.string.none),
-            getResult = { Result.None }
-          )
-        }
-
-        val actionsAndDelegates = (
-            (repository.getActionPickerDelegates()
-              .map { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
-              .map {
-                ActionPickerItem.ActionItem(
-                  it,
-                  repository.getActionSettingsKey(it.id)
-                )
-              })
+        emit(buildList<ActionPickerItem> {
+          if (screen.showDefaultOption)
+            this += ActionPickerItem.SpecialOption(
+              title = resources(R.string._default),
+              getResult = { Result.Default }
             )
-          .sortedBy { it.title }
 
-        emit(specialOptions + actionsAndDelegates)
+          if (screen.showNoneOption)
+            this += ActionPickerItem.SpecialOption(
+              title = resources(R.string.none),
+              getResult = { Result.None }
+            )
+
+          this += (
+              (repository.getActionPickerDelegates()
+                .map { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
+                .map {
+                  ActionPickerItem.ActionItem(
+                    it,
+                    repository.getActionSettingsKey(it.id)
+                  )
+                })
+            .sortedBy { it.title })
+        })
       }
 
       ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.action_picker_title)) } }) {
         ResourceVerticalListFor(items) { item ->
           ListItem(
-            modifier = Modifier.clickable(onClick = scopedAction {
+            onClick = scopedAction {
               val result = item.getResult(navigator) ?: return@scopedAction
               if (result is Result.Action) {
                 val action = repository.getAction(result.actionId)
@@ -83,13 +77,14 @@ class ActionPickerScreen(
                   return@scopedAction
               }
               navigator.pop(screen, result)
-            }),
+            },
             leading = { item.Icon(Modifier.size(24.dp)) },
-            trailing = if (item.settingsScreen != null) ({
+            trailing = if (item.settingsScreen == null) null
+            else ({
               IconButton(onClick = action { navigator.push(item.settingsScreen!!) }) {
                 Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_settings), null)
               }
-            }) else null,
+            }),
             title = { Text(item.title) }
           )
         }

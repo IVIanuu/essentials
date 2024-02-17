@@ -70,7 +70,7 @@ data class CheckableAppsScreen(
       ResourceVerticalListFor(allApps) { app ->
         val isChecked = app.packageName in checkedApps
         ListItem(
-          modifier = Modifier.clickable {
+          onClick = {
             updateCheckedApps {
               if (isChecked) this + app.packageName
               else this - app.packageName

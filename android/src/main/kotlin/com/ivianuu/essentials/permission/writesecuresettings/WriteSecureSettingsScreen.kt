@@ -49,8 +49,8 @@ class WriteSecureSettingsScreen(
       shell: Shell,
       toaster: Toaster
     ) = Ui<WriteSecureSettingsScreen, Unit> {
-      var currentStep by remember { mutableStateOf(1) }
-      var completedStep by remember { mutableStateOf(1) }
+      var currentStep by remember { mutableIntStateOf(1) }
+      var completedStep by remember { mutableIntStateOf(1) }
 
       val canContinueStep = if (currentStep != completedStep) false
       else produceState(false, completedStep) {

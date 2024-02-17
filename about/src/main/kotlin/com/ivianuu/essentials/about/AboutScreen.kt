@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.about
 
-import androidx.compose.foundation.*
 import androidx.compose.material.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
@@ -39,7 +38,7 @@ class AboutScreen : Screen<Unit> {
 
           item {
             ListItem(
-              modifier = Modifier.clickable(onClick = action { rateUseCases.rateOnPlay() }),
+              onClick = action { rateUseCases.rateOnPlay() },
               leading = { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_star), null) },
               title = { Text(stringResource(R.string.about_rate)) },
               subtitle = { Text(stringResource(R.string.about_rate_desc)) }
@@ -49,7 +48,7 @@ class AboutScreen : Screen<Unit> {
           if (donations != null)
             item {
               ListItem(
-                modifier = Modifier.clickable(onClick = action { navigator.push(DonationScreen()) }),
+                onClick = action { navigator.push(DonationScreen()) },
                 leading = { Icon(painterResource(R.drawable.ic_favorite), null) },
                 title = { Text(stringResource(R.string.about_donate)) }
               )
@@ -57,9 +56,9 @@ class AboutScreen : Screen<Unit> {
 
           item {
             ListItem(
-              modifier = Modifier.clickable(onClick = action {
+              onClick = action {
                 navigator.push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
-              }),
+              },
               leading = { Icon(painterResource(R.drawable.ic_google_play), null) },
               title = { Text(stringResource(R.string.about_more_apps)) },
               subtitle = { Text(stringResource(R.string.about_more_apps_desc)) }
@@ -68,9 +67,9 @@ class AboutScreen : Screen<Unit> {
 
           item {
             ListItem(
-              modifier = Modifier.clickable(onClick = action {
+              onClick = action {
                 navigator.push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
-              }),
+              },
               leading = { Icon(painterResource(R.drawable.ic_reddit), null) },
               title = { Text(stringResource(R.string.about_reddit)) },
               subtitle = { Text(stringResource(R.string.about_reddit_desc)) }
@@ -79,9 +78,9 @@ class AboutScreen : Screen<Unit> {
 
           item {
             ListItem(
-              modifier = Modifier.clickable(onClick = action {
+              onClick = action {
                 navigator.push(UrlScreen("https://github.com/IVIanuu"))
-              }),
+              },
               leading = { Icon(painterResource(R.drawable.ic_github), null) },
               title = { Text(stringResource(R.string.about_github)) },
               subtitle = { Text(stringResource(R.string.about_github_desc)) }
@@ -90,9 +89,9 @@ class AboutScreen : Screen<Unit> {
 
           item {
             ListItem(
-              modifier = Modifier.clickable(onClick = action {
+              onClick = action {
                 navigator.push(UrlScreen("https://twitter.com/IVIanuu"))
-              }),
+              },
               leading = { Icon(painterResource(R.drawable.ic_twitter), null) },
               title = { Text(stringResource(R.string.about_twitter)) },
               subtitle = { Text(stringResource(R.string.about_twitter_desc)) }
@@ -101,7 +100,7 @@ class AboutScreen : Screen<Unit> {
 
           item {
             ListItem(
-              modifier = Modifier.clickable(onClick = action { navigator.push(FeedbackMailScreen()) }),
+              onClick = action { navigator.push(FeedbackMailScreen()) },
               leading = { Icon(painterResource(R.drawable.ic_email), null) },
               title = { Text(stringResource(R.string.about_feedback)) },
               subtitle = { Text(email.value) }
@@ -111,9 +110,9 @@ class AboutScreen : Screen<Unit> {
           if (privacyPolicyUrl != null)
             item {
               ListItem(
-                modifier = Modifier.clickable(onClick = action {
+                onClick = action {
                   navigator.push(UrlScreen(privacyPolicyUrl.value))
-                }),
+                },
                 leading = { Icon(painterResource(R.drawable.ic_policy), null) },
                 title = { Text(stringResource(R.string.about_privacy_policy)) }
               )

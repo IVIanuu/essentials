@@ -50,7 +50,7 @@ class NotificationsScreen : Screen<Unit>
           LazyColumn {
             items(state.notifications) { notification ->
               ListItem(
-                modifier = Modifier.clickable { state.openNotification(notification) },
+                onClick = { state.openNotification(notification) },
                 title = { Text(notification.title) },
                 subtitle = { Text(notification.text) },
                 leading = {
@@ -118,14 +118,15 @@ data class UiNotification(
 ) = Presenter {
   NotificationsState(
     hasPermissions = remember {
-      permissionManager.permissionState(listOf(typeKeyOf<SampleNotificationsPermission>()))
-    }.collectAsResourceState().value,
-    notifications = remember {
-      service.notifications
-        .map {
-          it.map { it.toUiNotification() }
-        }
-    }.collectAsState(emptyList()).value,
+      permissionManager
+        .permissionState(listOf(typeKeyOf<SampleNotificationsPermission>()))
+    }
+      .collectAsResourceState()
+      .value,
+    notifications = service.notifications
+      .map { it.map { it.toUiNotification() } }
+      .collectAsState(emptyList())
+      .value,
     requestPermissions = action {
       permissionManager.requestPermissions(listOf(typeKeyOf<SampleNotificationsPermission>()))
     },

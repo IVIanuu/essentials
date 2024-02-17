@@ -22,49 +22,52 @@ class TextInputScreen(
   val keyboardOptions: KeyboardOptions = KeyboardOptions(),
   val title: String? = null,
   val predicate: (String) -> Boolean = { true }
-) : DialogScreen<String>
+) : DialogScreen<String> {
+  @Provide companion object {
+    @Provide fun ui(
+      commonStrings: CommonStrings,
+      navigator: Navigator,
+      screen: TextInputScreen
+    ) = Ui<TextInputScreen, Unit> {
+      DialogScaffold {
+        var currentValue by remember {
+          mutableStateOf(TextFieldValue(screen.initial, TextRange(screen.initial.length)))
+        }
 
-@Provide fun textInputUi(
-  commonStrings: CommonStrings,
-  navigator: Navigator,
-  screen: TextInputScreen
-) = Ui<TextInputScreen, Unit> {
-  DialogScaffold {
-    var currentValue by remember {
-      mutableStateOf(TextFieldValue(screen.initial, TextRange(screen.initial.length)))
-    }
+        Dialog(
+          title = screen.title?.let { { Text(it) } },
+          content = {
+            val focusRequester = remember { FocusRequester() }
 
-    Dialog(
-      title = screen.title?.let { { Text(it) } },
-      content = {
-        val focusRequester = remember { FocusRequester() }
+            TextField(
+              modifier = Modifier.focusRequester(focusRequester),
+              value = currentValue,
+              onValueChange = { currentValue = it },
+              keyboardOptions = screen.keyboardOptions,
+              textStyle = MaterialTheme.typography.subtitle1,
+              label = { Text(screen.label) }
+            )
 
-        TextField(
-          modifier = Modifier.focusRequester(focusRequester),
-          value = currentValue,
-          onValueChange = { currentValue = it },
-          keyboardOptions = screen.keyboardOptions,
-          textStyle = MaterialTheme.typography.subtitle1,
-          label = { Text(screen.label) }
+            DisposableEffect(true) {
+              focusRequester.requestFocus()
+              onDispose { }
+            }
+          },
+          buttons = {
+            TextButton(onClick = action { navigator.pop(screen, null) }) {
+              Text(commonStrings.cancel)
+            }
+
+            val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
+
+            TextButton(
+              enabled = currentValueIsOk,
+              onClick = action { navigator.pop(screen, currentValue.text) }
+            ) { Text(commonStrings.ok) }
+          }
         )
-
-        DisposableEffect(true) {
-          focusRequester.requestFocus()
-          onDispose { }
-        }
-      },
-      buttons = {
-        TextButton(onClick = action { navigator.pop(screen, null) }) {
-          Text(commonStrings.cancel)
-        }
-
-        val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
-
-        TextButton(
-          enabled = currentValueIsOk,
-          onClick = action { navigator.pop(screen, currentValue.text) }
-        ) { Text(commonStrings.ok) }
       }
-    )
+    }
   }
 }
+

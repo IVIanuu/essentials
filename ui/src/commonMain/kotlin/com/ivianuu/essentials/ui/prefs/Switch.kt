@@ -18,7 +18,8 @@ import com.ivianuu.essentials.ui.material.*
   modifier: Modifier = Modifier
 ) {
   ListItem(
-    modifier = modifier.clickable { onValueChange(!value) },
+    modifier = modifier,
+    onClick = { onValueChange(!value) },
     title = title,
     subtitle = subtitle,
     leading = leading,

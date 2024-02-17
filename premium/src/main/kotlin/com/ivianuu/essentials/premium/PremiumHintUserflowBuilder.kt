@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.*
 
   override suspend fun invoke(): List<Screen<*>> {
     if (hintShown || !enabled.value || premiumVersionManager.isPremiumVersion.first())
-    hintShown = true
+      hintShown = true
     return listOf(
       GoPremiumScreen(
         showTryBasicOption = isFirstRun().value,

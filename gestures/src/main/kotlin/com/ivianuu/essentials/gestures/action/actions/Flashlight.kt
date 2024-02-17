@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.*
     Icon(
       painterResource(
         if (remember {
-          cameraManager.flashlightState(coroutineContexts)
+            cameraManager.flashlightState(coroutineContexts)
         }.collectAsState(false).value) R.drawable.ic_flashlight_on
         else R.drawable.ic_flashlight_off
       ),

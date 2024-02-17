@@ -29,7 +29,7 @@ class PrefsScreen : Screen<Unit> {
       navigator: Navigator,
       pref: DataStore<SamplePrefs>
     ) = Ui<PrefsScreen, Unit> {
-      val prefs by pref.data.collectAsState(remember { SamplePrefs() })
+      val prefs by pref.data.collectAsState(SamplePrefs())
       ScreenScaffold(topBar = { AppBar { Text("Prefs") } }) {
         VerticalList {
           item {
@@ -99,21 +99,18 @@ class PrefsScreen : Screen<Unit> {
 
           item {
             ListItem(
-              modifier = Modifier
-                .clickable(
-                  onClick = action {
-                    val newTextInput = navigator.push(
-                      TextInputScreen(
-                        initial = prefs.textInput,
-                        label = "Input",
-                        title = "Text input",
-                        predicate = { it.isNotEmpty() }
-                      )
-                    ) ?: return@action
-                    pref.updateData { copy(textInput = newTextInput) }
-                  }
-                )
-                .interactive(prefs.switch),
+              modifier = Modifier.interactive(prefs.switch),
+              onClick = action {
+                val newTextInput = navigator.push(
+                  TextInputScreen(
+                    initial = prefs.textInput,
+                    label = "Input",
+                    title = "Text input",
+                    predicate = { it.isNotEmpty() }
+                  )
+                ) ?: return@action
+                pref.updateData { copy(textInput = newTextInput) }
+              },
               leading = { Icon(Icons.Default.ThumbUp, null) },
               title = { Text("Text input") },
               subtitle = { Text("This is a text input preference") }

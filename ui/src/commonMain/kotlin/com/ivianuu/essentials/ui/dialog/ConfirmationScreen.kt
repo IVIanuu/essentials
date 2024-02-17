@@ -12,22 +12,24 @@ import com.ivianuu.injekt.*
 
 class ConfirmationScreen(val title: String) : DialogScreen<ConfirmationScreen.Result> {
   enum class Result { CONFIRMED, DENIED }
-}
 
-@Provide fun confirmationUi(
-  navigator: Navigator,
-  screen: ConfirmationScreen,
-) = Ui<ConfirmationScreen, Unit> {
-  DialogScaffold {
-    Dialog(
-      title = { Text(screen.title) },
-      buttons = {
-        ConfirmationScreen.Result.entries.forEach { item ->
-          TextButton(onClick = action { navigator.pop(screen, item) }) {
-            Text(item.name)
+  @Provide companion object {
+    @Provide fun ui(
+      navigator: Navigator,
+      screen: ConfirmationScreen,
+    ) = Ui<ConfirmationScreen, Unit> {
+      DialogScaffold {
+        Dialog(
+          title = { Text(screen.title) },
+          buttons = {
+            ConfirmationScreen.Result.entries.forEach { item ->
+              TextButton(onClick = action { navigator.pop(screen, item) }) {
+                Text(item.name)
+              }
+            }
           }
-        }
+        )
       }
-    )
+    }
   }
 }

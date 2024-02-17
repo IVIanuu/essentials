@@ -3,13 +3,10 @@
  */
 
 package com.ivianuu.essentials.ui.dialog
-
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
-import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
@@ -23,41 +20,41 @@ class SingleChoiceListScreen<T : Any>(
   val selected: T,
   val title: String? = null,
   @Inject val renderable: UiRenderer<T>
-) : DialogScreen<T>
-
-@Provide fun singleChoiceListUi(
-  commonStrings: CommonStrings,
-  navigator: Navigator,
-  screen: SingleChoiceListScreen<Any>,
-) = Ui<SingleChoiceListScreen<Any>, Unit> {
-  DialogScaffold {
-    Dialog(
-      applyContentPadding = false,
-      title = screen.title?.let { { Text(it) } },
-      content = {
-        LazyColumn {
-          items(screen.items) { item ->
-            ListItem(
-              modifier = Modifier.clickable(onClick = action {
-                navigator.pop(screen, item)
-              }),
-              trailingPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
-              title = { Text(screen.renderable(item)) },
-              trailing = {
-                RadioButton(
-                  selected = item == screen.selected,
-                  onClick = null
+) : DialogScreen<T> {
+  @Provide companion object {
+    @Provide fun ui(
+      commonStrings: CommonStrings,
+      navigator: Navigator,
+      screen: SingleChoiceListScreen<Any>,
+    ) = Ui<SingleChoiceListScreen<Any>, Unit> {
+      DialogScaffold {
+        Dialog(
+          applyContentPadding = false,
+          title = screen.title?.let { { Text(it) } },
+          content = {
+            VerticalList(decorate = false) {
+              items(screen.items) { item ->
+                ListItem(
+                  onClick = action { navigator.pop(screen, item) },
+                  trailingPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
+                  title = { Text(screen.renderable(item)) },
+                  trailing = {
+                    RadioButton(
+                      selected = item == screen.selected,
+                      onClick = null
+                    )
+                  }
                 )
               }
-            )
+            }
+          },
+          buttons = {
+            TextButton(onClick = action { navigator.pop(screen, null) }) {
+              Text(commonStrings.cancel)
+            }
           }
-        }
-      },
-      buttons = {
-        TextButton(onClick = action { navigator.pop(screen, null) }) {
-          Text(commonStrings.cancel)
-        }
+        )
       }
-    )
+    }
   }
 }

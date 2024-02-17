@@ -27,22 +27,20 @@ import kotlin.time.Duration.Companion.seconds
   private val logger: Logger,
   private val powerManager: @SystemService PowerManager
 ) {
-  val screenState: Flow<ScreenState> = compositionFlow {
-    remember {
-      broadcastsFactory(
-        Intent.ACTION_SCREEN_OFF,
-        Intent.ACTION_SCREEN_ON,
-        Intent.ACTION_USER_PRESENT
-      ).map { it.action }
-    }.collectAsState(null).value
-
-    if (powerManager.isInteractive) {
-      if (keyguardManager.isDeviceLocked) ScreenState.LOCKED
-      else ScreenState.UNLOCKED
-    } else {
-      ScreenState.OFF
+  val screenState: Flow<ScreenState> = broadcastsFactory(
+    Intent.ACTION_SCREEN_OFF,
+    Intent.ACTION_SCREEN_ON,
+    Intent.ACTION_USER_PRESENT
+  )
+    .map {
+      if (powerManager.isInteractive) {
+        if (keyguardManager.isDeviceLocked) ScreenState.LOCKED
+        else ScreenState.UNLOCKED
+      } else {
+        ScreenState.OFF
+      }
     }
-  }
+    .distinctUntilChanged()
 
   suspend fun turnScreenOn(): Boolean {
     logger.log { "on request is off ? ${!powerManager.isInteractive}" }

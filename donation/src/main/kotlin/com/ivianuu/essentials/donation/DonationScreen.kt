@@ -7,6 +7,7 @@ package com.ivianuu.essentials.donation
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
@@ -34,7 +35,7 @@ class DonationScreen : DialogScreen<Unit> {
       screen: DonationScreen,
       toaster: Toaster
     ) = Ui<DonationScreen, Unit> {
-      val skus = produceResourceState {
+      val skus by produceResourceState {
         emit(
           donations
             .value
@@ -49,7 +50,7 @@ class DonationScreen : DialogScreen<Unit> {
               )
             }
         )
-      }.value
+      }
       DialogScaffold {
         Dialog(
           applyContentPadding = false,
@@ -67,14 +68,13 @@ class DonationScreen : DialogScreen<Unit> {
               }
             ) { donation ->
               ListItem(
-                modifier = Modifier
-                  .clickable(onClick = action {
-                    if (billingService.purchase(donation.donation.sku, true, true)) {
-                      billingService.consumePurchase(donation.donation.sku)
-                      toaster(R.string.donation_thanks)
-                    }
-                  })
-                  .padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 8.dp),
+                onClick = action {
+                  if (billingService.purchase(donation.donation.sku, true, true)) {
+                    billingService.consumePurchase(donation.donation.sku)
+                    toaster(R.string.donation_thanks)
+                  }
+                },
                 title = { Text(donation.title) },
                 leading = { Icon(painterResource(donation.donation.iconRes), null) },
                 trailing = {

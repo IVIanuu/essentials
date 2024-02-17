@@ -24,51 +24,53 @@ class MultiChoiceListScreen<T : Any>(
   val selected: Set<T>,
   val title: String? = null,
   @Inject val renderable: UiRenderer<T>
-) : DialogScreen<Set<T>>
+) : DialogScreen<Set<T>> {
+  @Provide companion object {
+    @Provide fun ui(
+      commonStrings: CommonStrings,
+      navigator: Navigator,
+      screen: MultiChoiceListScreen<Any>,
+    ) = Ui<MultiChoiceListScreen<Any>, Unit> {
+      DialogScaffold {
+        var selectedItems by remember { mutableStateOf(screen.selected) }
 
-@Provide fun multiChoiceListUi(
-  commonStrings: CommonStrings,
-  navigator: Navigator,
-  screen: MultiChoiceListScreen<Any>,
-) = Ui<MultiChoiceListScreen<Any>, Unit> {
-  DialogScaffold {
-    var selectedItems by remember { mutableStateOf(screen.selected) }
-
-    Dialog(
-      applyContentPadding = false,
-      title = screen.title?.let { { Text(it) } },
-      content = {
-        LazyColumn {
-          items(screen.items) { item ->
-            val selected = item in selectedItems
-            ListItem(
-              modifier = Modifier.clickable {
-                val newSelectedItems = selectedItems.toMutableSet()
-                if (!selected) newSelectedItems += item
-                else newSelectedItems -= item
-                selectedItems = newSelectedItems
-              },
-              trailingPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
-              title = { Text(screen.renderable(item)) },
-              trailing = {
-                Switch(
-                  checked = selected,
-                  onCheckedChange = null
+        Dialog(
+          applyContentPadding = false,
+          title = screen.title?.let { { Text(it) } },
+          content = {
+            VerticalList(decorate = false) {
+              items(screen.items) { item ->
+                val selected = item in selectedItems
+                ListItem(
+                  onClick = {
+                    val newSelectedItems = selectedItems.toMutableSet()
+                    if (!selected) newSelectedItems += item
+                    else newSelectedItems -= item
+                    selectedItems = newSelectedItems
+                  },
+                  trailingPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
+                  title = { Text(screen.renderable(item)) },
+                  trailing = {
+                    Switch(
+                      checked = selected,
+                      onCheckedChange = null
+                    )
+                  }
                 )
               }
-            )
-          }
-        }
-      },
-      buttons = {
-        TextButton(onClick = action { navigator.pop(screen, null) }) {
-          Text(commonStrings.cancel)
-        }
+            }
+          },
+          buttons = {
+            TextButton(onClick = action { navigator.pop(screen, null) }) {
+              Text(commonStrings.cancel)
+            }
 
-        TextButton(onClick = action { navigator.pop(screen, selectedItems) }) {
-          Text(commonStrings.ok)
-        }
+            TextButton(onClick = action { navigator.pop(screen, selectedItems) }) {
+              Text(commonStrings.ok)
+            }
+          }
+        )
       }
-    )
+    }
   }
 }

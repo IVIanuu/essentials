@@ -7,7 +7,6 @@ package com.ivianuu.essentials.apps
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
@@ -35,14 +34,14 @@ class AppPickerScreen(
         topBar = { AppBar { Text(screen.title ?: stringResource(R.string.title_app_picker)) } }
       ) {
         ResourceVerticalListFor(
-          remember {
+          produceResourceState {
             repository.installedApps
               .map { it.filter { screen.appPredicate(it) } }
-          }
-            .collectAsResourceState().value
+              .collect { emit(it) }
+          }.value
         ) { app ->
           ListItem(
-            modifier = Modifier.clickable(onClick = action { navigator.pop(screen, app) }),
+            onClick = action { navigator.pop(screen, app) },
             title = { Text(app.appName) },
             leading = {
               Image(
@@ -57,4 +56,3 @@ class AppPickerScreen(
     }
   }
 }
-

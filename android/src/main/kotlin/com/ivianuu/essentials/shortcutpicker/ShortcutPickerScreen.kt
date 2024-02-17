@@ -35,7 +35,7 @@ class ShortcutPickerScreen : Screen<Shortcut> {
       ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.title_shortcut_picker)) } }) {
         ResourceVerticalListFor(repository.shortcuts.collectAsResourceState().value) { shortcut ->
           ListItem(
-            modifier = Modifier.clickable(onClick = action {
+            onClick = action {
               catch {
                 val shortcutRequestResult = navigator.push(DefaultIntentScreen(shortcut.intent))
                   ?.getOrNull()
@@ -46,11 +46,11 @@ class ShortcutPickerScreen : Screen<Shortcut> {
                 it.printStackTrace()
                 toaster(R.string.failed_to_pick_shortcut)
               }
-            }),
+            },
             leading = {
               Image(
                 modifier = Modifier.size(40.dp),
-                painter = remember { BitmapPainter(shortcut.icon.toBitmap().asImageBitmap()) },
+                bitmap = shortcut.icon.toBitmap().asImageBitmap(),
                 contentDescription = null
               )
             },

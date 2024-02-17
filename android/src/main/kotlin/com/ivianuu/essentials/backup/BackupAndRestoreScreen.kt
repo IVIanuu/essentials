@@ -27,13 +27,13 @@ class BackupAndRestoreScreen : Screen<Unit> {
         VerticalList {
           item {
             ListItem(
-              modifier = Modifier.clickable(onClick = action {
+              onClick = action {
                 catch { backupManager.createBackup() }
                   .onLeft {
                     it.printStackTrace()
                     toaster(R.string.backup_error)
                   }
-              }),
+              },
               leading = { Icon(painterResource(R.drawable.ic_save), null) },
               title = { Text(stringResource(R.string.pref_backup)) },
               subtitle = { Text(stringResource(R.string.pref_backup_summary)) }
@@ -41,13 +41,13 @@ class BackupAndRestoreScreen : Screen<Unit> {
           }
           item {
             ListItem(
-              modifier = Modifier.clickable(onClick = action {
+              onClick = action {
                 catch { backupManager.restoreBackup() }
                   .onLeft {
                     it.printStackTrace()
                     toaster(R.string.restore_error)
                   }
-              }),
+              },
               leading = { Icon(painterResource(R.drawable.ic_restore), null) },
               title = { Text(stringResource(R.string.pref_restore)) },
               subtitle = { Text(stringResource(R.string.pref_restore_summary)) }

@@ -7,9 +7,8 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.*
 import android.provider.*
 import android.view.*
-import androidx.compose.foundation.*
 import androidx.compose.material.*
-import androidx.compose.ui.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.apps.*
@@ -70,7 +69,7 @@ class MediaActionSettingsScreen : Screen<Unit> {
         VerticalList {
           item {
             ListItem(
-              modifier = Modifier.clickable(onClick = action {
+              onClick = scopedAction {
                 val newMediaApp = navigator.push(
                   AppPickerScreen(
                     intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
@@ -78,15 +77,15 @@ class MediaActionSettingsScreen : Screen<Unit> {
                 )
                 if (newMediaApp != null)
                   pref.updateData { copy(mediaApp = newMediaApp.packageName) }
-              }),
+              },
               title = { Text(stringResource(R.string.pref_media_app)) },
               subtitle = {
-                val mediaApp = produceResourceState {
+                val mediaApp by produceResourceState {
                   pref.data
                     .map { it.mediaApp }
                     .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
                     .let { emitAll(it) }
-                }.value
+                }
                 Text(
                   stringResource(
                     R.string.pref_media_app_summary,

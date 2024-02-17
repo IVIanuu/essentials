@@ -8,6 +8,7 @@ import android.annotation.*
 import android.app.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.foreground.*
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.*
@@ -40,13 +41,15 @@ class ForegroundScreen : Screen<Unit> {
               ) {
                 setSmallIcon(R.drawable.ic_home)
                 setContentTitle("Foreground")
-
-                val count = remember {
-                  ticker(1000)
-                    .receiveAsFlow()
-                    .runningFold(0) { acc, _ -> acc.inc() }
-                }.collectAsState(0).value
-                setContentText("Current progress $count")
+                setContentText("Current progress ${
+                  remember {
+                    ticker(1000)
+                      .receiveAsFlow()
+                      .runningFold(0) { acc, _ -> acc.inc() }
+                  }
+                    .collectAsState(0)
+                    .value
+                }")
               }
             }
           }

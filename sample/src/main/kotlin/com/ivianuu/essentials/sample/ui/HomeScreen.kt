@@ -82,7 +82,7 @@ import com.ivianuu.injekt.*
 
 @Composable private fun HomeItem(color: Color, onClick: () -> Unit, item: HomeItem) {
   ListItem(
-    modifier = Modifier.clickable(onClick = onClick),
+    onClick = onClick,
     title = {
       Text(
         item.title,

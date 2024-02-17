@@ -53,12 +53,16 @@ class GoPremiumScreen(
       screen: GoPremiumScreen,
       toaster: Toaster
     ) = Ui<GoPremiumScreen, Unit> {
-      val premiumSkuDetails = premiumVersionManager.premiumSkuDetails.collectAsResourceState().value
+      val premiumSkuDetails by premiumVersionManager.premiumSkuDetails.collectAsResourceState()
       val goPremium = action {
         if (premiumVersionManager.purchasePremiumVersion()) {
           navigator.pop(screen, true)
           toaster(R.string.premium_activated)
         }
+      }
+      val tryBasicVersion = action {
+        fullScreenAdManager.loadAndShowAdWithTimeout()
+        navigator.pop(screen, false)
       }
 
       BackHandler(onBack = action {
@@ -67,11 +71,6 @@ class GoPremiumScreen(
           navigator.pop(screen, false)
         }
       })
-
-      val tryBasicVersion = action {
-        fullScreenAdManager.loadAndShowAdWithTimeout()
-        navigator.pop(screen, false)
-      }
 
       Surface {
         InsetsPadding {

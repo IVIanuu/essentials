@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.ui.material
 
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -12,6 +13,7 @@ import androidx.compose.ui.unit.*
 
 @Composable fun ListItem(
   modifier: Modifier = Modifier,
+  onClick: (() -> Unit)? = null,
   title: (@Composable () -> Unit)? = null,
   subtitle: (@Composable () -> Unit)? = null,
   leading: (@Composable () -> Unit)? = null,
@@ -27,7 +29,9 @@ import androidx.compose.ui.unit.*
   }
 
   Row(
-    modifier = modifier.heightIn(minHeight),
+    modifier = (onClick?.let { Modifier.clickable(onClick = it) } ?: Modifier)
+      .then(modifier)
+      .heightIn(minHeight),
     horizontalArrangement = Arrangement.Center
   ) {
     // leading

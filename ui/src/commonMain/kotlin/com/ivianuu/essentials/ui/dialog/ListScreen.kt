@@ -18,27 +18,28 @@ class ListScreen<T : Any>(
   val items: List<T>,
   val title: String? = null,
   @Inject val renderer: UiRenderer<T>,
-) : DialogScreen<T>
-
-@Provide fun listKeyUi(
-  key: ListScreen<Any>,
-  navigator: Navigator
-) = Ui<ListScreen<Any>, Unit> {
-  DialogScaffold {
-    Dialog(
-      title = key.title?.let { { Text(it) } },
-      content = {
-        LazyColumn {
-          items(key.items) { item ->
-            ListItem(
-              modifier = Modifier.clickable(onClick = action {
-                navigator.pop(key, item)
-              }),
-              title = { Text(key.renderer(item)) },
-            )
+) : DialogScreen<T> {
+  @Provide companion object {
+    @Provide fun ui(
+      key: ListScreen<Any>,
+      navigator: Navigator
+    ) = Ui<ListScreen<Any>, Unit> {
+      DialogScaffold {
+        Dialog(
+          title = key.title?.let { { Text(it) } },
+          content = {
+            VerticalList(decorate = false) {
+              items(key.items) { item ->
+                ListItem(
+                  onClick = action { navigator.pop(key, item) },
+                  title = { Text(key.renderer(item)) },
+                )
+              }
+            }
           }
-        }
+        )
       }
-    )
+    }
   }
 }
+
