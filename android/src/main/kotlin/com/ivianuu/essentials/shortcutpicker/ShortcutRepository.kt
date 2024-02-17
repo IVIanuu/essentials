@@ -13,6 +13,7 @@ import androidx.core.graphics.drawable.toDrawable
 import arrow.core.Either
 import arrow.fx.coroutines.parMap
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
@@ -40,7 +41,7 @@ import kotlinx.coroutines.withContext
         val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
         packageManager.queryIntentActivities(shortcutsIntent, 0)
           .parMap { resolveInfo ->
-            Either.catch {
+            catch {
               Shortcut(
                 intent = Intent().apply {
                   action = Intent.ACTION_CREATE_SHORTCUT

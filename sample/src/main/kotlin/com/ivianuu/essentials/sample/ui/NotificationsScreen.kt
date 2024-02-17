@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import arrow.core.Either
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationService
@@ -63,11 +64,7 @@ import kotlinx.coroutines.flow.map
 
 @Provide val notificationsHomeItem = HomeItem("Notifications") { NotificationsScreen() }
 
-class NotificationsScreen : Screen<Unit> {
-  companion object {
-
-  }
-}
+class NotificationsScreen : Screen<Unit>
 
 @Provide val notificationsUi = Ui<NotificationsScreen, NotificationsState> { state ->
   ScreenScaffold(topBar = { AppBar { Text("Notifications") } }) {
@@ -189,7 +186,7 @@ private fun StatusBarNotification.toUiNotification(
   @Inject appContext: AppContext
 ) {
   val icon = produceState<ImageBitmap?>(null) {
-    value = Either.catch {
+    value = catch {
       notification.smallIcon
         .loadDrawable(appContext)
     }.recover {

@@ -54,12 +54,13 @@ import kotlinx.coroutines.withContext
   suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean {
     logger.log { "request permissions $permissions" }
 
-    val result = permissions.all { permissionState(listOf(it)).first() } ||
-        appUiStarter()
-          .cast<UiScopeOwner>()
-          .uiScope
-          .navigator
-          .push(PermissionRequestScreen(permissions)) == true
+    val result = permissions.all { permissionState(listOf(it)).first() } || run {
+      appUiStarter()
+        .cast<UiScopeOwner>()
+        .uiScope
+        .navigator
+        .push(PermissionRequestScreen(permissions)) == true
+    }
 
     logger.log { "request permissions result $permissions -> $result" }
     return result

@@ -12,6 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import arrow.core.Either
 import com.ivianuu.essentials.android.R
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.AppBar
@@ -34,7 +35,7 @@ class BackupAndRestoreScreen : Screen<Unit> {
           item {
             ListItem(
               modifier = Modifier.clickable(onClick = action {
-                Either.catch { backupManager.createBackup() }
+                catch { backupManager.createBackup() }
                   .onLeft {
                     it.printStackTrace()
                     toaster(R.string.backup_error)
@@ -48,7 +49,7 @@ class BackupAndRestoreScreen : Screen<Unit> {
           item {
             ListItem(
               modifier = Modifier.clickable(onClick = action {
-                Either.catch { backupManager.restoreBackup() }
+                catch { backupManager.restoreBackup() }
                   .onLeft {
                     it.printStackTrace()
                     toaster(R.string.restore_error)

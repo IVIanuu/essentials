@@ -21,8 +21,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import arrow.fx.coroutines.guarantee
+import arrow.fx.coroutines.guaranteeCase
 import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.scopedAction
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
@@ -33,7 +36,6 @@ import com.ivianuu.essentials.ui.material.ScreenScaffold
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowScreen
-import com.ivianuu.essentials.ui.navigation.Presenter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -43,83 +45,72 @@ import kotlinx.coroutines.flow.first
 
 class PermissionRequestScreen(
   val permissionsKeys: List<TypeKey<Permission>>
-) : CriticalUserFlowScreen<Boolean>
+) : CriticalUserFlowScreen<Boolean> {
+  @Provide companion object {
+    @Provide fun ui(
+      appUiStarter: AppUiStarter,
+      navigator: Navigator,
+      permissionManager: PermissionManager,
+      requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>,
+      screen: PermissionRequestScreen
+    ) = Ui<PermissionRequestScreen, Unit> {
+      LaunchedEffect(true) {
+        permissionManager.permissionState(screen.permissionsKeys).first { it }
+        navigator.pop(screen, true)
+      }
 
-@Provide val permissionRequestUi = Ui<PermissionRequestScreen, PermissionRequestState> { state ->
-  ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.request_permission_title)) } }) {
-    VerticalList {
-      items(state.permissionsToGrant) { permission ->
-        ListItem(
-          modifier = Modifier
-            .padding(start = 8.dp, top = 8.dp, end = 8.dp)
-            .border(
-              1.dp,
-              LocalContentColor.current.copy(alpha = 0.12f),
-              RoundedCornerShape(8.dp)
-            ),
-          textPadding = PaddingValues(start = 16.dp),
-          title = { Text(permission.title) },
-          subtitle = permission.desc?.let { { Text(it) } },
-          leading = { permission.icon?.invoke() },
-          trailing = {
-            Row(horizontalArrangement = Arrangement.End) {
-              TextButton(
-                modifier = Modifier.width(56.dp),
-                onClick = { state.denyPermission(permission) }
-              ) {
-                Text(stringResource(R.string.deny), maxLines = 1)
-              }
+      val keysByPermission = remember {
+        screen.permissionsKeys.associateBy { permissionManager.permission(it) }
+      }
 
-              TextButton(
-                modifier = Modifier.width(56.dp),
-                onClick = { state.grantPermission(permission) }
-              ) {
-                Text(stringResource(R.string.grant), maxLines = 1)
-              }
-            }
+      val permissionsToGrant = keysByPermission
+        .keys
+        .filterNot {
+          key(keysByPermission[it]) {
+            remember { permissionManager.permissionState(listOf(keysByPermission[it]!!)) }
+              .collectAsState(false).value
           }
-        )
+        }
+
+      ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.request_permission_title)) } }) {
+        VerticalList {
+          items(permissionsToGrant) { permission ->
+            ListItem(
+              modifier = Modifier
+                .padding(start = 8.dp, top = 8.dp, end = 8.dp)
+                .border(
+                  1.dp,
+                  LocalContentColor.current.copy(alpha = 0.12f),
+                  RoundedCornerShape(8.dp)
+                ),
+              textPadding = PaddingValues(start = 16.dp),
+              title = { Text(permission.title) },
+              subtitle = permission.desc?.let { { Text(it) } },
+              leading = { permission.icon?.invoke() },
+              trailing = {
+                Row(horizontalArrangement = Arrangement.End) {
+                  TextButton(
+                    modifier = Modifier.width(56.dp),
+                    onClick = action { navigator.pop(screen, false) }
+                  ) {
+                    Text(stringResource(R.string.deny), maxLines = 1)
+                  }
+
+                  TextButton(
+                    modifier = Modifier.width(56.dp),
+                    onClick = scopedAction {
+                      requestHandlers[keysByPermission[permission]!!]!!()(permission)
+                      appUiStarter()
+                    }
+                  ) {
+                    Text(stringResource(R.string.grant), maxLines = 1)
+                  }
+                }
+              }
+            )
+          }
+        }
       }
     }
   }
-}
-
-data class PermissionRequestState(
-  val permissionsToGrant: List<Permission>,
-  val grantPermission: (Permission) -> Unit,
-  val denyPermission: (Permission) -> Unit
-)
-
-@Provide fun permissionRequestPresenter(
-  appUiStarter: AppUiStarter,
-  navigator: Navigator,
-  permissionManager: PermissionManager,
-  requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>,
-  screen: PermissionRequestScreen
-) = Presenter {
-  LaunchedEffect(true) {
-    permissionManager.permissionState(screen.permissionsKeys)
-      .first { it }
-    navigator.pop(screen, true)
-  }
-
-  val keysByPermission = remember {
-    screen.permissionsKeys.associateBy { permissionManager.permission(it) }
-  }
-
-  PermissionRequestState(
-    permissionsToGrant = keysByPermission
-      .keys
-      .filterNot {
-        key(keysByPermission[it]) {
-          remember { permissionManager.permissionState(listOf(keysByPermission[it]!!)) }
-            .collectAsState(false).value
-        }
-      },
-    grantPermission = action { permission ->
-      requestHandlers[keysByPermission[permission]!!]!!()(permission)
-      appUiStarter()
-    },
-    denyPermission = action { _ -> navigator.pop(screen, false) }
-  )
 }

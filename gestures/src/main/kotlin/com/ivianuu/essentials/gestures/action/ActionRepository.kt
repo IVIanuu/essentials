@@ -7,6 +7,7 @@ package com.ivianuu.essentials.gestures.action
 import arrow.core.Either
 import arrow.core.getOrElse
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.CloseSystemDialogsUseCase
@@ -75,7 +76,7 @@ import kotlinx.coroutines.withContext
 
   suspend fun executeAction(id: String): Boolean =
     withContext(coroutineContexts.computation) {
-      Either.catch {
+      catch {
         logger.log { "execute $id" }
         val action = getAction(id)
 

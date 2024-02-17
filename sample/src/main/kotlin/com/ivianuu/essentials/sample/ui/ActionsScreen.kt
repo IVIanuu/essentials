@@ -7,6 +7,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import com.ivianuu.essentials.LocalScope
+import com.ivianuu.essentials.compose.scopedAction
 import com.ivianuu.essentials.coroutineScope
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ui.ActionPickerScreen
@@ -34,44 +35,39 @@ class ActionsScreen : Screen<Unit> {
       toaster: Toaster
     ) = Ui<ActionsScreen, Unit> {
       ScreenScaffold(topBar = { AppBar { Text("Actions") } }) {
-        val scope = LocalScope.current.coroutineScope
         Column {
           Button(
-            onClick = {
-              scope.launch {
-                val actionId = navigator.push(ActionPickerScreen())
-                  .safeAs<ActionPickerScreen.Result.Action>()
-                  ?.actionId ?: return@launch
+            onClick = scopedAction {
+              val actionId = navigator.push(ActionPickerScreen())
+                .safeAs<ActionPickerScreen.Result.Action>()
+                ?.actionId ?: return@scopedAction
 
-                val action = repository.getAction(actionId)
+              val action = repository.getAction(actionId)
 
-                delay(1.seconds)
+              delay(1.seconds)
 
-                toaster("Execute action ${action.title}")
+              toaster("Execute action ${action.title}")
 
-                repository.executeAction(actionId)
-              }
+              repository.executeAction(actionId)
             }
           ) { Text("Pick action") }
 
           Button(
-            onClick = {
-              scope.launch {
-                val actionId = navigator.push(ActionPickerScreen())
-                  .safeAs<ActionPickerScreen.Result.Action>()
-                  ?.actionId ?: return@launch
+            onClick = scopedAction {
+              val actionId = navigator.push(ActionPickerScreen())
+                .safeAs<ActionPickerScreen.Result.Action>()
+                ?.actionId ?: return@scopedAction
 
-                val action = repository.getAction(actionId)
+              val action = repository.getAction(actionId)
 
-                delay(1.seconds)
+              delay(1.seconds)
 
-                while (true) {
-                  toaster("Execute action ${action.title}")
+              while (true) {
+                toaster("Execute action ${action.title}")
 
-                  repository.executeAction(actionId)
+                repository.executeAction(actionId)
 
-                  delay(3.seconds)
-                }
+                delay(3.seconds)
               }
             }
           ) { Text("Loop action") }

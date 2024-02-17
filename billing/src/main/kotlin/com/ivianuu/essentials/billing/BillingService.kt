@@ -23,6 +23,7 @@ import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.AppVisibleScope
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutineScope
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.childCoroutineScope
@@ -89,7 +90,7 @@ import kotlin.time.Duration.Companion.seconds
      },
     release = { _, billingClient ->
       logger.log { "release client" }
-      Either.catch { billingClient.endConnection() }
+      catch { billingClient.endConnection() }
     }
   )
 

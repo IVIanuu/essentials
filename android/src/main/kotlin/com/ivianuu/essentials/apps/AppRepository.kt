@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import arrow.core.Either
 import arrow.fx.coroutines.parMap
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
@@ -60,7 +61,7 @@ import kotlinx.coroutines.withContext
     .onStart<Any?> { emit(Unit) }
     .map {
       withContext(coroutineContexts.io) {
-        val applicationInfo = Either.catch {
+        val applicationInfo = catch {
           packageManager.getApplicationInfo(packageName, 0)
         }.getOrNull() ?: return@withContext null
         AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())

@@ -16,6 +16,7 @@ import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.AppVisibleScope
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.RateLimiter
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
@@ -68,7 +69,7 @@ import kotlin.time.Duration.Companion.seconds
     scope.launch { loadAd() }
   }
 
-  suspend fun loadAd() = Either.catch {
+  suspend fun loadAd() = catch {
     if (!adsEnabledFlow.first().value) return@catch false
     getOrCreateCurrentAd()
     true
@@ -80,7 +81,7 @@ import kotlin.time.Duration.Companion.seconds
       .also { preloadAd() }
   }
 
-  suspend fun loadAndShowAdWithTimeout() = Either.catch {
+  suspend fun loadAndShowAdWithTimeout() = catch {
     if (!adsEnabledFlow.first().value) return@catch false
     withTimeoutOrNull(1.seconds) { getOrCreateCurrentAd() }?.invoke() == true
   }

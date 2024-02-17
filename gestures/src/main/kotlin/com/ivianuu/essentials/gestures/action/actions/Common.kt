@@ -20,6 +20,7 @@ import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.accessibility.AccessibilityService
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityService
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ui.LocalActionIconSizeModifier
@@ -61,7 +62,7 @@ operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this,
 ) {
   operator fun invoke(intent: Intent, options: Bundle?) {
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    Either.catch {
+    catch {
       PendingIntent.getActivity(
         appContext,
         1000,
@@ -82,7 +83,7 @@ operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this,
   private val accessibilityService: AccessibilityService,
 ) {
   @SuppressLint("MissingPermission", "InlinedApi")
-  suspend operator fun invoke(): Either<Throwable, Unit> = Either.catch {
+  suspend operator fun invoke(): Either<Throwable, Unit> = catch {
     if (appConfig.sdk >= 31)
       accessibilityService.performGlobalAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
     else

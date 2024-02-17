@@ -53,7 +53,8 @@ fun interface AppUiStarter {
           UUID.randomUUID().toString(),
           ActivityResultContracts.StartActivityForResult()
         ) {
-          if (continuation.isActive) continuation.resume(it.right())
+          println("on result $it")
+          continuation.resume(it.right())
         }
         try {
           launcher.launch(intent)

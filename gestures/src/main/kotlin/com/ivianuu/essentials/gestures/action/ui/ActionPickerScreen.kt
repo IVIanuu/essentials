@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.scopedAction
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
@@ -93,12 +94,12 @@ class ActionPickerScreen(
       ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.action_picker_title)) } }) {
         ResourceVerticalListFor(items) { item ->
           ListItem(
-            modifier = Modifier.clickable(onClick = action {
-              val result = item.getResult(navigator) ?: return@action
-              if (result is ActionPickerScreen.Result.Action) {
+            modifier = Modifier.clickable(onClick = scopedAction {
+              val result = item.getResult(navigator) ?: return@scopedAction
+              if (result is Result.Action) {
                 val action = repository.getAction(result.actionId)
                 if (!permissionManager.requestPermissions(action.permissions))
-                  return@action
+                  return@scopedAction
               }
               navigator.pop(screen, result)
             }),

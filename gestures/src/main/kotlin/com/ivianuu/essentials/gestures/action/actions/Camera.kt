@@ -17,6 +17,7 @@ import com.ivianuu.essentials.ScopeManager
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.accessibility.AccessibilityScope
 import com.ivianuu.essentials.accessibility.accessibilityService
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
@@ -90,14 +91,14 @@ import kotlin.coroutines.resume
           super.onCameraAvailable(cameraId)
           cameraManager.unregisterAvailabilityCallback(this)
           if (cameraId == frontCamera)
-            Either.catch { cont.resume(true) }
+            catch { cont.resume(true) }
         }
 
         override fun onCameraUnavailable(cameraId: String) {
           super.onCameraUnavailable(cameraId)
           cameraManager.unregisterAvailabilityCallback(this)
           if (cameraId == frontCamera)
-            Either.catch { cont.resume(false) }
+            catch { cont.resume(false) }
         }
       }, Handler(Looper.getMainLooper()))
     }

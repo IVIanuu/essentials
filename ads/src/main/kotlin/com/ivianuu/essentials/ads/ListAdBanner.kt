@@ -9,6 +9,7 @@ import arrow.core.Either
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.navigation.screen
 import com.ivianuu.injekt.Provide
@@ -40,7 +41,7 @@ fun interface ListAdBanner : ListDecorator
 ) = ListAdBanner decorator@{
   if (config != null && isVertical) {
     item(null) {
-      val screen = Either.catch {
+      val screen = catch {
         LocalScope.current.screen::class
       }.getOrNull()
       if ((screen == null || isAdFeatureEnabled(screen, ListAdBannerFeature)) &&

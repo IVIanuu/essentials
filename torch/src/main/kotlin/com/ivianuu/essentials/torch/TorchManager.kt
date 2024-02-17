@@ -13,6 +13,7 @@ import arrow.core.Either
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.SystemService
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.compositionStateFlow
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.onCancel
@@ -33,13 +34,13 @@ import com.ivianuu.injekt.Provide
     if (!_torchEnabled) return@compositionStateFlow _torchEnabled
 
     LaunchedEffect(true) {
-      Either.catch {
+      catch {
         val cameraId = cameraManager.cameraIdList[0]
         logger.log { "enable torch" }
         cameraManager.setTorchMode(cameraId, true)
         onCancel {
           logger.log { "disable torch on cancel" }
-          Either.catch { cameraManager.setTorchMode(cameraId, false) }
+          catch { cameraManager.setTorchMode(cameraId, false) }
           _torchEnabled = false
         }
       }.onLeft {

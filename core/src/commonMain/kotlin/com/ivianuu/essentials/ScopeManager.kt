@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 
     override fun onExit(scope: Scope<Any?>) = _activeScopes.update { it - scope }
   }
+
   @Provide fun <N> observer(): ScopeObserver<N> = _observer.cast()
 }
 

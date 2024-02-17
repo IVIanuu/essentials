@@ -14,8 +14,7 @@ import com.ivianuu.essentials.scopeOf
 import com.ivianuu.essentials.ui.navigation.AppUiStarter
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
-
-@Provide fun appUiStarter(
+@Provide fun androidAppUiStarter(
   appContext: AppContext,
   appConfig: AppConfig,
   packageManager: PackageManager,

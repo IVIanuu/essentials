@@ -2,8 +2,10 @@ package com.ivianuu.essentials
 
 import arrow.core.Either
 
+inline fun <T> catch(block: () -> T) = Either.catch(f = block)
+
 fun <A> Either<Throwable, A>.recover(block: () -> A) = when (this) {
-  is Either.Left -> Either.catch(block)
+  is Either.Left -> catch(block)
   is Either.Right -> this
 }
 

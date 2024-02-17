@@ -26,6 +26,7 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.sharedComputation
@@ -127,7 +128,7 @@ fun interface Worker<I : WorkId> {
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
     val workId = inputData.getString(WORK_ID) ?: return Result.failure()
-    return Either.catch {
+    return catch {
       workManager.runWorker(object : WorkId(workId) {})
     }.fold({ Result.success() }, { Result.retry() })
   }

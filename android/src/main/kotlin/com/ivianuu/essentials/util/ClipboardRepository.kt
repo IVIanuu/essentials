@@ -8,6 +8,7 @@ import android.content.ClipData
 import arrow.core.Either
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.android.R
+import com.ivianuu.essentials.catch
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +31,7 @@ import android.content.ClipboardManager as AndroidClipboardManager
   }
 
   suspend fun updateClipboardText(value: String, showMessage: Boolean) {
-    Either.catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
+    catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
       .also { result ->
         if (showMessage)
           toaster(result.fold({ R.string.copy_to_clipboard_failed }, { R.string.copied_to_clipboard }))

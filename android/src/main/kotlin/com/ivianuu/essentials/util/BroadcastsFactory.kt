@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import arrow.core.Either
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.channels.awaitClose
@@ -31,7 +32,7 @@ import kotlinx.coroutines.flow.flowOn
       actions.forEach { addAction(it) }
     })
     awaitClose {
-      Either.catch {
+      catch {
         appContext.unregisterReceiver(broadcastReceiver)
       }
     }

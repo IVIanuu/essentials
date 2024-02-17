@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import arrow.fx.coroutines.raceN
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.compose.action
@@ -53,6 +52,7 @@ import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import splitties.coroutines.raceOf
 
 class WriteSecureSettingsScreen(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
@@ -263,7 +263,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
       completedStep = currentStep
     },
     openPhoneInfo = action {
-      raceN(
+      raceOf(
         {
           navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
             ?.onLeft { toaster(R.string.open_phone_info_failed) }
@@ -273,7 +273,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
       appUiStarter()
     },
     openDeveloperSettings = action {
-      raceN(
+      raceOf(
         {
           navigator.push(DefaultIntentScreen(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)))
             ?.onLeft { toaster(R.string.open_developer_settings_failed) }

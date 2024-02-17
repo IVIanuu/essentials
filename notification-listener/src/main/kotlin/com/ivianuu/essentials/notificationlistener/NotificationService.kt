@@ -9,6 +9,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import arrow.core.Either
 import com.ivianuu.essentials.ScopeManager
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.scopeOf
 import com.ivianuu.essentials.scopeOfOrNull
 import com.ivianuu.injekt.Provide
@@ -27,14 +28,14 @@ import kotlinx.coroutines.flow.flatMapLatest
       .flatMapLatest { it?.notificationListenerService?.notifications ?: emptyFlow() }
 
   suspend fun openNotification(notification: Notification) =
-    Either.catch { notification.contentIntent.send() }
+    catch { notification.contentIntent.send() }
 
-  suspend fun dismissNotification(key: String) = Either.catch {
+  suspend fun dismissNotification(key: String) = catch {
     scopeManager.scopeOf<NotificationScope>().first()
       .notificationListenerService.cancelNotification(key)
   }
 
-  suspend fun dismissAllNotifications() = Either.catch {
+  suspend fun dismissAllNotifications() = catch {
     scopeManager.scopeOf<NotificationScope>().first()
       .notificationListenerService.cancelAllNotifications()
   }

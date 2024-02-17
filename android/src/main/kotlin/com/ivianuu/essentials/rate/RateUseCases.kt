@@ -6,6 +6,7 @@ package com.ivianuu.essentials.rate
 
 import arrow.core.Either
 import com.ivianuu.essentials.AppConfig
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.printErrors
 import com.ivianuu.essentials.time.Clock
@@ -25,7 +26,7 @@ import kotlinx.coroutines.flow.first
   private val pref: DataStore<RatePrefs>
 ) {
   suspend fun rateOnPlay() {
-    Either.catch {
+    catch {
       navigator.push(PlayStoreAppDetailsKey(appConfig.packageName))
       pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
     }.printErrors()

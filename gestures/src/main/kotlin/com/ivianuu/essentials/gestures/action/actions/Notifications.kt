@@ -18,6 +18,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityScope
 import com.ivianuu.essentials.accessibility.AccessibilityService
 import com.ivianuu.essentials.accessibility.accessibilityService
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -41,7 +42,7 @@ import kotlinx.coroutines.flow.first
   closeSystemDialogs: CloseSystemDialogsUseCase,
   scopeManager: ScopeManager,
 ) = ActionExecutor<NotificationsActionId> {
-  val targetState = Either.catch {
+  val targetState = catch {
     val service = scopeManager.scopeOfOrNull<AccessibilityScope>().first()!!.accessibilityService
 
     val systemUiContext = appContext.createPackageContext(

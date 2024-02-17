@@ -11,6 +11,7 @@ import arrow.core.getOrElse
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Service
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -68,7 +69,7 @@ import kotlinx.coroutines.flow.StateFlow
   }
 
   private fun updateNotifications() {
-    _notifications.value = Either.catch { activeNotifications!!.toList() }
+    _notifications.value = catch { activeNotifications!!.toList() }
       .getOrElse { emptyList() }
   }
 }

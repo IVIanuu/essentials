@@ -4,4 +4,6 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-class ScreenScope
+class ScreenScope {
+  override fun toString() = "ScreenScope"
+}

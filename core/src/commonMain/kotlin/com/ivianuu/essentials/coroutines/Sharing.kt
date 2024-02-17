@@ -4,6 +4,7 @@ import app.cash.quiver.extensions.orThrow
 import arrow.core.Either
 import arrow.fx.coroutines.bracketCase
 import arrow.fx.coroutines.guarantee
+import com.ivianuu.essentials.catch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.awaitCancellation
@@ -47,7 +48,7 @@ fun <K, T> CoroutineScope.sharedComputation(
   block: suspend (K) -> T
 ): suspend (K) -> T {
   val flows = sharedFlow<K, Either<Throwable, T>>(sharingStarted, 1) { key ->
-    emit(Either.catch { block(key) })
+    emit(catch { block(key) })
   }
   return { flows(it).first().orThrow() }
 }
@@ -60,7 +61,7 @@ fun <K, T> CoroutineScope.sharedResource(
   create: suspend (K) -> T
 ): suspend (K) -> Releasable<T> {
   val flows: (K) -> Flow<Either<Throwable, T>> = sharedFlow(sharingStarted, 1) { key: K ->
-    val value = Either.catch { create(key) }
+    val value = catch { create(key) }
     bracketCase(
       acquire = { value },
       use = {

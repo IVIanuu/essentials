@@ -40,6 +40,7 @@ import com.ivianuu.essentials.LocalScope
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.SystemService
 import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.awaitCancellation
@@ -85,7 +86,7 @@ fun Modifier.systemWindowTrigger() = composed {
 
   DisposableEffect(true) {
     onDispose {
-      Either.catch {
+      catch {
         systemWindowManager.windowManager.removeViewImmediate(triggerView)
       }
     }
@@ -178,7 +179,7 @@ fun Modifier.systemWindowTrigger() = composed {
         awaitCancellation()
       },
       { contentView, _ ->
-        Either.catch { windowManager.removeViewImmediate(contentView) }
+        catch { windowManager.removeViewImmediate(contentView) }
         contentView.dispose()
       }
     )
@@ -225,7 +226,7 @@ private fun WindowManager.addOrUpdateView(view: View, layoutParams: WindowManage
   if (view.isAttachedToWindow) {
     updateViewLayout(view, layoutParams)
   } else {
-    Either.catch { removeViewImmediate(view) }
+    catch { removeViewImmediate(view) }
     addView(view, layoutParams)
   }
 }

@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import arrow.core.Either
 import com.ivianuu.essentials.Lerper
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.serialization.InjektSerializer
 import com.ivianuu.essentials.unlerp
 import com.ivianuu.injekt.Provide
@@ -29,11 +30,11 @@ val Color.isLight: Boolean get() = luminance() > 0.5f
 expect fun Color.toHexString(includeAlpha: Boolean = true): String
 
 fun Color.toHexStringOrNull(includeAlpha: Boolean = true): String? =
-  Either.catch { toHexString(includeAlpha) }.getOrNull()
+  catch { toHexString(includeAlpha) }.getOrNull()
 
 expect fun String.toColor(): Color
 
-fun String.toColorOrNull(): Color? = Either.catch { toColor() }.getOrNull()
+fun String.toColorOrNull(): Color? = catch { toColor() }.getOrNull()
 
 @Provide @InjektSerializer object ColorSerializer : KSerializer<Color> {
   override val descriptor =

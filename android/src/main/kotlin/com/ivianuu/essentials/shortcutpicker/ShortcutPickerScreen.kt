@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import arrow.core.Either
 import com.ivianuu.essentials.android.R
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.collectAsResourceState
@@ -46,7 +47,7 @@ class ShortcutPickerScreen : Screen<Shortcut> {
         ResourceVerticalListFor(repository.shortcuts.collectAsResourceState().value) { shortcut ->
           ListItem(
             modifier = Modifier.clickable(onClick = action {
-              Either.catch {
+              catch {
                 val shortcutRequestResult = navigator.push(DefaultIntentScreen(shortcut.intent))
                   ?.getOrNull()
                   ?.data ?: return@catch

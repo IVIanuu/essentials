@@ -19,15 +19,15 @@ class SharedTest {
       calls[key] = calls[key]?.inc() ?: 1
     }
 
-    parZip(
-      testScheduler,
+    par(
       { shared(0) },
       {
         delay(5.milliseconds)
         shared(0)
       },
-      { shared(1) }
-    ) { _, _, _ -> }
+      { shared(1) },
+      context = testScheduler
+    )
 
     calls[0] shouldBe 1
     calls[1] shouldBe 1

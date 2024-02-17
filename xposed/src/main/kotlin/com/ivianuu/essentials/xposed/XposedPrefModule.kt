@@ -13,6 +13,7 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.data.DataStore
@@ -61,7 +62,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     fun readData(): T {
       val serialized = sharedPrefs.getString("data", null)
       return serialized?.let {
-        Either.catch { json.decodeFromString(serializer, serialized) }
+        catch { json.decodeFromString(serializer, serialized) }
           .printErrors()
           .getOrNull()
       } ?: default()
@@ -117,7 +118,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       sharedPrefs.reload()
       val serialized = sharedPrefs.getString("data", null)
       return serialized?.let {
-        Either.catch { json.decodeFromString(serializer, serialized) }
+        catch { json.decodeFromString(serializer, serialized) }
           .getOrNull()
       } ?: default()
     }

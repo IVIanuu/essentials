@@ -42,6 +42,7 @@ kotlin {
         api(Deps.Injekt.common)
         api(Deps.KotlinSerialization.json)
         api(Deps.quiver)
+        api(Deps.splittiesCoroutines)
       }
     }
 

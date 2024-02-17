@@ -13,6 +13,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import arrow.core.Either
+import com.ivianuu.essentials.catch
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
@@ -65,7 +66,7 @@ fun <T> Flow<Resource<T>>.unwrapResource(): Flow<T> = flow {
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
   flow<Resource<T>> {
     emit(Resource.Loading)
-    Either.catch {
+    catch {
       block(FlowCollector<T> { value -> this@flow.emit(Resource.Success(value)) })
     }.onLeft { emit(Resource.Error(it)) }
   }

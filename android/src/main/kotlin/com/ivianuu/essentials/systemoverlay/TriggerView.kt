@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.FrameLayout
 import arrow.core.Either
 import arrow.core.getOrElse
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.printErrors
 
 @SuppressLint("ViewConstructor")
@@ -52,7 +53,7 @@ class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {
     }
 
     // compose crashes in some situations
-    return Either.catch { delegate.dispatchTouchEvent(ev) }
+    return catch { delegate.dispatchTouchEvent(ev) }
       .printErrors()
       .getOrElse { false }
   }
