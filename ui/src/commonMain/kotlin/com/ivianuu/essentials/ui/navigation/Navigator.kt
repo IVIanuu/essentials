@@ -13,16 +13,18 @@ import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlin.collections.set
 
-@Provide class Navigator(
+class Navigator(
   private val scope: CoroutineScope,
   initialBackStack: List<Screen<*>> = emptyList(),
   private val screenInterceptors: List<ScreenInterceptor<*>> = emptyList(),
@@ -43,7 +45,7 @@ import kotlin.collections.set
         }
       }
 
-    withContext(scope.coroutineContext) {
+    scope.launch(start = CoroutineStart.UNDISPATCHED) {
       mutex.withLock {
         val finalResults = results.toMutableMap()
         _backStack.value = buildList {
@@ -56,6 +58,9 @@ import kotlin.collections.set
 
             if (interceptedHandle == null) add(screen)
             else finalResults[screen] = interceptedHandle()
+              .also {
+                println("no intercepted handle result $it")
+              }
           }
         }
 
