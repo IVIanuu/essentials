@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -35,7 +35,7 @@ class DecoratorsScreen : Screen<Unit> {
 }
 
 @Provide val sampleListDecorator = ListDecorator {
-  item {
+  item(null) {
     val screen = catch { LocalScope.current }.getOrNull()?.screen
     if (screen is DecoratorsScreen)
       Text("Sample decorator before content $screen")
@@ -43,7 +43,7 @@ class DecoratorsScreen : Screen<Unit> {
 
   content()
 
-  item {
+  item(null) {
     val screen = catch { LocalScope.current }.getOrNull()?.screen
     if (screen is DecoratorsScreen)
       Text("Sample decorator after content $screen")
@@ -57,29 +57,25 @@ class DecoratorsScreen : Screen<Unit> {
     return@decorator
   } else {
     Column {
-      Box(
-        modifier = Modifier
-          .weight(1f)
-          .consumeWindowInsets(
-            PaddingValues(
-              bottom = with(LocalDensity.current) {
-                WindowInsets.navigationBars.getBottom(this).toDp()
-              }
-            )
-          )
-      ) { content() }
+      Box(modifier = Modifier.weight(1f)) {
+        val currentInsets = LocalInsets.current
+        CompositionLocalProvider(
+          LocalInsets provides currentInsets.copy(bottom = 0.dp),
+          content = content
+        )
+      }
 
       Surface(color = MaterialTheme.colors.primary, elevation = 8.dp) {
-        Box(
-          modifier = Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding(),
-          contentAlignment = Alignment.Center
-        ) {
-          Text(
-            text = "This is a bottom decorator",
-            style = MaterialTheme.typography.h3
-          )
+        InsetsPadding(top = false) {
+          Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+          ) {
+            Text(
+              text = "This is a bottom decorator",
+              style = MaterialTheme.typography.h3
+            )
+          }
         }
       }
     }

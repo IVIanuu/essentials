@@ -12,78 +12,86 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.max
+import com.ivianuu.essentials.ui.insets.*
 
 @Composable fun ScreenScaffold(
   modifier: Modifier = Modifier,
+  state: ScaffoldState = rememberScaffoldState(),
   topBar: (@Composable () -> Unit)? = null,
   bottomBar: (@Composable () -> Unit)? = null,
   floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
+  isFloatingActionButtonDocked: Boolean = false,
   backgroundColor: Color = MaterialTheme.colors.background,
+  applyInsets: Boolean = true,
   scrollTopBar: Boolean = topBar != null,
-  maxTopBarSize: Dp = 56.dp + with(LocalDensity.current) {
-    WindowInsets.systemBars.getTop(LocalDensity.current).toDp()
-  },
+  maxTopBarSize: Dp = 56.dp + LocalInsets.current.top,
   content: @Composable () -> Unit
 ) {
-  val topBarScrollState = if (!scrollTopBar) null
-  else rememberTopBarScrollState()
-    .also {
-      val maxHeightOffset =
-        with(LocalDensity.current) { -maxTopBarSize.toPx() }
-      if (it.maxHeightOffset != maxHeightOffset) {
-        it.maxHeightOffset = maxHeightOffset
+  InsetsPadding(left = applyInsets, top = false, right = applyInsets, bottom = false) {
+    val topBarScrollState = if (!scrollTopBar) null
+    else rememberTopBarScrollState()
+      .also {
+        val maxHeightOffset =
+          with(LocalDensity.current) { -maxTopBarSize.toPx() }
+        if (it.maxHeightOffset != maxHeightOffset) {
+          it.maxHeightOffset = maxHeightOffset
+        }
       }
-    }
 
-  Scaffold(
-    modifier = modifier
-      .windowInsetsPadding(
-        WindowInsets(
-          left = WindowInsets.safeContent.getLeft(LocalDensity.current, LocalLayoutDirection.current),
-          right = WindowInsets.safeContent.getRight(LocalDensity.current, LocalLayoutDirection.current)
-        )
-      )
-      .then(
-        if (topBarScrollState == null) Modifier
-        else Modifier.nestedScroll(topBarScrollState)
-      ),
-    topBar = topBar?.let {
-      if (topBarScrollState == null) topBar
-      else ({
-        Box(
-          modifier = Modifier.heightIn(
-            max = with(LocalDensity.current) {
-              maxTopBarSize + topBarScrollState.heightOffset.toDp()
+    Scaffold(
+      modifier = modifier
+        .then(
+          if (topBarScrollState == null) Modifier
+          else Modifier.nestedScroll(topBarScrollState)
+        ),
+      scaffoldState = state,
+      topBar = topBar?.let {
+        if (topBarScrollState == null) topBar
+        else ({
+          Box(
+            modifier = Modifier.heightIn(
+              max = with(LocalDensity.current) {
+                maxTopBarSize + topBarScrollState.heightOffset.toDp()
+              }
+            ),
+            propagateMinConstraints = true
+          ) {
+            topBar()
+          }
+        })
+      } ?: {},
+      bottomBar = bottomBar ?: {},
+      floatingActionButton = if (floatingActionButton != null) (
+          {
+            InsetsPadding(
+              top = applyInsets && topBar == null,
+              bottom = applyInsets && bottomBar == null
+            ) {
+              Box {
+                floatingActionButton()
+              }
             }
+          }
+          ) else ({}),
+      floatingActionButtonPosition = floatingActionButtonPosition,
+      isFloatingActionButtonDocked = isFloatingActionButtonDocked,
+      backgroundColor = backgroundColor
+    ) { bodyPadding ->
+      val insets = if (applyInsets) LocalInsets.current else Insets()
+      CompositionLocalProvider(
+        LocalInsets provides Insets(
+          left = max(bodyPadding.calculateLeftPadding(LocalLayoutDirection.current), insets.left),
+          top = if (topBar == null) insets.top else bodyPadding.calculateTopPadding(),
+          right = max(
+            bodyPadding.calculateRightPadding(LocalLayoutDirection.current),
+            insets.right
           ),
-          propagateMinConstraints = true
-        ) {
-          topBar()
-        }
-      })
-    } ?: {},
-    bottomBar = bottomBar ?: {},
-    floatingActionButton = floatingActionButton?.let {
-      {
-        Box(modifier = Modifier.safeContentPadding()) {
-          floatingActionButton()
-        }
-      }
-    } ?: {},
-    floatingActionButtonPosition = floatingActionButtonPosition,
-    backgroundColor = backgroundColor
-  ) {
-    Box(
-      modifier = Modifier.consumeWindowInsets(
-        PaddingValues(
-          top = if (topBar != null) Dp.Infinity else 0.dp,
-          bottom = if (bottomBar != null) Dp.Infinity else 0.dp
-        )
-      ),
-      propagateMinConstraints = true
-    ) {
-      content()
+          bottom = if (bottomBar == null) insets.bottom else bodyPadding.calculateBottomPadding()
+        ),
+        content = content
+      )
     }
   }
 }

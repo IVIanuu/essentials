@@ -7,13 +7,12 @@ package com.ivianuu.essentials.ui.systembars
 import android.os.*
 import android.view.*
 import androidx.activity.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.*
 import androidx.core.view.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.injekt.*
 
 @Provide actual val systemBarManagerProvider = SystemBarManagerProvider { content ->
@@ -47,10 +46,14 @@ private class AndroidSystemBarManager : SystemBarManager {
       onDispose { }
     }
 
-    val windowInsets = WindowInsets.systemBars
+    val windowInsets = LocalInsets.current
     val density = LocalDensity.current
 
-    val statusBarHitPointY = (windowInsets.getTop(density) / 2).toFloat()
+    val statusBarHitPointY = remember(density, windowInsets) {
+      with(density) {
+        windowInsets.top.toPx() / 2
+      }
+    }
 
     val statusBarStyle = styles
       .sortedBy { it.zIndex }
@@ -69,15 +72,17 @@ private class AndroidSystemBarManager : SystemBarManager {
 
     val screenHeight = activity.window.decorView.height.toFloat()
     val screenWidth = activity.window.decorView.width.toFloat()
-    val navBarHitPointY = with(density) {
-      val bottomPadding = windowInsets.getBottom(density).toFloat()
-      val leftPadding = windowInsets.getLeft(density, LocalLayoutDirection.current).toFloat()
-      val rightPadding = windowInsets.getRight(density, LocalLayoutDirection.current).toFloat()
-      when {
-        bottomPadding > 0f -> screenHeight - bottomPadding / 2
-        leftPadding > 0f -> leftPadding / 2
-        rightPadding > 0f -> screenWidth - rightPadding / 2
-        else -> 0f
+    val navBarHitPointY = remember(density, windowInsets, screenWidth, screenHeight) {
+      with(density) {
+        val bottomPadding = windowInsets.bottom.toPx()
+        val leftPadding = windowInsets.left.toPx()
+        val rightPadding = windowInsets.right.toPx()
+        when {
+          bottomPadding > 0f -> screenHeight - bottomPadding / 2
+          leftPadding > 0f -> leftPadding / 2
+          rightPadding > 0f -> screenWidth - rightPadding / 2
+          else -> 0f
+        }
       }
     }
 
