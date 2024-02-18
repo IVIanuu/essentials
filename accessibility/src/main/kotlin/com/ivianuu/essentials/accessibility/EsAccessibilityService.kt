@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.*
 
     val configs = accessibilityComponent.configs
     logger.log { "update config from $configs" }
-    serviceInfo = serviceInfo?.apply {
+    serviceInfo = serviceInfo.apply {
       eventTypes = configs
         .map { it.eventTypes }
         .fold(0) { acc, events -> acc.addFlag(events) }
@@ -44,8 +44,7 @@ import kotlinx.coroutines.flow.*
       feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
 
       notificationTimeout = configs
-        .map { it.notificationTimeout }
-        .minOrNull() ?: 0L
+        .minOfOrNull { it.notificationTimeout } ?: 0L
 
       packageNames = null
     }
