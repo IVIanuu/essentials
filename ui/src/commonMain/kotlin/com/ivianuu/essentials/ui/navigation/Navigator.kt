@@ -87,8 +87,6 @@ suspend fun <R> Navigator.push(screen: Screen<R>): R? {
 
 suspend fun <R> Navigator.replaceTop(screen: Screen<R>): R? {
   val currentBackStack = backStack.value
-  if (currentBackStack.lastOrNull() == screen)
-    return awaitResult(screen)
   setBackStack(
     currentBackStack
       .dropLast(1) + screen
