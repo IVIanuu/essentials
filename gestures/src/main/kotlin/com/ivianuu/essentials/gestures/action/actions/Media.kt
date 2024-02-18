@@ -80,12 +80,12 @@ class MediaActionSettingsScreen : Screen<Unit> {
               },
               title = { Text(stringResource(R.string.pref_media_app)) },
               subtitle = {
-                val mediaApp by produceResourceState {
-                  pref.data
-                    .map { it.mediaApp }
-                    .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
-                    .let { emitAll(it) }
-                }
+                val mediaApp = pref.data
+                  .flatMapLatest {
+                    if (it.mediaApp != null) appRepository.appInfo(it.mediaApp)
+                    else infiniteEmptyFlow()
+                  }
+                  .collectResource()
                 Text(
                   stringResource(
                     R.string.pref_media_app_summary,

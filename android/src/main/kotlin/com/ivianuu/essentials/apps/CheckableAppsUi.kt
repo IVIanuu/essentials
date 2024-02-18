@@ -13,6 +13,7 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import coil.compose.*
 import com.ivianuu.essentials.android.R
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Switch
@@ -33,11 +34,10 @@ data class CheckableAppsScreen(
   private val repository: AppRepository
 ) {
   @Composable fun Content() {
-    val checkedApps by screen.checkedApps.collectAsState(emptySet())
-    val allApps by remember {
-      repository.installedApps
-        .map { it.filter { screen.appPredicate(it) } }
-    }.collectAsResourceState()
+    val checkedApps = screen.checkedApps.collect(emptySet())
+    val allApps = repository.installedApps
+      .map { it.filter { screen.appPredicate(it) } }
+      .collectResource()
 
     fun updateCheckedApps(transform: Set<String>.() -> Set<String>) {
       val newCheckedApps = checkedApps.transform()

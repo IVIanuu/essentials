@@ -66,28 +66,3 @@ fun <V> Either<Throwable, V>.toResource(): Resource<V> = fold(
   ifRight = { Resource.Success(it) },
   ifLeft = { Resource.Error(it) }
 )
-
-@Composable fun <T> Flow<T>.collectAsResourceState(
-  vararg keys: Any?,
-  context: CoroutineContext = EmptyCoroutineContext
-): State<Resource<T>> {
-  val state = remember(*keys) { mutableStateOf<Resource<T>>(Resource.Loading) }
-
-  LaunchedEffect(this, context) {
-    withContext(context) {
-      flowAsResource()
-        .collect {
-          if (it.isComplete || !state.value.isComplete)
-            state.value = it
-        }
-    }
-  }
-
-  return state
-}
-
-@Composable fun <T> produceResourceState(
-  vararg keys: Any?,
-  producer: suspend FlowCollector<T>.() -> Unit
-): State<Resource<T>> = remember(*keys) { flow(producer) }
-  .collectAsResourceState()
