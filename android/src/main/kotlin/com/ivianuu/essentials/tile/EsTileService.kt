@@ -5,13 +5,11 @@
 package com.ivianuu.essentials.tile
 
 import android.service.quicksettings.*
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
 @Provide @AndroidComponent class EsTileService1(
@@ -70,11 +68,29 @@ abstract class AbstractEsTileService(
     super.onStartListening()
     logger.log { "${this::class} on start listening" }
     tileScope = tileScopeFactory(this)
-    val tileComponent = tileScope!!.service<TileComponent>()
-    tileComponent
-      .tileState
-      .onEach { applyState(it) }
-      .launchIn(tileComponent.coroutineScope)
+    tileScope!!.coroutineScope.launchComposition {
+      val presenter = remember {
+        val tileComponent = tileScope!!.service<TileComponent>()
+        tileComponent.tilePresenterRecords[this::class]?.invoke()
+          ?: error("No presenter found for ${this::class} in ${tileComponent.tilePresenterRecords}")
+      }
+
+      val currentState = presenter.present()
+        .also { this.currentState = it }
+
+      LaunchedEffect(currentState) {
+        val qsTile = qsTile ?: return@LaunchedEffect
+        qsTile.state = when (currentState.status) {
+          TileState.Status.ACTIVE -> Tile.STATE_ACTIVE
+          TileState.Status.INACTIVE -> Tile.STATE_INACTIVE
+          TileState.Status.UNAVAILABLE -> Tile.STATE_UNAVAILABLE
+        }
+        qsTile.icon = currentState.icon
+        qsTile.label = currentState.label
+        qsTile.contentDescription = currentState.description
+        qsTile.updateTile()
+      }
+    }
   }
 
   override fun onClick() {
@@ -89,29 +105,8 @@ abstract class AbstractEsTileService(
     logger.log { "${this::class} on stop listening" }
     super.onStopListening()
   }
-
-  private fun applyState(state: TileState<*>) {
-    currentState = state
-    val qsTile = qsTile ?: return
-
-    qsTile.state = when (state.status) {
-      TileState.Status.ACTIVE -> Tile.STATE_ACTIVE
-      TileState.Status.INACTIVE -> Tile.STATE_INACTIVE
-      TileState.Status.UNAVAILABLE -> Tile.STATE_UNAVAILABLE
-    }
-    qsTile.icon = state.icon
-    qsTile.label = state.label
-    qsTile.contentDescription = state.description
-    qsTile.updateTile()
-  }
 }
 
 @Provide @Service<TileScope> data class TileComponent(
-  val tileService: AbstractEsTileService,
-  val tilePresenterRecords: Map<KClass<AbstractEsTileService>, () -> Presenter<TileState<*>>>,
-  val coroutineScope: ScopedCoroutineScope<TileScope>
-) {
-  private val presenter = tilePresenterRecords[tileService::class]?.invoke()
-    ?: error("No tile found for ${tileService::class} in ${tilePresenterRecords.toMap()}")
-  val tileState = coroutineScope.compositionStateFlow { presenter.present() }
-}
+  val tilePresenterRecords: Map<KClass<AbstractEsTileService>, () -> Presenter<TileState<*>>>
+)
