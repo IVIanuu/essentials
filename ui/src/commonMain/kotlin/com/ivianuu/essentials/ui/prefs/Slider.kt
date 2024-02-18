@@ -24,7 +24,7 @@ import kotlin.time.Duration.Companion.seconds
   title: (@Composable () -> Unit)? = null,
   subtitle: (@Composable () -> Unit)? = null,
   leading: (@Composable () -> Unit)? = null,
-  valueText: @Composable ((T) -> Unit)? = null,
+  valueText: @Composable ((T) -> Unit)? = { Text(it.toString()) },
   @Inject lerper: Lerper<T>,
   @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
 ) {
