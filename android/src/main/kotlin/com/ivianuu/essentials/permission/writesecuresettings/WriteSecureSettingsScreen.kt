@@ -53,18 +53,18 @@ class WriteSecureSettingsScreen(
       var completedStep by remember { mutableIntStateOf(1) }
 
       val canContinueStep = if (currentStep != completedStep) false
-      else produceState(false, completedStep) {
-        when (completedStep) {
-          1 -> developerModeDataStore.data.map { it != 0 }.collect { value = it }
-          2 -> adbEnabledDataStore.data.map { it != 0 }.collect { value = it }
-          3 -> value = true
-          4 -> while (true) {
-            value = permissionManager.permissionState(listOf(screen.permissionKey)).first()
+      else when (completedStep) {
+        1 -> developerModeDataStore.data.map { it != 0 }.collect(false)
+        2 -> adbEnabledDataStore.data.map { it != 0 }.collect(false)
+        3 -> true
+        4 -> collect(false) {
+          while (true) {
+            emit(permissionManager.permissionState(listOf(screen.permissionKey)).first())
             delay(1000)
           }
-          else -> value = true
         }
-      }.value
+        else -> true
+      }
       val continueStep = action {
         if (completedStep == 4)
           navigator.pop(screen, true)
