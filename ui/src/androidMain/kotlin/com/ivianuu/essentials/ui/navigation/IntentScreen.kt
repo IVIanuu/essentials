@@ -48,7 +48,6 @@ fun interface AppUiStarter {
           UUID.randomUUID().toString(),
           ActivityResultContracts.StartActivityForResult()
         ) {
-          println("on result $it")
           continuation.resume(it.right())
         }
         try {

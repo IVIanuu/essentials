@@ -47,9 +47,6 @@ class Navigator(
 
             if (interceptedHandle == null) add(screen)
             else finalResults[screen] = interceptedHandle()
-              .also {
-                println("no intercepted handle result $it")
-              }
           }
         }
 
