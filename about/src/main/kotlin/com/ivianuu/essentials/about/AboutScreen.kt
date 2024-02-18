@@ -118,9 +118,7 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
           if (screen.privacyPolicyUrl != null)
             item {
               ListItem(
-                onClick = action {
-                  navigator.push(UrlScreen(screen.privacyPolicyUrl))
-                },
+                onClick = action { navigator.push(UrlScreen(screen.privacyPolicyUrl)) },
                 leading = { Icon(painterResource(R.drawable.ic_policy), null) },
                 title = { Text(stringResource(R.string.about_privacy_policy)) }
               )
