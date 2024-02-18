@@ -13,7 +13,6 @@ import kotlinx.coroutines.*
 @Provide class Toaster(
   private val appContext: AppContext,
   private val coroutineContexts: CoroutineContexts,
-  private val resources: Resources,
   private val scope: ScopedCoroutineScope<AppScope>
 ) {
   operator fun invoke(message: String) {
@@ -25,9 +24,4 @@ import kotlinx.coroutines.*
       ).show()
     }
   }
-
-  operator fun invoke(messageRes: Int) = invoke(resources<String>(messageRes))
-
-  operator fun invoke(messageRes: Int, vararg args: Any?) =
-    invoke(resources<String>(messageRes, *args))
 }

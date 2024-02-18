@@ -13,35 +13,36 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Provide object HomeActionId : ActionId("home")
-
-@Provide fun homeAction(resources: Resources) = Action(
-  id = HomeActionId,
-  title = resources(R.string.action_home),
-  permissions = if (needsHomeIntentWorkaround) emptyList()
-  else accessibilityActionPermissions,
-  icon = staticActionIcon(R.drawable.ic_action_home)
-)
-
-@Provide fun homeActionExecutor(
-  accessibilityService: AccessibilityService,
-  closeSystemDialogs: CloseSystemDialogsUseCase,
-  intentSender: ActionIntentSender
-) = ActionExecutor<HomeActionId> {
-  if (!needsHomeIntentWorkaround) {
-    accessibilityService.performGlobalAction(GLOBAL_ACTION_HOME)
-  } else {
-    closeSystemDialogs()
-
-    intentSender(
-      Intent(Intent.ACTION_MAIN).apply {
-        addCategory(
-          Intent.CATEGORY_HOME
-        )
-      },
-      null
+@Provide object HomeActionId : ActionId("home") {
+  @Provide val action
+    get() = Action(
+      id = HomeActionId,
+      title = "Home",
+      permissions = if (needsHomeIntentWorkaround) emptyList()
+      else accessibilityActionPermissions,
+      icon = staticActionIcon(R.drawable.ic_action_home)
     )
-  }
-}
 
-private val needsHomeIntentWorkaround = Build.MANUFACTURER == "OnePlus"
+  @Provide fun homeActionExecutor(
+    accessibilityService: AccessibilityService,
+    closeSystemDialogs: CloseSystemDialogsUseCase,
+    intentSender: ActionIntentSender
+  ) = ActionExecutor<HomeActionId> {
+    if (!needsHomeIntentWorkaround) {
+      accessibilityService.performGlobalAction(GLOBAL_ACTION_HOME)
+    } else {
+      closeSystemDialogs()
+
+      intentSender(
+        Intent(Intent.ACTION_MAIN).apply {
+          addCategory(
+            Intent.CATEGORY_HOME
+          )
+        },
+        null
+      )
+    }
+  }
+
+  private val needsHomeIntentWorkaround = Build.MANUFACTURER == "OnePlus"
+}

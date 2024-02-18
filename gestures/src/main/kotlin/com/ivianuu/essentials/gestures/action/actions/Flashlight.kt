@@ -20,51 +20,51 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
-@Provide object FlashlightActionId : ActionId("flashlight")
+@Provide object FlashlightActionId : ActionId("flashlight") {
+  @Provide fun action(
+    cameraManager: @SystemService CameraManager,
+    coroutineContexts: CoroutineContexts
+  ) = Action(
+    id = FlashlightActionId,
+    title = "Flashlight",
+    icon = {
+      Icon(
+        painterResource(
+          if (cameraManager.flashlightState(coroutineContexts).collect(false)) R.drawable.ic_flashlight_on
+          else R.drawable.ic_flashlight_off
+        ),
+        null
+      )
+    }
+  )
 
-@Provide fun flashlightAction(
-  cameraManager: @SystemService CameraManager,
-  coroutineContexts: CoroutineContexts,
-  resources: Resources
-) = Action(
-  id = FlashlightActionId,
-  title = resources(R.string.action_torch),
-  icon = {
-    Icon(
-      painterResource(
-        if (cameraManager.flashlightState(coroutineContexts).collect(false)) R.drawable.ic_flashlight_on
-        else R.drawable.ic_flashlight_off
-      ),
-      null
-    )
-  }
-)
-
-@Provide fun flashlightActionExecutor(
-  cameraManager: @SystemService CameraManager,
-  coroutineContexts: CoroutineContexts,
-  toaster: Toaster
-) = ActionExecutor<FlashlightActionId> {
-  withContext(coroutineContexts.main) {
-    val state = cameraManager.flashlightState(coroutineContexts).first()
-    catch {
-      val cameraId = cameraManager.cameraIdList[0]
-      cameraManager.setTorchMode(cameraId, !state)
-    }.onLeft {
-      it.printStackTrace()
-      toaster("Failed to enable flashlight!")
+  @Provide fun executor(
+    cameraManager: @SystemService CameraManager,
+    coroutineContexts: CoroutineContexts,
+    toaster: Toaster
+  ) = ActionExecutor<FlashlightActionId> {
+    withContext(coroutineContexts.main) {
+      val state = cameraManager.flashlightState(coroutineContexts).first()
+      catch {
+        val cameraId = cameraManager.cameraIdList[0]
+        cameraManager.setTorchMode(cameraId, !state)
+      }.onLeft {
+        it.printStackTrace()
+        toaster("Failed to enable flashlight!")
+      }
     }
   }
+
+  private fun CameraManager.flashlightState(coroutineContexts: CoroutineContexts) = callbackFlow {
+    val rearCameraId = cameraIdList[0]
+    val callback = object : TorchCallback() {
+      override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
+        if (rearCameraId == cameraId)
+          trySend(enabled)
+      }
+    }
+    registerTorchCallback(callback ,null)
+    awaitClose { unregisterTorchCallback(callback) }
+  }.flowOn(coroutineContexts.main)
+
 }
-
-private fun CameraManager.flashlightState(coroutineContexts: CoroutineContexts) = callbackFlow {
-  val rearCameraId = cameraIdList[0]
-  val callback = object : TorchCallback() {
-    override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
-      if (rearCameraId == cameraId)
-        trySend(enabled)
-    }
-  }
-  registerTorchCallback(callback ,null)
-  awaitClose { unregisterTorchCallback(callback) }
-}.flowOn(coroutineContexts.main)

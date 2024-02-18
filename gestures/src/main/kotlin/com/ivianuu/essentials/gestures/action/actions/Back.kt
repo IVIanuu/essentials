@@ -10,16 +10,16 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Provide object BackActionId : ActionId("back")
+@Provide object BackActionId : ActionId("back") {
+  @Provide val action get() = Action(
+    id = BackActionId,
+    title = "Back",
+    permissions = accessibilityActionPermissions,
+    icon = staticActionIcon(R.drawable.ic_action_back)
+  )
 
-@Provide fun backAction(resources: Resources) = Action(
-  id = BackActionId,
-  title = resources(R.string.action_back),
-  permissions = accessibilityActionPermissions,
-  icon = staticActionIcon(R.drawable.ic_action_back)
-)
-
-@Provide fun backActionExecutor(accessibilityService: AccessibilityService) =
-  ActionExecutor<BackActionId> {
-    accessibilityService.performGlobalAction(AndroidAccessibilityService.GLOBAL_ACTION_BACK)
-  }
+  @Provide fun executor(accessibilityService: AccessibilityService) =
+    ActionExecutor<BackActionId> {
+      accessibilityService.performGlobalAction(AndroidAccessibilityService.GLOBAL_ACTION_BACK)
+    }
+}

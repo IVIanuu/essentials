@@ -31,7 +31,12 @@ import android.content.ClipboardManager as AndroidClipboardManager
     catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
       .also { result ->
         if (showMessage)
-          toaster(result.fold({ R.string.copy_to_clipboard_failed }, { R.string.copied_to_clipboard }))
+          toaster(
+            result.fold(
+              { "Couldn\'t copy to clipboard!" },
+              { "Copied to clipboard!" }
+            )
+          )
       }
   }
 }

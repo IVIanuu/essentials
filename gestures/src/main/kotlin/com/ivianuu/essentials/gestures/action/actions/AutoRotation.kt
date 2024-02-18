@@ -16,30 +16,27 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-@Provide object AutoRotationActionId : ActionId("auto_rotation")
+@Provide object AutoRotationActionId : ActionId("auto_rotation") {
+  @Provide fun action(autoRotationDataStore: DataStore<AutoRotation>) = Action(
+    id = AutoRotationActionId,
+    title = "Auto rotation",
+    permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
+    icon = {
+      Icon(
+        painterResource(
+          if (autoRotationDataStore.data.collect(1) == 1) R.drawable.ic_screen_rotation
+          else R.drawable.ic_screen_lock_rotation
+        ),
+        null
+      )
+    }
+  )
 
-@Provide fun autoRotationAction(
-  autoRotationDataStore: DataStore<AutoRotation>,
-  resources: Resources
-) = Action(
-  id = AutoRotationActionId,
-  title = resources(R.string.action_auto_rotation),
-  permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
-  icon = {
-    Icon(
-      painterResource(
-        if (autoRotationDataStore.data.collect(1) == 1) R.drawable.ic_screen_rotation
-        else R.drawable.ic_screen_lock_rotation
-      ),
-      null
-    )
+  @Provide fun executor(
+    autoRotationDataStore: DataStore<AutoRotation>,
+  ) = ActionExecutor<AutoRotationActionId> {
+    autoRotationDataStore.updateData { if (this != 1) 1 else 0 }
   }
-)
-
-@Provide fun autoRotationActionExecutor(
-  autoRotationDataStore: DataStore<AutoRotation>,
-) = ActionExecutor<AutoRotationActionId> {
-  autoRotationDataStore.updateData { if (this != 1) 1 else 0 }
 }
 
 @Tag annotation class AutoRotationTag

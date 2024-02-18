@@ -54,7 +54,7 @@ class PermissionRequestScreen(
           }
         }
 
-      ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.request_permission_title)) } }) {
+      ScreenScaffold(topBar = { AppBar { Text("Required permissions") } }) {
         VerticalList {
           items(permissionsToGrant) { permission ->
             ListItem(
@@ -74,9 +74,7 @@ class PermissionRequestScreen(
                   TextButton(
                     modifier = Modifier.width(56.dp),
                     onClick = action { navigator.pop(screen, false) }
-                  ) {
-                    Text(stringResource(R.string.deny), maxLines = 1)
-                  }
+                  ) { Text("Deny") }
 
                   TextButton(
                     modifier = Modifier.width(56.dp),
@@ -84,9 +82,7 @@ class PermissionRequestScreen(
                       requestHandlers[keysByPermission[permission]!!]!!()(permission)
                       appUiStarter()
                     }
-                  ) {
-                    Text(stringResource(R.string.grant), maxLines = 1)
-                  }
+                  ) { Text("Allow") }
                 }
               }
             )

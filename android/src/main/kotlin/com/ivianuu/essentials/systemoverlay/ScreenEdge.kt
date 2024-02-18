@@ -12,13 +12,13 @@ import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 
 enum class ScreenEdge(
-  val titleRes: Int,
+  val title: String,
   val iconRes: Int,
   val alignment: Alignment,
   val isOnSide: Boolean,
 ) {
   LEFT(
-    titleRes = R.string.screen_edge_left,
+    title = "Left",
     iconRes = R.drawable.ic_trigger_left,
     alignment = Alignment.TopStart,
     isOnSide = true
@@ -38,7 +38,7 @@ enum class ScreenEdge(
     }
   },
   TOP(
-    titleRes = R.string.screen_edge_top,
+    title = "Top",
     iconRes = R.drawable.ic_trigger_top,
     alignment = Alignment.TopStart,
     isOnSide = false
@@ -58,7 +58,7 @@ enum class ScreenEdge(
     }
   },
   RIGHT(
-    titleRes = R.string.screen_edge_right,
+    title = "Right",
     iconRes = R.drawable.ic_trigger_right,
     alignment = Alignment.TopEnd,
     isOnSide = true
@@ -78,7 +78,7 @@ enum class ScreenEdge(
     }
   },
   BOTTOM(
-    titleRes = R.string.screen_edge_bottom,
+    title = "Bottom",
     iconRes = R.drawable.ic_trigger_bottom,
     alignment = Alignment.BottomStart,
     isOnSide = false
@@ -101,10 +101,4 @@ enum class ScreenEdge(
   abstract fun rotate(rotation: DisplayRotation): ScreenEdge
 
   abstract fun rotate(rotation: DisplayRotation, position: Float): Pair<Float, Float>
-
-  @Provide companion object {
-    @Provide fun uiRenderer(resources: Resources) = UiRenderer<ScreenEdge> {
-      resources(it.titleRes)
-    }
-  }
 }

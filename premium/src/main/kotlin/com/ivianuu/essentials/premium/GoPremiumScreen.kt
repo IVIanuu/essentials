@@ -57,7 +57,7 @@ class GoPremiumScreen(
       val goPremium = action {
         if (premiumVersionManager.purchasePremiumVersion()) {
           navigator.pop(screen, true)
-          toaster(R.string.premium_activated)
+          toaster("Premium version is now active!")
         }
       }
       val tryBasicVersion = action {
@@ -139,14 +139,14 @@ class GoPremiumScreen(
         )
 
         Text(
-          text = stringResource(R.string.go_premium_title),
+          text = "Go premium",
           style = MaterialTheme.typography.h5,
           fontWeight = FontWeight.Bold
         )
 
         Text(
           modifier = Modifier.padding(top = 8.dp),
-          text = stringResource(R.string.go_premium_desc),
+          text = "Unlock all features",
           style = MaterialTheme.typography.body2,
           color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
         )
@@ -201,7 +201,7 @@ class GoPremiumScreen(
         ) {
           Text(
             modifier = Modifier.height(32.dp),
-            text = stringResource(R.string.premium_title),
+            text = "Premium",
             style = MaterialTheme.typography.button,
             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
           )
@@ -225,7 +225,7 @@ class GoPremiumScreen(
         ) {
           Text(
             modifier = Modifier.height(32.dp),
-            text = stringResource(R.string.basic_title),
+            text = "Basic",
             style = MaterialTheme.typography.button,
             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
           )
@@ -255,31 +255,22 @@ class GoPremiumScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
-        if (skuDetails != null) {
+        if (skuDetails != null)
           Text(
-            text = when (skuDetails.type.toSkuType()) {
-              Sku.Type.IN_APP -> stringResource(R.string.one_time_purchase_desc, skuDetails.price)
-              Sku.Type.SUBS -> {
-                if (skuDetails.freeTrialPeriod.toIso8601Duration().amount == 0) {
-                  stringResource(
-                    R.string.subscription_pricing_model_desc,
-                    skuDetails.price,
-                    skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()
-                  )
-                } else {
-                  stringResource(
-                    R.string.subscription_pricing_model_with_trial_desc,
-                    skuDetails.price,
-                    skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString(),
-                    skuDetails.freeTrialPeriod.toIso8601Duration().toReadableString()
-                  )
-                }
+          text = when (skuDetails.type.toSkuType()) {
+            Sku.Type.IN_APP -> "One time fee of ${skuDetails.price}"
+            Sku.Type.SUBS -> {
+              if (skuDetails.freeTrialPeriod.toIso8601Duration().amount == 0) {
+                "${skuDetails.price}/${skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()}"
+              } else {
+                "${skuDetails.price}/${skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()} " +
+                    "after ${skuDetails.freeTrialPeriod.toIso8601Duration().toReadableString()} free trial"
               }
-            },
-            style = MaterialTheme.typography.caption,
-            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
-          )
-        }
+            }
+          },
+          style = MaterialTheme.typography.caption,
+          color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+        )
 
         Button(
           modifier = Modifier
@@ -289,7 +280,7 @@ class GoPremiumScreen(
           colors = ButtonDefaults.esButtonColors(backgroundColor = MaterialTheme.colors.primary),
           onClick = onGoPremiumClick
         ) {
-          Text(stringResource(R.string.go_premium_title))
+          Text("Go premium")
         }
 
         if (showTryBasicOption) {
@@ -300,7 +291,7 @@ class GoPremiumScreen(
               .fillMaxWidth(),
             onClick = onTryBasicVersionClick
           ) {
-            Text(stringResource(R.string.try_basic_version))
+            Text("Try limited version")
           }
         }
       }

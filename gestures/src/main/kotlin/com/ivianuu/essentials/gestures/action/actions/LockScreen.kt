@@ -13,19 +13,18 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-@Provide object LockScreenActionId : ActionId("lock_screen")
+@Provide object LockScreenActionId : ActionId("lock_screen") {
+  @Provide val lockScreenAction get() = Action(
+      id = LockScreenActionId,
+      title = "Lock screen",
+      icon = staticActionIcon(R.drawable.ic_power_settings),
+      permissions = listOf(typeKeyOf<ActionAccessibilityPermission>())
+    )
 
-@Provide fun lockScreenAction(resources: Resources) = Action(
-  id = LockScreenActionId,
-  title = resources(R.string.action_lock_screen),
-  icon = staticActionIcon(R.drawable.ic_power_settings),
-  permissions = listOf(typeKeyOf<ActionAccessibilityPermission>())
-)
-
-@SuppressLint("InlinedApi")
-@Provide
-fun lockScreenActionExecutor(
-  accessibilityService: AccessibilityService
-) = ActionExecutor<LockScreenActionId> {
-  accessibilityService.performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
+  @Provide fun executor(
+    accessibilityService: AccessibilityService
+  ) = ActionExecutor<LockScreenActionId> {
+    accessibilityService.performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
+  }
 }
+

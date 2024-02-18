@@ -18,11 +18,10 @@ import kotlinx.coroutines.flow.*
   @Provide companion object {
     @Provide fun final(
       adConfig: ListAdBannerConfig,
-      appConfig: AppConfig,
-      resources: Resources,
+      appConfig: AppConfig
     ): @FinalAdConfig ListAdBannerConfig =
       if (!appConfig.isDebug) adConfig
-      else adConfig.copy(id = resources(R.string.test_ad_unit_id_banner))
+      else adConfig.copy(id = AdBannerConfig.TEST_ID)
   }
 }
 

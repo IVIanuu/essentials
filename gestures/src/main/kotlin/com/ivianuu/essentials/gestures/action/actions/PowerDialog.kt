@@ -11,17 +11,17 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Provide object PowerDialogActionId : ActionId("power_dialog")
+@Provide object PowerDialogActionId : ActionId("power_dialog") {
+  @Provide val action get() = Action(
+    id = PowerDialogActionId,
+    title = "Power dialog",
+    permissions = accessibilityActionPermissions,
+    icon = staticActionIcon(R.drawable.ic_power_settings_new)
+  )
 
-@Provide fun powerDialogAction(resources: Resources) = Action(
-  id = PowerDialogActionId,
-  title = resources(R.string.action_power_dialog),
-  permissions = accessibilityActionPermissions,
-  icon = staticActionIcon(R.drawable.ic_power_settings_new)
-)
-
-@Provide fun powerDialogActionExecutor(
-  accessibilityService: AccessibilityService
-) = ActionExecutor<PowerDialogActionId> {
-  accessibilityService.performGlobalAction(GLOBAL_ACTION_POWER_DIALOG)
+  @Provide fun executor(
+    accessibilityService: AccessibilityService
+  ) = ActionExecutor<PowerDialogActionId> {
+    accessibilityService.performGlobalAction(GLOBAL_ACTION_POWER_DIALOG)
+  }
 }

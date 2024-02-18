@@ -57,13 +57,11 @@ import java.io.*
   }
 }
 
-@Provide class ShortcutActionPickerDelegate(
-  private val resources: Resources
-) : ActionPickerDelegate {
+@Provide class ShortcutActionPickerDelegate : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String
-    get() = resources(R.string.action_shortcut)
+    get() = "Shortcut"
   override val icon: @Composable () -> Unit
     get() = { Icon(painterResource(R.drawable.ic_content_cut), null) }
 

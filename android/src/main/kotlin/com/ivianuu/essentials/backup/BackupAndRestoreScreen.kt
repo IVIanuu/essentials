@@ -29,7 +29,7 @@ class BackupAndRestoreScreen : Screen<Unit> {
                 catch { backupManager.createBackup() }
                   .onLeft {
                     it.printStackTrace()
-                    toaster(R.string.backup_error)
+                    toaster("Failed to backup your data!")
                   }
               },
               leading = { Icon(painterResource(R.drawable.ic_save), null) },

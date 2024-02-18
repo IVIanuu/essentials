@@ -11,19 +11,20 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-@Provide object SkipNextActionId : ActionId("media_skip_next")
+@Provide object SkipNextActionId : ActionId("media_skip_next") {
+  @Provide val action
+    get() = Action(
+      id = SkipNextActionId,
+      title = "Media skip next",
+      icon = staticActionIcon(R.drawable.ic_skip_next)
+    )
 
-@Provide fun skipNextMediaAction(resources: Resources) = Action(
-  id = SkipNextActionId,
-  title = resources(R.string.action_media_skip_next),
-  icon = staticActionIcon(R.drawable.ic_skip_next)
-)
+  @Provide fun executor(
+    mediaActionSender: MediaActionSender
+  ) = ActionExecutor<SkipNextActionId> {
+    mediaActionSender(KeyEvent.KEYCODE_MEDIA_NEXT)
+  }
 
-@Provide fun skipNextMediaActionExecutor(
-  mediaActionSender: MediaActionSender
-) = ActionExecutor<SkipNextActionId> {
-  mediaActionSender(KeyEvent.KEYCODE_MEDIA_NEXT)
+  @Provide inline val settingsScreen: @ActionSettingsKey<SkipNextActionId> Screen<Unit>
+    get() = MediaActionSettingsScreen()
 }
-
-@Provide inline val skipNextMediaActionSettingsScreen: @ActionSettingsKey<SkipNextActionId> Screen<Unit>
-  get() = MediaActionSettingsScreen()

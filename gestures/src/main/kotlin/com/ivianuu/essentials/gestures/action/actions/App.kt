@@ -53,13 +53,12 @@ import kotlinx.coroutines.flow.*
 }
 
 @Provide class AppActionPickerDelegate(
-  private val launchableAppPredicate: LaunchableAppPredicate,
-  private val resources: Resources
+  private val launchableAppPredicate: LaunchableAppPredicate
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String
-    get() = resources(R.string.action_app)
+    get() = "App"
   override val icon: @Composable () -> Unit
     get() = { Icon(painterResource(R.drawable.ic_apps), null) }
 

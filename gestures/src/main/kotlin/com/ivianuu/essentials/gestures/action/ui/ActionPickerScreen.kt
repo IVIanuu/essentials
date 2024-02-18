@@ -36,22 +36,15 @@ class ActionPickerScreen(
       navigator: Navigator,
       permissionManager: PermissionManager,
       @Inject repository: ActionRepository,
-      @Inject resources: Resources,
       screen: ActionPickerScreen
     ) = Ui<ActionPickerScreen, Unit> {
       val items = collectResource {
         buildList<ActionPickerItem> {
           if (screen.showDefaultOption)
-            this += ActionPickerItem.SpecialOption(
-              title = resources(R.string._default),
-              getResult = { Result.Default }
-            )
+            this += ActionPickerItem.SpecialOption(title = "Default", getResult = { Result.Default })
 
           if (screen.showNoneOption)
-            this += ActionPickerItem.SpecialOption(
-              title = resources(R.string.none),
-              getResult = { Result.None }
-            )
+            this += ActionPickerItem.SpecialOption(title = "None", getResult = { Result.None })
 
           this += (
               (repository.getActionPickerDelegates()
@@ -67,7 +60,7 @@ class ActionPickerScreen(
           .let { emit(it) }
       }
 
-      ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.action_picker_title)) } }) {
+      ScreenScaffold(topBar = { AppBar { Text("Pick an action") } }) {
         ResourceVerticalListFor(items) { item ->
           ListItem(
             onClick = scopedAction {

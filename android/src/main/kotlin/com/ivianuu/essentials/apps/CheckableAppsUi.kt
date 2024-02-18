@@ -56,12 +56,12 @@ data class CheckableAppsScreen(
                     this + allApps.get().map { it.packageName }
                   }
                 }
-              ) { Text(stringResource(R.string.select_all)) }
+              ) { Text("Select all") }
               PopupMenuItem(
                 onSelected = {
                   updateCheckedApps { emptySet() }
                 }
-              ) { Text(stringResource(R.string.deselect_all)) }
+              ) { Text("Deselect all") }
             }
           }
         )

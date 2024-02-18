@@ -14,20 +14,19 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 
-@Provide object ScreenshotActionId : ActionId("screenshot")
+@Provide object ScreenshotActionId : ActionId("screenshot") {
+  @Provide val action
+    get() = Action(
+      id = ScreenshotActionId,
+      title = "Screenshot",
+      icon = staticActionIcon(R.drawable.ic_photo_album),
+      permissions = listOf(typeKeyOf<ActionAccessibilityPermission>())
+    )
 
-@Provide fun screenshotAction(resources: Resources) = Action(
-  id = ScreenshotActionId,
-  title = resources(R.string.action_screenshot),
-  icon = staticActionIcon(R.drawable.ic_photo_album),
-  permissions = listOf(typeKeyOf<ActionAccessibilityPermission>())
-)
-
-@SuppressLint("InlinedApi")
-@Provide
-fun screenshotActionExecutor(
-  accessibilityService: AccessibilityService
-) = ActionExecutor<ScreenshotActionId> {
-  delay(500)
-  accessibilityService.performGlobalAction(GLOBAL_ACTION_TAKE_SCREENSHOT)
+  @Provide fun screenshotActionExecutor(
+    accessibilityService: AccessibilityService
+  ) = ActionExecutor<ScreenshotActionId> {
+    delay(500)
+    accessibilityService.performGlobalAction(GLOBAL_ACTION_TAKE_SCREENSHOT)
+  }
 }

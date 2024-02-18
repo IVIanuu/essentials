@@ -40,3 +40,5 @@ fun interface IsAdFeatureEnabledUseCase {
 ) = IsAdFeatureEnabledUseCase { keyClass, feature ->
   featuresByScreen[keyClass]?.value?.contains(feature) == true
 }
+
+@Tag annotation class FinalAdConfig

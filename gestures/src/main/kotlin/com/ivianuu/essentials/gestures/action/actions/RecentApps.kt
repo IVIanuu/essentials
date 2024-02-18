@@ -11,16 +11,17 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Provide object RecentAppsActionId : ActionId("recent_apps")
+@Provide object RecentAppsActionId : ActionId("recent_apps") {
+  @Provide val action
+    get() = Action(
+      id = RecentAppsActionId,
+      title = "Recent apps",
+      icon = staticActionIcon(R.drawable.ic_action_recent_apps)
+    )
 
-@Provide fun recentAppsAction(resources: Resources) = Action(
-  id = RecentAppsActionId,
-  title = resources(R.string.action_recent_apps),
-  icon = staticActionIcon(R.drawable.ic_action_recent_apps)
-)
-
-@Provide fun recentAppsActionExecutor(
-  accessibilityService: AccessibilityService
-) = ActionExecutor<RecentAppsActionId> {
-  accessibilityService.performGlobalAction(GLOBAL_ACTION_RECENTS)
+  @Provide fun executor(
+    accessibilityService: AccessibilityService
+  ) = ActionExecutor<RecentAppsActionId> {
+    accessibilityService.performGlobalAction(GLOBAL_ACTION_RECENTS)
+  }
 }

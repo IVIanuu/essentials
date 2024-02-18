@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
-  -->
-
-<resources>
-    <string name="test_ad_unit_id_banner">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="test_ad_unit_id_full_screen">ca-app-pub-3940256099942544/1033173712</string>
-</resources>

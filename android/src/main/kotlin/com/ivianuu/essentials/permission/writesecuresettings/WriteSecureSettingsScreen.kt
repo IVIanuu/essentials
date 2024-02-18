@@ -65,18 +65,25 @@ class WriteSecureSettingsScreen(
         }
         else -> true
       }
-      val continueStep = action {
-        if (completedStep == 4)
-          navigator.pop(screen, true)
-        else {
-          completedStep++
-          currentStep = completedStep
-        }
+
+      @Composable fun ContinueButton(text: String = "Continue") {
+        Button(
+          onClick = action {
+            if (completedStep == 4)
+              navigator.pop(screen, true)
+            else {
+              completedStep++
+              currentStep = completedStep
+            }
+          },
+          enabled = canContinueStep
+        ) { Text(text) }
       }
+
       val openStep = { step: Int -> currentStep = step }
 
       ScreenScaffold(
-        topBar = { AppBar { Text(stringResource(R.string.secure_settings_title)) } },
+        topBar = { AppBar { Text("PC instructions") } },
         bottomBar = {
           Snackbar(
             modifier = Modifier.padding(16.dp),
@@ -85,7 +92,7 @@ class WriteSecureSettingsScreen(
                 shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
                   .onRight {
                     if (permissionManager.permissionState(listOf(screen.permissionKey)).first()) {
-                      toaster(R.string.secure_settings_permission_granted)
+                      toaster("Permission granted!")
                       navigator.pop(screen)
                     }
                   }
@@ -94,18 +101,20 @@ class WriteSecureSettingsScreen(
                     toaster("Your device is not rooted!")
                   }
               }) {
-                Text(stringResource(R.string.secure_settings_use_root_action))
+                Text("Grant")
               }
             }
           ) {
-            Text(stringResource(R.string.secure_settings_use_root))
+            Text("Grant permission using root")
           }
         }
       ) {
         VerticalList {
           item {
             Text(
-              stringResource(R.string.secure_settings_desc),
+              text = "The WRITE_SECURE_SETTINGS permission can be granted from the browser on your PC! " +
+                  "You don\'t have to install any drivers or programs.\n" +
+                  "You can grant the permission with a single click on rooted devices.",
               modifier = Modifier.padding(all = 16.dp),
               style = MaterialTheme.typography.body2
             )
@@ -117,27 +126,26 @@ class WriteSecureSettingsScreen(
               isCompleted = completedStep > 1,
               isCurrent = currentStep == 1,
               onClick = { openStep(1) },
-              title = { Text(stringResource(R.string.secure_settings_step_1_title)) },
+              title = { Text("Enable Developer options") },
               content = {
                 Text(
-                  text = stringResource(R.string.secure_settings_step_1_content),
+                  text = ") Click \"Open about phone\"\n" +
+                      "2) Click \"Build Number\" multiple times until the \"Developer options\" are active",
                   style = MaterialTheme.typography.body2
                 )
               },
               actions = {
-                Button(onClick = continueStep, enabled = canContinueStep) {
-                  Text(stringResource(R.string._continue))
-                }
+                ContinueButton()
                 OutlinedButton(onClick = scopedAction {
                   raceOf(
                     {
                       navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).asScreen())
-                        ?.onLeft { toaster(R.string.open_phone_info_failed) }
+                        ?.onLeft { toaster("Couldn't open phone! Please open manually") }
                     },
                     { developerModeDataStore.data.first { it != 0 } }
                   )
                   appUiStarter()
-                }) { Text(stringResource(R.string.open_phone_info)) }
+                }) { Text("Open about phone") }
               }
             )
           }
@@ -148,28 +156,27 @@ class WriteSecureSettingsScreen(
               isCompleted = completedStep > 2,
               isCurrent = currentStep == 2,
               onClick = { openStep(2) },
-              title = { Text(stringResource(R.string.secure_settings_step_2_title)) },
+              title = { Text("Enable USB debugging") },
               content = {
                 Text(
-                  text = stringResource(R.string.secure_settings_step_2_content),
+                  text = "1) Click \"Open developer options\"\n" +
+                      "2) Enable \"USB debugging\"",
                   style = MaterialTheme.typography.body2
                 )
               },
               actions = {
-                Button(onClick = continueStep, enabled = canContinueStep) {
-                  Text(stringResource(R.string._continue))
-                }
+                ContinueButton()
                 OutlinedButton(onClick = scopedAction {
                   raceOf(
                     {
                       navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).asScreen())
-                        ?.onLeft { toaster(R.string.open_developer_settings_failed) }
+                        ?.onLeft { toaster("Couldn\'t open developer options! Please open manually") }
                     },
                     { adbEnabledDataStore.data.first { it != 0 } }
                   )
                   appUiStarter()
                 }) {
-                  Text(stringResource(R.string.open_developer_settings))
+                  Text("Open developer options")
                 }
               }
             )
@@ -181,13 +188,20 @@ class WriteSecureSettingsScreen(
               isCompleted = completedStep > 3,
               isCurrent = currentStep == 3,
               onClick = { openStep(3) },
-              title = { Text(stringResource(R.string.secure_settings_step_3_title)) },
-              content = { Text(stringResource(R.string.secure_settings_step_3_content)) },
-              actions = {
-                Button(onClick = continueStep, enabled = canContinueStep) {
-                  Text(stringResource(R.string._continue))
-                }
-              }
+              title = { Text("Connect your phone to WebADB") },
+              content = {
+                Text(
+                  "1) Open \"www.webadb.com\" on your PC\n" +
+                      "2) Connect your phone with your PC\n" +
+                      "3) On your PC click \"Start\"\n" +
+                      "4) Click \"Add device\"\n" +
+                      "5) Click *YOUR DEVICE*\\n" +
+                      "6) Click \"Connect\" on the pop up\n" +
+                      "7) Click \"Connect\" next to the \"Add device\" button\n" +
+                      "8) On your phone click \"Allow\""
+                )
+              },
+              actions = { ContinueButton() }
             )
           }
 
@@ -197,9 +211,10 @@ class WriteSecureSettingsScreen(
               isCompleted = completedStep > 4,
               isCurrent = currentStep == 4,
               onClick = { openStep(4) },
-              title = { Text(stringResource(R.string.secure_settings_step_4_title)) },
+              title = { Text("Grant permission") },
               content = {
-                Text(stringResource(R.string.secure_settings_step_4_content))
+                Text("1) On your PC click \"Interactive shell\" in the left panel" +
+                    "\n2) In the terminal window type the command below and hit the enter button")
 
                 Text(
                   modifier = Modifier
@@ -213,11 +228,7 @@ class WriteSecureSettingsScreen(
                   style = MaterialTheme.typography.body2.copy(fontSize = 14.sp)
                 )
               },
-              actions = {
-                Button(onClick = continueStep, enabled = canContinueStep) {
-                  Text(stringResource(R.string.complete))
-                }
-              }
+              actions = { ContinueButton(text = "Complete") }
             )
           }
         }

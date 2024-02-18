@@ -13,19 +13,20 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-@Provide object PlayPauseActionId : ActionId("media_play_pause")
+@Provide object PlayPauseActionId : ActionId("media_play_pause") {
+  @Provide val action
+    get() = Action(
+      id = PlayPauseActionId,
+      title = "Media play/Pause",
+      icon = staticActionIcon(Icons.Default.PlayArrow)
+    )
 
-@Provide fun playPauseMediaAction(resources: Resources) = Action(
-  id = PlayPauseActionId,
-  title = resources(R.string.action_media_play_pause),
-  icon = staticActionIcon(Icons.Default.PlayArrow)
-)
+  @Provide fun executor(
+    mediaActionSender: MediaActionSender
+  ) = ActionExecutor<PlayPauseActionId> {
+    mediaActionSender(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
+  }
 
-@Provide fun playPauseMediaActionExecutor(
-  mediaActionSender: MediaActionSender
-) = ActionExecutor<PlayPauseActionId> {
-  mediaActionSender(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
+  @Provide inline val settingsScreen: @ActionSettingsKey<PlayPauseActionId> Screen<Unit>
+    get() = MediaActionSettingsScreen()
 }
-
-@Provide inline val playPauseMediaActionSettingsScreen: @ActionSettingsKey<PlayPauseActionId> Screen<Unit>
-  get() = MediaActionSettingsScreen()

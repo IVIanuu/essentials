@@ -121,10 +121,9 @@ data class FullScreenAdConfig(val id: String, val adsInterval: Duration = 30.sec
   @Provide companion object {
     @Provide fun final(
       adConfig: FullScreenAdConfig,
-      appConfig: AppConfig,
-      resources: Resources,
+      appConfig: AppConfig
     ): @FinalAdConfig FullScreenAdConfig = if (!appConfig.isDebug) adConfig
-    else adConfig.copy(id = resources(R.string.test_ad_unit_id_full_screen))
+    else adConfig.copy(id = "ca-app-pub-3940256099942544/1033173712")
   }
 }
 

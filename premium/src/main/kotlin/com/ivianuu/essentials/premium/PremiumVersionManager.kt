@@ -65,7 +65,7 @@ import kotlinx.serialization.*
     if (isPremiumVersion.first()) return block()
 
     scope.launch {
-      toaster(com.ivianuu.essentials.premium.R.string.premium_version_hint)
+      toaster("This functionality is only available in the premium version!")
       if (!deviceScreenManager.unlockScreen()) return@launch
       appUiStarter()
         .cast<UiScopeOwner>()

@@ -12,21 +12,22 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Provide object LastAppActionId : ActionId("last_app")
+@Provide object LastAppActionId : ActionId("last_app") {
+  @Provide val action
+    get() = Action(
+      id = LastAppActionId,
+      title = "Last app",
+      permissions = accessibilityActionPermissions,
+      unlockScreen = true,
+      closeSystemDialogs = true,
+      icon = staticActionIcon(R.drawable.ic_repeat)
+    )
 
-@Provide fun lastAppAction(resources: Resources) = Action(
-  id = LastAppActionId,
-  title = resources(R.string.action_last_app),
-  permissions = accessibilityActionPermissions,
-  unlockScreen = true,
-  closeSystemDialogs = true,
-  icon = staticActionIcon(R.drawable.ic_repeat)
-)
-
-@Provide fun lastAppActionExecutor(
-  accessibilityService: AccessibilityService
-) = ActionExecutor<LastAppActionId> {
-  accessibilityService.performGlobalAction(GLOBAL_ACTION_RECENTS)
-  delay(100)
-  accessibilityService.performGlobalAction(GLOBAL_ACTION_RECENTS)
+  @Provide fun executor(
+    accessibilityService: AccessibilityService
+  ) = ActionExecutor<LastAppActionId> {
+    accessibilityService.performGlobalAction(GLOBAL_ACTION_RECENTS)
+    delay(100)
+    accessibilityService.performGlobalAction(GLOBAL_ACTION_RECENTS)
+  }
 }
