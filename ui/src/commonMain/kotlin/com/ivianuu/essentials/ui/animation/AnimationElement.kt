@@ -15,7 +15,7 @@ fun Modifier.animationElement(key: Any): Modifier = composed {
   }
 }
 
-val ContentKey = "content"
+const val ContentKey = "content"
 
 internal class ElementAnimationScope(
   val scope: AnimatedVisibilityScope,

@@ -32,5 +32,5 @@ interface DialogScreen<T> : OverlayScreen<T> {
   }
 }
 
-val DialogKey = "dialog"
-val DialogScrimKey = "dialog_scrim"
+const val DialogKey = "dialog"
+const val DialogScrimKey = "dialog_scrim"

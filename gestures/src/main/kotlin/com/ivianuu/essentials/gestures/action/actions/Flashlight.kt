@@ -65,5 +65,4 @@ import kotlinx.coroutines.flow.*
     registerTorchCallback(callback ,null)
     awaitClose { unregisterTorchCallback(callback) }
   }.flowOn(coroutineContexts.main)
-
 }
