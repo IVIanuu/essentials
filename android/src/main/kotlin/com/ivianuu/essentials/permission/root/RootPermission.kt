@@ -5,8 +5,6 @@
 package com.ivianuu.essentials.permission.root
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.android.*
-import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.util.*

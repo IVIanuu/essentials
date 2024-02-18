@@ -23,7 +23,6 @@ class SingleChoiceListScreen<T : Any>(
 ) : DialogScreen<T> {
   @Provide companion object {
     @Provide fun ui(
-      commonStrings: CommonStrings,
       navigator: Navigator,
       screen: SingleChoiceListScreen<Any>,
     ) = Ui<SingleChoiceListScreen<Any>, Unit> {
@@ -50,7 +49,7 @@ class SingleChoiceListScreen<T : Any>(
           },
           buttons = {
             TextButton(onClick = action { navigator.pop(screen, null) }) {
-              Text(commonStrings.cancel)
+              Text("Cancel")
             }
           }
         )

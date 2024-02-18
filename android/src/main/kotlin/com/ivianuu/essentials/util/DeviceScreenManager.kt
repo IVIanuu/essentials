@@ -5,10 +5,8 @@ import android.content.*
 import android.os.*
 import android.view.*
 import androidx.activity.*
-import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*

@@ -7,7 +7,6 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.layout.*

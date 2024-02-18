@@ -4,11 +4,9 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.compose.*

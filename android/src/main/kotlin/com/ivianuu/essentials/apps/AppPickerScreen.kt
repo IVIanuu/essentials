@@ -8,12 +8,9 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.ui.*
-import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import coil.compose.*
-import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*

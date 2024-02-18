@@ -12,9 +12,7 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.common.*

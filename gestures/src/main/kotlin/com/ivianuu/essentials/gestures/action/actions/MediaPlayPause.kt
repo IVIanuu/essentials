@@ -7,8 +7,6 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.view.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*

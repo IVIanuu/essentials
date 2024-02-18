@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.compose
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
 import kotlinx.coroutines.*
 
 @Composable inline fun action(

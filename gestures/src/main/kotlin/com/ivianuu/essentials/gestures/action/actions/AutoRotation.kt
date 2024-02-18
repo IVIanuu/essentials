@@ -6,9 +6,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.gestures.R

@@ -14,7 +14,6 @@ import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
-import arrow.fx.coroutines.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.dialog.*
@@ -24,7 +23,6 @@ import com.ivianuu.essentials.ui.popup.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.essentials.xposed.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
 
 @Provide class HomeScreen : RootScreen
 

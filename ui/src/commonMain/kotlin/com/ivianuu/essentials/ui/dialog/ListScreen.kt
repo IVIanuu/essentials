@@ -4,10 +4,8 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
-import androidx.compose.ui.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*

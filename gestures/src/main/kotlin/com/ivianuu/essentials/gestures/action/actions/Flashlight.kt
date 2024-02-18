@@ -7,7 +7,6 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.hardware.camera2.*
 import android.hardware.camera2.CameraManager.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*

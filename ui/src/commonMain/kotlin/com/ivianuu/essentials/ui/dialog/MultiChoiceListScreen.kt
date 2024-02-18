@@ -4,12 +4,10 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
@@ -27,7 +25,6 @@ class MultiChoiceListScreen<T : Any>(
 ) : DialogScreen<Set<T>> {
   @Provide companion object {
     @Provide fun ui(
-      commonStrings: CommonStrings,
       navigator: Navigator,
       screen: MultiChoiceListScreen<Any>,
     ) = Ui<MultiChoiceListScreen<Any>, Unit> {
@@ -62,11 +59,11 @@ class MultiChoiceListScreen<T : Any>(
           },
           buttons = {
             TextButton(onClick = action { navigator.pop(screen, null) }) {
-              Text(commonStrings.cancel)
+              Text("Cancel")
             }
 
             TextButton(onClick = action { navigator.pop(screen, selectedItems) }) {
-              Text(commonStrings.ok)
+              Text("OK")
             }
           }
         )

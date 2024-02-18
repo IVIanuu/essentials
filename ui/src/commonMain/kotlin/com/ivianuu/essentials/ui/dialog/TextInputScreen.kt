@@ -12,7 +12,6 @@ import androidx.compose.ui.focus.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.*
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
@@ -25,7 +24,6 @@ class TextInputScreen(
 ) : DialogScreen<String> {
   @Provide companion object {
     @Provide fun ui(
-      commonStrings: CommonStrings,
       navigator: Navigator,
       screen: TextInputScreen
     ) = Ui<TextInputScreen, Unit> {
@@ -55,7 +53,7 @@ class TextInputScreen(
           },
           buttons = {
             TextButton(onClick = action { navigator.pop(screen, null) }) {
-              Text(commonStrings.cancel)
+              Text("Cancel")
             }
 
             val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
@@ -63,11 +61,10 @@ class TextInputScreen(
             TextButton(
               enabled = currentValueIsOk,
               onClick = action { navigator.pop(screen, currentValue.text) }
-            ) { Text(commonStrings.ok) }
+            ) { Text("OK") }
           }
         )
       }
     }
   }
 }
-

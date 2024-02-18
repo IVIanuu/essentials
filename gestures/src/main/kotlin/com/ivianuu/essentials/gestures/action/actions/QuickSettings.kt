@@ -6,7 +6,6 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.*
 import android.accessibilityservice.AccessibilityService.*
-import android.annotation.*
 import android.view.accessibility.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
@@ -14,7 +13,6 @@ import arrow.core.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.accessibility.AccessibilityService
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*

@@ -9,9 +9,7 @@ package com.ivianuu.essentials.resource
 import androidx.compose.runtime.*
 import arrow.core.*
 import com.ivianuu.essentials.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlin.coroutines.*
 
 @Stable sealed interface Resource<out T> {
   data object Loading : Resource<Nothing>

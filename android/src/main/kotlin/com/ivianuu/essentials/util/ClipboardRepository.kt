@@ -6,7 +6,6 @@ package com.ivianuu.essentials.util
 
 import android.content.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.android.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*

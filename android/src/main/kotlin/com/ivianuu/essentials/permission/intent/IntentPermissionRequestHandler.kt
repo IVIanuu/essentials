@@ -6,7 +6,6 @@ package com.ivianuu.essentials.permission.intent
 
 import android.content.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.android.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*

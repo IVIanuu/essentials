@@ -7,17 +7,12 @@ package com.ivianuu.essentials.shortcutpicker
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.painter.*
-import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import androidx.core.graphics.drawable.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*

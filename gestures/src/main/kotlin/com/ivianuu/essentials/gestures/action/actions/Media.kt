@@ -8,14 +8,11 @@ import android.content.*
 import android.provider.*
 import android.view.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*

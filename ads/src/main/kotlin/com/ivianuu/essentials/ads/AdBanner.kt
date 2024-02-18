@@ -12,7 +12,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.viewinterop.*
 import com.google.android.gms.ads.*
-import com.ivianuu.injekt.*
 
 @Immutable data class AdBannerConfig(val id: String, val size: AdSize = AdSize.LARGE_BANNER) {
   companion object {

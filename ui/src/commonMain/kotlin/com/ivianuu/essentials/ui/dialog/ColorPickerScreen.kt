@@ -23,9 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.layout.*
-import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.util.*
@@ -40,7 +38,6 @@ class ColorPickerScreen(
 ) : DialogScreen<Color> {
   @Provide companion object {
     @Provide fun ui(
-      commonStrings: CommonStrings,
       navigator: Navigator,
       screen: ColorPickerScreen
     ) = Ui<ColorPickerScreen, Unit> {
@@ -103,18 +100,14 @@ class ColorPickerScreen(
               }
             }
 
-            TextButton(onClick = action { navigator.pop(screen) }) {
-              Text(commonStrings.cancel)
-            }
+            TextButton(onClick = action { navigator.pop(screen) }) { Text("Cancel") }
 
             TextButton(
               onClick = action { navigator.pop(screen, currentColor) },
               colors = ButtonDefaults.textButtonColors(
                 contentColor = currentColor
               )
-            ) {
-              Text(commonStrings.ok)
-            }
+            ) { Text("OK") }
           }
         )
       }
