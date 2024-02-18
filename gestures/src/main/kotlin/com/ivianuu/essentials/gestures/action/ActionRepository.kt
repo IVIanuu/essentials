@@ -14,15 +14,17 @@ import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 @Provide class ActionRepository(
-  private val actions: () -> Map<String, () -> Action<*>>,
-  private val actionFactories: () -> List<() -> ActionFactory>,
-  private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>>,
-  private val actionSettings: () -> Map<String, () -> @ActionSettingsKey<ActionId> Screen<Unit>>,
-  private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
+  private val actions: Map<String, () -> Action<*>>,
+  private val actionFactories: List<() -> ActionFactory>,
+  private val actionsExecutors: Map<String, () -> ActionExecutor<*>>,
+  private val actionSettings: Map<String, () -> @ActionSettingsKey<ActionId> Screen<Unit>>,
+  private val actionPickerDelegates: List<() -> ActionPickerDelegate>,
+  private val appConfig: AppConfig,
   private val closeSystemDialogs: CloseSystemDialogsUseCase,
   private val coroutineContexts: CoroutineContexts,
   private val deviceScreenManager: DeviceScreenManager,
@@ -32,13 +34,13 @@ import kotlinx.coroutines.flow.*
   private val toaster: Toaster
 ) {
   suspend fun getAllActions() = withContext(coroutineContexts.computation) {
-    actions().values.map { it() }
+    actions.values.map { it() }
   }
 
   suspend fun getAction(id: String) = withContext(coroutineContexts.computation) {
-    actions()[id]
+    actions[id]
       ?.invoke()
-      ?: actionFactories()
+      ?: actionFactories
         .asSequence()
         .map { it() }
         .firstOrNull { it.handles(id) }
@@ -51,9 +53,9 @@ import kotlinx.coroutines.flow.*
   }
 
   suspend fun getActionExecutor(id: String) = withContext(coroutineContexts.computation) {
-    actionsExecutors()[id]
+    actionsExecutors[id]
       ?.invoke()
-      ?: actionFactories()
+      ?: actionFactories
         .asSequence()
         .map { it() }
         .firstOrNull { it.handles(id) }
@@ -64,10 +66,10 @@ import kotlinx.coroutines.flow.*
   }
 
   suspend fun getActionSettingsKey(id: String) =
-    withContext(coroutineContexts.computation) { actionSettings()[id]?.invoke() }
+    withContext(coroutineContexts.computation) { actionSettings[id]?.invoke() }
 
   suspend fun getActionPickerDelegates() =
-    withContext(coroutineContexts.computation) { actionPickerDelegates().map { it() } }
+    withContext(coroutineContexts.computation) { actionPickerDelegates.map { it() } }
 
   suspend fun executeAction(id: String): Boolean =
     withContext(coroutineContexts.computation) {
@@ -95,7 +97,9 @@ import kotlinx.coroutines.flow.*
         }
 
         // close system dialogs
-        if (action.closeSystemDialogs)
+        if (action.closeSystemDialogs &&
+          (appConfig.sdk < 31 ||
+              permissionManager.permissionState(listOf(typeKeyOf<ActionAccessibilityPermission>())).first()))
           closeSystemDialogs()
 
         logger.log { "fire $id" }
