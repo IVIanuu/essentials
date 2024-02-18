@@ -72,20 +72,6 @@ class WriteSecureSettingsScreen(
       var currentStep by remember { mutableIntStateOf(1) }
       var completedStep by remember { mutableIntStateOf(1) }
 
-      val canContinueStep = if (currentStep != completedStep) false
-      else when (completedStep) {
-        1 -> developerModeDataStore.data.map { it != 0 }.collect(false)
-        2 -> adbEnabledDataStore.data.map { it != 0 }.collect(false)
-        3 -> true
-        4 -> collect(false) {
-          while (true) {
-            emit(permissionManager.permissionState(listOf(screen.permissionKey)).first())
-            delay(1.seconds)
-          }
-        }
-        else -> true
-      }
-
       @Composable fun ContinueButton(text: String = "Continue") {
         Button(
           onClick = action {
@@ -96,7 +82,19 @@ class WriteSecureSettingsScreen(
               currentStep = completedStep
             }
           },
-          enabled = canContinueStep
+          enabled = if (currentStep != completedStep) false
+          else when (completedStep) {
+            1 -> developerModeDataStore.data.map { it != 0 }.collect(false)
+            2 -> adbEnabledDataStore.data.map { it != 0 }.collect(false)
+            3 -> true
+            4 -> collect(false) {
+              while (true) {
+                emit(permissionManager.permissionState(listOf(screen.permissionKey)).first())
+                delay(1.seconds)
+              }
+            }
+            else -> true
+          }
         ) { Text(text) }
       }
 
