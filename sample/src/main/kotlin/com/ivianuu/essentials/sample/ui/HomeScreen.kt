@@ -34,20 +34,6 @@ import kotlinx.coroutines.*
   navigator: Navigator,
   toaster: Toaster
 ) = Ui<HomeScreen, Unit> {
-  LaunchedEffect(true) {
-    guarantee(
-      { println("launched effect start"); awaitCancellation() },
-      { println("launched effect end") }
-    )
-  }
-
-  LaunchedScopedEffect(true) {
-    guarantee(
-      { println("launched scoped effect start"); awaitCancellation() },
-      { println("launched scoped effect end") }
-    )
-  }
-
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   ScreenScaffold(
     topBar = {

@@ -29,29 +29,17 @@ import kotlinx.coroutines.*
 
 @Composable fun <T : Any> rememberScoped(
   vararg keys: Any?,
-  key: Any? = null,
-  init: () -> T
+  init: () -> T,
 ): T {
-  val finalKey = key ?: currentCompositeKeyHash
-
   val scope = LocalScope.current
-  val holder = remember(scope, finalKey) {
-    scope.scoped(finalKey) { ScopedHolder() }
-  }
+  val key = currentCompositeKeyHash
+  val holder = remember(scope, key) { scope.scoped(key) { ScopedHolder() } }
 
-  holder.value
+  val value = (holder.value
     .takeIf { it !== Uninitialized && keys.contentEquals(holder.keys) }
-    ?: init()
-      .also {
-        holder.value.safeAs<Disposable>()?.dispose()
-        holder.value.safeAs<RememberObserver>()?.onForgotten()
+    ?: init().also { holder.updateValue(it, keys) })
+    .unsafeCast<T>()
 
-        holder.value = it
-        holder.keys = keys
-        holder.rememberedValue = false
-      }
-
-  val value = holder.value.unsafeCast<T>()
   SideEffect {
     if (!holder.rememberedValue) {
       holder.rememberedValue = true
@@ -68,11 +56,15 @@ private class ScopedHolder : Disposable {
   var rememberedValue = false
 
   override fun dispose() {
+    updateValue(Uninitialized, null)
+  }
+
+  fun updateValue(newValue: Any?, newKeys: Array<out Any?>?) {
     value.safeAs<Disposable>()?.dispose()
     value.safeAs<RememberObserver>()?.onForgotten()
-    value = null
-    keys = null
     rememberedValue = false
+    value = newValue
+    keys = newKeys
   }
 }
 
