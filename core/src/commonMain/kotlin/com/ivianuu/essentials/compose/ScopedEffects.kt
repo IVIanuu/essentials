@@ -2,6 +2,30 @@ package com.ivianuu.essentials.compose
 
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
+import kotlinx.coroutines.*
+
+@Composable fun LaunchedScopedEffect(
+  vararg keys: Any?,
+  block: suspend CoroutineScope.() -> Unit
+) {
+  val coroutineScope = scopedCoroutineScope
+  rememberScoped(keys = keys) {
+    object : RememberObserver {
+      private var job: Job? = null
+
+      override fun onRemembered() {
+        job = coroutineScope.launch(block = block)
+      }
+
+      override fun onForgotten() {
+        job?.cancel()
+        job = null
+      }
+
+      override fun onAbandoned() = TODO()
+    }
+  }
+}
 
 @Composable fun <T : Any> rememberScoped(
   vararg keys: Any?,
@@ -11,31 +35,44 @@ import com.ivianuu.essentials.*
   val finalKey = key ?: currentCompositeKeyHash
 
   val scope = LocalScope.current
-  val valueHolder = remember(scope, finalKey) {
-    scope.scoped(finalKey) { ScopedValueHolder() }
+  val holder = remember(scope, finalKey) {
+    scope.scoped(finalKey) { ScopedHolder() }
   }
 
-  val value = remember(*keys) {
-    valueHolder.value
-      .takeIf { it !== Uninitialized && keys.contentEquals(valueHolder.keys) }
-      ?: init()
-        .also {
-          valueHolder.value.safeAs<Disposable>()?.dispose()
-          valueHolder.value = it
-          valueHolder.keys = keys
-        }
+  holder.value
+    .takeIf { it !== Uninitialized && keys.contentEquals(holder.keys) }
+    ?: init()
+      .also {
+        holder.value.safeAs<Disposable>()?.dispose()
+        holder.value.safeAs<RememberObserver>()?.onForgotten()
+
+        holder.value = it
+        holder.keys = keys
+        holder.rememberedValue = false
+      }
+
+  val value = holder.value.unsafeCast<T>()
+  SideEffect {
+    if (!holder.rememberedValue) {
+      holder.rememberedValue = true
+      value.safeAs<RememberObserver>()?.onRemembered()
+    }
   }
 
-  return value as T
+  return value
 }
 
-private class ScopedValueHolder : Disposable {
+private class ScopedHolder : Disposable {
   var value: Any? = Uninitialized
-  var keys: Array<out Any?> = emptyArray()
+  var keys: Array<out Any?>? = null
+  var rememberedValue = false
 
   override fun dispose() {
     value.safeAs<Disposable>()?.dispose()
+    value.safeAs<RememberObserver>()?.onForgotten()
     value = null
+    keys = null
+    rememberedValue = false
   }
 }
 
