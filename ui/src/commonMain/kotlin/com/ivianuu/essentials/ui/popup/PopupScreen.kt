@@ -26,74 +26,76 @@ class PopupScreen(
   val transformOrigin: TransformOrigin,
   val onCancel: (() -> Unit)?,
   val content: @Composable () -> Unit,
-) : OverlayScreen<Unit>
+) : OverlayScreen<Unit> {
+  @Provide companion object {
+    @Provide fun ui(navigator: Navigator, screen: PopupScreen) = Ui<PopupScreen> {
+      var previousConstraints by remember { mutableStateOf<Constraints?>(null) }
 
-@Provide fun popupUi(navigator: Navigator, screen: PopupScreen) = Ui<PopupScreen> {
-  var previousConstraints by remember { mutableStateOf<Constraints?>(null) }
-
-  BoxWithConstraints {
-    if (previousConstraints != null && constraints != previousConstraints)
-      LaunchedEffect(true) {
-        navigator.pop(screen)
-      }
-
-    previousConstraints = constraints
-
-    var dismissed by remember { mutableStateOf(false) }
-
-    val dismiss: (Boolean) -> Unit = action { cancelled ->
-      if (!dismissed) {
-        dismissed = true
-        navigator.pop(screen)
-        if (cancelled) screen.onCancel?.invoke()
-      }
-    }
-
-    PopupLayout(
-      position = screen.position,
-      modifier = Modifier
-        .fillMaxSize()
-        .pointerInput(true) {
-          detectTapGestures { dismiss(true) }
-        }
-    ) {
-      Box(
-        modifier = Modifier
-          .animationElement(PopupKey)
-          .pointerInput(true) {
-            detectTapGestures {
-            }
+      BoxWithConstraints {
+        if (previousConstraints != null && constraints != previousConstraints)
+          LaunchedEffect(true) {
+            navigator.pop(screen)
           }
-      ) {
-        screen.content()
+
+        previousConstraints = constraints
+
+        var dismissed by remember { mutableStateOf(false) }
+
+        val dismiss = action { cancelled: Boolean ->
+          if (!dismissed) {
+            dismissed = true
+            navigator.pop(screen)
+            if (cancelled) screen.onCancel?.invoke()
+          }
+        }
+
+        PopupLayout(
+          position = screen.position,
+          modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(true) {
+              detectTapGestures { dismiss(true) }
+            }
+        ) {
+          Box(
+            modifier = Modifier
+              .animationElement(PopupKey)
+              .pointerInput(true) {
+                detectTapGestures {
+                }
+              }
+          ) {
+            screen.content()
+          }
+        }
       }
     }
+
+    private const val PopupKey = "popup"
+
+    @Provide val popupScreenConfig: ScreenConfig<PopupScreen>
+      get() = ScreenConfig(opaque = true) {
+        if (isPush) {
+          PopupKey entersWith
+              fadeIn(
+                animationSpec = tween(
+                  durationMillis = DefaultFadeInDuration.ForFade,
+                  easing = LinearEasing
+                )
+              ) + scaleIn(
+            animationSpec = tween(
+              durationMillis = DefaultFadeInDuration,
+              easing = FastOutSlowInEasing
+            ),
+            initialScale = 0.8f,
+            transformOrigin = target!!.cast<PopupScreen>().transformOrigin
+          )
+        } else {
+          PopupKey exitsWith materialFadeOut()
+        }
+      }
   }
 }
-
-private val PopupKey = "popup"
-
-@Provide val popupScreenConfig: ScreenConfig<PopupScreen>
-  get() = ScreenConfig(opaque = true) {
-    if (isPush) {
-      PopupKey entersWith
-          fadeIn(
-            animationSpec = tween(
-              durationMillis = DefaultFadeInDuration.ForFade,
-              easing = LinearEasing
-            )
-          ) + scaleIn(
-        animationSpec = tween(
-          durationMillis = DefaultFadeInDuration,
-          easing = FastOutSlowInEasing
-        ),
-        initialScale = 0.8f,
-        transformOrigin = target!!.cast<PopupScreen>().transformOrigin
-      )
-    } else {
-      PopupKey exitsWith materialFadeOut()
-    }
-  }
 
 @Composable private fun PopupLayout(
   position: Rect,
@@ -106,7 +108,7 @@ private val PopupKey = "popup"
     content = content,
     modifier = modifier
       .onGloballyPositioned { globalLayoutPosition = it.positionInRoot() }
-  ) { measureables, constraints ->
+  ) { measurables, constraints ->
     fun Dp.insetOrMinPadding() = max(this, 16.dp).roundToPx()
 
     val childConstraints = constraints.copy(
@@ -120,36 +122,29 @@ private val PopupKey = "popup"
           insets.bottom.insetOrMinPadding()
     )
 
-    val placeable = measureables.single().measure(childConstraints)
+    val placeable = measurables.single().measure(childConstraints)
 
-    var y = position.top.toInt() - globalLayoutPosition.y.toInt()
-    var x: Int
-
-    // Find the ideal horizontal position.
-    if ((position.left + position.right / 2) < constraints.maxWidth / 2) {
-      x = position.left.toInt()
-    } else if (position.left < position.right) {
-      x = (position.right - placeable.width).toInt()
-    } else {
-      x = (position.right - placeable.width).toInt()
-    }
-
-    x = x.coerceIn(
+    val y = (position.top.toInt() - globalLayoutPosition.y.toInt())
+      .coerceIn(
+        insets.top.insetOrMinPadding(),
+        max(
+          insets.top.insetOrMinPadding(),
+          constraints.maxHeight -
+              placeable.height -
+              insets.bottom.insetOrMinPadding()
+        )
+      )
+    val x = (when {
+      (position.left + position.right / 2) < constraints.maxWidth / 2 -> position.left.toInt()
+      position.left < position.right -> (position.right - placeable.width).toInt()
+      else -> (position.right - placeable.width).toInt()
+    }).coerceIn(
       insets.left.insetOrMinPadding(),
       max(
         insets.left.insetOrMinPadding(),
         constraints.maxWidth -
             placeable.width -
             insets.right.insetOrMinPadding()
-      )
-    )
-    y = y.coerceIn(
-      insets.top.insetOrMinPadding(),
-      max(
-        insets.top.insetOrMinPadding(),
-        constraints.maxHeight -
-            placeable.height -
-            insets.bottom.insetOrMinPadding()
       )
     )
 
