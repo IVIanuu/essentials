@@ -31,14 +31,12 @@ class AppPickerScreen(
       screen: AppPickerScreen
     ) = Ui<AppPickerScreen, Unit> {
       ScreenScaffold(
-        topBar = { AppBar { Text(screen.title ?: stringResource(R.string.title_app_picker)) } }
+        topBar = { AppBar { Text(screen.title ?: "Pick an app") } }
       ) {
         ResourceVerticalListFor(
-          produceResourceState {
-            repository.installedApps
-              .map { it.filter { screen.appPredicate(it) } }
-              .collect { emit(it) }
-          }.value
+          repository.installedApps
+            .map { it.filter { screen.appPredicate(it) } }
+            .collectResource()
         ) { app ->
           ListItem(
             onClick = action { navigator.pop(screen, app) },

@@ -5,7 +5,9 @@
 package com.ivianuu.essentials.backup
 
 import android.content.*
+import android.content.pm.*
 import android.icu.text.*
+import androidx.core.content.*
 import app.cash.quiver.extensions.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
@@ -15,10 +17,12 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
+import java.io.*
 import java.util.*
 import java.util.zip.*
 
 @Provide class BackupManager(
+  private val appContext: AppContext,
   private val backupDir: BackupDir,
   private val backupFiles: List<BackupFile>,
   private val appConfig: AppConfig,
@@ -27,6 +31,7 @@ import java.util.zip.*
   private val dataDir: DataDir,
   private val logger: Logger,
   private val navigator: Navigator,
+  private val packageManager: PackageManager,
   private val processRestarter: ProcessRestarter,
   private val scope: ScopedCoroutineScope<AppScope>
 ) {
@@ -42,24 +47,45 @@ import java.util.zip.*
           it.createNewFile()
         }
 
-      val zipOutputStream = ZipOutputStream(backupFile.outputStream())
+      ZipOutputStream(backupFile.outputStream()).use { zipOutputStream ->
+        backupFiles
+          .flatMap { it.walkTopDown() }
+          .filterNot { it.isDirectory }
+          .filterNot { it.absolutePath in BACKUP_BLACKLIST }
+          .filter { it.exists() }
+          .forEach { file ->
+            logger.log { "backup file $file" }
+            val entry = ZipEntry(file.relativeTo(dataDir).toString())
+            zipOutputStream.putNextEntry(entry)
+            file.inputStream().copyTo(zipOutputStream)
+            zipOutputStream.closeEntry()
+          }
+      }
 
-      backupFiles
-        .flatMap { it.walkTopDown() }
-        .filterNot { it.isDirectory }
-        .filterNot { it.absolutePath in BACKUP_BLACKLIST }
-        .filter { it.exists() }
-        .forEach { file ->
-          logger.log { "backup file $file" }
-          val entry = ZipEntry(file.relativeTo(dataDir).toString())
-          zipOutputStream.putNextEntry(entry)
-          file.inputStream().copyTo(zipOutputStream)
-          zipOutputStream.closeEntry()
+      val uri = FileProvider.getUriForFile(
+        appContext,
+        "${appConfig.packageName}.backupprovider",
+        backupFile
+      )
+      val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "application/zip"
+        data = uri
+        putExtra(Intent.EXTRA_STREAM, uri)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      }
+      packageManager
+        .queryIntentActivities(intent, PackageManager.MATCH_ALL)
+        .map { it.activityInfo.packageName }
+        .distinct()
+        .forEach {
+          appContext.grantUriPermission(
+            it,
+            uri,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+          )
         }
 
-      zipOutputStream.close()
-
-      navigator.push(ShareBackupFileScreen(backupFile.absolutePath))?.orThrow()
+      navigator.push(Intent.createChooser(intent, "Share File").asScreen())?.orThrow()
     }
 
   suspend fun restoreBackup() = withContext(scope.coroutineContext + coroutineContexts.io) {
@@ -72,21 +98,20 @@ import java.util.zip.*
       ).asScreen()
     )?.getOrNull()?.data?.data ?: return@withContext
 
-    val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!)
-
-    generateSequence { zipInputStream.nextEntry }
-      .forEach { entry ->
-        val file = dataDir.resolve(entry.name)
-        logger.log { "restore file $file" }
-        if (!file.exists()) {
-          file.parentFile.mkdirs()
-          file.createNewFile()
+    ZipInputStream(contentResolver.openInputStream(uri)!!).use { zipInputStream ->
+      generateSequence { zipInputStream.nextEntry }
+        .forEach { entry ->
+          val file = dataDir.resolve(entry.name)
+          logger.log { "restore file $file" }
+          if (!file.exists()) {
+            file.parentFile.mkdirs()
+            file.createNewFile()
+          }
+          zipInputStream.copyTo(file.outputStream())
+          zipInputStream.closeEntry()
         }
-        zipInputStream.copyTo(file.outputStream())
-        zipInputStream.closeEntry()
-      }
 
-    zipInputStream.close()
+    }
 
     processRestarter()
   }
@@ -96,3 +121,23 @@ private val BACKUP_BLACKLIST = listOf(
   "com.google.android.datatransport.events",
   "com.google.android.datatransport.events-journal"
 )
+
+@Tag annotation class BackupFileTag {
+  @Provide companion object {
+    @Provide fun backupPrefs(prefsDir: PrefsDir): BackupFile = prefsDir
+
+    @Provide fun backupDatabases(dataDir: DataDir): BackupFile = dataDir.resolve("databases")
+
+    @Provide fun backupSharedPrefs(dataDir: DataDir): BackupFile = dataDir.resolve("shared_prefs")
+  }
+}
+typealias BackupFile = @BackupFileTag File
+
+@Tag annotation class BackupDirTag {
+  @Provide companion object {
+    @Provide fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
+  }
+}
+typealias BackupDir = @BackupDirTag File
+
+@Provide @AndroidComponent class BackupFileProvider : FileProvider()

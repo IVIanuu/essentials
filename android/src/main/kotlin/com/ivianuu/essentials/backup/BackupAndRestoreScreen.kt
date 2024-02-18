@@ -4,9 +4,7 @@
 
 package com.ivianuu.essentials.backup
 
-import androidx.compose.foundation.*
 import androidx.compose.material.*
-import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.android.R
@@ -23,7 +21,7 @@ class BackupAndRestoreScreen : Screen<Unit> {
       backupManager: BackupManager,
       toaster: Toaster,
     ) = Ui<BackupAndRestoreScreen, Unit> {
-      ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.backup_and_restore_title)) } }) {
+      ScreenScaffold(topBar = { AppBar { Text("Backup/Restore") } }) {
         VerticalList {
           item {
             ListItem(
@@ -35,8 +33,8 @@ class BackupAndRestoreScreen : Screen<Unit> {
                   }
               },
               leading = { Icon(painterResource(R.drawable.ic_save), null) },
-              title = { Text(stringResource(R.string.pref_backup)) },
-              subtitle = { Text(stringResource(R.string.pref_backup_summary)) }
+              title = { Text("Backup") },
+              subtitle = { Text("Export your data") }
             )
           }
           item {
@@ -45,12 +43,12 @@ class BackupAndRestoreScreen : Screen<Unit> {
                 catch { backupManager.restoreBackup() }
                   .onLeft {
                     it.printStackTrace()
-                    toaster(R.string.restore_error)
+                    toaster("Failed to restore your data!")
                   }
               },
               leading = { Icon(painterResource(R.drawable.ic_restore), null) },
-              title = { Text(stringResource(R.string.pref_restore)) },
-              subtitle = { Text(stringResource(R.string.pref_restore_summary)) }
+              title = { Text("Restore") },
+              subtitle = { Text("Restore your data") }
             )
           }
         }

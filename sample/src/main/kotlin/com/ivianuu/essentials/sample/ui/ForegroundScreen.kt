@@ -42,13 +42,10 @@ class ForegroundScreen : Screen<Unit> {
                 setSmallIcon(R.drawable.ic_home)
                 setContentTitle("Foreground")
                 setContentText("Current progress ${
-                  remember {
-                    ticker(1000)
-                      .receiveAsFlow()
-                      .runningFold(0) { acc, _ -> acc.inc() }
-                  }
-                    .collectAsState(0)
-                    .value
+                  ticker(1000)
+                    .receiveAsFlow()
+                    .runningFold(0) { acc, _ -> acc.inc() }
+                    .collect(0)
                 }")
               }
             }

@@ -39,8 +39,8 @@ class ActionPickerScreen(
       @Inject resources: Resources,
       screen: ActionPickerScreen
     ) = Ui<ActionPickerScreen, Unit> {
-      val items by produceResourceState {
-        emit(buildList<ActionPickerItem> {
+      val items = collectResource {
+        buildList<ActionPickerItem> {
           if (screen.showDefaultOption)
             this += ActionPickerItem.SpecialOption(
               title = resources(R.string._default),
@@ -61,9 +61,10 @@ class ActionPickerScreen(
                     it,
                     repository.getActionSettingsKey(it.id)
                   )
-                })
-            .sortedBy { it.title })
-        })
+                }))
+            .sortedBy { it.title }
+        }
+          .let { emit(it) }
       }
 
       ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.action_picker_title)) } }) {

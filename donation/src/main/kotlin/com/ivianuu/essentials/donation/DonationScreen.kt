@@ -24,6 +24,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 class DonationScreen : DialogScreen<Unit> {
   @Provide companion object {
@@ -35,26 +36,25 @@ class DonationScreen : DialogScreen<Unit> {
       screen: DonationScreen,
       toaster: Toaster
     ) = Ui<DonationScreen, Unit> {
-      val skus by produceResourceState {
-        emit(
-          donations
-            .value
-            .parMap { donation ->
-              val details = billingService.getSkuDetails(donation.sku)!!
-              UiDonation(
-                donation,
-                details.title
-                  .replaceAfterLast("(", "")
-                  .removeSuffix("("),
-                details.price
-              )
-            }
-        )
+      val skus = collectResource {
+        donations
+          .value
+          .parMap { donation ->
+            val details = billingService.getSkuDetails(donation.sku)!!
+            UiDonation(
+              donation,
+              details.title
+                .replaceAfterLast("(", "")
+                .removeSuffix("("),
+              details.price
+            )
+          }
+          .let { emit(it) }
       }
       DialogScaffold {
         Dialog(
           applyContentPadding = false,
-          title = { Text(stringResource(R.string.donation_title)) },
+          title = { Text("Support development \uD83D\uDC9B") },
           content = {
             ResourceVerticalListFor(
               resource = skus,
@@ -72,7 +72,7 @@ class DonationScreen : DialogScreen<Unit> {
                 onClick = action {
                   if (billingService.purchase(donation.donation.sku, true, true)) {
                     billingService.consumePurchase(donation.donation.sku)
-                    toaster(R.string.donation_thanks)
+                    toaster("Thanks for your support! \uD83D\uDC9B")
                   }
                 },
                 title = { Text(donation.title) },

@@ -32,10 +32,10 @@ class ShortcutPickerScreen : Screen<Shortcut> {
       screen: ShortcutPickerScreen,
       toaster: Toaster
     ) = Ui<ShortcutPickerScreen, Unit> {
-      ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.title_shortcut_picker)) } }) {
-        ResourceVerticalListFor(repository.shortcuts.collectAsResourceState().value) { shortcut ->
+      ScreenScaffold(topBar = { AppBar { Text("Pick an shortcut") } }) {
+        ResourceVerticalListFor(repository.shortcuts.collectResource()) { shortcut ->
           ListItem(
-            onClick = action {
+            onClick = scopedAction {
               catch {
                 val shortcutRequestResult = navigator.push(shortcut.intent.asScreen())
                   ?.getOrNull()
@@ -44,7 +44,7 @@ class ShortcutPickerScreen : Screen<Shortcut> {
                 navigator.pop(screen, finalShortcut)
               }.onLeft {
                 it.printStackTrace()
-                toaster(R.string.failed_to_pick_shortcut)
+                toaster("Failed to pick a shortcut!")
               }
             },
             leading = {
