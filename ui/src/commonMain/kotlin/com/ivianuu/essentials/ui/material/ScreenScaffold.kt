@@ -17,12 +17,10 @@ import com.ivianuu.essentials.ui.insets.*
 
 @Composable fun ScreenScaffold(
   modifier: Modifier = Modifier,
-  state: ScaffoldState = rememberScaffoldState(),
   topBar: (@Composable () -> Unit)? = null,
   bottomBar: (@Composable () -> Unit)? = null,
   floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
-  isFloatingActionButtonDocked: Boolean = false,
   backgroundColor: Color = MaterialTheme.colors.background,
   applyInsets: Boolean = true,
   scrollTopBar: Boolean = topBar != null,
@@ -46,7 +44,6 @@ import com.ivianuu.essentials.ui.insets.*
           if (topBarScrollState == null) Modifier
           else Modifier.nestedScroll(topBarScrollState)
         ),
-      scaffoldState = state,
       topBar = topBar?.let {
         if (topBarScrollState == null) topBar
         else ({
@@ -76,7 +73,6 @@ import com.ivianuu.essentials.ui.insets.*
           }
           ) else ({}),
       floatingActionButtonPosition = floatingActionButtonPosition,
-      isFloatingActionButtonDocked = isFloatingActionButtonDocked,
       backgroundColor = backgroundColor
     ) { bodyPadding ->
       val insets = if (applyInsets) LocalInsets.current else Insets()
