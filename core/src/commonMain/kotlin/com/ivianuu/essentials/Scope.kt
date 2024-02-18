@@ -183,3 +183,6 @@ interface ScopeObserver<N> : ExtensionPoint<ScopeObserver<N>> {
 }
 
 val LocalScope = compositionLocalOf<Scope<*>> { error("No provided scope") }
+
+val scopedCoroutineScope: CoroutineScope
+  @Composable get() = LocalScope.current.coroutineScope
