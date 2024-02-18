@@ -17,7 +17,7 @@ class ConfirmationScreen(val title: String) : DialogScreen<ConfirmationScreen.Re
     @Provide fun ui(
       navigator: Navigator,
       screen: ConfirmationScreen,
-    ) = Ui<ConfirmationScreen, Unit> {
+    ) = Ui<ConfirmationScreen> {
       DialogScaffold {
         Dialog(
           title = { Text(screen.title) },

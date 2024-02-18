@@ -24,7 +24,7 @@ class CheckAppsScreen : Screen<Unit> {
       db: @CheckApps Db,
       launchableAppPredicate: LaunchableAppPredicate,
       scope: ScopedCoroutineScope<ScreenScope>
-    ) = Ui<CheckAppsScreen, Unit> {
+    ) = Ui<CheckAppsScreen> {
       remember {
         checkableAppsUi(
           CheckableAppsScreen(

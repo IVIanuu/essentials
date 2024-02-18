@@ -36,7 +36,7 @@ class ActionPickerScreen(
       permissionManager: PermissionManager,
       @Inject repository: ActionRepository,
       screen: ActionPickerScreen
-    ) = Ui<ActionPickerScreen, Unit> {
+    ) = Ui<ActionPickerScreen> {
       val items = collectResource {
         buildList<ActionPickerItem> {
           if (screen.showDefaultOption)

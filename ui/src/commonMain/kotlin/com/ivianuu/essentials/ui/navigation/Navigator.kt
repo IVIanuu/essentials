@@ -119,3 +119,15 @@ suspend fun Navigator.clear() {
 }
 
 val Scope<*>.navigator: Navigator get() = service()
+
+@Tag annotation class NavGraph<N>
+
+object RootNavGraph
+
+fun interface ScreenInterceptor<R> {
+  suspend operator fun invoke(screen: Screen<R>): (suspend () -> R?)?
+
+  @Provide companion object {
+    @Provide val defaultScreenInterceptors get() = emptyList<ScreenInterceptor<*>>()
+  }
+}

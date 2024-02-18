@@ -25,7 +25,7 @@ class UnlockScreen : Screen<Unit> {
       deviceScreenManager: DeviceScreenManager,
       scope: ScopedCoroutineScope<ScreenScope>,
       toaster: Toaster
-    ) = Ui<UnlockScreen, Unit> {
+    ) = Ui<UnlockScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Unlock") } }) {
         Column(
           modifier = Modifier.fillMaxSize(),

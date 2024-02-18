@@ -26,7 +26,7 @@ class AppPickerScreen(
       navigator: Navigator,
       repository: AppRepository,
       screen: AppPickerScreen
-    ) = Ui<AppPickerScreen, Unit> {
+    ) = Ui<AppPickerScreen> {
       ScreenScaffold(
         topBar = { AppBar { Text(screen.title ?: "Pick an app") } }
       ) {

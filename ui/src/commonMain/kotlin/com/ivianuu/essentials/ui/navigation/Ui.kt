@@ -6,6 +6,6 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
 
-@Stable fun interface Ui<S : Screen<*>, T> {
-  @Composable operator fun invoke(state: T)
+@Stable fun interface Ui<S : Screen<*>> {
+  @Composable fun Content()
 }

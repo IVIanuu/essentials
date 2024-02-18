@@ -25,7 +25,7 @@ import com.ivianuu.injekt.*
 
 class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit> {
   @Provide companion object {
-    @Provide fun ui(screen: HelpScreen) = Ui<HelpScreen, Unit> {
+    @Provide fun ui(screen: HelpScreen) = Ui<HelpScreen> {
       var expandedItem: HelpItem? by remember {
         mutableStateOf(
           screen.categories

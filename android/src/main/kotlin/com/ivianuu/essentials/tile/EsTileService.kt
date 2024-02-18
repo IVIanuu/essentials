@@ -113,5 +113,5 @@ abstract class AbstractEsTileService(
 ) {
   private val presenter = tilePresenterRecords[tileService::class]?.invoke()
     ?: error("No tile found for ${tileService::class} in ${tilePresenterRecords.toMap()}")
-  val tileState = coroutineScope.compositionStateFlow { presenter() }
+  val tileState = coroutineScope.compositionStateFlow { presenter.present() }
 }

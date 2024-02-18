@@ -28,7 +28,7 @@ class PopupScreen(
   val content: @Composable () -> Unit,
 ) : OverlayScreen<Unit>
 
-@Provide fun popupUi(navigator: Navigator, screen: PopupScreen) = Ui<PopupScreen, Unit> {
+@Provide fun popupUi(navigator: Navigator, screen: PopupScreen) = Ui<PopupScreen> {
   var previousConstraints by remember { mutableStateOf<Constraints?>(null) }
 
   BoxWithConstraints {

@@ -21,7 +21,7 @@ class ListScreen<T : Any>(
     @Provide fun ui(
       key: ListScreen<Any>,
       navigator: Navigator
-    ) = Ui<ListScreen<Any>, Unit> {
+    ) = Ui<ListScreen<Any>> {
       DialogScaffold {
         Dialog(
           title = key.title?.let { { Text(it) } },

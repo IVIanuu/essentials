@@ -25,7 +25,7 @@ object ChildNavGraph
 
 @Provide fun childNavigationUi(
   screenContextComponent: ScreenContextComponent<ChildNavGraph>
-) = Ui<ChildNavigationScreen, Unit> {
+) = Ui<ChildNavigationScreen> {
   ScreenScaffold(topBar = { AppBar { Text("Child Navigation") } }) {
     Column {
       (1..3).forEach { navigationIndex ->
@@ -57,7 +57,7 @@ data class ChildNavigationItemScreen(
     @Provide fun ui(
       navigator: Navigator,
       screen: ChildNavigationItemScreen
-    ): @NavGraph<ChildNavGraph> Ui<ChildNavigationItemScreen, Unit> = Ui {
+    ): @NavGraph<ChildNavGraph> Ui<ChildNavigationItemScreen> = Ui {
       val color = Colors.shuffled().first()
 
       Surface(

@@ -21,7 +21,7 @@ class AdsScreen : Screen<Unit> {
     @Provide fun ui(
       adsEnabled: MutableStateFlow<AdsEnabled>,
       fullScreenAd: FullScreenAdManager
-    ) = Ui<AdsScreen, Unit> {
+    ) = Ui<AdsScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Ads") } }) {
         VerticalList {
           item {

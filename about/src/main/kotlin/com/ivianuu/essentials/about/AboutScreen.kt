@@ -30,7 +30,7 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
       donations: (() -> List<Donation>)? = null,
       navigator: Navigator,
       screen: AboutScreen
-    ) = Ui<AboutScreen, Unit> {
+    ) = Ui<AboutScreen> {
       ScreenScaffold(topBar = { AppBar { Text("About") } }) {
         VerticalList {
           item {

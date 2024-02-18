@@ -26,7 +26,7 @@ class TextInputScreen(
     @Provide fun ui(
       navigator: Navigator,
       screen: TextInputScreen
-    ) = Ui<TextInputScreen, Unit> {
+    ) = Ui<TextInputScreen> {
       DialogScaffold {
         var currentValue by remember {
           mutableStateOf(TextFieldValue(screen.initial, TextRange(screen.initial.length)))

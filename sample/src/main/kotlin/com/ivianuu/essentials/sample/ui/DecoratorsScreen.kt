@@ -20,7 +20,7 @@ import com.ivianuu.injekt.*
 
 class DecoratorsScreen : Screen<Unit> {
   @Provide companion object {
-    @Provide val ui = Ui<DecoratorsScreen, Unit> {
+    @Provide val ui = Ui<DecoratorsScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Decorators") } }) {
         VerticalList {
           (1..10).forEach { itemIndex ->

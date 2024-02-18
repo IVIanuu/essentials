@@ -22,7 +22,7 @@ class BackupAndRestoreScreen : Screen<Unit> {
     @Provide fun ui(
       backupManager: BackupManager,
       toaster: Toaster,
-    ) = Ui<BackupAndRestoreScreen, Unit> {
+    ) = Ui<BackupAndRestoreScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Backup/Restore") } }) {
         VerticalList {
           item {

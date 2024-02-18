@@ -61,7 +61,7 @@ class MediaActionSettingsScreen : Screen<Unit> {
       navigator: Navigator,
       intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
       pref: DataStore<MediaActionPrefs>
-    ) = Ui<MediaActionSettingsScreen, Unit> {
+    ) = Ui<MediaActionSettingsScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Media action settings") } }) {
         VerticalList {
           item {

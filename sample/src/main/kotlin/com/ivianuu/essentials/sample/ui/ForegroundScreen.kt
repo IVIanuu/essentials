@@ -27,7 +27,7 @@ class ForegroundScreen : Screen<Unit> {
     @Provide fun ui(
       foregroundManager: ForegroundManager,
       notificationFactory: NotificationFactory
-    ) = Ui<ForegroundScreen, Unit> {
+    ) = Ui<ForegroundScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Foreground") } }) {
         var isEnabled by remember { mutableStateOf(false) }
 

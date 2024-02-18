@@ -27,7 +27,7 @@ class MultiChoiceListScreen<T : Any>(
     @Provide fun ui(
       navigator: Navigator,
       screen: MultiChoiceListScreen<Any>,
-    ) = Ui<MultiChoiceListScreen<Any>, Unit> {
+    ) = Ui<MultiChoiceListScreen<Any>> {
       DialogScaffold {
         var selectedItems by remember { mutableStateOf(screen.selected) }
 

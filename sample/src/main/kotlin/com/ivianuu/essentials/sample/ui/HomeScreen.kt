@@ -31,7 +31,7 @@ import com.ivianuu.injekt.*
   itemsFactory: () -> List<HomeItem>,
   navigator: Navigator,
   toaster: Toaster
-) = Ui<HomeScreen, Unit> {
+) = Ui<HomeScreen> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   ScreenScaffold(
     topBar = {

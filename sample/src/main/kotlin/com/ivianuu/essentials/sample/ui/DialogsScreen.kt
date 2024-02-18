@@ -24,7 +24,7 @@ class DialogsScreen : Screen<Unit> {
     @Provide fun ui(
       navigator: Navigator,
       toaster: Toaster
-    ) = Ui<DialogsScreen, Unit> {
+    ) = Ui<DialogsScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Dialogs") } }) {
         VerticalList(
           modifier = Modifier.fillMaxSize(),

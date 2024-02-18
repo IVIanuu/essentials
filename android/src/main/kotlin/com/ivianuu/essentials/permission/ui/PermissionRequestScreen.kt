@@ -33,7 +33,7 @@ class PermissionRequestScreen(
       permissionManager: PermissionManager,
       requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>,
       screen: PermissionRequestScreen
-    ) = Ui<PermissionRequestScreen, Unit> {
+    ) = Ui<PermissionRequestScreen> {
       LaunchedEffect(true) {
         permissionManager.permissionState(screen.permissionsKeys).first { it }
         navigator.pop(screen, true)

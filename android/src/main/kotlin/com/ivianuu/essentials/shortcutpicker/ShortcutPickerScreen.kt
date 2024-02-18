@@ -26,7 +26,7 @@ class ShortcutPickerScreen : Screen<Shortcut> {
       repository: ShortcutRepository,
       screen: ShortcutPickerScreen,
       toaster: Toaster
-    ) = Ui<ShortcutPickerScreen, Unit> {
+    ) = Ui<ShortcutPickerScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Pick an shortcut") } }) {
         ResourceVerticalListFor(repository.shortcuts.collectResource()) { shortcut ->
           ListItem(

@@ -23,7 +23,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class WorkScreen : Screen<Unit> {
   @Provide companion object {
-    @Provide fun ui(workManager: WorkManager) = Ui<WorkScreen, Unit> {
+    @Provide fun ui(workManager: WorkManager) = Ui<WorkScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Work") } }) {
         Column {
           if (workManager.isWorkerRunning(SampleWorkId).collect())

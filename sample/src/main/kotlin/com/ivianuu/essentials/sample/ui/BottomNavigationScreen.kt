@@ -26,7 +26,7 @@ import com.ivianuu.injekt.*
 
 class BottomNavigationScreen : Screen<Unit> {
   @Provide companion object {
-    @Provide val ui = Ui<BottomNavigationScreen, Unit> {
+    @Provide val ui = Ui<BottomNavigationScreen> {
       var selectedItem by remember { mutableStateOf(BottomNavItem.entries.first()) }
 
       ScreenScaffold(

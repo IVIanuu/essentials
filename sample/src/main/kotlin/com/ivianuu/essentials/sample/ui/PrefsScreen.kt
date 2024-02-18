@@ -26,7 +26,7 @@ class PrefsScreen : Screen<Unit> {
     @Provide fun ui(
       navigator: Navigator,
       pref: DataStore<SamplePrefs>
-    ) = Ui<PrefsScreen, Unit> {
+    ) = Ui<PrefsScreen> {
       val prefs = pref.data.collect(SamplePrefs())
       ScreenScaffold(topBar = { AppBar { Text("Prefs") } }) {
         VerticalList {

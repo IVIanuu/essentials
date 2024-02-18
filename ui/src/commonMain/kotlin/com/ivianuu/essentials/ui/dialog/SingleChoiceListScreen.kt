@@ -25,7 +25,7 @@ class SingleChoiceListScreen<T : Any>(
     @Provide fun ui(
       navigator: Navigator,
       screen: SingleChoiceListScreen<Any>,
-    ) = Ui<SingleChoiceListScreen<Any>, Unit> {
+    ) = Ui<SingleChoiceListScreen<Any>> {
       DialogScaffold {
         Dialog(
           applyContentPadding = false,

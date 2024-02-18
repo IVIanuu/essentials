@@ -32,7 +32,7 @@ class PermissionsScreen : Screen<Unit> {
   @Provide companion object {
     @Provide fun ui(
       permissionManager: PermissionManager
-    ) = Ui<PermissionsScreen, Unit> {
+    ) = Ui<PermissionsScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Permissions") } }) {
         Button(
           modifier = Modifier.center(),

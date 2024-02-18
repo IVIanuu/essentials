@@ -29,7 +29,7 @@ class SystemWindowScreen : Screen<Unit> {
       permissionManager: PermissionManager,
       scope: ScopedCoroutineScope<ScreenScope>,
       systemWindowManager: SystemWindowManager
-    ) = Ui<SystemWindowScreen, Unit> {
+    ) = Ui<SystemWindowScreen> {
       ScreenScaffold(topBar = { AppBar { Text("System window") } }) {
         var showSystemWindow by remember { mutableStateOf(false) }
 

@@ -26,7 +26,7 @@ class ActionsScreen : Screen<Unit> {
       navigator: Navigator,
       repository: ActionRepository,
       toaster: Toaster
-    ) = Ui<ActionsScreen, Unit> {
+    ) = Ui<ActionsScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Actions") } }) {
         Column {
           Button(

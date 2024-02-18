@@ -46,7 +46,7 @@ class WriteSecureSettingsScreen(
       screen: WriteSecureSettingsScreen,
       shell: Shell,
       toaster: Toaster
-    ) = Ui<WriteSecureSettingsScreen, Unit> {
+    ) = Ui<WriteSecureSettingsScreen> {
       var currentStep by remember { mutableIntStateOf(1) }
       var completedStep by remember { mutableIntStateOf(1) }
 

@@ -32,7 +32,7 @@ class DonationScreen : DialogScreen<Unit> {
       navigator: Navigator,
       screen: DonationScreen,
       toaster: Toaster
-    ) = Ui<DonationScreen, Unit> {
+    ) = Ui<DonationScreen> {
       val skus = collectResource {
         donations
           .value

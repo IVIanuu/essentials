@@ -40,7 +40,7 @@ class ColorPickerScreen(
     @Provide fun ui(
       navigator: Navigator,
       screen: ColorPickerScreen
-    ) = Ui<ColorPickerScreen, Unit> {
+    ) = Ui<ColorPickerScreen> {
       DialogScaffold {
         var currentColor by remember { mutableStateOf(screen.initialColor) }
         var currentScreen by remember { mutableStateOf(ColorPickerTab.COLORS) }

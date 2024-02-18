@@ -52,7 +52,7 @@ class GoPremiumScreen(
       premiumVersionManager: PremiumVersionManager,
       screen: GoPremiumScreen,
       toaster: Toaster
-    ) = Ui<GoPremiumScreen, Unit> {
+    ) = Ui<GoPremiumScreen> {
       val premiumSkuDetails = premiumVersionManager.premiumSkuDetails.collectResource()
       val goPremium = action {
         if (premiumVersionManager.purchasePremiumVersion()) {
