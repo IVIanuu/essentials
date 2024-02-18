@@ -5,6 +5,9 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
@@ -15,7 +18,7 @@ import com.ivianuu.injekt.common.*
   @Provide val lockScreenAction get() = Action(
       id = LockScreenActionId,
       title = "Lock screen",
-      icon = staticActionIcon(R.drawable.ic_power_settings),
+      icon = { Icon(Icons.Default.SettingsPower, null) },
       permissions = listOf(typeKeyOf<ActionAccessibilityPermission>())
     )
 

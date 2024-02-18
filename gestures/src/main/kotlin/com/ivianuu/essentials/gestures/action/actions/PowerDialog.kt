@@ -5,6 +5,9 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
@@ -15,7 +18,7 @@ import com.ivianuu.injekt.*
     id = PowerDialogActionId,
     title = "Power dialog",
     permissions = accessibilityActionPermissions,
-    icon = staticActionIcon(R.drawable.ic_power_settings_new)
+    icon = { Icon(Icons.Default.PowerSettingsNew, null) }
   )
 
   @Provide fun executor(

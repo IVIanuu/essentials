@@ -10,6 +10,8 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
@@ -91,7 +93,7 @@ class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit> {
 
           val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
           Icon(
-            painter = painterResource(R.drawable.ic_expand_more),
+            Icons.Default.ExpandMore,
             modifier = Modifier
               .size(24.dp)
               .rotate(iconRotation),

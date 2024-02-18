@@ -5,6 +5,9 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
@@ -17,7 +20,7 @@ import kotlinx.coroutines.*
     get() = Action(
       id = ScreenshotActionId,
       title = "Screenshot",
-      icon = staticActionIcon(R.drawable.ic_photo_album),
+      icon = { Icon(Icons.Default.PhotoAlbum, null) },
       permissions = listOf(typeKeyOf<ActionAccessibilityPermission>())
     )
 

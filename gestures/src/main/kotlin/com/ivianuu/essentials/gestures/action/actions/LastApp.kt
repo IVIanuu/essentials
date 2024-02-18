@@ -5,6 +5,9 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
@@ -19,7 +22,7 @@ import kotlinx.coroutines.*
       permissions = accessibilityActionPermissions,
       unlockScreen = true,
       closeSystemDialogs = true,
-      icon = staticActionIcon(R.drawable.ic_repeat)
+      icon = { Icon(Icons.Default.Repeat, null) }
     )
 
   @Provide fun executor(

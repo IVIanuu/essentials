@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.vector.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.sample.R
@@ -40,7 +41,7 @@ class BottomNavigationScreen : Screen<Unit> {
                 alwaysShowLabel = false,
                 selected = item == selectedItem,
                 onClick = { selectedItem = item },
-                icon = { Icon(painterResource(item.icon), null) },
+                icon = { Icon(item.icon, null) },
                 label = { Text(item.title) }
               )
             }
@@ -70,32 +71,32 @@ class BottomNavigationScreen : Screen<Unit> {
 
     private enum class BottomNavItem(
       val title: String,
-      val icon: Int,
+      val icon: ImageVector,
       val color: Color
     ) {
       HOME(
         title = "Home",
-        icon = R.drawable.ic_home,
+        icon = Icons.Default.Home,
         color = Color.Yellow
       ),
       MAILS(
         title = "Mails",
-        icon = R.drawable.ic_email,
+        icon = Icons.Default.Email,
         color = Color.Red
       ),
       SEARCH(
         title = "Search",
-        icon = R.drawable.ic_search,
+        icon = Icons.Default.Search,
         color = Color.Blue
       ),
       SCHEDULE(
         title = "Schedule",
-        icon = R.drawable.ic_view_agenda,
+        icon = Icons.Default.ViewAgenda,
         color = Color.Cyan
       ),
       SETTINGS(
         title = "Settings",
-        icon = R.drawable.ic_settings,
+        icon = Icons.Default.Settings,
         color = Color.Green
       )
     }

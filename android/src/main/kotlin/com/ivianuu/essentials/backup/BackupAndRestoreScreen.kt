@@ -5,6 +5,8 @@
 package com.ivianuu.essentials.backup
 
 import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.android.R
@@ -32,7 +34,7 @@ class BackupAndRestoreScreen : Screen<Unit> {
                     toaster("Failed to backup your data!")
                   }
               },
-              leading = { Icon(painterResource(R.drawable.ic_save), null) },
+              leading = { Icon(Icons.Default.Save, null) },
               title = { Text("Backup") },
               subtitle = { Text("Export your data") }
             )
@@ -46,7 +48,7 @@ class BackupAndRestoreScreen : Screen<Unit> {
                     toaster("Failed to restore your data!")
                   }
               },
-              leading = { Icon(painterResource(R.drawable.ic_restore), null) },
+              leading = { Icon(Icons.Default.Restore, null) },
               title = { Text("Restore") },
               subtitle = { Text("Restore your data") }
             )

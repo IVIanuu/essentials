@@ -5,6 +5,8 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.premium.*
@@ -22,43 +24,43 @@ import com.ivianuu.injekt.*
 @Provide val premiumFeature = listOf(
   AppFeature(
     title = "Sample feature 1",
-    icon = { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_accessibility), null) },
+    icon = { Icon(Icons.Default.Accessibility, null) },
     inPremium = false,
     inBasic = true
   ),
   AppFeature(
     title = "Sample feature 2",
-    icon = { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_notifications), null) },
+    icon = { Icon(Icons.Default.Notifications, null) },
     inPremium = true,
     inBasic = false
   ),
   AppFeature(
     title = "Sample feature 3",
-    icon = { Icon(painterResource(com.ivianuu.essentials.gestures.R.drawable.ic_photo_album), null) },
+    icon = { Icon(Icons.Default.PhotoAlbum, null) },
     inPremium = true,
     inBasic = false
   ),
   AppFeature(
     title = "Sample feature 4",
-    icon = { Icon(painterResource(com.ivianuu.essentials.gestures.R.drawable.ic_adb), null) },
+    icon = { Icon(Icons.Default.Adb, null) },
     inPremium = true,
     inBasic = true
   ),
   AppFeature(
     title = "Sample feature 5",
-    icon = { Icon(painterResource(com.ivianuu.essentials.gestures.R.drawable.ic_adb), null) },
+    icon = { Icon(Icons.Default.Adb, null) },
     inPremium = true,
     inBasic = true
   ),
   AppFeature(
     title = "Sample feature 6",
-    icon = { Icon(painterResource(com.ivianuu.essentials.gestures.R.drawable.ic_adb), null) },
+    icon = { Icon(Icons.Default.Adb, null) },
     inPremium = true,
     inBasic = true
   ),
   AppFeature(
     title = "Sample feature 7",
-    icon = { Icon(painterResource(com.ivianuu.essentials.gestures.R.drawable.ic_adb), null) },
+    icon = { Icon(Icons.Default.Adb, null) },
     inPremium = true,
     inBasic = true
   )

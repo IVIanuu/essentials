@@ -6,6 +6,8 @@ package com.ivianuu.essentials.gestures.action.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
@@ -73,7 +75,7 @@ class ActionPickerScreen(
             trailing = if (item.settingsScreen == null) null
             else ({
               IconButton(onClick = action { navigator.push(item.settingsScreen!!) }) {
-                Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_settings), null)
+                Icon(Icons.Default.Settings, null)
               }
             }),
             title = { Text(item.title) }

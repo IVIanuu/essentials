@@ -9,6 +9,8 @@ import android.graphics.*
 import android.util.*
 import androidx.compose.foundation.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.*
@@ -62,7 +64,7 @@ import java.io.*
   override val title: String
     get() = "Shortcut"
   override val icon: @Composable () -> Unit
-    get() = { Icon(painterResource(R.drawable.ic_content_cut), null) }
+    get() = { Icon(Icons.Default.ContentCut, null) }
 
   override suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result? {
     val shortcut = navigator.push(ShortcutPickerScreen()) ?: return null

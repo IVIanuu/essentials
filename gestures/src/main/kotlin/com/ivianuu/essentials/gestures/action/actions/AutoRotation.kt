@@ -6,6 +6,8 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.data.*
@@ -21,10 +23,8 @@ import com.ivianuu.injekt.common.*
     permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
     icon = {
       Icon(
-        painterResource(
-          if (autoRotationDataStore.data.collect(1) == 1) R.drawable.ic_screen_rotation
-          else R.drawable.ic_screen_lock_rotation
-        ),
+        if (autoRotationDataStore.data.collect(1) == 1) Icons.Default.ScreenRotation
+        else Icons.Default.ScreenLockRotation,
         null
       )
     }

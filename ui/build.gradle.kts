@@ -27,6 +27,8 @@ kotlin {
         api(Deps.circuitFoundation)
         api(Deps.Compose.foundation)
         api(Deps.Compose.material)
+        api(Deps.Compose.materialIconsExtended)
+        api(Deps.composeIconsFontAwesome)
         api(Deps.materialMotionCompose)
         api(project(":core"))
       }

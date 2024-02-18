@@ -129,11 +129,11 @@ class GoPremiumScreen(
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
         Icon(
+          painter = painterResource(R.drawable.ic_medal),
           modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
             .size(36.dp),
-          painter = painterResource(R.drawable.ic_medal),
           tint = MaterialTheme.colors.primary,
           contentDescription = null
         )
@@ -208,11 +208,11 @@ class GoPremiumScreen(
 
           features.forEach { feature ->
             Icon(
+              if (feature.inPremium) Icons.Default.Done
+              else Icons.Default.Remove,
               modifier = Modifier
                 .size(48.dp)
                 .center(),
-              painter = if (feature.inPremium) rememberVectorPainter(Icons.Default.Done)
-              else painterResource(R.drawable.ic_remove),
               tint = MaterialTheme.colors.primary,
               contentDescription = null
             )
@@ -232,11 +232,11 @@ class GoPremiumScreen(
 
           features.forEach { feature ->
             Icon(
+              if (feature.inPremium) Icons.Default.Remove
+              else Icons.Default.Done,
               modifier = Modifier
                 .size(48.dp)
                 .center(),
-              painter = if (feature.inBasic) rememberVectorPainter(Icons.Default.Done)
-              else painterResource(R.drawable.ic_remove),
               tint = MaterialTheme.colors.primary,
               contentDescription = null
             )

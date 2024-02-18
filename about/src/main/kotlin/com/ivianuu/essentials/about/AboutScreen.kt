@@ -6,8 +6,12 @@ package com.ivianuu.essentials.about
 
 import android.content.*
 import android.net.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.ui.res.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.donation.*
@@ -15,6 +19,9 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import compose.icons.*
+import compose.icons.fontawesomeicons.*
+import compose.icons.fontawesomeicons.brands.*
 
 class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
   @Provide companion object {
@@ -28,7 +35,7 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
         VerticalList {
           item {
             ListItem(
-              leading = { Icon(painterResource(R.drawable.ic_info), null) },
+              leading = { Icon(Icons.Default.Info, null) },
               title = { Text("Version") },
               subtitle = { Text(appConfig.versionName) }
             )
@@ -37,7 +44,7 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
           item {
             ListItem(
               onClick = action { navigator.push(PlayStoreAppDetailsKey(appConfig.packageName)) },
-              leading = { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_star), null) },
+              leading = { Icon(Icons.Default.Star, null) },
               title = { Text("Rate") },
               subtitle = { Text("I'll be happy if you give me 5 stars") }
             )
@@ -47,7 +54,7 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
             item {
               ListItem(
                 onClick = action { navigator.push(DonationScreen()) },
-                leading = { Icon(painterResource(R.drawable.ic_favorite), null) },
+                leading = { Icon(Icons.Default.Favorite, null) },
                 title = { Text("Donate") }
               )
             }
@@ -57,7 +64,7 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
               onClick = action {
                 navigator.push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
               },
-              leading = { Icon(painterResource(R.drawable.ic_google_play), null) },
+              leading = { Icon(Icons.Default.ShoppingBag, null) },
               title = { Text("More apps") },
               subtitle = { Text("Check out my other apps on Google Play") }
             )
@@ -68,7 +75,13 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
               onClick = action {
                 navigator.push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
               },
-              leading = { Icon(painterResource(R.drawable.ic_reddit), null) },
+              leading = {
+                Icon(
+                  imageVector = FontAwesomeIcons.Brands.RedditAlien,
+                  modifier = Modifier.size(24.dp),
+                  contentDescription = null
+                )
+              },
               title = { Text("Reddit") },
               subtitle = { Text("If you need help or have questions, my subreddit is a good place to go") }
             )
@@ -77,7 +90,13 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
           item {
             ListItem(
               onClick = action { navigator.push(UrlScreen("https://github.com/IVIanuu")) },
-              leading = { Icon(painterResource(R.drawable.ic_github), null) },
+              leading = {
+                Icon(
+                  imageVector = FontAwesomeIcons.Brands.Github,
+                  modifier = Modifier.size(24.dp),
+                  contentDescription = null
+                )
+              },
               title = { Text("Github") },
               subtitle = { Text("Check out my work on Github") }
             )
@@ -86,7 +105,13 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
           item {
             ListItem(
               onClick = action { navigator.push(UrlScreen("https://twitter.com/IVIanuu")) },
-              leading = { Icon(painterResource(R.drawable.ic_twitter), null) },
+              leading = {
+                Icon(
+                  imageVector = FontAwesomeIcons.Brands.Twitter,
+                  modifier = Modifier.size(24.dp),
+                  contentDescription = null
+                )
+              },
               title = { Text("Twitter") },
               subtitle = { Text("Follow me on Twitter") }
             )
@@ -108,7 +133,7 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
                     .asScreen()
                 )
               },
-              leading = { Icon(painterResource(R.drawable.ic_email), null) },
+              leading = { Icon(Icons.Default.Email, null) },
               title = { Text("Send feedback") },
               subtitle = { Text(email) }
             )
@@ -118,7 +143,7 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
             item {
               ListItem(
                 onClick = action { navigator.push(UrlScreen(screen.privacyPolicyUrl)) },
-                leading = { Icon(painterResource(R.drawable.ic_policy), null) },
+                leading = { Icon(Icons.Default.Policy, null) },
                 title = { Text("Privacy policy") }
               )
             }

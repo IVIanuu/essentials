@@ -4,6 +4,9 @@
 
 package com.ivianuu.essentials.gestures.action
 
+import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import arrow.core.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
@@ -50,7 +53,7 @@ import kotlinx.coroutines.flow.*
       ?: Action(
         id = "error",
         title = RECONFIGURE_ACTION_MESSAGE,
-        icon = staticActionIcon(R.drawable.ic_error)
+        icon = { Icon(Icons.Default.Error, null) }
       )
   }
 

@@ -9,6 +9,9 @@ import android.content.pm.*
 import android.hardware.camera2.*
 import android.os.*
 import android.provider.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
@@ -27,7 +30,7 @@ import kotlin.coroutines.*
     get() = Action(
       id = CameraActionId,
       title = "Camera",
-      icon = staticActionIcon(R.drawable.ic_photo_camera),
+      icon = { Icon(Icons.Default.PhotoCamera, null) },
       permissions = listOf(
         typeKeyOf<ActionAccessibilityPermission>(),
         typeKeyOf<ActionSystemOverlayPermission>()

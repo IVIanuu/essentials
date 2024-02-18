@@ -83,9 +83,12 @@ object Deps {
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
     const val googleFonts = "androidx.compose.ui:ui-text-google-fonts:$version"
     const val material = "org.jetbrains.compose.material:material:$version"
+    const val materialIconsExtended = "org.jetbrains.compose.material:material-icons-extended:$version"
     const val runtime = "org.jetbrains.compose.runtime:runtime:$version"
     const val runtimeSaveable = "org.jetbrains.compose.runtime:runtime-saveable:$version"
   }
+
+  const val composeIconsFontAwesome = "br.com.devsrsouza.compose.icons:font-awesome:1.1.0"
 
   object Coroutines {
     private const val version = "1.8.0"

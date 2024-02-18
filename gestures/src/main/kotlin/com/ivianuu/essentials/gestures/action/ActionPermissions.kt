@@ -5,6 +5,8 @@
 package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
@@ -17,17 +19,17 @@ import com.ivianuu.injekt.*
   serviceClass = EsAccessibilityService::class,
   title = "Accessibility",
   desc = "Required to perform actions such as back, open notifications, or to switch the camera",
-  icon = { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_accessibility), null) }
+  icon = { Icon(Icons.Default.Accessibility, null) }
 )
 
 @Provide class ActionSystemOverlayPermission : SystemOverlayPermission(
     title = "System overlay",
     desc = "Required to open apps from the background",
-    icon = { Icon(painterResource(R.drawable.ic_adb), null) }
+    icon = { Icon(Icons.Default.Adb, null) }
   )
 
 @Provide class ActionWriteSettingsPermission : WriteSettingsPermission(
     title = "Write settings",
     desc = "Required to change settings",
-    icon = { Icon(painterResource(com.ivianuu.essentials.android.R.drawable.ic_settings), null) }
+    icon = { Icon(Icons.Default.Settings, null) }
   )

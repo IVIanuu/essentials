@@ -6,6 +6,9 @@ package com.ivianuu.essentials.donation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
@@ -70,7 +73,7 @@ class DonationScreen : DialogScreen<Unit> {
                   }
                 },
                 title = { Text(donation.title) },
-                leading = { Icon(painterResource(donation.donation.iconRes), null) },
+                leading = donation.donation.icon,
                 trailing = {
                   Text(
                     text = donation.price,
@@ -94,16 +97,24 @@ class DonationScreen : DialogScreen<Unit> {
   }
 }
 
-data class Donation(val sku: Sku, val iconRes: Int)
+data class Donation(val sku: Sku, val icon: @Composable () -> Unit)
 
 @JvmInline value class Donations(val value: List<Donation>) {
   @Provide companion object {
     @Provide val default get() = Donations(
         listOf(
-          Donation(Sku("donation_crossaint", Sku.Type.IN_APP), R.drawable.ic_bakery_dining),
-          Donation(Sku("donation_coffee_2", Sku.Type.IN_APP), R.drawable.ic_free_breakfast),
-          Donation(Sku("donation_burger_menu", Sku.Type.IN_APP), R.drawable.ic_lunch_dining),
-          Donation(Sku("donation_movie", Sku.Type.IN_APP), R.drawable.ic_popcorn)
+          Donation(Sku("donation_crossaint", Sku.Type.IN_APP)) {
+            Icon(Icons.Default.BakeryDining, null)
+          },
+          Donation(Sku("donation_coffee_2", Sku.Type.IN_APP)) {
+            Icon(Icons.Default.BreakfastDining, null)
+          },
+          Donation(Sku("donation_burger_menu", Sku.Type.IN_APP)) {
+            Icon(Icons.Default.BreakfastDining, null)
+          },
+          Donation(Sku("donation_movie", Sku.Type.IN_APP)) {
+            Icon(Icons.Default.Theaters, null)
+          }
         )
       )
   }
