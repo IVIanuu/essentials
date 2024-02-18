@@ -32,7 +32,7 @@ class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit> {
         )
       }
 
-      ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.help_title)) } }) {
+      ScreenScaffold(topBar = { AppBar { Text("Help") } }) {
         VerticalList {
           screen.categories.forEach { category ->
             if (category.title != null) {

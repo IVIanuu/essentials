@@ -21,8 +21,7 @@ import kotlinx.coroutines.flow.*
 @Provide class AppActionFactory(
   private val appRepository: AppRepository,
   private val intentSender: ActionIntentSender,
-  private val packageManager: PackageManager,
-  private val resources: Resources
+  private val packageManager: PackageManager
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
@@ -31,8 +30,7 @@ import kotlinx.coroutines.flow.*
       .split(ACTION_DELIMITER)[0]
     return Action<ActionId>(
       id = id,
-      title = appRepository.appInfo(packageName).first()?.appName
-        ?: resources(R.string.unknown_action_name),
+      title = appRepository.appInfo(packageName).first()!!.appName,
       unlockScreen = true,
       closeSystemDialogs = true,
       enabled = true,

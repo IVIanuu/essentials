@@ -91,7 +91,7 @@ class WriteSecureSettingsScreen(
                   }
                   .onLeft {
                     it.printStackTrace()
-                    toaster(R.string.secure_settings_no_root)
+                    toaster("Your device is not rooted!")
                   }
               }) {
                 Text(stringResource(R.string.secure_settings_use_root_action))

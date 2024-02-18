@@ -52,7 +52,7 @@ import kotlinx.coroutines.flow.*
       cameraManager.setTorchMode(cameraId, !state)
     }.onLeft {
       it.printStackTrace()
-      toaster(R.string.failed_to_enable_torch)
+      toaster("Failed to enable flashlight!")
     }
   }
 }

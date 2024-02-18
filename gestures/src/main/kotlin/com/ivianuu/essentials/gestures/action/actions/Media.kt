@@ -65,7 +65,7 @@ class MediaActionSettingsScreen : Screen<Unit> {
       intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
       pref: DataStore<MediaActionPrefs>
     ) = Ui<MediaActionSettingsScreen, Unit> {
-      ScreenScaffold(topBar = { AppBar { Text(stringResource(R.string.media_app_settings_ui_title)) } }) {
+      ScreenScaffold(topBar = { AppBar { Text("Media action settings") } }) {
         VerticalList {
           item {
             ListItem(
@@ -78,7 +78,7 @@ class MediaActionSettingsScreen : Screen<Unit> {
                 if (newMediaApp != null)
                   pref.updateData { copy(mediaApp = newMediaApp.packageName) }
               },
-              title = { Text(stringResource(R.string.pref_media_app)) },
+              title = { Text("Media app") },
               subtitle = {
                 val mediaApp = pref.data
                   .flatMapLatest {
@@ -87,10 +87,7 @@ class MediaActionSettingsScreen : Screen<Unit> {
                   }
                   .collectResource()
                 Text(
-                  stringResource(
-                    R.string.pref_media_app_summary,
-                    mediaApp.getOrNull()?.appName ?: stringResource(R.string.none)
-                  )
+                  "Define the target app for the media actions (current: ${mediaApp.getOrNull()?.appName ?: "None"})"
                 )
               }
             )

@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.*
   private val deviceScreenManager: DeviceScreenManager,
   private val logger: Logger,
   private val permissionManager: PermissionManager,
-  private val resources: Resources,
   private val toaster: Toaster
 ) {
   suspend fun getAllActions() = withContext(coroutineContexts.computation) {
@@ -38,31 +37,34 @@ import kotlinx.coroutines.flow.*
   }
 
   suspend fun getAction(id: String) = withContext(coroutineContexts.computation) {
-    actions[id]
-      ?.invoke()
-      ?: actionFactories
-        .asSequence()
-        .map { it() }
-        .firstOrNull { it.handles(id) }
-        ?.createAction(id)
+    catch {
+      actions[id]
+        ?.invoke()
+        ?: actionFactories
+          .map { it() }
+          .firstOrNull { it.handles(id) }
+          ?.createAction(id)
+    }
+      .printErrors()
+      .getOrNull()
       ?: Action(
         id = "error",
-        title = resources(R.string.error_action),
+        title = RECONFIGURE_ACTION_MESSAGE,
         icon = staticActionIcon(R.drawable.ic_error)
       )
   }
 
   suspend fun getActionExecutor(id: String) = withContext(coroutineContexts.computation) {
-    actionsExecutors[id]
-      ?.invoke()
-      ?: actionFactories
-        .asSequence()
-        .map { it() }
-        .firstOrNull { it.handles(id) }
-        ?.createExecutor(id)
-      ?: ActionExecutor {
-        toaster(R.string.error_action)
-      }
+    catch {
+      actionsExecutors[id]
+        ?.invoke()
+        ?: actionFactories
+          .map { it() }
+          .firstOrNull { it.handles(id) }
+          ?.createExecutor(id)
+    }
+      .getOrNull()
+      ?: ActionExecutor { toaster(RECONFIGURE_ACTION_MESSAGE) }
   }
 
   suspend fun getActionSettingsKey(id: String) =
@@ -109,7 +111,9 @@ import kotlinx.coroutines.flow.*
         return@catch true
       }.onLeft {
         it.printStackTrace()
-        toaster(R.string.action_execution_failed, id)
+        toaster("Failed to execute action $id!")
       }.getOrElse { false }
     }
+
+  private val RECONFIGURE_ACTION_MESSAGE = "Error please reconfigure this action"
 }

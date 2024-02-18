@@ -31,30 +31,11 @@
     <string name="action_split_screen">Split screen</string>
     <string name="action_torch">Flashlight</string>
 
-    <string name="error_action">Error please reconfigure this action</string>
-
-    <!-- Media -->
-    <string name="media_app_settings_ui_title">Media action settings</string>
-    <string name="pref_media_app">Media app</string>
-    <string name="pref_media_app_summary">Define the target app for the media actions (current: %s)</string>
-
-    <!-- Keycode -->
-    <string name="unknown_action_name">Unknown</string>
-    <string name="activity_not_found">Failed to launch screen!</string>
-    <string name="action_execution_failed">Failed to execute action %s!</string>
-
     <!-- Permissions -->
     <string name="action_accessibility_permission_title">Accessibility</string>
     <string name="action_accessibility_permission_desc">Required to perform actions such as back, open notifications, or to switch the camera</string>
-    <string name="action_notification_policy_permission_title">Notification policy</string>
-    <string name="action_notification_policy_permission_desc">Required to change notification settings</string>
-    <string name="action_root_permission_title">Root</string>
     <string name="action_system_overlay_permission_title">System overlay</string>
     <string name="action_system_overlay_permission_desc">Required to open apps from the background</string>
-    <string name="action_write_secure_settings_permission_title">Write secure settings</string>
-    <string name="action_write_secure_settings_permission_desc">Required to change the navigation bar visibility</string>
     <string name="action_write_settings_permission_title">Write settings</string>
     <string name="action_write_settings_permission_desc">Required to change settings</string>
-
-    <string name="failed_to_enable_torch">Failed to enable flashlight!</string>
 </resources>

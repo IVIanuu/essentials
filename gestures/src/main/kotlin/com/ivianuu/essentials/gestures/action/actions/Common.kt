@@ -67,7 +67,7 @@ operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this,
       ).send()
     }.onLeft {
       it.printStackTrace()
-      toaster(R.string.activity_not_found)
+      toaster("Failed to launch screen!")
     }
   }
 }
