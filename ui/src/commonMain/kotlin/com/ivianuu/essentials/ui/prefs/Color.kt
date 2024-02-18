@@ -17,10 +17,10 @@ import com.ivianuu.essentials.ui.material.*
 @Composable fun ColorListItem(
   value: Color,
   onValueChangeRequest: () -> Unit,
+  modifier: Modifier = Modifier,
   title: (@Composable () -> Unit)? = null,
   subtitle: (@Composable () -> Unit)? = null,
   leading: (@Composable () -> Unit)? = null,
-  modifier: Modifier = Modifier
 ) {
   ListItem(
     modifier = modifier,

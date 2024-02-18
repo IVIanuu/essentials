@@ -13,24 +13,24 @@ import com.slack.circuit.foundation.internal.*
 import kotlin.collections.set
 
 @Composable fun NavigatorContent(
-  modifier: Modifier = Modifier,
   navigator: Navigator,
+  modifier: Modifier = Modifier,
   handleBack: Boolean = true,
   defaultTransitionSpec: ElementTransitionSpec<Screen<*>> = LocalScreenTransitionSpec.current
 ) {
   NavigatorContent<RootNavGraph>(
-    modifier,
     navigator,
     LocalScope.current.service(),
+    modifier,
     handleBack,
     defaultTransitionSpec
   )
 }
 
 @Composable fun <N> NavigatorContent(
-  modifier: Modifier = Modifier,
   navigator: Navigator,
   screenContextComponent: ScreenContextComponent<N>,
+  modifier: Modifier = Modifier,
   handleBack: Boolean = true,
   defaultTransitionSpec: ElementTransitionSpec<Screen<*>> = LocalScreenTransitionSpec.current
 ) {
