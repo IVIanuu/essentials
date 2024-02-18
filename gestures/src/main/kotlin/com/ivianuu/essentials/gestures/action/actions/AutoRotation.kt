@@ -40,6 +40,6 @@ import com.ivianuu.injekt.common.*
 @Tag annotation class AutoRotationTag
 internal typealias AutoRotation = @AutoRotationTag Int
 
-@Provide val autoRotationModule = AndroidSettingModule<AutoRotation, Int>(
+@Provide val autoRotationModule = AndroidSettingModule<AutoRotation>(
   Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM, 1
 )

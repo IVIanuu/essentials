@@ -13,7 +13,7 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-class AndroidSettingModule<T : S, S : Any>(
+class AndroidSettingModule<T : Any>(
   private val name: String,
   private val type: AndroidSettingsType,
   private val defaultValue: T

@@ -2,7 +2,7 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.permission.notificationlistener
+package com.ivianuu.essentials.permission
 
 import android.content.*
 import android.provider.*
@@ -11,8 +11,6 @@ import androidx.compose.runtime.*
 import androidx.core.app.*
 import androidx.core.os.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.intent.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 

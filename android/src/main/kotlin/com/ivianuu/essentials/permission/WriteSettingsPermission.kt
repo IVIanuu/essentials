@@ -2,7 +2,7 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.permission.writesecuresettings
+package com.ivianuu.essentials.permission
 
 import android.content.*
 import android.provider.*
@@ -13,10 +13,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
+import androidx.core.net.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
@@ -31,6 +31,28 @@ import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import splitties.coroutines.*
+import kotlin.time.Duration.Companion.seconds
+
+abstract class WriteSettingsPermission(
+  override val title: String,
+  override val desc: String? = null,
+  override val icon: (@Composable () -> Unit)? = null
+) : Permission {
+  @Provide companion object {
+    @Provide fun <P : WriteSettingsPermission> stateProvider(
+      appContext: AppContext
+    ) = PermissionStateProvider<P> { Settings.System.canWrite(appContext) }
+
+    @Provide fun <P : WriteSettingsPermission> intentFactory(
+      appConfig: AppConfig
+    ) = PermissionIntentFactory<P> {
+      Intent(
+        Settings.ACTION_MANAGE_WRITE_SETTINGS,
+        "package:${appConfig.packageName}".toUri()
+      )
+    }
+  }
+}
 
 class WriteSecureSettingsScreen(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
@@ -58,7 +80,7 @@ class WriteSecureSettingsScreen(
         4 -> collect(false) {
           while (true) {
             emit(permissionManager.permissionState(listOf(screen.permissionKey)).first())
-            delay(1000)
+            delay(1.seconds)
           }
         }
         else -> true
@@ -238,7 +260,7 @@ class WriteSecureSettingsScreen(
 @Tag annotation class DeveloperModeTag
 typealias DeveloperMode = @DeveloperModeTag Int
 
-@Provide val developerModeSettingModule = AndroidSettingModule<DeveloperMode, Int>(
+@Provide val developerModeSettingModule = AndroidSettingModule<DeveloperMode>(
   Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,
   AndroidSettingsType.GLOBAL,
   0
@@ -247,7 +269,7 @@ typealias DeveloperMode = @DeveloperModeTag Int
 @Tag annotation class AdbEnabledTag
 typealias AdbEnabled = @AdbEnabledTag Int
 
-@Provide val adbEnabledSettingModule = AndroidSettingModule<AdbEnabled, Int>(
+@Provide val adbEnabledSettingModule = AndroidSettingModule<AdbEnabled>(
   Settings.Global.ADB_ENABLED,
   AndroidSettingsType.GLOBAL,
   0

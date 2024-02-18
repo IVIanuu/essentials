@@ -13,12 +13,6 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.notificationlistener.*
 import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.accessibility.*
-import com.ivianuu.essentials.permission.notificationlistener.*
-import com.ivianuu.essentials.permission.runtime.*
-import com.ivianuu.essentials.permission.systemoverlay.*
-import com.ivianuu.essentials.permission.writesecuresettings.*
-import com.ivianuu.essentials.permission.writesettings.*
 import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Button

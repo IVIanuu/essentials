@@ -2,13 +2,12 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.permission.runtime
+package com.ivianuu.essentials.permission
 
 import android.content.pm.*
 import androidx.activity.result.contract.*
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 

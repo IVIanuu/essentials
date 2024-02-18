@@ -7,12 +7,8 @@ package com.ivianuu.essentials.gestures.action
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import androidx.compose.ui.res.*
 import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.permission.accessibility.*
-import com.ivianuu.essentials.permission.systemoverlay.*
-import com.ivianuu.essentials.permission.writesettings.*
+import com.ivianuu.essentials.permission.*
 import com.ivianuu.injekt.*
 
 @Provide class ActionAccessibilityPermission : AccessibilityServicePermission(
