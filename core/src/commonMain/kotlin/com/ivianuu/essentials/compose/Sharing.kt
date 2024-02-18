@@ -51,6 +51,6 @@ fun <K, T> CoroutineScope.sharedComposition(
       sharedFlow
     }
 
-    sharedFlow.collectAsState(sharedFlow.replayCache.single()).value
+    sharedFlow.collect(sharedFlow.replayCache.single())
   }
 }

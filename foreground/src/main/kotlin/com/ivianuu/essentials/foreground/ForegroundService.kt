@@ -40,7 +40,7 @@ import kotlin.time.Duration.Companion.seconds
       context = RateLimiter(1, 1.seconds)
         .asFrameClock()
     ) {
-      val states by foregroundManager.states.collectAsState()
+      val states = foregroundManager.states.collect()
       var removeServiceNotification by remember { mutableStateOf(true) }
 
       if (states.isEmpty()) {

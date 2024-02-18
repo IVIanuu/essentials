@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -48,7 +49,7 @@ fun interface ScreenAdBanner : ScreenDecorator
   }
 
   Column {
-    val adsEnabled by adsEnabledFlow.collectAsState()
+    val adsEnabled = adsEnabledFlow.collect()
 
     Box(modifier = Modifier.weight(1f)) {
       val currentInsets = LocalInsets.current

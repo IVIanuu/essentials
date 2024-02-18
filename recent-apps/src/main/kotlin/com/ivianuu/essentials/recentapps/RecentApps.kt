@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.*
   logger: Logger,
   scope: ScopedCoroutineScope<AppScope>
 ): @Scoped<AppScope> StateFlow<RecentApps> = scope.compositionStateFlow {
-  val currentApp = currentApps.collectAsState(null).value?.value
+  val currentApp = currentApps.collect(null)?.value
   var recentApps by remember { mutableStateOf(emptyList<String>()) }
 
   val index = recentApps.indexOf(currentApp)

@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
@@ -31,9 +32,7 @@ import kotlinx.coroutines.flow.*
   icon = {
     Icon(
       painterResource(
-        if (remember {
-            cameraManager.flashlightState(coroutineContexts)
-        }.collectAsState(false).value) R.drawable.ic_flashlight_on
+        if (cameraManager.flashlightState(coroutineContexts).collect(false)) R.drawable.ic_flashlight_on
         else R.drawable.ic_flashlight_off
       ),
       null

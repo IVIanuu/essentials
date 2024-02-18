@@ -27,7 +27,7 @@ class AdsScreen : Screen<Unit> {
         VerticalList {
           item {
             SwitchListItem(
-              value = adsEnabled.collectAsState().value.value,
+              value = adsEnabled.collect().value,
               onValueChange = { adsEnabled.value = AdsEnabled(it) },
               title = { Text("Show ads") }
             )

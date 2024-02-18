@@ -6,6 +6,7 @@ package com.ivianuu.essentials.ads
 
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -40,7 +41,7 @@ fun interface ListAdBanner : ListDecorator
         LocalScope.current.screen::class
       }.getOrNull()
       if ((screen == null || isAdFeatureEnabled(screen, ListAdBannerFeature)) &&
-        adsEnabledFlow.collectAsState().value.value)
+        adsEnabledFlow.collect().value)
         AdBanner(config)
     }
   }

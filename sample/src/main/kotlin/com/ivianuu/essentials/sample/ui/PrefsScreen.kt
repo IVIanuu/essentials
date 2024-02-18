@@ -29,7 +29,7 @@ class PrefsScreen : Screen<Unit> {
       navigator: Navigator,
       pref: DataStore<SamplePrefs>
     ) = Ui<PrefsScreen, Unit> {
-      val prefs by pref.data.collectAsState(SamplePrefs())
+      val prefs = pref.data.collect(SamplePrefs())
       ScreenScaffold(topBar = { AppBar { Text("Prefs") } }) {
         VerticalList {
           item {

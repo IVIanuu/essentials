@@ -34,7 +34,7 @@ import kotlin.collections.set
   handleBack: Boolean = true,
   defaultTransitionSpec: ElementTransitionSpec<Screen<*>> = LocalScreenTransitionSpec.current
 ) {
-  val backStack by navigator.backStack.collectAsState()
+  val backStack = navigator.backStack.collect()
 
   val screenContexts = remember { mutableStateMapOf<Screen<*>, ScreenContext<*>>() }
 

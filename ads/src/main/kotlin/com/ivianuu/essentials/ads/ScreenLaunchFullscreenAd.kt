@@ -39,7 +39,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   navigator: Navigator,
   pref: DataStore<ScreenLaunchPrefs>
 ) = ScopeComposition<UiScope> {
-  if (adsEnabledFlow.collectAsState().value.value)
+  if (adsEnabledFlow.collect().value)
     LaunchedEffect(true) {
       navigator.launchEvents().collectLatest {
         val launchCount = pref

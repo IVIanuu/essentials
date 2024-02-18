@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
@@ -25,10 +26,9 @@ import com.ivianuu.injekt.common.*
   title = resources(R.string.action_auto_rotation),
   permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
   icon = {
-    val enabled = autoRotationDataStore.data.collectAsState(1).value == 1
     Icon(
       painterResource(
-        if (enabled) R.drawable.ic_screen_rotation
+        if (autoRotationDataStore.data.collect(1) == 1) R.drawable.ic_screen_rotation
         else R.drawable.ic_screen_lock_rotation
       ),
       null
