@@ -23,7 +23,6 @@ import com.ivianuu.essentials.ads.*
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.resource.*
-import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -73,17 +72,33 @@ class GoPremiumScreen(
       })
 
       Surface {
-        InsetsPadding {
-          if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Column(
-              modifier = Modifier.padding(16.dp),
-              horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+          Column(
+            modifier = Modifier.safeContentPadding().padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+            PremiumUiHeader()
+
+            Spacer(Modifier.height(32.dp))
+
+            PremiumUiFeatures(Modifier.weight(1f), features)
+
+            Spacer(Modifier.height(8.dp))
+
+            PremiumUiFooter(
+              skuDetails = premiumSkuDetails.getOrNull(),
+              showTryBasicOption = screen.showTryBasicOption,
+              onGoPremiumClick = goPremium,
+              onTryBasicVersionClick = tryBasicVersion
+            )
+          }
+        } else {
+          Row(
+            modifier = Modifier.safeContentPadding().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+          ) {
+            Column(modifier = Modifier.weight(1f)) {
               PremiumUiHeader()
-
-              Spacer(Modifier.height(32.dp))
-
-              PremiumUiFeatures(Modifier.weight(1f), features)
 
               Spacer(Modifier.height(8.dp))
 
@@ -94,29 +109,11 @@ class GoPremiumScreen(
                 onTryBasicVersionClick = tryBasicVersion
               )
             }
-          } else {
-            Row(
-              modifier = Modifier.padding(16.dp),
-              verticalAlignment = Alignment.CenterVertically
-            ) {
-              Column(modifier = Modifier.weight(1f)) {
-                PremiumUiHeader()
 
-                Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.width(16.dp))
 
-                PremiumUiFooter(
-                  skuDetails = premiumSkuDetails.getOrNull(),
-                  showTryBasicOption = screen.showTryBasicOption,
-                  onGoPremiumClick = goPremium,
-                  onTryBasicVersionClick = tryBasicVersion
-                )
-              }
-
-              Spacer(Modifier.width(16.dp))
-
-              Column(modifier = Modifier.weight(1f)) {
-                PremiumUiFeatures(Modifier.weight(1f), features)
-              }
+            Column(modifier = Modifier.weight(1f)) {
+              PremiumUiFeatures(Modifier.weight(1f), features)
             }
           }
         }

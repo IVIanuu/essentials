@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import soup.compose.material.motion.MotionConstants.DefaultFadeInDuration
@@ -100,24 +99,24 @@ private val PopupKey = "popup"
   modifier: Modifier,
   content: @Composable () -> Unit,
 ) {
-  val insets = LocalInsets.current
+  val insets = WindowInsets.safeContent
   var globalLayoutPosition by remember { mutableStateOf(Offset.Zero) }
   Layout(
     content = content,
     modifier = modifier
       .onGloballyPositioned { globalLayoutPosition = it.positionInRoot() }
   ) { measureables, constraints ->
-    fun Dp.insetOrMinPadding() = max(this, 16.dp).roundToPx()
+    fun Int.insetOrMinPadding() = max(this, 16.dp.roundToPx())
 
     val childConstraints = constraints.copy(
       minWidth = 0,
       minHeight = 0,
       maxWidth = constraints.maxWidth -
-          insets.left.insetOrMinPadding() -
-          insets.right.insetOrMinPadding(),
+          insets.getLeft(this, layoutDirection).insetOrMinPadding() -
+          insets.getRight(this, layoutDirection).insetOrMinPadding(),
       maxHeight = constraints.maxHeight -
-          insets.top.insetOrMinPadding() -
-          insets.bottom.insetOrMinPadding()
+          insets.getTop(this).insetOrMinPadding() -
+          insets.getBottom(this).insetOrMinPadding()
     )
 
     val placeable = measureables.single().measure(childConstraints)
@@ -135,21 +134,21 @@ private val PopupKey = "popup"
     }
 
     x = x.coerceIn(
-      insets.left.insetOrMinPadding(),
+      insets.getLeft(this, layoutDirection).insetOrMinPadding(),
       max(
-        insets.left.insetOrMinPadding(),
+        insets.getLeft(this, layoutDirection).insetOrMinPadding(),
         constraints.maxWidth -
             placeable.width -
-            insets.right.insetOrMinPadding()
+            insets.getRight(this, layoutDirection).insetOrMinPadding()
       )
     )
     y = y.coerceIn(
-      insets.top.insetOrMinPadding(),
+      insets.getTop(this).insetOrMinPadding(),
       max(
-        insets.top.insetOrMinPadding(),
+        insets.getTop(this).insetOrMinPadding(),
         constraints.maxHeight -
             placeable.height -
-            insets.bottom.insetOrMinPadding()
+            insets.getBottom(this).insetOrMinPadding()
       )
     )
 

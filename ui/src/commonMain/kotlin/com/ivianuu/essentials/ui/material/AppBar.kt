@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.systembars.*
 import com.ivianuu.essentials.ui.util.*
@@ -98,18 +97,16 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
     elevation = elevation,
     modifier = systemBarStyleModifier.then(modifier)
   ) {
-    InsetsPadding(left = false, right = false, bottom = false) {
-      Column {
-        Row(
-          modifier = Modifier
-            .height(DefaultAppBarHeight)
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp),
-          verticalAlignment = Alignment.CenterVertically,
-          content = content
-        )
-        bottomContent?.invoke()
-      }
+    Column(modifier = Modifier.statusBarsPadding()) {
+      Row(
+        modifier = Modifier
+          .height(DefaultAppBarHeight)
+          .fillMaxWidth()
+          .padding(start = 16.dp, end = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        content = content
+      )
+      bottomContent?.invoke()
     }
   }
 }

@@ -9,15 +9,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.platform.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.*
-import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.injekt.*
 
 @Composable fun VerticalList(
   modifier: Modifier = Modifier,
   state: LazyListState = rememberLazyListState(),
-  contentPadding: PaddingValues = localVerticalInsetsPadding(),
+  contentPadding: PaddingValues = WindowInsets.safeContent.asPaddingValues(),
   reverseLayout: Boolean = false,
   verticalArrangement: Arrangement.Vertical =
     if (!reverseLayout) Arrangement.Top else Arrangement.Bottom,
@@ -31,21 +31,34 @@ import com.ivianuu.injekt.*
   LazyColumn(
     modifier = modifier.fillMaxHeight(),
     state = state,
-    contentPadding = contentPadding,
     reverseLayout = reverseLayout,
     verticalArrangement = verticalArrangement,
     horizontalAlignment = horizontalAlignment,
     flingBehavior = flingBehavior,
     userScrollEnabled = userScrollEnabled
   ) {
-    decoratedContent(true, decorators, content)
+    decoratedContent(true, decorators) {
+      item {
+        Spacer(
+          Modifier.windowInsetsTopHeight(WindowInsets(top = contentPadding.calculateTopPadding()))
+        )
+      }
+
+      content()
+
+      item {
+        Spacer(
+          Modifier.windowInsetsBottomHeight(WindowInsets(bottom = contentPadding.calculateBottomPadding()))
+        )
+      }
+    }
   }
 }
 
 @Composable fun HorizontalList(
   modifier: Modifier = Modifier,
   state: LazyListState = rememberLazyListState(),
-  contentPadding: PaddingValues = localHorizontalInsetsPadding(),
+  contentPadding: PaddingValues = WindowInsets.safeContent.asPaddingValues(),
   reverseLayout: Boolean = false,
   horizontalArrangement: Arrangement.Horizontal =
     if (!reverseLayout) Arrangement.Start else Arrangement.End,
@@ -56,6 +69,7 @@ import com.ivianuu.injekt.*
   content: LazyListScope.() -> Unit
 ) {
   val decorators = if (decorate) remember(LocalListDecorators.current) else emptyList()
+  val layoutDirection = LocalLayoutDirection.current
   LazyRow(
     modifier = modifier.fillMaxWidth(),
     state = state,
@@ -66,7 +80,21 @@ import com.ivianuu.injekt.*
     flingBehavior = flingBehavior,
     userScrollEnabled = userScrollEnabled
   ) {
-    decoratedContent(false, decorators, content)
+    decoratedContent(false, decorators) {
+      item {
+        Spacer(
+          Modifier.windowInsetsStartWidth(WindowInsets(left = contentPadding.calculateStartPadding(layoutDirection)))
+        )
+      }
+
+      content()
+
+      item {
+        Spacer(
+          Modifier.windowInsetsBottomHeight(WindowInsets(bottom = contentPadding.calculateEndPadding(layoutDirection)))
+        )
+      }
+    }
   }
 }
 

@@ -14,7 +14,6 @@ import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.slack.circuit.foundation.internal.*
 import kotlinx.coroutines.*
@@ -39,8 +38,9 @@ import kotlinx.coroutines.*
       .then(modifier),
     contentAlignment = Alignment.Center
   ) {
-    InsetsPadding(
+    Box(
       modifier = Modifier
+        .safeContentPadding()
         .animationElement(DialogKey)
         .pointerInput(true) { detectTapGestures { } }
         .wrapContentSize(align = Alignment.Center)

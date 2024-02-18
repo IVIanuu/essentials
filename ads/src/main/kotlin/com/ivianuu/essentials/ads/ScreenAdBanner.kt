@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
@@ -50,21 +50,29 @@ fun interface ScreenAdBanner : ScreenDecorator
   Column {
     val adsEnabled by adsEnabledFlow.collectAsState()
 
-    Box(modifier = Modifier.weight(1f)) {
-      val currentInsets = LocalInsets.current
-      CompositionLocalProvider(
-        LocalInsets provides if (!adsEnabled.value) currentInsets
-        else currentInsets.copy(bottom = 0.dp),
-        content = content
-      )
+    Box(
+      modifier = Modifier
+        .weight(1f)
+        .then(
+          if (adsEnabled.value) Modifier.consumeWindowInsets(
+            PaddingValues(
+              bottom = with(LocalDensity.current) {
+                WindowInsets.navigationBars.getBottom(this).toDp()
+              }
+            )
+          )
+          else Modifier
+        )
+    ) {
+      content()
     }
 
-    if (adsEnabled.value) {
+    if (adsEnabled.value)
       Surface(elevation = 8.dp) {
-        InsetsPadding(top = false) {
-          AdBanner(config)
-        }
+        AdBanner(
+          modifier = Modifier.navigationBarsPadding(),
+          config = config
+        )
       }
-    }
   }
 }

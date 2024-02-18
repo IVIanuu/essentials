@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.*
-import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.util.*
 import com.ivianuu.injekt.*
 
@@ -74,7 +73,6 @@ fun interface SystemBarManagerProvider : AppUiDecorator {
   @Provide companion object {
     @Provide val loadingOrder
       get() = LoadingOrder<SystemBarManagerProvider>()
-        .after<WindowInsetsProvider>()
   }
 }
 
