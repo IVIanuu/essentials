@@ -7,6 +7,8 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
@@ -14,6 +16,7 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -42,13 +45,25 @@ class BottomNavigationScreen : Screen<Unit> {
               )
             }
           }
+        },
+        floatingActionButton = {
+          FloatingActionButton(onClick = {}) {
+            Icon(Icons.Default.Done, null)
+          }
         }
       ) {
         AnimatedContent(selectedItem) { item ->
-          Box(
+          VerticalList(
             modifier = Modifier.fillMaxSize()
               .background(item.color)
-          )
+          ) {
+            (1..100).forEach { item ->
+              println("compose item $item")
+              item {
+                ListItem(title = { Text("Item $item") })
+              }
+            }
+          }
         }
       }
     }
