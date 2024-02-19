@@ -14,10 +14,8 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.recentapps.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
@@ -26,23 +24,22 @@ import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*
 
 @Provide object CameraActionId : ActionId("camera") {
-  @Provide val action
-    get() = Action(
-      id = CameraActionId,
-      title = "Camera",
-      icon = { Icon(Icons.Default.PhotoCamera, null) },
-      permissions = listOf(
-        typeKeyOf<ActionAccessibilityPermission>(),
-        typeKeyOf<ActionSystemOverlayPermission>()
-      ),
-      turnScreenOn = true,
-      closeSystemDialogs = true
-    )
+  @Provide val action get() = Action(
+    id = CameraActionId,
+    title = "Camera",
+    icon = { Icon(Icons.Default.PhotoCamera, null) },
+    permissions = listOf(
+      typeKeyOf<ActionAccessibilityPermission>(),
+      typeKeyOf<ActionSystemOverlayPermission>()
+    ),
+    turnScreenOn = true,
+    closeSystemDialogs = true
+  )
 
   @Provide fun executor(
     actionIntentSender: ActionIntentSender,
     cameraManager: @SystemService CameraManager,
-    currentApp: Flow<CurrentApp?>,
+    currentAppProvider: CurrentAppProvider,
     deviceScreenManager: DeviceScreenManager,
     logger: Logger,
     packageManager: PackageManager,
@@ -71,7 +68,7 @@ import kotlin.coroutines.*
       (currentScreenState == ScreenState.UNLOCKED ||
           scopeManager.scopeOfOrNull<AccessibilityScope>().first()
             ?.accessibilityService?.rootInActiveWindow?.packageName != "com.android.systemui") &&
-      cameraApp.activityInfo!!.packageName == currentApp.first()?.value
+      cameraApp.activityInfo!!.packageName == currentAppProvider.currentApp.first()
     )
       suspendCancellableCoroutine<Boolean> { cont ->
         cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
@@ -117,5 +114,4 @@ import kotlin.coroutines.*
       if (frontFacing) 512 else 256
     )
   }
-
 }

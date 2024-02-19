@@ -18,7 +18,6 @@ include(
   ":ksp",
   ":notification-listener",
   ":premium",
-  ":recent-apps",
   ":rubik",
   ":sample",
   ":test",

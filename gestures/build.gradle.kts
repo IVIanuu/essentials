@@ -11,7 +11,6 @@ plugins {
 dependencies {
   api(project(":accessibility"))
   api(project(":android"))
-  api(project(":recent-apps"))
   testImplementation(project(":android-test"))
 }
 
