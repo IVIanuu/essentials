@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.ui.app
 
 import androidx.compose.runtime.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.systembars.*
 import com.ivianuu.injekt.*
 
@@ -29,14 +29,14 @@ fun interface AppUiDecorator : ExtensionPoint<AppUiDecorator> {
         .fold({ it() }) { acc, record ->
           { content ->
             acc {
-              logger.log { "decorate app ui ${record.key.value}" }
+              logger.d { "decorate app ui ${record.key.value}" }
               record.instance(content)
             }
           }
         }
     }
 
-    logger.log { "decorate app ui $content with combined $combinedDecorator" }
+    logger.d { "decorate app ui $content with combined $combinedDecorator" }
 
     combinedDecorator(content)
   }

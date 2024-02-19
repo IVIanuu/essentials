@@ -6,8 +6,8 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.runtime.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
@@ -62,14 +62,14 @@ fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
         .fold({ it() }) { acc, record ->
           { content ->
             acc {
-              logger.log { "decorate screen with ${record.key.value}" }
+              logger.d { "decorate screen with ${record.key.value}" }
               record.instance(content)
             }
           }
         }
     }
 
-    logger.log { "decorate screen $content with combined $combinedDecorator" }
+    logger.d { "decorate screen $content with combined $combinedDecorator" }
 
     combinedDecorator(content)
   }

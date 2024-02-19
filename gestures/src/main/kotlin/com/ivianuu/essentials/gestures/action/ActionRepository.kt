@@ -8,11 +8,11 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import arrow.core.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.gestures.*
 import com.ivianuu.essentials.gestures.action.actions.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
@@ -79,25 +79,25 @@ import kotlinx.coroutines.flow.*
   suspend fun executeAction(id: String): Boolean =
     withContext(coroutineContexts.computation) {
       catch {
-        logger.log { "execute $id" }
+        logger.d { "execute $id" }
         val action = getAction(id)
 
         // check permissions
         if (!permissionManager.permissionState(action.permissions).first()) {
-          logger.log { "didn't had permissions for $id ${action.permissions}" }
+          logger.d { "didn't had permissions for $id ${action.permissions}" }
           deviceScreenManager.unlockScreen()
           permissionManager.requestPermissions(action.permissions)
           return@catch false
         }
 
         if (action.turnScreenOn && !deviceScreenManager.turnScreenOn()) {
-          logger.log { "couldn't turn screen on for $id" }
+          logger.d { "couldn't turn screen on for $id" }
           return@catch false
         }
 
         // unlock screen
         if (action.unlockScreen && !deviceScreenManager.unlockScreen()) {
-          logger.log { "couldn't unlock screen for $id" }
+          logger.d { "couldn't unlock screen for $id" }
           return@catch false
         }
 
@@ -107,7 +107,7 @@ import kotlinx.coroutines.flow.*
               permissionManager.permissionState(listOf(typeKeyOf<ActionAccessibilityPermission>())).first()))
           closeSystemDialogs()
 
-        logger.log { "fire $id" }
+        logger.d { "fire $id" }
 
         // fire
         getActionExecutor(id)()

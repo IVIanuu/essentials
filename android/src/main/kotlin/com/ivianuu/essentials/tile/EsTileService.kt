@@ -6,9 +6,9 @@ package com.ivianuu.essentials.tile
 
 import android.service.quicksettings.*
 import androidx.compose.runtime.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
@@ -66,7 +66,7 @@ abstract class AbstractEsTileService(
 
   override fun onStartListening() {
     super.onStartListening()
-    logger.log { "${this::class} on start listening" }
+    logger.d { "${this::class} on start listening" }
     tileScope = tileScopeFactory(this)
     tileScope!!.coroutineScope.launchComposition {
       val presenter = remember {
@@ -95,14 +95,14 @@ abstract class AbstractEsTileService(
 
   override fun onClick() {
     super.onClick()
-    logger.log { "${this::class} on click" }
+    logger.d { "${this::class} on click" }
     currentState?.onClick?.invoke()
   }
 
   override fun onStopListening() {
     tileScope?.dispose()
     tileScope = null
-    logger.log { "${this::class} on stop listening" }
+    logger.d { "${this::class} on stop listening" }
     super.onStopListening()
   }
 }

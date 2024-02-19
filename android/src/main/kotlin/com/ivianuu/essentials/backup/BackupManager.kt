@@ -9,13 +9,14 @@ import android.content.pm.*
 import android.icu.text.*
 import androidx.core.content.*
 import app.cash.quiver.extensions.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.*
 import java.io.*
 import java.util.*
@@ -54,7 +55,7 @@ import java.util.zip.*
           .filterNot { it.absolutePath in BACKUP_BLACKLIST }
           .filter { it.exists() }
           .forEach { file ->
-            logger.log { "backup file $file" }
+            logger.d { "backup file $file" }
             val entry = ZipEntry(file.relativeTo(dataDir).toString())
             zipOutputStream.putNextEntry(entry)
             file.inputStream().copyTo(zipOutputStream)
@@ -102,7 +103,7 @@ import java.util.zip.*
       generateSequence { zipInputStream.nextEntry }
         .forEach { entry ->
           val file = dataDir.resolve(entry.name)
-          logger.log { "restore file $file" }
+          logger.d { "restore file $file" }
           if (!file.exists()) {
             file.parentFile.mkdirs()
             file.createNewFile()

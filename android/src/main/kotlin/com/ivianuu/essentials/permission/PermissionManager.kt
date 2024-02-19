@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.permission
 
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -42,7 +42,7 @@ import kotlinx.coroutines.flow.*
     ) { states -> states.all { it } }
 
   suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean {
-    logger.log { "request permissions $permissions" }
+    logger.d { "request permissions $permissions" }
 
     val result = permissions.all { permissionState(listOf(it)).first() } || run {
       appUiStarter()
@@ -52,7 +52,7 @@ import kotlinx.coroutines.flow.*
         .push(PermissionRequestScreen(permissions)) == true
     }
 
-    logger.log { "request permissions result $permissions -> $result" }
+    logger.d { "request permissions result $permissions -> $result" }
     return result
   }
 }

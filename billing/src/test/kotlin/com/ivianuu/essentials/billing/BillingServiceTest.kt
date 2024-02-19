@@ -9,7 +9,6 @@ import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.test.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*

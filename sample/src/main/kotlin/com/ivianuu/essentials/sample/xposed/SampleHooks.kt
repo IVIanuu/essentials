@@ -5,22 +5,22 @@
 package com.ivianuu.essentials.sample.xposed
 
 import android.bluetooth.*
-import com.ivianuu.essentials.logging.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.xposed.*
 import com.ivianuu.injekt.*
 
 @Provide fun sampleHooks(logger: Logger) = Hooks { config ->
-  logger.log { "hello ${config.packageName}" }
+  logger.d { "hello ${config.packageName}" }
   if (config.packageName != "com.apelabs.wapp") return@Hooks
 
-  logger.log { "ape ape ape" }
+  logger.d { "ape ape ape" }
 
   hookAllMethods(
     BluetoothGatt::class,
     "writeCharacteristic"
   ) {
     before {
-      logger.log { "ape message ${args.contentDeepToString()}" }
+      logger.d { "ape message ${args.contentDeepToString()}" }
     }
   }
 }

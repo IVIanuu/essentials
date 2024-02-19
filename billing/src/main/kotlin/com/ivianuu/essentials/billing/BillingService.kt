@@ -4,11 +4,11 @@
 
 package com.ivianuu.essentials.billing
 
+import co.touchlab.kermit.*
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -28,7 +28,7 @@ import kotlin.time.Duration.Companion.seconds
   private val billingClient = scope.coroutineScope.childCoroutineScope(coroutineContexts.io).sharedResource(
     sharingStarted = SharingStarted.WhileSubscribed(10.seconds.inWholeMilliseconds),
     create = { _: Unit ->
-      logger.log { "create client" }
+      logger.d { "create client" }
       val client = billingClientFactory()
       suspendCancellableCoroutine { continuation ->
         client.startConnection(
@@ -38,7 +38,7 @@ import kotlin.time.Duration.Companion.seconds
               // we ensure that we we only resume once
               if (continuation.isActive) {
                 if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                  logger.log { "connected" }
+                  logger.d { "connected" }
                   continuation.resume(Unit)
                 } else {
                   continuation.resumeWithException(
@@ -49,16 +49,16 @@ import kotlin.time.Duration.Companion.seconds
             }
 
             override fun onBillingServiceDisconnected() {
-              logger.log { "on billing service disconnected" }
+              logger.d { "on billing service disconnected" }
             }
           }
         )
       }
       client
-        .also { logger.log { "client created" } }
+        .also { logger.d { "client created" } }
      },
     release = { _, billingClient ->
-      logger.log { "release client" }
+      logger.d { "release client" }
       catch { billingClient.endConnection() }
     }
   )
@@ -66,17 +66,17 @@ import kotlin.time.Duration.Companion.seconds
   fun isPurchased(sku: Sku): Flow<Boolean> = scopeManager.flowInScope<AppVisibleScope, _>(
     refreshes.onStart { emit(BillingRefresh) }
       .onStart { emit(BillingRefresh) }
-      .onEach { logger.log { "update is purchased for $sku" } }
+      .onEach { logger.d { "update is purchased for $sku" } }
       .map { billingClient.use(Unit) { it.getIsPurchased(sku) } }
       .distinctUntilChanged()
-      .onEach { logger.log { "is purchased for $sku -> $it" } }
+      .onEach { logger.d { "is purchased for $sku -> $it" } }
   )
 
   suspend fun getSkuDetails(sku: Sku): SkuDetails? = billingClient.use(Unit) {
     it.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
       ?.firstOrNull { it.sku == sku.skuString }
-      .also { logger.log { "got sku details $it for $sku" } }
+      .also { logger.d { "got sku details $it for $sku" } }
   }
 
   suspend fun purchase(
@@ -84,7 +84,7 @@ import kotlin.time.Duration.Companion.seconds
     acknowledge: Boolean,
     consumeOldPurchaseIfUnspecified: Boolean
   ): Boolean = billingClient.use(Unit) { billingClient ->
-    logger.log {
+    logger.d {
       "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
     }
     if (consumeOldPurchaseIfUnspecified) {
@@ -125,7 +125,7 @@ import kotlin.time.Duration.Companion.seconds
 
     val result = billingClient.consumePurchase(consumeParams)
 
-    logger.log {
+    logger.d {
       "consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}"
     }
 
@@ -146,7 +146,7 @@ import kotlin.time.Duration.Companion.seconds
 
     val result = billingClient.acknowledgePurchase(acknowledgeParams)
 
-    logger.log {
+    logger.d {
       "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"
     }
 
@@ -158,7 +158,7 @@ import kotlin.time.Duration.Companion.seconds
   private suspend fun BillingClient.getIsPurchased(sku: Sku): Boolean {
     val purchase = getPurchase(sku) ?: return false
     val isPurchased = purchase.purchaseState == Purchase.PurchaseState.PURCHASED
-    logger.log { "get is purchased for $sku result is $isPurchased for $purchase" }
+    logger.d { "get is purchased for $sku result is $isPurchased for $purchase" }
     return isPurchased
   }
 
@@ -170,5 +170,5 @@ import kotlin.time.Duration.Companion.seconds
     )
       .purchasesList
       .firstOrNull { sku.skuString in it.skus }
-      .also { logger.log { "got purchase $it for $sku" } }
+      .also { logger.d { "got purchase $it for $sku" } }
 }

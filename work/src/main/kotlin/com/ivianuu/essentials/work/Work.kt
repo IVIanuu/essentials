@@ -8,11 +8,11 @@ import android.annotation.*
 import android.content.*
 import androidx.work.*
 import arrow.fx.coroutines.*
+import co.touchlab.kermit.*
+import co.touchlab.kermit.Logger
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.injekt.*
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.coroutines.*
@@ -48,7 +48,7 @@ fun interface Worker<I : WorkId> {
 ) : SynchronizedObject() {
   private val workerStates = mutableMapOf<String, MutableStateFlow<Boolean>>()
   private val sharedWorkers = scope.sharedComputation<WorkId, Unit> { id ->
-    logger.log { "run worker ${id.value}" }
+    logger.d { "run worker ${id.value}" }
 
     val workerState = synchronized(this@WorkManager) {
       workerStates.getOrPut(id.value) { MutableStateFlow(false) }
@@ -62,7 +62,7 @@ fun interface Worker<I : WorkId> {
       finalizer = {
         if (it is ExitCase.Failure) it.failure.printStackTrace()
         workerState.value = false
-        logger.log { "run worker end ${id.value}" }
+        logger.d { "run worker end ${id.value}" }
       }
     )
   }
@@ -74,7 +74,7 @@ fun interface Worker<I : WorkId> {
   suspend fun <I : WorkId> runWorker(id: I): Unit =
     withContext(scope.coroutineContext + coroutineContexts.computation) {
       if (id.value !in workersMap) {
-        logger.log { "no worker found for ${id.value}" }
+        logger.d { "no worker found for ${id.value}" }
         androidWorkManager.cancelUniqueWork(id.value)
         return@withContext
       }
@@ -160,7 +160,7 @@ fun interface Worker<I : WorkId> {
               existing.state == WorkInfo.State.RUNNING) &&
               existing.tags.any { it == scheduleHash }
         }) {
-        logger.log { "enqueue work $workId with $schedule" }
+        logger.d { "enqueue work $workId with $schedule" }
 
         androidWorkManager.enqueueUniquePeriodicWork(
           workId,
@@ -183,7 +183,7 @@ fun interface Worker<I : WorkId> {
             .build()
         )
       } else {
-        logger.log { "do not reenqueue work $workId with $schedule" }
+        logger.d { "do not reenqueue work $workId with $schedule" }
       }
     }
   }

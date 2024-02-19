@@ -6,11 +6,11 @@ package com.ivianuu.essentials.app
 
 import androidx.compose.runtime.*
 import arrow.fx.coroutines.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
@@ -40,18 +40,18 @@ fun <N> ScopeComposition(
             val workers = workersFactory()
               .sortedWithLoadingOrder()
 
-            logger.log { "${nameKey.value} run scope workers ${workers.map { it.key.value }}" }
+            logger.d { "${nameKey.value} run scope workers ${workers.map { it.key.value }}" }
 
             workers.forEach { record ->
               launch { record.instance() }
             }
           }
 
-          logger.log { "${nameKey.value} scope workers completed" }
+          logger.d { "${nameKey.value} scope workers completed" }
         },
         finalizer = {
           if (it is ExitCase.Cancelled)
-            logger.log { "${nameKey.value} cancel scope workers" }
+            logger.d { "${nameKey.value} cancel scope workers" }
         }
       )
     }

@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
 
@@ -21,7 +21,7 @@ fun interface UserflowBuilder : suspend () -> List<Screen<*>>, ExtensionPoint<Us
     .sortedWithLoadingOrder()
     .flatMap { it.instance() }
 
-  logger.log { "Userflow -> $userflowScreens" }
+  logger.d { "Userflow -> $userflowScreens" }
 
   if (userflowScreens.isEmpty()) return@ScopeWorker
 

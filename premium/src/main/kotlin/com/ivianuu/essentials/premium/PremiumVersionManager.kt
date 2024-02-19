@@ -5,17 +5,18 @@
 package com.ivianuu.essentials.premium
 
 import arrow.fx.coroutines.*
+import co.touchlab.kermit.*
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ads.*
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
@@ -46,7 +47,7 @@ import kotlinx.serialization.*
     .onEach { isPremiumVersion ->
       scope.launch {
         if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
-          logger.log { "handle premium version downgrade" }
+          logger.d { "handle premium version downgrade" }
           downgradeHandlers().parMap { it() }
         }
         pref.updateData {

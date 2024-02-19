@@ -40,6 +40,7 @@ kotlin {
         api(Deps.Coroutines.core)
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)
+        api(Deps.kermit)
         api(Deps.KotlinSerialization.json)
         api(Deps.quiver)
         api(Deps.splittiesCoroutines)

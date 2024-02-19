@@ -12,10 +12,10 @@ import android.provider.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
@@ -89,7 +89,7 @@ import kotlin.coroutines.*
       }
     else null
 
-    logger.log { "open camera with $frontFacing" }
+    logger.d { "open camera with $frontFacing" }
 
     if (frontFacing != null)
       intent.addCameraFacingExtras(frontFacing)

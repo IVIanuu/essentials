@@ -4,10 +4,10 @@
 
 package com.ivianuu.essentials.sample
 
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 
 @Provide fun sampleFirstRunHandler(logger: Logger) = FirstRunHandler {
-  logger.log { "hello" }
+  logger.d { "hello" }
 }

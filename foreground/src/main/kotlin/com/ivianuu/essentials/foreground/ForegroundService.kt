@@ -10,11 +10,11 @@ import android.content.*
 import android.os.*
 import androidx.compose.runtime.*
 import arrow.fx.coroutines.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.RateLimiter
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -34,7 +34,7 @@ import kotlin.time.Duration.Companion.seconds
 
   override fun onCreate() {
     super.onCreate()
-    logger.log { "start service" }
+    logger.d { "foreground service started" }
 
     job = scope.launchComposition(
       context = RateLimiter(1, 1.seconds)
@@ -47,16 +47,16 @@ import kotlin.time.Duration.Companion.seconds
         LaunchedEffect(true, removeServiceNotification) {
           onCancel(
             fa = {
-              logger.log { "stop foreground -> remove notification $removeServiceNotification" }
+              logger.d { "stop foreground -> remove notification $removeServiceNotification" }
               stopForeground(
                 if (removeServiceNotification) STOP_FOREGROUND_REMOVE
                 else STOP_FOREGROUND_DETACH
               )
-              logger.log { "dispatch delayed stop" }
+              logger.d { "dispatch delayed foreground stop" }
               delay(6.seconds)
               stopSelf()
             },
-            onCancel = { logger.log { "cancel delayed stop" } }
+            onCancel = { logger.d { "cancel delayed foreground stop" } }
           )
         }
       } else {
@@ -88,7 +88,7 @@ import kotlin.time.Duration.Companion.seconds
           .forEachIndexed { index, (id, removeNotification, notification) ->
             key(id) {
               DisposableEffect(index, id, notification) {
-                logger.log { "update $id" }
+                logger.d { "update foreground notification $id" }
 
                 if (index == 0) {
                   removeServiceNotification = removeNotification
@@ -118,7 +118,7 @@ import kotlin.time.Duration.Companion.seconds
   }
 
   override fun onDestroy() {
-    logger.log { "stop service" }
+    logger.d { "stop foreground service" }
     job?.cancel()
     super.onDestroy()
   }

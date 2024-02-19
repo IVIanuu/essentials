@@ -8,10 +8,10 @@ import android.app.*
 import android.content.*
 import androidx.compose.runtime.*
 import androidx.core.content.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
@@ -34,7 +34,7 @@ import kotlinx.coroutines.sync.*
       ForegroundState(foregroundId.value, removeNotification, notification)
         .also {
           lock.withLock { states.value = states.value + it }
-          logger.log { "start foreground ${foregroundId.value} ${states.value}" }
+          logger.d { "start foreground ${foregroundId.value} ${states.value}" }
 
           ContextCompat.startForegroundService(
             appContext,
@@ -45,7 +45,7 @@ import kotlinx.coroutines.sync.*
     release = { state, _ ->
       state.seen.await()
       lock.withLock { states.value = states.value - state }
-      logger.log { "stop foreground $foregroundId ${states.value}" }
+      logger.d { "stop foreground $foregroundId ${states.value}" }
     }
   )
 

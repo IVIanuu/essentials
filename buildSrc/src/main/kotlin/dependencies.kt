@@ -120,6 +120,8 @@ object Deps {
 
   const val junit = "junit:junit:4.13"
 
+  const val kermit = "co.touchlab:kermit:2.0.3"
+
   const val kotestAssertions = "io.kotest:kotest-assertions-core:5.4.2"
 
   object Kotlin {

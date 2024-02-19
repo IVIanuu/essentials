@@ -2,9 +2,9 @@ package com.ivianuu.essentials.util
 
 import android.app.*
 import android.content.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -57,7 +57,7 @@ interface RemoteAction<I : Any?> {
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     scope.launch {
-      logger.log { "on intent ${intent.extras}" }
+      logger.d { "on intent ${intent.extras}" }
 
       val input = intent.getStringExtra("input_class")
         ?.let { Class.forName(it) }
@@ -73,7 +73,7 @@ interface RemoteAction<I : Any?> {
         ?.let { actionFactories[it]?.invoke(input) }
         ?: return@launch
 
-      logger.log { "execute remote action ${action::class.java.name} with $input" }
+      logger.d { "execute remote action ${action::class.java.name} with $input" }
 
       action.invoke()
     }

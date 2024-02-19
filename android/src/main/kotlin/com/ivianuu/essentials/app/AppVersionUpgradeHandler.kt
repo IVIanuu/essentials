@@ -5,9 +5,9 @@
 package com.ivianuu.essentials.app
 
 import arrow.fx.coroutines.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
@@ -30,7 +30,7 @@ fun interface AppVersionUpgradeHandler {
 
   if (appConfig.versionCode <= prefs.lastAppVersion) return@ScopeWorker
 
-  logger.log { "upgrade from app version ${prefs.lastAppVersion} to ${appConfig.versionCode}" }
+  logger.d { "upgrade from app version ${prefs.lastAppVersion} to ${appConfig.versionCode}" }
 
   handlers().parMap { it(prefs.lastAppVersion, appConfig.versionCode) }
 

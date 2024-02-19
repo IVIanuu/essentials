@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.sample
 
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.boot.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 
-@Provide fun bootLogger(logger: Logger) = BootListener { logger.log { "booted!" } }
+@Provide fun bootLogger(logger: Logger) = BootListener { logger.d { "booted!" } }

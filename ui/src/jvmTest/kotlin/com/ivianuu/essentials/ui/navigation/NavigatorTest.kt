@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.test.*
 import com.ivianuu.injekt.*
 import io.kotest.matchers.*

@@ -5,9 +5,9 @@
 package com.ivianuu.essentials.app
 
 import arrow.fx.coroutines.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -42,7 +42,7 @@ fun interface FirstRunHandler {
 ) = ScopeWorker<AppScope> {
   if (!isFirstRun().value) return@ScopeWorker
 
-  logger.log { "first run" }
+  logger.d { "first run" }
 
   handlers().parMap { it() }
 

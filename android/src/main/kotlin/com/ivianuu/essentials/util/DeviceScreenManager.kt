@@ -6,9 +6,9 @@ import android.os.*
 import android.view.*
 import androidx.activity.*
 import androidx.lifecycle.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -42,9 +42,9 @@ import kotlin.time.Duration.Companion.seconds
     .distinctUntilChanged()
 
   suspend fun turnScreenOn(): Boolean {
-    logger.log { "on request is off ? ${!powerManager.isInteractive}" }
+    logger.d { "on request is off ? ${!powerManager.isInteractive}" }
     if (powerManager.isInteractive) {
-      logger.log { "already on" }
+      logger.d { "already on" }
       return true
     }
 
@@ -52,9 +52,9 @@ import kotlin.time.Duration.Companion.seconds
   }
 
   suspend fun unlockScreen(): Boolean {
-    logger.log { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
+    logger.d { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
     if (!keyguardManager.isKeyguardLocked) {
-      logger.log { "already unlocked" }
+      logger.d { "already unlocked" }
       return true
     }
 
@@ -106,7 +106,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
       return
     }
 
-    logger.log {
+    logger.d {
       when (requestType) {
         REQUEST_TYPE_UNLOCK -> "unlock screen for $requestId"
         REQUEST_TYPE_SCREEN_ON -> "turn screen on $requestId"
@@ -117,7 +117,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
     var hasResult = false
 
     fun finishWithResult(success: Boolean) {
-      logger.log { "finish with result $success" }
+      logger.d { "finish with result $success" }
       hasResult = true
       requestsById.remove(requestId)?.complete(success)
       finish()
@@ -145,19 +145,19 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
               KeyguardManager.KeyguardDismissCallback() {
               override fun onDismissSucceeded() {
                 super.onDismissSucceeded()
-                logger.log { "dismiss succeeded" }
+                logger.d { "dismiss succeeded" }
                 finishWithResult(true)
               }
 
               override fun onDismissError() {
                 super.onDismissError()
-                logger.log { "dismiss error" }
+                logger.d { "dismiss error" }
                 finishWithResult(true)
               }
 
               override fun onDismissCancelled() {
                 super.onDismissCancelled()
-                logger.log { "dismiss cancelled" }
+                logger.d { "dismiss cancelled" }
                 finishWithResult(false)
               }
             }

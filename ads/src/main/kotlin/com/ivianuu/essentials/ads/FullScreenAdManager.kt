@@ -5,12 +5,12 @@
 package com.ivianuu.essentials.ads
 
 import androidx.activity.*
+import co.touchlab.kermit.*
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -74,7 +74,7 @@ import kotlin.time.Duration.Companion.seconds
     deferredAd?.takeUnless {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
     } ?: scope.async(coroutineContexts.main) {
-      logger.log { "start loading ad" }
+      logger.d { "start loading ad" }
 
       val ad = suspendCoroutine { cont ->
         InterstitialAd.load(
@@ -93,11 +93,11 @@ import kotlin.time.Duration.Companion.seconds
         )
       }
 
-      logger.log { "ad loaded" }
+      logger.d { "ad loaded" }
 
       val result: suspend () -> Boolean = {
         if (rateLimiter.tryAcquire()) {
-          logger.log { "show ad" }
+          logger.d { "show ad" }
           lock.withLock { deferredAd = null }
           if (scopeManager.scopeOfOrNull<AppVisibleScope>().first() != null) {
             withContext(coroutineContexts.main) {
@@ -107,7 +107,7 @@ import kotlin.time.Duration.Companion.seconds
           } else
             false
         } else {
-          logger.log { "do not show ad due to rate limit" }
+          logger.d { "do not show ad due to rate limit" }
           false
         }
       }

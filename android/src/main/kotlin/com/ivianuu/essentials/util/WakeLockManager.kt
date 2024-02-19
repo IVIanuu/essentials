@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.util
 
 import android.os.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
@@ -13,12 +13,12 @@ import com.ivianuu.injekt.common.*
 ) {
   suspend fun acquire(@Inject id: WakeLockId): Nothing = bracketCase(
     acquire = {
-      logger.log { "${id.value} acquire" }
+      logger.d { "${id.value} acquire wake lock" }
       powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, id.value)
         .also { it.acquire() }
     },
     release = { wakeLock, _ ->
-      logger.log { "${id.value} release" }
+      logger.d { "${id.value} release wake lock" }
       wakeLock.release()
     }
   )

@@ -6,9 +6,9 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.*
 import arrow.core.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
@@ -26,34 +26,34 @@ import kotlinx.coroutines.flow.*
 
   override fun onListenerConnected() {
     super.onListenerConnected()
-    logger.log { "listener connected" }
+    logger.d { "notification listener connected" }
     notificationScope = notificationScopeFactory(this)
     updateNotifications()
   }
 
   override fun onNotificationPosted(sbn: StatusBarNotification) {
     super.onNotificationPosted(sbn)
-    logger.log { "notification posted $sbn" }
+    logger.d { "notification posted $sbn" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.NotificationPosted(sbn))
   }
 
   override fun onNotificationRemoved(sbn: StatusBarNotification) {
     super.onNotificationRemoved(sbn)
-    logger.log { "notification removed $sbn" }
+    logger.d { "notification removed $sbn" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.NotificationRemoved(sbn))
   }
 
   override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
     super.onNotificationRankingUpdate(rankingMap)
-    logger.log { "ranking update $rankingMap" }
+    logger.d { "notification ranking update $rankingMap" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.RankingUpdate(rankingMap))
   }
 
   override fun onListenerDisconnected() {
-    logger.log { "listener disconnected" }
+    logger.d { "notification listener disconnected" }
     notificationScope?.dispose()
     notificationScope = null
     super.onListenerDisconnected()

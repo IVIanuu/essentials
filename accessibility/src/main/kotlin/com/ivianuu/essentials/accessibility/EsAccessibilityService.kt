@@ -6,9 +6,9 @@ package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.*
 import android.content.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
@@ -23,10 +23,10 @@ import kotlinx.coroutines.flow.*
 
   override fun onServiceConnected() {
     super.onServiceConnected()
-    logger.log { "service connected" }
+    logger.d { "accessibility service connected" }
     accessibilityScope = accessibilityScopeFactory(this)
     val configs = accessibilityScope!!.service<Component>().configs
-    logger.log { "update configs $configs" }
+    logger.d { "update accessibility configs $configs" }
     serviceInfo = serviceInfo.apply {
       eventTypes = configs
         .map { it.eventTypes }
@@ -48,7 +48,7 @@ import kotlinx.coroutines.flow.*
   }
 
   override fun onAccessibilityEvent(event: AndroidAccessibilityEvent) {
-    logger.log { "on accessibility event $event" }
+    logger.d { "on accessibility event $event" }
     _events.tryEmit(
       AccessibilityEvent(
         type = event.eventType,
@@ -63,7 +63,7 @@ import kotlinx.coroutines.flow.*
   }
 
   override fun onUnbind(intent: Intent?): Boolean {
-    logger.log { "service disconnected" }
+    logger.d { "accessibility service disconnected" }
     accessibilityScope?.dispose()
     accessibilityScope = null
     return super.onUnbind(intent)

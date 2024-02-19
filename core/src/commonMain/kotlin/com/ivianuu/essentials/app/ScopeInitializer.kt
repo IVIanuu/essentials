@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.app
 
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
@@ -23,7 +23,7 @@ interface ScopeInitializerRunner<N> : ScopeObserver<N>
     initializers(scope.cast())
       .sortedWithLoadingOrder()
       .forEach {
-        logger(scope.cast()).log { "${nameKey().value} initialize ${it.key.value}" }
+        logger(scope.cast()).d { "${nameKey().value} initialize ${it.key.value}" }
         it.instance()
       }
   }

@@ -4,13 +4,13 @@
 
 package com.ivianuu.essentials.sample
 
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 
 @Provide fun observer(logger: Logger, scopeManager: ScopeManager) = ScopeWorker<AppScope> {
   scopeManager.activeScopes.collect { activeScopes ->
-    logger.log { "active scopes ${activeScopes.map { it.name.value }}" }
+    logger.d { "active scopes ${activeScopes.map { it.name.value }}" }
   }
 }

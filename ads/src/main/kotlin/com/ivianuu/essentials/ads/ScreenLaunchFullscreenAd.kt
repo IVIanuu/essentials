@@ -6,10 +6,10 @@ package com.ivianuu.essentials.ads
 
 import androidx.compose.runtime.*
 import arrow.core.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -45,9 +45,9 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
         val launchCount = pref
           .updateData { copy(screenLaunchCount = screenLaunchCount + 1) }
           .screenLaunchCount
-        logger.log { "screen launched $launchCount" }
+        logger.d { "screen launched $launchCount" }
         if (launchCount >= config.screenLaunchToShowAdCount) {
-          logger.log { "try to show full screen ad $launchCount" }
+          logger.d { "try to show full screen ad $launchCount" }
           if (fullScreenAdManager.loadAndShowAdWithTimeout().getOrElse { false })
             pref.updateData { copy(screenLaunchCount = 0) }
         }
