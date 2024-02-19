@@ -19,7 +19,7 @@ fun interface BootListener {
 
 
 @Provide @AndroidComponent class BootReceiver(
-  private val bootListeners: () ->List<BootListener>,
+  private val bootListeners: () -> List<BootListener>,
   private val logger: Logger
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
