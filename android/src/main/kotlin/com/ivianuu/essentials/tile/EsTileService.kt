@@ -13,53 +13,53 @@ import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
 @Provide @AndroidComponent class EsTileService1(
-  @Inject logger: Logger,
-  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService2(
-  @Inject logger: Logger,
-  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService3(
-  @Inject logger: Logger,
-  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService4(
-  @Inject logger: Logger,
-  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService5(
-  @Inject logger: Logger,
-  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService6(
-  @Inject logger: Logger,
-  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService7(
-  @Inject logger: Logger,
-  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService8(
-  @Inject logger: Logger,
-  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService9(
-  @Inject logger: Logger,
-  @Inject tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 abstract class AbstractEsTileService(
-  @Inject private val logger: Logger,
-  @Inject private val tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+  private val logger: Logger,
+  private val tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
 ) : TileService() {
   private var tileScope: Scope<TileScope>? = null
   private var currentState: TileState<*>? = null

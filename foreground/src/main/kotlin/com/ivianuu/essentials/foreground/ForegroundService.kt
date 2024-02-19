@@ -15,6 +15,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.RateLimiter
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
+import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -22,6 +23,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Provide @AndroidComponent class ForegroundService(
   private val appConfig: AppConfig,
+  private val clock: Clock,
   private val foregroundManager: ForegroundManager,
   private val notificationFactory: NotificationFactory,
   private val notificationManager: @SystemService NotificationManager,
@@ -38,7 +40,7 @@ import kotlin.time.Duration.Companion.seconds
 
     job = scope.launchComposition(
       context = RateLimiter(1, 1.seconds)
-        .asFrameClock()
+        .asFrameClock(clock)
     ) {
       val states = foregroundManager.states.collect()
       var removeServiceNotification by remember { mutableStateOf(true) }

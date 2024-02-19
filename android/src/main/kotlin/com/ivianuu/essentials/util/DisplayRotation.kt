@@ -29,16 +29,16 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 @Provide fun displayRotation(
   appContext: AppContext,
   deviceScreenManager: DeviceScreenManager,
-  @Inject windowManager: @SystemService WindowManager
+  windowManager: @SystemService WindowManager
 ): Flow<DisplayRotation> = compositionFlow {
   val screenState = deviceScreenManager.screenState.collect(ScreenState.OFF)
-  var displayRotation by remember { mutableStateOf(getCurrentDisplayRotation()) }
+  var displayRotation by remember { mutableStateOf(getCurrentDisplayRotation(windowManager)) }
 
   if (screenState.isOn)
     DisposableEffect(true) {
       val listener = object : OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {
         override fun onOrientationChanged(orientation: Int) {
-          displayRotation = getCurrentDisplayRotation()
+          displayRotation = getCurrentDisplayRotation(windowManager)
         }
       }
       listener.enable()
@@ -49,7 +49,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 }
 
 private fun getCurrentDisplayRotation(
-  @Inject windowManager: @SystemService WindowManager,
+  windowManager: @SystemService WindowManager,
 ) = when (windowManager.defaultDisplay.rotation) {
   Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
   Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT

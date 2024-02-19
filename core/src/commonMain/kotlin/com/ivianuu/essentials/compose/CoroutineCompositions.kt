@@ -99,7 +99,7 @@ typealias StateCoroutineContext = @StateCoroutineContextTag CoroutineContext
   @Provide val context: StateCoroutineContext
 }
 
-fun RateLimiter.asFrameClock(@Inject clock: Clock): MonotonicFrameClock =
+fun RateLimiter.asFrameClock(clock: Clock): MonotonicFrameClock =
   object : MonotonicFrameClock {
     override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R {
       acquire()

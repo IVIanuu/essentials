@@ -11,7 +11,7 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 class TestBillingClient(
-  @Inject private val scope: CoroutineScope,
+  private val scope: CoroutineScope,
   private val purchasesUpdated: () -> Unit
 ) : BillingClient() {
   var purchases = emptyList<Purchase>()

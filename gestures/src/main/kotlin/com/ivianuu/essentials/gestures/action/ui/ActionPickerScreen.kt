@@ -34,7 +34,7 @@ class ActionPickerScreen(
     @Provide fun ui(
       navigator: Navigator,
       permissionManager: PermissionManager,
-      @Inject repository: ActionRepository,
+      repository: ActionRepository,
       screen: ActionPickerScreen
     ) = Ui<ActionPickerScreen> {
       val items = collectResource {

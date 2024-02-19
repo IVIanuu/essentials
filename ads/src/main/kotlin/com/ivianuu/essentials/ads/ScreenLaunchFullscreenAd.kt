@@ -32,7 +32,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
 
 @Provide fun screenLaunchFullScreenObserver(
   adsEnabledFlow: StateFlow<AdsEnabled>,
-  @Inject isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
+  isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAdManager: FullScreenAdManager,
   logger: Logger,
@@ -41,7 +41,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
 ) = ScopeComposition<UiScope> {
   if (adsEnabledFlow.collect().value)
     LaunchedEffect(true) {
-      navigator.launchEvents().collectLatest {
+      navigator.launchEvents(isAdFeatureEnabled).collectLatest {
         val launchCount = pref
           .updateData { copy(screenLaunchCount = screenLaunchCount + 1) }
           .screenLaunchCount
@@ -55,9 +55,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
     }
 }
 
-private fun Navigator.launchEvents(
-  @Inject isAdFeatureEnabled: IsAdFeatureEnabledUseCase
-): Flow<Screen<*>> {
+private fun Navigator.launchEvents(isAdFeatureEnabled: IsAdFeatureEnabledUseCase): Flow<Screen<*>> {
   var lastBackStack = backStack.value
   return backStack
     .mapNotNull { currentBackStack ->
