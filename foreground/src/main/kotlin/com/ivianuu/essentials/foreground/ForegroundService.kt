@@ -64,7 +64,7 @@ import kotlin.time.Duration.Companion.seconds
           remember(states.any { it.notification == null }) {
             listOf(
               Triple(
-                "default_foreground_id".hashCode(),
+                "default_foreground_id",
                 true,
                 notificationFactory(
                   "default_foreground",
@@ -82,23 +82,23 @@ import kotlin.time.Duration.Companion.seconds
           .mapNotNull { state ->
             key(state.id) {
               state.notification?.invoke()
-                ?.let { Triple(state.id.hashCode(), state.removeNotification, it) }
+                ?.let { Triple(state.id, state.removeNotification, it) }
             }
           })
           .forEachIndexed { index, (id, removeNotification, notification) ->
             key(id) {
               DisposableEffect(index, id, notification) {
-                logger.d { "update foreground notification $id" }
+                logger.d { "$id update foreground notification" }
 
                 if (index == 0) {
                   removeServiceNotification = removeNotification
-                  startForeground(id, notification)
+                  startForeground(id.hashCode(), notification)
                   onDispose {  }
                 } else {
-                  notificationManager.notify(id, notification)
+                  notificationManager.notify(id.hashCode(), notification)
                   onDispose {
                     if (removeNotification)
-                      notificationManager.cancel(id)
+                      notificationManager.cancel(id.hashCode())
                   }
                 }
               }
