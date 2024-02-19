@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.systemoverlay
 
 import android.accessibilityservice.AccessibilityService
+import android.content.Context
 import android.graphics.*
 import android.view.*
 import androidx.compose.runtime.*
@@ -112,14 +113,13 @@ fun Modifier.systemWindowTrigger() = composed {
 }
 
 @Provide class SystemWindowManager(
-  private val appContext: AppContext,
-  accessibilityService: AccessibilityService? = null,
+  private val context: Context,
   private val coroutineContexts: CoroutineContexts,
-  private val systemWindowScopeFactory: () -> Scope<SystemWindowScope>
+  private val systemWindowScopeFactory: () -> Scope<SystemWindowScope>,
+  val windowManager: @SystemService WindowManager
 ) {
-  internal val accessibilityAvailable = accessibilityService != null
-  internal val windowManager = (accessibilityService ?: appContext)
-    .getSystemService<WindowManager>()!!
+  val accessibilityAvailable: Boolean
+    get() = context is AccessibilityService
 
   suspend fun attachSystemWindow(
     state: SystemWindowState = SystemWindowState(),
@@ -128,7 +128,7 @@ fun Modifier.systemWindowTrigger() = composed {
     bracketCase(
       acquire = {
         lateinit var contentView: View
-        contentView = OverlayComposeView(appContext) {
+        contentView = OverlayComposeView(context) {
           val scope = remember(systemWindowScopeFactory)
           DisposableEffect(true) {
             onDispose { scope.dispose() }
