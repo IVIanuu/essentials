@@ -7,9 +7,13 @@ package com.ivianuu.essentials.time
 
 import com.ivianuu.injekt.*
 import kotlin.time.*
+import kotlin.time.Duration.Companion.nanoseconds
 
 fun interface Clock {
   operator fun invoke(): Duration
-}
 
-@Provide expect val DefaultClock: Clock
+  @Provide companion object {
+    @Provide val impl = Clock { System.nanoTime().nanoseconds }
+  }
+}
+S

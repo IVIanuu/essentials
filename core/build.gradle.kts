@@ -18,12 +18,7 @@ kotlin {
   }
 
   sourceSets {
-    val commonJvmMain = create("commonJvmMain") {
-      dependsOn(commonMain.get())
-    }
-
     named("androidMain") {
-      dependsOn(commonJvmMain)
       dependencies {
         api(Deps.Compose.foundation)
       }
@@ -47,9 +42,7 @@ kotlin {
       }
     }
 
-    named("jvmMain") {
-      dependsOn(commonJvmMain)
-    }
+    named("jvmMain")
 
     named("jvmTest") {
       dependencies {
