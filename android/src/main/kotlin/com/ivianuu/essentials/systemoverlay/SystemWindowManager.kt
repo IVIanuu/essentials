@@ -16,15 +16,16 @@
 
 package com.ivianuu.essentials.systemoverlay
 
+import android.accessibilityservice.AccessibilityService
 import android.graphics.*
 import android.view.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.*
+import androidx.core.content.*
 import arrow.fx.coroutines.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -39,10 +40,10 @@ class SystemWindowState(
   y: Int = 0,
   interceptor: (WindowManager.LayoutParams) -> Unit = {}
 ) {
-  var width by mutableStateOf(width)
-  var height by mutableStateOf(height)
-  var x by mutableStateOf(x)
-  var y by mutableStateOf(y)
+  var width by mutableIntStateOf(width)
+  var height by mutableIntStateOf(height)
+  var x by mutableIntStateOf(x)
+  var y by mutableIntStateOf(y)
   var interceptor by mutableStateOf(interceptor)
 }
 
@@ -55,7 +56,8 @@ fun Modifier.systemWindowTrigger() = composed {
       gravity = Gravity.LEFT or Gravity.TOP
 
       type =
-        if (systemWindowManager.canUseAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+        if (systemWindowManager.accessibilityAvailable)
+          WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
         else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
       format = PixelFormat.TRANSLUCENT
 
@@ -111,13 +113,13 @@ fun Modifier.systemWindowTrigger() = composed {
 
 @Provide class SystemWindowManager(
   private val appContext: AppContext,
-  accessibilityWindowManager: AccessibilityWindowManager? = null,
+  accessibilityService: AccessibilityService? = null,
   private val coroutineContexts: CoroutineContexts,
-  private val systemWindowScopeFactory: () -> Scope<SystemWindowScope>,
-  windowManager: @SystemService WindowManager
+  private val systemWindowScopeFactory: () -> Scope<SystemWindowScope>
 ) {
-  internal val canUseAccessibility = accessibilityWindowManager != null
-  internal val windowManager = accessibilityWindowManager ?: windowManager
+  internal val accessibilityAvailable = accessibilityService != null
+  internal val windowManager = (accessibilityService ?: appContext)
+    .getSystemService<WindowManager>()!!
 
   suspend fun attachSystemWindow(
     state: SystemWindowState = SystemWindowState(),
@@ -145,7 +147,7 @@ fun Modifier.systemWindowTrigger() = composed {
             this.height = WindowManager.LayoutParams.WRAP_CONTENT
             gravity = Gravity.LEFT or Gravity.TOP
 
-            type = if (canUseAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+            type = if (accessibilityAvailable) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
             else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
 
             flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
