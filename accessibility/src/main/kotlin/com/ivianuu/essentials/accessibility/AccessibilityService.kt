@@ -6,6 +6,11 @@ import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
+data object AccessibilityScope
+
+val Scope<*>.accessibilityService: EsAccessibilityService
+  get() = service()
+
 @Provide class AccessibilityService(private val scopeManager: ScopeManager) {
   val events: Flow<AccessibilityEvent>
     get() = scopeManager.scopeOfOrNull<AccessibilityScope>()

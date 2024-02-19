@@ -74,6 +74,5 @@ import kotlinx.coroutines.flow.*
 }
 
 @Provide @Service<AccessibilityScope> data class AccessibilityComponent(
-  val configs: List<AccessibilityConfig>,
-  val coroutineScope: ScopedCoroutineScope<AccessibilityScope>
+  val configs: List<AccessibilityConfig>
 )

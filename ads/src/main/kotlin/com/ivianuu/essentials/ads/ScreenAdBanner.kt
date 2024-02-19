@@ -59,12 +59,11 @@ fun interface ScreenAdBanner : ScreenDecorator
       )
     }
 
-    if (adsEnabled.value) {
+    if (adsEnabled.value)
       Surface(elevation = 8.dp) {
         InsetsPadding(top = false) {
           AdBanner(config)
         }
       }
-    }
   }
 }
