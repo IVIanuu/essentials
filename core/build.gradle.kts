@@ -37,6 +37,7 @@ kotlin {
         api(Deps.Injekt.common)
         api(Deps.kermit)
         api(Deps.KotlinSerialization.json)
+        api(Deps.molecule)
         api(Deps.quiver)
         api(Deps.splittiesCoroutines)
       }

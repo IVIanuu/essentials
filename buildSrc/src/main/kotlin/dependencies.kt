@@ -156,6 +156,8 @@ object Deps {
 
   const val mockk = "io.mockk:mockk:1.12.8"
 
+  const val molecule = "app.cash.molecule:molecule-runtime:1.3.2"
+
   const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.24.0"
 
   const val playBillingKtx = "com.android.billingclient:billing-ktx:6.0.1"

@@ -6,6 +6,7 @@ package com.ivianuu.essentials.tile
 
 import android.service.quicksettings.*
 import androidx.compose.runtime.*
+import app.cash.molecule.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
@@ -68,7 +69,7 @@ abstract class AbstractEsTileService(
     super.onStartListening()
     logger.d { "${this::class} on start listening" }
     tileScope = tileScopeFactory(this)
-    tileScope!!.coroutineScope.launchComposition {
+    tileScope!!.coroutineScope.launchMolecule(RecompositionMode.Immediate, {}) {
       val presenter = remember {
         val tileComponent = tileScope!!.service<TileComponent>()
         tileComponent.tilePresenterRecords[this::class]?.invoke()

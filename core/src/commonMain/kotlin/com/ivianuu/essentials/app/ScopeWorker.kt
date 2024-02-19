@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.app
 
 import androidx.compose.runtime.*
+import app.cash.molecule.*
 import arrow.fx.coroutines.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
@@ -19,11 +20,8 @@ fun interface ScopeWorker<N> : ExtensionPoint<ScopeWorker<N>> {
   suspend operator fun invoke()
 }
 
-fun <N> ScopeComposition(
-  @Inject stateCoroutineContext: StateCoroutineContext,
-  block: @Composable () -> Unit
-) = ScopeWorker<N> {
-  coroutineScope { launchComposition(block = block) }
+fun <N> ScopeComposition(block: @Composable () -> Unit) = ScopeWorker<N> {
+  coroutineScope { launchMolecule(RecompositionMode.Immediate,{}, body = block) }
 }
 
 @Provide class ScopeWorkerRunner<N>(

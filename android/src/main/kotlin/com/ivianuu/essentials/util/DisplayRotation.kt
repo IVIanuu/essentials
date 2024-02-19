@@ -7,6 +7,7 @@ package com.ivianuu.essentials.util
 import android.hardware.*
 import android.view.*
 import androidx.compose.runtime.*
+import app.cash.molecule.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.injekt.*
@@ -30,7 +31,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
   appContext: AppContext,
   deviceScreenManager: DeviceScreenManager,
   windowManager: @SystemService WindowManager
-): Flow<DisplayRotation> = compositionFlow {
+): Flow<DisplayRotation> = moleculeFlow(RecompositionMode.Immediate) {
   val screenState = deviceScreenManager.screenState.collect(ScreenState.OFF)
   var displayRotation by remember { mutableStateOf(getCurrentDisplayRotation(windowManager)) }
 
