@@ -19,25 +19,24 @@ class ListScreen<T : Any>(
 ) : DialogScreen<T> {
   @Provide companion object {
     @Provide fun ui(
-      key: ListScreen<Any>,
-      navigator: Navigator
+      navigator: Navigator,
+      screen: ListScreen<Any>,
     ) = Ui<ListScreen<Any>> {
-      DialogScaffold {
-        Dialog(
-          title = key.title?.let { { Text(it) } },
-          content = {
-            VerticalList(decorate = false) {
-              items(key.items) { item ->
-                ListItem(
-                  onClick = action { navigator.pop(key, item) },
-                  title = { Text(key.renderer(item)) },
-                )
-              }
+      AlertDialog(
+        onDismissRequest = action { navigator.pop(screen, null) },
+        title = screen.title?.let { { Text(it) } },
+        text = {
+          VerticalList(decorate = false) {
+            items(screen.items) { item ->
+              ListItem(
+                onClick = action { navigator.pop(screen, item) },
+                title = { Text(screen.renderer(item)) },
+              )
             }
           }
-        )
-      }
+        },
+        buttons = {}
+      )
     }
   }
 }
-

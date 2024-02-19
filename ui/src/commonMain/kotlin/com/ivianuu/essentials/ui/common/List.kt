@@ -1,4 +1,5 @@
-/*
+/*  fillMaxWidth: Boolean,
+
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
@@ -29,7 +30,7 @@ import com.ivianuu.injekt.*
 ) {
   val decorators = if (decorate) remember(LocalListDecorators.current) else emptyList()
   LazyColumn(
-    modifier = modifier.fillMaxHeight(),
+    modifier = modifier,
     state = state,
     contentPadding = contentPadding,
     reverseLayout = reverseLayout,
@@ -57,7 +58,7 @@ import com.ivianuu.injekt.*
 ) {
   val decorators = if (decorate) remember(LocalListDecorators.current) else emptyList()
   LazyRow(
-    modifier = modifier.fillMaxWidth(),
+    modifier = modifier,
     state = state,
     contentPadding = contentPadding,
     reverseLayout = reverseLayout,

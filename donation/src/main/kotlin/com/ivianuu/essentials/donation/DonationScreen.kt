@@ -46,49 +46,48 @@ class DonationScreen : DialogScreen<Unit> {
           }
           .let { emit(it) }
       }
-      DialogScaffold {
-        Dialog(
-          applyContentPadding = false,
-          title = { Text("Support development \uD83D\uDC9B") },
-          content = {
-            ResourceVerticalListFor(
-              resource = skus,
-              loading = {
-                CircularProgressIndicator(
-                  modifier = Modifier
-                    .height(100.dp)
-                    .fillMaxWidth()
-                    .center()
-                )
-              }
-            ) { donation ->
-              ListItem(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                onClick = action {
-                  if (billingService.purchase(donation.donation.sku, true, true)) {
-                    billingService.consumePurchase(donation.donation.sku)
-                    toaster("Thanks for your support! \uD83D\uDC9B")
-                  }
-                },
-                title = { Text(donation.title) },
-                leading = donation.donation.icon,
-                trailing = {
-                  Text(
-                    text = donation.price,
-                    style = MaterialTheme.typography.body2,
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
-                  )
-                }
+
+      AlertDialog(
+        onDismissRequest = action { navigator.pop(screen, null) },
+        title = { Text("Support development \uD83D\uDC9B") },
+        text = {
+          ResourceVerticalListFor(
+            resource = skus,
+            loading = {
+              CircularProgressIndicator(
+                modifier = Modifier
+                  .height(100.dp)
+                  .fillMaxWidth()
+                  .center()
               )
             }
-          },
-          buttons = {
-            TextButton(onClick = action { navigator.pop(screen) }) {
-              Text("Cancel")
-            }
+          ) { donation ->
+            ListItem(
+              modifier = Modifier.padding(horizontal = 8.dp),
+              onClick = action {
+                if (billingService.purchase(donation.donation.sku, true, true)) {
+                  billingService.consumePurchase(donation.donation.sku)
+                  toaster("Thanks for your support! \uD83D\uDC9B")
+                }
+              },
+              title = { Text(donation.title) },
+              leading = donation.donation.icon,
+              trailing = {
+                Text(
+                  text = donation.price,
+                  style = MaterialTheme.typography.body2,
+                  color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                )
+              }
+            )
           }
-        )
-      }
+        },
+        confirmButton = {
+          TextButton(onClick = action { navigator.pop(screen) }) {
+            Text("Cancel")
+          }
+        }
+      )
     }
 
     private data class UiDonation(val donation: Donation, val title: String, val price: String)

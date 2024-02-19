@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
@@ -18,18 +18,20 @@ class ConfirmationScreen(val title: String) : DialogScreen<ConfirmationScreen.Re
       navigator: Navigator,
       screen: ConfirmationScreen,
     ) = Ui<ConfirmationScreen> {
-      DialogScaffold {
-        Dialog(
-          title = { Text(screen.title) },
-          buttons = {
-            ConfirmationScreen.Result.entries.forEach { item ->
-              TextButton(onClick = action { navigator.pop(screen, item) }) {
-                Text(item.name)
-              }
-            }
+      AlertDialog(
+        onDismissRequest = action { navigator.pop(screen, null) },
+        title = { Text(screen.title) },
+        confirmButton = {
+          TextButton(onClick = action { navigator.pop(screen, Result.CONFIRMED) }) {
+            Text("Confirm")
           }
-        )
-      }
+        },
+        dismissButton = {
+          TextButton(onClick = action { navigator.pop(screen, Result.DENIED) }) {
+            Text("Deny")
+          }
+        },
+      )
     }
   }
 }

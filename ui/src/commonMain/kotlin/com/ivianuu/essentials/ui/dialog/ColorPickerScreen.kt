@@ -41,76 +41,74 @@ class ColorPickerScreen(
       navigator: Navigator,
       screen: ColorPickerScreen
     ) = Ui<ColorPickerScreen> {
-      DialogScaffold {
-        var currentColor by remember { mutableStateOf(screen.initialColor) }
-        var currentScreen by remember { mutableStateOf(ColorPickerTab.COLORS) }
-        val otherScreen = when (currentScreen) {
-          ColorPickerTab.COLORS -> ColorPickerTab.EDITOR
-          ColorPickerTab.EDITOR -> ColorPickerTab.COLORS
-        }
+      var currentColor by remember { mutableStateOf(screen.initialColor) }
+      var currentScreen by remember { mutableStateOf(ColorPickerTab.COLORS) }
+      val otherScreen = when (currentScreen) {
+        ColorPickerTab.COLORS -> ColorPickerTab.EDITOR
+        ColorPickerTab.EDITOR -> ColorPickerTab.COLORS
+      }
 
-        if (!screen.allowCustomArgb && currentScreen == ColorPickerTab.EDITOR) {
-          currentScreen = ColorPickerTab.COLORS
-        }
+      if (!screen.allowCustomArgb && currentScreen == ColorPickerTab.EDITOR) {
+        currentScreen = ColorPickerTab.COLORS
+      }
 
-        Dialog(
-          applyContentPadding = false,
-          title = screen.title?.let { { Text(it) } },
-          content = {
-            AnimatedContent(
-              modifier = Modifier.height(300.dp)
-                .padding(start = 24.dp, end = 24.dp),
-              state = currentScreen,
-              transitionSpec = { materialSharedAxisY() }
-            ) { currentScreen ->
-              when (currentScreen) {
-                ColorPickerTab.COLORS -> {
-                  ColorGrid(
-                    modifier = Modifier.fillMaxSize(),
-                    currentColor = currentColor,
-                    colors = screen.colorPalettes,
-                    onColorSelected = { currentColor = it }
-                  )
-                }
-                ColorPickerTab.EDITOR -> {
-                  ColorEditor(
-                    modifier = Modifier.fillMaxSize(),
-                    color = currentColor,
-                    onColorChanged = { currentColor = it },
-                    showAlphaSelector = screen.showAlphaSelector
-                  )
-                }
-              }
-            }
-          },
-          buttons = {
-            if (screen.allowCustomArgb) {
-              TextButton(
-                onClick = { currentScreen = otherScreen },
-                colors = ButtonDefaults.textButtonColors(
-                  contentColor = currentColor
+      AlertDialog(
+        onDismissRequest = action { navigator.pop(screen, null) },
+        title = screen.title?.let { { Text(it) } },
+        text = {
+          AnimatedContent(
+            modifier = Modifier.height(300.dp)
+              .padding(start = 24.dp, end = 24.dp),
+            state = currentScreen,
+            transitionSpec = { materialSharedAxisY() }
+          ) { currentScreen ->
+            when (currentScreen) {
+              ColorPickerTab.COLORS -> {
+                ColorGrid(
+                  modifier = Modifier.fillMaxSize(),
+                  currentColor = currentColor,
+                  colors = screen.colorPalettes,
+                  onColorSelected = { currentColor = it }
                 )
-              ) {
-                Text(
-                  when (currentScreen) {
-                    ColorPickerTab.COLORS -> "Colors"
-                    ColorPickerTab.EDITOR -> "Custom"
-                  }
+              }
+              ColorPickerTab.EDITOR -> {
+                ColorEditor(
+                  modifier = Modifier.fillMaxSize(),
+                  color = currentColor,
+                  onColorChanged = { currentColor = it },
+                  showAlphaSelector = screen.showAlphaSelector
                 )
               }
             }
-
-            TextButton(onClick = action { navigator.pop(screen) }) { Text("Cancel") }
-
+          }
+        },
+        confirmButton = {
+          if (screen.allowCustomArgb) {
             TextButton(
-              onClick = action { navigator.pop(screen, currentColor) },
+              onClick = { currentScreen = otherScreen },
               colors = ButtonDefaults.textButtonColors(
                 contentColor = currentColor
               )
-            ) { Text("OK") }
+            ) {
+              Text(
+                when (currentScreen) {
+                  ColorPickerTab.COLORS -> "Colors"
+                  ColorPickerTab.EDITOR -> "Custom"
+                }
+              )
+            }
           }
-        )
-      }
+
+          TextButton(onClick = action { navigator.pop(screen) }) { Text("Cancel") }
+
+          TextButton(
+            onClick = action { navigator.pop(screen, currentColor) },
+            colors = ButtonDefaults.textButtonColors(
+              contentColor = currentColor
+            )
+          ) { Text("OK") }
+        }
+      )
     }
 
     private val NoPalette = Any()

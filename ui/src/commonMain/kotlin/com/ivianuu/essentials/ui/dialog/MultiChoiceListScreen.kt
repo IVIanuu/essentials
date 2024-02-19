@@ -6,7 +6,7 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.compose.*
@@ -28,46 +28,45 @@ class MultiChoiceListScreen<T : Any>(
       navigator: Navigator,
       screen: MultiChoiceListScreen<Any>,
     ) = Ui<MultiChoiceListScreen<Any>> {
-      DialogScaffold {
-        var selectedItems by remember { mutableStateOf(screen.selected) }
+      var selectedItems by remember { mutableStateOf(screen.selected) }
 
-        Dialog(
-          applyContentPadding = false,
-          title = screen.title?.let { { Text(it) } },
-          content = {
-            VerticalList(decorate = false) {
-              items(screen.items) { item ->
-                val selected = item in selectedItems
-                ListItem(
-                  onClick = {
-                    val newSelectedItems = selectedItems.toMutableSet()
-                    if (!selected) newSelectedItems += item
-                    else newSelectedItems -= item
-                    selectedItems = newSelectedItems
-                  },
-                  trailingPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
-                  title = { Text(screen.renderable(item)) },
-                  trailing = {
-                    Switch(
-                      checked = selected,
-                      onCheckedChange = null
-                    )
-                  }
-                )
-              }
-            }
-          },
-          buttons = {
-            TextButton(onClick = action { navigator.pop(screen, null) }) {
-              Text("Cancel")
-            }
-
-            TextButton(onClick = action { navigator.pop(screen, selectedItems) }) {
-              Text("OK")
+      AlertDialog(
+        onDismissRequest = action { navigator.pop(screen, null) },
+        title = screen.title?.let { { Text(it) } },
+        text = {
+          VerticalList(decorate = false) {
+            items(screen.items) { item ->
+              val selected = item in selectedItems
+              ListItem(
+                onClick = {
+                  val newSelectedItems = selectedItems.toMutableSet()
+                  if (!selected) newSelectedItems += item
+                  else newSelectedItems -= item
+                  selectedItems = newSelectedItems
+                },
+                trailingPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
+                title = { Text(screen.renderable(item)) },
+                trailing = {
+                  Switch(
+                    checked = selected,
+                    onCheckedChange = null
+                  )
+                }
+              )
             }
           }
-        )
-      }
+        },
+        confirmButton = {
+          TextButton(onClick = action { navigator.pop(screen, selectedItems) }) {
+            Text("OK")
+          }
+        },
+        dismissButton = {
+          TextButton(onClick = action { navigator.pop(screen, null) }) {
+            Text("Cancel")
+          }
+        }
+      )
     }
   }
 }

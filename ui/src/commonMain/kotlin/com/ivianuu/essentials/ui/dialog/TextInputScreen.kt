@@ -27,44 +27,44 @@ class TextInputScreen(
       navigator: Navigator,
       screen: TextInputScreen
     ) = Ui<TextInputScreen> {
-      DialogScaffold {
-        var currentValue by remember {
-          mutableStateOf(TextFieldValue(screen.initial, TextRange(screen.initial.length)))
-        }
-
-        Dialog(
-          title = screen.title?.let { { Text(it) } },
-          content = {
-            val focusRequester = remember { FocusRequester() }
-
-            TextField(
-              modifier = Modifier.focusRequester(focusRequester),
-              value = currentValue,
-              onValueChange = { currentValue = it },
-              keyboardOptions = screen.keyboardOptions,
-              textStyle = MaterialTheme.typography.subtitle1,
-              label = { Text(screen.label) }
-            )
-
-            DisposableEffect(true) {
-              focusRequester.requestFocus()
-              onDispose { }
-            }
-          },
-          buttons = {
-            TextButton(onClick = action { navigator.pop(screen, null) }) {
-              Text("Cancel")
-            }
-
-            val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
-
-            TextButton(
-              enabled = currentValueIsOk,
-              onClick = action { navigator.pop(screen, currentValue.text) }
-            ) { Text("OK") }
-          }
-        )
+      var currentValue by remember {
+        mutableStateOf(TextFieldValue(screen.initial, TextRange(screen.initial.length)))
       }
+
+      AlertDialog(
+        onDismissRequest = action { navigator.pop(screen, null) },
+        title = screen.title?.let { { Text(it) } },
+        text = {
+          val focusRequester = remember { FocusRequester() }
+
+          TextField(
+            modifier = Modifier.focusRequester(focusRequester),
+            value = currentValue,
+            onValueChange = { currentValue = it },
+            keyboardOptions = screen.keyboardOptions,
+            textStyle = MaterialTheme.typography.subtitle1,
+            label = { Text(screen.label) }
+          )
+
+          DisposableEffect(true) {
+            focusRequester.requestFocus()
+            onDispose { }
+          }
+        },
+        confirmButton = {
+          val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
+
+          TextButton(
+            enabled = currentValueIsOk,
+            onClick = action { navigator.pop(screen, currentValue.text) }
+          ) { Text("OK") }
+        },
+        dismissButton = {
+          TextButton(onClick = action { navigator.pop(screen, null) }) {
+            Text("Cancel")
+          }
+        }
+      )
     }
   }
 }
