@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.core.net.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.intent.*
 import com.ivianuu.injekt.*
 
 abstract class IgnoreBatteryOptimizationsPermission(
