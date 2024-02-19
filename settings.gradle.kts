@@ -14,7 +14,6 @@ include(
   ":foreground",
   ":gestures",
   ":gradle-plugin",
-  ":ide",
   ":ksp",
   ":notification-listener",
   ":premium",

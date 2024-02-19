@@ -168,8 +168,6 @@ object Deps {
 
   const val roboelectric = "org.robolectric:robolectric:4.10.3"
 
-  const val shadowGradlePlugin = "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
-
   const val splittiesCoroutines = "com.louiscad.splitties:splitties-coroutines:3.0.0"
 
   const val superUser = "eu.chainfire:libsuperuser:1.1.1"

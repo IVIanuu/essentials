@@ -4,6 +4,7 @@
 
 import com.android.build.gradle.*
 import com.vanniktech.maven.publish.*
+import org.jetbrains.kotlin.gradle.tasks.*
 
 buildscript {
   repositories {
@@ -24,7 +25,6 @@ buildscript {
     classpath(Deps.essentialsGradlePlugin)
     classpath(Deps.Kotlin.gradlePlugin)
     classpath(Deps.mavenPublishGradlePlugin)
-    classpath(Deps.shadowGradlePlugin)
   }
 }
 
@@ -66,4 +66,13 @@ allprojects {
 
   plugins.withId("com.android.library") { setupAndroid() }
   plugins.withId("com.android.application") { setupAndroid() }
+
+  tasks.withType<KotlinCompilationTask<*>> {
+    compilerOptions.freeCompilerArgs.addAll(
+      "-opt-in=kotlin.experimental.ExperimentalTypeInference",
+      "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
+      "-opt-in=androidx.compose.animation.core.InternalAnimationApi",
+      "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
+    )
+  }
 }
