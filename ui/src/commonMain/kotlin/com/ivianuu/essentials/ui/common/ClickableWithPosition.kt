@@ -12,11 +12,10 @@ import kotlinx.coroutines.flow.*
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   indication: Indication? = LocalIndication.current,
   enabled: Boolean = true,
-  onClick: ((Offset) -> Unit)? = null
+  onClick: (Offset) -> Unit
 ): Modifier {
   val scope = rememberCoroutineScope()
   return clickable(interactionSource, indication, enabled, null, null) {
-    if (onClick == null) return@clickable
     scope.launch(start = CoroutineStart.UNDISPATCHED) {
       val position = interactionSource.interactions
         .mapNotNull {

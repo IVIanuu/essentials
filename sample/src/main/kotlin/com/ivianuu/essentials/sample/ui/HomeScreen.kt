@@ -19,7 +19,6 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.popup.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.essentials.xposed.*
 import com.ivianuu.injekt.*
@@ -38,9 +37,9 @@ import com.ivianuu.injekt.*
       AppBar(
         title = { Text("Home") },
         actions = {
-          PopupMenuButton {
+          DropdownMenuButton {
             listOf("Option 1", "Option 2", "Option 3").forEach { title ->
-              PopupMenuItem(onSelected = { toaster("Selected $title") }) {
+              DropdownMenuItem(onClick = { toaster("Selected $title") }) {
                 Text(title)
               }
             }
@@ -97,9 +96,9 @@ import com.ivianuu.injekt.*
       )
     },
     trailing = {
-      PopupMenuButton {
+      DropdownMenuButton {
         (0..100).forEach { index ->
-          PopupMenuItem(onSelected = {}) {
+          DropdownMenuItem(onClick = {}) {
             Text(index.toString())
           }
         }

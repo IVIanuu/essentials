@@ -6,7 +6,7 @@ package com.ivianuu.essentials.apps
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
@@ -16,7 +16,6 @@ import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Switch
-import com.ivianuu.essentials.ui.popup.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
@@ -47,16 +46,16 @@ data class CheckableAppsScreen(
         AppBar(
           title = { Text(screen.appBarTitle) },
           actions = {
-            PopupMenuButton {
-              PopupMenuItem(
-                onSelected = {
+            DropdownMenuButton {
+              DropdownMenuItem(
+                onClick = {
                   updateCheckedApps {
                     this + allApps.get().map { it.packageName }
                   }
                 }
               ) { Text("Select all") }
-              PopupMenuItem(
-                onSelected = {
+              DropdownMenuItem(
+                onClick = {
                   updateCheckedApps { emptySet() }
                 }
               ) { Text("Deselect all") }
