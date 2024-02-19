@@ -30,6 +30,7 @@ import kotlin.time.Duration.Companion.seconds
     Intent.ACTION_SCREEN_ON,
     Intent.ACTION_USER_PRESENT
   )
+    .onStart<Any?> { emit(Unit) }
     .map {
       if (powerManager.isInteractive) {
         if (keyguardManager.isDeviceLocked) ScreenState.LOCKED

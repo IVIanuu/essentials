@@ -25,11 +25,8 @@ import kotlinx.coroutines.flow.*
     super.onServiceConnected()
     logger.log { "service connected" }
     accessibilityScope = accessibilityScopeFactory(this)
-    val accessibilityComponent = accessibilityScope!!
-      .service<AccessibilityComponent>()
-
-    val configs = accessibilityComponent.configs
-    logger.log { "update config from $configs" }
+    val configs = accessibilityScope!!.service<Component>().configs
+    logger.log { "update configs $configs" }
     serviceInfo = serviceInfo.apply {
       eventTypes = configs
         .map { it.eventTypes }
@@ -71,8 +68,7 @@ import kotlinx.coroutines.flow.*
     accessibilityScope = null
     return super.onUnbind(intent)
   }
-}
 
-@Provide @Service<AccessibilityScope> data class AccessibilityComponent(
-  val configs: List<AccessibilityConfig>
-)
+  @Provide @Service<AccessibilityScope>
+  data class Component(val configs: List<AccessibilityConfig>)
+}
