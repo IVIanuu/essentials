@@ -16,4 +16,3 @@ fun interface Clock {
     @Provide val impl = Clock { System.nanoTime().nanoseconds }
   }
 }
-S
