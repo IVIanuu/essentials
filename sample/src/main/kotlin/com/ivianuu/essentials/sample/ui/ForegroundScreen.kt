@@ -33,7 +33,7 @@ class ForegroundScreen : Screen<Unit> {
 
         if (isEnabled)
           LaunchedEffect(true) {
-            foregroundManager.startForeground(removeNotification = false) {
+            foregroundManager.startForeground(id = "foreground", removeNotification = false) {
               notificationFactory(
                 "foreground",
                 "Foreground",

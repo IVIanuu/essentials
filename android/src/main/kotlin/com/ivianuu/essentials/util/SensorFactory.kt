@@ -10,7 +10,6 @@ import kotlin.time.*
 import kotlin.time.Duration.Companion.nanoseconds
 import android.hardware.SensorEvent as AndroidSensorEvent
 
-
 @Provide class SensorFactory(
   private val sensorManager: @SystemService SensorManager,
   private val wakeLockManager: WakeLockManager,
@@ -20,7 +19,7 @@ import android.hardware.SensorEvent as AndroidSensorEvent
   fun sensorEvents(sensor: Sensor, samplingRate: Duration): Flow<SensorEvent> =
     callbackFlow {
       if (!sensor.isWakeUpSensor)
-        launch { wakeLockManager.acquire() }
+        launch { wakeLockManager.acquire("sensor_${sensor.id}") }
 
       if (sensor.reportingMode == Sensor.REPORTING_MODE_ONE_SHOT) {
         val listener = object : TriggerEventListener() {

@@ -64,7 +64,7 @@ import kotlin.time.Duration.Companion.seconds
           remember(states.any { it.notification == null }) {
             listOf(
               Triple(
-                inject<ForegroundId>().value,
+                "default_foreground_id".hashCode(),
                 true,
                 notificationFactory(
                   "default_foreground",
@@ -82,7 +82,7 @@ import kotlin.time.Duration.Companion.seconds
           .mapNotNull { state ->
             key(state.id) {
               state.notification?.invoke()
-                ?.let { Triple(state.id, state.removeNotification, it) }
+                ?.let { Triple(state.id.hashCode(), state.removeNotification, it) }
             }
           })
           .forEachIndexed { index, (id, removeNotification, notification) ->

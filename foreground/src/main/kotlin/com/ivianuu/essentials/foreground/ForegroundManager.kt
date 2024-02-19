@@ -27,14 +27,14 @@ import kotlinx.coroutines.sync.*
 
   suspend fun startForeground(
     removeNotification: Boolean = true,
-    @Inject foregroundId: ForegroundId,
+    id: String,
     notification: (@Composable () -> Notification)?,
   ): Nothing = bracketCase(
     acquire = {
-      ForegroundState(foregroundId.value, removeNotification, notification)
+      ForegroundState(id, removeNotification, notification)
         .also {
           lock.withLock { states.value = states.value + it }
-          logger.d { "start foreground ${foregroundId.value} ${states.value}" }
+          logger.d { "start foreground $id ${states.value}" }
 
           ContextCompat.startForegroundService(
             appContext,
@@ -45,22 +45,16 @@ import kotlinx.coroutines.sync.*
     release = { state, _ ->
       state.seen.await()
       lock.withLock { states.value = states.value - state }
-      logger.d { "stop foreground $foregroundId ${states.value}" }
+      logger.d { "stop foreground $id ${states.value}" }
     }
   )
 
   internal class ForegroundState(
-    val id: Int,
+    val id: String,
     val removeNotification: Boolean,
     val notification: (@Composable () -> Notification)?,
   ) {
     val seen = CompletableDeferred<Unit>()
-  }
-}
-
-@JvmInline value class ForegroundId(val value: Int) {
-  @Provide companion object {
-    @Provide fun default(sourceKey: SourceKey) = ForegroundId(sourceKey.hashCode())
   }
 }
 

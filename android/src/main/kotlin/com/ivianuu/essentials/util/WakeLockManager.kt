@@ -11,21 +11,15 @@ import com.ivianuu.injekt.common.*
   private val logger: Logger,
   private val powerManager: @SystemService PowerManager
 ) {
-  suspend fun acquire(@Inject id: WakeLockId): Nothing = bracketCase(
+  suspend fun acquire(id: String): Nothing = bracketCase(
     acquire = {
-      logger.d { "${id.value} acquire wake lock" }
-      powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, id.value)
+      logger.d { "$id acquire wake lock" }
+      powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, id)
         .also { it.acquire() }
     },
     release = { wakeLock, _ ->
-      logger.d { "${id.value} release wake lock" }
+      logger.d { "$id release wake lock" }
       wakeLock.release()
     }
   )
-}
-
-@JvmInline value class WakeLockId(val value: String) {
-  @Provide companion object {
-    @Provide fun default(sourceKey: SourceKey) = WakeLockId(sourceKey.value)
-  }
 }
