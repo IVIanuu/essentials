@@ -24,29 +24,31 @@ class AndroidSettingModule<T : Any>(
     coroutineContexts: CoroutineContexts,
     scope: ScopedCoroutineScope<AppScope>
   ): DataStore<T> = object : DataStore<T> {
-    private fun get(): T = when (defaultValue) {
-      is Float -> when (type) {
-        AndroidSettingsType.GLOBAL -> Settings.Global.getFloat(contentResolver, name, defaultValue)
-        AndroidSettingsType.SECURE -> Settings.Secure.getFloat(contentResolver, name, defaultValue)
-        AndroidSettingsType.SYSTEM -> Settings.System.getFloat(contentResolver, name, defaultValue)
-      }
-      is Int -> when (type) {
-        AndroidSettingsType.GLOBAL -> Settings.Global.getInt(contentResolver, name, defaultValue)
-        AndroidSettingsType.SECURE -> Settings.Secure.getInt(contentResolver, name, defaultValue)
-        AndroidSettingsType.SYSTEM -> Settings.System.getInt(contentResolver, name, defaultValue)
-      }
-      is Long -> when (type) {
-        AndroidSettingsType.GLOBAL -> Settings.Global.getLong(contentResolver, name, defaultValue)
-        AndroidSettingsType.SECURE -> Settings.Secure.getLong(contentResolver, name, defaultValue)
-        AndroidSettingsType.SYSTEM -> Settings.System.getLong(contentResolver, name, defaultValue)
-      }
-      is String -> when (type) {
-        AndroidSettingsType.GLOBAL -> Settings.Global.getString(contentResolver, name) ?: defaultValue
-        AndroidSettingsType.SECURE -> Settings.Secure.getString(contentResolver, name) ?: defaultValue
-        AndroidSettingsType.SYSTEM -> Settings.System.getString(contentResolver, name) ?: defaultValue
-      }
-      else -> throw AssertionError("Unsupported type ${defaultValue::class}")
-    }.unsafeCast()
+    private suspend fun get(): T = withContext(coroutineContexts.io) {
+      when (defaultValue) {
+        is Float -> when (type) {
+          AndroidSettingsType.GLOBAL -> Settings.Global.getFloat(contentResolver, name, defaultValue)
+          AndroidSettingsType.SECURE -> Settings.Secure.getFloat(contentResolver, name, defaultValue)
+          AndroidSettingsType.SYSTEM -> Settings.System.getFloat(contentResolver, name, defaultValue)
+        }
+        is Int -> when (type) {
+          AndroidSettingsType.GLOBAL -> Settings.Global.getInt(contentResolver, name, defaultValue)
+          AndroidSettingsType.SECURE -> Settings.Secure.getInt(contentResolver, name, defaultValue)
+          AndroidSettingsType.SYSTEM -> Settings.System.getInt(contentResolver, name, defaultValue)
+        }
+        is Long -> when (type) {
+          AndroidSettingsType.GLOBAL -> Settings.Global.getLong(contentResolver, name, defaultValue)
+          AndroidSettingsType.SECURE -> Settings.Secure.getLong(contentResolver, name, defaultValue)
+          AndroidSettingsType.SYSTEM -> Settings.System.getLong(contentResolver, name, defaultValue)
+        }
+        is String -> when (type) {
+          AndroidSettingsType.GLOBAL -> Settings.Global.getString(contentResolver, name) ?: defaultValue
+          AndroidSettingsType.SECURE -> Settings.Secure.getString(contentResolver, name) ?: defaultValue
+          AndroidSettingsType.SYSTEM -> Settings.System.getString(contentResolver, name) ?: defaultValue
+        }
+        else -> throw AssertionError("Unsupported type ${defaultValue::class}")
+      }.unsafeCast()
+    }
 
     override val data: Flow<T> = contentChangesFactory(
       when (type) {
@@ -56,7 +58,7 @@ class AndroidSettingModule<T : Any>(
       }
     )
       .onStart { emit(Unit) }
-      .map { withContext(coroutineContexts.io) { get() } }
+      .map { get() }
       .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
       .distinctUntilChanged()
 
