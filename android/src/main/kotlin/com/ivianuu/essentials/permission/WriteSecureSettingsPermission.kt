@@ -22,7 +22,6 @@ import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.stepper.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*

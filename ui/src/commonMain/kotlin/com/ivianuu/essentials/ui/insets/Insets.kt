@@ -10,7 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import arrow.fx.coroutines.*
-import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.app.*
 import com.ivianuu.injekt.*
 
 @Composable fun InsetsPadding(

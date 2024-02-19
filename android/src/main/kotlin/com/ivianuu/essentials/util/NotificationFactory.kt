@@ -9,7 +9,7 @@ import android.content.*
 import androidx.compose.ui.graphics.*
 import androidx.core.app.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.app.*
 import com.ivianuu.injekt.*
 
 @Provide class NotificationFactory(

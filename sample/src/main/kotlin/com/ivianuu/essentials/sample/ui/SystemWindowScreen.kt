@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.systemoverlay.*
-import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*

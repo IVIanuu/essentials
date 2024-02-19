@@ -2,7 +2,7 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.ui.resource
+package com.ivianuu.essentials.ui.common
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -13,8 +13,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.layout.*
 import kotlin.reflect.*
 
 @Composable fun <T> ResourceVerticalListFor(

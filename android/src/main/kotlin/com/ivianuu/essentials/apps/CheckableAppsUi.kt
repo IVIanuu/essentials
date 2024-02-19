@@ -13,10 +13,10 @@ import androidx.compose.ui.unit.*
 import coil.compose.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.popup.*
-import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 

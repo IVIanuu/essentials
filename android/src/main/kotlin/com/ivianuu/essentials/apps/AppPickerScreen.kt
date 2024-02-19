@@ -11,9 +11,9 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import coil.compose.*
 import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 

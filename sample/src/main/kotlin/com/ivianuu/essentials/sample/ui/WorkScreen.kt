@@ -9,7 +9,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.ui.*
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*

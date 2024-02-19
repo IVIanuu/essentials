@@ -10,17 +10,15 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import arrow.fx.coroutines.parMap
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.dialog.*
-import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 

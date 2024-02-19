@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.util.*
 
 data class TriggerGeometry(

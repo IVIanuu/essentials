@@ -13,7 +13,7 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.notificationlistener.*
 import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*

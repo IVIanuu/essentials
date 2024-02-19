@@ -10,7 +10,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.app.*
 import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.injekt.*
 

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.util.*
