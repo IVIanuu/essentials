@@ -10,7 +10,7 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-class ConfirmationScreen(val title: String) : DialogScreen<ConfirmationScreen.Result> {
+class ConfirmationScreen(val title: String) : OverlayScreen<ConfirmationScreen.Result> {
   enum class Result { CONFIRMED, DENIED }
 
   @Provide companion object {

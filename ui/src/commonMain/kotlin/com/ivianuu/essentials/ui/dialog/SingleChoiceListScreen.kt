@@ -19,7 +19,7 @@ class SingleChoiceListScreen<T : Any>(
   val selected: T,
   val title: String? = null,
   @Inject val renderable: UiRenderer<T>
-) : DialogScreen<T> {
+) : OverlayScreen<T> {
   @Provide companion object {
     @Provide fun ui(
       navigator: Navigator,

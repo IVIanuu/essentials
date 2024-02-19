@@ -22,7 +22,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 
-class DonationScreen : DialogScreen<Unit> {
+class DonationScreen : OverlayScreen<Unit> {
   @Provide companion object {
     @Provide fun ui(
       billingService: BillingService,

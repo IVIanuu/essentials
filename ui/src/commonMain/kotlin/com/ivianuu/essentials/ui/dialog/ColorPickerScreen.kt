@@ -35,7 +35,7 @@ class ColorPickerScreen(
   val title: String? = null,
   val allowCustomArgb: Boolean = true,
   val showAlphaSelector: Boolean = false,
-) : DialogScreen<Color> {
+) : OverlayScreen<Color> {
   @Provide companion object {
     @Provide fun ui(
       navigator: Navigator,

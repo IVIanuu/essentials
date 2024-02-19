@@ -22,7 +22,7 @@ class MultiChoiceListScreen<T : Any>(
   val selected: Set<T>,
   val title: String? = null,
   @Inject val renderable: UiRenderer<T>
-) : DialogScreen<Set<T>> {
+) : OverlayScreen<Set<T>> {
   @Provide companion object {
     @Provide fun ui(
       navigator: Navigator,

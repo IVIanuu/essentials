@@ -21,7 +21,7 @@ class TextInputScreen(
   val keyboardOptions: KeyboardOptions = KeyboardOptions(),
   val title: String? = null,
   val predicate: (String) -> Boolean = { true }
-) : DialogScreen<String> {
+) : OverlayScreen<String> {
   @Provide companion object {
     @Provide fun ui(
       navigator: Navigator,
