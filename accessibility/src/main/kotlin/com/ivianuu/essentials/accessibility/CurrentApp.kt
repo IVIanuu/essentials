@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.*
     .stateIn(scope, SharingStarted.Lazily, null)
 
   companion object {
-    @Provide val currentAppAccessibilityConfig: AccessibilityConfig
+    @Provide val accessibilityConfig: AccessibilityConfig
       get() = AccessibilityConfig(
         eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
       )
