@@ -6,6 +6,7 @@ package com.ivianuu.essentials.shortcut
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
@@ -28,29 +29,33 @@ class ShortcutPickerScreen : Screen<Shortcut> {
       toaster: Toaster
     ) = Ui<ShortcutPickerScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Pick an shortcut") } }) {
-        ResourceVerticalListFor(repository.shortcuts.collectResource()) { shortcut ->
-          ListItem(
-            onClick = scopedAction {
-              catch {
-                val shortcutRequestResult = navigator.push(shortcut.intent.asScreen())
-                  ?.getOrNull()
-                  ?.data ?: return@catch
-                val finalShortcut = repository.extractShortcut(shortcutRequestResult)
-                navigator.pop(screen, finalShortcut)
-              }.onLeft {
-                it.printStackTrace()
-                toaster("Failed to pick a shortcut!")
-              }
-            },
-            leading = {
-              Image(
-                modifier = Modifier.size(40.dp),
-                bitmap = shortcut.icon.toBitmap().asImageBitmap(),
-                contentDescription = null
+        ResourceBox(repository.shortcuts.collectResource()) { shortcuts ->
+          VerticalList {
+            items(shortcuts) { shortcut ->
+              ListItem(
+                onClick = scopedAction {
+                  catch {
+                    val shortcutRequestResult = navigator.push(shortcut.intent.asScreen())
+                      ?.getOrNull()
+                      ?.data ?: return@catch
+                    val finalShortcut = repository.extractShortcut(shortcutRequestResult)
+                    navigator.pop(screen, finalShortcut)
+                  }.onLeft {
+                    it.printStackTrace()
+                    toaster("Failed to pick a shortcut!")
+                  }
+                },
+                leading = {
+                  Image(
+                    modifier = Modifier.size(40.dp),
+                    bitmap = shortcut.icon.toBitmap().asImageBitmap(),
+                    contentDescription = null
+                  )
+                },
+                title = { Text(shortcut.name) }
               )
-            },
-            title = { Text(shortcut.name) }
-          )
+            }
+          }
         }
       }
     }

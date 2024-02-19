@@ -15,54 +15,6 @@ import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.animation.*
 import kotlin.reflect.*
 
-@Composable fun <T> ResourceVerticalListFor(
-  resource: Resource<List<T>>,
-  modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<ResourceBoxItem<List<T>>> = ResourceBoxDefaults.transitionSpec,
-  error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
-  loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
-  successEmpty: @Composable () -> Unit = {},
-  successItemContent: @Composable LazyItemScope.(T) -> Unit,
-) {
-  ResourceBox(
-    resource = resource,
-    modifier = modifier,
-    transitionSpec = transitionSpec,
-    error = error,
-    loading = loading
-  ) { items ->
-    if (items.isNotEmpty()) {
-      VerticalList { items(items) { successItemContent(it) } }
-    } else {
-      successEmpty()
-    }
-  }
-}
-
-@Composable fun <T> ResourceHorizontalListFor(
-  resource: Resource<List<T>>,
-  modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<ResourceBoxItem<List<T>>> = ResourceBoxDefaults.transitionSpec,
-  error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
-  loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
-  successEmpty: @Composable () -> Unit = {},
-  successItemContent: @Composable LazyItemScope.(T) -> Unit,
-) {
-  ResourceBox(
-    resource = resource,
-    modifier = modifier,
-    transitionSpec = transitionSpec,
-    error = error,
-    loading = loading
-  ) { items ->
-    if (items.isNotEmpty()) {
-      HorizontalList { items(items) { successItemContent(it) } }
-    } else {
-      successEmpty()
-    }
-  }
-}
-
 @Composable fun <T> ResourceBox(
   resource: Resource<T>,
   modifier: Modifier = Modifier,

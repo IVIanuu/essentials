@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.gestures.action.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
@@ -59,26 +60,30 @@ class ActionPickerScreen(
       }
 
       ScreenScaffold(topBar = { AppBar { Text("Pick an action") } }) {
-        ResourceVerticalListFor(items) { item ->
-          ListItem(
-            onClick = scopedAction {
-              val result = item.getResult(navigator) ?: return@scopedAction
-              if (result is Result.Action) {
-                val action = repository.getAction(result.actionId)
-                if (!permissionManager.requestPermissions(action.permissions))
-                  return@scopedAction
-              }
-              navigator.pop(screen, result)
-            },
-            leading = { item.Icon(Modifier.size(24.dp)) },
-            trailing = if (item.settingsScreen == null) null
-            else ({
-              IconButton(onClick = action { navigator.push(item.settingsScreen!!) }) {
-                Icon(Icons.Default.Settings, null)
-              }
-            }),
-            title = { Text(item.title) }
-          )
+        ResourceBox(items) { items ->
+          VerticalList {
+            items(items) { item ->
+              ListItem(
+                onClick = scopedAction {
+                  val result = item.getResult(navigator) ?: return@scopedAction
+                  if (result is Result.Action) {
+                    val action = repository.getAction(result.actionId)
+                    if (!permissionManager.requestPermissions(action.permissions))
+                      return@scopedAction
+                  }
+                  navigator.pop(screen, result)
+                },
+                leading = { item.Icon(Modifier.size(24.dp)) },
+                trailing = if (item.settingsScreen == null) null
+                else ({
+                  IconButton(onClick = action { navigator.push(item.settingsScreen!!) }) {
+                    Icon(Icons.Default.Settings, null)
+                  }
+                }),
+                title = { Text(item.title) }
+              )
+            }
+          }
         }
       }
     }

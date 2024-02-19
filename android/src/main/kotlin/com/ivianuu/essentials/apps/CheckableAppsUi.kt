@@ -6,6 +6,7 @@ package com.ivianuu.essentials.apps
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -64,25 +65,29 @@ data class CheckableAppsScreen(
         )
       }
     ) {
-      ResourceVerticalListFor(allApps) { app ->
-        val isChecked = app.packageName in checkedApps
-        ListItem(
-          onClick = {
-            updateCheckedApps {
-              if (isChecked) this + app.packageName
-              else this - app.packageName
-            }
-          },
-          title = { Text(app.appName) },
-          leading = {
-            Image(
-              painter = rememberAsyncImagePainter(AppIcon(packageName = app.packageName)),
-              modifier = Modifier.size(40.dp),
-              contentDescription = null
+      ResourceBox(allApps) { apps ->
+        VerticalList {
+          items(apps) { app ->
+            val isChecked = app.packageName in checkedApps
+            ListItem(
+              onClick = {
+                updateCheckedApps {
+                  if (isChecked) this + app.packageName
+                  else this - app.packageName
+                }
+              },
+              title = { Text(app.appName) },
+              leading = {
+                Image(
+                  painter = rememberAsyncImagePainter(AppIcon(packageName = app.packageName)),
+                  modifier = Modifier.size(40.dp),
+                  contentDescription = null
+                )
+              },
+              trailing = { Switch(checked = isChecked, onCheckedChange = null) }
             )
-          },
-          trailing = { Switch(checked = isChecked, onCheckedChange = null) }
-        )
+          }
+        }
       }
     }
   }

@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.donation
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
@@ -51,7 +52,7 @@ class DonationScreen : OverlayScreen<Unit> {
         onDismissRequest = action { navigator.pop(screen, null) },
         title = { Text("Support development \uD83D\uDC9B") },
         text = {
-          ResourceVerticalListFor(
+          ResourceBox(
             resource = skus,
             loading = {
               CircularProgressIndicator(
@@ -61,25 +62,29 @@ class DonationScreen : OverlayScreen<Unit> {
                   .center()
               )
             }
-          ) { donation ->
-            ListItem(
-              modifier = Modifier.padding(horizontal = 8.dp),
-              onClick = action {
-                if (billingService.purchase(donation.donation.sku, true, true)) {
-                  billingService.consumePurchase(donation.donation.sku)
-                  toaster("Thanks for your support! \uD83D\uDC9B")
-                }
-              },
-              title = { Text(donation.title) },
-              leading = donation.donation.icon,
-              trailing = {
-                Text(
-                  text = donation.price,
-                  style = MaterialTheme.typography.body2,
-                  color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+          ) { donations ->
+            VerticalList {
+              items(donations) { donation ->
+                ListItem(
+                  modifier = Modifier.padding(horizontal = 8.dp),
+                  onClick = action {
+                    if (billingService.purchase(donation.donation.sku, true, true)) {
+                      billingService.consumePurchase(donation.donation.sku)
+                      toaster("Thanks for your support! \uD83D\uDC9B")
+                    }
+                  },
+                  title = { Text(donation.title) },
+                  leading = donation.donation.icon,
+                  trailing = {
+                    Text(
+                      text = donation.price,
+                      style = MaterialTheme.typography.body2,
+                      color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                    )
+                  }
                 )
               }
-            )
+            }
           }
         },
         confirmButton = {
