@@ -24,8 +24,7 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
   ): @Scoped<AppScope> DataStore<T> {
     val androidDataStore = DataStoreFactory.create(
       object : Serializer<T> {
-        override val defaultValue: T
-          get() = default()
+        override val defaultValue: T get() = default()
 
         private val serializer by lazy(serializerFactory)
 

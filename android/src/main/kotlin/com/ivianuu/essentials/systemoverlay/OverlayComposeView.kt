@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.systemoverlay
 
 import android.annotation.*
+import android.content.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.*
 import androidx.lifecycle.*
@@ -15,9 +16,9 @@ import com.ivianuu.injekt.*
 @SuppressLint("ViewConstructor")
 @Provide
 class OverlayComposeView(
-  appContext: AppContext,
+  context: Context,
   private val content: @Composable () -> Unit,
-) : AbstractComposeView(appContext),
+) : AbstractComposeView(context),
   LifecycleOwner,
   SavedStateRegistryOwner,
   ViewModelStoreOwner {
