@@ -12,8 +12,10 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.systembars.*
 import com.ivianuu.essentials.ui.util.*
 import com.ivianuu.injekt.*
 
@@ -168,5 +170,13 @@ typealias AppScreenTransitionSpec = @AppTransitionScreenSpecTag ElementTransitio
       LocalScreenTransitionSpec provides transitionSpec,
       content = content
     )
+  }
+}
+
+fun interface AppThemeDecorator : AppUiDecorator {
+  @Provide companion object {
+    @Provide val loadingOrder
+      get() = LoadingOrder<AppThemeDecorator>()
+        .after<SystemBarManagerProvider>()
   }
 }

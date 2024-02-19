@@ -23,8 +23,5 @@ import kotlin.math.*
       bottom = max(systemBarsInsets.getBottom(density), imeInsets.getBottom(density)).toDp(),
     )
   }
-  CompositionLocalProvider(
-    LocalInsets provides insets,
-    content = content
-  )
+  CompositionLocalProvider(LocalInsets provides insets, content = content)
 }

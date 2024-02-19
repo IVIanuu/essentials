@@ -65,4 +65,3 @@ import kotlinx.coroutines.sync.*
 }
 
 data object ForegroundScope
-
