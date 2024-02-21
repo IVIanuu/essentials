@@ -22,7 +22,7 @@ import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import kotlin.reflect.*
 
 fun staticActionImage(data: Any) = ActionIcon {
   Image(
@@ -48,7 +48,7 @@ fun staticActionIcon(id: Int) = ActionIcon {
   )
 }
 
-operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
+operator fun KClass<Permission>.plus(other: KClass<Permission>) = listOf(this, other)
 
 @Provide class ActionIntentSender(
   private val appContext: AppContext,

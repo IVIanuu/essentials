@@ -5,54 +5,54 @@
 package com.ivianuu.essentials
 
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import kotlin.reflect.*
 
-sealed interface LoadingOrder<T> {
-  sealed interface Static<T> : LoadingOrder<T> {
-    class First<T> : Static<T>
+sealed interface LoadingOrder<T : Any> {
+  sealed interface Static<T : Any> : LoadingOrder<T> {
+    class First<T : Any> : Static<T>
 
-    class Last<T> : Static<T>
+    class Last<T : Any> : Static<T>
 
-    class None<T> : LoadingOrder<T> {
+    class None<T : Any> : LoadingOrder<T> {
       fun first() = First<T>()
 
       fun last() = Last<T>()
 
-      fun <S> before(@Inject key: TypeKey<S>): Topological.Before<T> =
+      fun <S : Any> before(@Inject key: KClass<S>): Topological.Before<T> =
         Topological.Before(key).cast()
 
-      fun <S> after(@Inject key: TypeKey<S>): Topological.After<T> =
+      fun <S : Any> after(@Inject key: KClass<S>): Topological.After<T> =
         Topological.After(key).cast()
     }
   }
 
-  sealed interface Topological<T> : LoadingOrder<T> {
-    data class Before<T>(val key: TypeKey<T>) : Topological<T>
+  sealed interface Topological<T : Any> : LoadingOrder<T> {
+    data class Before<T : Any>(val key: KClass<T>) : Topological<T>
 
-    data class After<T>(val key: TypeKey<T>) : Topological<T>
+    data class After<T : Any>(val key: KClass<T>) : Topological<T>
 
-    data class Combined<T>(val a: Topological<T>, val b: Topological<T>) : Topological<T>
+    data class Combined<T : Any>(val a: Topological<T>, val b: Topological<T>) : Topological<T>
 
     operator fun plus(other: Topological<T>) = Combined(this, other)
 
-    fun <S> before(@Inject key: TypeKey<S>) = Combined(this, Before(key).cast())
+    fun <S : Any> before(@Inject key: KClass<S>) = Combined(this, Before(key).cast())
 
-    fun <S> after(@Inject key: TypeKey<S>) = Combined(this, After(key).cast())
+    fun <S : Any> after(@Inject key: KClass<S>) = Combined(this, After(key).cast())
   }
 
   interface Descriptor<in T> {
-    fun key(x: T): TypeKey<*>
+    fun key(x: T): KClass<*>
 
     fun loadingOrder(x: T): LoadingOrder<*>
   }
 
   companion object {
-    operator fun <T> invoke() = Static.None<T>()
+    operator fun <T : Any> invoke() = Static.None<T>()
   }
 }
 
-private fun LoadingOrder.Topological<*>.dependencies(): Set<TypeKey<*>> {
-  val result = mutableSetOf<TypeKey<*>>()
+private fun LoadingOrder.Topological<*>.dependencies(): Set<KClass<*>> {
+  val result = mutableSetOf<KClass<*>>()
 
   fun LoadingOrder.Topological<*>.collect() {
     when (this) {
@@ -70,8 +70,8 @@ private fun LoadingOrder.Topological<*>.dependencies(): Set<TypeKey<*>> {
   return result
 }
 
-private fun LoadingOrder.Topological<*>.dependents(): Set<TypeKey<*>> {
-  val result = mutableSetOf<TypeKey<*>>()
+private fun LoadingOrder.Topological<*>.dependents(): Set<KClass<*>> {
+  val result = mutableSetOf<KClass<*>>()
 
   fun LoadingOrder.Topological<*>.collect() {
     when (this) {
@@ -100,7 +100,7 @@ fun <T> Collection<T>.sortedWithLoadingOrder(
     else null
   }
 
-  val dependencies = mutableMapOf<TypeKey<*>, MutableSet<TypeKey<*>>>()
+  val dependencies = mutableMapOf<KClass<*>, MutableSet<KClass<*>>>()
 
   // collect dependencies for each item
   for (item in this) {

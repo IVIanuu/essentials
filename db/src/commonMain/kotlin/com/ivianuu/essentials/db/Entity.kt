@@ -5,12 +5,12 @@
 package com.ivianuu.essentials.db
 
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
+import kotlin.reflect.*
 
-interface EntityDescriptor<T> {
-  val key: TypeKey<T>
+interface EntityDescriptor<T : Any> {
+  val key: KClass<T>
 
   val tableName: String
 
@@ -19,9 +19,9 @@ interface EntityDescriptor<T> {
   val serializer: KSerializer<T>
 }
 
-fun <T> EntityDescriptor(
+fun <T : Any> EntityDescriptor(
   tableName: String,
-  @Inject key: TypeKey<T>,
+  @Inject key: KClass<T>,
   @Inject serializer: KSerializer<T>
 ): EntityDescriptor<T> = EntityDescriptorImpl(tableName, key, serializer)
 
@@ -37,9 +37,9 @@ annotation class PrimaryKey
 @SerialInfo
 annotation class AutoIncrement
 
-private class EntityDescriptorImpl<T>(
+private class EntityDescriptorImpl<T : Any>(
   override val tableName: String,
-  override val key: TypeKey<T>,
+  override val key: KClass<T>,
   override val serializer: KSerializer<T>
 ) : EntityDescriptor<T> {
   override val rows: List<Row> = (0 until serializer.descriptor.elementsCount)
@@ -91,7 +91,7 @@ data class Row(
   enum class Type { STRING, INT, BYTES, DOUBLE }
 }
 
-fun <T> T.toSqlColumnsAndArgsString(schema: Schema, @Inject key: TypeKey<T>): String = buildString {
+fun <T : Any> T.toSqlColumnsAndArgsString(schema: Schema, @Inject key: KClass<T>): String = buildString {
   val descriptor = schema.descriptor<T>()
 
   val rowsWithValues = descriptor.rows.zip(

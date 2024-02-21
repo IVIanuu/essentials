@@ -5,24 +5,24 @@
 package com.ivianuu.essentials
 
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import kotlin.reflect.*
 
 interface ExtensionPoint<T : ExtensionPoint<T>>
 
 data class ExtensionPointRecord<T : ExtensionPoint<*>>(
-  val key: TypeKey<T>,
+  val key: KClass<T>,
   val instance: T,
   val loadingOrder: LoadingOrder<T>
 ) {
   @Provide companion object {
     @Provide val loadingOrderDescriptor = object : LoadingOrder.Descriptor<ExtensionPointRecord<*>> {
-      override fun key(x: ExtensionPointRecord<*>): TypeKey<*> = x.key
+      override fun key(x: ExtensionPointRecord<*>): KClass<*> = x.key
       override fun loadingOrder(x: ExtensionPointRecord<*>): LoadingOrder<*> = x.loadingOrder
     }
 
     @Provide fun <@Spread T : ExtensionPoint<B>, B : ExtensionPoint<*>> record(
       initializer: T,
-      key: TypeKey<T>,
+      key: KClass<T>,
       loadingOrder: LoadingOrder<T> = LoadingOrder()
     ): ExtensionPointRecord<B> = ExtensionPointRecord(key, initializer, loadingOrder).cast()
 

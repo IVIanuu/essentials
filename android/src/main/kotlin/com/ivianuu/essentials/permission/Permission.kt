@@ -11,8 +11,8 @@ import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
+import kotlin.reflect.*
 
 interface Permission {
   val title: String
@@ -22,27 +22,27 @@ interface Permission {
 
 @Provide object PermissionModule {
   @Provide fun <@Spread T : Permission> permission(
-    permissionKey: TypeKey<T>,
+    key: KClass<T>,
     permission: () -> T
-  ): Pair<TypeKey<Permission>, () -> Permission> = permissionKey to permission
+  ): Pair<KClass<Permission>, () -> Permission> = (key to permission).cast()
 
-  @Provide val defaultPermissions get() = emptyList<Pair<TypeKey<Permission>, () -> Permission>>()
+  @Provide val defaultPermissions get() = emptyList<Pair<KClass<Permission>, () -> Permission>>()
 
   @Provide fun <@Spread T : Permission> requestHandlerBinding(
-    permissionKey: TypeKey<T>,
+    key: KClass<T>,
     requestHandler: () -> PermissionRequestHandler<T>
-  ): Pair<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>> =
-    (permissionKey to { requestHandler().intercept() }).cast()
+  ): Pair<KClass<Permission>, () -> PermissionRequestHandler<Permission>> =
+    (key to { requestHandler().intercept() }).cast()
 
-  @Provide val defaultRequestHandlers get() = emptyList<Pair<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>>()
+  @Provide val defaultRequestHandlers get() = emptyList<Pair<KClass<Permission>, () -> PermissionRequestHandler<Permission>>>()
 
   @Provide fun <@Spread T : Permission> stateProvider(
-    permissionKey: TypeKey<T>,
+    key: KClass<T>,
     stateProvider: () -> PermissionStateProvider<T>
-  ): Pair<TypeKey<Permission>, () -> PermissionStateProvider<Permission>> =
-    (permissionKey to stateProvider).cast()
+  ): Pair<KClass<Permission>, () -> PermissionStateProvider<Permission>> =
+    (key to stateProvider).cast()
 
-  @Provide val defaultStateProviders get() = emptyList<Pair<TypeKey<Permission>, () -> PermissionStateProvider<Permission>>>()
+  @Provide val defaultStateProviders get() = emptyList<Pair<KClass<Permission>, () -> PermissionStateProvider<Permission>>>()
 }
 
 fun interface PermissionStateProvider<P : Permission> {
@@ -64,19 +64,19 @@ private fun <P : Permission> PermissionRequestHandler<P>.intercept() = Permissio
   permissionRefreshes.emit(Unit)
 }
 
-interface PermissionRevokeHandler : suspend (List<TypeKey<Permission>>) -> Unit {
-  val permissions: List<TypeKey<Permission>>
+interface PermissionRevokeHandler : suspend (List<KClass<Permission>>) -> Unit {
+  val permissions: List<KClass<Permission>>
 
   @Provide companion object {
     inline operator fun invoke(
-      permissions: List<TypeKey<Permission>>,
-      crossinline block: suspend (List<TypeKey<Permission>>) -> Unit
+      permissions: List<KClass<Permission>>,
+      crossinline block: suspend (List<KClass<Permission>>) -> Unit
     ): PermissionRevokeHandler {
       return object : PermissionRevokeHandler {
-        override val permissions: List<TypeKey<Permission>>
+        override val permissions: List<KClass<Permission>>
           get() = permissions
 
-        override suspend fun invoke(p1: List<TypeKey<Permission>>) {
+        override suspend fun invoke(p1: List<KClass<Permission>>) {
           block(p1)
         }
       }

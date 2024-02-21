@@ -19,7 +19,6 @@ import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.shortcut.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import java.io.*
 
 @Provide class ShortcutActionFactory(private val intentSender: ActionIntentSender) : ActionFactory {
@@ -37,7 +36,7 @@ import java.io.*
       unlockScreen = true,
       closeSystemDialogs = true,
       enabled = true,
-      permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>()),
+      permissions = listOf(ActionSystemOverlayPermission::class),
       icon = {
         Image(
           modifier = LocalActionImageSizeModifier.current,

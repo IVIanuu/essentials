@@ -13,21 +13,21 @@ import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
+import kotlin.reflect.*
 
-fun interface ScopeWorker<N> : ExtensionPoint<ScopeWorker<N>> {
+fun interface ScopeWorker<N : Any> : ExtensionPoint<ScopeWorker<N>> {
   suspend operator fun invoke()
 }
 
-fun <N> ScopeComposition(block: @Composable () -> Unit) = ScopeWorker<N> {
+fun <N : Any> ScopeComposition(block: @Composable () -> Unit) = ScopeWorker<N> {
   coroutineScope { launchMolecule(RecompositionMode.Immediate,{}, body = block) }
 }
 
-@Provide class ScopeWorkerRunner<N>(
+@Provide class ScopeWorkerRunner<N : Any>(
   private val coroutineScope: ScopedCoroutineScope<N>,
   private val logger: Logger,
-  private val nameKey: TypeKey<N>,
+  private val nameKey: KClass<N>,
   private val workersFactory: () -> List<ExtensionPointRecord<ScopeWorker<N>>>
 ) : ScopeObserver<N> {
   override fun onEnter(scope: Scope<N>) {
@@ -38,25 +38,25 @@ fun <N> ScopeComposition(block: @Composable () -> Unit) = ScopeWorker<N> {
             val workers = workersFactory()
               .sortedWithLoadingOrder()
 
-            logger.d { "${nameKey.value} run scope workers ${workers.map { it.key.value }}" }
+            logger.d { "${nameKey.simpleName} run scope workers ${workers.map { it.key.qualifiedName }}" }
 
             workers.forEach { record ->
               launch { record.instance() }
             }
           }
 
-          logger.d { "${nameKey.value} scope workers completed" }
+          logger.d { "${nameKey.simpleName} scope workers completed" }
         },
         finalizer = {
           if (it is ExitCase.Cancelled)
-            logger.d { "${nameKey.value} cancel scope workers" }
+            logger.d { "${nameKey.simpleName} cancel scope workers" }
         }
       )
     }
   }
 
   @Provide companion object {
-    @Provide fun <N> loadingOrder(@Inject nameKey: TypeKey<N>) = LoadingOrder<ScopeWorkerRunner<N>>()
+    @Provide fun <N : Any> loadingOrder(@Inject nameKey: KClass<N>) = LoadingOrder<ScopeWorkerRunner<N>>()
       .after<ScopeInitializerRunner<N>>()
   }
 }

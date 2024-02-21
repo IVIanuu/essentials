@@ -62,7 +62,7 @@ fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
         .fold({ it() }) { acc, record ->
           { content ->
             acc {
-              logger.d { "decorate screen with ${record.key.value}" }
+              logger.d { "decorate screen with ${record.key.qualifiedName}" }
               record.instance(content)
             }
           }

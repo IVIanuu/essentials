@@ -19,18 +19,18 @@ import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
+import kotlin.reflect.*
 
 class PermissionRequestScreen(
-  val permissionsKeys: List<TypeKey<Permission>>
+  val permissionsKeys: List<KClass<out Permission>>
 ) : CriticalUserFlowScreen<Boolean> {
   @Provide companion object {
     @Provide fun ui(
       appUiStarter: AppUiStarter,
       navigator: Navigator,
       permissionManager: PermissionManager,
-      requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>,
+      requestHandlers: Map<KClass<out Permission>, () -> PermissionRequestHandler<Permission>>,
       screen: PermissionRequestScreen
     ) = Ui<PermissionRequestScreen> {
       LaunchedEffect(true) {

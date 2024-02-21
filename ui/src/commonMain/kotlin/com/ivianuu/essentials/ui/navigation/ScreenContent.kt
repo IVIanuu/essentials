@@ -7,7 +7,6 @@ import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlin.reflect.*
 
 @Composable fun <S : Screen<*>> ScreenContent(screen: S) {
@@ -117,6 +116,6 @@ import kotlin.reflect.*
   @Provide companion object {
     @Provide fun rootService(
       factory: () -> ScreenContextComponent<RootNavGraph>
-    ) = ProvidedService<UiScope, _>(typeKeyOf(), factory)
+    ) = ProvidedService<UiScope, _>(ScreenContextComponent::class, factory)
   }
 }

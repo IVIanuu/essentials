@@ -18,7 +18,6 @@ import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 
 @Provide val systemWindowHomeItem = HomeItem("System Window") { SystemWindowScreen() }
@@ -50,7 +49,7 @@ class SystemWindowScreen : Screen<Unit> {
           modifier = Modifier.center(),
           onClick = {
             scope.launch {
-              if (permissionManager.requestPermissions(listOf(typeKeyOf<SampleSystemOverlayPermission>())))
+              if (permissionManager.requestPermissions(listOf(SampleSystemOverlayPermission::class)))
                 showSystemWindow = true
             }
           }

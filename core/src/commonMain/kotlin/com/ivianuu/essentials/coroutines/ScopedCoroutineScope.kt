@@ -7,7 +7,6 @@ package com.ivianuu.essentials.coroutines
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
@@ -25,7 +24,7 @@ typealias ScopedCoroutineScope<N> = @ScopedCoroutineScopeTag<N> CoroutineScope
     }
 
     @Provide fun <N> service(scope: () -> ScopedCoroutineScope<N>) =
-      ProvidedService<N, CoroutineScope>(typeKeyOf(), scope)
+      ProvidedService<N, CoroutineScope>(CoroutineScope::class, scope)
 
     @Provide fun coroutinesScope(scope: ScopedCoroutineScope<*>): CoroutineScope = scope
   }

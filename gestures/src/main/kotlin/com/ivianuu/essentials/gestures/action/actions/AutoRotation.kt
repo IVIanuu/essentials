@@ -14,13 +14,12 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 @Provide object AutoRotationActionId : ActionId("auto_rotation") {
   @Provide fun action(autoRotationDataStore: DataStore<AutoRotation>) = Action(
     id = AutoRotationActionId,
     title = "Auto rotation",
-    permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
+    permissions = listOf(ActionWriteSettingsPermission::class),
     icon = {
       Icon(
         if (autoRotationDataStore.data.collect(1) == 1) Icons.Default.ScreenRotation

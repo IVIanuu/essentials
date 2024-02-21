@@ -18,7 +18,6 @@ import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 @Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsScreen() }
 
@@ -30,16 +29,16 @@ class PermissionsScreen : Screen<Unit> {
       ScreenScaffold(topBar = { AppBar { Text("Permissions") } }) {
         Button(
           modifier = Modifier.center(),
-          onClick = action {
+          onClick = scopedAction {
             permissionManager.requestPermissions(
               listOf(
-                typeKeyOf<SampleCameraPermission>(),
-                typeKeyOf<SamplePhonePermission>(),
-                typeKeyOf<SampleAccessibilityPermission>(),
-                typeKeyOf<SampleNotificationListenerPermission>(),
-                typeKeyOf<SampleSystemOverlayPermission>(),
-                typeKeyOf<SampleWriteSecureSettingsPermission>(),
-                typeKeyOf<SampleWriteSettingsPermission>()
+                SampleCameraPermission::class,
+                SamplePhonePermission::class,
+                SampleAccessibilityPermission::class,
+                SampleNotificationListenerPermission::class,
+                SampleSystemOverlayPermission::class,
+                SampleWriteSecureSettingsPermission::class,
+                SampleWriteSettingsPermission::class
               )
             )
           }

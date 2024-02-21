@@ -55,8 +55,8 @@ import kotlin.collections.set
     key(screenContext) {
       DisposableEffect(true) {
         screenContext.scope.addObserver(
-          object : ScopeObserver<Any?> {
-            override fun onExit(scope: Scope<Any?>) {
+          object : ScopeObserver<Any> {
+            override fun onExit(scope: Scope<Any>) {
               screenContexts.remove(screen)
             }
           }

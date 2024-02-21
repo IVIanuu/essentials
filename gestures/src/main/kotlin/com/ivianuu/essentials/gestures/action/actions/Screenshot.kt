@@ -12,7 +12,6 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 
 @Provide object ScreenshotActionId : ActionId("screenshot") {
@@ -21,7 +20,7 @@ import kotlinx.coroutines.*
       id = ScreenshotActionId,
       title = "Screenshot",
       icon = { Icon(Icons.Default.PhotoAlbum, null) },
-      permissions = listOf(typeKeyOf<ActionAccessibilityPermission>())
+      permissions = listOf(ActionAccessibilityPermission::class)
     )
 
   @Provide fun screenshotActionExecutor(

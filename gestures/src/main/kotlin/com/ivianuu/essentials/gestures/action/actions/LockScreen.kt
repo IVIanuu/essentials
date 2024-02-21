@@ -12,14 +12,13 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 @Provide object LockScreenActionId : ActionId("lock_screen") {
   @Provide val lockScreenAction get() = Action(
       id = LockScreenActionId,
       title = "Lock screen",
       icon = { Icon(Icons.Default.SettingsPower, null) },
-      permissions = listOf(typeKeyOf<ActionAccessibilityPermission>())
+      permissions = listOf(ActionAccessibilityPermission::class)
     )
 
   @Provide fun executor(

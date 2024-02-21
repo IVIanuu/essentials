@@ -18,7 +18,6 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*
@@ -29,8 +28,8 @@ import kotlin.coroutines.*
     title = "Camera",
     icon = { Icon(Icons.Default.PhotoCamera, null) },
     permissions = listOf(
-      typeKeyOf<ActionAccessibilityPermission>(),
-      typeKeyOf<ActionSystemOverlayPermission>()
+      ActionAccessibilityPermission::class,
+      ActionSystemOverlayPermission::class
     ),
     turnScreenOn = true,
     closeSystemDialogs = true

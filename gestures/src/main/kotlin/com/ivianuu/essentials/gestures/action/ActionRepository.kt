@@ -17,7 +17,6 @@ import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
@@ -104,7 +103,7 @@ import kotlinx.coroutines.flow.*
         // close system dialogs
         if (action.closeSystemDialogs &&
           (appConfig.sdk < 31 ||
-              permissionManager.permissionState(listOf(typeKeyOf<ActionAccessibilityPermission>())).first()))
+              permissionManager.permissionState(listOf(ActionAccessibilityPermission::class)).first()))
           closeSystemDialogs()
 
         logger.d { "fire $id" }

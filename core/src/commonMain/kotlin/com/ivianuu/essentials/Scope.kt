@@ -6,13 +6,13 @@ package com.ivianuu.essentials
 
 import androidx.compose.runtime.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.atomicfu.locks.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlin.reflect.*
 
-@Provide class Scope<N>(
-  val name: TypeKey<N>,
+@Provide class Scope<N : Any>(
+  val name: KClass<N>,
   val parent: @ParentScope Scope<*>? = null,
   observers: (Scope<N>, @ParentScope Scope<*>?) -> List<ExtensionPointRecord<ScopeObserver<N>>>,
   services: (Scope<N>, @ParentScope Scope<*>?) -> List<ProvidedService<N, *>>
@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.*
 
   private val services = buildMap {
     for (service in services(this@Scope, this@Scope))
-      this[service.key.value] = service
+      this[service.key] = service
   }
 
   private val _children = MutableStateFlow<Set<Scope<*>>>(emptySet())
@@ -56,12 +56,12 @@ import kotlinx.coroutines.flow.*
     }
   }
 
-  fun <T : Any> serviceOrNull(@Inject key: TypeKey<T>): T? = services[key.value]?.let {
+  fun <T : Any> serviceOrNull(@Inject key: KClass<T>): T? = services[key]?.let {
     return it.factory().unsafeCast()
   } ?: parent?.serviceOrNull(key)
 
-  fun <T : Any> service(@Inject key: TypeKey<T>): T =
-    serviceOrNull(key) ?: error("No service found for ${key.value} in ${name.value}")
+  fun <T : Any> service(@Inject key: KClass<T>): T =
+    serviceOrNull(key) ?: error("No service found for ${key.qualifiedName} in ${name.qualifiedName}")
 
   inline fun <T> scoped(key: Any, compute: () -> T): T = synchronized(cache) {
     checkDisposed()
@@ -76,8 +76,8 @@ import kotlinx.coroutines.flow.*
     (if (value !== NULL) value else null).unsafeCast()
   }
 
-  inline fun <T> scoped(@Inject key: TypeKey<T>, compute: () -> T): T =
-    scoped(key.value, compute)
+  inline fun <T : Any> scoped(@Inject key: KClass<T>, compute: () -> T): T =
+    scoped(key as Any, compute)
 
   fun dispose() {
     synchronized(this) {
@@ -126,13 +126,13 @@ val Scope<*>.root: Scope<*> get() = parent?.root ?: this
 
 val Scope<*>.coroutineScope: CoroutineScope get() = service()
 
-data class ProvidedService<N, T>(val key: TypeKey<T>, val factory: () -> T) {
+data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T) {
   @Provide companion object {
     @Provide fun <N> defaultServices() = emptyList<ProvidedService<N, *>>()
   }
 }
 
-interface ScopeObserver<N> : ExtensionPoint<ScopeObserver<N>> {
+interface ScopeObserver<N : Any> : ExtensionPoint<ScopeObserver<N>> {
   fun onEnter(scope: Scope<N>) {
   }
 
@@ -140,24 +140,23 @@ interface ScopeObserver<N> : ExtensionPoint<ScopeObserver<N>> {
   }
 
   @Provide companion object {
-    @Provide fun <N> defaultObservers() = emptyList<ScopeObserver<N>>()
+    @Provide fun <N : Any> defaultObservers() = emptyList<ScopeObserver<N>>()
   }
 }
 
 @Tag annotation class Scoped<N> {
   @Provide companion object {
-    @Provide inline fun <@Spread T : @Scoped<N> S, S : Any, N> scoped(
-      key: TypeKey<S>,
+    @Provide inline fun <@Spread T : @Scoped<N> S, reified S : Any, N : Any> scoped(
       scope: Scope<N>,
       crossinline init: () -> T,
-    ): S = scope.scoped(key) { init() }
+    ): S = scope.scoped(typeOf<S>()) { init() }
   }
 }
 
 @Tag annotation class Service<N> {
   @Provide companion object {
     @Provide fun <@Spread T : @Service<N> S, S : Any, N> service(
-      key: TypeKey<S>,
+      key: KClass<S>,
       factory: () -> T
     ) = ProvidedService<N, S>(key, factory)
 
@@ -167,12 +166,12 @@ interface ScopeObserver<N> : ExtensionPoint<ScopeObserver<N>> {
 
 @Tag annotation class ParentScope
 
-@Tag annotation class Eager<N> {
+@Tag annotation class Eager<N : Any> {
   @Provide companion object {
-    @Provide fun <@Spread T : @Eager<N> S, S : Any, N> scoped(value: T): @Scoped<N> S = value
+    @Provide fun <@Spread T : @Eager<N> S, S : Any, N : Any> scoped(value: T): @Scoped<N> S = value
 
-    @Provide inline fun <@Spread T : @Eager<N> S, S : Any, N> observer(
-      key: TypeKey<S>,
+    @Provide inline fun <@Spread T : @Eager<N> S, S : Any, N : Any> observer(
+      key: KClass<S>,
       crossinline factory: () -> S
     ): ScopeObserver<N> = object : ScopeObserver<N> {
       override fun onEnter(scope: Scope<N>) {

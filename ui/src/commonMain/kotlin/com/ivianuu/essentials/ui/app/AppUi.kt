@@ -29,7 +29,7 @@ fun interface AppUiDecorator : ExtensionPoint<AppUiDecorator> {
         .fold({ it() }) { acc, record ->
           { content ->
             acc {
-              logger.d { "decorate app ui ${record.key.value}" }
+              logger.d { "decorate app ui ${record.key.qualifiedName}" }
               record.instance(content)
             }
           }

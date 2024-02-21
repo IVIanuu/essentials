@@ -9,10 +9,10 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import splitties.coroutines.*
+import kotlin.reflect.*
 
 fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
 
@@ -20,7 +20,7 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
 
 @Provide fun <P : Permission> intentPermissionRequestHandler(
   appConfig: AppConfig,
-  key: TypeKey<P>,
+  key: KClass<P>,
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
   permissionManager: PermissionManager,

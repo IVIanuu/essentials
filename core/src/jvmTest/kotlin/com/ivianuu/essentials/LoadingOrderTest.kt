@@ -1,7 +1,6 @@
 package com.ivianuu.essentials
 
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import io.kotest.matchers.collections.*
 import org.junit.*
 

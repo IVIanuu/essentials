@@ -8,14 +8,14 @@ import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import kotlin.reflect.*
 
-fun interface ScopeInitializer<N> : () -> Unit, ExtensionPoint<ScopeInitializer<N>>
+fun interface ScopeInitializer<N : Any> : () -> Unit, ExtensionPoint<ScopeInitializer<N>>
 
-interface ScopeInitializerRunner<N> : ScopeObserver<N>
+interface ScopeInitializerRunner<N : Any> : ScopeObserver<N>
 
-@Provide inline fun <N> scopeInitializerRunner(
-  crossinline nameKey: () -> TypeKey<N>,
+@Provide inline fun <N : Any> scopeInitializerRunner(
+  crossinline name: () -> KClass<N>,
   crossinline initializers: (Scope<N>) -> List<ExtensionPointRecord<ScopeInitializer<N>>>,
   crossinline logger: (Scope<N>) -> Logger
 ): ScopeInitializerRunner<N> = object : ScopeInitializerRunner<N> {
@@ -23,7 +23,7 @@ interface ScopeInitializerRunner<N> : ScopeObserver<N>
     initializers(scope.cast())
       .sortedWithLoadingOrder()
       .forEach {
-        logger(scope.cast()).d { "${nameKey().value} initialize ${it.key.value}" }
+        logger(scope.cast()).d { "${name().simpleName} initialize ${it.key}" }
         it.instance()
       }
   }

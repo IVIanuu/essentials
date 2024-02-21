@@ -112,7 +112,6 @@ object Deps {
 
   object Injekt {
     private const val version = "0.0.1-dev727"
-    const val common = "com.ivianuu.injekt:common:$version"
     const val core = "com.ivianuu.injekt:core:$version"
     const val compiler = "com.ivianuu.injekt:compiler:$version"
     const val gradlePlugin = "com.ivianuu.injekt:gradle-plugin:$version"

@@ -24,10 +24,10 @@ import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import splitties.coroutines.*
+import kotlin.reflect.*
 import kotlin.time.Duration.Companion.seconds
 
 abstract class WriteSecureSettingsPermission(
@@ -45,15 +45,15 @@ abstract class WriteSecureSettingsPermission(
 
     @Provide fun <P : WriteSecureSettingsPermission> requestHandler(
       navigator: Navigator,
-      permissionKey: TypeKey<P>
+      key: KClass<P>
     ) = PermissionRequestHandler<P> {
-      navigator.push(WriteSecureSettingsScreen(permissionKey))
+      navigator.push(WriteSecureSettingsScreen(key))
     }
   }
 }
 
 class WriteSecureSettingsScreen(
-  val permissionKey: TypeKey<WriteSecureSettingsPermission>
+  val permissionClass: KClass<out WriteSecureSettingsPermission>
 ) : CriticalUserFlowScreen<Boolean> {
   @Provide companion object {
     @Provide fun ui(
@@ -87,7 +87,7 @@ class WriteSecureSettingsScreen(
             3 -> true
             4 -> collect(false) {
               while (true) {
-                emit(permissionManager.permissionState(listOf(screen.permissionKey)).first())
+                emit(permissionManager.permissionState(listOf(screen.permissionClass)).first())
                 delay(1.seconds)
               }
             }
@@ -108,7 +108,7 @@ class WriteSecureSettingsScreen(
               com.ivianuu.essentials.ui.material.TextButton(onClick = scopedAction {
                 shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
                   .onRight {
-                    if (permissionManager.permissionState(listOf(screen.permissionKey)).first()) {
+                    if (permissionManager.permissionState(listOf(screen.permissionClass)).first()) {
                       toaster("Permission granted!")
                       navigator.pop(screen)
                     }

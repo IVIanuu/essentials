@@ -5,10 +5,10 @@
 package com.ivianuu.essentials.db
 
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import kotlinx.serialization.modules.*
+import kotlin.reflect.*
 
 class Schema(
   val version: Int,
@@ -17,7 +17,7 @@ class Schema(
   val serializersModule: SerializersModule = EmptySerializersModule(),
   val embeddedFormat: StringFormat = Json,
 ) {
-  private val _entities = entities.associateBy { it.key.value }
+  private val _entities = entities.associateBy { it.key }
 
   suspend fun create(db: Db) {
     _entities.values
@@ -38,8 +38,8 @@ class Schema(
     migrationsToExecute.forEach { it.execute(db, from, to) }
   }
 
-  fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T> =
-    _entities[key.value]?.let { it as EntityDescriptor<T> } ?: error("Unknown entity $key")
+  fun <T : Any> descriptor(@Inject key: KClass<T>): EntityDescriptor<T> =
+    _entities[key]?.let { it as EntityDescriptor<T> } ?: error("Unknown entity $key")
 }
 
 interface Migration {

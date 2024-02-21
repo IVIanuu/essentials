@@ -9,12 +9,12 @@ import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import kotlin.reflect.*
 
 @Immutable data class Action<I : ActionId>(
   val id: String,
   val title: String,
-  val permissions: List<TypeKey<Permission>> = emptyList(),
+  val permissions: List<KClass<out Permission>> = emptyList(),
   val unlockScreen: Boolean = false,
   val closeSystemDialogs: Boolean = false,
   val turnScreenOn: Boolean = false,
@@ -24,7 +24,7 @@ import com.ivianuu.injekt.common.*
   constructor(
     id: I,
     title: String,
-    permissions: List<TypeKey<Permission>> = emptyList(),
+    permissions: List<KClass<out Permission>> = emptyList(),
     unlockScreen: Boolean = false,
     closeSystemDialogs: Boolean = false,
     turnScreenOn: Boolean = false,

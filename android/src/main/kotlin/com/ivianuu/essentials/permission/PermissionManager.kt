@@ -10,21 +10,21 @@ import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlin.reflect.*
 
 @Provide class PermissionManager(
   private val appUiStarter: AppUiStarter,
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
-  private val permissions: Map<TypeKey<Permission>, () -> Permission>,
-  private val stateProviders: Map<TypeKey<Permission>, () -> PermissionStateProvider<Permission>>
+  private val permissions: Map<KClass<out Permission>, () -> Permission>,
+  private val stateProviders: Map<KClass<out Permission>, () -> PermissionStateProvider<Permission>>
 ) {
-  fun <T : Permission> permission(key: TypeKey<T>): T =
+  fun <T : Permission> permission(key: KClass<T>): T =
     permissions[key]!!().unsafeCast()
 
-  fun permissionState(permissions: List<TypeKey<Permission>>): Flow<Boolean> =
+  fun permissionState(permissions: List<KClass<out Permission>>): Flow<Boolean> =
     if (permissions.isEmpty()) flowOf(true)
     else combine(
       permissions
@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.*
         }
     ) { states -> states.all { it } }
 
-  suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean {
+  suspend fun requestPermissions(permissions: List<KClass<out Permission>>): Boolean {
     logger.d { "request permissions $permissions" }
 
     val result = permissions.all { permissionState(listOf(it)).first() } || run {

@@ -9,7 +9,6 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 @Provide object SearchActionId : ActionId("search") {
   @Provide val action
@@ -17,7 +16,7 @@ import com.ivianuu.injekt.common.*
       id = SearchActionId,
       title = "Search",
       icon = staticActionIcon(Icons.Default.Search),
-      permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>())
+      permissions = listOf(ActionSystemOverlayPermission::class)
     )
 
   @Provide fun executor(intentSender: ActionIntentSender) =
