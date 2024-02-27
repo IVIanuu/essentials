@@ -14,12 +14,12 @@ import androidx.core.graphics.drawable.*
 import com.ivianuu.injekt.*
 
 @Provide class Resources(private val appContext: AppContext) {
-  operator fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T = loader(appContext, id)
+  operator fun <T> invoke(id: Int, loader: ResourceLoader<T> = inject): T = loader(appContext, id)
 
   operator fun <T> invoke(
     id: Int,
     vararg args: Any?,
-    @Inject loader: ResourceLoaderWithArgs<T>
+    loader: ResourceLoaderWithArgs<T> = inject
   ): T = loader(appContext, id, *args)
 }
 

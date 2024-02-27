@@ -16,7 +16,7 @@ interface RemoteAction<I : Any?> {
   suspend operator fun invoke()
 
   @Provide companion object {
-    @Provide fun <@Spread T : RemoteAction<I>, I : Any?> binding(
+    @Provide fun <@AddOn T : RemoteAction<I>, I : Any?> binding(
       clazz: KClass<T>,
       factory: (I) -> T
     ): Pair<KClass<RemoteAction<*>>, (Any?) -> RemoteAction<*>> = (clazz to factory).cast()
@@ -27,7 +27,7 @@ interface RemoteAction<I : Any?> {
   private val appContext: AppContext,
   private val json: Json
 ) {
-  operator fun <T : RemoteAction<I>, I> invoke(input: I? = null, @Inject actionClass: KClass<T>): PendingIntent =
+  operator fun <T : RemoteAction<I>, I> invoke(input: I? = null, actionClass: KClass<T> = inject): PendingIntent =
     PendingIntent.getBroadcast(
       appContext,
       0,

@@ -4,52 +4,30 @@
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
-  kotlin("multiplatform")
+  kotlin("android")
 }
 
 android {
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+  sourceSets["main"].kotlin.srcDirs("src/commonMain/kotlin")
 }
 
-kotlin {
-  jvm()
-  android {
-    publishLibraryVariants("release")
-  }
-
-  sourceSets {
-    named("androidMain") {
-      dependencies {
-        api(Deps.Compose.foundation)
-      }
-    }
-
-    commonMain {
-      dependencies {
-        api(Deps.Arrow.core)
-        api(Deps.Arrow.fxCoroutines)
-        api(Deps.Arrow.resilience)
-        api(Deps.AtomicFu.runtime)
-        api(Deps.Compose.runtime)
-        api(Deps.Compose.runtimeSaveable)
-        api(Deps.Coroutines.core)
-        api(Deps.Injekt.core)
-        api(Deps.kermit)
-        api(Deps.KotlinSerialization.json)
-        api(Deps.molecule)
-        api(Deps.quiver)
-        api(Deps.splittiesCoroutines)
-      }
-    }
-
-    named("jvmMain")
-
-    named("jvmTest") {
-      dependencies {
-        implementation(project(":test"))
-      }
-    }
-  }
+dependencies {
+  api(Deps.Compose.foundation)
+  api(Deps.Arrow.core)
+  api(Deps.Arrow.fxCoroutines)
+  api(Deps.Arrow.resilience)
+  api(Deps.AtomicFu.runtime)
+  api(Deps.Compose.runtime)
+  api(Deps.Compose.runtimeSaveable)
+  api(Deps.Coroutines.core)
+  api(Deps.Injekt.core)
+  api(Deps.kermit)
+  api(Deps.KotlinSerialization.json)
+  api(Deps.molecule)
+  api(Deps.quiver)
+  api(Deps.splittiesCoroutines)
+  testImplementation(project(":test"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

@@ -15,7 +15,7 @@ import kotlin.reflect.*
 
 interface IntentScreen : Screen<Either<ActivityNotFoundException, ActivityResult>> {
   @Provide companion object {
-    @Provide fun <@Spread T : ScreenIntentFactory<K>, K : Any> intentFactoryBinding(
+    @Provide fun <@AddOn T : ScreenIntentFactory<K>, K : Any> intentFactoryBinding(
       intentFactory: T,
       keyClass: KClass<K>
     ): Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>> =

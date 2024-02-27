@@ -38,7 +38,7 @@ class Schema(
     migrationsToExecute.forEach { it.execute(db, from, to) }
   }
 
-  fun <T : Any> descriptor(@Inject key: KClass<T>): EntityDescriptor<T> =
+  fun <T : Any> descriptor(key: KClass<T> = inject): EntityDescriptor<T> =
     _entities[key]?.let { it as EntityDescriptor<T> } ?: error("Unknown entity $key")
 }
 

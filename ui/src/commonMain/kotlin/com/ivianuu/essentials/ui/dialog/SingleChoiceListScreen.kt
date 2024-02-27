@@ -18,7 +18,7 @@ class SingleChoiceListScreen<T : Any>(
   val items: List<T>,
   val selected: T,
   val title: String? = null,
-  @Inject val renderable: UiRenderer<T>
+  val renderable: UiRenderer<T> = inject
 ) : OverlayScreen<T> {
   @Provide companion object {
     @Provide fun ui(

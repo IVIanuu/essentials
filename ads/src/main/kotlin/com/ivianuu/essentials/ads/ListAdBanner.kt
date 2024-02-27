@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.*
 
 @Provide object ListAdBannerFeature : AdFeature
 
-@Tag annotation class ListAdBannerConfigTag {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class ListAdBannerConfigTag {
   @Provide companion object {
     @Provide fun final(
       adConfig: ListAdBannerConfig,

@@ -14,7 +14,7 @@ import kotlin.collections.set
 @Composable fun AnimatedVisibility(
   visible: Boolean,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<Boolean> = { materialFade() },
+  transitionSpec: ElementTransitionSpec<Boolean> = ElementTransitionSpec { materialFade() },
   content: @Composable AnimatedVisibilityScope.() -> Unit
 ) {
   AnimatedContent(state = visible, transitionSpec = transitionSpec) {
@@ -26,7 +26,7 @@ import kotlin.collections.set
 @Composable fun <T> AnimatedContent(
   state: T,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<T> = { materialFadeThrough() },
+  transitionSpec: ElementTransitionSpec<T> = ElementTransitionSpec { materialFadeThrough() },
   contentAlignment: Alignment = Alignment.TopStart,
   content: @Composable AnimatedVisibilityScope.(T) -> Unit
 ) {
@@ -42,7 +42,7 @@ import kotlin.collections.set
 @Composable fun <T> AnimatedStack(
   items: List<T>,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<T> = { materialFadeThrough() },
+  transitionSpec: ElementTransitionSpec<T> = ElementTransitionSpec { materialFadeThrough() },
   contentAlignment: Alignment = Alignment.TopStart,
   contentOpaque: (T) -> Boolean = { false },
   content: @Composable AnimatedVisibilityScope.(T) -> Unit
@@ -91,7 +91,7 @@ import kotlin.collections.set
       target,
       isPush,
       density
-    ).apply(transitionSpec)
+    ).apply { with(transitionSpec) { invoke() } }
       .let { builder ->
         if (target != null)
           enterTransitions[target] = builder.enterTransitions
@@ -368,4 +368,6 @@ private class AnimatedStackMeasurePolicy(val scope: AnimatedStackScope<*>) : Mea
   ) = measurables.asSequence().map { it.maxIntrinsicHeight(width) }.maxOrNull() ?: 0
 }
 
-typealias ElementTransitionSpec<T> = ElementTransitionBuilder<T>.() -> Unit
+fun interface ElementTransitionSpec<T> {
+  operator fun ElementTransitionBuilder<T>.invoke()
+}

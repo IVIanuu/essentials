@@ -84,14 +84,14 @@ fun interface Worker<I : WorkId> {
 }
 
 @Provide object WorkModule {
-  @Provide fun <@Spread I : WorkId> worker(
+  @Provide fun <@AddOn I : WorkId> worker(
     id: I,
     worker: () -> Worker<I>,
   ): Pair<String, () -> Worker<*>> = id.value to worker
 
   @Provide val defaultWorkers get() = emptyList<Pair<String, () -> Worker<*>>>()
 
-  @Provide fun <@Spread I : WorkId> workSchedule(
+  @Provide fun <@AddOn I : WorkId> workSchedule(
     id: I,
     schedule: PeriodicWorkSchedule<I>,
   ): Pair<String, PeriodicWorkSchedule<*>> = id.value to schedule

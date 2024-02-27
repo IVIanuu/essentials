@@ -7,7 +7,9 @@ package com.ivianuu.essentials.xposed
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 
-@Provide data object XposedScope {
+data object XposedScope
+
+object XposedAppScopeModule {
   @Provide fun appScope(xposedScope: Scope<XposedScope>): Scope<AppScope> = xposedScope.cast()
 }
 

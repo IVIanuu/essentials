@@ -79,14 +79,16 @@ import kotlinx.serialization.*
   }
 }
 
-@Tag annotation class PremiumVersionSkuTag {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class PremiumVersionSkuTag {
   @Provide companion object {
     @Provide val default: PremiumVersionSku get() = Sku("premium_version", Sku.Type.SUBS)
   }
 }
 typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
 
-@Tag annotation class OldPremiumVersionSkuTag {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class OldPremiumVersionSkuTag {
   @Provide companion object {
     @Provide val defaultOldPermissionVersionSkus get() = emptyList<OldPremiumVersionSku>()
   }

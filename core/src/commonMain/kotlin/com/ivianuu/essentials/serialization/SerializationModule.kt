@@ -28,16 +28,17 @@ import kotlin.reflect.*
   }
 }
 
-@Tag annotation class InjektSerializer {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class InjektSerializer {
   @Provide companion object {
     @Provide val defaultSerializers get() = emptyList<Pair<KClass<*>, KSerializer<*>>>()
 
-    @Provide fun <@Spread T : @InjektSerializer KSerializer<S>, S : Any> serializerBinding(
+    @Provide fun <@AddOn T : @InjektSerializer KSerializer<S>, S : Any> serializerBinding(
       clazz: KClass<S>,
       serializer: T
     ): Pair<KClass<*>, KSerializer<*>> = clazz to serializer
 
-    @Provide fun <@Spread T : @InjektSerializer KSerializer<S>, S : Any> serializer(
+    @Provide fun <@AddOn T : @InjektSerializer KSerializer<S>, S : Any> serializer(
       serializer: T
     ): KSerializer<S> = serializer
   }

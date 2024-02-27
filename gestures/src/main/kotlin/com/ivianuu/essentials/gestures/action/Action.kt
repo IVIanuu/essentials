@@ -51,7 +51,8 @@ interface ActionFactory {
   suspend fun createExecutor(id: String): ActionExecutor<*>
 }
 
-@Tag annotation class ActionSettingsKey<I : ActionId>
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class ActionSettingsKey<I : ActionId>
 
 interface ActionPickerDelegate {
   val baseId: String
@@ -63,25 +64,25 @@ interface ActionPickerDelegate {
 }
 
 @Provide object ActionModule {
-  @Provide fun <@Spread T : Action<I>, I : ActionId> actionBinding(
+  @Provide fun <@AddOn T : Action<I>, I : ActionId> actionBinding(
     id: I,
     provider: () -> T,
   ): Pair<String, () -> Action<*>> = id.value to provider
 
-  @Provide fun <@Spread T : ActionFactory> actionFactoryBinding(
+  @Provide fun <@AddOn T : ActionFactory> actionFactoryBinding(
     provider: () -> T
   ): () -> ActionFactory = provider
 
-  @Provide fun <@Spread T : ActionExecutor<I>, I : ActionId> actionExecutorBinding(
+  @Provide fun <@AddOn T : ActionExecutor<I>, I : ActionId> actionExecutorBinding(
     id: I,
     provider: () -> T
   ): Pair<String, () -> ActionExecutor<*>> = id.value to provider
 
-  @Provide fun <@Spread T : ActionPickerDelegate> actionPickerDelegateBinding(
+  @Provide fun <@AddOn T : ActionPickerDelegate> actionPickerDelegateBinding(
     provider: () -> T
   ): () -> ActionPickerDelegate = provider
 
-  @Provide fun <@Spread T : @ActionSettingsKey<I> Screen<Unit>, I : ActionId> actionSettingsKeyBinding(
+  @Provide fun <@AddOn T : @ActionSettingsKey<I> Screen<Unit>, I : ActionId> actionSettingsKeyBinding(
     id: I,
     provider: () -> T,
   ): Pair<String, () -> @ActionSettingsKey<ActionId> Screen<Unit>> = id.value to provider

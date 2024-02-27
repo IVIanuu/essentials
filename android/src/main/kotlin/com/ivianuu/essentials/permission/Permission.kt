@@ -21,14 +21,14 @@ interface Permission {
 }
 
 @Provide object PermissionModule {
-  @Provide fun <@Spread T : Permission> permission(
+  @Provide fun <@AddOn T : Permission> permission(
     key: KClass<T>,
     permission: () -> T
   ): Pair<KClass<Permission>, () -> Permission> = (key to permission).cast()
 
   @Provide val defaultPermissions get() = emptyList<Pair<KClass<Permission>, () -> Permission>>()
 
-  @Provide fun <@Spread T : Permission> requestHandlerBinding(
+  @Provide fun <@AddOn T : Permission> requestHandlerBinding(
     key: KClass<T>,
     requestHandler: () -> PermissionRequestHandler<T>
   ): Pair<KClass<Permission>, () -> PermissionRequestHandler<Permission>> =
@@ -36,7 +36,7 @@ interface Permission {
 
   @Provide val defaultRequestHandlers get() = emptyList<Pair<KClass<Permission>, () -> PermissionRequestHandler<Permission>>>()
 
-  @Provide fun <@Spread T : Permission> stateProvider(
+  @Provide fun <@AddOn T : Permission> stateProvider(
     key: KClass<T>,
     stateProvider: () -> PermissionStateProvider<T>
   ): Pair<KClass<Permission>, () -> PermissionStateProvider<Permission>> =

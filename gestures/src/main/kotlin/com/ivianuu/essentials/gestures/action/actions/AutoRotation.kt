@@ -36,7 +36,8 @@ import com.ivianuu.injekt.*
   }
 }
 
-@Tag annotation class AutoRotationTag
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class AutoRotationTag
 internal typealias AutoRotation = @AutoRotationTag Int
 
 @Provide val autoRotationModule = AndroidSettingModule<AutoRotation>(

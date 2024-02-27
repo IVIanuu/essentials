@@ -21,8 +21,8 @@ interface EntityDescriptor<T : Any> {
 
 fun <T : Any> EntityDescriptor(
   tableName: String,
-  @Inject key: KClass<T>,
-  @Inject serializer: KSerializer<T>
+  key: KClass<T> = inject,
+  serializer: KSerializer<T> = inject
 ): EntityDescriptor<T> = EntityDescriptorImpl(tableName, key, serializer)
 
 @Target(AnnotationTarget.CLASS)
@@ -91,7 +91,7 @@ data class Row(
   enum class Type { STRING, INT, BYTES, DOUBLE }
 }
 
-fun <T : Any> T.toSqlColumnsAndArgsString(schema: Schema, @Inject key: KClass<T>): String = buildString {
+fun <T : Any> T.toSqlColumnsAndArgsString(schema: Schema, key: KClass<T> = inject): String = buildString {
   val descriptor = schema.descriptor<T>()
 
   val rowsWithValues = descriptor.rows.zip(

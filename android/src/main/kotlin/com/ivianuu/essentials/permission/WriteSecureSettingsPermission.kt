@@ -254,7 +254,8 @@ class WriteSecureSettingsScreen(
   }
 }
 
-@Tag annotation class DeveloperModeTag
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class DeveloperModeTag
 typealias DeveloperMode = @DeveloperModeTag Int
 
 @Provide val developerModeSettingModule: AndroidSettingModule<DeveloperMode> = AndroidSettingModule(
@@ -263,7 +264,8 @@ typealias DeveloperMode = @DeveloperModeTag Int
   0
 )
 
-@Tag annotation class AdbEnabledTag
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class AdbEnabledTag
 typealias AdbEnabled = @AdbEnabledTag Int
 
 @Provide val adbEnabledSettingModule: AndroidSettingModule<AdbEnabled> = AndroidSettingModule(

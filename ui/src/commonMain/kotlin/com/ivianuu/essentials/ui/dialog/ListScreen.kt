@@ -15,7 +15,7 @@ import com.ivianuu.injekt.*
 class ListScreen<T : Any>(
   val items: List<T>,
   val title: String? = null,
-  @Inject val renderer: UiRenderer<T>,
+  val renderer: UiRenderer<T> = inject,
 ) : OverlayScreen<T> {
   @Provide companion object {
     @Provide fun ui(

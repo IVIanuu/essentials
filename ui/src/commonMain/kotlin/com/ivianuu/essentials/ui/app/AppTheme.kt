@@ -31,11 +31,13 @@ data class AppColors(
 
 typealias AppFont = @AppFontTag FontFamily
 
-@Tag annotation class AppFontTag
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class AppFontTag
 
 typealias AppTypography = @AppTypographyTag Typography
 
-@Tag annotation class AppTypographyTag {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class AppTypographyTag {
   @Provide companion object {
     @Provide fun default(font: AppFont? = null): AppTypography = Typography(
       h1 = TextStyle(
@@ -121,7 +123,8 @@ typealias AppTypography = @AppTypographyTag Typography
 
 typealias AppShapes = @AppShapesTag Shapes
 
-@Tag annotation class AppShapesTag {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class AppShapesTag {
   @Provide companion object {
     @Provide val default: AppShapes
       get() = Shapes(
@@ -134,12 +137,11 @@ typealias AppShapes = @AppShapesTag Shapes
 
 typealias AppScreenTransitionSpec = @AppTransitionScreenSpecTag ElementTransitionSpec<Screen<*>>
 
-@Tag annotation class AppTransitionScreenSpecTag {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class AppTransitionScreenSpecTag {
   @Provide companion object {
     @Provide val default: AppScreenTransitionSpec
-      get() = {
-        fadeUpwards()
-      }
+      get() = AppScreenTransitionSpec { fadeUpwards() }
   }
 }
 

@@ -78,8 +78,6 @@ fun interface SystemBarManagerProvider : AppUiDecorator {
   }
 }
 
-@Provide expect val systemBarManagerProvider: SystemBarManagerProvider
-
 val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager> {
   error("No system bar manager provided")
 }

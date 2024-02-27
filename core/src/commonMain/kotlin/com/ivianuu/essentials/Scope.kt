@@ -56,11 +56,11 @@ import kotlin.reflect.*
     }
   }
 
-  fun <T : Any> serviceOrNull(@Inject key: KClass<T>): T? = services[key]?.let {
+  fun <T : Any> serviceOrNull(key: KClass<T> = inject): T? = services[key]?.let {
     return it.factory().unsafeCast()
   } ?: parent?.serviceOrNull(key)
 
-  fun <T : Any> service(@Inject key: KClass<T>): T =
+  fun <T : Any> service(key: KClass<T> = inject): T =
     serviceOrNull(key) ?: error("No service found for ${key.qualifiedName} in ${name.qualifiedName}")
 
   inline fun <T> scoped(key: Any, compute: () -> T): T = synchronized(cache) {
@@ -76,7 +76,7 @@ import kotlin.reflect.*
     (if (value !== NULL) value else null).unsafeCast()
   }
 
-  inline fun <T : Any> scoped(@Inject key: KClass<T>, compute: () -> T): T =
+  inline fun <T : Any> scoped(key: KClass<T> = inject, compute: () -> T): T =
     scoped(key as Any, compute)
 
   fun dispose() {
@@ -144,33 +144,37 @@ interface ScopeObserver<N : Any> : ExtensionPoint<ScopeObserver<N>> {
   }
 }
 
-@Tag annotation class Scoped<N> {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class Scoped<N> {
   @Provide companion object {
-    @Provide inline fun <@Spread T : @Scoped<N> S, reified S : Any, N : Any> scoped(
+    @Provide inline fun <@AddOn T : @Scoped<N> S, reified S : Any, N : Any> scoped(
       scope: Scope<N>,
       crossinline init: () -> T,
     ): S = scope.scoped(typeOf<S>()) { init() }
   }
 }
 
-@Tag annotation class Service<N> {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class Service<N> {
   @Provide companion object {
-    @Provide fun <@Spread T : @Service<N> S, S : Any, N> service(
+    @Provide fun <@AddOn T : @Service<N> S, S : Any, N> service(
       key: KClass<S>,
       factory: () -> T
     ) = ProvidedService<N, S>(key, factory)
 
-    @Provide fun <@Spread T : @Service<N> S, S : Any, N> accessor(service: T): S = service
+    @Provide fun <@AddOn T : @Service<N> S, S : Any, N> accessor(service: T): S = service
   }
 }
 
-@Tag annotation class ParentScope
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class ParentScope
 
-@Tag annotation class Eager<N : Any> {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class Eager<N : Any> {
   @Provide companion object {
-    @Provide fun <@Spread T : @Eager<N> S, S : Any, N : Any> scoped(value: T): @Scoped<N> S = value
+    @Provide fun <@AddOn T : @Eager<N> S, S : Any, N : Any> scoped(value: T): @Scoped<N> S = value
 
-    @Provide inline fun <@Spread T : @Eager<N> S, S : Any, N : Any> observer(
+    @Provide inline fun <@AddOn T : @Eager<N> S, S : Any, N : Any> observer(
       key: KClass<S>,
       crossinline factory: () -> S
     ): ScopeObserver<N> = object : ScopeObserver<N> {

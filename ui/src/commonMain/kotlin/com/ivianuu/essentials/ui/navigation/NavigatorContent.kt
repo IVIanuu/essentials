@@ -77,11 +77,13 @@ import kotlin.collections.set
         screenContexts[initial]?.config?.exitTransitionSpec)
         ?: defaultTransitionSpec
 
-      spec()
+      with(spec) { invoke() }
     }
   ) {
     screenContexts[it]?.let { ScreenContent(it) }
   }
 }
 
-val LocalScreenTransitionSpec = compositionLocalOf<ElementTransitionSpec<Screen<*>>> { { } }
+val LocalScreenTransitionSpec = compositionLocalOf<ElementTransitionSpec<Screen<*>>> {
+  ElementTransitionSpec {  }
+}

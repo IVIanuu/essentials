@@ -108,10 +108,7 @@ suspend fun Navigator.popTo(screen: Screen<*>) {
   check(index != -1) {
     "Screen $screen was not in ${backStack.value}"
   }
-  setBackStack(
-    backStack.value
-      .take(index + 1)
-  )
+  setBackStack(backStack.value.take(index + 1))
 }
 
 suspend fun Navigator.clear() {
@@ -120,7 +117,8 @@ suspend fun Navigator.clear() {
 
 val Scope<*>.navigator: Navigator get() = service()
 
-@Tag annotation class NavGraph<N>
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class NavGraph<N>
 
 object RootNavGraph
 

@@ -10,14 +10,17 @@ import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.*
 
 abstract class EsXposedInit : IXposedHookLoadPackage {
-  override fun handleLoadPackage(@Provide lpparam: XC_LoadPackage.LoadPackageParam) {
-    xposedScope = buildXposedScope()
+  override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
+    xposedScope = buildXposedScope(lpparam, XposedAppScopeModule)
     xposedScope.service<XposedHooksComponent>().run {
       hooks.forEach { it(config) }
     }
   }
 
-  protected abstract fun buildXposedScope(@Inject params: XC_LoadPackage.LoadPackageParam): Scope<XposedScope>
+  protected abstract fun buildXposedScope(
+    @Provide params: XC_LoadPackage.LoadPackageParam,
+    @Provide module: XposedAppScopeModule
+  ): Scope<XposedScope>
 
   companion object {
     private lateinit var xposedScope: Scope<XposedScope>

@@ -18,22 +18,22 @@ import kotlin.reflect.*
   @Provide fun <N : Any> observer(): ScopeObserver<N> = _observer.cast()
 }
 
-fun <N : Any> ScopeManager.activeScopesOf(@Inject name: KClass<N>): Flow<Set<Scope<N>>> = activeScopes
+fun <N : Any> ScopeManager.activeScopesOf(name: KClass<N> = inject): Flow<Set<Scope<N>>> = activeScopes
   .map { it.filterTo(mutableSetOf()) { it.name == name }.cast() }
 
-fun <N : Any> ScopeManager.scopeOfOrNull(@Inject name: KClass<N>): Flow<Scope<N>?> = activeScopesOf<N>()
+fun <N : Any> ScopeManager.scopeOfOrNull(name: KClass<N> = inject): Flow<Scope<N>?> = activeScopesOf<N>()
   .map { it.firstOrNull() }
 
-fun <N : Any> ScopeManager.scopeOf(@Inject name: KClass<N>): Flow<Scope<N>> = activeScopesOf<N>()
+fun <N : Any> ScopeManager.scopeOf(name: KClass<N> = inject): Flow<Scope<N>> = activeScopesOf<N>()
   .mapNotNull { it.firstOrNull() }
 
-fun <N : Any, T> ScopeManager.flowInScope(flow: Flow<T>, @Inject name: KClass<N>): Flow<T> = channelFlow {
+fun <N : Any, T> ScopeManager.flowInScope(flow: Flow<T>, name: KClass<N> = inject): Flow<T> = channelFlow {
   repeatInScope<N> {
     flow.collect { send(it) }
   }
 }
 
-suspend fun <N : Any> ScopeManager.repeatInScope(@Inject name: KClass<N>, block: suspend (Scope<N>) -> Unit) {
+suspend fun <N : Any> ScopeManager.repeatInScope(name: KClass<N> = inject, block: suspend (Scope<N>) -> Unit) {
   val jobs = mutableMapOf<Scope<*>, Job>()
   try {
     activeScopesOf<N>().collect { scopes ->

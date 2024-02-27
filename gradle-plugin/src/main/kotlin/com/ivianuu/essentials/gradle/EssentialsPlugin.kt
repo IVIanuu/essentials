@@ -34,17 +34,13 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
   override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> {
     kotlinCompilation.kotlinOptions.run {
       freeCompilerArgs = freeCompilerArgs + listOf(
-        "-Xskip-runtime-version-check",
         "-XXLanguage:+NewInference",
         "-Xskip-prerelease-check",
         "-opt-in=androidx.compose.animation.ExperimentalAnimationApi"
       )
       if (kotlinCompilation is KotlinJvmCompilation ||
-        kotlinCompilation is KotlinJvmAndroidCompilation
-      ) {
-        (kotlinCompilation.kotlinOptions as KotlinJvmOptions).jvmTarget = "1.8"
-        freeCompilerArgs += listOf("-Xallow-jvm-ir-dependencies")
-      }
+        kotlinCompilation is KotlinJvmAndroidCompilation)
+          (kotlinCompilation.kotlinOptions as KotlinJvmOptions).jvmTarget = "1.8"
     }
     return kotlinCompilation.target.project.provider { emptyList() }
   }

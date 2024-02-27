@@ -71,8 +71,8 @@ interface Lerper<T> {
   }
 }
 
-fun <T> lerp(start: T, stop: T, fraction: Float, @Inject lerper: Lerper<T>): T =
+fun <T> lerp(start: T, stop: T, fraction: Float, lerper: Lerper<T> = inject): T =
   lerper.lerp(start, stop, fraction)
 
-fun <T> unlerp(start: T, stop: T, value: T, @Inject lerper: Lerper<T>): Float =
+fun <T> unlerp(start: T, stop: T, value: T, lerper: Lerper<T> = inject): Float =
   lerper.unlerp(start, stop, value)

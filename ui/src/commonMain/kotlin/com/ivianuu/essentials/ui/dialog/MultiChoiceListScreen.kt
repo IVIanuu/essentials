@@ -21,7 +21,7 @@ class MultiChoiceListScreen<T : Any>(
   val items: List<T>,
   val selected: Set<T>,
   val title: String? = null,
-  @Inject val renderable: UiRenderer<T>
+  val renderable: UiRenderer<T> = inject
 ) : OverlayScreen<Set<T>> {
   @Provide companion object {
     @Provide fun ui(

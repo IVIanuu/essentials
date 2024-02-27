@@ -116,5 +116,6 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     "${modulePackageName}.PREFS_CHANGED"
 }
 
-@Tag annotation class XposedPrefFlowTag
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class XposedPrefFlowTag
 typealias XposedPrefFlow<T> = @XposedPrefFlowTag Flow<T>

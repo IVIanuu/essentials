@@ -18,7 +18,7 @@ import kotlin.reflect.*
 @Composable fun <T> ResourceBox(
   resource: Resource<T>,
   modifier: Modifier = Modifier,
-  transitionSpec: ElementTransitionSpec<ResourceBoxItem<T>> = ResourceBoxDefaults.transitionSpec,
+  transitionSpec: ElementTransitionSpec<ResourceBoxItem<T>> = ResourceBoxDefaults.transitionSpec(),
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   success: @Composable (T) -> Unit
@@ -57,7 +57,7 @@ class ResourceBoxItem<T>(
 }
 
 object ResourceBoxDefaults {
-  val transitionSpec: ElementTransitionSpec<*> = { crossFade() }
+  fun <T> transitionSpec() = ElementTransitionSpec<T> { crossFade() }
   val error: @Composable (Throwable) -> Unit = {
     Text(
       modifier = Modifier

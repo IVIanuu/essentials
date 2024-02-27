@@ -56,7 +56,7 @@ fun <N : Any> ScopeComposition(block: @Composable () -> Unit) = ScopeWorker<N> {
   }
 
   @Provide companion object {
-    @Provide fun <N : Any> loadingOrder(@Inject nameKey: KClass<N>) = LoadingOrder<ScopeWorkerRunner<N>>()
+    @Provide fun <N : Any> loadingOrder(nameKey: KClass<N> = inject) = LoadingOrder<ScopeWorkerRunner<N>>()
       .after<ScopeInitializerRunner<N>>()
   }
 }
