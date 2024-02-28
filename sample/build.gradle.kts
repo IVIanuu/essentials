@@ -22,7 +22,6 @@ dependencies {
   implementation(project(":ads"))
   implementation(project(":android"))
   implementation(project(":billing"))
-  implementation(project(":boot"))
   implementation(project(":donation"))
   implementation(project(":foreground"))
   implementation(project(":gestures"))

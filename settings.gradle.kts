@@ -6,7 +6,6 @@ include(
   ":android",
   ":android-test",
   ":billing",
-  ":boot",
   ":compiler",
   ":core",
   ":db",
