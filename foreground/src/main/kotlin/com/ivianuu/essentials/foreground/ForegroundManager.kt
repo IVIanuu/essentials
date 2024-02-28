@@ -27,7 +27,7 @@ import kotlinx.coroutines.sync.*
   suspend fun startForeground(
     id: String,
     removeNotification: Boolean = true,
-    notification: (@Composable () -> Notification)?,
+    notification: (@Composable () -> Notification)? = null,
   ): Nothing = bracketCase(
     acquire = {
       ForegroundState(id, removeNotification, notification)
