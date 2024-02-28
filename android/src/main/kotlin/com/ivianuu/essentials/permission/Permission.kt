@@ -64,20 +64,22 @@ private fun <P : Permission> PermissionRequestHandler<P>.intercept() = Permissio
   permissionRefreshes.emit(Unit)
 }
 
-interface PermissionRevokeHandler : suspend (List<KClass<out Permission>>) -> Unit {
+interface PermissionRevokeHandler {
   val permissions: List<KClass<out Permission>>
+
+  suspend fun onPermissionRevoked(permissions: List<KClass<out Permission>>)
 
   @Provide companion object {
     inline operator fun invoke(
       permissions: List<KClass<out Permission>>,
-      crossinline block: suspend (List<KClass<out Permission>>) -> Unit
+      crossinline onPermissionRevoked: suspend (List<KClass<out Permission>>) -> Unit
     ): PermissionRevokeHandler {
       return object : PermissionRevokeHandler {
         override val permissions: List<KClass<out Permission>>
           get() = permissions
 
-        override suspend fun invoke(p1: List<KClass<out Permission>>) {
-          block(p1)
+        override suspend fun onPermissionRevoked(permissions: List<KClass<out Permission>>) {
+          onPermissionRevoked.invoke(permissions)
         }
       }
     }
@@ -94,6 +96,6 @@ interface PermissionRevokeHandler : suspend (List<KClass<out Permission>>) -> Un
     val revokedPermissions = handler.permissions
       .filter { !permissionManager.permissionState(listOf(it)).first() }
     if (revokedPermissions.isNotEmpty())
-      handler(revokedPermissions)
+      handler.onPermissionRevoked(revokedPermissions)
   }
 }
