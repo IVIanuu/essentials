@@ -51,7 +51,14 @@ class ScopeWorkerManager<N : Any> @Provide @Service<N> @Scoped<N> constructor(
               launch(start = CoroutineStart.UNDISPATCHED) { record.instance.doWork() }
             }
 
-            _state.value = State.RUNNING
+            launch {
+              launchMolecule(RecompositionMode.Immediate, {}) {
+                LaunchedEffect(true) {
+                  _state.value = State.RUNNING
+                }
+              }
+            }
+
             try {
               jobs.joinAll()
             } finally {
