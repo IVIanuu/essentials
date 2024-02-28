@@ -19,7 +19,7 @@ abstract class EsXposedInit(
     this.lpparam = lpparam
     xposedScope = buildXposedScope()
     xposedScope.service<XposedHooksComponent>().run {
-      hooks.forEach { it(config) }
+      hooks.forEach { it.hook(config) }
     }
   }
 

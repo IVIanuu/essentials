@@ -48,7 +48,7 @@ class ScreenScope {
 }
 
 fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
-  @Composable operator fun invoke(content: @Composable () -> Unit)
+  @Composable fun DecoratedContent(content: @Composable () -> Unit)
 }
 
 @Provide class DecorateScreen(
@@ -63,7 +63,7 @@ fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
           { content ->
             acc {
               logger.d { "decorate screen with ${record.key.qualifiedName}" }
-              record.instance(content)
+              record.instance.DecoratedContent(content)
             }
           }
         }

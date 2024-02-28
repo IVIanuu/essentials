@@ -161,7 +161,7 @@ class WriteSecureSettingsScreen(
                     },
                     { developerModeDataStore.data.first { it != 0 } }
                   )
-                  appUiStarter()
+                  appUiStarter.startAppUi()
                 }) { Text("Open about phone") }
               }
             )
@@ -191,7 +191,7 @@ class WriteSecureSettingsScreen(
                     },
                     { adbEnabledDataStore.data.first { it != 0 } }
                   )
-                  appUiStarter()
+                  appUiStarter.startAppUi()
                 }) {
                   Text("Open developer options")
                 }

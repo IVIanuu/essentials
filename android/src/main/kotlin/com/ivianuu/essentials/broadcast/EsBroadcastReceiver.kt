@@ -17,13 +17,13 @@ import kotlinx.coroutines.*
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     scope.launch {
-      handlers.parMap { it(intent) }
+      handlers.parMap { it.onReceive(intent) }
     }
   }
 }
 
 fun interface BroadcastHandler {
-  suspend operator fun invoke(intent: Intent)
+  suspend fun onReceive(intent: Intent)
 
   @Provide companion object {
     inline operator fun invoke(

@@ -42,8 +42,9 @@ class Navigator(
             @Suppress("UNCHECKED_CAST")
             screen as Screen<Any?>
 
-            val interceptedHandle =
-              screenInterceptors.firstNotNullOfOrNull { it.cast<ScreenInterceptor<Any?>>()(screen) }
+            val interceptedHandle = screenInterceptors.firstNotNullOfOrNull {
+              it.cast<ScreenInterceptor<Any?>>().intercept(screen)
+            }
 
             if (interceptedHandle == null) add(screen)
             else finalResults[screen] = interceptedHandle()
@@ -123,7 +124,7 @@ annotation class NavGraph<N>
 object RootNavGraph
 
 fun interface ScreenInterceptor<R> {
-  suspend operator fun invoke(screen: Screen<R>): (suspend () -> R?)?
+  suspend fun intercept(screen: Screen<R>): (suspend () -> R?)?
 
   @Provide companion object {
     @Provide val defaultScreenInterceptors get() = emptyList<ScreenInterceptor<*>>()

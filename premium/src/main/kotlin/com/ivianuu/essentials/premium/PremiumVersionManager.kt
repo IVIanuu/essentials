@@ -68,7 +68,7 @@ import kotlinx.serialization.*
     scope.launch {
       toaster("This functionality is only available in the premium version!")
       if (!deviceScreenManager.unlockScreen()) return@launch
-      appUiStarter()
+      appUiStarter.startAppUi()
         .cast<UiScopeOwner>()
         .uiScope
         .navigator

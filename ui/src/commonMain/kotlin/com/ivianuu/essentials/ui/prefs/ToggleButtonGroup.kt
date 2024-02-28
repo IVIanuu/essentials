@@ -129,7 +129,7 @@ import com.ivianuu.injekt.*
             contentPadding = PaddingValues(horizontal = 8.dp)
           ) {
             Text(
-              text = renderer(value),
+              text = renderer.render(value),
               maxLines = 1
             )
           }

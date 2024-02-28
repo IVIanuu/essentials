@@ -10,7 +10,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 
 fun interface BootListener {
-  operator fun invoke()
+  fun onBoot()
 
   @Provide companion object {
     @Provide val defaultListeners get() = emptyList<BootListener>()
@@ -25,6 +25,6 @@ fun interface BootListener {
   override fun onReceive(context: Context, intent: Intent) {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
     logger.d { "on system boot" }
-    bootListeners().forEach { it() }
+    bootListeners().forEach { it.onBoot() }
   }
 }

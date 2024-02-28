@@ -24,11 +24,11 @@ interface IntentScreen : Screen<Either<ActivityNotFoundException, ActivityResult
 }
 
 fun interface ScreenIntentFactory<T> {
-  suspend operator fun invoke(screen: T): Intent
+  suspend fun createIntent(screen: T): Intent
 }
 
 fun interface AppUiStarter {
-  suspend operator fun invoke(): ComponentActivity
+  suspend fun startAppUi(): ComponentActivity
 }
 
 @Provide fun intentScreenInterceptor(
@@ -39,9 +39,9 @@ fun interface AppUiStarter {
   if (screen !is IntentScreen) return@handler null
   val intentFactory = intentFactories()[screen::class.cast()]
     ?: return@handler null
-  val intent = intentFactory(screen)
+  val intent = intentFactory.createIntent(screen)
   return@handler {
-    val activity = appUiStarter()
+    val activity = appUiStarter.startAppUi()
     withContext(coroutineContexts.main) {
       suspendCancellableCoroutine<Either<Throwable, ActivityResult>> { continuation ->
         val launcher = activity.activityResultRegistry.register(

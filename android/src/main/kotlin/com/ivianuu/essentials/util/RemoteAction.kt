@@ -13,7 +13,7 @@ import kotlinx.serialization.json.*
 import kotlin.reflect.*
 
 interface RemoteAction<I : Any?> {
-  suspend operator fun invoke()
+  suspend fun execute()
 
   @Provide companion object {
     @Provide fun <@AddOn T : RemoteAction<I>, I : Any?> binding(
@@ -44,8 +44,8 @@ interface RemoteAction<I : Any?> {
 }
 
 @Provide class StartAppRemoteAction(private val appUiStarter: AppUiStarter) : RemoteAction<Any?> {
-  override suspend fun invoke() {
-    appUiStarter()
+  override suspend fun execute() {
+    appUiStarter.startAppUi()
   }
 }
 
@@ -75,7 +75,7 @@ interface RemoteAction<I : Any?> {
 
       logger.d { "execute remote action ${action::class.java.name} with $input" }
 
-      action.invoke()
+      action.execute()
     }
   }
 }

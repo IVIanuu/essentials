@@ -46,11 +46,11 @@ interface Permission {
 }
 
 fun interface PermissionStateProvider<P : Permission> {
-  suspend operator fun invoke(permission: P): Boolean
+  suspend fun permissionState(permission: P): Boolean
 }
 
 fun interface PermissionRequestHandler<P : Permission> {
-  suspend operator fun invoke(permission: P)
+  suspend fun requestPermission(permission: P)
 }
 
 internal val permissionRefreshes = EventFlow<Unit>()
@@ -60,7 +60,7 @@ internal val permissionRefreshes = EventFlow<Unit>()
 }
 
 private fun <P : Permission> PermissionRequestHandler<P>.intercept() = PermissionRequestHandler<P> {
-  this(it)
+  requestPermission(it)
   permissionRefreshes.emit(Unit)
 }
 

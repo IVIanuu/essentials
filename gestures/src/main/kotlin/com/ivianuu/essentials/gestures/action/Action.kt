@@ -34,13 +34,13 @@ import kotlin.reflect.*
 }
 
 fun interface ActionIcon {
-  @Composable operator fun invoke()
+  @Composable fun Content()
 }
 
 abstract class ActionId(val value: String)
 
 fun interface ActionExecutor<I : ActionId> {
-  suspend operator fun invoke()
+  suspend fun execute()
 }
 
 interface ActionFactory {

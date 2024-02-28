@@ -10,7 +10,9 @@ import com.ivianuu.essentials.Scope
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
-fun interface ScopeInitializer<N : Any> : () -> Unit, ExtensionPoint<ScopeInitializer<N>>
+fun interface ScopeInitializer<N : Any> : ExtensionPoint<ScopeInitializer<N>> {
+  fun initialize()
+}
 
 interface ScopeInitializerRunner<N : Any> : ScopeObserver<N>
 
@@ -24,7 +26,7 @@ interface ScopeInitializerRunner<N : Any> : ScopeObserver<N>
       .sortedWithLoadingOrder()
       .forEach {
         logger(scope.cast()).d { "${name().simpleName} initialize ${it.key}" }
-        it.instance()
+        it.instance.initialize()
       }
   }
 }

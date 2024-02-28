@@ -14,17 +14,18 @@ import androidx.core.graphics.drawable.*
 import com.ivianuu.injekt.*
 
 @Provide class Resources(private val appContext: AppContext) {
-  operator fun <T> invoke(id: Int, loader: ResourceLoader<T> = inject): T = loader(appContext, id)
+  operator fun <T> invoke(id: Int, loader: ResourceLoader<T> = inject): T =
+    loader.loadResource(appContext, id)
 
   operator fun <T> invoke(
     id: Int,
     vararg args: Any?,
     loader: ResourceLoaderWithArgs<T> = inject
-  ): T = loader(appContext, id, *args)
+  ): T = loader.loadResource(appContext, id, *args)
 }
 
 fun interface ResourceLoaderWithArgs<out T> {
-  operator fun invoke(context: Context, id: Int, vararg args: Any?): T
+  fun loadResource(context: Context, id: Int, vararg args: Any?): T
 
   @Provide companion object {
     @Provide val string =
@@ -33,7 +34,7 @@ fun interface ResourceLoaderWithArgs<out T> {
 }
 
 fun interface ResourceLoader<out T> {
-  operator fun invoke(context: Context, id: Int): T
+  fun loadResource(context: Context, id: Int): T
 
   @Provide companion object {
     @Provide val bitmap = ResourceLoader { context, id -> context.getDrawable(id)!!.toBitmap() }

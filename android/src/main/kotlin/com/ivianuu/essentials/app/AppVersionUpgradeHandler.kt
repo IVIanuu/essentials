@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
 
 fun interface AppVersionUpgradeHandler {
-  suspend operator fun invoke(lastAppVersion: Int, appVersion: Int)
+  suspend fun onAppVersionUpgrade(lastAppVersion: Int, appVersion: Int)
 
   @Provide companion object {
     @Provide val defaultHandlers get() = emptyList<AppVersionUpgradeHandler>()
@@ -32,7 +32,7 @@ fun interface AppVersionUpgradeHandler {
 
   logger.d { "upgrade from app version ${prefs.lastAppVersion} to ${appConfig.versionCode}" }
 
-  handlers().parMap { it(prefs.lastAppVersion, appConfig.versionCode) }
+  handlers().parMap { it.onAppVersionUpgrade(prefs.lastAppVersion, appConfig.versionCode) }
 
   pref.updateData { copy(lastAppVersion = appConfig.versionCode) }
 }

@@ -17,13 +17,13 @@ import kotlinx.coroutines.*
 import kotlin.reflect.*
 
 fun interface ScopeWorker<N : Any> : ExtensionPoint<ScopeWorker<N>> {
-  suspend operator fun invoke()
+  suspend fun doWork()
 }
 
 fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
   @Composable fun Content()
 
-  override suspend fun invoke() {
+  override suspend fun doWork() {
     coroutineScope { launchMolecule(RecompositionMode.Immediate, {}) { Content() } }
   }
 }
@@ -45,7 +45,7 @@ fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
             logger.d { "${nameKey.simpleName} run scope workers ${workers.map { it.key.qualifiedName }}" }
 
             workers.forEach { record ->
-              launch { record.instance() }
+              launch { record.instance.doWork() }
             }
           }
 

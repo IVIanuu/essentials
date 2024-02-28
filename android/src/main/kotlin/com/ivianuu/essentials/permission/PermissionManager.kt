@@ -35,7 +35,7 @@ import kotlin.reflect.*
             .onStart<Any?> { emit(Unit) }
             .map {
               withContext(coroutineContexts.io) {
-                stateProvider(permission)
+                stateProvider.permissionState(permission)
               }
             }
         }
@@ -45,7 +45,7 @@ import kotlin.reflect.*
     logger.d { "request permissions $permissions" }
 
     val result = permissions.all { permissionState(listOf(it)).first() } || run {
-      appUiStarter()
+      appUiStarter.startAppUi()
         .cast<UiScopeOwner>()
         .uiScope
         .navigator

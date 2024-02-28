@@ -75,47 +75,48 @@ import kotlinx.coroutines.flow.*
   suspend fun getActionPickerDelegates() =
     withContext(coroutineContexts.computation) { actionPickerDelegates.map { it() } }
 
-  suspend fun executeAction(id: String): Boolean =
-    withContext(coroutineContexts.computation) {
-      catch {
-        logger.d { "execute $id" }
-        val action = getAction(id)
+  suspend fun executeAction(id: String): Boolean = withContext(coroutineContexts.computation) {
+    catch {
+      logger.d { "execute $id" }
+      val action = getAction(id)
 
-        // check permissions
-        if (!permissionManager.permissionState(action.permissions).first()) {
-          logger.d { "didn't had permissions for $id ${action.permissions}" }
-          deviceScreenManager.unlockScreen()
-          permissionManager.requestPermissions(action.permissions)
-          return@catch false
-        }
+      // check permissions
+      if (!permissionManager.permissionState(action.permissions).first()) {
+        logger.d { "didn't had permissions for $id ${action.permissions}" }
+        deviceScreenManager.unlockScreen()
+        permissionManager.requestPermissions(action.permissions)
+        return@catch false
+      }
 
-        if (action.turnScreenOn && !deviceScreenManager.turnScreenOn()) {
-          logger.d { "couldn't turn screen on for $id" }
-          return@catch false
-        }
+      if (action.turnScreenOn && !deviceScreenManager.turnScreenOn()) {
+        logger.d { "couldn't turn screen on for $id" }
+        return@catch false
+      }
 
-        // unlock screen
-        if (action.unlockScreen && !deviceScreenManager.unlockScreen()) {
-          logger.d { "couldn't unlock screen for $id" }
-          return@catch false
-        }
+      // unlock screen
+      if (action.unlockScreen && !deviceScreenManager.unlockScreen()) {
+        logger.d { "couldn't unlock screen for $id" }
+        return@catch false
+      }
 
-        // close system dialogs
-        if (action.closeSystemDialogs &&
-          (appConfig.sdk < 31 ||
-              permissionManager.permissionState(listOf(ActionAccessibilityPermission::class)).first()))
-          closeSystemDialogs()
+      // close system dialogs
+      if (action.closeSystemDialogs &&
+        (appConfig.sdk < 31 ||
+            permissionManager.permissionState(listOf(ActionAccessibilityPermission::class)).first()))
+        closeSystemDialogs()
 
-        logger.d { "fire $id" }
+      logger.d { "fire $id" }
 
-        // fire
-        getActionExecutor(id)()
-        return@catch true
-      }.onLeft {
-        it.printStackTrace()
-        toaster("Failed to execute action $id!")
-      }.getOrElse { false }
-    }
+      // fire
+      getActionExecutor(id).execute()
+      return@catch true
+    }.onLeft {
+      it.printStackTrace()
+      toaster("Failed to execute action $id!")
+    }.getOrElse { false }
+  }
 
-  private val RECONFIGURE_ACTION_MESSAGE = "Error please reconfigure this action"
+  companion object {
+    private const val RECONFIGURE_ACTION_MESSAGE = "Error please reconfigure this action"
+  }
 }

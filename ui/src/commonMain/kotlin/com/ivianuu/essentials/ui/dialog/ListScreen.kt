@@ -30,7 +30,7 @@ class ListScreen<T : Any>(
             items(screen.items) { item ->
               ListItem(
                 onClick = action { navigator.pop(screen, item) },
-                title = { Text(screen.renderer(item)) },
+                title = { Text(screen.renderer.render(item)) },
               )
             }
           }

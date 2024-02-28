@@ -45,7 +45,7 @@ class MultiChoiceListScreen<T : Any>(
                   selectedItems = newSelectedItems
                 },
                 trailingPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
-                title = { Text(screen.renderable(item)) },
+                title = { Text(screen.renderable.render(item)) },
                 trailing = {
                   Switch(
                     checked = selected,

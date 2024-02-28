@@ -36,7 +36,7 @@ data class WorkConstraints(
 }
 
 fun interface Worker<I : WorkId> {
-  suspend operator fun invoke()
+  suspend fun doWork()
 }
 
 @Provide @Scoped<AppScope> class WorkManager(
@@ -57,7 +57,7 @@ fun interface Worker<I : WorkId> {
     guaranteeCase(
       fa = {
         workerState.value = true
-        workersMap[id.value]!!.invoke().invoke()
+        workersMap[id.value]!!.invoke().doWork()
       },
       finalizer = {
         if (it is ExitCase.Failure) it.failure.printStackTrace()
@@ -130,7 +130,7 @@ fun interface Worker<I : WorkId> {
   private val appContext: AppContext,
   private val workerFactory: WorkerFactory
 ) : ScopeInitializer<AppScope> {
-  override fun invoke() {
+  override fun initialize() {
     AndroidWorkManager.initialize(
       appContext,
       Configuration.Builder()
