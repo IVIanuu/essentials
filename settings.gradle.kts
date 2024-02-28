@@ -1,5 +1,4 @@
 include(
-  ":about",
   ":accessibility",
   ":ads",
   ":analytics-android",

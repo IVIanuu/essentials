@@ -16,7 +16,6 @@ android {
 }
 
 dependencies {
-  implementation(project(":about"))
   implementation(project(":analytics-android"))
   implementation(project(":accessibility"))
   implementation(project(":ads"))
