@@ -20,12 +20,12 @@ import kotlin.time.Duration.Companion.seconds
 
 @Provide class DeviceScreenManager(
   private val appContext: AppContext,
-  private val broadcastsFactory: BroadcastsFactory,
+  broadcastManager: BroadcastManager,
   private val keyguardManager: @SystemService KeyguardManager,
   private val logger: Logger,
   private val powerManager: @SystemService PowerManager
 ) {
-  val screenState: Flow<ScreenState> = broadcastsFactory(
+  val screenState: Flow<ScreenState> = broadcastManager.broadcasts(
     Intent.ACTION_SCREEN_OFF,
     Intent.ACTION_SCREEN_ON,
     Intent.ACTION_USER_PRESENT

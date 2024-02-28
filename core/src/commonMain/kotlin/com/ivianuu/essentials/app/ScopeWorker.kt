@@ -10,10 +10,10 @@ import arrow.fx.coroutines.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
-import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
 fun interface ScopeWorker<N : Any> : ExtensionPoint<ScopeWorker<N>> {
@@ -28,12 +28,15 @@ fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
   }
 }
 
-@Provide class ScopeWorkerRunner<N : Any>(
+class ScopeWorkerManager<N : Any> @Provide @Service<N> @Scoped<N> constructor(
   private val coroutineScope: ScopedCoroutineScope<N>,
   private val logger: Logger,
   private val nameKey: KClass<N>,
   private val workersFactory: () -> List<ExtensionPointRecord<ScopeWorker<N>>>,
 ) : ScopeObserver<N> {
+  private val _state = MutableStateFlow(State.IDLE)
+  val state: StateFlow<State> by this::_state
+
   override fun onEnter(scope: Scope<N>) {
     coroutineScope.launch {
       guaranteeCase(
@@ -44,8 +47,15 @@ fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
 
             logger.d { "${nameKey.simpleName} run scope workers ${workers.map { it.key.qualifiedName }}" }
 
-            workers.forEach { record ->
-              launch { record.instance.doWork() }
+            val jobs = workers.map { record ->
+              launch(start = CoroutineStart.UNDISPATCHED) { record.instance.doWork() }
+            }
+
+            _state.value = State.RUNNING
+            try {
+              jobs.joinAll()
+            } finally {
+              _state.value = State.COMPLETED
             }
           }
 
@@ -59,8 +69,10 @@ fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
     }
   }
 
+  enum class State { IDLE, RUNNING, COMPLETED }
+
   @Provide companion object {
-    @Provide fun <N : Any> loadingOrder() = LoadingOrder<ScopeWorkerRunner<N>>()
+    @Provide fun <N : Any> loadingOrder() = LoadingOrder<ScopeWorkerManager<N>>()
       .after<ScopeInitializerRunner<N>>()
   }
 }

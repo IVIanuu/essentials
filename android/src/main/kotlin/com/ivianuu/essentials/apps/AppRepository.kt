@@ -15,17 +15,12 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 @Provide class AppRepository(
-  private val broadcastsFactory: BroadcastsFactory,
+  private val broadcastManager: BroadcastManager,
   private val coroutineContexts: CoroutineContexts,
   private val packageManager: PackageManager
 ) {
   val installedApps: Flow<List<AppInfo>> = flow {
-    merge(
-      broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
-      broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED),
-      broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
-      broadcastsFactory(Intent.ACTION_PACKAGE_REPLACED)
-    )
+    appChanges()
       .onStart<Any?> { emit(Unit) }
       .map {
         withContext(coroutineContexts.io) {
@@ -45,12 +40,7 @@ import kotlinx.coroutines.flow.*
       .let { emitAll(it) }
   }
 
-  fun appInfo(packageName: String) = broadcastsFactory(
-    Intent.ACTION_PACKAGE_ADDED,
-    Intent.ACTION_PACKAGE_REMOVED,
-    Intent.ACTION_PACKAGE_CHANGED,
-    Intent.ACTION_PACKAGE_REPLACED
-  )
+  fun appInfo(packageName: String) = appChanges()
     .onStart<Any?> { emit(Unit) }
     .map {
       withContext(coroutineContexts.io) {
@@ -61,6 +51,13 @@ import kotlinx.coroutines.flow.*
       }
     }
     .distinctUntilChanged()
+
+  private fun appChanges() = merge(
+    broadcastManager.broadcasts(Intent.ACTION_PACKAGE_ADDED),
+    broadcastManager.broadcasts(Intent.ACTION_PACKAGE_REMOVED),
+    broadcastManager.broadcasts(Intent.ACTION_PACKAGE_CHANGED),
+    broadcastManager.broadcasts(Intent.ACTION_PACKAGE_REPLACED)
+  )
 }
 
 data class AppInfo(val packageName: String, val appName: String)
