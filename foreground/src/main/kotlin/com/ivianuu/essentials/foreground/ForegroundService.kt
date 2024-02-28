@@ -27,17 +27,16 @@ import kotlin.time.Duration.Companion.seconds
   private val notificationFactory: NotificationFactory,
   private val notificationManager: @SystemService NotificationManager,
   private val logger: Logger,
-  scope: ScopedCoroutineScope<AppScope>,
+  private val scope: ScopedCoroutineScope<AppScope>,
   private val foregroundScopeFactory: () -> Scope<ForegroundScope>,
   private val remoteActionFactory: RemoteActionFactory
 ) : Service() {
-  private val scope = scope.childCoroutineScope()
-
+  private var job: Job? = null
   override fun onCreate() {
     super.onCreate()
     logger.d { "foreground service started" }
 
-    scope.launchMolecule(RecompositionMode.Immediate, {}) {
+    job = scope.launchMolecule {
       val states = foregroundManager.states
       var removeServiceNotification by remember { mutableStateOf(true) }
 
@@ -117,7 +116,7 @@ import kotlin.time.Duration.Companion.seconds
 
   override fun onDestroy() {
     logger.d { "stop foreground service" }
-    scope.cancel()
+    job?.cancel()
     super.onDestroy()
   }
 

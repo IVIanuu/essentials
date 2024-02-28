@@ -5,15 +5,14 @@
 package com.ivianuu.essentials.app
 
 import androidx.compose.runtime.*
-import app.cash.molecule.*
 import arrow.fx.coroutines.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
 fun interface ScopeWorker<N : Any> : ExtensionPoint<ScopeWorker<N>> {
@@ -24,7 +23,7 @@ fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
   @Composable fun Content()
 
   override suspend fun doWork() {
-    coroutineScope { launchMolecule(RecompositionMode.Immediate, {}) { Content() } }
+    coroutineScope { launchMolecule { Content() } }
   }
 }
 
@@ -51,12 +50,12 @@ class ScopeWorkerManager<N : Any> @Provide @Service<N> @Scoped<N> constructor(
               launch(start = CoroutineStart.UNDISPATCHED) { record.instance.doWork() }
             }
 
-            launch { state = State.RUNNING }
+            launch { this@ScopeWorkerManager.state = State.RUNNING }
 
             try {
               jobs.joinAll()
             } finally {
-              state = State.COMPLETED
+              this@ScopeWorkerManager.state = State.COMPLETED
             }
           }
 

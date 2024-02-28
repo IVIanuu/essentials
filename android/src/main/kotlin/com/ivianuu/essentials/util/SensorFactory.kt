@@ -2,8 +2,8 @@ package com.ivianuu.essentials.util
 
 import android.hardware.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.*
@@ -19,7 +19,7 @@ import android.hardware.SensorEvent as AndroidSensorEvent
   fun sensorEvents(sensor: Sensor, samplingRate: Duration): Flow<SensorEvent> =
     callbackFlow {
       if (!sensor.isWakeUpSensor)
-        launch { wakeLockManager.acquire("sensor_${sensor.id}") }
+        launchMolecule { wakeLockManager.WakeLock("sensor_${sensor.id}") }
 
       if (sensor.reportingMode == Sensor.REPORTING_MODE_ONE_SHOT) {
         val listener = object : TriggerEventListener() {

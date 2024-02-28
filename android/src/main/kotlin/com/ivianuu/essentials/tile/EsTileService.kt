@@ -69,7 +69,7 @@ abstract class AbstractEsTileService(
     super.onStartListening()
     logger.d { "${this::class} on start listening" }
     tileScope = tileScopeFactory(this)
-    tileScope!!.coroutineScope.launchMolecule(RecompositionMode.Immediate, {}) {
+    tileScope!!.coroutineScope.launchMolecule {
       val presenter = remember {
         val tileComponent = tileScope!!.service<TileComponent>()
         tileComponent.tilePresenterRecords[this::class]?.invoke()

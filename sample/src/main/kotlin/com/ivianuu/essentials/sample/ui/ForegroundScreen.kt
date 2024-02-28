@@ -32,22 +32,20 @@ class ForegroundScreen : Screen<Unit> {
         var isEnabled by remember { mutableStateOf(false) }
 
         if (isEnabled)
-          LaunchedEffect(true) {
-            foregroundManager.startForeground(id = "foreground", removeNotification = false) {
-              notificationFactory(
-                "foreground",
-                "Foreground",
-                NotificationManager.IMPORTANCE_LOW
-              ) {
-                setSmallIcon(R.drawable.ic_home)
-                setContentTitle("Foreground")
-                setContentText("Current progress ${
-                  ticker(1000)
-                    .receiveAsFlow()
-                    .runningFold(0) { acc, _ -> acc.inc() }
-                    .collect(0)
-                }")
-              }
+          foregroundManager.Foreground(id = "foreground", removeNotification = false) {
+            notificationFactory(
+              "foreground",
+              "Foreground",
+              NotificationManager.IMPORTANCE_LOW
+            ) {
+              setSmallIcon(R.drawable.ic_home)
+              setContentTitle("Foreground")
+              setContentText("Current progress ${
+                ticker(1000)
+                  .receiveAsFlow()
+                  .runningFold(0) { acc, _ -> acc.inc() }
+                  .collect(0)
+              }")
             }
           }
 
