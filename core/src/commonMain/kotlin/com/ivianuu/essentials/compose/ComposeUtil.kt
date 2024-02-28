@@ -17,7 +17,9 @@ val <T> T.state: State<T>
   remember(keys = keys) { flowAsResource() }.collect(Resource.Loading)
 
 @Composable fun <T> collect(initial: T, vararg keys: Any?, block: suspend FlowCollector<T>.() -> Unit): T =
-  remember(keys = keys) { flow(block) }.collect(initial)
+  remember(keys = keys) {
+    channelFlow { block(FlowCollector { value -> send(value) }) }
+  }.collect(initial)
 
 @Composable fun <T> collectResource(vararg keys: Any?, block: suspend FlowCollector<T>.() -> Unit): Resource<T> =
   remember(keys = keys) { resourceFlow(block) }.collect(Resource.Loading)
