@@ -38,7 +38,7 @@ import kotlin.time.Duration.Companion.seconds
     logger.d { "foreground service started" }
 
     scope.launchMolecule(RecompositionMode.Immediate, {}) {
-      val states = foregroundManager.states.collect()
+      val states = foregroundManager.states
       var removeServiceNotification by remember { mutableStateOf(true) }
 
       if (states.isEmpty()) {

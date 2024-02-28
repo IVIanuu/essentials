@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.ads
 
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
@@ -30,7 +31,7 @@ typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
 fun interface ListAdBanner : ListDecorator
 
 @Provide fun adBannerListDecorator(
-  adsEnabledFlow: StateFlow<AdsEnabled>,
+  adsEnabled: State<AdsEnabled>,
   isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: @FinalAdConfig ListAdBannerConfig? = null
 ) = ListAdBanner decorator@{
@@ -39,8 +40,7 @@ fun interface ListAdBanner : ListDecorator
       val screen = catch {
         LocalScope.current.screen::class
       }.getOrNull()
-      if ((screen == null || isAdFeatureEnabled(screen, ListAdBannerFeature)) &&
-        adsEnabledFlow.collect().value)
+      if ((screen == null || isAdFeatureEnabled(screen, ListAdBannerFeature)) && adsEnabled.value.value)
         AdBanner(config)
     }
   }

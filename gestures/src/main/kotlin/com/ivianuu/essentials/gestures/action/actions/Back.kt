@@ -19,8 +19,8 @@ import com.ivianuu.injekt.*
     icon = { Icon(painterResource(R.drawable.ic_action_back), null) }
   )
 
-  @Provide fun executor(accessibilityService: AccessibilityService) =
+  @Provide fun executor(accessibilityManager: AccessibilityManager) =
     ActionExecutor<BackActionId> {
-      accessibilityService.performGlobalAction(AndroidAccessibilityService.GLOBAL_ACTION_BACK)
+      accessibilityManager.performGlobalAction(AndroidAccessibilityService.GLOBAL_ACTION_BACK)
     }
 }

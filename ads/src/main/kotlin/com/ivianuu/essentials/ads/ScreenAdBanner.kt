@@ -33,7 +33,7 @@ typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 fun interface ScreenAdBanner : ScreenDecorator
 
 @Provide fun adBannerKeyUiDecorator(
-  adsEnabledFlow: StateFlow<AdsEnabled>,
+  adsEnabledState: State<AdsEnabled>,
   isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: @FinalAdConfig ScreenAdBannerConfig? = null,
   screen: Screen<*>
@@ -49,18 +49,16 @@ fun interface ScreenAdBanner : ScreenDecorator
   }
 
   Column {
-    val adsEnabled = adsEnabledFlow.collect()
-
     Box(modifier = Modifier.weight(1f)) {
       val currentInsets = LocalInsets.current
       CompositionLocalProvider(
-        LocalInsets provides if (!adsEnabled.value) currentInsets
+        LocalInsets provides if (!adsEnabledState.value.value) currentInsets
         else currentInsets.copy(bottom = 0.dp),
         content = content
       )
     }
 
-    if (adsEnabled.value)
+    if (adsEnabledState.value.value)
       Surface(elevation = 8.dp) {
         InsetsPadding(top = false) {
           AdBanner(config)

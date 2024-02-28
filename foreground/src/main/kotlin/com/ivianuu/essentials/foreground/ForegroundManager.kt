@@ -21,7 +21,8 @@ import kotlinx.coroutines.sync.*
   private val appContext: AppContext,
   private val logger: Logger
 ) {
-  internal val states = MutableStateFlow(emptyList<ForegroundState>())
+  internal var states = emptyList<ForegroundState>()
+    private set
   private val lock = Mutex()
 
   suspend fun startForeground(
@@ -32,8 +33,8 @@ import kotlinx.coroutines.sync.*
     acquire = {
       ForegroundState(id, removeNotification, notification)
         .also {
-          lock.withLock { states.value = states.value + it }
-          logger.d { "start foreground $id ${states.value}" }
+          lock.withLock { states += it }
+          logger.d { "start foreground $id $states" }
 
           ContextCompat.startForegroundService(
             appContext,
@@ -43,8 +44,8 @@ import kotlinx.coroutines.sync.*
     },
     release = { state, _ ->
       state.seen.await()
-      lock.withLock { states.value = states.value - state }
-      logger.d { "stop foreground $id ${states.value}" }
+      lock.withLock { states -= state }
+      logger.d { "stop foreground $id $states" }
     }
   )
 

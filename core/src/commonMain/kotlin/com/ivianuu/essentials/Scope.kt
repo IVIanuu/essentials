@@ -29,8 +29,7 @@ import kotlin.reflect.*
       this[service.key] = service
   }
 
-  private val _children = MutableStateFlow<Set<Scope<*>>>(emptySet())
-  val children: StateFlow<Set<Scope<*>>> by this::_children
+  var children by mutableStateOf(emptySet<Scope<*>>())
 
   init {
     observers(this@Scope, this@Scope)
@@ -82,7 +81,7 @@ import kotlin.reflect.*
   fun dispose() {
     synchronized(this) {
       if (!_isDisposed) {
-        _children.value.forEach { it.dispose() }
+        children.forEach { it.dispose() }
 
         _isDisposed = true
 
@@ -107,10 +106,8 @@ import kotlin.reflect.*
   }
 
   private fun registerChild(child: Scope<*>): Disposable {
-    synchronized(_children) { _children.value = _children.value + child }
-    return Disposable {
-      synchronized(_children) { _children.value = _children.value - child }
-    }
+    children += child
+    return Disposable { children -= child }
   }
 
   @PublishedApi internal fun checkDisposed() {

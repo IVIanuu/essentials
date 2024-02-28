@@ -6,6 +6,7 @@ package com.ivianuu.essentials.work
 
 import android.annotation.*
 import android.content.*
+import androidx.compose.runtime.*
 import androidx.work.*
 import arrow.fx.coroutines.*
 import co.touchlab.kermit.*
@@ -46,30 +47,30 @@ fun interface Worker<I : WorkId> {
   private val scope: ScopedCoroutineScope<AppScope>,
   private val workersMap: Map<String, () -> Worker<*>>,
 ) : SynchronizedObject() {
-  private val workerStates = mutableMapOf<String, MutableStateFlow<Boolean>>()
+  private val workerStates = mutableMapOf<String, MutableState<Boolean>>()
   private val sharedWorkers = scope.sharedComputation<WorkId, Unit> { id ->
     logger.d { "run worker ${id.value}" }
 
-    val workerState = synchronized(this@WorkManager) {
-      workerStates.getOrPut(id.value) { MutableStateFlow(false) }
+    var workerState by synchronized(this@WorkManager) {
+      workerStates.getOrPut(id.value) { mutableStateOf(false) }
     }
 
     guaranteeCase(
       fa = {
-        workerState.value = true
+        workerState = true
         workersMap[id.value]!!.invoke().doWork()
       },
       finalizer = {
         if (it is ExitCase.Failure) it.failure.printStackTrace()
-        workerState.value = false
+        workerState = false
         logger.d { "run worker end ${id.value}" }
       }
     )
   }
 
   fun <I : WorkId> isWorkerRunning(id: I) = synchronized(this) {
-    workerStates.getOrPut(id.value) { MutableStateFlow(false) }
-  }
+    workerStates.getOrPut(id.value) { mutableStateOf(false) }
+  }.value
 
   suspend fun <I : WorkId> runWorker(id: I): Unit =
     withContext(scope.coroutineContext + coroutineContexts.computation) {

@@ -65,7 +65,7 @@ import kotlin.coroutines.*
     val frontFacing = if (frontCamera != null &&
       currentScreenState != ScreenState.OFF &&
       (currentScreenState == ScreenState.UNLOCKED ||
-          scopeManager.scopeOfOrNull<AccessibilityScope>().first()
+          scopeManager.scopeOfOrNull<AccessibilityScope>()
             ?.accessibilityService?.rootInActiveWindow?.packageName != "com.android.systemui") &&
       cameraApp.activityInfo!!.packageName == currentAppProvider.currentApp.first()
     )

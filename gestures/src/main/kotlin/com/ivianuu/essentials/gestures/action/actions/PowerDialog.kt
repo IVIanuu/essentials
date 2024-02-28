@@ -9,7 +9,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
@@ -22,8 +21,8 @@ import com.ivianuu.injekt.*
   )
 
   @Provide fun executor(
-    accessibilityService: AccessibilityService
+    accessibilityManager: AccessibilityManager
   ) = ActionExecutor<PowerDialogActionId> {
-    accessibilityService.performGlobalAction(GLOBAL_ACTION_POWER_DIALOG)
+    accessibilityManager.performGlobalAction(GLOBAL_ACTION_POWER_DIALOG)
   }
 }

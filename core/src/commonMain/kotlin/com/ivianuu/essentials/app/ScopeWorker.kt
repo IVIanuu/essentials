@@ -34,8 +34,8 @@ class ScopeWorkerManager<N : Any> @Provide @Service<N> @Scoped<N> constructor(
   private val nameKey: KClass<N>,
   private val workersFactory: () -> List<ExtensionPointRecord<ScopeWorker<N>>>,
 ) : ScopeObserver<N> {
-  private val _state = MutableStateFlow(State.IDLE)
-  val state: StateFlow<State> by this::_state
+  var state by mutableStateOf(State.IDLE)
+    private set
 
   override fun onEnter(scope: Scope<N>) {
     coroutineScope.launch {
@@ -51,20 +51,12 @@ class ScopeWorkerManager<N : Any> @Provide @Service<N> @Scoped<N> constructor(
               launch(start = CoroutineStart.UNDISPATCHED) { record.instance.doWork() }
             }
 
-            launch {
-              launchMolecule(RecompositionMode.Immediate, {}) {
-                SideEffect {
-                  launch {
-                    _state.value = State.RUNNING
-                  }
-                }
-              }
-            }
+            launch { state = State.RUNNING }
 
             try {
               jobs.joinAll()
             } finally {
-              _state.value = State.COMPLETED
+              state = State.COMPLETED
             }
           }
 

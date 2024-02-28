@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.util
 
 import android.content.*
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
@@ -49,15 +50,15 @@ import kotlinx.coroutines.flow.*
 
         par(
           {
-            appScope.service<ScopeWorkerManager<AppScope>>().state.first {
+            snapshotFlow { appScope.service<ScopeWorkerManager<AppScope>>().state }.first {
               it == ScopeWorkerManager.State.RUNNING
             }
           },
-          { broadcastWorkerManager.state.first { it == ScopeWorkerManager.State.RUNNING } }
+          { snapshotFlow { broadcastWorkerManager.state }.first { it == ScopeWorkerManager.State.RUNNING } }
         )
 
         explicitBroadcasts.emit(intent)
-        broadcastWorkerManager.state.first { it == ScopeWorkerManager.State.COMPLETED }
+        snapshotFlow { broadcastWorkerManager.state }.first { it == ScopeWorkerManager.State.COMPLETED }
       } finally {
         broadcastScope.dispose()
       }
