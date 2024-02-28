@@ -57,50 +57,50 @@ import kotlin.time.Duration.Companion.seconds
           )
         }
       } else {
-        ((if (states.any { it.notification == null })
-          remember(states.any { it.notification == null }) {
-            listOf(
-              Triple(
-                "default_foreground_id",
-                true,
-                notificationFactory(
-                  "default_foreground",
-                  "Foreground",
-                  NotificationManager.IMPORTANCE_LOW
-                ) {
-                  setContentTitle("${appConfig.appName} is running!")
-                  setSmallIcon(R.drawable.ic_sync)
-                  setContentIntent(remoteActionFactory<StartAppRemoteAction, _>())
-                }
-              )
-            )
-          }
-        else emptyList()) + states
-          .mapNotNull { state ->
+        val notifications = states
+          .mapNotNullTo(mutableListOf()) { state ->
             key(state.id) {
               state.notification?.invoke()
                 ?.let { Triple(state.id, state.removeNotification, it) }
             }
-          })
-          .forEachIndexed { index, (id, removeNotification, notification) ->
-            key(id) {
-              DisposableEffect(index, id, notification) {
-                logger.d { "$id update foreground notification" }
+          }
 
-                if (index == 0) {
-                  removeServiceNotification = removeNotification
-                  startForeground(id.hashCode(), notification)
-                  onDispose {  }
-                } else {
-                  notificationManager.notify(id.hashCode(), notification)
-                  onDispose {
-                    if (removeNotification)
-                      notificationManager.cancel(id.hashCode())
-                  }
+        if (notifications.isEmpty())
+          notifications += remember {
+            Triple(
+              "default_foreground_id",
+              true,
+              notificationFactory(
+                "default_foreground",
+                "Foreground",
+                NotificationManager.IMPORTANCE_LOW
+              ) {
+                setContentTitle("${appConfig.appName} is running!")
+                setSmallIcon(R.drawable.ic_sync)
+                setContentIntent(remoteActionFactory<StartAppRemoteAction, _>())
+              }
+            )
+          }
+
+        notifications.forEachIndexed { index, (id, removeNotification, notification) ->
+          key(id) {
+            DisposableEffect(index, id, notification) {
+              logger.d { "$id update foreground notification" }
+
+              if (index == 0) {
+                removeServiceNotification = removeNotification
+                startForeground(id.hashCode(), notification)
+                onDispose {  }
+              } else {
+                notificationManager.notify(id.hashCode(), notification)
+                onDispose {
+                  if (removeNotification)
+                    notificationManager.cancel(id.hashCode())
                 }
               }
             }
           }
+        }
 
         LaunchedEffect(states) {
           states.forEach { it.seen.complete(Unit) }
