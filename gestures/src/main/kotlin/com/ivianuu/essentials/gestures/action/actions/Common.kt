@@ -48,8 +48,6 @@ fun staticActionIcon(id: Int) = ActionIcon {
   )
 }
 
-operator fun KClass<Permission>.plus(other: KClass<Permission>) = listOf(this, other)
-
 @Provide class ActionIntentSender(
   private val appContext: AppContext,
   private val toaster: Toaster

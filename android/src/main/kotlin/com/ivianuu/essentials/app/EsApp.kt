@@ -7,8 +7,6 @@ package com.ivianuu.essentials.app
 import android.app.*
 import com.ivianuu.essentials.*
 
-abstract class EsApp : Application(), AppScopeOwner {
-  override val appScope by lazy { buildAppScope() }
-
-  protected abstract fun buildAppScope(): Scope<AppScope>
+abstract class EsApp(appScope: EsApp.() -> Scope<AppScope>) : Application(), AppScopeOwner {
+  override val appScope by lazy { appScope() }
 }

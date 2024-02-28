@@ -24,25 +24,25 @@ interface Permission {
   @Provide fun <@AddOn T : Permission> permission(
     key: KClass<T>,
     permission: () -> T
-  ): Pair<KClass<Permission>, () -> Permission> = (key to permission).cast()
+  ): Pair<KClass<out Permission>, () -> Permission> = (key to permission).cast()
 
-  @Provide val defaultPermissions get() = emptyList<Pair<KClass<Permission>, () -> Permission>>()
+  @Provide val defaultPermissions get() = emptyList<Pair<KClass<out Permission>, () -> Permission>>()
 
   @Provide fun <@AddOn T : Permission> requestHandlerBinding(
     key: KClass<T>,
     requestHandler: () -> PermissionRequestHandler<T>
-  ): Pair<KClass<Permission>, () -> PermissionRequestHandler<Permission>> =
+  ): Pair<KClass<out Permission>, () -> PermissionRequestHandler<Permission>> =
     (key to { requestHandler().intercept() }).cast()
 
-  @Provide val defaultRequestHandlers get() = emptyList<Pair<KClass<Permission>, () -> PermissionRequestHandler<Permission>>>()
+  @Provide val defaultRequestHandlers get() = emptyList<Pair<KClass<out Permission>, () -> PermissionRequestHandler<Permission>>>()
 
   @Provide fun <@AddOn T : Permission> stateProvider(
     key: KClass<T>,
     stateProvider: () -> PermissionStateProvider<T>
-  ): Pair<KClass<Permission>, () -> PermissionStateProvider<Permission>> =
+  ): Pair<KClass<out Permission>, () -> PermissionStateProvider<Permission>> =
     (key to stateProvider).cast()
 
-  @Provide val defaultStateProviders get() = emptyList<Pair<KClass<Permission>, () -> PermissionStateProvider<Permission>>>()
+  @Provide val defaultStateProviders get() = emptyList<Pair<KClass<out Permission>, () -> PermissionStateProvider<Permission>>>()
 }
 
 fun interface PermissionStateProvider<P : Permission> {
@@ -64,19 +64,19 @@ private fun <P : Permission> PermissionRequestHandler<P>.intercept() = Permissio
   permissionRefreshes.emit(Unit)
 }
 
-interface PermissionRevokeHandler : suspend (List<KClass<Permission>>) -> Unit {
-  val permissions: List<KClass<Permission>>
+interface PermissionRevokeHandler : suspend (List<KClass<out Permission>>) -> Unit {
+  val permissions: List<KClass<out Permission>>
 
   @Provide companion object {
     inline operator fun invoke(
-      permissions: List<KClass<Permission>>,
-      crossinline block: suspend (List<KClass<Permission>>) -> Unit
+      permissions: List<KClass<out Permission>>,
+      crossinline block: suspend (List<KClass<out Permission>>) -> Unit
     ): PermissionRevokeHandler {
       return object : PermissionRevokeHandler {
-        override val permissions: List<KClass<Permission>>
+        override val permissions: List<KClass<out Permission>>
           get() = permissions
 
-        override suspend fun invoke(p1: List<KClass<Permission>>) {
+        override suspend fun invoke(p1: List<KClass<out Permission>>) {
           block(p1)
         }
       }
