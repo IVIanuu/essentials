@@ -19,8 +19,8 @@ import compose.icons.fontawesomeicons.*
 import compose.icons.fontawesomeicons.brands.*
 
 class AboutScreen(
-  val donationScreen: Screen<*>? = null,
-  val privacyPolicyUrl: String? = null
+  val donationScreen: Screen<*>?,
+  val privacyPolicyUrl: String?
 ) : Screen<Unit> {
   @Provide companion object {
     @Provide fun ui(
