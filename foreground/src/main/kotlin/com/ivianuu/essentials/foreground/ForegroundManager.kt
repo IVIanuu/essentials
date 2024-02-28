@@ -25,8 +25,8 @@ import kotlinx.coroutines.sync.*
   private val lock = Mutex()
 
   suspend fun startForeground(
-    removeNotification: Boolean = true,
     id: String,
+    removeNotification: Boolean = true,
     notification: (@Composable () -> Notification)?,
   ): Nothing = bracketCase(
     acquire = {
