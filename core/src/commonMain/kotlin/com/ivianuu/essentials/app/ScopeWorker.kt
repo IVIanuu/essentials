@@ -20,15 +20,19 @@ fun interface ScopeWorker<N : Any> : ExtensionPoint<ScopeWorker<N>> {
   suspend operator fun invoke()
 }
 
-fun <N : Any> ScopeComposition(block: @Composable () -> Unit) = ScopeWorker<N> {
-  coroutineScope { launchMolecule(RecompositionMode.Immediate,{}, body = block) }
+fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
+  @Composable fun Content()
+
+  override suspend fun invoke() {
+    coroutineScope { launchMolecule(RecompositionMode.Immediate, {}) { Content() } }
+  }
 }
 
 @Provide class ScopeWorkerRunner<N : Any>(
   private val coroutineScope: ScopedCoroutineScope<N>,
   private val logger: Logger,
   private val nameKey: KClass<N>,
-  private val workersFactory: () -> List<ExtensionPointRecord<ScopeWorker<N>>>
+  private val workersFactory: () -> List<ExtensionPointRecord<ScopeWorker<N>>>,
 ) : ScopeObserver<N> {
   override fun onEnter(scope: Scope<N>) {
     coroutineScope.launch {
