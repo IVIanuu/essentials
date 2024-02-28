@@ -25,5 +25,5 @@ fun interface UserflowBuilder : suspend () -> List<Screen<*>>, ExtensionPoint<Us
 
   if (userflowScreens.isEmpty()) return@ScopeWorker
 
-  navigator.setBackStack(backStack = navigator.backStack.value + userflowScreens)
+  navigator.setBackStack(backStack = navigator.backStack + userflowScreens)
 }

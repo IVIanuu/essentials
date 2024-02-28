@@ -56,8 +56,8 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
 }
 
 private fun Navigator.launchEvents(isAdFeatureEnabled: IsAdFeatureEnabledUseCase): Flow<Screen<*>> {
-  var lastBackStack = backStack.value
-  return backStack
+  var lastBackStack = backStack
+  return snapshotFlow { backStack }
     .mapNotNull { currentBackStack ->
       val launchedScreens = currentBackStack
         .filter {

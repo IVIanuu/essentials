@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.*
@@ -18,8 +19,8 @@ class Navigator(
   initialBackStack: List<Screen<*>> = emptyList(),
   private val screenInterceptors: List<ScreenInterceptor<*>> = emptyList(),
 ) {
-  private val _backStack = MutableStateFlow(initialBackStack)
-  val backStack: StateFlow<List<Screen<*>>> by this::_backStack
+  var backStack by mutableStateOf(initialBackStack)
+    private set
 
   private val _results = EventFlow<Pair<Screen<*>, Any?>>()
   val results: Flow<Pair<Screen<*>, Any?>> by this::_results
@@ -37,7 +38,7 @@ class Navigator(
     scope.launch(start = CoroutineStart.UNDISPATCHED) {
       mutex.withLock {
         val finalResults = results.toMutableMap()
-        _backStack.value = buildList {
+        this@Navigator.backStack = buildList {
           for (screen in backStack) {
             @Suppress("UNCHECKED_CAST")
             screen as Screen<Any?>
@@ -79,12 +80,12 @@ suspend fun <R> Navigator.setRoot(screen: Screen<R>): R? {
 }
 
 suspend fun <R> Navigator.push(screen: Screen<R>): R? {
-  setBackStack(backStack.value.filter { it != screen } + screen)
+  setBackStack(backStack.filter { it != screen } + screen)
   return awaitResult(screen)
 }
 
 suspend fun <R> Navigator.replaceTop(screen: Screen<R>): R? {
-  val currentBackStack = backStack.value
+  val currentBackStack = backStack
   setBackStack(
     currentBackStack
       .dropLast(1) + screen
@@ -93,11 +94,11 @@ suspend fun <R> Navigator.replaceTop(screen: Screen<R>): R? {
 }
 
 suspend fun <R> Navigator.pop(screen: Screen<R>, result: R? = null) {
-  setBackStack(backStack.value.filter { it != screen }, mapOf(screen to result))
+  setBackStack(backStack.filter { it != screen }, mapOf(screen to result))
 }
 
 suspend fun Navigator.popTop(): Boolean {
-  val currentBackStack = backStack.value
+  val currentBackStack = backStack
   return if (currentBackStack.isNotEmpty()) {
     pop(currentBackStack.last())
     true
@@ -105,11 +106,11 @@ suspend fun Navigator.popTop(): Boolean {
 }
 
 suspend fun Navigator.popTo(screen: Screen<*>) {
-  val index = backStack.value.indexOfLast { it == screen }
+  val index = backStack.indexOfLast { it == screen }
   check(index != -1) {
-    "Screen $screen was not in ${backStack.value}"
+    "Screen $screen was not in $backStack"
   }
-  setBackStack(backStack.value.take(index + 1))
+  setBackStack(backStack.take(index + 1))
 }
 
 suspend fun Navigator.clear() {
