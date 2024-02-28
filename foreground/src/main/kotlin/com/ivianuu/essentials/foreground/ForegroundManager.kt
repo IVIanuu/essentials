@@ -21,39 +21,41 @@ import kotlinx.coroutines.sync.*
   private val appContext: AppContext,
   private val logger: Logger
 ) {
-  internal val states = MutableStateFlow(emptyList<ForegroundState>())
-  private val lock = Mutex()
+  internal var states = emptyList<ForegroundState>()
+    private set
 
-  suspend fun startForeground(
-    removeNotification: Boolean = true,
+  @Composable fun Foreground(
     id: String,
-    notification: (@Composable () -> Notification)?,
-  ): Nothing = bracketCase(
-    acquire = {
+    removeNotification: Boolean = true,
+    notification: (@Composable () -> Notification)? = null,
+  ) {
+    val state = remember(id) {
       ForegroundState(id, removeNotification, notification)
-        .also {
-          lock.withLock { states.value = states.value + it }
-          logger.d { "start foreground $id ${states.value}" }
-
-          ContextCompat.startForegroundService(
-            appContext,
-            Intent(appContext, ForegroundService::class.java)
-          )
-        }
-    },
-    release = { state, _ ->
-      state.seen.await()
-      lock.withLock { states.value = states.value - state }
-      logger.d { "stop foreground $id ${states.value}" }
     }
-  )
+
+    LaunchedEffect(state) {
+      states += state
+      logger.d { "start foreground $id $states" }
+      ContextCompat.startForegroundService(
+        appContext,
+        Intent(appContext, ForegroundService::class.java)
+      )
+      onCancel {
+        state.seen.await()
+        states -= state
+        logger.d { "stop foreground $id $states" }
+      }
+    }
+  }
 
   internal class ForegroundState(
     val id: String,
-    val removeNotification: Boolean,
-    val notification: (@Composable () -> Notification)?,
+    removeNotification: Boolean,
+    notification: (@Composable () -> Notification)?,
   ) {
     val seen = CompletableDeferred<Unit>()
+    var removeNotification by mutableStateOf(removeNotification)
+    var notification by mutableStateOf(notification)
   }
 }
 

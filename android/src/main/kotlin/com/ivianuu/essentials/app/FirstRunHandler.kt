@@ -27,7 +27,7 @@ import kotlinx.serialization.*
 }
 
 fun interface FirstRunHandler {
-  suspend operator fun invoke()
+  suspend fun onFirstRun()
 
   @Provide companion object {
     @Provide val defaultHandlers get() = emptyList<FirstRunHandler>()
@@ -44,7 +44,7 @@ fun interface FirstRunHandler {
 
   logger.d { "first run" }
 
-  handlers().parMap { it() }
+  handlers().parMap { it.onFirstRun() }
 
   pref.updateData { copy(isFirstRun = false) }
 }

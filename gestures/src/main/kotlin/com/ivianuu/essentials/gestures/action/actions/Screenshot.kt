@@ -9,7 +9,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -24,9 +23,9 @@ import kotlinx.coroutines.*
     )
 
   @Provide fun screenshotActionExecutor(
-    accessibilityService: AccessibilityService
+    accessibilityManager: AccessibilityManager
   ) = ActionExecutor<ScreenshotActionId> {
     delay(500)
-    accessibilityService.performGlobalAction(GLOBAL_ACTION_TAKE_SCREENSHOT)
+    accessibilityManager.performGlobalAction(GLOBAL_ACTION_TAKE_SCREENSHOT)
   }
 }

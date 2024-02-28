@@ -5,58 +5,30 @@
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
-  kotlin("multiplatform")
+  kotlin("android")
 }
 
 android {
   sourceSets["main"].run {
     manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    java.srcDirs("src/androidMain/java")
+    kotlin.srcDirs("src/androidMain/kotlin")
+    kotlin.srcDirs("src/commonJvmMain/kotlin")
+    kotlin.srcDirs("src/commonMain/kotlin")
   }
 }
 
-kotlin {
-  jvm()
-  android {
-    publishLibraryVariants("release")
-  }
-
-  sourceSets {
-    commonMain {
-      dependencies {
-        api(Deps.circuitFoundation)
-        api(Deps.Compose.foundation)
-        api(Deps.Compose.material)
-        api(Deps.Compose.materialIconsExtended)
-        api(Deps.composeIconsFontAwesome)
-        api(Deps.materialMotionCompose)
-        api(project(":core"))
-      }
-    }
-
-    val commonJvmMain by creating
-
-    val androidMain by getting
-    androidMain.dependsOn(commonJvmMain)
-
-    named("androidMain") {
-      dependencies {
-        api(Deps.Accompanist.flowLayout)
-        api(Deps.Accompanist.pagerIndicators)
-        api(Deps.AndroidX.Activity.compose)
-        api(Deps.AndroidX.core)
-      }
-    }
-
-    val jvmMain by getting
-    jvmMain.dependsOn(commonJvmMain)
-
-    named("jvmTest") {
-      dependencies {
-        implementation(project(":test"))
-      }
-    }
-  }
+dependencies {
+  api(Deps.circuitFoundation)
+  api(Deps.Compose.foundation)
+  api(Deps.Compose.material)
+  api(Deps.Compose.materialIconsExtended)
+  api(Deps.composeIconsFontAwesome)
+  api(Deps.materialMotionCompose)
+  api(project(":core"))
+  api(Deps.Accompanist.flowLayout)
+  api(Deps.Accompanist.pagerIndicators)
+  api(Deps.AndroidX.Activity.compose)
+  api(Deps.AndroidX.core)
 }
 
 plugins.apply("com.vanniktech.maven.publish")

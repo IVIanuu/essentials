@@ -19,11 +19,11 @@ import kotlinx.coroutines.flow.*
 
 @Provide class ShortcutRepository(
   private val appContext: AppContext,
-  broadcastsFactory: BroadcastsFactory,
+  broadcastManager: BroadcastManager,
   private val coroutineContexts: CoroutineContexts,
   private val packageManager: PackageManager
 ) {
-  val shortcuts: Flow<List<Shortcut>> = broadcastsFactory(
+  val shortcuts: Flow<List<Shortcut>> = broadcastManager.broadcasts(
     Intent.ACTION_PACKAGE_ADDED,
     Intent.ACTION_PACKAGE_REMOVED,
     Intent.ACTION_PACKAGE_CHANGED,

@@ -20,12 +20,12 @@ val Color.isDark: Boolean get() = !isLight
 
 val Color.isLight: Boolean get() = luminance() > 0.5f
 
-expect fun Color.toHexString(includeAlpha: Boolean = true): String
+//expect fun Color.toHexString(includeAlpha: Boolean = true): String
 
 fun Color.toHexStringOrNull(includeAlpha: Boolean = true): String? =
   catch { toHexString(includeAlpha) }.getOrNull()
 
-expect fun String.toColor(): Color
+//expect fun String.toColor(): Color
 
 fun String.toColorOrNull(): Color? = catch { toColor() }.getOrNull()
 

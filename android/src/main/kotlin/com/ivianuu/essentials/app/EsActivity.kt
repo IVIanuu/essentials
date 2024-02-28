@@ -36,7 +36,7 @@ import kotlinx.coroutines.*
     setContent {
       CompositionLocalProvider(LocalScope provides uiScope) {
         esActivityComponent.decorateAppUi {
-          esActivityComponent.appUi()
+          esActivityComponent.appUi.Content()
         }
       }
     }

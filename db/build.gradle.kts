@@ -4,31 +4,17 @@
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
-  kotlin("multiplatform")
+  kotlin("android")
 }
 
 android {
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+  sourceSets["main"].kotlin.srcDirs("src/androidMain/kotlin")
+  sourceSets["main"].kotlin.srcDirs("src/commonMain/kotlin")
 }
 
-kotlin {
-  jvm()
-  android {
-    publishLibraryVariants("release")
-  }
-
-  sourceSets {
-    commonMain {
-      dependencies {
-        api(project(":core"))
-      }
-    }
-    named("androidUnitTest") {
-      dependencies {
-        implementation(project(":android-test"))
-      }
-    }
-  }
+dependencies {
+  api(project(":core"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

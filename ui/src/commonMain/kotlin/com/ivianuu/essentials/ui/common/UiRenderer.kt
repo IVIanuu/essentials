@@ -8,7 +8,7 @@ import androidx.compose.runtime.*
 import com.ivianuu.injekt.*
 
 @Stable fun interface UiRenderer<in T> {
-  operator fun invoke(x: T): String
+  fun render(x: T): String
 
   @Provide companion object {
     @Provide fun <T : Enum<T>> enum() = UiRenderer<T> { it.name }
@@ -16,7 +16,7 @@ import com.ivianuu.injekt.*
     @Provide fun <T> collection(
       elementRenderer: UiRenderer<T>
     ) = UiRenderer<Collection<T>> { values ->
-      values.joinToString(", ") { elementRenderer(it) }
+      values.joinToString(", ") { elementRenderer.render(it) }
     }
   }
 }

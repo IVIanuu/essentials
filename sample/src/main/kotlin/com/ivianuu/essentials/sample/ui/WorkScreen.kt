@@ -26,7 +26,7 @@ class WorkScreen : Screen<Unit> {
     @Provide fun ui(workManager: WorkManager) = Ui<WorkScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Work") } }) {
         Column {
-          if (workManager.isWorkerRunning(SampleWorkId).collect())
+          if (workManager.isWorkerRunning(SampleWorkId))
             CircularProgressIndicator()
 
           Button(

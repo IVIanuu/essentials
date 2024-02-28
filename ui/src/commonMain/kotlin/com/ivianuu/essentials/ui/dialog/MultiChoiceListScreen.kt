@@ -21,7 +21,7 @@ class MultiChoiceListScreen<T : Any>(
   val items: List<T>,
   val selected: Set<T>,
   val title: String? = null,
-  @Inject val renderable: UiRenderer<T>
+  val renderable: UiRenderer<T> = inject
 ) : OverlayScreen<Set<T>> {
   @Provide companion object {
     @Provide fun ui(
@@ -45,7 +45,7 @@ class MultiChoiceListScreen<T : Any>(
                   selectedItems = newSelectedItems
                 },
                 trailingPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
-                title = { Text(screen.renderable(item)) },
+                title = { Text(screen.renderable.render(item)) },
                 trailing = {
                   Switch(
                     checked = selected,

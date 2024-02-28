@@ -15,7 +15,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.injekt.*
 
-@Provide actual val systemBarManagerProvider = SystemBarManagerProvider { content ->
+@Provide /*actual*/ val systemBarManagerProvider = SystemBarManagerProvider { content ->
   val systemBarManager = remember { AndroidSystemBarManager() }
   systemBarManager.Apply()
   CompositionLocalProvider(

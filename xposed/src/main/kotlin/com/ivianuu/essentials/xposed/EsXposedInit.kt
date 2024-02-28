@@ -7,17 +7,21 @@ package com.ivianuu.essentials.xposed
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import de.robv.android.xposed.*
-import de.robv.android.xposed.callbacks.*
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam
 
-abstract class EsXposedInit : IXposedHookLoadPackage {
-  override fun handleLoadPackage(@Provide lpparam: XC_LoadPackage.LoadPackageParam) {
+abstract class EsXposedInit(
+  private val buildXposedScope: (@Provide EsXposedInit).() -> Scope<XposedScope>
+) : IXposedHookLoadPackage {
+  @Provide lateinit var lpparam: LoadPackageParam
+  @Provide val xposedAppScopeModule get() = XposedAppScopeModule
+
+  override fun handleLoadPackage(lpparam: LoadPackageParam) {
+    this.lpparam = lpparam
     xposedScope = buildXposedScope()
     xposedScope.service<XposedHooksComponent>().run {
-      hooks.forEach { it(config) }
+      hooks.forEach { it.hook(config) }
     }
   }
-
-  protected abstract fun buildXposedScope(@Inject params: XC_LoadPackage.LoadPackageParam): Scope<XposedScope>
 
   companion object {
     private lateinit var xposedScope: Scope<XposedScope>

@@ -12,7 +12,7 @@ import androidx.compose.material.icons.filled.*
 import arrow.core.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.accessibility.AccessibilityService
+import com.ivianuu.essentials.accessibility.AccessibilityManager
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
@@ -26,13 +26,13 @@ import kotlinx.coroutines.flow.*
   )
 
   @Provide fun executor(
-    accessibilityService: AccessibilityService,
+    accessibilityManager: AccessibilityManager,
     appContext: AppContext,
     closeSystemDialogs: CloseSystemDialogsUseCase,
     scopeManager: ScopeManager,
   ) = ActionExecutor<NotificationsActionId> {
     val targetState = catch {
-      val service = scopeManager.scopeOfOrNull<AccessibilityScope>().first()!!.accessibilityService
+      val service = scopeManager.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
 
       val systemUiContext = appContext.createPackageContext(
         "com.android.systemui", 0
@@ -55,7 +55,7 @@ import kotlinx.coroutines.flow.*
     }.getOrElse { true }
 
     if (targetState)
-      accessibilityService.performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
+      accessibilityManager.performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
     else
       closeSystemDialogs()
   }

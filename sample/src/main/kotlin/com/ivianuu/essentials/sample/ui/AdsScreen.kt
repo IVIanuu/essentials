@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.*
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.ads.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
@@ -19,15 +20,15 @@ import kotlinx.coroutines.flow.*
 class AdsScreen : Screen<Unit> {
   @Provide companion object {
     @Provide fun ui(
-      adsEnabled: MutableStateFlow<AdsEnabled>,
+      adsEnabledState: MutableState<AdsEnabled>,
       fullScreenAd: FullScreenAdManager
     ) = Ui<AdsScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Ads") } }) {
         VerticalList {
           item {
             SwitchListItem(
-              value = adsEnabled.collect().value,
-              onValueChange = { adsEnabled.value = AdsEnabled(it) },
+              value = adsEnabledState.value.value,
+              onValueChange = { adsEnabledState.value = AdsEnabled(it) },
               title = { Text("Show ads") }
             )
           }
@@ -43,7 +44,7 @@ class AdsScreen : Screen<Unit> {
   }
 }
 
-@Provide val showAds = MutableStateFlow(AdsEnabled(false))
+@Provide val showAds = mutableStateOf(AdsEnabled(false))
 @Provide val fullScreenAdConfig = FullScreenAdConfig("")
 @Provide val listAdBannerConfig = ListAdBannerConfig("")
 @Provide val screenAdBannerConfig = ScreenAdBannerConfig("")

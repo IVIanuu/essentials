@@ -99,7 +99,7 @@ import kotlin.time.Duration.Companion.seconds
         if (rateLimiter.tryAcquire()) {
           logger.d { "show ad" }
           lock.withLock { deferredAd = null }
-          if (scopeManager.scopeOfOrNull<AppVisibleScope>().first() != null) {
+          if (scopeManager.scopeOfOrNull<AppVisibleScope>() != null) {
             withContext(coroutineContexts.main) {
               ad.show(activity)
             }

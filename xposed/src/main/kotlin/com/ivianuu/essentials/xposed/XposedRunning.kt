@@ -23,3 +23,6 @@ private fun isXposedRunning() = false
       replace { true }
     }
 }
+
+fun main() {
+}

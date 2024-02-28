@@ -5,8 +5,12 @@
 package com.ivianuu.essentials.sample.ui
 
 import com.ivianuu.essentials.about.*
+import com.ivianuu.essentials.donation.*
 import com.ivianuu.injekt.*
 
 @Provide val aboutHomeItem = HomeItem("About") {
-  AboutScreen(privacyPolicyUrl = "https://www.google.com")
+  AboutScreen(
+    donationScreen = DonationScreen(),
+    privacyPolicyUrl = "https://www.google.com"
+  )
 }

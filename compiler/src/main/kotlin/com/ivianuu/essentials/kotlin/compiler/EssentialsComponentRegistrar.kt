@@ -13,6 +13,9 @@ import org.jetbrains.kotlin.config.*
 
 @AutoService(ComponentRegistrar::class)
 class EssentialsComponentRegistrar : ComponentRegistrar {
+  override val supportsK2: Boolean
+    get() = true
+
   override fun registerProjectComponents(
     project: MockProject,
     configuration: CompilerConfiguration

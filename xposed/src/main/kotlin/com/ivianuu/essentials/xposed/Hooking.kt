@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.xposed
 
+import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import de.robv.android.xposed.*
 import java.lang.reflect.*
@@ -85,38 +86,42 @@ inline fun <reified T : Throwable> MethodHookScope.throwable(): T = throwable as
 inline fun hookMethod(
   method: Method,
   block: MethodHookBuilder.() -> Unit
-): XC_MethodHook.Unhook = XposedBridge.hookMethod(method, methodHook(block))
+) = XposedBridge.hookMethod(method, methodHook(block)).asDisposable()
 
 inline fun <T : Any> hookAllMethods(
   methodName: String,
-  @Inject hookClass: KClass<T>,
+  hookClass: KClass<T> = inject,
   block: MethodHookBuilder.() -> Unit
-): Set<XC_MethodHook.Unhook> = hookAllMethods(hookClass, methodName, block)
+) = hookAllMethods(hookClass, methodName, block)
 
 inline fun hookAllMethods(
   className: String,
   methodName: String,
-  @Inject classLoader: ClassLoader,
+  classLoader: ClassLoader = inject,
   block: MethodHookBuilder.() -> Unit
-): Set<XC_MethodHook.Unhook> = hookAllMethods(classLoader.getClass(className), methodName, block)
+) = hookAllMethods(classLoader.getClass(className), methodName, block)
 
 inline fun hookAllMethods(
   hookClass: KClass<*>,
   methodName: String,
   block: MethodHookBuilder.() -> Unit
-): Set<XC_MethodHook.Unhook> = XposedBridge.hookAllMethods(
+) = XposedBridge.hookAllMethods(
   hookClass.java,
   methodName,
   methodHook(block)
-)
+).map { it.asDisposable() }
 
 inline fun hookAllConstructors(
   className: String,
-  @Inject classLoader: ClassLoader,
+  classLoader: ClassLoader = inject,
   block: MethodHookBuilder.() -> Unit
-): Set<XC_MethodHook.Unhook> = hookAllConstructors(classLoader.getClass(className), block)
+) = hookAllConstructors(classLoader.getClass(className), block)
 
 inline fun <T : Any> hookAllConstructors(
-  @Inject hookClass: KClass<T>,
+  hookClass: KClass<T> = inject,
   block: MethodHookBuilder.() -> Unit
-): Set<XC_MethodHook.Unhook> = XposedBridge.hookAllConstructors(hookClass.java, methodHook(block))
+) = XposedBridge.hookAllConstructors(hookClass.java, methodHook(block))
+  .map { it.asDisposable() }
+
+// todo remove once fir supports nested java classes lol
+fun XC_MethodHook.Unhook.asDisposable() = Disposable { unhook() }

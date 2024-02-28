@@ -8,11 +8,14 @@ private val aKey = typeKeyOf<A>()
 private val bKey = typeKeyOf<B>()
 private val cKey = typeKeyOf<C>()
 
-@Tag private annotation class ATag
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+private annotation class ATag
 private typealias A = @ATag Item
-@Tag private annotation class BTag
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+private annotation class BTag
 private typealias B = @BTag Item
-@Tag private annotation class CTag
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+private annotation class CTag
 private typealias C = @CTag Item
 
 private data class Item(

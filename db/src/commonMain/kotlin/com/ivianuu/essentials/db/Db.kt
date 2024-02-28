@@ -29,13 +29,13 @@ interface Db : Disposable {
 fun <T : Any> Db.query(
   sql: String,
   tableName: String?,
-  @Inject key: KClass<T>
+  key: KClass<T> = inject
 ): Flow<List<T>> = query(sql, tableName) { it.toList(schema) }
 
 suspend fun <T : Any> Db.insert(
   entity: T,
   conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
-  @Inject key: KClass<T>
+  key: KClass<T> = inject
 ): Long {
   val descriptor = schema.descriptor<T>()
   return executeInsert(
@@ -53,14 +53,14 @@ suspend fun <T : Any> Db.insert(
 suspend fun <T : Any> Db.insertAll(
   entities: List<T>,
   conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
-  @Inject key: KClass<T>
+  key: KClass<T> = inject
 ) {
   entities.forEach { insert(it, conflictStrategy) }
 }
 
 enum class InsertConflictStrategy { REPLACE, ABORT, IGNORE }
 
-fun <T : Any> Db.selectAll(@Inject key: KClass<T>): Flow<List<T>> {
+fun <T : Any> Db.selectAll(key: KClass<T> = inject): Flow<List<T>> {
   val descriptor = schema.descriptor<T>()
   return query(
     "SELECT * FROM ${descriptor.tableName}",
@@ -68,7 +68,7 @@ fun <T : Any> Db.selectAll(@Inject key: KClass<T>): Flow<List<T>> {
   )
 }
 
-fun <T : Any> Db.selectById(id: Any, @Inject key: KClass<T>): Flow<T?> {
+fun <T : Any> Db.selectById(id: Any, key: KClass<T> = inject): Flow<T?> {
   val descriptor = schema.descriptor<T>()
   val primaryKeyRow = descriptor.rows.single { it.isPrimaryKey }
   return query<T>(
@@ -80,7 +80,7 @@ fun <T : Any> Db.selectById(id: Any, @Inject key: KClass<T>): Flow<T?> {
 }
 
 fun <T : Any, S> Db.selectAllTransform(
-  @Inject key: KClass<T>,
+  key: KClass<T> = inject,
   transform: suspend (T?) -> S?
 ): Flow<List<S>> = tableChanges
   .onStart { emit(null) }
@@ -93,14 +93,14 @@ fun <T : Any, S> Db.selectAllTransform(
 
 fun <T : Any, S> Db.selectTransform(
   id: Any,
-  @Inject key: KClass<T>,
+  key: KClass<T> = inject,
   transform: suspend (T?) -> S?
 ): Flow<S?> = tableChanges
   .onStart { emit(null) }
   .mapLatest { transform(selectById<T>(id).first()) }
   .distinctUntilChanged()
 
-suspend fun <T : Any> Db.deleteById(vararg ids: Any, @Inject key: KClass<T>) {
+suspend fun <T : Any> Db.deleteById(vararg ids: Any, key: KClass<T> = inject) {
   val descriptor = schema.descriptor<T>()
   val primaryKeyRow = descriptor.rows.single { it.isPrimaryKey }
   execute(
@@ -110,7 +110,7 @@ suspend fun <T : Any> Db.deleteById(vararg ids: Any, @Inject key: KClass<T>) {
   )
 }
 
-suspend fun <T : Any> Db.deleteAll(@Inject key: KClass<T>) {
+suspend fun <T : Any> Db.deleteAll(key: KClass<T> = inject) {
   val tableName = schema.descriptor<T>().tableName
   execute("DELETE FROM $tableName", tableName)
 }
@@ -131,7 +131,7 @@ interface Cursor : Disposable {
   fun getColumnIndex(name: String): Int
 }
 
-fun <T : Any> Cursor.toList(schema: Schema, @Inject key: KClass<T>): List<T> = buildList {
+fun <T : Any> Cursor.toList(schema: Schema, key: KClass<T> = inject): List<T> = buildList {
   while (next()) {
     val serializer = schema.descriptor<T>().serializer
     this += serializer.deserialize(
@@ -158,7 +158,7 @@ fun Db.tableNames(): Flow<List<String>> =
   }
 
 suspend fun <T : Any> Db.createTable(
-  @Inject descriptor: EntityDescriptor<T>,
+  descriptor: EntityDescriptor<T> = inject,
   tableName: String = descriptor.tableName
 ) = execute(
   sql = buildString {

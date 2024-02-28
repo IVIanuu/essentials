@@ -25,8 +25,8 @@ import kotlin.time.Duration.Companion.seconds
   subtitle: (@Composable () -> Unit)? = null,
   leading: (@Composable () -> Unit)? = null,
   valueText: @Composable ((T) -> Unit)? = { Text(it.toString()) },
-  @Inject lerper: Lerper<T>,
-  @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
+  lerper: Lerper<T> = inject,
+  valueRange: @DefaultSliderRange ClosedRange<T> = inject,
 ) {
   var internalValue: T? by remember { mutableStateOf(null) }
   var internalValueEraseJob: Job? by remember { mutableStateOf(null) }

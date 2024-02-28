@@ -121,7 +121,7 @@ val DefaultAppBarElevation = 0.dp
   val navigator = catch { LocalScope.current.navigator }.getOrNull()
   val screen = catch { LocalScope.current.screen }.getOrNull()
   val canGoBack = remember {
-    navigator?.backStack?.value?.indexOf(screen)?.let { it > 0 } == true
+    navigator?.backStack?.indexOf(screen)?.let { it > 0 } == true
   }
   return if (!canGoBack) null
   else ({

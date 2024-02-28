@@ -7,7 +7,7 @@ package com.ivianuu.essentials.ui.util
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 
-actual fun Color.toHexString(includeAlpha: Boolean) = if (this.toArgb() == 0) {
+/*actual*/ fun Color.toHexString(includeAlpha: Boolean) = if (this.toArgb() == 0) {
   if (includeAlpha) "00000000" else "000000"
 } else {
   if (includeAlpha) {
@@ -22,7 +22,7 @@ actual fun Color.toHexString(includeAlpha: Boolean) = if (this.toArgb() == 0) {
   }
 }
 
-actual fun String.toColor(): Color {
+/*actual*/ fun String.toColor(): Color {
   val finalColorString = if (startsWith("#")) this else "#$this"
   var color = finalColorString.substring(1).toLong(16)
   if (finalColorString.length == 7) {

@@ -72,7 +72,7 @@ import com.ivianuu.injekt.*
 }
 
 fun interface ListDecorator : ExtensionPoint<ListDecorator> {
-  operator fun ListDecoratorScope.invoke()
+  fun ListDecoratorScope.decoratedItems()
 }
 
 @Stable interface ListDecoratorScope : LazyListScope {
@@ -114,7 +114,7 @@ private fun LazyListScope.decoratedContent(
             }
           }
           with(scope) {
-            invoke()
+            decoratedItems()
           }
         }
       }

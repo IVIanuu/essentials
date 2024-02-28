@@ -18,10 +18,10 @@ sealed interface LoadingOrder<T : Any> {
 
       fun last() = Last<T>()
 
-      fun <S : Any> before(@Inject key: KClass<S>): Topological.Before<T> =
+      fun <S : Any> before(key: KClass<S> = inject): Topological.Before<T> =
         Topological.Before(key).cast()
 
-      fun <S : Any> after(@Inject key: KClass<S>): Topological.After<T> =
+      fun <S : Any> after(key: KClass<S> = inject): Topological.After<T> =
         Topological.After(key).cast()
     }
   }
@@ -35,9 +35,9 @@ sealed interface LoadingOrder<T : Any> {
 
     operator fun plus(other: Topological<T>) = Combined(this, other)
 
-    fun <S : Any> before(@Inject key: KClass<S>) = Combined(this, Before(key).cast())
+    fun <S : Any> before(key: KClass<S> = inject) = Combined(this, Before(key).cast())
 
-    fun <S : Any> after(@Inject key: KClass<S>) = Combined(this, After(key).cast())
+    fun <S : Any> after(key: KClass<S> = inject) = Combined(this, After(key).cast())
   }
 
   interface Descriptor<in T> {
@@ -90,7 +90,7 @@ private fun LoadingOrder.Topological<*>.dependents(): Set<KClass<*>> {
 }
 
 fun <T> Collection<T>.sortedWithLoadingOrder(
-  @Inject descriptor: LoadingOrder.Descriptor<T>
+  descriptor: LoadingOrder.Descriptor<T> = inject
 ): List<T> {
   if (isEmpty() || size == 1) return toList()
 

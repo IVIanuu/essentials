@@ -19,8 +19,8 @@ import com.ivianuu.injekt.*
     )
 
   @Provide fun executor(
-    accessibilityService: AccessibilityService
+    accessibilityManager: AccessibilityManager
   ) = ActionExecutor<RecentAppsActionId> {
-    accessibilityService.performGlobalAction(GLOBAL_ACTION_RECENTS)
+    accessibilityManager.performGlobalAction(GLOBAL_ACTION_RECENTS)
   }
 }

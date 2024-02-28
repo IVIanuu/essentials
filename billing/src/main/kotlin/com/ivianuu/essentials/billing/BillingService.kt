@@ -96,7 +96,7 @@ import kotlin.time.Duration.Companion.seconds
       }
     }
 
-    val activity = appUiStarter()
+    val activity = appUiStarter.startAppUi()
 
     val skuDetails = getSkuDetails(sku)
       ?: return@use false

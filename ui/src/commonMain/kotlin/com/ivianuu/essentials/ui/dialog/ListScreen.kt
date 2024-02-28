@@ -15,7 +15,7 @@ import com.ivianuu.injekt.*
 class ListScreen<T : Any>(
   val items: List<T>,
   val title: String? = null,
-  @Inject val renderer: UiRenderer<T>,
+  val renderer: UiRenderer<T> = inject,
 ) : OverlayScreen<T> {
   @Provide companion object {
     @Provide fun ui(
@@ -30,7 +30,7 @@ class ListScreen<T : Any>(
             items(screen.items) { item ->
               ListItem(
                 onClick = action { navigator.pop(screen, item) },
-                title = { Text(screen.renderer(item)) },
+                title = { Text(screen.renderer.render(item)) },
               )
             }
           }

@@ -20,7 +20,7 @@ data class ExtensionPointRecord<T : ExtensionPoint<*>>(
       override fun loadingOrder(x: ExtensionPointRecord<*>): LoadingOrder<*> = x.loadingOrder
     }
 
-    @Provide fun <@Spread T : ExtensionPoint<B>, B : ExtensionPoint<*>> record(
+    @Provide fun <@AddOn T : ExtensionPoint<B>, B : ExtensionPoint<*>> record(
       initializer: T,
       key: KClass<T>,
       loadingOrder: LoadingOrder<T> = LoadingOrder()

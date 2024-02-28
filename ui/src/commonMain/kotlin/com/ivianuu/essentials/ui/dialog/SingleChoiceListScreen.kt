@@ -18,7 +18,7 @@ class SingleChoiceListScreen<T : Any>(
   val items: List<T>,
   val selected: T,
   val title: String? = null,
-  @Inject val renderable: UiRenderer<T>
+  val renderable: UiRenderer<T> = inject
 ) : OverlayScreen<T> {
   @Provide companion object {
     @Provide fun ui(
@@ -34,7 +34,7 @@ class SingleChoiceListScreen<T : Any>(
               ListItem(
                 onClick = action { navigator.pop(screen, item) },
                 trailingPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
-                title = { Text(screen.renderable(item)) },
+                title = { Text(screen.renderable.render(item)) },
                 trailing = {
                   RadioButton(
                     selected = item == screen.selected,

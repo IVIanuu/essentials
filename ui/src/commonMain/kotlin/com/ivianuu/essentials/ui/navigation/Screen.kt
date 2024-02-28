@@ -48,7 +48,7 @@ class ScreenScope {
 }
 
 fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
-  @Composable operator fun invoke(content: @Composable () -> Unit)
+  @Composable fun DecoratedContent(content: @Composable () -> Unit)
 }
 
 @Provide class DecorateScreen(
@@ -63,7 +63,7 @@ fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
           { content ->
             acc {
               logger.d { "decorate screen with ${record.key.qualifiedName}" }
-              record.instance(content)
+              record.instance.DecoratedContent(content)
             }
           }
         }
@@ -76,25 +76,25 @@ fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
 }
 
 @Provide object ScreenModule {
-  @Provide fun <@Spread T : Ui<S>, S : Screen<*>> rootNavGraphUiFactory(
+  @Provide fun <@AddOn T : Ui<S>, S : Screen<*>> rootNavGraphUiFactory(
     screenClass: KClass<S>,
     uiFactory: UiFactory<S>
   ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> UiFactory<Screen<*>>> =
     (screenClass to uiFactory).unsafeCast()
 
-  @Provide fun <@Spread T : Ui<S>, S : Screen<*>> rootNavGraphConfigFactory(
+  @Provide fun <@AddOn T : Ui<S>, S : Screen<*>> rootNavGraphConfigFactory(
     screenClass: KClass<S>,
     screenConfigFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
   ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> ScreenConfigFactory<Screen<*>>> =
     (screenClass to screenConfigFactory).unsafeCast()
 
-  @Provide fun <@Spread T : @NavGraph<N> Ui<S>, N, S : Screen<*>> navGraphUiFactory(
+  @Provide fun <@AddOn T : @NavGraph<N> Ui<S>, N, S : Screen<*>> navGraphUiFactory(
     screenClass: KClass<S>,
     uiFactory: (Navigator, Scope<ScreenScope>, S) -> @NavGraph<N> Ui<S>
   ): Pair<KClass<Screen<*>>, @NavGraph<N> UiFactory<Screen<*>>> =
     (screenClass to uiFactory).unsafeCast()
 
-  @Provide fun <@Spread T : @NavGraph<N> Ui<S>, N, S : Screen<*>> navGraphConfigFactory(
+  @Provide fun <@AddOn T : @NavGraph<N> Ui<S>, N, S : Screen<*>> navGraphConfigFactory(
     screenClass: KClass<S>,
     screenConfigFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
   ): Pair<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>> =

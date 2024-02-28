@@ -34,11 +34,9 @@ import kotlin.collections.set
   handleBack: Boolean = true,
   defaultTransitionSpec: ElementTransitionSpec<Screen<*>> = LocalScreenTransitionSpec.current
 ) {
-  val backStack = navigator.backStack.collect()
-
   val screenContexts = remember { mutableStateMapOf<Screen<*>, ScreenContext<*>>() }
 
-  backStack.forEachIndexed { index, screen ->
+  navigator.backStack.forEachIndexed { index, screen ->
     key(screen) {
       screenContexts[screen] = rememberScreenContext(screen, navigator, screenContextComponent)
 
@@ -68,7 +66,7 @@ import kotlin.collections.set
 
   AnimatedStack(
     modifier = modifier,
-    items = backStack,
+    items = navigator.backStack,
     contentOpaque = { screenContexts[it]?.config?.opaque ?: false },
     transitionSpec = {
       val spec = (if (isPush)
@@ -77,11 +75,13 @@ import kotlin.collections.set
         screenContexts[initial]?.config?.exitTransitionSpec)
         ?: defaultTransitionSpec
 
-      spec()
+      with(spec) { invoke() }
     }
   ) {
     screenContexts[it]?.let { ScreenContent(it) }
   }
 }
 
-val LocalScreenTransitionSpec = compositionLocalOf<ElementTransitionSpec<Screen<*>>> { { } }
+val LocalScreenTransitionSpec = compositionLocalOf<ElementTransitionSpec<Screen<*>>> {
+  ElementTransitionSpec {  }
+}

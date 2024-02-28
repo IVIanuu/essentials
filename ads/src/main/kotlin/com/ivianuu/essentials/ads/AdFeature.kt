@@ -24,7 +24,7 @@ interface AdFeature
     @Provide fun <T : CriticalUserFlowScreen<*>> defaultCriticalUserFlowAdFeatures(): AdFeatures<T> =
       AdFeatures(listOf(ScreenAdBannerFeature))
 
-    @Provide fun <@Spread T : Ui<S>, S : Screen<*>> adFeatureConfigMapEntry(
+    @Provide fun <@AddOn T : Ui<S>, S : Screen<*>> adFeatureConfigMapEntry(
       keyClass: KClass<S>,
       features: AdFeatures<S>
     ): Pair<KClass<out Screen<*>>, AdFeatures<*>> = keyClass to features
@@ -41,4 +41,5 @@ fun interface IsAdFeatureEnabledUseCase {
   featuresByScreen[keyClass]?.value?.contains(feature) == true
 }
 
-@Tag annotation class FinalAdConfig
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class FinalAdConfig

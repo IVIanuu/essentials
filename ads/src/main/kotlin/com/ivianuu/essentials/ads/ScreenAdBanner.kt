@@ -18,7 +18,8 @@ import kotlinx.coroutines.flow.*
 
 @Provide object ScreenAdBannerFeature : AdFeature
 
-@Tag annotation class ScreenAdBannerConfigTag {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class ScreenAdBannerConfigTag {
   @Provide companion object {
     @Provide fun final(
       adConfig: ScreenAdBannerConfig,
@@ -32,7 +33,7 @@ typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 fun interface ScreenAdBanner : ScreenDecorator
 
 @Provide fun adBannerKeyUiDecorator(
-  adsEnabledFlow: StateFlow<AdsEnabled>,
+  adsEnabledState: State<AdsEnabled>,
   isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: @FinalAdConfig ScreenAdBannerConfig? = null,
   screen: Screen<*>
@@ -48,18 +49,16 @@ fun interface ScreenAdBanner : ScreenDecorator
   }
 
   Column {
-    val adsEnabled = adsEnabledFlow.collect()
-
     Box(modifier = Modifier.weight(1f)) {
       val currentInsets = LocalInsets.current
       CompositionLocalProvider(
-        LocalInsets provides if (!adsEnabled.value) currentInsets
+        LocalInsets provides if (!adsEnabledState.value.value) currentInsets
         else currentInsets.copy(bottom = 0.dp),
         content = content
       )
     }
 
-    if (adsEnabled.value)
+    if (adsEnabledState.value.value)
       Surface(elevation = 8.dp) {
         InsetsPadding(top = false) {
           AdBanner(config)

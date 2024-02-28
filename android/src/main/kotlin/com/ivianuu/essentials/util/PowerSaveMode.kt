@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.*
 @JvmInline value class PowerSaveMode(val value: Boolean) {
   @Provide companion object {
     @Provide fun powerSaveMode(
-      broadcastsFactory: BroadcastsFactory,
+      broadcastManager: BroadcastManager,
       powerManager: @SystemService PowerManager,
       scope: ScopedCoroutineScope<AppScope>,
     ): @Scoped<AppScope> StateFlow<PowerSaveMode> =
-      broadcastsFactory(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
+      broadcastManager.broadcasts(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         .map { PowerSaveMode(powerManager.isPowerSaveMode) }
         .stateIn(
           scope,

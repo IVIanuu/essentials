@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.*
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
@@ -11,9 +12,9 @@ data object AccessibilityScope
 val Scope<*>.accessibilityService: EsAccessibilityService
   get() = service()
 
-@Provide class AccessibilityService(private val scopeManager: ScopeManager) {
+@Provide class AccessibilityManager(private val scopeManager: ScopeManager) {
   val events: Flow<AccessibilityEvent>
-    get() = scopeManager.scopeOfOrNull<AccessibilityScope>()
+    get() = snapshotFlow { scopeManager.scopeOfOrNull<AccessibilityScope>() }
       .flatMapLatest { it?.accessibilityService?.events ?: infiniteEmptyFlow() }
 
   suspend fun performGlobalAction(action: Int) {

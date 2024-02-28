@@ -38,7 +38,7 @@ import kotlin.reflect.*
 
   @Provide val defaultFetcherFactoryBindings get() = emptyList<FetcherFactoryBinding<*>>()
 
-  @Provide fun <@Spread F : Fetcher.Factory<T>, T : Any> fetcherBinding(
+  @Provide fun <@AddOn F : Fetcher.Factory<T>, T : Any> fetcherBinding(
     type: KClass<T>,
     instance: F
   ): FetcherFactoryBinding<*> = FetcherFactoryBinding(type, instance)
@@ -50,7 +50,7 @@ import kotlin.reflect.*
 
   data class MapperBinding<T : Any>(val type: KClass<T>, val mapper: Mapper<T, *>)
 
-  @Provide fun <@Spread M : Mapper<T, V>, T : Any, V : Any> mapperBinding(
+  @Provide fun <@AddOn M : Mapper<T, V>, T : Any, V : Any> mapperBinding(
     type: KClass<T>,
     instance: M
   ): MapperBinding<*> = MapperBinding(type, instance)
@@ -61,7 +61,7 @@ import kotlin.reflect.*
 
   data class KeyerBinding<T : Any>(val type: KClass<T>, val keyer: Keyer<T>)
 
-  @Provide fun <@Spread K : Keyer<T>, T : Any> keyerBinding(
+  @Provide fun <@AddOn K : Keyer<T>, T : Any> keyerBinding(
     type: KClass<T>,
     instance: K
   ): KeyerBinding<*> = KeyerBinding(type, instance)

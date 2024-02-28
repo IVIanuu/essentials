@@ -23,12 +23,12 @@ import com.ivianuu.injekt.*
     )
 
   @Provide fun homeActionExecutor(
-    accessibilityService: AccessibilityService,
+    accessibilityManager: AccessibilityManager,
     closeSystemDialogs: CloseSystemDialogsUseCase,
     intentSender: ActionIntentSender
   ) = ActionExecutor<HomeActionId> {
     if (!needsHomeIntentWorkaround) {
-      accessibilityService.performGlobalAction(GLOBAL_ACTION_HOME)
+      accessibilityManager.performGlobalAction(GLOBAL_ACTION_HOME)
     } else {
       closeSystemDialogs()
 

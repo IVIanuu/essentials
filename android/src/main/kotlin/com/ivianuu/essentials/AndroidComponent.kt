@@ -9,24 +9,25 @@ import android.content.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
-@Tag annotation class AndroidComponent {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class AndroidComponent {
   @Provide companion object {
-    @Provide fun <@Spread T : @AndroidComponent S, S : Activity> activity(
+    @Provide fun <@AddOn T : @AndroidComponent S, S : Activity> activity(
       componentClass: KClass<T>,
       factory: (Intent?) -> T
     ): Pair<KClass<*>, (Intent?) -> Any> = componentClass to factory
 
-    @Provide fun <@Spread T : @AndroidComponent S, S : android.app.Service> service(
+    @Provide fun <@AddOn T : @AndroidComponent S, S : android.app.Service> service(
       componentClass: KClass<T>,
       factory: (Intent?) -> T
     ): Pair<KClass<*>, (Intent?) -> Any> = componentClass to factory
 
-    @Provide fun <@Spread T : @AndroidComponent S, S : BroadcastReceiver> receiver(
+    @Provide fun <@AddOn T : @AndroidComponent S, S : BroadcastReceiver> receiver(
       componentClass: KClass<T>,
       factory: (Intent?) -> T
     ): Pair<KClass<*>, (Intent?) -> Any> = componentClass to factory
 
-    @Provide fun <@Spread T : @AndroidComponent S, S : ContentProvider> provider(
+    @Provide fun <@AddOn T : @AndroidComponent S, S : ContentProvider> provider(
       componentClass: KClass<T>,
       factory: (Intent?) -> T
     ): Pair<KClass<*>, (Intent?) -> Any> = componentClass to factory

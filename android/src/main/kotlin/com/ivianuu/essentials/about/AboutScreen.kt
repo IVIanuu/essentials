@@ -1,7 +1,3 @@
-/*
- * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
- */
-
 package com.ivianuu.essentials.about
 
 import android.content.*
@@ -14,7 +10,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.donation.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -23,11 +18,13 @@ import compose.icons.*
 import compose.icons.fontawesomeicons.*
 import compose.icons.fontawesomeicons.brands.*
 
-class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
+class AboutScreen(
+  val donationScreen: Screen<*>?,
+  val privacyPolicyUrl: String?
+) : Screen<Unit> {
   @Provide companion object {
     @Provide fun ui(
       appConfig: AppConfig,
-      donations: (() -> List<Donation>)? = null,
       navigator: Navigator,
       screen: AboutScreen
     ) = Ui<AboutScreen> {
@@ -50,10 +47,10 @@ class AboutScreen(val privacyPolicyUrl: String? = null) : Screen<Unit> {
             )
           }
 
-          if (donations != null)
+          if (screen.donationScreen != null)
             item {
               ListItem(
-                onClick = action { navigator.push(DonationScreen()) },
+                onClick = action { navigator.push(screen.donationScreen) },
                 leading = { Icon(Icons.Default.Favorite, null) },
                 title = { Text("Donate") }
               )

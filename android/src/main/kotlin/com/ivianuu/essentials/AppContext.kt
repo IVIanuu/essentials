@@ -8,7 +8,8 @@ import android.app.*
 import android.content.*
 import com.ivianuu.injekt.*
 
-@Tag annotation class AppContextTag {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class AppContextTag {
   @Provide companion object {
     @Provide fun appContext(app: Application): AppContext = app
   }

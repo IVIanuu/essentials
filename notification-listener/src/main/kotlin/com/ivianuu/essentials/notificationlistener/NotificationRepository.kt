@@ -6,18 +6,19 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.*
 import android.service.notification.*
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Provide class NotificationService(private val scopeManager: ScopeManager) {
+@Provide class NotificationRepository(private val scopeManager: ScopeManager) {
   val notificationEvents: Flow<NotificationEvent> =
-    scopeManager.scopeOfOrNull<NotificationScope>()
+    snapshotFlow { scopeManager.scopeOfOrNull<NotificationScope>() }
       .flatMapLatest { it?.notificationListenerService?.events ?: emptyFlow() }
 
-  val notifications: Flow<List<StatusBarNotification>> =
-    scopeManager.scopeOfOrNull<NotificationScope>()
-      .flatMapLatest { it?.notificationListenerService?.notifications ?: emptyFlow() }
+  val notifications: List<StatusBarNotification>
+    get() = scopeManager.scopeOfOrNull<NotificationScope>()
+      ?.notificationListenerService?.notifications ?: emptyList()
 
   suspend fun openNotification(notification: Notification) =
     catch { notification.contentIntent.send() }

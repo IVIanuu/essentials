@@ -11,11 +11,11 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 @Provide @Scoped<AppScope> class CurrentAppProvider(
-  accessibilityService: AccessibilityService,
+  accessibilityManager: AccessibilityManager,
   logger: Logger,
   scope: ScopedCoroutineScope<AppScope>
 ) {
-  val currentApp = accessibilityService.events
+  val currentApp = accessibilityManager.events
     .filter {
       it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
           it.isFullScreen &&

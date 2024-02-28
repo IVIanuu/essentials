@@ -8,7 +8,8 @@ import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import java.io.*
 
-@Tag annotation class DataDirTag {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class DataDirTag {
   @Provide companion object {
     @Provide fun dataDir(appContext: AppContext): DataDir = File(appContext.applicationInfo.dataDir)
   }
@@ -16,7 +17,8 @@ import java.io.*
 
 typealias DataDir = @DataDirTag File
 
-@Tag annotation class CacheDirTag {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class CacheDirTag {
   @Provide companion object {
     @Provide fun cacheDir(dataDir: DataDir): CacheDir = dataDir.resolve("cache")
   }
@@ -24,7 +26,8 @@ typealias DataDir = @DataDirTag File
 
 typealias CacheDir = @CacheDirTag File
 
-@Tag annotation class PrefsDirTag {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class PrefsDirTag {
   @Provide companion object {
     @Provide fun prefsDir(dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
   }

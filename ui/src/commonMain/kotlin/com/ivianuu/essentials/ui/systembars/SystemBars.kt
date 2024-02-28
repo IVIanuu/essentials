@@ -40,7 +40,7 @@ import com.ivianuu.injekt.*
 }
 
 @Provide class RootSystemBarsStyle : AppUiDecorator {
-  @Composable override fun invoke(content: @Composable () -> Unit) {
+  @Composable override fun DecoratedContent(content: @Composable () -> Unit) {
     Surface(
       modifier = Modifier
         .fillMaxSize()
@@ -77,8 +77,6 @@ fun interface SystemBarManagerProvider : AppUiDecorator {
         .after<WindowInsetsProvider>()
   }
 }
-
-@Provide expect val systemBarManagerProvider: SystemBarManagerProvider
 
 val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager> {
   error("No system bar manager provided")

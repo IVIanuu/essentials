@@ -27,18 +27,17 @@ import kotlin.time.Duration.Companion.seconds
   private val notificationFactory: NotificationFactory,
   private val notificationManager: @SystemService NotificationManager,
   private val logger: Logger,
-  scope: ScopedCoroutineScope<AppScope>,
+  private val scope: ScopedCoroutineScope<AppScope>,
   private val foregroundScopeFactory: () -> Scope<ForegroundScope>,
   private val remoteActionFactory: RemoteActionFactory
 ) : Service() {
-  private val scope = scope.childCoroutineScope()
-
+  private var job: Job? = null
   override fun onCreate() {
     super.onCreate()
     logger.d { "foreground service started" }
 
-    scope.launchMolecule(RecompositionMode.Immediate, {}) {
-      val states = foregroundManager.states.collect()
+    job = scope.launchMolecule {
+      val states = foregroundManager.states
       var removeServiceNotification by remember { mutableStateOf(true) }
 
       if (states.isEmpty()) {
@@ -58,50 +57,50 @@ import kotlin.time.Duration.Companion.seconds
           )
         }
       } else {
-        ((if (states.any { it.notification == null })
-          remember(states.any { it.notification == null }) {
-            listOf(
-              Triple(
-                "default_foreground_id",
-                true,
-                notificationFactory(
-                  "default_foreground",
-                  "Foreground",
-                  NotificationManager.IMPORTANCE_LOW
-                ) {
-                  setContentTitle("${appConfig.appName} is running!")
-                  setSmallIcon(R.drawable.ic_sync)
-                  setContentIntent(remoteActionFactory<StartAppRemoteAction, _>())
-                }
-              )
-            )
-          }
-        else emptyList()) + states
-          .mapNotNull { state ->
+        val notifications = states
+          .mapNotNullTo(mutableListOf()) { state ->
             key(state.id) {
               state.notification?.invoke()
                 ?.let { Triple(state.id, state.removeNotification, it) }
             }
-          })
-          .forEachIndexed { index, (id, removeNotification, notification) ->
-            key(id) {
-              DisposableEffect(index, id, notification) {
-                logger.d { "$id update foreground notification" }
+          }
 
-                if (index == 0) {
-                  removeServiceNotification = removeNotification
-                  startForeground(id.hashCode(), notification)
-                  onDispose {  }
-                } else {
-                  notificationManager.notify(id.hashCode(), notification)
-                  onDispose {
-                    if (removeNotification)
-                      notificationManager.cancel(id.hashCode())
-                  }
+        if (notifications.isEmpty())
+          notifications += remember {
+            Triple(
+              "default_foreground_id",
+              true,
+              notificationFactory(
+                "default_foreground",
+                "Foreground",
+                NotificationManager.IMPORTANCE_LOW
+              ) {
+                setContentTitle("${appConfig.appName} is running!")
+                setSmallIcon(R.drawable.ic_sync)
+                setContentIntent(remoteActionFactory<StartAppRemoteAction, _>())
+              }
+            )
+          }
+
+        notifications.forEachIndexed { index, (id, removeNotification, notification) ->
+          key(id) {
+            DisposableEffect(index, id, notification) {
+              logger.d { "$id update foreground notification" }
+
+              if (index == 0) {
+                removeServiceNotification = removeNotification
+                startForeground(id.hashCode(), notification)
+                onDispose {  }
+              } else {
+                notificationManager.notify(id.hashCode(), notification)
+                onDispose {
+                  if (removeNotification)
+                    notificationManager.cancel(id.hashCode())
                 }
               }
             }
           }
+        }
 
         LaunchedEffect(states) {
           states.forEach { it.seen.complete(Unit) }
@@ -117,7 +116,7 @@ import kotlin.time.Duration.Companion.seconds
 
   override fun onDestroy() {
     logger.d { "stop foreground service" }
-    scope.cancel()
+    job?.cancel()
     super.onDestroy()
   }
 

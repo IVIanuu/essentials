@@ -84,7 +84,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
   }
 
   @Provide fun xposedPrefFlow(
-    broadcastsFactory: BroadcastsFactory,
+    broadcastManager: BroadcastManager,
     config: XposedConfig,
     coroutineContexts: CoroutineContexts,
     jsonFactory: () -> Json,
@@ -104,7 +104,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       } ?: default()
     }
 
-    return broadcastsFactory(prefsChangedAction(config.modulePackageName))
+    return broadcastManager.broadcasts(prefsChangedAction(config.modulePackageName))
       .filter { sharedPrefs.hasFileChanged() }
       .onStart<Any?> { emit(Unit) }
       .map { readData() }
@@ -116,5 +116,6 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     "${modulePackageName}.PREFS_CHANGED"
 }
 
-@Tag annotation class XposedPrefFlowTag
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class XposedPrefFlowTag
 typealias XposedPrefFlow<T> = @XposedPrefFlowTag Flow<T>

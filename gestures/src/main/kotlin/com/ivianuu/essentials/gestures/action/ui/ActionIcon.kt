@@ -16,7 +16,7 @@ import com.ivianuu.essentials.gestures.action.*
     propagateMinConstraints = true,
     contentAlignment = Alignment.Center
   ) {
-    action.icon()
+    action.icon.Content()
   }
 }
 

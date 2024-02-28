@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.*
 import com.ivianuu.injekt.*
 import kotlin.math.*
 
-@Provide actual val windowInsetsProvider = WindowInsetsProvider { content ->
+@Provide /*actual*/ val windowInsetsProvider = WindowInsetsProvider { content ->
   val systemBarsInsets = WindowInsets.systemBars
   val imeInsets = WindowInsets.imeAnimationTarget
   val density = LocalDensity.current

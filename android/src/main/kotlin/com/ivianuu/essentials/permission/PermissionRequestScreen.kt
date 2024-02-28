@@ -76,8 +76,8 @@ class PermissionRequestScreen(
                   TextButton(
                     modifier = Modifier.width(56.dp),
                     onClick = scopedAction {
-                      requestHandlers[keysByPermission[permission]!!]!!()(permission)
-                      appUiStarter()
+                      requestHandlers[keysByPermission[permission]!!]!!().requestPermission(permission)
+                      appUiStarter.startAppUi()
                     }
                   ) { Text("Allow") }
                 }

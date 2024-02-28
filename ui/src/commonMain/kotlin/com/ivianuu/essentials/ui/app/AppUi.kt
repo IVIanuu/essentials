@@ -7,15 +7,14 @@ package com.ivianuu.essentials.ui.app
 import androidx.compose.runtime.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.systembars.*
 import com.ivianuu.injekt.*
 
 fun interface AppUi {
-  @Composable operator fun invoke()
+  @Composable fun Content()
 }
 
 fun interface AppUiDecorator : ExtensionPoint<AppUiDecorator> {
-  @Composable operator fun invoke(content: @Composable () -> Unit)
+  @Composable fun DecoratedContent(content: @Composable () -> Unit)
 }
 
 @Provide class DecorateAppUi(
@@ -30,7 +29,7 @@ fun interface AppUiDecorator : ExtensionPoint<AppUiDecorator> {
           { content ->
             acc {
               logger.d { "decorate app ui ${record.key.qualifiedName}" }
-              record.instance(content)
+              record.instance.DecoratedContent(content)
             }
           }
         }

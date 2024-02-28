@@ -16,13 +16,11 @@ android {
 }
 
 dependencies {
-  implementation(project(":about"))
   implementation(project(":analytics-android"))
   implementation(project(":accessibility"))
   implementation(project(":ads"))
   implementation(project(":android"))
   implementation(project(":billing"))
-  implementation(project(":boot"))
   implementation(project(":donation"))
   implementation(project(":foreground"))
   implementation(project(":gestures"))

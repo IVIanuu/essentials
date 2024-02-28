@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.app
 
 import androidx.compose.runtime.*
-import app.cash.molecule.*
 import arrow.fx.coroutines.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
@@ -17,19 +16,26 @@ import kotlinx.coroutines.*
 import kotlin.reflect.*
 
 fun interface ScopeWorker<N : Any> : ExtensionPoint<ScopeWorker<N>> {
-  suspend operator fun invoke()
+  suspend fun doWork()
 }
 
-fun <N : Any> ScopeComposition(block: @Composable () -> Unit) = ScopeWorker<N> {
-  coroutineScope { launchMolecule(RecompositionMode.Immediate,{}, body = block) }
+fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
+  @Composable fun Content()
+
+  override suspend fun doWork() {
+    coroutineScope { launchMolecule { Content() } }
+  }
 }
 
-@Provide class ScopeWorkerRunner<N : Any>(
+class ScopeWorkerManager<N : Any> @Provide @Service<N> @Scoped<N> constructor(
   private val coroutineScope: ScopedCoroutineScope<N>,
   private val logger: Logger,
   private val nameKey: KClass<N>,
-  private val workersFactory: () -> List<ExtensionPointRecord<ScopeWorker<N>>>
+  private val workersFactory: () -> List<ExtensionPointRecord<ScopeWorker<N>>>,
 ) : ScopeObserver<N> {
+  var state by mutableStateOf(State.IDLE)
+    private set
+
   override fun onEnter(scope: Scope<N>) {
     coroutineScope.launch {
       guaranteeCase(
@@ -40,8 +46,16 @@ fun <N : Any> ScopeComposition(block: @Composable () -> Unit) = ScopeWorker<N> {
 
             logger.d { "${nameKey.simpleName} run scope workers ${workers.map { it.key.qualifiedName }}" }
 
-            workers.forEach { record ->
-              launch { record.instance() }
+            val jobs = workers.map { record ->
+              launch(start = CoroutineStart.UNDISPATCHED) { record.instance.doWork() }
+            }
+
+            launch { this@ScopeWorkerManager.state = State.RUNNING }
+
+            try {
+              jobs.joinAll()
+            } finally {
+              this@ScopeWorkerManager.state = State.COMPLETED
             }
           }
 
@@ -55,8 +69,10 @@ fun <N : Any> ScopeComposition(block: @Composable () -> Unit) = ScopeWorker<N> {
     }
   }
 
+  enum class State { IDLE, RUNNING, COMPLETED }
+
   @Provide companion object {
-    @Provide fun <N : Any> loadingOrder(@Inject nameKey: KClass<N>) = LoadingOrder<ScopeWorkerRunner<N>>()
+    @Provide fun <N : Any> loadingOrder() = LoadingOrder<ScopeWorkerManager<N>>()
       .after<ScopeInitializerRunner<N>>()
   }
 }

@@ -19,10 +19,8 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.*
-import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
-import kotlin.reflect.*
 
 fun staticActionImage(data: Any) = ActionIcon {
   Image(
@@ -48,8 +46,6 @@ fun staticActionIcon(id: Int) = ActionIcon {
   )
 }
 
-operator fun KClass<Permission>.plus(other: KClass<Permission>) = listOf(this, other)
-
 @Provide class ActionIntentSender(
   private val appContext: AppContext,
   private val toaster: Toaster
@@ -74,12 +70,12 @@ operator fun KClass<Permission>.plus(other: KClass<Permission>) = listOf(this, o
 @Provide class CloseSystemDialogsUseCase(
   private val appConfig: AppConfig,
   private val appContext: AppContext,
-  private val accessibilityService: AccessibilityService,
+  private val accessibilityManager: AccessibilityManager,
 ) {
   @SuppressLint("MissingPermission", "InlinedApi")
   suspend operator fun invoke(): Either<Throwable, Unit> = catch {
     if (appConfig.sdk >= 31)
-      accessibilityService.performGlobalAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
+      accessibilityManager.performGlobalAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
     else
       appContext.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
   }

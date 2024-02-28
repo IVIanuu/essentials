@@ -32,8 +32,8 @@ import kotlin.time.Duration.Companion.seconds
     disabledActiveTickColor = Color.Transparent,
     disabledInactiveTickColor = Color.Transparent
   ),
-  @Inject lerper: Lerper<T>,
-  @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
+  lerper: Lerper<T> = inject,
+  valueRange: @DefaultSliderRange ClosedRange<T> = inject,
 ) {
   fun T.toFloat() = lerper.unlerp(valueRange.start, valueRange.endInclusive, this)
   fun Float.toValue() = lerper.lerp(valueRange.start, valueRange.endInclusive, this)
@@ -69,7 +69,8 @@ import kotlin.time.Duration.Companion.seconds
   )
 }
 
-@Tag annotation class DefaultSliderRange {
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class DefaultSliderRange {
   @Provide companion object {
     @Provide val double: @DefaultSliderRange ClosedRange<Double> = 0.0..1.0
     @Provide val float: @DefaultSliderRange ClosedRange<Float> = 0f..1f
@@ -106,8 +107,8 @@ fun incrementingStepPolicy(incValue: Duration): StepPolicy<Duration> = { valueRa
 
 fun <T : Comparable<T>> StepPolicy<T>.stepValue(
   value: T,
-  @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
-  @Inject lerper: Lerper<T>
+  valueRange: @DefaultSliderRange ClosedRange<T> = inject,
+  lerper: Lerper<T> = inject
 ): T {
   val steps = this@stepValue(valueRange)
   val stepFractions = (if (steps == 0) emptyList()
