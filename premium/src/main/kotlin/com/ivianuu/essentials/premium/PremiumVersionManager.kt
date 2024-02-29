@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.premium
 
+import androidx.compose.runtime.*
 import arrow.fx.coroutines.*
 import co.touchlab.kermit.*
 import com.android.billingclient.api.*
@@ -98,9 +99,15 @@ typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 @Provide fun premiumAdsEnabled(
   premiumVersionManager: PremiumVersionManager,
   scope: ScopedCoroutineScope<AppScope>
-) = premiumVersionManager.isPremiumVersion
-  .map { AdsEnabled(!it) }
-  .stateIn(scope, SharingStarted.Eagerly, AdsEnabled(false))
+): @Scoped<AppScope> State<AdsEnabled> {
+  val state = mutableStateOf(AdsEnabled(false))
+  scope.launch {
+    premiumVersionManager.isPremiumVersion
+      .map { AdsEnabled(!it) }
+      .collect { state.value = it }
+  }
+  return state
+}
 
 @Serializable data class PremiumVersionPrefs(val wasPremiumVersion: Boolean = false) {
   @Provide companion object {
