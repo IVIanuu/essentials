@@ -212,6 +212,19 @@ annotation class Service<N> {
 }
 
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
+annotation class ScopedService<N> {
+  @Provide companion object {
+    @Provide inline fun <@AddOn T : @ScopedService<N> S, reified S : Any, N : Any> scoped(
+      init: () -> T,
+    ): @Scoped<N> S = init()
+
+    @Provide inline fun <@AddOn T : @ScopedService<N> S, reified S : Any, N : Any> service(
+      noinline init: () -> S,
+    ) = ProvidedService<N, S>(S::class, init)
+  }
+}
+
+@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
 annotation class ParentScope
 
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)

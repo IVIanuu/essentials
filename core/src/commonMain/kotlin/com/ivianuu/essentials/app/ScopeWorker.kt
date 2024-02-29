@@ -27,7 +27,7 @@ fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
   }
 }
 
-class ScopeWorkerManager<N : Any> @Provide @Scoped<N> constructor(
+class ScopeWorkerManager<N : Any> @Provide @ScopedService<N> constructor(
   private val coroutineScope: ScopedCoroutineScope<N>,
   private val logger: Logger,
   private val nameKey: KClass<N>,
@@ -74,8 +74,5 @@ class ScopeWorkerManager<N : Any> @Provide @Scoped<N> constructor(
   @Provide companion object {
     @Provide fun <N : Any> loadingOrder() = LoadingOrder<ScopeWorkerManager<N>>()
       .after<ScopeInitializerRunner<N>>()
-
-    @Provide fun <N : Any> service(factory: () -> ScopeWorkerManager<N>) =
-      ProvidedService<N, ScopeWorkerManager<N>>(ScopeWorkerManager::class.unsafeCast(), factory)
   }
 }

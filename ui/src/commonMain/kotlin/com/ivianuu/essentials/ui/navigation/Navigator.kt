@@ -62,7 +62,7 @@ class Navigator(
       scope: ScopedCoroutineScope<UiScope>,
       rootScreen: RootScreen?,
       screenInterceptors: List<ScreenInterceptor<*>>,
-    ): @Scoped<UiScope> @Service<UiScope> Navigator = Navigator(
+    ): @ScopedService<UiScope> Navigator = Navigator(
       scope = scope,
       initialBackStack = listOfNotNull(rootScreen),
       screenInterceptors = screenInterceptors
