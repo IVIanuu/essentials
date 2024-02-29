@@ -4,9 +4,6 @@ import androidx.compose.runtime.*
 import com.ivianuu.essentials.resource.*
 import kotlinx.coroutines.flow.*
 
-val <T> T.state: State<T>
-  @Composable get() = rememberUpdatedState(this)
-
 @Composable fun <T> StateFlow<T>.collect(vararg keys: Any?): T =
   collect(initial = value, keys = keys)
 
