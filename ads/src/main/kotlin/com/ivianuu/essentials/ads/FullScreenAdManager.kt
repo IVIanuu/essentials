@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ads
 
 import androidx.activity.*
+import androidx.compose.runtime.*
 import co.touchlab.kermit.*
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.*
@@ -24,7 +25,7 @@ import kotlin.time.Duration.Companion.seconds
   private val activity: ComponentActivity,
   private val appContext: AppContext,
   private val appScope: Scope<AppScope>,
-  private val adsEnabledFlow: Flow<AdsEnabled>,
+  private val adsEnabledState: State<AdsEnabled>,
   private val config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
@@ -36,7 +37,7 @@ import kotlin.time.Duration.Companion.seconds
 
   init {
     scope.launch {
-      adsEnabledFlow
+      snapshotFlow { adsEnabledState.value }
         .filter { it.value }
         .collect { loadAd() }
     }
@@ -49,19 +50,19 @@ import kotlin.time.Duration.Companion.seconds
   }
 
   suspend fun loadAd() = catch {
-    if (!adsEnabledFlow.first().value) return@catch false
+    if (!adsEnabledState.value.value) return@catch false
     getOrCreateCurrentAd()
     true
   }
 
   suspend fun showAdIfLoaded(): Boolean {
-    if (!adsEnabledFlow.first().value) return false
+    if (!adsEnabledState.value.value) return false
     return (getCurrentAd()?.invoke() ?: false)
       .also { preloadAd() }
   }
 
   suspend fun loadAndShowAdWithTimeout() = catch {
-    if (!adsEnabledFlow.first().value) return@catch false
+    if (!adsEnabledState.value.value) return@catch false
     withTimeoutOrNull(1.seconds) { getOrCreateCurrentAd() }?.invoke() == true
   }
 
