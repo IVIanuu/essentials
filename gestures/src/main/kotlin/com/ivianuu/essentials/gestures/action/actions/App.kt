@@ -26,7 +26,8 @@ import kotlinx.coroutines.flow.*
   override suspend fun createAction(id: String): Action<*>? {
     if (!id.startsWith(BASE_ID)) return null
     val packageName = id.removePrefix(BASE_ID)
-      .split(ACTION_DELIMITER)[0]
+      .split(ACTION_DELIMITER)
+      .first()
     return Action<ActionId>(
       id = id,
       title = appRepository.appInfo(packageName).first()!!.appName,
