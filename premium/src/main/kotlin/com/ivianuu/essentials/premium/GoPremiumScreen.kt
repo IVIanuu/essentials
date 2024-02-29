@@ -52,19 +52,19 @@ class GoPremiumScreen(
       screen: GoPremiumScreen,
       toaster: Toaster
     ) = Ui<GoPremiumScreen> {
-      val premiumSkuDetails = premiumVersionManager.premiumSkuDetails.resourceState()
-      val goPremium = action {
+      val premiumSkuDetails = premiumVersionManager.premiumSkuDetails.scopedResourceState()
+      val goPremium = scopedAction {
         if (premiumVersionManager.purchasePremiumVersion()) {
           navigator.pop(screen, true)
           toaster("Premium version is now active!")
         }
       }
-      val tryBasicVersion = action {
+      val tryBasicVersion = scopedAction {
         fullScreenAdManager.loadAndShowAdWithTimeout()
         navigator.pop(screen, false)
       }
 
-      BackHandler(onBack = action {
+      BackHandler(onBack = scopedAction {
         if (screen.allowBackNavigation) {
           fullScreenAdManager.loadAndShowAdWithTimeout()
           navigator.pop(screen, false)

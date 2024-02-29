@@ -32,7 +32,7 @@ class DonationScreen : OverlayScreen<Unit> {
       screen: DonationScreen,
       toaster: Toaster
     ) = Ui<DonationScreen> {
-      val skus = resourceState {
+      val skus = scopedResourceState {
         value = donations
           .value
           .parMap { donation ->

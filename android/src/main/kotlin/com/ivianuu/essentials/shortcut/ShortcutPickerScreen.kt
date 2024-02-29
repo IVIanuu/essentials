@@ -29,7 +29,7 @@ class ShortcutPickerScreen : Screen<Shortcut> {
       toaster: Toaster
     ) = Ui<ShortcutPickerScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Pick an shortcut") } }) {
-        ResourceBox(repository.shortcuts.resourceState()) { shortcuts ->
+        ResourceBox(repository.shortcuts.scopedResourceState()) { shortcuts ->
           VerticalList {
             items(shortcuts) { shortcut ->
               ListItem(

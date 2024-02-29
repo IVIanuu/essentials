@@ -38,7 +38,7 @@ class ActionPickerScreen(
       repository: ActionRepository,
       screen: ActionPickerScreen
     ) = Ui<ActionPickerScreen> {
-      val items = resourceState {
+      val items = scopedResourceState {
         value = buildList<ActionPickerItem> {
           if (screen.showDefaultOption)
             this += ActionPickerItem.SpecialOption(title = "Default", getResult = { Result.Default })
@@ -76,7 +76,7 @@ class ActionPickerScreen(
                 leading = { item.Icon(Modifier.size(24.dp)) },
                 trailing = if (item.settingsScreen == null) null
                 else ({
-                  IconButton(onClick = action { navigator.push(item.settingsScreen!!) }) {
+                  IconButton(onClick = scopedAction { navigator.push(item.settingsScreen!!) }) {
                     Icon(Icons.Default.Settings, null)
                   }
                 }),
