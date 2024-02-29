@@ -11,9 +11,7 @@ import androidx.compose.material.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -35,7 +33,7 @@ import kotlinx.serialization.*
     keyEvent: Int,
     keycode: Int,
     prefs: MediaActionPrefs
-  ): Intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+  ) = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
     putExtra(
       Intent.EXTRA_KEY_EVENT,
       KeyEvent(keyEvent, keycode)
@@ -77,14 +75,10 @@ class MediaActionSettingsScreen : Screen<Unit> {
               },
               title = { Text("Media app") },
               subtitle = {
-                val mediaApp = pref.data
-                  .flatMapLatest {
-                    if (it.mediaApp != null) appRepository.appInfo(it.mediaApp)
-                    else infiniteEmptyFlow()
-                  }
-                  .resourceState()
+                val mediaAppName = pref.data.state(null)?.mediaApp
+                  ?.let { appRepository.appInfo(it).state(null)?.appName }
                 Text(
-                  "Define the target app for the media actions (current: ${mediaApp.getOrNull()?.appName ?: "None"})"
+                  "Define the target app for the media actions (current: ${mediaAppName ?: "None"})"
                 )
               }
             )

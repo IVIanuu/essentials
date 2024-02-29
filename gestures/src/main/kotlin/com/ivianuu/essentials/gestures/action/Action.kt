@@ -52,7 +52,7 @@ interface ActionFactory {
 }
 
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class ActionSettingsKey<I : ActionId>
+annotation class ActionSettingsScreen<I : ActionId>
 
 interface ActionPickerDelegate {
   val baseId: String
@@ -82,10 +82,10 @@ interface ActionPickerDelegate {
     provider: () -> T
   ): () -> ActionPickerDelegate = provider
 
-  @Provide fun <@AddOn T : @ActionSettingsKey<I> Screen<Unit>, I : ActionId> actionSettingsKeyBinding(
+  @Provide fun <@AddOn T : @ActionSettingsScreen<I> Screen<Unit>, I : ActionId> actionSettingsKeyBinding(
     id: I,
     provider: () -> T,
-  ): Pair<String, () -> @ActionSettingsKey<ActionId> Screen<Unit>> = id.value to provider
+  ): Pair<String, () -> @ActionSettingsScreen<ActionId> Screen<Unit>> = id.value to provider
 }
 
 const val ACTION_DELIMITER = "=:="

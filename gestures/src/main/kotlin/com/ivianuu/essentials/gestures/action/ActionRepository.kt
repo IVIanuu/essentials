@@ -11,7 +11,6 @@ import arrow.core.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.gestures.*
 import com.ivianuu.essentials.gestures.action.actions.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -24,7 +23,7 @@ import kotlinx.coroutines.flow.*
   private val actions: Map<String, () -> Action<*>>,
   private val actionFactories: List<() -> ActionFactory>,
   private val actionsExecutors: Map<String, () -> ActionExecutor<*>>,
-  private val actionSettings: Map<String, () -> @ActionSettingsKey<ActionId> Screen<Unit>>,
+  private val actionSettings: Map<String, () -> @ActionSettingsScreen<ActionId> Screen<Unit>>,
   private val actionPickerDelegates: List<() -> ActionPickerDelegate>,
   private val appConfig: AppConfig,
   private val closeSystemDialogs: CloseSystemDialogsUseCase,

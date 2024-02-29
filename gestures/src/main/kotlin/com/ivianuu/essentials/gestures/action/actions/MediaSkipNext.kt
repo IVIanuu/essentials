@@ -8,7 +8,6 @@ import android.view.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import com.ivianuu.essentials.gestures.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -27,6 +26,6 @@ import com.ivianuu.injekt.*
     mediaActionSender(KeyEvent.KEYCODE_MEDIA_NEXT)
   }
 
-  @Provide inline val settingsScreen: @ActionSettingsKey<SkipNextActionId> Screen<Unit>
+  @Provide inline val settingsScreen: @ActionSettingsScreen<SkipNextActionId> Screen<Unit>
     get() = MediaActionSettingsScreen()
 }
