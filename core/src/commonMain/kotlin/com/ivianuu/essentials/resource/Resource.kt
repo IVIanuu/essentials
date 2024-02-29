@@ -17,6 +17,10 @@ import kotlinx.coroutines.flow.*
   data class Error(val error: Throwable) : Resource<Nothing>
 }
 
+fun <T> T.success() = Resource.Success(this)
+
+fun Throwable.error() = Resource.Error(this)
+
 fun <T> Resource<T>.get(): T = if (this is Resource.Success) value else error("Called get() on a $this")
 
 inline fun <T> Resource<T>.getOrElse(defaultValue: () -> T) =
@@ -29,7 +33,7 @@ val Resource<*>.shouldLoad: Boolean get() = this is Resource.Error
 val Resource<*>.isComplete: Boolean get() = this is Resource.Success || this is Resource.Error
 
 inline fun <T, R> Resource<T>.map(transform: (T) -> R): Resource<R> = when (this) {
-  is Resource.Success -> Resource.Success(transform(value))
+  is Resource.Success -> transform(value).success()
   else -> this as Resource<R>
 }
 
@@ -56,11 +60,11 @@ fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Uni
   flow<Resource<T>> {
     emit(Resource.Loading)
     catch {
-      block(FlowCollector<T> { value -> this@flow.emit(Resource.Success(value)) })
-    }.onLeft { emit(Resource.Error(it)) }
+      block(FlowCollector<T> { value -> this@flow.emit(value.success()) })
+    }.onLeft { emit(it.error()) }
   }
 
 fun <V> Either<Throwable, V>.toResource(): Resource<V> = fold(
-  ifRight = { Resource.Success(it) },
-  ifLeft = { Resource.Error(it) }
+  ifRight = { it.success() },
+  ifLeft = { it.error() }
 )

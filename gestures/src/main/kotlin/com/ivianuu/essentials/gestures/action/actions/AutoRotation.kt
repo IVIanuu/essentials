@@ -8,10 +8,8 @@ import android.provider.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import androidx.compose.ui.res.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
@@ -22,7 +20,7 @@ import com.ivianuu.injekt.*
     permissions = listOf(ActionWriteSettingsPermission::class),
     icon = {
       Icon(
-        if (autoRotationDataStore.data.collect(1) == 1) Icons.Default.ScreenRotation
+        if (autoRotationDataStore.data.state(1) == 1) Icons.Default.ScreenRotation
         else Icons.Default.ScreenLockRotation,
         null
       )

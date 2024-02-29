@@ -21,6 +21,9 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.material.Button
+import com.ivianuu.essentials.ui.material.OutlinedButton
+import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
@@ -71,7 +74,7 @@ class WriteSecureSettingsScreen(
       var completedStep by remember { mutableIntStateOf(1) }
 
       @Composable fun ContinueButton(text: String = "Continue") {
-        com.ivianuu.essentials.ui.material.Button(
+        Button(
           onClick = action {
             if (completedStep == 4)
               navigator.pop(screen, true)
@@ -80,18 +83,17 @@ class WriteSecureSettingsScreen(
               currentStep = completedStep
             }
           },
-          enabled = if (currentStep != completedStep) false
+          enabled = if (currentStep > completedStep) false
           else when (completedStep) {
-            1 -> developerModeDataStore.data.map { it != 0 }.collect(false)
-            2 -> adbEnabledDataStore.data.map { it != 0 }.collect(false)
+            1 -> developerModeDataStore.data.state(null) != 0
+            2 -> adbEnabledDataStore.data.state(null) != 0
             3 -> true
-            4 -> collect(false) {
+            4 -> state(false) {
               while (true) {
-                emit(permissionManager.permissionState(listOf(screen.permissionClass)).first())
+                value = permissionManager.permissionState(listOf(screen.permissionClass)).first()
                 delay(1.seconds)
               }
             }
-
             else -> true
           }
         ) { Text(text) }
@@ -105,7 +107,7 @@ class WriteSecureSettingsScreen(
           Snackbar(
             modifier = Modifier.padding(16.dp),
             action = {
-              com.ivianuu.essentials.ui.material.TextButton(onClick = scopedAction {
+              TextButton(onClick = scopedAction {
                 shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
                   .onRight {
                     if (permissionManager.permissionState(listOf(screen.permissionClass)).first()) {
@@ -153,7 +155,7 @@ class WriteSecureSettingsScreen(
               },
               actions = {
                 ContinueButton()
-                com.ivianuu.essentials.ui.material.OutlinedButton(onClick = scopedAction {
+                OutlinedButton(onClick = scopedAction {
                   raceOf(
                     {
                       navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).asScreen())
@@ -183,7 +185,7 @@ class WriteSecureSettingsScreen(
               },
               actions = {
                 ContinueButton()
-                com.ivianuu.essentials.ui.material.OutlinedButton(onClick = scopedAction {
+                OutlinedButton(onClick = scopedAction {
                   raceOf(
                     {
                       navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).asScreen())

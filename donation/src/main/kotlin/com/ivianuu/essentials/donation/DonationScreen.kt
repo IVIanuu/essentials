@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.*
 import arrow.fx.coroutines.parMap
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
@@ -32,8 +32,8 @@ class DonationScreen : OverlayScreen<Unit> {
       screen: DonationScreen,
       toaster: Toaster
     ) = Ui<DonationScreen> {
-      val skus = collectResource {
-        donations
+      val skus = resourceState {
+        value = donations
           .value
           .parMap { donation ->
             val details = billingService.getSkuDetails(donation.sku)!!
@@ -45,7 +45,7 @@ class DonationScreen : OverlayScreen<Unit> {
               details.price
             )
           }
-          .let { emit(it) }
+          .success()
       }
 
       AlertDialog(

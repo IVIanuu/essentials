@@ -47,7 +47,7 @@ class PermissionRequestScreen(
         .filterNot {
           key(keysByPermission[it]) {
             permissionManager.permissionState(listOf(keysByPermission[it]!!))
-              .collect(false)
+              .state(false)
           }
         }
 

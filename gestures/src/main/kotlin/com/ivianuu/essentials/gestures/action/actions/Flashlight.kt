@@ -9,11 +9,9 @@ import android.hardware.camera2.CameraManager.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
@@ -30,7 +28,7 @@ import kotlinx.coroutines.flow.*
     title = "Flashlight",
     icon = {
       Icon(
-        if (cameraManager.flashlightState(coroutineContexts).collect(false)) Icons.Default.FlashlightOn
+        if (cameraManager.flashlightState(coroutineContexts).state(false)) Icons.Default.FlashlightOn
         else Icons.Default.FlashlightOff,
         null
       )

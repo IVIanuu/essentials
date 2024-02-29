@@ -82,7 +82,7 @@ class MediaActionSettingsScreen : Screen<Unit> {
                     if (it.mediaApp != null) appRepository.appInfo(it.mediaApp)
                     else infiniteEmptyFlow()
                   }
-                  .collectResource()
+                  .resourceState()
                 Text(
                   "Define the target app for the media actions (current: ${mediaApp.getOrNull()?.appName ?: "None"})"
                 )

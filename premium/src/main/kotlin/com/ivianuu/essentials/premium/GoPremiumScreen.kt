@@ -52,7 +52,7 @@ class GoPremiumScreen(
       screen: GoPremiumScreen,
       toaster: Toaster
     ) = Ui<GoPremiumScreen> {
-      val premiumSkuDetails = premiumVersionManager.premiumSkuDetails.collectResource()
+      val premiumSkuDetails = premiumVersionManager.premiumSkuDetails.resourceState()
       val goPremium = action {
         if (premiumVersionManager.purchasePremiumVersion()) {
           navigator.pop(screen, true)

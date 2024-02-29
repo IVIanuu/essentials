@@ -13,6 +13,6 @@ fun <T> CoroutineScope.launchMolecule(
   block: @Composable () -> T
 ): Job {
   val job = Job(coroutineContext.job)
-  childCoroutineScope(job).launchMolecule(mode = mode, emitter = emitter, context = context, body = block)
+  childCoroutineScope(job).launchMolecule(mode, emitter, context, body = block)
   return job
 }
