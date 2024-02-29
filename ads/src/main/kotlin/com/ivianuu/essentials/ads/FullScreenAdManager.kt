@@ -23,12 +23,12 @@ import kotlin.time.Duration.Companion.seconds
 @Provide @Scoped<UiScope> class FullScreenAdManager(
   private val activity: ComponentActivity,
   private val appContext: AppContext,
+  private val appScope: Scope<AppScope>,
   private val adsEnabledFlow: Flow<AdsEnabled>,
   private val config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
-  private val scope: ScopedCoroutineScope<UiScope>,
-  private val scopeManager: ScopeManager
+  private val scope: ScopedCoroutineScope<UiScope>
 ) {
   private val lock = Mutex()
   private var deferredAd: Deferred<suspend () -> Boolean>? = null
@@ -99,7 +99,7 @@ import kotlin.time.Duration.Companion.seconds
         if (rateLimiter.tryAcquire()) {
           logger.d { "show ad" }
           lock.withLock { deferredAd = null }
-          if (scopeManager.scopeOfOrNull<AppVisibleScope>() != null) {
+          if (appScope.scopeOfOrNull<AppVisibleScope>() != null) {
             withContext(coroutineContexts.main) {
               ad.show(activity)
             }

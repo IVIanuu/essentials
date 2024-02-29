@@ -13,6 +13,7 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
+import kotlin.time.Duration.Companion.seconds
 
 @Provide @Scoped<AppScope> class BroadcastManager(
   private val appContext: AppContext,
@@ -56,6 +57,9 @@ import kotlinx.coroutines.flow.*
           },
           { snapshotFlow { broadcastWorkerManager.state }.first { it == ScopeWorkerManager.State.RUNNING } }
         )
+
+        // todo remove once we have a better idea
+        delay(1.seconds)
 
         explicitBroadcasts.emit(intent)
         snapshotFlow { broadcastWorkerManager.state }.first { it == ScopeWorkerManager.State.COMPLETED }

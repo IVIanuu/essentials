@@ -11,25 +11,25 @@ import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Provide class NotificationRepository(private val scopeManager: ScopeManager) {
+@Provide class NotificationRepository(private val appScope: Scope<AppScope>) {
   val notificationEvents: Flow<NotificationEvent> =
-    snapshotFlow { scopeManager.scopeOfOrNull<NotificationScope>() }
+    snapshotFlow { appScope.scopeOfOrNull<NotificationScope>() }
       .flatMapLatest { it?.notificationListenerService?.events ?: emptyFlow() }
 
   val notifications: List<StatusBarNotification>
-    get() = scopeManager.scopeOfOrNull<NotificationScope>()
+    get() = appScope.scopeOfOrNull<NotificationScope>()
       ?.notificationListenerService?.notifications ?: emptyList()
 
   suspend fun openNotification(notification: Notification) =
     catch { notification.contentIntent.send() }
 
   suspend fun dismissNotification(key: String) = catch {
-    scopeManager.scopeOf<NotificationScope>().first()
+    appScope.scopeOf<NotificationScope>().first()
       .notificationListenerService.cancelNotification(key)
   }
 
   suspend fun dismissAllNotifications() = catch {
-    scopeManager.scopeOf<NotificationScope>().first()
+    appScope.scopeOf<NotificationScope>().first()
       .notificationListenerService.cancelAllNotifications()
   }
 }

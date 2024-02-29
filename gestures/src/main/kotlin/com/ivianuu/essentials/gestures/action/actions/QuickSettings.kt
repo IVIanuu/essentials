@@ -27,12 +27,12 @@ import kotlinx.coroutines.flow.*
 
   @Provide fun executor(
     accessibilityManager: AccessibilityManager,
+    appScope: Scope<AppScope>,
     appContext: AppContext,
-    closeSystemDialogs: CloseSystemDialogsUseCase,
-    scopeManager: ScopeManager,
+    closeSystemDialogs: CloseSystemDialogsUseCase
   ) = ActionExecutor<QuickSettingsActionId> {
     val targetState = catch {
-      val service = scopeManager.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
+      val service = appScope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
 
       val systemUiContext = appContext.createPackageContext(
         "com.android.systemui", 0

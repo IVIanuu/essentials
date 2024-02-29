@@ -11,8 +11,8 @@ import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.injekt.*
 
-@Provide fun scopeLogger(logger: Logger, scopeManager: ScopeManager) = ScopeComposition<AppScope> {
-  val activeScopes = scopeManager.activeScopes
+@Provide fun scopeLogger(logger: Logger, appScope: Scope<AppScope>) = ScopeComposition<AppScope> {
+  val activeScopes = appScope.allScopes
   LaunchedEffect(activeScopes) {
     logger.d { "active scopes ${activeScopes.map { it.name.simpleName }}" }
   }

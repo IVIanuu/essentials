@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
+import android.accessibilityservice.AccessibilityService.*
 import androidx.compose.material.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.accessibility.*
@@ -21,6 +22,6 @@ import com.ivianuu.injekt.*
 
   @Provide fun executor(accessibilityManager: AccessibilityManager) =
     ActionExecutor<BackActionId> {
-      accessibilityManager.performGlobalAction(AndroidAccessibilityService.GLOBAL_ACTION_BACK)
+      accessibilityManager.performGlobalAction(GLOBAL_ACTION_BACK)
     }
 }

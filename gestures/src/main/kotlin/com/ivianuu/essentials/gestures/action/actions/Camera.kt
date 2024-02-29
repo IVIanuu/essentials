@@ -37,12 +37,12 @@ import kotlin.coroutines.*
 
   @Provide fun executor(
     actionIntentSender: ActionIntentSender,
+    appScope: Scope<AppScope>,
     cameraManager: @SystemService CameraManager,
     currentAppProvider: CurrentAppProvider,
     deviceScreenManager: DeviceScreenManager,
     logger: Logger,
-    packageManager: PackageManager,
-    scopeManager: ScopeManager
+    packageManager: PackageManager
   ) = ActionExecutor<CameraActionId> {
     val cameraApp = packageManager
       .resolveActivity(
@@ -65,7 +65,7 @@ import kotlin.coroutines.*
     val frontFacing = if (frontCamera != null &&
       currentScreenState != ScreenState.OFF &&
       (currentScreenState == ScreenState.UNLOCKED ||
-          scopeManager.scopeOfOrNull<AccessibilityScope>()
+          appScope.scopeOfOrNull<AccessibilityScope>()
             ?.accessibilityService?.rootInActiveWindow?.packageName != "com.android.systemui") &&
       cameraApp.activityInfo!!.packageName == currentAppProvider.currentApp.first()
     )

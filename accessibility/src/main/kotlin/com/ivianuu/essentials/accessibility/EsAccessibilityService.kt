@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.*
 @Provide @AndroidComponent class EsAccessibilityService(
   private val accessibilityScopeFactory: (@Service<AccessibilityScope> EsAccessibilityService) -> Scope<AccessibilityScope>,
   private val logger: Logger
-) : AndroidAccessibilityService() {
+) : AccessibilityService() {
   private val _events = EventFlow<AccessibilityEvent>()
   val events: Flow<AccessibilityEvent> by this::_events
 

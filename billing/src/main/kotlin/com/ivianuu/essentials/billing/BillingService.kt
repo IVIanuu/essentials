@@ -17,15 +17,14 @@ import kotlin.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
 @Provide @Scoped<AppScope> class BillingService(
+  private val appScope: Scope<AppScope>,
   private val appUiStarter: AppUiStarter,
   private val billingClientFactory: () -> BillingClient,
   coroutineContexts: CoroutineContexts,
   private val logger: Logger,
-  private val refreshes: MutableSharedFlow<BillingRefresh>,
-  scope: Scope<AppScope>,
-  private val scopeManager: ScopeManager
+  private val refreshes: MutableSharedFlow<BillingRefresh>
 ) {
-  private val billingClient = scope.coroutineScope.childCoroutineScope(coroutineContexts.io).sharedResource(
+  private val billingClient = appScope.coroutineScope.childCoroutineScope(coroutineContexts.io).sharedResource(
     sharingStarted = SharingStarted.WhileSubscribed(10.seconds.inWholeMilliseconds),
     create = { _: Unit ->
       logger.d { "create client" }
@@ -63,14 +62,13 @@ import kotlin.time.Duration.Companion.seconds
     }
   )
 
-  fun isPurchased(sku: Sku): Flow<Boolean> = scopeManager.flowInScope<AppVisibleScope, _>(
-    refreshes.onStart { emit(BillingRefresh) }
-      .onStart { emit(BillingRefresh) }
-      .onEach { logger.d { "update is purchased for $sku" } }
-      .map { billingClient.use(Unit) { it.getIsPurchased(sku) } }
-      .distinctUntilChanged()
-      .onEach { logger.d { "is purchased for $sku -> $it" } }
-  )
+  fun isPurchased(sku: Sku): Flow<Boolean> = refreshes.onStart { emit(BillingRefresh) }
+    .onStart { emit(BillingRefresh) }
+    .onEach { logger.d { "update is purchased for $sku" } }
+    .map { billingClient.use(Unit) { it.getIsPurchased(sku) } }
+    .distinctUntilChanged()
+    .onEach { logger.d { "is purchased for $sku -> $it" } }
+    .flowInScope<AppVisibleScope, _>(appScope)
 
   suspend fun getSkuDetails(sku: Sku): SkuDetails? = billingClient.use(Unit) {
     it.querySkuDetails(sku.toSkuDetailsParams())

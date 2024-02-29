@@ -12,19 +12,18 @@ data object AccessibilityScope
 val Scope<*>.accessibilityService: EsAccessibilityService
   get() = service()
 
-@Provide class AccessibilityManager(private val scopeManager: ScopeManager) {
+@Provide class AccessibilityManager(private val appScope: Scope<AppScope>) {
   val events: Flow<AccessibilityEvent>
-    get() = snapshotFlow { scopeManager.scopeOfOrNull<AccessibilityScope>() }
+    get() = snapshotFlow { appScope.scopeOfOrNull<AccessibilityScope>() }
       .flatMapLatest { it?.accessibilityService?.events ?: infiniteEmptyFlow() }
 
   suspend fun performGlobalAction(action: Int) {
-    scopeManager.scopeOf<AccessibilityScope>().first().accessibilityService
+    appScope.scopeOf<AccessibilityScope>().first().accessibilityService
       .performGlobalAction(action)
   }
 }
 
 typealias AndroidAccessibilityEvent = android.view.accessibility.AccessibilityEvent
-typealias AndroidAccessibilityService = android.accessibilityservice.AccessibilityService
 
 data class AccessibilityEvent(
   val type: Int,

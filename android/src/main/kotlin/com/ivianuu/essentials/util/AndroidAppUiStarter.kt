@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.*
 @Provide fun androidAppUiStarter(
   appContext: AppContext,
   appConfig: AppConfig,
+  appScope: Scope<AppScope>,
   packageManager: PackageManager,
-  scopeManager: ScopeManager,
 ) = AppUiStarter {
   val intent = packageManager.getLaunchIntentForPackage(appConfig.packageName)!!
   appContext.startActivity(
@@ -25,5 +25,5 @@ import kotlinx.coroutines.flow.*
     }
   )
 
-  scopeManager.scopeOf<AppVisibleScope>().first().service()
+  appScope.scopeOf<AppVisibleScope>().first().service()
 }
