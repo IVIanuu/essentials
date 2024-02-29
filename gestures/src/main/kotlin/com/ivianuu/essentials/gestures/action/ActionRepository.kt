@@ -43,8 +43,7 @@ import kotlinx.coroutines.flow.*
         ?.invoke()
         ?: actionFactories
           .map { it() }
-          .firstOrNull { it.handles(id) }
-          ?.createAction(id)
+          .firstNotNullOfOrNull { it.createAction(id) }
     }
       .printErrors()
       .getOrNull()
@@ -61,10 +60,8 @@ import kotlinx.coroutines.flow.*
         ?.invoke()
         ?: actionFactories
           .map { it() }
-          .firstOrNull { it.handles(id) }
-          ?.createExecutor(id)
-    }
-      .getOrNull()
+          .firstNotNullOfOrNull { it.createExecutor(id) }
+    }.getOrNull()
       ?: ActionExecutor { toaster(RECONFIGURE_ACTION_MESSAGE) }
   }
 

@@ -22,9 +22,9 @@ import com.ivianuu.injekt.*
 import java.io.*
 
 @Provide class ShortcutActionFactory(private val intentSender: ActionIntentSender) : ActionFactory {
-  override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
+  override suspend fun createAction(id: String): Action<*>? {
+    if (!id.startsWith(BASE_ID)) return null
 
-  override suspend fun createAction(id: String): Action<*> {
     val tmp = id.split(ACTION_DELIMITER)
     val label = tmp[1]
 
@@ -48,7 +48,9 @@ import java.io.*
   }
 
   @Suppress("DEPRECATION")
-  override suspend fun createExecutor(id: String): ActionExecutor<*> {
+  override suspend fun createExecutor(id: String): ActionExecutor<*>? {
+    if (!id.startsWith(BASE_ID)) return null
+
     val tmp = id.split(ACTION_DELIMITER)
     val intent = Intent.getIntent(tmp[2])
     return ActionExecutor<ActionId> { intentSender(intent, null) }

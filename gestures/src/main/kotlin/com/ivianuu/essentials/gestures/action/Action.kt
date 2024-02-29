@@ -44,11 +44,9 @@ fun interface ActionExecutor<I : ActionId> {
 }
 
 interface ActionFactory {
-  suspend fun handles(id: String): Boolean
+  suspend fun createAction(id: String): Action<*>?
 
-  suspend fun createAction(id: String): Action<*>
-
-  suspend fun createExecutor(id: String): ActionExecutor<*>
+  suspend fun createExecutor(id: String): ActionExecutor<*>?
 }
 
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)

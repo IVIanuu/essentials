@@ -23,9 +23,8 @@ import kotlinx.coroutines.flow.*
   private val intentSender: ActionIntentSender,
   private val packageManager: PackageManager
 ) : ActionFactory {
-  override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
-
-  override suspend fun createAction(id: String): Action<*> {
+  override suspend fun createAction(id: String): Action<*>? {
+    if (!id.startsWith(BASE_ID)) return null
     val packageName = id.removePrefix(BASE_ID)
       .split(ACTION_DELIMITER)[0]
     return Action<ActionId>(
@@ -39,7 +38,8 @@ import kotlinx.coroutines.flow.*
     )
   }
 
-  override suspend fun createExecutor(id: String): ActionExecutor<*> {
+  override suspend fun createExecutor(id: String): ActionExecutor<*>? {
+    if (!id.startsWith(BASE_ID)) return null
     val packageName = id.removePrefix(BASE_ID)
       .split(ACTION_DELIMITER)
       .first()
