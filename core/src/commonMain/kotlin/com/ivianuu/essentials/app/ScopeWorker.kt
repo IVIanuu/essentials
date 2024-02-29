@@ -27,7 +27,7 @@ fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
   }
 }
 
-class ScopeWorkerManager<N : Any> @Provide @Service<N> @Scoped<N> constructor(
+class ScopeWorkerManager<N : Any> @Provide @Scoped<N> constructor(
   private val coroutineScope: ScopedCoroutineScope<N>,
   private val logger: Logger,
   private val nameKey: KClass<N>,
@@ -50,16 +50,16 @@ class ScopeWorkerManager<N : Any> @Provide @Service<N> @Scoped<N> constructor(
               launch(start = CoroutineStart.UNDISPATCHED) { record.instance.doWork() }
             }
 
-            launch { this@ScopeWorkerManager.state = State.RUNNING }
+            logger.d { "${nameKey.simpleName} set running" }
+            this@ScopeWorkerManager.state = State.RUNNING
 
             try {
               jobs.joinAll()
             } finally {
+              logger.d { "${nameKey.simpleName} scope workers completed" }
               this@ScopeWorkerManager.state = State.COMPLETED
             }
           }
-
-          logger.d { "${nameKey.simpleName} scope workers completed" }
         },
         finalizer = {
           if (it is ExitCase.Cancelled)
@@ -74,5 +74,8 @@ class ScopeWorkerManager<N : Any> @Provide @Service<N> @Scoped<N> constructor(
   @Provide companion object {
     @Provide fun <N : Any> loadingOrder() = LoadingOrder<ScopeWorkerManager<N>>()
       .after<ScopeInitializerRunner<N>>()
+
+    @Provide fun <N : Any> service(factory: () -> ScopeWorkerManager<N>) =
+      ProvidedService<N, ScopeWorkerManager<N>>(ScopeWorkerManager::class.unsafeCast(), factory)
   }
 }

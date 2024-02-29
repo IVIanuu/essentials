@@ -6,6 +6,7 @@ package com.ivianuu.essentials.util
 
 import android.content.*
 import androidx.compose.runtime.*
+import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
@@ -20,6 +21,7 @@ import kotlin.time.Duration.Companion.seconds
   private val appScope: Scope<AppScope>,
   private val broadcastScopeFactory: (Intent) -> Scope<BroadcastScope>,
   private val coroutineContexts: CoroutineContexts,
+  private val logger: Logger
 ) {
   private val explicitBroadcasts = EventFlow<Intent>()
 
@@ -44,6 +46,7 @@ import kotlin.time.Duration.Companion.seconds
   )
 
   internal fun onReceive(intent: Intent) {
+    logger.d { "on receive $intent" }
     appScope.coroutineScope.launch {
       val broadcastScope = broadcastScopeFactory(intent)
       try {
@@ -52,10 +55,14 @@ import kotlin.time.Duration.Companion.seconds
         par(
           {
             snapshotFlow { appScope.service<ScopeWorkerManager<AppScope>>().state }.first {
-              it == ScopeWorkerManager.State.RUNNING
+              it != ScopeWorkerManager.State.IDLE
             }
           },
-          { snapshotFlow { broadcastWorkerManager.state }.first { it == ScopeWorkerManager.State.RUNNING } }
+          {
+            snapshotFlow { broadcastWorkerManager.state }.first {
+              it != ScopeWorkerManager.State.IDLE
+            }
+          }
         )
 
         // todo remove once we have a better idea

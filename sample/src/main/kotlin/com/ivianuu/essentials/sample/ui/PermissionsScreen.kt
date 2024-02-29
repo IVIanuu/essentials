@@ -24,23 +24,14 @@ import com.ivianuu.injekt.*
 class PermissionsScreen : Screen<Unit> {
   @Provide companion object {
     @Provide fun ui(
-      permissionManager: PermissionManager
+      permissionManager: PermissionManager,
+      permissions: List<SamplePermission>
     ) = Ui<PermissionsScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Permissions") } }) {
         Button(
           modifier = Modifier.center(),
           onClick = scopedAction {
-            permissionManager.requestPermissions(
-              listOf(
-                SampleCameraPermission::class,
-                SamplePhonePermission::class,
-                SampleAccessibilityPermission::class,
-                SampleNotificationListenerPermission::class,
-                SampleSystemOverlayPermission::class,
-                SampleWriteSecureSettingsPermission::class,
-                SampleWriteSettingsPermission::class
-              )
-            )
+            permissionManager.requestPermissions(permissions.map { it::class })
           }
         ) {
           Text("Request")
@@ -50,48 +41,56 @@ class PermissionsScreen : Screen<Unit> {
   }
 }
 
+interface SamplePermission : Permission
+
+@Provide object BluetoothPermission : RuntimePermission(
+  permissionName = android.Manifest.permission.BLUETOOTH,
+  title = "Bluetooth",
+  icon = { Icon(Icons.Default.Bluetooth, null) }
+), SamplePermission
+
 @Provide object SampleCameraPermission : RuntimePermission(
   permissionName = android.Manifest.permission.CAMERA,
   title = "Camera",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu, null) }
-)
+  icon = { Icon(Icons.Default.Camera, null) }
+), SamplePermission
 
 @Provide object SamplePhonePermission : RuntimePermission(
   permissionName = android.Manifest.permission.CALL_PHONE,
   title = "Call phone",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu, null) }
-)
+  icon = { Icon(Icons.Default.Phone, null) }
+), SamplePermission
 
 @Provide object SampleAccessibilityPermission : AccessibilityServicePermission(
   serviceClass = EsAccessibilityService::class,
   title = "Accessibility",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu, null) }
-)
+  icon = { Icon(Icons.Default.Accessibility, null) }
+), SamplePermission
 
 @Provide object SampleNotificationListenerPermission : NotificationListenerPermission(
   serviceClass = EsNotificationListenerService::class,
   title = "Notification listener",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu, null) }
-)
+  icon = { Icon(Icons.Default.Notifications, null) }
+), SamplePermission
 
 @Provide object SampleSystemOverlayPermission : SystemOverlayPermission(
   title = "System overlay",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu, null) }
-)
+  icon = { Icon(Icons.Default.Window, null) }
+), SamplePermission
 
 @Provide object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission(
   title = "Write secure settings",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu, null) }
-)
+  icon = { Icon(Icons.Default.PowerSettingsNew, null) }
+), SamplePermission
 
 @Provide object SampleWriteSettingsPermission : WriteSettingsPermission(
   title = "Write settings",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu, null) }
-)
+  icon = { Icon(Icons.Default.Settings, null) }
+), SamplePermission
