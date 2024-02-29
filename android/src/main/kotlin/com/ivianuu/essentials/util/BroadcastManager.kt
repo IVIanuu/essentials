@@ -14,6 +14,7 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 @Provide @Scoped<AppScope> class BroadcastManager(
@@ -47,8 +48,8 @@ import kotlin.time.Duration.Companion.seconds
 
   internal fun onReceive(intent: Intent) {
     logger.d { "on receive $intent" }
-    appScope.coroutineScope.launch {
-      val broadcastScope = broadcastScopeFactory(intent)
+    val broadcastScope = broadcastScopeFactory(intent)
+    broadcastScope.coroutineScope.launch {
       try {
         val broadcastWorkerManager = broadcastScope.service<ScopeWorkerManager<BroadcastScope>>()
 
@@ -65,10 +66,11 @@ import kotlin.time.Duration.Companion.seconds
           }
         )
 
-        // todo remove once we have a better idea
-        delay(1.seconds)
+        // todo find a better way
+        delay(100.milliseconds)
 
         explicitBroadcasts.emit(intent)
+
         snapshotFlow { broadcastWorkerManager.state }.first { it == ScopeWorkerManager.State.COMPLETED }
       } finally {
         broadcastScope.dispose()
