@@ -46,7 +46,7 @@ import kotlin.time.Duration.Companion.seconds
     }
     .distinctUntilChanged()
 
-  val displayRotation: Flow<DisplayRotation> = moleculeFlow(RecompositionMode.Immediate) {
+  val screenRotation: Flow<ScreenRotation> = moleculeFlow(RecompositionMode.Immediate) {
     val screenState = screenState.state(ScreenState.OFF)
     var displayRotation by remember { mutableStateOf(getCurrentDisplayRotation()) }
 
@@ -65,10 +65,10 @@ import kotlin.time.Duration.Companion.seconds
   }
 
   private fun getCurrentDisplayRotation() = when (windowManager.defaultDisplay.rotation) {
-    Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
-    Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT
-    Surface.ROTATION_180 -> DisplayRotation.PORTRAIT_DOWN
-    Surface.ROTATION_270 -> DisplayRotation.LANDSCAPE_RIGHT
+    Surface.ROTATION_0 -> ScreenRotation.PORTRAIT_UP
+    Surface.ROTATION_90 -> ScreenRotation.LANDSCAPE_LEFT
+    Surface.ROTATION_180 -> ScreenRotation.PORTRAIT_DOWN
+    Surface.ROTATION_270 -> ScreenRotation.LANDSCAPE_RIGHT
     else -> error("Unexpected rotation")
   }
 
@@ -209,7 +209,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
   }
 }
 
-enum class DisplayRotation(val isPortrait: Boolean) {
+enum class ScreenRotation(val isPortrait: Boolean) {
   // 0 degrees
   PORTRAIT_UP(true),
 

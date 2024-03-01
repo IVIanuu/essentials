@@ -16,7 +16,7 @@ data class TriggerGeometry(
   val height: Int,
   val horizontalMargin: Int,
   val verticalMargin: Int,
-  val rotation: DisplayRotation,
+  val rotation: ScreenRotation,
   val edge: ScreenEdge
 )
 
@@ -27,11 +27,11 @@ fun TriggerGeometry(
   location: Float,
   rotate: Boolean,
   containerSize: IntSize,
-  rotation: DisplayRotation,
+  rotation: ScreenRotation,
   density: Density
 ): TriggerGeometry {
   val rotation = if (rotate) {
-    DisplayRotation.PORTRAIT_UP
+    ScreenRotation.PORTRAIT_UP
   } else {
     rotation
   }

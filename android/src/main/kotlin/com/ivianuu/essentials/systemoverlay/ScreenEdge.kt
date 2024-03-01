@@ -20,18 +20,18 @@ enum class ScreenEdge(
     alignment = Alignment.TopStart,
     isOnSide = true
   ) {
-    override fun rotate(rotation: DisplayRotation) = when (rotation) {
-      DisplayRotation.PORTRAIT_UP -> this
-      DisplayRotation.LANDSCAPE_LEFT -> BOTTOM
-      DisplayRotation.PORTRAIT_DOWN -> RIGHT
-      DisplayRotation.LANDSCAPE_RIGHT -> TOP
+    override fun rotate(rotation: ScreenRotation) = when (rotation) {
+      ScreenRotation.PORTRAIT_UP -> this
+      ScreenRotation.LANDSCAPE_LEFT -> BOTTOM
+      ScreenRotation.PORTRAIT_DOWN -> RIGHT
+      ScreenRotation.LANDSCAPE_RIGHT -> TOP
     }
 
-    override fun rotate(rotation: DisplayRotation, position: Float) = when (rotation) {
-      DisplayRotation.PORTRAIT_UP -> 0f to position
-      DisplayRotation.LANDSCAPE_LEFT -> position to 0f
-      DisplayRotation.PORTRAIT_DOWN -> 0f to 1f - position
-      DisplayRotation.LANDSCAPE_RIGHT -> 1f - position to 0f
+    override fun rotate(rotation: ScreenRotation, position: Float) = when (rotation) {
+      ScreenRotation.PORTRAIT_UP -> 0f to position
+      ScreenRotation.LANDSCAPE_LEFT -> position to 0f
+      ScreenRotation.PORTRAIT_DOWN -> 0f to 1f - position
+      ScreenRotation.LANDSCAPE_RIGHT -> 1f - position to 0f
     }
   },
   TOP(
@@ -40,18 +40,18 @@ enum class ScreenEdge(
     alignment = Alignment.TopStart,
     isOnSide = false
   ) {
-    override fun rotate(rotation: DisplayRotation) = when (rotation) {
-      DisplayRotation.PORTRAIT_UP -> this
-      DisplayRotation.LANDSCAPE_LEFT -> LEFT
-      DisplayRotation.PORTRAIT_DOWN -> BOTTOM
-      DisplayRotation.LANDSCAPE_RIGHT -> RIGHT
+    override fun rotate(rotation: ScreenRotation) = when (rotation) {
+      ScreenRotation.PORTRAIT_UP -> this
+      ScreenRotation.LANDSCAPE_LEFT -> LEFT
+      ScreenRotation.PORTRAIT_DOWN -> BOTTOM
+      ScreenRotation.LANDSCAPE_RIGHT -> RIGHT
     }
 
-    override fun rotate(rotation: DisplayRotation, position: Float) = when (rotation) {
-      DisplayRotation.PORTRAIT_UP -> position to 0f
-      DisplayRotation.LANDSCAPE_LEFT -> 0f to 1f - position
-      DisplayRotation.PORTRAIT_DOWN -> 1f - position to 0f
-      DisplayRotation.LANDSCAPE_RIGHT -> 0f to position
+    override fun rotate(rotation: ScreenRotation, position: Float) = when (rotation) {
+      ScreenRotation.PORTRAIT_UP -> position to 0f
+      ScreenRotation.LANDSCAPE_LEFT -> 0f to 1f - position
+      ScreenRotation.PORTRAIT_DOWN -> 1f - position to 0f
+      ScreenRotation.LANDSCAPE_RIGHT -> 0f to position
     }
   },
   RIGHT(
@@ -60,18 +60,18 @@ enum class ScreenEdge(
     alignment = Alignment.TopEnd,
     isOnSide = true
   ) {
-    override fun rotate(rotation: DisplayRotation) = when (rotation) {
-      DisplayRotation.PORTRAIT_UP -> this
-      DisplayRotation.LANDSCAPE_LEFT -> TOP
-      DisplayRotation.PORTRAIT_DOWN -> LEFT
-      DisplayRotation.LANDSCAPE_RIGHT -> BOTTOM
+    override fun rotate(rotation: ScreenRotation) = when (rotation) {
+      ScreenRotation.PORTRAIT_UP -> this
+      ScreenRotation.LANDSCAPE_LEFT -> TOP
+      ScreenRotation.PORTRAIT_DOWN -> LEFT
+      ScreenRotation.LANDSCAPE_RIGHT -> BOTTOM
     }
 
-    override fun rotate(rotation: DisplayRotation, position: Float) = when (rotation) {
-      DisplayRotation.PORTRAIT_UP -> 0f to position
-      DisplayRotation.LANDSCAPE_LEFT -> position to 0f
-      DisplayRotation.PORTRAIT_DOWN -> 0f to 1f - position
-      DisplayRotation.LANDSCAPE_RIGHT -> 1f - position to 0f
+    override fun rotate(rotation: ScreenRotation, position: Float) = when (rotation) {
+      ScreenRotation.PORTRAIT_UP -> 0f to position
+      ScreenRotation.LANDSCAPE_LEFT -> position to 0f
+      ScreenRotation.PORTRAIT_DOWN -> 0f to 1f - position
+      ScreenRotation.LANDSCAPE_RIGHT -> 1f - position to 0f
     }
   },
   BOTTOM(
@@ -80,22 +80,22 @@ enum class ScreenEdge(
     alignment = Alignment.BottomStart,
     isOnSide = false
   ) {
-    override fun rotate(rotation: DisplayRotation) = when (rotation) {
-      DisplayRotation.PORTRAIT_UP -> this
-      DisplayRotation.LANDSCAPE_LEFT -> RIGHT
-      DisplayRotation.PORTRAIT_DOWN -> TOP
-      DisplayRotation.LANDSCAPE_RIGHT -> LEFT
+    override fun rotate(rotation: ScreenRotation) = when (rotation) {
+      ScreenRotation.PORTRAIT_UP -> this
+      ScreenRotation.LANDSCAPE_LEFT -> RIGHT
+      ScreenRotation.PORTRAIT_DOWN -> TOP
+      ScreenRotation.LANDSCAPE_RIGHT -> LEFT
     }
 
-    override fun rotate(rotation: DisplayRotation, position: Float) = when (rotation) {
-      DisplayRotation.PORTRAIT_UP -> position to 0f
-      DisplayRotation.LANDSCAPE_LEFT -> 0f to 1f - position
-      DisplayRotation.PORTRAIT_DOWN -> 1f - position to 0f
-      DisplayRotation.LANDSCAPE_RIGHT -> 0f to position
+    override fun rotate(rotation: ScreenRotation, position: Float) = when (rotation) {
+      ScreenRotation.PORTRAIT_UP -> position to 0f
+      ScreenRotation.LANDSCAPE_LEFT -> 0f to 1f - position
+      ScreenRotation.PORTRAIT_DOWN -> 1f - position to 0f
+      ScreenRotation.LANDSCAPE_RIGHT -> 0f to position
     }
   };
 
-  abstract fun rotate(rotation: DisplayRotation): ScreenEdge
+  abstract fun rotate(rotation: ScreenRotation): ScreenEdge
 
-  abstract fun rotate(rotation: DisplayRotation, position: Float): Pair<Float, Float>
+  abstract fun rotate(rotation: ScreenRotation, position: Float): Pair<Float, Float>
 }
