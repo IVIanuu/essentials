@@ -15,16 +15,12 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 @Provide @Scoped<AppScope> class BroadcastManager(
   private val appContext: AppContext,
-  private val appScope: Scope<AppScope>,
-  private val broadcastScopeFactory: (BroadcastManager, @Service<BroadcastScope> Intent) -> Scope<BroadcastScope>,
-  private val coroutineContexts: CoroutineContexts,
-  private val logger: Logger
+  private val coroutineContexts: CoroutineContexts
 ) {
-  private val explicitBroadcasts = EventFlow<Intent>()
+  internal val explicitBroadcasts = EventFlow<Intent>()
 
   fun broadcasts(vararg actions: String): Flow<Intent> = merge(
     explicitBroadcasts.filter { it.action in actions },
@@ -45,10 +41,17 @@ import kotlin.time.Duration.Companion.seconds
     }
       .flowOn(coroutineContexts.main)
   )
+}
 
-  internal fun onReceive(intent: Intent) {
+@Provide @AndroidComponent class EsBroadcastReceiver(
+  private val appScope: Scope<AppScope>,
+  private val broadcastManager: BroadcastManager,
+  private val broadcastScopeFactory: (@Service<BroadcastScope> Intent) -> Scope<BroadcastScope>,
+  private val logger: Logger
+) : BroadcastReceiver() {
+  override fun onReceive(context: Context, intent: Intent) {
     logger.d { "on receive $intent" }
-    val broadcastScope = broadcastScopeFactory(this, intent)
+    val broadcastScope = broadcastScopeFactory(intent)
     broadcastScope.coroutineScope.launch {
       try {
         val broadcastWorkerManager = broadcastScope.service<ScopeWorkerManager<BroadcastScope>>()
@@ -69,21 +72,13 @@ import kotlin.time.Duration.Companion.seconds
         // todo find a better way
         delay(100.milliseconds)
 
-        explicitBroadcasts.emit(intent)
+        broadcastManager.explicitBroadcasts.emit(intent)
 
         snapshotFlow { broadcastWorkerManager.state }.first { it == ScopeWorkerManager.State.COMPLETED }
       } finally {
         broadcastScope.dispose()
       }
     }
-  }
-}
-
-@Provide @AndroidComponent class EsBroadcastReceiver(
-  private val broadcastManager: BroadcastManager
-) : BroadcastReceiver() {
-  override fun onReceive(context: Context, intent: Intent) {
-    broadcastManager.onReceive(intent)
   }
 }
 
