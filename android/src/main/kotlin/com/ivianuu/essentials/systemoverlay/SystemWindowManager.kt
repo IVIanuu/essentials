@@ -114,60 +114,58 @@ fun Modifier.systemWindowTrigger() = composed {
 
 @Provide class SystemWindowManager(
   private val context: Context,
-  private val coroutineContexts: CoroutineContexts,
   private val systemWindowScopeFactory: () -> Scope<SystemWindowScope>,
   val windowManager: @SystemService WindowManager
 ) {
   val accessibilityAvailable: Boolean
     get() = context is AccessibilityService
 
-  suspend fun attachSystemWindow(
+  @Composable fun SystemWindow(
     state: SystemWindowState = SystemWindowState(),
     content: @Composable () -> Unit
-  ): Nothing = withContext(coroutineContexts.main) {
-    bracketCase(
-      acquire = {
-        lateinit var contentView: View
-        contentView = OverlayComposeView(context) {
-          val scope = remember(systemWindowScopeFactory)
-          DisposableEffect(true) {
-            onDispose { scope.dispose() }
-          }
-          CompositionLocalProvider(LocalScope provides scope) {
-            Window(contentView, state, content)
-          }
+  ) {
+    val contentView = remember {
+      lateinit var contentView: View
+      contentView = OverlayComposeView(context) {
+        val scope = remember(systemWindowScopeFactory)
+        DisposableEffect(true) {
+          onDispose { scope.dispose() }
         }
-        contentView
-      },
-      use = { contentView ->
-        windowManager.addView(
-          contentView,
-          WindowManager.LayoutParams().apply {
-            this.width = WindowManager.LayoutParams.WRAP_CONTENT
-            this.height = WindowManager.LayoutParams.WRAP_CONTENT
-            gravity = Gravity.LEFT or Gravity.TOP
+        CompositionLocalProvider(LocalScope provides scope) {
+          Window(contentView, state, content)
+        }
+      }
+      contentView
+    }
 
-            type = if (accessibilityAvailable) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
-            else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+    DisposableEffect(contentView) {
+      windowManager.addView(
+        contentView,
+        WindowManager.LayoutParams().apply {
+          this.width = WindowManager.LayoutParams.WRAP_CONTENT
+          this.height = WindowManager.LayoutParams.WRAP_CONTENT
+          gravity = Gravity.LEFT or Gravity.TOP
 
-            flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-                WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
-                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
+          type = if (accessibilityAvailable) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+          else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
 
-            format = PixelFormat.TRANSLUCENT
+          flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+              WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+              WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+              WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
+              WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
 
-            state.interceptor(this)
-          }
-        )
-        awaitCancellation()
-      },
-      { contentView, _ ->
+          format = PixelFormat.TRANSLUCENT
+
+          state.interceptor(this)
+        }
+      )
+
+      onDispose {
         catch { windowManager.removeViewImmediate(contentView) }
         contentView.dispose()
       }
-    )
+    }
   }
 
   @Composable private fun Window(

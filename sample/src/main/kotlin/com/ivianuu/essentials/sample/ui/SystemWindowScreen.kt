@@ -33,16 +33,14 @@ class SystemWindowScreen : Screen<Unit> {
         var showSystemWindow by remember { mutableStateOf(false) }
 
         if (showSystemWindow)
-          LaunchedEffect(true) {
-            systemWindowManager.attachSystemWindow {
-              Box(
-                modifier = Modifier
-                  .fillMaxSize()
-                  .background(Color.Red)
-                  .systemWindowTrigger()
-                  .clickable { showSystemWindow = false }
-              )
-            }
+          systemWindowManager.SystemWindow {
+            Box(
+              modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Red)
+                .systemWindowTrigger()
+                .clickable { showSystemWindow = false }
+            )
           }
 
         Button(
