@@ -2,12 +2,16 @@ package com.ivianuu.essentials.util
 
 import android.app.*
 import android.content.*
+import android.hardware.*
 import android.os.*
 import android.view.*
 import androidx.activity.*
+import androidx.compose.runtime.*
 import androidx.lifecycle.*
+import app.cash.molecule.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -23,7 +27,8 @@ import kotlin.time.Duration.Companion.seconds
   broadcastManager: BroadcastManager,
   private val keyguardManager: @SystemService KeyguardManager,
   private val logger: Logger,
-  private val powerManager: @SystemService PowerManager
+  private val powerManager: @SystemService PowerManager,
+  private val windowManager: @SystemService WindowManager
 ) {
   val screenState: Flow<ScreenState> = broadcastManager.broadcasts(
     Intent.ACTION_SCREEN_OFF,
@@ -40,6 +45,32 @@ import kotlin.time.Duration.Companion.seconds
       }
     }
     .distinctUntilChanged()
+
+  val displayRotation: Flow<DisplayRotation> = moleculeFlow(RecompositionMode.Immediate) {
+    val screenState = screenState.state(ScreenState.OFF)
+    var displayRotation by remember { mutableStateOf(getCurrentDisplayRotation()) }
+
+    if (screenState.isOn)
+      DisposableEffect(true) {
+        val listener = object : OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {
+          override fun onOrientationChanged(orientation: Int) {
+            displayRotation = getCurrentDisplayRotation()
+          }
+        }
+        listener.enable()
+        onDispose { listener.disable() }
+      }
+
+    displayRotation
+  }
+
+  private fun getCurrentDisplayRotation() = when (windowManager.defaultDisplay.rotation) {
+    Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
+    Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT
+    Surface.ROTATION_180 -> DisplayRotation.PORTRAIT_DOWN
+    Surface.ROTATION_270 -> DisplayRotation.LANDSCAPE_RIGHT
+    else -> error("Unexpected rotation")
+  }
 
   suspend fun turnScreenOn(): Boolean {
     logger.d { "on request is off ? ${!powerManager.isInteractive}" }
@@ -134,9 +165,9 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
       }
     }
 
-    when (requestType) {
-      REQUEST_TYPE_UNLOCK -> {
-        lifecycleScope.launch {
+    lifecycleScope.launch {
+      when (requestType) {
+        REQUEST_TYPE_UNLOCK -> {
           delay(250)
 
           keyguardManager.requestDismissKeyguard(
@@ -163,9 +194,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
             }
           )
         }
-      }
-      REQUEST_TYPE_SCREEN_ON -> {
-        lifecycleScope.launch {
+        REQUEST_TYPE_SCREEN_ON -> {
           withTimeoutOrNull(1.seconds) {
             while (!powerManager.isInteractive)
               yield()
@@ -178,4 +207,18 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
       }
     }
   }
+}
+
+enum class DisplayRotation(val isPortrait: Boolean) {
+  // 0 degrees
+  PORTRAIT_UP(true),
+
+  // 90 degrees
+  LANDSCAPE_LEFT(false),
+
+  // 180 degrees
+  PORTRAIT_DOWN(true),
+
+  // 270 degrees
+  LANDSCAPE_RIGHT(false)
 }
