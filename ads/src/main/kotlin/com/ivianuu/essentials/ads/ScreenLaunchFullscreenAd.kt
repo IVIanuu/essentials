@@ -8,7 +8,6 @@ import androidx.compose.runtime.*
 import arrow.core.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -32,7 +31,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
 
 @Provide fun screenLaunchFullScreenObserver(
   adsEnabledState: State<AdsEnabled>,
-  isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
+  adFeatureRepository: AdFeatureRepository,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAdManager: FullScreenAdManager,
   logger: Logger,
@@ -41,7 +40,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
 ) = ScopeComposition<UiScope> {
   if (adsEnabledState.value.value)
     LaunchedEffect(true) {
-      navigator.launchEvents(isAdFeatureEnabled).collectLatest {
+      navigator.launchEvents(adFeatureRepository).collectLatest {
         val launchCount = pref
           .updateData { copy(screenLaunchCount = screenLaunchCount + 1) }
           .screenLaunchCount
@@ -55,14 +54,14 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
     }
 }
 
-private fun Navigator.launchEvents(isAdFeatureEnabled: IsAdFeatureEnabledUseCase): Flow<Screen<*>> {
+private fun Navigator.launchEvents(adFeatureRepository: AdFeatureRepository): Flow<Screen<*>> {
   var lastBackStack = backStack
   return snapshotFlow { backStack }
     .mapNotNull { currentBackStack ->
       val launchedScreens = currentBackStack
         .filter {
           it !in lastBackStack &&
-              isAdFeatureEnabled(it::class, ScreenLaunchFullscreenAdFeature)
+              adFeatureRepository.isEnabled(it::class, ScreenLaunchFullscreenAdFeature)
         }
       (if (currentBackStack.size > 1 && launchedScreens.isNotEmpty()) launchedScreens.first()
       else null)

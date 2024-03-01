@@ -10,11 +10,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
 
 @Provide object ScreenAdBannerFeature : AdFeature
 
@@ -30,39 +28,40 @@ annotation class ScreenAdBannerConfigTag {
 }
 typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 
-fun interface ScreenAdBanner : ScreenDecorator
-
-@Provide fun adBannerKeyUiDecorator(
-  adsEnabledState: State<AdsEnabled>,
-  isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
-  config: @FinalAdConfig ScreenAdBannerConfig? = null,
-  screen: Screen<*>
-) = ScreenAdBanner decorator@{ content ->
-  if (config == null) {
-    content()
-    return@decorator
-  }
-
-  if (!isAdFeatureEnabled(screen::class, ScreenAdBannerFeature)) {
-    content()
-    return@decorator
-  }
-
-  Column {
-    Box(modifier = Modifier.weight(1f)) {
-      val currentInsets = LocalInsets.current
-      CompositionLocalProvider(
-        LocalInsets provides if (!adsEnabledState.value.value) currentInsets
-        else currentInsets.copy(bottom = 0.dp),
-        content = content
-      )
+@Provide class AdBannerScreenDecorator(
+  private val adsEnabledState: State<AdsEnabled>,
+  private val adFeatureRepository: AdFeatureRepository,
+  private val config: @FinalAdConfig ScreenAdBannerConfig? = null,
+  private val screen: Screen<*>
+) : ScreenDecorator {
+  @Composable override fun DecoratedContent(content: @Composable () -> Unit) {
+    println("ad enabled ${adsEnabledState.value}")
+    if (config == null) {
+      content()
+      return
     }
 
-    if (adsEnabledState.value.value)
-      Surface(elevation = 8.dp) {
-        InsetsPadding(top = false) {
-          AdBanner(config)
-        }
+    if (!adFeatureRepository.isEnabled(screen::class, ScreenAdBannerFeature)) {
+      content()
+      return
+    }
+
+    Column {
+      Box(modifier = Modifier.weight(1f)) {
+        val currentInsets = LocalInsets.current
+        CompositionLocalProvider(
+          LocalInsets provides if (!adsEnabledState.value.value) currentInsets
+          else currentInsets.copy(bottom = 0.dp),
+          content = content
+        )
       }
+
+      if (adsEnabledState.value.value)
+        Surface(elevation = 8.dp) {
+          InsetsPadding(top = false) {
+            AdBanner(config)
+          }
+        }
+    }
   }
 }

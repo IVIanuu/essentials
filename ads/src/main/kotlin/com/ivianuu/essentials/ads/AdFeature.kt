@@ -31,14 +31,11 @@ interface AdFeature
   }
 }
 
-fun interface IsAdFeatureEnabledUseCase {
-  operator fun invoke(screenClass: KClass<out Screen<*>>, feature: AdFeature): Boolean
-}
-
-@Provide fun isAdFeatureEnabledUseCase(
-  featuresByScreen: Map<KClass<out Screen<*>>, AdFeatures<*>>
-) = IsAdFeatureEnabledUseCase { keyClass, feature ->
-  featuresByScreen[keyClass]?.value?.contains(feature) == true
+@Provide class AdFeatureRepository(
+  private val featuresByScreen: Map<KClass<out Screen<*>>, AdFeatures<*>>
+) {
+  fun isEnabled(screenClass: KClass<out Screen<*>>, feature: AdFeature): Boolean =
+    featuresByScreen[screenClass]?.value?.contains(feature) == true
 }
 
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)

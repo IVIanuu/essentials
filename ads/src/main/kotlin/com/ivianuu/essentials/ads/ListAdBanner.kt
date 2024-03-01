@@ -6,11 +6,9 @@ package com.ivianuu.essentials.ads
 
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
 
 @Provide object ListAdBannerFeature : AdFeature
 
@@ -28,22 +26,21 @@ annotation class ListAdBannerConfigTag {
 
 typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
 
-fun interface ListAdBanner : ListDecorator
-
-@Provide fun adBannerListDecorator(
-  adsEnabled: State<AdsEnabled>,
-  isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
-  config: @FinalAdConfig ListAdBannerConfig? = null
-) = ListAdBanner decorator@{
-  if (config != null && isVertical) {
-    item(null) {
-      val screen = catch {
-        LocalScope.current.screen::class
-      }.getOrNull()
-      if ((screen == null || isAdFeatureEnabled(screen, ListAdBannerFeature)) && adsEnabled.value.value)
-        AdBanner(config)
-    }
+@Provide class AdBannerListDecorator(
+  private val adsEnabled: State<AdsEnabled>,
+  private val adFeatureRepository: AdFeatureRepository,
+  private val config: @FinalAdConfig ListAdBannerConfig? = null
+) : ListDecorator {
+  override fun ListDecoratorScope.decoratedItems() {
+    if (config != null && isVertical)
+      item(null) {
+        val screen = catch {
+          LocalScope.current.screen::class
+        }.getOrNull()
+        if ((screen == null || adFeatureRepository.isEnabled(screen, ListAdBannerFeature)) &&
+          adsEnabled.value.value)
+          AdBanner(config)
+      }
+    content()
   }
-
-  content()
 }
