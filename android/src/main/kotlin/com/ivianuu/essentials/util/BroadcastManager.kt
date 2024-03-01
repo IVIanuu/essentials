@@ -20,7 +20,7 @@ import kotlin.time.Duration.Companion.seconds
 @Provide @Scoped<AppScope> class BroadcastManager(
   private val appContext: AppContext,
   private val appScope: Scope<AppScope>,
-  private val broadcastScopeFactory: (Intent) -> Scope<BroadcastScope>,
+  private val broadcastScopeFactory: (BroadcastManager, @Service<BroadcastScope> Intent) -> Scope<BroadcastScope>,
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger
 ) {
@@ -48,7 +48,7 @@ import kotlin.time.Duration.Companion.seconds
 
   internal fun onReceive(intent: Intent) {
     logger.d { "on receive $intent" }
-    val broadcastScope = broadcastScopeFactory(intent)
+    val broadcastScope = broadcastScopeFactory(this, intent)
     broadcastScope.coroutineScope.launch {
       try {
         val broadcastWorkerManager = broadcastScope.service<ScopeWorkerManager<BroadcastScope>>()
