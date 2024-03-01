@@ -32,7 +32,7 @@ import com.google.android.gms.ads.*
     factory = {
       AdView(it).apply {
         adUnitId = config.id
-        adSize = config.size
+        setAdSize(config.size)
         loadAd(AdRequest.Builder().build())
       }
     }

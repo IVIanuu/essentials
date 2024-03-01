@@ -102,10 +102,10 @@ object Deps {
   const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1244"
 
   object Firebase {
-    const val ads = "com.google.firebase:firebase-ads:20.6.0"
-    const val analytics = "com.google.firebase:firebase-analytics-ktx:21.0.0"
-    const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.2.10"
-    const val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
+    const val ads = "com.google.firebase:firebase-ads:22.6.0"
+    const val analytics = "com.google.firebase:firebase-analytics-ktx:21.5.1"
+    const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.6.2"
+    const val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.9"
   }
 
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.3.10"
