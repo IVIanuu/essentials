@@ -24,7 +24,7 @@ interface AdFeature
     @Provide fun <T : CriticalUserFlowScreen<*>> defaultCriticalUserFlowAdFeatures(): AdFeatures<T> =
       AdFeatures(listOf(ScreenAdBannerFeature))
 
-    @Provide fun <@AddOn T : Ui<S>, S : Screen<*>> adFeatureConfigMapEntry(
+    @Provide fun <@AddOn T : Ui<S>, S : Screen<*>> adFeatureConfigBinding(
       keyClass: KClass<S>,
       features: AdFeatures<S>
     ): Pair<KClass<out Screen<*>>, AdFeatures<*>> = keyClass to features

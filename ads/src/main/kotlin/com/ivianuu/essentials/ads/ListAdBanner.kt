@@ -29,14 +29,12 @@ typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
 @Provide class AdBannerListDecorator(
   private val adsEnabled: State<AdsEnabled>,
   private val adFeatureRepository: AdFeatureRepository,
-  private val config: @FinalAdConfig ListAdBannerConfig? = null
+  private val config: @FinalAdConfig ListAdBannerConfig
 ) : ListDecorator {
   override fun ListDecoratorScope.decoratedItems() {
-    if (config != null && isVertical)
+    if (isVertical)
       item(null) {
-        val screen = catch {
-          LocalScope.current.screen::class
-        }.getOrNull()
+        val screen = catch { LocalScope.current.screen::class }.getOrNull()
         if ((screen == null || adFeatureRepository.isEnabled(screen, ListAdBannerFeature)) &&
           adsEnabled.value.value)
           AdBanner(config)

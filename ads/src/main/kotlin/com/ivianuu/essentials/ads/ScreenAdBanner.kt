@@ -31,16 +31,10 @@ typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 @Provide class AdBannerScreenDecorator(
   private val adsEnabledState: State<AdsEnabled>,
   private val adFeatureRepository: AdFeatureRepository,
-  private val config: @FinalAdConfig ScreenAdBannerConfig? = null,
+  private val config: @FinalAdConfig ScreenAdBannerConfig,
   private val screen: Screen<*>
 ) : ScreenDecorator {
   @Composable override fun DecoratedContent(content: @Composable () -> Unit) {
-    println("ad enabled ${adsEnabledState.value}")
-    if (config == null) {
-      content()
-      return
-    }
-
     if (!adFeatureRepository.isEnabled(screen::class, ScreenAdBannerFeature)) {
       content()
       return

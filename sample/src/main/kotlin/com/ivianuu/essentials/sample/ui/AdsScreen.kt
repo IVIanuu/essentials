@@ -34,7 +34,7 @@ class AdsScreen : Screen<Unit> {
           }
 
           item {
-            Button(onClick = action { fullScreenAd.loadAndShowAdWithTimeout() }) {
+            Button(onClick = scopedAction { fullScreenAd.loadAndShowAdWithTimeout() }) {
               Text("Show full screen ad")
             }
           }
@@ -45,6 +45,6 @@ class AdsScreen : Screen<Unit> {
 }
 
 @Provide val showAds = mutableStateOf(AdsEnabled(false))
-@Provide val fullScreenAdConfig = FullScreenAdConfig("")
-@Provide val listAdBannerConfig = ListAdBannerConfig("")
-@Provide val screenAdBannerConfig = ScreenAdBannerConfig("")
+@Provide val fullScreenAdConfig: FullScreenAdConfig = FullScreenAdConfig("")
+@Provide val listAdBannerConfig: ListAdBannerConfig = ListAdBannerConfig("")
+@Provide val screenAdBannerConfig: ScreenAdBannerConfig = ScreenAdBannerConfig("")
