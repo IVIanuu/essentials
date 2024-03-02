@@ -41,7 +41,7 @@ import kotlin.time.Duration.Companion.seconds
       var removeServiceNotification by remember { mutableStateOf(true) }
 
       if (states.isEmpty()) {
-        LaunchedEffect(true, removeServiceNotification) {
+        LaunchedEffect(removeServiceNotification) {
           onCancel(
             fa = {
               logger.d { "stop foreground -> remove notification $removeServiceNotification" }
