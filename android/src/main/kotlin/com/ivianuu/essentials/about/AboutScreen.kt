@@ -40,7 +40,7 @@ class AboutScreen(
 
           item {
             ListItem(
-              onClick = action { navigator.push(PlayStoreAppDetailsKey(appConfig.packageName)) },
+              onClick = scopedAction { navigator.push(PlayStoreAppDetailsKey(appConfig.packageName)) },
               leading = { Icon(Icons.Default.Star, null) },
               title = { Text("Rate") },
               subtitle = { Text("I'll be happy if you give me 5 stars") }
@@ -50,7 +50,7 @@ class AboutScreen(
           if (screen.donationScreen != null)
             item {
               ListItem(
-                onClick = action { navigator.push(screen.donationScreen) },
+                onClick = scopedAction { navigator.push(screen.donationScreen) },
                 leading = { Icon(Icons.Default.Favorite, null) },
                 title = { Text("Donate") }
               )
@@ -58,7 +58,7 @@ class AboutScreen(
 
           item {
             ListItem(
-              onClick = action {
+              onClick = scopedAction {
                 navigator.push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
               },
               leading = { Icon(Icons.Default.ShoppingBag, null) },
@@ -69,7 +69,7 @@ class AboutScreen(
 
           item {
             ListItem(
-              onClick = action {
+              onClick = scopedAction {
                 navigator.push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
               },
               leading = {
@@ -86,7 +86,7 @@ class AboutScreen(
 
           item {
             ListItem(
-              onClick = action { navigator.push(UrlScreen("https://github.com/IVIanuu")) },
+              onClick = scopedAction { navigator.push(UrlScreen("https://github.com/IVIanuu")) },
               leading = {
                 Icon(
                   imageVector = FontAwesomeIcons.Brands.Github,
@@ -101,7 +101,7 @@ class AboutScreen(
 
           item {
             ListItem(
-              onClick = action { navigator.push(UrlScreen("https://twitter.com/IVIanuu")) },
+              onClick = scopedAction { navigator.push(UrlScreen("https://twitter.com/IVIanuu")) },
               leading = {
                 Icon(
                   imageVector = FontAwesomeIcons.Brands.Twitter,
@@ -117,7 +117,7 @@ class AboutScreen(
           item {
             val email = "ivianuu@gmail.com"
             ListItem(
-              onClick = action {
+              onClick = scopedAction {
                 navigator.push(
                   Intent(Intent.ACTION_SENDTO).apply {
                     data = Uri.parse("mailto:")
@@ -139,7 +139,7 @@ class AboutScreen(
           if (screen.privacyPolicyUrl != null)
             item {
               ListItem(
-                onClick = action { navigator.push(UrlScreen(screen.privacyPolicyUrl)) },
+                onClick = scopedAction { navigator.push(UrlScreen(screen.privacyPolicyUrl)) },
                 leading = { Icon(Icons.Default.Policy, null) },
                 title = { Text("Privacy policy") }
               )
