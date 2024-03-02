@@ -15,10 +15,7 @@ import com.ivianuu.injekt.*
 
   logger.d { "ape ape ape" }
 
-  hookAllMethods(
-    BluetoothGatt::class,
-    "writeCharacteristic"
-  ) {
+  hookAllMethods(BluetoothGatt::class, "writeCharacteristic") {
     before {
       logger.d { "ape message ${args.contentDeepToString()}" }
     }
