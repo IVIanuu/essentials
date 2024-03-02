@@ -67,7 +67,7 @@ class DonationScreen : OverlayScreen<Unit> {
               items(donations) { donation ->
                 ListItem(
                   modifier = Modifier.padding(horizontal = 8.dp),
-                  onClick = action {
+                  onClick = scopedAction {
                     if (billingService.purchase(donation.donation.sku, true, true)) {
                       billingService.consumePurchase(donation.donation.sku)
                       toaster("Thanks for your support! \uD83D\uDC9B")
@@ -88,7 +88,7 @@ class DonationScreen : OverlayScreen<Unit> {
           }
         },
         confirmButton = {
-          TextButton(onClick = action { navigator.pop(screen) }) {
+          TextButton(onClick = scopedAction { navigator.pop(screen) }) {
             Text("Cancel")
           }
         }
