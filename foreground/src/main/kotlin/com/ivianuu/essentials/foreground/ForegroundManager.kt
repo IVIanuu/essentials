@@ -29,9 +29,7 @@ import kotlinx.coroutines.sync.*
     removeNotification: Boolean = true,
     notification: (@Composable () -> Notification)? = null,
   ) {
-    val state = remember(id) {
-      ForegroundState(id, removeNotification, notification)
-    }
+    val state = remember(id) { ForegroundState(id, removeNotification, notification) }
 
     LaunchedEffect(state) {
       states += state
