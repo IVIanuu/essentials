@@ -4,8 +4,10 @@
 
 package com.ivianuu.essentials.permission
 
+import androidx.compose.runtime.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -24,22 +26,21 @@ import kotlin.reflect.*
   fun <T : Permission> permission(key: KClass<T>): T =
     permissions[key]!!().unsafeCast()
 
-  fun permissionState(permissions: List<KClass<out Permission>>): Flow<Boolean> =
-    if (permissions.isEmpty()) flowOf(true)
-    else combine(
-      permissions
-        .map { permissionKey ->
-          val permission = this.permissions[permissionKey]!!()
-          val stateProvider = stateProviders[permissionKey]!!()
-          permissionRefreshes
-            .onStart<Any?> { emit(Unit) }
-            .map {
-              withContext(coroutineContexts.io) {
-                stateProvider.permissionState(permission)
-              }
-            }
+  fun permissionState(permissions: List<KClass<out Permission>>): Flow<Boolean> = moleculeFlow {
+    if (permissions.isEmpty()) true
+    else permissions.all { permissionKey ->
+      val permission = remember { this.permissions[permissionKey]!!() }
+      val stateProvider = remember { stateProviders[permissionKey]!!() }
+      permissionRefreshes
+        .onStart<Any?> { emit(Unit) }
+        .map {
+          withContext(coroutineContexts.io) {
+            stateProvider.permissionState(permission)
+          }
         }
-    ) { states -> states.all { it } }
+        .state(null) == true
+    }
+  }
 
   suspend fun requestPermissions(permissions: List<KClass<out Permission>>): Boolean {
     logger.d { "request permissions $permissions" }
