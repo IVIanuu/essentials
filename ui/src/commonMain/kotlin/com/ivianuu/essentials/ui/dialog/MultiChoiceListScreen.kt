@@ -22,7 +22,7 @@ class MultiChoiceListScreen<T : Any>(
   val selected: Set<T>,
   val title: String? = null,
   val renderable: UiRenderer<T> = inject
-) : OverlayScreen<Set<T>> {
+) : DialogScreen<Set<T>> {
   @Provide companion object {
     @Provide fun ui(
       navigator: Navigator,
@@ -30,10 +30,10 @@ class MultiChoiceListScreen<T : Any>(
     ) = Ui<MultiChoiceListScreen<Any>> {
       var selectedItems by remember { mutableStateOf(screen.selected) }
 
-      AlertDialog(
-        onDismissRequest = action { navigator.pop(screen, null) },
+      Dialog(
         title = screen.title?.let { { Text(it) } },
-        text = {
+        applyContentPadding = false,
+        content = {
           VerticalList(decorate = false) {
             items(screen.items) { item ->
               val selected = item in selectedItems
@@ -56,14 +56,12 @@ class MultiChoiceListScreen<T : Any>(
             }
           }
         },
-        confirmButton = {
-          TextButton(onClick = action { navigator.pop(screen, selectedItems) }) {
-            Text("OK")
-          }
-        },
-        dismissButton = {
-          TextButton(onClick = action { navigator.pop(screen, null) }) {
+        buttons = {
+          TextButton(onClick = scopedAction { navigator.pop(screen, null) }) {
             Text("Cancel")
+          }
+          TextButton(onClick = scopedAction { navigator.pop(screen, selectedItems) }) {
+            Text("OK")
           }
         }
       )

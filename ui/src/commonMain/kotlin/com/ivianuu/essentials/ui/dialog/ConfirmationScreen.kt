@@ -10,7 +10,7 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-class ConfirmationScreen(val title: String) : OverlayScreen<ConfirmationScreen.Result> {
+class ConfirmationScreen(val title: String) : DialogScreen<ConfirmationScreen.Result> {
   enum class Result { CONFIRMED, DENIED }
 
   @Provide companion object {
@@ -18,19 +18,17 @@ class ConfirmationScreen(val title: String) : OverlayScreen<ConfirmationScreen.R
       navigator: Navigator,
       screen: ConfirmationScreen,
     ) = Ui<ConfirmationScreen> {
-      AlertDialog(
-        onDismissRequest = action { navigator.pop(screen, null) },
+      Dialog(
         title = { Text(screen.title) },
-        confirmButton = {
-          TextButton(onClick = action { navigator.pop(screen, Result.CONFIRMED) }) {
-            Text("Confirm")
-          }
-        },
-        dismissButton = {
-          TextButton(onClick = action { navigator.pop(screen, Result.DENIED) }) {
+        buttons = {
+          TextButton(onClick = scopedAction { navigator.pop(screen, Result.DENIED) }) {
             Text("Deny")
           }
-        },
+
+          TextButton(onClick = scopedAction { navigator.pop(screen, Result.CONFIRMED) }) {
+            Text("Confirm")
+          }
+        }
       )
     }
   }

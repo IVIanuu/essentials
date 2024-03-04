@@ -35,7 +35,7 @@ class ColorPickerScreen(
   val title: String? = null,
   val allowCustomArgb: Boolean = true,
   val showAlphaSelector: Boolean = false,
-) : OverlayScreen<Color> {
+) : DialogScreen<Color> {
   @Provide companion object {
     @Provide fun ui(
       navigator: Navigator,
@@ -48,14 +48,10 @@ class ColorPickerScreen(
         ColorPickerTab.EDITOR -> ColorPickerTab.COLORS
       }
 
-      if (!screen.allowCustomArgb && currentScreen == ColorPickerTab.EDITOR) {
-        currentScreen = ColorPickerTab.COLORS
-      }
 
-      AlertDialog(
-        onDismissRequest = action { navigator.pop(screen, null) },
+      Dialog(
         title = screen.title?.let { { Text(it) } },
-        text = {
+        content = {
           AnimatedContent(
             modifier = Modifier.height(300.dp)
               .padding(start = 24.dp, end = 24.dp),
@@ -82,7 +78,7 @@ class ColorPickerScreen(
             }
           }
         },
-        confirmButton = {
+        buttons = {
           if (screen.allowCustomArgb) {
             TextButton(
               onClick = { currentScreen = otherScreen },
@@ -99,10 +95,10 @@ class ColorPickerScreen(
             }
           }
 
-          TextButton(onClick = action { navigator.pop(screen) }) { Text("Cancel") }
+          TextButton(onClick = scopedAction { navigator.pop(screen) }) { Text("Cancel") }
 
           TextButton(
-            onClick = action { navigator.pop(screen, currentColor) },
+            onClick = scopedAction { navigator.pop(screen, currentColor) },
             colors = ButtonDefaults.textButtonColors(
               contentColor = currentColor
             )

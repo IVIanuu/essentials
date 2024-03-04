@@ -17,13 +17,14 @@ import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 
-class DonationScreen : OverlayScreen<Unit> {
+class DonationScreen : DialogScreen<Unit> {
   @Provide companion object {
     @Provide fun ui(
       billingManager: BillingManager,
@@ -48,10 +49,10 @@ class DonationScreen : OverlayScreen<Unit> {
           .success()
       }
 
-      AlertDialog(
-        onDismissRequest = action { navigator.pop(screen, null) },
+      Dialog(
         title = { Text("Support development \uD83D\uDC9B") },
-        text = {
+        applyContentPadding = false,
+        content = {
           ResourceBox(
             resource = skus,
             loading = {
@@ -87,7 +88,7 @@ class DonationScreen : OverlayScreen<Unit> {
             }
           }
         },
-        confirmButton = {
+        buttons = {
           TextButton(onClick = scopedAction { navigator.pop(screen) }) {
             Text("Cancel")
           }

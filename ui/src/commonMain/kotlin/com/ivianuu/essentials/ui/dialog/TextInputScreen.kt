@@ -21,7 +21,7 @@ class TextInputScreen(
   val keyboardOptions: KeyboardOptions = KeyboardOptions(),
   val title: String? = null,
   val predicate: (String) -> Boolean = { true }
-) : OverlayScreen<String> {
+) : DialogScreen<String> {
   @Provide companion object {
     @Provide fun ui(
       navigator: Navigator,
@@ -31,10 +31,9 @@ class TextInputScreen(
         mutableStateOf(TextFieldValue(screen.initial, TextRange(screen.initial.length)))
       }
 
-      AlertDialog(
-        onDismissRequest = action { navigator.pop(screen, null) },
+      Dialog(
         title = screen.title?.let { { Text(it) } },
-        text = {
+        content = {
           val focusRequester = remember { FocusRequester() }
 
           TextField(
@@ -51,18 +50,16 @@ class TextInputScreen(
             onDispose { }
           }
         },
-        confirmButton = {
-          val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
-
-          TextButton(
-            enabled = currentValueIsOk,
-            onClick = action { navigator.pop(screen, currentValue.text) }
-          ) { Text("OK") }
-        },
-        dismissButton = {
-          TextButton(onClick = action { navigator.pop(screen, null) }) {
+        buttons = {
+          TextButton(onClick = scopedAction { navigator.pop(screen, null) }) {
             Text("Cancel")
           }
+
+          val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
+          TextButton(
+            enabled = currentValueIsOk,
+            onClick = scopedAction { navigator.pop(screen, currentValue.text) }
+          ) { Text("OK") }
         }
       )
     }

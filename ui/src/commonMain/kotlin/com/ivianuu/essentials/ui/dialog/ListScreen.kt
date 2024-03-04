@@ -16,26 +16,25 @@ class ListScreen<T : Any>(
   val items: List<T>,
   val title: String? = null,
   val renderer: UiRenderer<T> = inject,
-) : OverlayScreen<T> {
+) : DialogScreen<T> {
   @Provide companion object {
     @Provide fun ui(
       navigator: Navigator,
       screen: ListScreen<Any>,
     ) = Ui<ListScreen<Any>> {
-      AlertDialog(
-        onDismissRequest = action { navigator.pop(screen, null) },
+      Dialog(
         title = screen.title?.let { { Text(it) } },
-        text = {
+        applyContentPadding = false,
+        content = {
           VerticalList(decorate = false) {
             items(screen.items) { item ->
               ListItem(
-                onClick = action { navigator.pop(screen, item) },
+                onClick = scopedAction { navigator.pop(screen, item) },
                 title = { Text(screen.renderer.render(item)) },
               )
             }
           }
-        },
-        buttons = {}
+        }
       )
     }
   }
