@@ -27,8 +27,7 @@ import kotlin.reflect.*
     permissions[key]!!().unsafeCast()
 
   fun permissionState(permissions: List<KClass<out Permission>>): Flow<Boolean> = moleculeFlow {
-    if (permissions.isEmpty()) true
-    else permissions.all { permissionKey ->
+    permissions.map { permissionKey ->
       val permission = remember { this.permissions[permissionKey]!!() }
       val stateProvider = remember { stateProviders[permissionKey]!!() }
       permissionRefreshes
@@ -36,11 +35,14 @@ import kotlin.reflect.*
         .map {
           withContext(coroutineContexts.io) {
             stateProvider.permissionState(permission)
+              .also { println("lolo check $permissions $it") }
           }
         }
-        .state(null) == true
+        .state(null)
     }
-  }
+      .takeIf { it.all { it != null } }
+      ?.all { it == true }
+  }.filterNotNull()
 
   suspend fun requestPermissions(permissions: List<KClass<out Permission>>): Boolean {
     logger.d { "request permissions $permissions" }
