@@ -59,7 +59,6 @@ class BottomNavigationScreen : Screen<Unit> {
               .background(item.color)
           ) {
             (1..100).forEach { item ->
-              println("compose item $item")
               item {
                 ListItem(title = { Text("Item $item") })
               }

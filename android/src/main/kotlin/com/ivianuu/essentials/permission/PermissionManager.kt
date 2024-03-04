@@ -35,7 +35,6 @@ import kotlin.reflect.*
         .map {
           withContext(coroutineContexts.io) {
             stateProvider.permissionState(permission)
-              .also { println("lolo check $permissions $it") }
           }
         }
         .state(null)
