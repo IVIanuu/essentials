@@ -6,6 +6,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
@@ -33,19 +34,17 @@ class DynamicSystemBarsScreen : Screen<Unit> {
         }
         VerticalList(contentPadding = PaddingValues(0.dp)) {
           // todo use items once fixed
-          for (color in colors) {
-            item {
-              Box(
-                modifier = Modifier
-                  .fillMaxWidth()
-                  .height(300.dp)
-                  .background(color)
-                  .systemBarStyle(
-                    bgColor = Color.Black.copy(alpha = 0.2f),
-                    darkIcons = color.isLight
-                  )
-              )
-            }
+          items(colors) { color ->
+            Box(
+              modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .background(color)
+                .systemBarStyle(
+                  bgColor = Color.Black.copy(alpha = 0.2f),
+                  darkIcons = color.isLight
+                )
+            )
           }
         }
 

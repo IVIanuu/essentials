@@ -8,6 +8,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
@@ -43,17 +44,15 @@ class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit> {
               }
             }
 
-            category.items.forEach { item ->
-              item {
-                HelpItem(
-                  item = item,
-                  isExpanded = expandedItem == item,
-                  onToggleExpandedClick = {
-                    expandedItem = if (expandedItem != item) item
-                    else null
-                  }
-                )
-              }
+            items(category.items) { item ->
+              HelpItem(
+                item = item,
+                isExpanded = expandedItem == item,
+                onToggleExpandedClick = {
+                  expandedItem = if (expandedItem != item) item
+                  else null
+                }
+              )
             }
           }
         }
