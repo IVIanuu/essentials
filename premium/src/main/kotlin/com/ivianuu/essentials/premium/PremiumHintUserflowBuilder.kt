@@ -10,31 +10,22 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@JvmInline value class AppStartPremiumHintEnabled(val value: Boolean) {
-  @Provide companion object {
-    @Provide val default get() = AppStartPremiumHintEnabled(true)
-  }
-}
-
 @Provide class PremiumHintUserflowBuilder(
-  private val enabled: AppStartPremiumHintEnabled,
   private val isFirstRun: suspend () -> IsFirstRun,
   private val premiumVersionManager: PremiumVersionManager
 ) : UserflowBuilder {
-  private var hintShown = false
-
-  override suspend fun createUserflow(): List<Screen<*>> {
-    if (hintShown || !enabled.value || premiumVersionManager.isPremiumVersion.first())
-      hintShown = true
-    return listOf(
+  override suspend fun createUserflow(): List<Screen<*>> =
+    if (hintShown || premiumVersionManager.isPremiumVersion.first()) emptyList()
+    else listOf(
       GoPremiumScreen(
         showTryBasicOption = isFirstRun().value,
         allowBackNavigation = !isFirstRun().value
       )
-    )
-  }
+    ).also { hintShown = true }
 
   companion object {
+    private var hintShown = false
+
     @Provide val loadingOrder: LoadingOrder<PremiumHintUserflowBuilder>
       get() = LoadingOrder<PremiumHintUserflowBuilder>()
         .last()
