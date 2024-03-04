@@ -11,6 +11,7 @@ import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ads.*
 import com.ivianuu.essentials.billing.*
+import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.ui.*
@@ -37,26 +38,21 @@ import kotlinx.serialization.*
   val premiumSkuDetails: Flow<SkuDetails> =
     flow { emit(billingManager.getSkuDetails(premiumVersionSku)!!) }
 
-  val isPremiumVersion: Flow<Boolean> = combine(
-    billingManager.isPurchased(premiumVersionSku),
-    if (oldPremiumVersionSkus.isNotEmpty())
-      combine(oldPremiumVersionSkus.map { billingManager.isPurchased(it) }) {
-        it.any { it }
+  val isPremiumVersion: Flow<Boolean> = scope.launchMolecule {
+    val isPremiumVersion = (oldPremiumVersionSkus + premiumVersionSku)
+      .map { billingManager.isPurchased(it).state(null) == true }
+      .any()
+
+    LaunchedEffect(isPremiumVersion) {
+      if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
+        logger.d { "handle premium version downgrade" }
+        downgradeHandlers().parMap { it() }
       }
-    else flowOf(false)
-  ) { a, b -> a || b }
-    .onEach { isPremiumVersion ->
-      scope.launch {
-        if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
-          logger.d { "handle premium version downgrade" }
-          downgradeHandlers().parMap { it() }
-        }
-        pref.updateData {
-          copy(wasPremiumVersion = isPremiumVersion)
-        }
-      }
+      pref.updateData { copy(wasPremiumVersion = isPremiumVersion) }
     }
-    .shareIn(scope, SharingStarted.Eagerly, 1)
+
+    isPremiumVersion
+  }
 
   suspend fun purchasePremiumVersion() =
     billingManager.purchase(premiumVersionSku, true, true)
