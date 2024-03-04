@@ -93,7 +93,7 @@ import kotlin.coroutines.*
     if (frontFacing != null)
       intent.addCameraFacingExtras(frontFacing)
 
-    actionIntentSender(intent, null)
+    actionIntentSender.sendIntent(intent, null)
   }
 
   private fun Intent.addCameraFacingExtras(frontFacing: Boolean) {

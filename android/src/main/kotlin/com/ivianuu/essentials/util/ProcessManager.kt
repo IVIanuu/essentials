@@ -9,8 +9,8 @@ import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import com.jakewharton.processphoenix.*
 
-@Provide class ProcessRestarter(private val appContext: AppContext, private val logger: Logger) {
-  suspend operator fun invoke() {
+@Provide class ProcessManager(private val appContext: AppContext, private val logger: Logger) {
+  suspend fun restart() {
     logger.d { "restart process" }
     ProcessPhoenix.triggerRebirth(appContext)
   }

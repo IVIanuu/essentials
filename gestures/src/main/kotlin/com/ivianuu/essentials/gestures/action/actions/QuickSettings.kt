@@ -15,7 +15,6 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.accessibility.AccessibilityManager
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
 
 @Provide object QuickSettingsActionId : ActionId("quick_settings") {
   @Provide val action get() = Action(
@@ -29,7 +28,7 @@ import kotlinx.coroutines.flow.*
     accessibilityManager: AccessibilityManager,
     appScope: Scope<AppScope>,
     appContext: AppContext,
-    closeSystemDialogs: CloseSystemDialogsUseCase
+    systemDialogController: SystemDialogController
   ) = ActionExecutor<QuickSettingsActionId> {
     val targetState = catch {
       val service = appScope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
@@ -57,7 +56,7 @@ import kotlinx.coroutines.flow.*
     if (targetState)
       accessibilityManager.performGlobalAction(GLOBAL_ACTION_QUICK_SETTINGS)
     else
-      closeSystemDialogs()
+      systemDialogController.closeSystemDialogs()
   }
 
   @Provide val accessibilityConfig: AccessibilityConfig

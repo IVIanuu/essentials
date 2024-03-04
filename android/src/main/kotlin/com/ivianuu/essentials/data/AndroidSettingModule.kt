@@ -19,7 +19,7 @@ class AndroidSettingModule<T : Any>(
   private val defaultValue: T
 ) {
   @Provide fun dataStore(
-    contentChangesFactory: ContentChangesFactory,
+    contentChangeManager: ContentChangeManager,
     contentResolver: ContentResolver,
     coroutineContexts: CoroutineContexts,
     scope: ScopedCoroutineScope<AppScope>
@@ -50,7 +50,7 @@ class AndroidSettingModule<T : Any>(
       }.unsafeCast()
     }
 
-    override val data: Flow<T> = contentChangesFactory(
+    override val data: Flow<T> = contentChangeManager.contentChanges(
       when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)
         AndroidSettingsType.SECURE -> Settings.Secure.getUriFor(name)

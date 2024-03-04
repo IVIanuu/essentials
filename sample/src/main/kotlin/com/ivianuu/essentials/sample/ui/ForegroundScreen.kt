@@ -33,7 +33,7 @@ class ForegroundScreen : Screen<Unit> {
 
         if (isEnabled)
           foregroundManager.Foreground(id = "foreground", removeNotification = false) {
-            notificationFactory(
+            notificationFactory.create(
               "foreground",
               "Foreground",
               NotificationManager.IMPORTANCE_LOW

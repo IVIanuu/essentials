@@ -33,63 +33,61 @@ import java.util.zip.*
   private val logger: Logger,
   private val navigator: Navigator,
   private val packageManager: PackageManager,
-  private val processRestarter: ProcessRestarter,
-  private val scope: ScopedCoroutineScope<AppScope>
+  private val processManager: ProcessManager
 ) {
-  suspend fun createBackup(): Unit =
-    withContext(scope.coroutineContext + coroutineContexts.io) {
-      val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
-      val backupFileName =
-        "${appConfig.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
+  suspend fun createBackup(): Unit = withContext(coroutineContexts.io) {
+    val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
+    val backupFileName =
+      "${appConfig.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
 
-      val backupFile = backupDir.resolve("$backupFileName.zip")
-        .also {
-          it.parentFile.mkdirs()
-          it.createNewFile()
-        }
-
-      ZipOutputStream(backupFile.outputStream()).use { zipOutputStream ->
-        backupFiles
-          .flatMap { it.walkTopDown() }
-          .filterNot { it.isDirectory }
-          .filterNot { it.absolutePath in BACKUP_BLACKLIST }
-          .filter { it.exists() }
-          .forEach { file ->
-            logger.d { "backup file $file" }
-            val entry = ZipEntry(file.relativeTo(dataDir).toString())
-            zipOutputStream.putNextEntry(entry)
-            file.inputStream().copyTo(zipOutputStream)
-            zipOutputStream.closeEntry()
-          }
+    val backupFile = backupDir.resolve("$backupFileName.zip")
+      .also {
+        it.parentFile.mkdirs()
+        it.createNewFile()
       }
 
-      val uri = FileProvider.getUriForFile(
-        appContext,
-        "${appConfig.packageName}.backupprovider",
-        backupFile
-      )
-      val intent = Intent(Intent.ACTION_SEND).apply {
-        type = "application/zip"
-        data = uri
-        putExtra(Intent.EXTRA_STREAM, uri)
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-      }
-      packageManager
-        .queryIntentActivities(intent, PackageManager.MATCH_ALL)
-        .map { it.activityInfo.packageName }
-        .distinct()
-        .forEach {
-          appContext.grantUriPermission(
-            it,
-            uri,
-            Intent.FLAG_GRANT_READ_URI_PERMISSION
-          )
+    ZipOutputStream(backupFile.outputStream()).use { zipOutputStream ->
+      backupFiles
+        .flatMap { it.walkTopDown() }
+        .filterNot { it.isDirectory }
+        .filterNot { it.absolutePath in BACKUP_BLACKLIST }
+        .filter { it.exists() }
+        .forEach { file ->
+          logger.d { "backup file $file" }
+          val entry = ZipEntry(file.relativeTo(dataDir).toString())
+          zipOutputStream.putNextEntry(entry)
+          file.inputStream().copyTo(zipOutputStream)
+          zipOutputStream.closeEntry()
         }
-
-      navigator.push(Intent.createChooser(intent, "Share File").asScreen())?.orThrow()
     }
 
-  suspend fun restoreBackup() = withContext(scope.coroutineContext + coroutineContexts.io) {
+    val uri = FileProvider.getUriForFile(
+      appContext,
+      "${appConfig.packageName}.backupprovider",
+      backupFile
+    )
+    val intent = Intent(Intent.ACTION_SEND).apply {
+      type = "application/zip"
+      data = uri
+      putExtra(Intent.EXTRA_STREAM, uri)
+      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+    packageManager
+      .queryIntentActivities(intent, PackageManager.MATCH_ALL)
+      .map { it.activityInfo.packageName }
+      .distinct()
+      .forEach {
+        appContext.grantUriPermission(
+          it,
+          uri,
+          Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
+      }
+
+    navigator.push(Intent.createChooser(intent, "Share File").asScreen())?.orThrow()
+  }
+
+  suspend fun restoreBackup() = withContext(coroutineContexts.io) {
     val uri = navigator.push(
       Intent.createChooser(
         Intent(Intent.ACTION_GET_CONTENT).apply {
@@ -111,10 +109,9 @@ import java.util.zip.*
           zipInputStream.copyTo(file.outputStream())
           zipInputStream.closeEntry()
         }
-
     }
 
-    processRestarter()
+    processManager.restart()
   }
 }
 

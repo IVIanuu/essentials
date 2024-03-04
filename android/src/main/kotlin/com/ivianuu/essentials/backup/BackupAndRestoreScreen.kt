@@ -7,9 +7,7 @@ package com.ivianuu.essentials.backup
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
@@ -31,7 +29,7 @@ class BackupAndRestoreScreen : Screen<Unit> {
                 catch { backupManager.createBackup() }
                   .onLeft {
                     it.printStackTrace()
-                    toaster("Failed to backup your data!")
+                    toaster.toast("Failed to backup your data!")
                   }
               },
               leading = { Icon(Icons.Default.Save, null) },
@@ -45,7 +43,7 @@ class BackupAndRestoreScreen : Screen<Unit> {
                 catch { backupManager.restoreBackup() }
                   .onLeft {
                     it.printStackTrace()
-                    toaster("Failed to restore your data!")
+                    toaster.toast("Failed to restore your data!")
                   }
               },
               leading = { Icon(Icons.Default.Restore, null) },

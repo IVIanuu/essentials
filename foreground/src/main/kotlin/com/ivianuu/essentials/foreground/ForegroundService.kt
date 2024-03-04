@@ -70,7 +70,7 @@ import kotlin.time.Duration.Companion.seconds
             Triple(
               "default_foreground_id",
               true,
-              notificationFactory(
+              notificationFactory.create(
                 "default_foreground",
                 "Foreground",
                 NotificationManager.IMPORTANCE_LOW

@@ -22,7 +22,7 @@ abstract class RootPermission(
       shell: Shell,
       toaster: Toaster
     ) = PermissionRequestHandler<P> {
-      if (!shell.isAvailable()) toaster("Your device is not rooted!")
+      if (!shell.isAvailable()) toaster.toast("Your device is not rooted!")
     }
   }
 }

@@ -21,7 +21,7 @@ import com.ivianuu.injekt.*
 
   @Provide fun executor(intentSender: ActionIntentSender) =
     ActionExecutor<SearchActionId> {
-      intentSender(
+      intentSender.sendIntent(
         Intent(Intent.ACTION_MAIN).apply {
           component = ComponentName(
             "com.google.android.googlequicksearchbox",

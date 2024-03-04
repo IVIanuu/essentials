@@ -21,7 +21,7 @@ fun interface AppUiDecorator : ExtensionPoint<AppUiDecorator> {
   private val records: List<ExtensionPointRecord<AppUiDecorator>>,
   private val logger: Logger
 ) {
-  @Composable operator fun invoke(content: @Composable () -> Unit) {
+  @Composable fun DecoratedContent(content: @Composable () -> Unit) {
     val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
       records
         .sortedWithLoadingOrder()

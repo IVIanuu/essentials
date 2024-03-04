@@ -57,7 +57,7 @@ interface PremiumVersionManager {
     LaunchedEffect(isPremiumVersion) {
       if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
         logger.d { "handle premium version downgrade" }
-        downgradeHandlers().parMap { it() }
+        downgradeHandlers().parMap { it.onPremiumDowngrade() }
       }
       pref.updateData { copy(wasPremiumVersion = isPremiumVersion) }
     }
@@ -74,7 +74,7 @@ interface PremiumVersionManager {
     if (isPremiumVersion.first()) return block()
 
     scope.launch {
-      toaster("This functionality is only available in the premium version!")
+      toaster.toast("This functionality is only available in the premium version!")
       if (!deviceScreenManager.unlockScreen()) return@launch
       appUiStarter.startAppUi()
         .cast<UiScopeOwner>()
@@ -125,7 +125,7 @@ typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 }
 
 fun interface PremiumDowngradeHandler {
-  suspend operator fun invoke()
+  suspend fun onPremiumDowngrade()
 
   @Provide companion object {
     @Provide val defaultHandlers get() = emptyList<PremiumDowngradeHandler>()

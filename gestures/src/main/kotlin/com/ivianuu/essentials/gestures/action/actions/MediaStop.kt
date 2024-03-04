@@ -23,7 +23,7 @@ import com.ivianuu.injekt.*
   @Provide fun executor(
     mediaActionSender: MediaActionSender
   ) = ActionExecutor<StopActionId> {
-    mediaActionSender(KeyEvent.KEYCODE_MEDIA_STOP)
+    mediaActionSender.sendMediaAction(KeyEvent.KEYCODE_MEDIA_STOP)
   }
 
   @Provide inline val settingsScreen: @ActionSettingsScreen<StopActionId> Screen<Unit>

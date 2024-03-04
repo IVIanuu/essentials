@@ -32,11 +32,11 @@ fun interface PermissionIntentFactory<P : Permission> {
   raceOf(
     {
       if (showFindPermissionHint.value)
-        toaster("Find ${appConfig.appName} here")
+        toaster.toast("Find ${appConfig.appName} here")
       // wait until user navigates back from the permission screen
       catch { navigator.push(intentFactory.createIntent(permission).asScreen()) }
         .printErrors()
-        .onLeft { toaster("Couldn\'t open settings screen! Please grant the permission manually") }
+        .onLeft { toaster.toast("Couldn\'t open settings screen! Please grant the permission manually") }
     },
     {
       // wait until user granted permission

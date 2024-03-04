@@ -99,7 +99,7 @@ import kotlin.reflect.*
     screen = screen,
     config = config,
     content = {
-      decorateScreen {
+      decorateScreen.DecoratedContent {
         ui.Content()
       }
     },

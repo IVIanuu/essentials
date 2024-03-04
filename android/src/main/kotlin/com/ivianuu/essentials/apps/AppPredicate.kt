@@ -9,14 +9,14 @@ import android.content.pm.*
 import com.ivianuu.injekt.*
 
 fun interface AppPredicate {
-  operator fun invoke(app: AppInfo): Boolean
+  fun test(app: AppInfo): Boolean
 }
 
 val DefaultAppPredicate = AppPredicate { true }
 
 @Provide class LaunchableAppPredicate(private val packageManager: PackageManager): AppPredicate {
   val cache = mutableMapOf<String, Boolean>()
-  override fun invoke(app: AppInfo): Boolean = cache.getOrPut(app.packageName) {
+  override fun test(app: AppInfo): Boolean = cache.getOrPut(app.packageName) {
     packageManager.getLaunchIntentForPackage(app.packageName) != null
   }
 }
@@ -29,5 +29,5 @@ val DefaultAppPredicate = AppPredicate { true }
     packageManager.queryIntentActivities(intent, 0)
       .map { it.activityInfo.applicationInfo.packageName }
   }
-  override fun invoke(app: AppInfo): Boolean = app.packageName in apps
+  override fun test(app: AppInfo): Boolean = app.packageName in apps
 }

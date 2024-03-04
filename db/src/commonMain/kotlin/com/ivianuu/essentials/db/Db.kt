@@ -201,5 +201,5 @@ suspend fun Db.dropAllAndRecreateTables() {
 }
 
 fun interface DbFactory {
-  operator fun invoke(name: String, schema: Schema): Db
+  fun createDb(name: String, schema: Schema): Db
 }

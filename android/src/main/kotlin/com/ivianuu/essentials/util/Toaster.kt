@@ -15,7 +15,7 @@ import kotlinx.coroutines.*
   private val coroutineContexts: CoroutineContexts,
   private val scope: ScopedCoroutineScope<AppScope>
 ) {
-  operator fun invoke(message: String) {
+  fun toast(message: String) {
     scope.launch(coroutineContexts.main) {
       Toast.makeText(
         appContext,

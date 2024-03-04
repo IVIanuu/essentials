@@ -71,7 +71,7 @@ class DonationScreen : DialogScreen<Unit> {
                   onClick = scopedAction {
                     if (billingManager.purchase(donation.donation.sku, true, true)) {
                       billingManager.consumePurchase(donation.donation.sku)
-                      toaster("Thanks for your support! \uD83D\uDC9B")
+                      toaster.toast("Thanks for your support! \uD83D\uDC9B")
                     }
                   },
                   title = { Text(donation.title) },

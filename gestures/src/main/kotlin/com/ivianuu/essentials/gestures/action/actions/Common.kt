@@ -50,7 +50,7 @@ fun staticActionIcon(id: Int) = ActionIcon {
   private val appContext: AppContext,
   private val toaster: Toaster
 ) {
-  operator fun invoke(intent: Intent, options: Bundle?) {
+  fun sendIntent(intent: Intent, options: Bundle?) {
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     catch {
       PendingIntent.getActivity(
@@ -62,18 +62,18 @@ fun staticActionIcon(id: Int) = ActionIcon {
       ).send()
     }.onLeft {
       it.printStackTrace()
-      toaster("Failed to launch screen!")
+      toaster.toast("Failed to launch screen!")
     }
   }
 }
 
-@Provide class CloseSystemDialogsUseCase(
+@Provide class SystemDialogController(
   private val appConfig: AppConfig,
   private val appContext: AppContext,
   private val accessibilityManager: AccessibilityManager,
 ) {
   @SuppressLint("MissingPermission", "InlinedApi")
-  suspend operator fun invoke(): Either<Throwable, Unit> = catch {
+  suspend fun closeSystemDialogs(): Either<Throwable, Unit> = catch {
     if (appConfig.sdk >= 31)
       accessibilityManager.performGlobalAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
     else

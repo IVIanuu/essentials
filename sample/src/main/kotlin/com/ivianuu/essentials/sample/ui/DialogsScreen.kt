@@ -96,7 +96,7 @@ class DialogsScreen : Screen<Unit> {
               onClick = action {
                 navigator.push(
                   ConfirmationScreen(title = "Would you like to share your private data?")
-                )?.let { toaster("result = $it") }
+                )?.let { toaster.toast("result = $it") }
               }
             ) { Text("Confirmation") }
           }

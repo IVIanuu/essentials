@@ -39,7 +39,7 @@ class ActionsScreen : Screen<Unit> {
 
               delay(1.seconds)
 
-              toaster("Execute action ${action.title}")
+              toaster.toast("Execute action ${action.title}")
 
               repository.executeAction(actionId)
             }
@@ -56,7 +56,7 @@ class ActionsScreen : Screen<Unit> {
               delay(1.seconds)
 
               while (true) {
-                toaster("Execute action ${action.title}")
+                toaster.toast("Execute action ${action.title}")
 
                 repository.executeAction(actionId)
 

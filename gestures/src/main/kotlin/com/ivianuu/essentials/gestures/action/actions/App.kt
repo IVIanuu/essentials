@@ -9,9 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.res.*
 import com.ivianuu.essentials.apps.*
-import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -45,7 +43,7 @@ import kotlinx.coroutines.flow.*
       .split(ACTION_DELIMITER)
       .first()
     return ActionExecutor<ActionId> {
-      intentSender(
+      intentSender.sendIntent(
         packageManager.getLaunchIntentForPackage(packageName)!!,
         null
       )

@@ -42,7 +42,7 @@ class ShortcutPickerScreen : Screen<Shortcut> {
                     navigator.pop(screen, finalShortcut)
                   }.onLeft {
                     it.printStackTrace()
-                    toaster("Failed to pick a shortcut!")
+                    toaster.toast("Failed to pick a shortcut!")
                   }
                 },
                 leading = {

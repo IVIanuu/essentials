@@ -33,7 +33,7 @@ class AppPickerScreen(
       ) {
         ResourceBox(
           repository.installedApps
-            .map { it.filter { screen.appPredicate(it) } }
+            .map { it.filter { screen.appPredicate.test(it) } }
             .scopedResourceState()
         ) { apps ->
           VerticalList {

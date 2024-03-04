@@ -24,15 +24,15 @@ import com.ivianuu.injekt.*
 
   @Provide fun homeActionExecutor(
     accessibilityManager: AccessibilityManager,
-    closeSystemDialogs: CloseSystemDialogsUseCase,
-    intentSender: ActionIntentSender
+    intentSender: ActionIntentSender,
+    systemDialogController: SystemDialogController,
   ) = ActionExecutor<HomeActionId> {
     if (!needsHomeIntentWorkaround) {
       accessibilityManager.performGlobalAction(GLOBAL_ACTION_HOME)
     } else {
-      closeSystemDialogs()
+      systemDialogController.closeSystemDialogs()
 
-      intentSender(
+      intentSender.sendIntent(
         Intent(Intent.ACTION_MAIN).apply {
           addCategory(
             Intent.CATEGORY_HOME

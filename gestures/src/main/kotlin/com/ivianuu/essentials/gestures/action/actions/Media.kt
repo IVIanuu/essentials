@@ -23,7 +23,7 @@ import kotlinx.serialization.*
   private val appContext: AppContext,
   private val prefs: DataStore<MediaActionPrefs>
 ) {
-  suspend operator fun invoke(keycode: Int) {
+  suspend fun sendMediaAction(keycode: Int) {
     val currentPrefs = prefs.data.first()
     appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
     appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)

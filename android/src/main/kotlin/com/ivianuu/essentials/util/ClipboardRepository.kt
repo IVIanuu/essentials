@@ -30,7 +30,7 @@ import android.content.ClipboardManager as AndroidClipboardManager
     catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
       .also { result ->
         if (showMessage)
-          toaster(
+          toaster.toast(
             result.fold(
               { "Couldn\'t copy to clipboard!" },
               { "Copied to clipboard!" }

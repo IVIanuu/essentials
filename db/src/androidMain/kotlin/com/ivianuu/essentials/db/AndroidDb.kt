@@ -179,7 +179,7 @@ class AndroidDb private constructor(
   private val context: Context,
   private val coroutineContexts: CoroutineContexts
 ) : DbFactory {
-  override fun invoke(name: String, schema: Schema) = AndroidDb(
+  override fun createDb(name: String, schema: Schema) = AndroidDb(
     name = name,
     schema = schema,
     coroutineContext = coroutineContexts.io,

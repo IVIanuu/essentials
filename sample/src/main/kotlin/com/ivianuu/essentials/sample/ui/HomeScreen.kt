@@ -39,7 +39,7 @@ import com.ivianuu.injekt.*
             actions = {
               DropdownMenuButton {
                 listOf("Option 1", "Option 2", "Option 3").forEach { title ->
-                  DropdownMenuItem(onClick = { toaster("Selected $title") }) {
+                  DropdownMenuItem(onClick = { toaster.toast("Selected $title") }) {
                     Text(title)
                   }
                 }

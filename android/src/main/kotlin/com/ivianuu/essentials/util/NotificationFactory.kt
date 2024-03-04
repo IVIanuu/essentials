@@ -17,7 +17,7 @@ import com.ivianuu.injekt.*
   private val appColors: AppColors,
   @PublishedApi internal val notificationManager: @SystemService NotificationManager
 ) {
-  inline operator fun invoke(
+  inline fun create(
     channel: NotificationChannel,
     builder: NotificationCompat.Builder.() -> Unit
   ): Notification {
@@ -32,12 +32,12 @@ import com.ivianuu.injekt.*
     color = appColors.primary.toArgb()
   }
 
-  inline operator fun invoke(
+  inline fun create(
     channelId: String,
     channelName: String,
     importance: Int,
     builder: NotificationCompat.Builder.() -> Unit
-  ): Notification = invoke(NotificationChannel(channelId, channelName, importance), builder)
+  ): Notification = create(NotificationChannel(channelId, channelName, importance), builder)
 }
 
 inline val NotificationCompat.Builder.context: Context

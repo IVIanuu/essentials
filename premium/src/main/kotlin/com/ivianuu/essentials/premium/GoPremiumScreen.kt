@@ -56,7 +56,7 @@ class GoPremiumScreen(
       val goPremium = scopedAction {
         if (premiumVersionManager.purchasePremiumVersion()) {
           navigator.pop(screen, true)
-          toaster("Premium version is now active!")
+          toaster.toast("Premium version is now active!")
         }
       }
       val tryBasicVersion = scopedAction {

@@ -13,11 +13,11 @@ import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.flowOn
 
-@Provide class ContentChangesFactory(
+@Provide class ContentChangeManager(
   private val contentResolver: ContentResolver,
   private val coroutineContexts: CoroutineContexts,
 ) {
-  operator fun invoke(uri: Uri): Flow<Unit> = callbackFlow {
+  fun contentChanges(uri: Uri): Flow<Unit> = callbackFlow {
     val observer = object : ContentObserver(null) {
       override fun onChange(selfChange: Boolean) {
         super.onChange(selfChange)

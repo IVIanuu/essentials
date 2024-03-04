@@ -15,7 +15,6 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.accessibility.AccessibilityManager
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
 
 @Provide object NotificationsActionId : ActionId("notifications") {
   @Provide val action get() = Action(
@@ -27,9 +26,9 @@ import kotlinx.coroutines.flow.*
 
   @Provide fun executor(
     accessibilityManager: AccessibilityManager,
-    appScope: Scope<AppScope>,
     appContext: AppContext,
-    closeSystemDialogs: CloseSystemDialogsUseCase
+    appScope: Scope<AppScope>,
+    systemDialogController: SystemDialogController
   ) = ActionExecutor<NotificationsActionId> {
     val targetState = catch {
       val service = appScope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
@@ -57,7 +56,7 @@ import kotlinx.coroutines.flow.*
     if (targetState)
       accessibilityManager.performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS)
     else
-      closeSystemDialogs()
+      systemDialogController.closeSystemDialogs()
   }
 
   @Provide val accessibilityConfig: AccessibilityConfig

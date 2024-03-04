@@ -10,7 +10,7 @@ import kotlin.time.*
 import kotlin.time.Duration.Companion.nanoseconds
 
 fun interface Clock {
-  operator fun invoke(): Duration
+  fun now(): Duration
 
   @Provide companion object {
     @Provide val impl = Clock { System.nanoTime().nanoseconds }

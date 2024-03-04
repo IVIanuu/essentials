@@ -26,11 +26,11 @@ import kotlinx.coroutines.flow.*
   private val actionSettings: Map<String, () -> @ActionSettingsScreen<ActionId> Screen<Unit>>,
   private val actionPickerDelegates: List<() -> ActionPickerDelegate>,
   private val appConfig: AppConfig,
-  private val closeSystemDialogs: CloseSystemDialogsUseCase,
   private val coroutineContexts: CoroutineContexts,
   private val deviceScreenManager: DeviceScreenManager,
   private val logger: Logger,
   private val permissionManager: PermissionManager,
+  private val systemDialogController: SystemDialogController,
   private val toaster: Toaster
 ) {
   suspend fun getAllActions() = withContext(coroutineContexts.computation) {
@@ -62,7 +62,7 @@ import kotlinx.coroutines.flow.*
           .map { it() }
           .firstNotNullOfOrNull { it.createExecutor(id) }
     }.getOrNull()
-      ?: ActionExecutor { toaster(RECONFIGURE_ACTION_MESSAGE) }
+      ?: ActionExecutor { toaster.toast(RECONFIGURE_ACTION_MESSAGE) }
   }
 
   suspend fun getActionSettingsKey(id: String) =
@@ -99,7 +99,7 @@ import kotlinx.coroutines.flow.*
       if (action.closeSystemDialogs &&
         (appConfig.sdk < 31 ||
             permissionManager.permissionState(listOf(ActionAccessibilityPermission::class)).first()))
-        closeSystemDialogs()
+        systemDialogController.closeSystemDialogs()
 
       logger.d { "fire $id" }
 
@@ -108,7 +108,7 @@ import kotlinx.coroutines.flow.*
       return@catch true
     }.onLeft {
       it.printStackTrace()
-      toaster("Failed to execute action $id!")
+      toaster.toast("Failed to execute action $id!")
     }.getOrElse { false }
   }
 

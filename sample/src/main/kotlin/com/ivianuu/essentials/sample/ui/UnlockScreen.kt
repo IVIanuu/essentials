@@ -35,11 +35,11 @@ class UnlockScreen : Screen<Unit> {
           Button(
             onClick = {
               scope.launch {
-                toaster("Turn the screen off")
+                toaster.toast("Turn the screen off")
                 deviceScreenManager.screenState.first { !it.isOn }
                 delay(1500)
                 val unlocked = deviceScreenManager.unlockScreen()
-                toaster("Screen unlocked $unlocked")
+                toaster.toast("Screen unlocked $unlocked")
               }
             }
           ) { Text("Unlock") }
@@ -49,11 +49,11 @@ class UnlockScreen : Screen<Unit> {
           Button(
             onClick = {
               scope.launch {
-                toaster("Turn the screen off")
+                toaster.toast("Turn the screen off")
                 deviceScreenManager.screenState.first { !it.isOn }
                 delay(1500)
                 val screenOn = deviceScreenManager.turnScreenOn()
-                toaster("Screen activated $screenOn")
+                toaster.toast("Screen activated $screenOn")
               }
             }
           ) { Text("Activate") }

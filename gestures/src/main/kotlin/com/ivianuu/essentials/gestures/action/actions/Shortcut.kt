@@ -53,7 +53,7 @@ import java.io.*
 
     val tmp = id.split(ACTION_DELIMITER)
     val intent = Intent.getIntent(tmp[2])
-    return ActionExecutor<ActionId> { intentSender(intent, null) }
+    return ActionExecutor<ActionId> { intentSender.sendIntent(intent, null) }
   }
 }
 
