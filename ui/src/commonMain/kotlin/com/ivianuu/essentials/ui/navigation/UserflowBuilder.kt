@@ -10,7 +10,9 @@ import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
 
-fun interface UserflowBuilder : suspend () -> List<Screen<*>>, ExtensionPoint<UserflowBuilder>
+fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
+  suspend fun createUserflow(): List<Screen<*>>
+}
 
 @Provide fun userflowBuilderWorker(
   records: List<ExtensionPointRecord<UserflowBuilder>>,
@@ -19,7 +21,7 @@ fun interface UserflowBuilder : suspend () -> List<Screen<*>>, ExtensionPoint<Us
 ) = ScopeWorker<UiScope> {
   val userflowScreens = records
     .sortedWithLoadingOrder()
-    .flatMap { it.instance() }
+    .flatMap { it.instance.createUserflow() }
 
   logger.d { "Userflow -> $userflowScreens" }
 

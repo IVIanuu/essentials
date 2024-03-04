@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.*
 ) : UserflowBuilder {
   private var hintShown = false
 
-  override suspend fun invoke(): List<Screen<*>> {
+  override suspend fun createUserflow(): List<Screen<*>> {
     if (hintShown || !enabled.value || premiumVersionManager.isPremiumVersion.first())
       hintShown = true
     return listOf(
