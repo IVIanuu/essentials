@@ -38,7 +38,7 @@ import kotlinx.serialization.*
   val premiumSkuDetails: Flow<SkuDetails> =
     flow { emit(billingManager.getSkuDetails(premiumVersionSku)!!) }
 
-  val isPremiumVersion: Flow<Boolean> = scope.launchMolecule {
+  val isPremiumVersion = scope.moleculeStateFlow {
     val isPremiumVersion = (oldPremiumVersionSkus + premiumVersionSku)
       .map { billingManager.isPurchased(it).state(null) == true }
       .any()
