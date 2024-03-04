@@ -24,7 +24,7 @@ import kotlinx.serialization.*
 
 @Provide @Eager<AppScope> class PremiumVersionManager(
   private val appUiStarter: AppUiStarter,
-  private val billingService: BillingService,
+  private val billingManager: BillingManager,
   private val deviceScreenManager: DeviceScreenManager,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
   private val logger: Logger,
@@ -35,12 +35,12 @@ import kotlinx.serialization.*
   private val toaster: Toaster
 ) {
   val premiumSkuDetails: Flow<SkuDetails> =
-    flow { emit(billingService.getSkuDetails(premiumVersionSku)!!) }
+    flow { emit(billingManager.getSkuDetails(premiumVersionSku)!!) }
 
   val isPremiumVersion: Flow<Boolean> = combine(
-    billingService.isPurchased(premiumVersionSku),
+    billingManager.isPurchased(premiumVersionSku),
     if (oldPremiumVersionSkus.isNotEmpty())
-      combine(oldPremiumVersionSkus.map { billingService.isPurchased(it) }) {
+      combine(oldPremiumVersionSkus.map { billingManager.isPurchased(it) }) {
         it.any { it }
       }
     else flowOf(false)
@@ -59,9 +59,9 @@ import kotlinx.serialization.*
     .shareIn(scope, SharingStarted.Eagerly, 1)
 
   suspend fun purchasePremiumVersion() =
-    billingService.purchase(premiumVersionSku, true, true)
+    billingManager.purchase(premiumVersionSku, true, true)
 
-  suspend fun consumePremiumVersion() = billingService.consumePurchase(premiumVersionSku)
+  suspend fun consumePremiumVersion() = billingManager.consumePurchase(premiumVersionSku)
 
   suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
     if (isPremiumVersion.first()) return block()

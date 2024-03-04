@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
-@Provide @Scoped<AppScope> class BillingService(
+@Provide @Scoped<AppScope> class BillingManager(
   private val appScope: Scope<AppScope>,
   private val appUiStarter: AppUiStarter,
   private val billingClientFactory: () -> BillingClient,
@@ -62,7 +62,7 @@ import kotlin.time.Duration.Companion.seconds
     }
   )
 
-  fun isPurchased(sku: Sku): Flow<Boolean> = refreshes.onStart { emit(BillingRefresh) }
+  fun isPurchased(sku: Sku): Flow<Boolean> = refreshes
     .onStart { emit(BillingRefresh) }
     .onEach { logger.d { "update is purchased for $sku" } }
     .map { billingClient.use(Unit) { it.getIsPurchased(sku) } }

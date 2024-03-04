@@ -26,7 +26,7 @@ import com.ivianuu.injekt.*
 class DonationScreen : OverlayScreen<Unit> {
   @Provide companion object {
     @Provide fun ui(
-      billingService: BillingService,
+      billingManager: BillingManager,
       donations: Donations,
       navigator: Navigator,
       screen: DonationScreen,
@@ -36,7 +36,7 @@ class DonationScreen : OverlayScreen<Unit> {
         value = donations
           .value
           .parMap { donation ->
-            val details = billingService.getSkuDetails(donation.sku)!!
+            val details = billingManager.getSkuDetails(donation.sku)!!
             UiDonation(
               donation,
               details.title
@@ -68,8 +68,8 @@ class DonationScreen : OverlayScreen<Unit> {
                 ListItem(
                   modifier = Modifier.padding(horizontal = 8.dp),
                   onClick = scopedAction {
-                    if (billingService.purchase(donation.donation.sku, true, true)) {
-                      billingService.consumePurchase(donation.donation.sku)
+                    if (billingManager.purchase(donation.donation.sku, true, true)) {
+                      billingManager.consumePurchase(donation.donation.sku)
                       toaster("Thanks for your support! \uD83D\uDC9B")
                     }
                   },

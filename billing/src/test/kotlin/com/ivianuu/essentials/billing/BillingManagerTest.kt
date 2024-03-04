@@ -22,7 +22,7 @@ import org.robolectric.annotation.*
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
-class BillingServiceTest {
+class BillingManagerTest {
   @Provide val logger = NoopLogger
   @Provide val appForegroundState = flowOf(AppForegroundState.FOREGROUND)
   @Provide val appUiStarter = AppUiStarter { mockk() }
@@ -30,7 +30,7 @@ class BillingServiceTest {
   @Test fun testWithConnection() = runCancellingBlockingTest {
     @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()
 
-    val context = BillingService(
+    val context = BillingManager(
       billingClientFactory = {
         mockk {
           every { startConnection(any()) } answers {
@@ -54,7 +54,7 @@ class BillingServiceTest {
   @Test fun testWithConnectionWithMultipleCallsToFinish() = runCancellingBlockingTest {
     @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()
 
-    val context = BillingService(
+    val context = BillingManager(
       billingClientFactory = {
         mockk {
           every { startConnection(any()) } answers {
@@ -84,7 +84,7 @@ class BillingServiceTest {
     @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()
     @Provide val refreshes = EventFlow<BillingRefresh>()
 
-    val service = BillingService(
+    val service = BillingManager(
       billingClientFactory = { TestBillingClient { refreshes.tryEmit(BillingRefresh) }.withTestSku() },
       coroutineContexts = CoroutineContexts(dispatcher)
     )
