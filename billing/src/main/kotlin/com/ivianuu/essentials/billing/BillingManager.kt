@@ -87,11 +87,8 @@ import kotlin.time.Duration.Companion.seconds
     }
     if (consumeOldPurchaseIfUnspecified) {
       val oldPurchase = billingClient.getPurchase(sku)
-      if (oldPurchase != null) {
-        if (oldPurchase.purchaseState == Purchase.PurchaseState.UNSPECIFIED_STATE) {
-          consumePurchase(sku)
-        }
-      }
+      if (oldPurchase != null && oldPurchase.purchaseState == Purchase.PurchaseState.UNSPECIFIED_STATE)
+        consumePurchase(sku)
     }
 
     val activity = appUiStarter.startAppUi()
