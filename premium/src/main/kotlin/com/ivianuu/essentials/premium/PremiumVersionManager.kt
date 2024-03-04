@@ -23,7 +23,18 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
 
-@Provide @Eager<AppScope> class PremiumVersionManager(
+interface PremiumVersionManager {
+  val premiumSkuDetails: Flow<SkuDetails>
+  val isPremiumVersion: StateFlow<Boolean>
+
+  suspend fun purchasePremiumVersion(): Boolean
+
+  suspend fun consumePremiumVersion(): Boolean
+
+  suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
+}
+
+@Provide @Eager<AppScope> class PremiumVersionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val billingManager: BillingManager,
   private val deviceScreenManager: DeviceScreenManager,
@@ -34,11 +45,11 @@ import kotlinx.serialization.*
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
   private val scope: ScopedCoroutineScope<AppScope>,
   private val toaster: Toaster
-) {
-  val premiumSkuDetails: Flow<SkuDetails> =
+) : PremiumVersionManager {
+  override val premiumSkuDetails: Flow<SkuDetails> =
     flow { emit(billingManager.getSkuDetails(premiumVersionSku)!!) }
 
-  val isPremiumVersion = scope.moleculeStateFlow {
+  override val isPremiumVersion = scope.moleculeStateFlow {
     val isPremiumVersion = (oldPremiumVersionSkus + premiumVersionSku)
       .map { billingManager.isPurchased(it).state(null) == true }
       .any()
@@ -54,12 +65,12 @@ import kotlinx.serialization.*
     isPremiumVersion
   }
 
-  suspend fun purchasePremiumVersion() =
+  override suspend fun purchasePremiumVersion() =
     billingManager.purchase(premiumVersionSku, true, true)
 
-  suspend fun consumePremiumVersion() = billingManager.consumePurchase(premiumVersionSku)
+  override suspend fun consumePremiumVersion() = billingManager.consumePurchase(premiumVersionSku)
 
-  suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
+  override suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
     if (isPremiumVersion.first()) return block()
 
     scope.launch {
