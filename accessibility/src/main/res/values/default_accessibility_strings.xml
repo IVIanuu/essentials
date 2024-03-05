@@ -3,6 +3,8 @@
   -->
 
 <resources>
+    <public name="accessibility_service_desc" type="string"/>
+    <public name="accessibility_service_summary" type="string"/>
     <string name="accessibility_service_desc">TODO</string>
     <string name="accessibility_service_summary">TODO</string>
 </resources>
