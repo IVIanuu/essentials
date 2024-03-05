@@ -5,14 +5,14 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.*
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
 data class TileState<out T : AbstractEsTileService>(
-  val icon: Icon? = null,
   val label: String? = null,
+  val icon: Icon? = null,
   val description: String? = null,
   val status: Status = Status.ACTIVE,
   val onClick: () -> Unit = {}
@@ -20,12 +20,13 @@ data class TileState<out T : AbstractEsTileService>(
   enum class Status { UNAVAILABLE, ACTIVE, INACTIVE }
 
   @Provide companion object {
-    @Provide fun <@AddOn T : Presenter<TileState<S>>, S : AbstractEsTileService> tilePresenters(
+    @Provide fun <@AddOn T : Presenter<TileState<S>>, S : AbstractEsTileService> tilePresenterBinding(
       serviceClass: KClass<S>,
       presenter: () -> T
-    ): Pair<KClass<AbstractEsTileService>, () -> Presenter<TileState<*>>> = (serviceClass to presenter).cast()
+    ): Pair<KClass<out AbstractEsTileService>, () -> Presenter<TileState<*>>> = (serviceClass to presenter).cast()
 
-    @Provide val defaultTilePresenters get() = emptyList<Pair<KClass<AbstractEsTileService>, () -> Presenter<TileState<*>>>>()
+    @Provide val defaultTilePresenterBindings
+      get() = emptyList<Pair<KClass<out AbstractEsTileService>, () -> Presenter<TileState<*>>>>()
   }
 }
 

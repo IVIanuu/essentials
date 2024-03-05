@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
-  -->
-
-<resources>
-    <string name="accessibility_service_desc">This is a desc</string>
-    <string name="accessibility_service_summary">This is a summary</string>
-</resources>

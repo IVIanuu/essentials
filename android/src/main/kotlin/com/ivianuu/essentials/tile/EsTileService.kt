@@ -4,63 +4,73 @@
 
 package com.ivianuu.essentials.tile
 
+import android.graphics.*
+import android.graphics.drawable.*
 import android.service.quicksettings.*
+import android.view.*
+import android.view.View.MeasureSpec
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
-import app.cash.molecule.*
+import androidx.compose.ui.*
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.unit.*
+import androidx.core.view.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlin.coroutines.*
 import kotlin.reflect.*
 
 @Provide @AndroidComponent class EsTileService1(
-  logger: Logger = inject,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope> = inject
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService2(
-  logger: Logger = inject,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope> = inject
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService3(
-  logger: Logger = inject,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope> = inject
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService4(
-  logger: Logger = inject,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope> = inject
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService5(
-  logger: Logger = inject,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope> = inject
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService6(
-  logger: Logger = inject,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope> = inject
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService7(
-  logger: Logger = inject,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope> = inject
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService8(
-  logger: Logger = inject,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope> = inject
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 @Provide @AndroidComponent class EsTileService9(
-  logger: Logger = inject,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope> = inject
-) : AbstractEsTileService()
+  logger: Logger,
+  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
+) : AbstractEsTileService(logger, tileScopeFactory)
 
 abstract class AbstractEsTileService(
-  private val logger: Logger = inject,
-  private val tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope> = inject
+  private val logger: Logger,
+  private val tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
 ) : TileService() {
   private var tileScope: Scope<TileScope>? = null
   private var currentState: TileState<*>? = null
@@ -109,5 +119,5 @@ abstract class AbstractEsTileService(
 }
 
 @Provide @Service<TileScope> data class TileComponent(
-  val tilePresenterRecords: Map<KClass<AbstractEsTileService>, () -> Presenter<TileState<*>>>
+  val tilePresenterRecords: Map<KClass<out AbstractEsTileService>, () -> Presenter<TileState<*>>>
 )

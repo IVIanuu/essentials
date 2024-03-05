@@ -8,7 +8,7 @@ import com.ivianuu.injekt.*
 @Provide fun sampleTilePresenter(resources: Resources) = Presenter {
   var count by remember { mutableIntStateOf(0) }
   TileState<EsTileService1>(
-    icon = resources.load(com.ivianuu.essentials.gestures.R.drawable.ic_flashlight_on),
+    icon = resources.load(com.ivianuu.essentials.gestures.R.drawable.ic_action_recent_apps),
     label = "Count $count",
     onClick = { count++ }
   )
