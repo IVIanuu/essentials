@@ -21,6 +21,7 @@ dependencies {
   api(Deps.Compose.runtime)
   api(Deps.Compose.runtimeSaveable)
   api(Deps.Coroutines.core)
+  api(Deps.Injekt.common)
   api(Deps.Injekt.core)
   api(Deps.kermit)
   api(Deps.KotlinSerialization.json)

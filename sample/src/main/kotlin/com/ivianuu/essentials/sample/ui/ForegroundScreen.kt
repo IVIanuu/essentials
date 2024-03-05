@@ -38,7 +38,7 @@ class ForegroundScreen : Screen<Unit> {
               "Foreground",
               NotificationManager.IMPORTANCE_LOW
             ) {
-              setSmallIcon(R.drawable.ic_home)
+              setSmallIcon(R.drawable.ic_launcher_foreground)
               setContentTitle("Foreground")
               setContentText("Current progress ${
                 ticker(1000)

@@ -6,6 +6,7 @@ package com.ivianuu.essentials
 
 import androidx.compose.runtime.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 import kotlinx.atomicfu.locks.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -76,8 +77,8 @@ import kotlin.reflect.*
     (if (value !== NULL) value else null).unsafeCast()
   }
 
-  inline fun <T : Any> scoped(key: KClass<T> = inject, compute: () -> T): T =
-    scoped(key as Any, compute)
+  inline fun <T : Any> scoped(key: TypeKey<T> = inject, compute: () -> T): T =
+    scoped(key.value, compute)
 
   fun dispose() {
     synchronized(this) {
@@ -194,8 +195,9 @@ annotation class Scoped<N> {
   @Provide companion object {
     @Provide inline fun <@AddOn T : @Scoped<N> S, reified S : Any, N : Any> scoped(
       scope: Scope<N>,
+      key: TypeKey<S>,
       crossinline init: () -> T,
-    ): S = scope.scoped(typeOf<S>()) { init() }
+    ): S = scope.scoped(key) { init() }
   }
 }
 
