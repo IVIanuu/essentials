@@ -20,7 +20,7 @@ data class TileState<out T : AbstractEsTileService>(
   enum class Status { UNAVAILABLE, ACTIVE, INACTIVE }
 
   @Provide companion object {
-    @Provide fun <@AddOn T : Presenter<TileState<S>>, S : AbstractEsTileService> tilePresenterBinding(
+    @Provide fun <@AddOn T : Presenter<out TileState<S>>, S : AbstractEsTileService> tilePresenterBinding(
       serviceClass: KClass<S>,
       presenter: () -> T
     ): Pair<KClass<out AbstractEsTileService>, () -> Presenter<TileState<*>>> = (serviceClass to presenter).cast()
