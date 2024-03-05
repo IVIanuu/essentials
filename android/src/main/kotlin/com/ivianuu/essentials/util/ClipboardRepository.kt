@@ -12,8 +12,7 @@ import kotlinx.coroutines.flow.*
 import android.content.ClipboardManager as AndroidClipboardManager
 
 @Provide class ClipboardRepository(
-  private val androidClipboardManager: @SystemService AndroidClipboardManager,
-  private val toaster: Toaster
+  private val androidClipboardManager: @SystemService AndroidClipboardManager
 ) {
   val clipboardText: Flow<String?> = callbackFlow {
     val listener = AndroidClipboardManager.OnPrimaryClipChangedListener {
@@ -26,16 +25,7 @@ import android.content.ClipboardManager as AndroidClipboardManager
     awaitClose { androidClipboardManager.removePrimaryClipChangedListener(listener) }
   }
 
-  suspend fun updateClipboardText(value: String, showMessage: Boolean) {
+  suspend fun updateClipboardText(value: String) {
     catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
-      .also { result ->
-        if (showMessage)
-          toaster.toast(
-            result.fold(
-              { "Couldn\'t copy to clipboard!" },
-              { "Copied to clipboard!" }
-            )
-          )
-      }
   }
 }
