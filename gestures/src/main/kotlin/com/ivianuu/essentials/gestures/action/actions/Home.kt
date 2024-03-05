@@ -43,5 +43,5 @@ import com.ivianuu.injekt.*
     }
   }
 
-  private val needsHomeIntentWorkaround = Build.MANUFACTURER == "OnePlus"
+  private val needsHomeIntentWorkaround get() = Build.MANUFACTURER == "OnePlus"
 }
