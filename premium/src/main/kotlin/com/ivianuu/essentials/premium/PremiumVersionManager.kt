@@ -52,7 +52,7 @@ interface PremiumVersionManager {
   override val isPremiumVersion = scope.moleculeStateFlow {
     val isPremiumVersion = (oldPremiumVersionSkus + premiumVersionSku)
       .map { billingManager.isPurchased(it).state(null) == true }
-      .any()
+      .any { it }
 
     LaunchedEffect(isPremiumVersion) {
       if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
