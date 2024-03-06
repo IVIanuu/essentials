@@ -32,7 +32,7 @@ class ForegroundScreen : Screen<Unit> {
         var isEnabled by remember { mutableStateOf(false) }
 
         if (isEnabled)
-          foregroundManager.Foreground(id = "foreground", removeNotification = false) {
+          foregroundManager.Foreground(removeNotification = false) {
             notificationFactory.create(
               "foreground",
               "Foreground",

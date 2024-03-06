@@ -6,7 +6,6 @@ package com.ivianuu.essentials.premium
 
 import androidx.compose.runtime.*
 import arrow.fx.coroutines.*
-import co.touchlab.kermit.*
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ads.*
@@ -14,6 +13,7 @@ import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*

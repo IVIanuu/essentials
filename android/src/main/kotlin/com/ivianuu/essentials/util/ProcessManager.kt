@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.util
 
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.jakewharton.processphoenix.*
 

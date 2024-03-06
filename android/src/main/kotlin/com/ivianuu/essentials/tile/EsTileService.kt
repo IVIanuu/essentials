@@ -15,9 +15,9 @@ import androidx.compose.ui.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import androidx.core.view.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*

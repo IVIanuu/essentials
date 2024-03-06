@@ -6,8 +6,8 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.runtime.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*

@@ -8,10 +8,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import arrow.core.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.gestures.action.actions.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*

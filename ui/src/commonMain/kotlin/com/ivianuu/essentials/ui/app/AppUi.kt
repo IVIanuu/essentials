@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.ui.app
 
 import androidx.compose.runtime.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 
 fun interface AppUi {

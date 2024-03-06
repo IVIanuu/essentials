@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
 

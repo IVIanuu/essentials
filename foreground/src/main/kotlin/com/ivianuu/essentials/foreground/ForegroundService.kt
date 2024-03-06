@@ -11,10 +11,10 @@ import android.os.*
 import androidx.compose.runtime.*
 import app.cash.molecule.*
 import arrow.fx.coroutines.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*

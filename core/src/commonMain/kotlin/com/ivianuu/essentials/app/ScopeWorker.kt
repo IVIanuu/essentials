@@ -6,11 +6,11 @@ package com.ivianuu.essentials.app
 
 import androidx.compose.runtime.*
 import arrow.fx.coroutines.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlin.reflect.*

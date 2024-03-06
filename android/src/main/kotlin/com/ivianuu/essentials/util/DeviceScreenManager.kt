@@ -9,10 +9,10 @@ import androidx.activity.*
 import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import app.cash.molecule.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*

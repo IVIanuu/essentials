@@ -9,11 +9,11 @@ import android.content.*
 import androidx.compose.runtime.*
 import androidx.work.*
 import arrow.fx.coroutines.*
-import co.touchlab.kermit.*
-import co.touchlab.kermit.Logger
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.injekt.*
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.coroutines.*

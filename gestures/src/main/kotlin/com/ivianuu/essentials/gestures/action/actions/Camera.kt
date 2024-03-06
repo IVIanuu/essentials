@@ -12,10 +12,10 @@ import android.provider.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -44,11 +44,10 @@ import kotlin.coroutines.*
     logger: Logger,
     packageManager: PackageManager
   ) = ActionExecutor<CameraActionId> {
-    val cameraApp = packageManager
-      .resolveActivity(
-        Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
-        PackageManager.MATCH_DEFAULT_ONLY
-      )!!
+    val cameraApp = packageManager.resolveActivity(
+      Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
+      PackageManager.MATCH_DEFAULT_ONLY
+    )!!
 
     val intent = if (cameraApp.activityInfo!!.packageName == "com.motorola.camera2")
       packageManager.getLaunchIntentForPackage("com.motorola.camera2")!!

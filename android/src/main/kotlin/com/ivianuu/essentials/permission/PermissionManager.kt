@@ -5,10 +5,10 @@
 package com.ivianuu.essentials.permission
 
 import androidx.compose.runtime.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*

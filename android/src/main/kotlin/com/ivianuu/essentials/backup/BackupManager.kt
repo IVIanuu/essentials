@@ -9,10 +9,10 @@ import android.content.pm.*
 import android.icu.text.*
 import androidx.core.content.*
 import app.cash.quiver.extensions.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*

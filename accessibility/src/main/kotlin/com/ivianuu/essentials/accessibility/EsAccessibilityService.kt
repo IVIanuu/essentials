@@ -6,9 +6,9 @@ package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.*
 import android.content.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 

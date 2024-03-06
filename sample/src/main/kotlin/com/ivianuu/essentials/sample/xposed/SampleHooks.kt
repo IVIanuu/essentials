@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.sample.xposed
 
 import android.bluetooth.*
-import co.touchlab.kermit.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.xposed.*
 import com.ivianuu.injekt.*
 

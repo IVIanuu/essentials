@@ -19,7 +19,7 @@ import android.hardware.SensorEvent as AndroidSensorEvent
   fun sensorEvents(sensor: Sensor, samplingRate: Duration): Flow<SensorEvent> =
     callbackFlow {
       if (!sensor.isWakeUpSensor)
-        launchMolecule { wakeLockManager.WakeLock("sensor_${sensor.id}") }
+        launchMolecule { wakeLockManager.WakeLock() }
 
       if (sensor.reportingMode == Sensor.REPORTING_MODE_ONE_SHOT) {
         val listener = object : TriggerEventListener() {

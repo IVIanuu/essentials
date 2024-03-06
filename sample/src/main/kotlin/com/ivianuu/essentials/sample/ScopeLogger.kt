@@ -5,10 +5,10 @@
 package com.ivianuu.essentials.sample
 
 import androidx.compose.runtime.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 
 @Provide fun scopeLogger(logger: Logger, appScope: Scope<AppScope>) = ScopeComposition<AppScope> {

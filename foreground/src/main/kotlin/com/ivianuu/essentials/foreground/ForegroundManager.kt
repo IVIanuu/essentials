@@ -8,14 +8,13 @@ import android.app.*
 import android.content.*
 import androidx.compose.runtime.*
 import androidx.core.content.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.*
 
 @Provide @Scoped<AppScope> class ForegroundManager(
   private val appContext: AppContext,
@@ -25,15 +24,15 @@ import kotlinx.coroutines.sync.*
     private set
 
   @Composable fun Foreground(
-    id: String,
+    id: SourceKey = inject,
     removeNotification: Boolean = true,
     notification: (@Composable () -> Notification)? = null,
   ) {
-    val state = remember(id) { ForegroundState(id, removeNotification, notification) }
+    val state = remember(id.value) { ForegroundState(id.value, removeNotification, notification) }
 
     LaunchedEffect(state) {
       states += state
-      logger.d { "start foreground $id $states" }
+      logger.d { "start foreground ${id.value} $states" }
       ContextCompat.startForegroundService(
         appContext,
         Intent(appContext, ForegroundService::class.java)
@@ -41,7 +40,7 @@ import kotlinx.coroutines.sync.*
       onCancel {
         state.seen.await()
         states -= state
-        logger.d { "stop foreground $id $states" }
+        logger.d { "stop foreground ${id.value} $states" }
       }
     }
   }

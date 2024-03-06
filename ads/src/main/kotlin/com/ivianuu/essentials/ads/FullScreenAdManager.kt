@@ -6,12 +6,12 @@ package com.ivianuu.essentials.ads
 
 import androidx.activity.*
 import androidx.compose.runtime.*
-import co.touchlab.kermit.*
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*

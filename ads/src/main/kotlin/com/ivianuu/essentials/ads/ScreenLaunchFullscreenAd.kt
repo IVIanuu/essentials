@@ -6,9 +6,9 @@ package com.ivianuu.essentials.ads
 
 import androidx.compose.runtime.*
 import arrow.core.*
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*

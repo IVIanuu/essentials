@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.app
 
-import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
