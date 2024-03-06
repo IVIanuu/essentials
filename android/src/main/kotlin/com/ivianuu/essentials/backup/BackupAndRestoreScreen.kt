@@ -25,7 +25,7 @@ class BackupAndRestoreScreen : Screen<Unit> {
         VerticalList {
           item {
             ListItem(
-              onClick = action {
+              onClick = scopedAction {
                 catch { backupManager.createBackup() }
                   .onLeft {
                     it.printStackTrace()
@@ -39,7 +39,7 @@ class BackupAndRestoreScreen : Screen<Unit> {
           }
           item {
             ListItem(
-              onClick = action {
+              onClick = scopedAction {
                 catch { backupManager.restoreBackup() }
                   .onLeft {
                     it.printStackTrace()
