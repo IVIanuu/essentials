@@ -19,28 +19,25 @@ import kotlinx.coroutines.flow.*
   private val coroutineContexts: CoroutineContexts,
   private val packageManager: PackageManager
 ) {
-  val installedApps: Flow<List<AppInfo>> = flow {
-    appChanges()
-      .onStart<Any?> { emit(Unit) }
-      .map {
-        withContext(coroutineContexts.io) {
-          packageManager.getInstalledApplications(0)
-            .parMap {
-              AppInfo(
-                appName = it.loadLabel(packageManager).toString(),
-                packageName = it.packageName
-              )
-            }
-            .distinctBy { it.packageName }
-            .sortedBy { it.appName.toLowerCase() }
-            .toList()
-        }
+  val installedApps: Flow<List<AppInfo>> = appChanges()
+    .onStart<Any?> { emit(Unit) }
+    .map {
+      withContext(coroutineContexts.io) {
+        packageManager.getInstalledApplications(0)
+          .parMap {
+            AppInfo(
+              appName = it.loadLabel(packageManager).toString(),
+              packageName = it.packageName
+            )
+          }
+          .distinctBy { it.packageName }
+          .sortedBy { it.appName.toLowerCase() }
+          .toList()
       }
-      .distinctUntilChanged()
-      .let { emitAll(it) }
-  }
+    }
+    .distinctUntilChanged()
 
-  fun appInfo(packageName: String) = appChanges()
+  fun appInfo(packageName: String): Flow<AppInfo?> = appChanges()
     .onStart<Any?> { emit(Unit) }
     .map {
       withContext(coroutineContexts.io) {
