@@ -2,6 +2,8 @@ package com.ivianuu.essentials.compose
 
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 
 @Composable inline fun scopedAction(crossinline block: suspend () -> Unit): () -> Unit =
@@ -53,10 +55,11 @@ import kotlinx.coroutines.*
 
 @Composable fun <T : Any> rememberScoped(
   vararg keys: Any?,
+  sourceKey: SourceKey = inject,
   init: () -> T,
 ): T {
   val scope = LocalScope.current
-  val key = currentCompositeKeyHash
+  val key = key(sourceKey) { currentCompositeKeyHash }
   val holder = remember(scope, key) { scope.scoped(key) { ScopedHolder() } }
 
   val value = (holder.value

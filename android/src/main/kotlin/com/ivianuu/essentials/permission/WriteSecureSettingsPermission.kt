@@ -85,10 +85,10 @@ class WriteSecureSettingsScreen(
           },
           enabled = if (currentStep > completedStep) false
           else when (completedStep) {
-            1 -> developerModeDataStore.data.state(null) != 0
-            2 -> adbEnabledDataStore.data.state(null) != 0
+            1 -> developerModeDataStore.data.scopedState(null) != 0
+            2 -> adbEnabledDataStore.data.scopedState(null) != 0
             3 -> true
-            4 -> state(false) {
+            4 -> scopedState(false) {
               while (true) {
                 value = permissionManager.permissionState(listOf(screen.permissionClass)).first()
                 delay(1.seconds)

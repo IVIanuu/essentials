@@ -3,6 +3,8 @@ package com.ivianuu.essentials.compose
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.resource.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
@@ -43,10 +45,15 @@ interface StateScope<T> : CoroutineScope {
 @Composable fun <T> Flow<T>.scopedState(initial: T, vararg keys: Any?): T =
   scopedState(initial, keys = keys) { collect { value = it } }
 
-@Composable fun <T> Flow<T>.scopedResourceState(vararg keys: Any?): Resource<T> =
+@Composable fun <T> Flow<T>.scopedResourceState(vararg keys: Any?, sourceKey: SourceKey = inject()): Resource<T> =
   scopedResourceState(keys = keys) { collect { value = it.success() } }
 
-@Composable fun <T> scopedState(initial: T, vararg keys: Any?, block: suspend StateScope<T>.() -> Unit): T {
+@Composable fun <T> scopedState(
+  initial: T,
+  vararg keys: Any?,
+  sourceKey: SourceKey = inject,
+  block: suspend StateScope<T>.() -> Unit,
+): T {
   val state = rememberScoped { mutableStateOf(initial) }
   LaunchedScopedEffect(keys = keys) {
     block(
@@ -58,7 +65,11 @@ interface StateScope<T> : CoroutineScope {
   return state.value
 }
 
-@Composable fun <T> scopedResourceState(vararg keys: Any?, block: suspend StateScope<Resource<T>>.() -> Unit): Resource<T> =
+@Composable fun <T> scopedResourceState(
+  vararg keys: Any?,
+  sourceKey: SourceKey = inject,
+  block: suspend StateScope<Resource<T>>.() -> Unit,
+): Resource<T> =
   scopedState<Resource<T>>(Resource.Loading, keys = keys) {
     catch { block(this) }
       .onLeft { value = it.error() }

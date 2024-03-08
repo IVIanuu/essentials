@@ -44,7 +44,7 @@ class ForegroundScreen : Screen<Unit> {
                 ticker(1000)
                   .receiveAsFlow()
                   .runningFold(0) { acc, _ -> acc.inc() }
-                  .state(0)
+                  .scopedState(0)
               }")
             }
           }

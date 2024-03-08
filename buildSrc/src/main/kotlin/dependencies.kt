@@ -111,7 +111,7 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.4.1"
 
   object Injekt {
-    private const val version = "0.0.1-dev742"
+    private const val version = "0.0.1-dev743"
     const val common = "com.ivianuu.injekt:common:$version"
     const val core = "com.ivianuu.injekt:core:$version"
     const val compiler = "com.ivianuu.injekt:compiler:$version"

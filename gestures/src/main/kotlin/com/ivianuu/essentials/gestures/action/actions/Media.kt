@@ -75,8 +75,8 @@ class MediaActionSettingsScreen : Screen<Unit> {
               },
               title = { Text("Media app") },
               subtitle = {
-                val mediaAppName = pref.data.state(null)?.mediaApp
-                  ?.let { appRepository.appInfo(it).state(null)?.appName }
+                val mediaAppName = pref.data.scopedState(null)?.mediaApp
+                  ?.let { appRepository.appInfo(it).scopedState(null)?.appName }
                 Text(
                   "Define the target app for the media actions (current: ${mediaAppName ?: "None"})"
                 )
