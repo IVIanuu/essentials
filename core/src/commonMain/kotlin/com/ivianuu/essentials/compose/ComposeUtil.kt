@@ -39,14 +39,19 @@ interface StateScope<T> : CoroutineScope {
       .onLeft { value = it.error() }
   }
 
-@Composable fun <T> StateFlow<T>.scopedState(vararg keys: Any?): T =
+@Composable fun <T> StateFlow<T>.scopedState(vararg keys: Any?, sourceKey: SourceKey = inject): T =
   scopedState(initial = value, keys = keys)
 
-@Composable fun <T> Flow<T>.scopedState(initial: T, vararg keys: Any?): T =
-  scopedState(initial, keys = keys) { collect { value = it } }
+@Composable fun <T> Flow<T>.scopedState(
+  initial: T,
+  vararg keys: Any?,
+  sourceKey: SourceKey = inject,
+): T = scopedState(initial, keys = keys) { collect { value = it } }
 
-@Composable fun <T> Flow<T>.scopedResourceState(vararg keys: Any?, sourceKey: SourceKey = inject()): Resource<T> =
-  scopedResourceState(keys = keys) { collect { value = it.success() } }
+@Composable fun <T> Flow<T>.scopedResourceState(
+  vararg keys: Any?,
+  sourceKey: SourceKey = inject,
+): Resource<T> = scopedResourceState(keys = keys) { collect { value = it.success() } }
 
 @Composable fun <T> scopedState(
   initial: T,
@@ -54,8 +59,8 @@ interface StateScope<T> : CoroutineScope {
   sourceKey: SourceKey = inject,
   block: suspend StateScope<T>.() -> Unit,
 ): T {
-  val state = rememberScoped { mutableStateOf(initial) }
-  LaunchedScopedEffect(keys = keys) {
+  val state = rememberScoped(sourceKey = SourceKey("a_$sourceKey")) { mutableStateOf(initial) }
+  LaunchedScopedEffect(keys = keys, sourceKey = SourceKey("b_$sourceKey")) {
     block(
       object : StateScope<T>, CoroutineScope by this {
         override var value: T by state

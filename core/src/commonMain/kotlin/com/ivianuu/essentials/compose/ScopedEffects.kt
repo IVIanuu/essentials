@@ -29,6 +29,7 @@ import kotlinx.coroutines.*
 
 @Composable fun LaunchedScopedEffect(
   vararg keys: Any?,
+  sourceKey: SourceKey = inject,
   block: suspend CoroutineScope.() -> Unit
 ) {
   val coroutineScope = scopedCoroutineScope
