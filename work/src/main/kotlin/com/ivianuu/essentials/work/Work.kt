@@ -109,9 +109,9 @@ fun interface Worker<I : WorkId> {
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
     val workId = inputData.getString(WORK_ID) ?: return Result.failure()
-    return catch {
-      workManager.runWorker(object : WorkId(workId) {})
-    }.fold({ Result.success() }, { Result.retry() })
+    return catch { workManager.runWorker(object : WorkId(workId) {}) }
+      .printErrors()
+      .fold(ifLeft = { Result.retry() }, ifRight = { Result.success() })
   }
 }
 
