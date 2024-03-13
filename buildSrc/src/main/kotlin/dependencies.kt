@@ -77,7 +77,7 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.6.0-rc02"
+    const val version = "1.6.0"
     const val compilerVersion = "1.5.9-kt-2.0.0-Beta4"
     const val compiler = "androidx.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"

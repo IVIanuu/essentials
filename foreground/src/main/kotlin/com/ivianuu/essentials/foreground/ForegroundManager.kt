@@ -20,7 +20,7 @@ import kotlinx.coroutines.*
   private val appContext: AppContext,
   private val logger: Logger
 ) {
-  internal var states = emptyList<ForegroundState>()
+  internal var states by mutableStateOf(emptyList<ForegroundState>())
     private set
 
   @Composable fun Foreground(
