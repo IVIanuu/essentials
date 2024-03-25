@@ -108,6 +108,8 @@ object Deps {
     const val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.9"
   }
 
+  const val flowExt = "io.github.hoc081098:FlowExt:0.8.1-Beta"
+
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.4.1"
 
   object Injekt {

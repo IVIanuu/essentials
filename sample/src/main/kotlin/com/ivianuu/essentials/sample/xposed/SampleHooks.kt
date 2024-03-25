@@ -11,13 +11,19 @@ import com.ivianuu.injekt.*
 
 @Provide fun sampleHooks(logger: Logger) = Hooks { config ->
   logger.d { "hello ${config.packageName}" }
-  if (config.packageName != "com.apelabs.wapp") return@Hooks
+  if (config.packageName != "uk.co.minirig.app") return@Hooks
 
-  logger.d { "ape ape ape" }
+  logger.d { "minirig minirig minirig" }
+
+  hookAllMethods(BluetoothGatt::class, "connect") {
+    before {
+      logger.d { "connect ${args.contentDeepToString()}" }
+    }
+  }
 
   hookAllMethods(BluetoothGatt::class, "writeCharacteristic") {
     before {
-      logger.d { "ape message ${args.contentDeepToString()}" }
+      logger.d { "minirig message ${args.contentDeepToString()}" }
     }
   }
 }
