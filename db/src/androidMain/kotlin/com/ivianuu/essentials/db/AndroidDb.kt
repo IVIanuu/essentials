@@ -168,7 +168,7 @@ class AndroidDb private constructor(
           )
         }
       }
-      .distinctUntilChanged()
+      .distinctUntilChangedBy { it.hashCode() }
 
   override fun dispose() {
     openHelper?.close() ?: database.close()
@@ -196,11 +196,15 @@ private class AndroidCursor(private val cursor: android.database.Cursor) : Curso
 
   override fun getString(index: Int) = if (cursor.isNull(index)) null else cursor.getString(index)
 
-  override fun getLong(index: Int) = if (cursor.isNull(index)) null else cursor.getLong(index)
+  override fun getLong(index: Int): Long = cursor.getLong(index)
+
+  override fun getNullableLong(index: Int) = if (cursor.isNull(index)) null else cursor.getLong(index)
 
   override fun getBytes(index: Int) = if (cursor.isNull(index)) null else cursor.getBlob(index)
 
-  override fun getDouble(index: Int) = if (cursor.isNull(index)) null else cursor.getDouble(index)
+  override fun getDouble(index: Int): Double = cursor.getDouble(index)
+
+  override fun getNullableDouble(index: Int) = if (cursor.isNull(index)) null else cursor.getDouble(index)
 
   override fun dispose() = cursor.close()
 }

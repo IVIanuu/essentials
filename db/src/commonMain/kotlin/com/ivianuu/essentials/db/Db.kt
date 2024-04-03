@@ -89,13 +89,13 @@ fun <T : Any, S> Db.selectAllTransform(
       .first()
       .mapNotNull { transform(it) }
   }
-  .distinctUntilChanged()
+  .distinctUntilChangedBy { it.hashCode() }
 
-fun <T : Any, S> Db.selectTransform(
+fun <T : Any, S> Db.selectByIdTransform(
   id: Any,
   key: KClass<T> = inject,
-  transform: suspend (T?) -> S?
-): Flow<S?> = tableChanges
+  transform: suspend (T?) -> S
+): Flow<S> = tableChanges
   .onStart { emit(null) }
   .mapLatest { transform(selectById<T>(id).first()) }
   .distinctUntilChanged()
@@ -122,11 +122,15 @@ interface Cursor : Disposable {
 
   fun getString(index: Int): String?
 
-  fun getLong(index: Int): Long?
+  fun getNullableLong(index: Int): Long?
+
+  fun getLong(index: Int): Long
 
   fun getBytes(index: Int): ByteArray?
 
-  fun getDouble(index: Int): Double?
+  fun getNullableDouble(index: Int): Double?
+
+  fun getDouble(index: Int): Double
 
   fun getColumnIndex(name: String): Int
 }
