@@ -122,15 +122,15 @@ interface Cursor : Disposable {
 
   fun getString(index: Int): String?
 
-  fun getNullableLong(index: Int): Long?
-
   fun getLong(index: Int): Long
+
+  fun getLongOrNull(index: Int): Long?
 
   fun getBytes(index: Int): ByteArray?
 
-  fun getNullableDouble(index: Int): Double?
-
   fun getDouble(index: Int): Double
+
+  fun getDoubleOrNull(index: Int): Double?
 
   fun getColumnIndex(name: String): Int
 }

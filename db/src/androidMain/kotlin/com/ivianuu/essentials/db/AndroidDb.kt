@@ -198,13 +198,13 @@ private class AndroidCursor(private val cursor: android.database.Cursor) : Curso
 
   override fun getLong(index: Int): Long = cursor.getLong(index)
 
-  override fun getNullableLong(index: Int) = if (cursor.isNull(index)) null else cursor.getLong(index)
+  override fun getLongOrNull(index: Int) = if (cursor.isNull(index)) null else cursor.getLong(index)
 
   override fun getBytes(index: Int) = if (cursor.isNull(index)) null else cursor.getBlob(index)
 
   override fun getDouble(index: Int): Double = cursor.getDouble(index)
 
-  override fun getNullableDouble(index: Int) = if (cursor.isNull(index)) null else cursor.getDouble(index)
+  override fun getDoubleOrNull(index: Int) = if (cursor.isNull(index)) null else cursor.getDouble(index)
 
   override fun dispose() = cursor.close()
 }
