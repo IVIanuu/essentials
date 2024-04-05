@@ -14,6 +14,8 @@ interface EntityDescriptor<T : Any> {
 
   val tableName: String
 
+  val indices: List<Index>
+
   val rows: List<Row>
 
   val serializer: KSerializer<T>
@@ -37,32 +39,42 @@ annotation class PrimaryKey
 @SerialInfo
 annotation class AutoIncrement
 
+@Target(AnnotationTarget.CLASS)
+@SerialInfo
+annotation class Index(
+  val name: String,
+  vararg val columnNames: String,
+  val unique: Boolean = false
+)
+
 private class EntityDescriptorImpl<T : Any>(
   override val tableName: String,
   override val key: KClass<T>,
   override val serializer: KSerializer<T>
 ) : EntityDescriptor<T> {
-  override val rows: List<Row> = (0 until serializer.descriptor.elementsCount)
-    .map { elementIndex ->
-      val annotations = serializer.descriptor.getElementAnnotations(elementIndex)
-      Row(
-        name = serializer.descriptor.getElementName(elementIndex),
-        type = when (serializer.descriptor.getElementDescriptor(elementIndex).kind) {
-          PrimitiveKind.BOOLEAN -> Row.Type.INT
-          PrimitiveKind.BYTE -> Row.Type.INT
-          PrimitiveKind.CHAR -> Row.Type.STRING
-          PrimitiveKind.SHORT -> Row.Type.INT
-          PrimitiveKind.INT -> Row.Type.INT
-          PrimitiveKind.LONG -> Row.Type.INT
-          PrimitiveKind.FLOAT -> Row.Type.DOUBLE
-          PrimitiveKind.DOUBLE -> Row.Type.DOUBLE
-          else -> Row.Type.STRING
-        },
-        isNullable = serializer.descriptor.getElementDescriptor(elementIndex).isNullable,
-        isPrimaryKey = annotations.any { it is PrimaryKey },
-        autoIncrement = annotations.any { it is AutoIncrement }
-      )
-    }
+  override val rows: List<Row> = List(serializer.descriptor.elementsCount) { elementIndex ->
+    val annotations = serializer.descriptor.getElementAnnotations(elementIndex)
+    Row(
+      name = serializer.descriptor.getElementName(elementIndex),
+      type = when (serializer.descriptor.getElementDescriptor(elementIndex).kind) {
+        PrimitiveKind.BOOLEAN -> Row.Type.INT
+        PrimitiveKind.BYTE -> Row.Type.INT
+        PrimitiveKind.CHAR -> Row.Type.STRING
+        PrimitiveKind.SHORT -> Row.Type.INT
+        PrimitiveKind.INT -> Row.Type.INT
+        PrimitiveKind.LONG -> Row.Type.INT
+        PrimitiveKind.FLOAT -> Row.Type.DOUBLE
+        PrimitiveKind.DOUBLE -> Row.Type.DOUBLE
+        else -> Row.Type.STRING
+      },
+      isNullable = serializer.descriptor.getElementDescriptor(elementIndex).isNullable,
+      isPrimaryKey = annotations.any { it is PrimaryKey },
+      autoIncrement = annotations.any { it is AutoIncrement }
+    )
+  }
+
+  override val indices: List<Index> = serializer.descriptor.annotations
+    .filterIsInstance<Index>()
 
   init {
     check(serializer.descriptor.annotations.any { it is Entity }) {
@@ -78,6 +90,18 @@ private class EntityDescriptorImpl<T : Any>(
           else -> {}
         }
       }
+
+    indices.forEach { index ->
+      check(index.columnNames.isNotEmpty()) {
+        "Index needs at least one column name"
+      }
+
+      index.columnNames.forEach { columnName ->
+        check(rows.any { it.name == columnName }) {
+          "No row found for $columnName in $rows"
+        }
+      }
+    }
   }
 }
 

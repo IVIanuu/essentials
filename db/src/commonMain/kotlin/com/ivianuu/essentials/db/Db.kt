@@ -164,36 +164,40 @@ fun Db.tableNames(): Flow<List<String>> =
 suspend fun <T : Any> Db.createTable(
   descriptor: EntityDescriptor<T> = inject,
   tableName: String = descriptor.tableName
-) = execute(
-  sql = buildString {
-    append("CREATE TABLE IF NOT EXISTS $tableName")
-    append("(")
-    descriptor.rows.forEachIndexed { index, row ->
-      append(row.name)
+) {
+  execute(
+    sql = buildString {
+      append("CREATE TABLE IF NOT EXISTS $tableName")
+      append("(")
+      descriptor.rows.forEachIndexed { index, row ->
+        append(row.name)
 
-      when (row.type) {
-        Row.Type.STRING -> append(" TEXT")
-        Row.Type.INT -> append(" INTEGER")
-        Row.Type.BYTES -> append(" BLOB")
-        Row.Type.DOUBLE -> append(" REAL")
+        when (row.type) {
+          Row.Type.STRING -> append(" TEXT")
+          Row.Type.INT -> append(" INTEGER")
+          Row.Type.BYTES -> append(" BLOB")
+          Row.Type.DOUBLE -> append(" REAL")
+        }
+
+        if (row.isPrimaryKey)
+          append(" PRIMARY KEY")
+
+        if (row.autoIncrement)
+          append(" AUTOINCREMENT")
+
+        if (!row.isNullable)
+          append(" NOT NULL")
+
+        if (index != descriptor.rows.lastIndex)
+          append(",")
       }
+      append(")")
+    },
+    tableName = tableName
+  )
 
-      if (row.isPrimaryKey)
-        append(" PRIMARY KEY")
-
-      if (row.autoIncrement)
-        append(" AUTOINCREMENT")
-
-      if (!row.isNullable)
-        append(" NOT NULL")
-
-      if (index != descriptor.rows.lastIndex)
-        append(",")
-    }
-    append(")")
-  },
-  tableName = tableName
-)
+  descriptor.indices.forEach { createIndex(it, descriptor.tableName) }
+}
 
 suspend fun Db.dropTable(tableName: String) {
   execute("DROP TABLE IF EXISTS $tableName", tableName)
@@ -202,6 +206,23 @@ suspend fun Db.dropTable(tableName: String) {
 suspend fun Db.dropAllAndRecreateTables() {
   tableNames().first().forEach { dropTable(it) }
   schema.entities.forEach { createTable(it) }
+}
+
+suspend fun Db.createIndex(index: Index, tableName: String) {
+  execute(
+    sql = buildString {
+      append("CREATE ")
+      if (index.unique)
+        append("UNIQUE ")
+      append("INDEX IF NOT EXISTS ${index.name} ON $tableName")
+      append(index.columnNames.joinToString(", ", "(", ")"))
+    },
+    tableName = tableName
+  )
+}
+
+suspend fun Db.dropIndex(indexName: String, tableName: String) {
+  execute("DROP INDEX IF EXISTS $indexName", tableName)
 }
 
 fun interface DbFactory {
