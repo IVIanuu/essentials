@@ -32,6 +32,7 @@ import kotlin.time.Duration.Companion.seconds
   private val remoteActionFactory: RemoteActionFactory
 ) : Service() {
   private var job: Job? = null
+
   override fun onCreate() {
     super.onCreate()
     logger.d { "foreground service started" }
@@ -57,13 +58,12 @@ import kotlin.time.Duration.Companion.seconds
           )
         }
       } else {
-        val notifications = states
-          .mapNotNullTo(mutableListOf()) { state ->
-            key(state.id) {
-              state.notification?.invoke()
-                ?.let { Triple(state.id, state.removeNotification, it) }
-            }
+        val notifications = states.mapNotNullTo(mutableListOf()) { state ->
+          key(state.id) {
+            state.notification?.invoke()
+              ?.let { Triple(state.id, state.removeNotification, it) }
           }
+        }
 
         if (notifications.isEmpty())
           notifications += remember {
