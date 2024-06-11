@@ -23,7 +23,6 @@ dependencies {
 
   api(Deps.processPhoenix)
 
-  api(project(":db"))
   api(project(":core"))
   api(project(":ui"))
   testImplementation(project(":android-test"))
