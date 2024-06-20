@@ -74,7 +74,8 @@ import kotlin.time.Duration.Companion.milliseconds
 
         broadcastManager.explicitBroadcasts.emit(intent)
 
-        snapshotFlow { broadcastWorkerManager.state }.first { it == ScopeWorkerManager.State.COMPLETED }
+        snapshotFlow { broadcastWorkerManager.state }
+          .first { it == ScopeWorkerManager.State.COMPLETED }
       } finally {
         broadcastScope.dispose()
       }
