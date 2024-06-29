@@ -83,3 +83,27 @@ import kotlin.time.Duration.Companion.seconds
     }
   )
 }
+
+@Composable fun <T> SliderListItem(
+  value: T,
+  values: List<T>,
+  modifier: Modifier = Modifier,
+  onValueChange: ((T) -> Unit)? = null,
+  onValueChangeFinished: ((T) -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  subtitle: (@Composable () -> Unit)? = null,
+  leading: (@Composable () -> Unit)? = null,
+  valueText: @Composable ((T) -> Unit)? = { Text(it.toString()) }
+) {
+  SliderListItem(
+    value = values.indexOf(value),
+    modifier = modifier,
+    valueRange = 0..values.lastIndex,
+    onValueChange = onValueChange?.let { { onValueChange(values[it]) } },
+    onValueChangeFinished = onValueChangeFinished?.let { { onValueChangeFinished(values[it]) } },
+    title = title,
+    subtitle = subtitle,
+    leading = leading,
+    valueText = valueText?.let { { valueText(values[it]) } }
+  )
+}
