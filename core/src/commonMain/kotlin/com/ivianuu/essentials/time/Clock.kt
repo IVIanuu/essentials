@@ -7,12 +7,13 @@ package com.ivianuu.essentials.time
 
 import com.ivianuu.injekt.*
 import kotlin.time.*
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.nanoseconds
 
 fun interface Clock {
   fun now(): Duration
 
   @Provide companion object {
-    @Provide val impl = Clock { System.nanoTime().nanoseconds }
+    @Provide val impl = Clock { System.currentTimeMillis().milliseconds }
   }
 }
