@@ -14,6 +14,7 @@ import kotlin.reflect.*
 @Provide object SerializationModule {
   @Provide fun json(serializersModule: SerializersModule): @Scoped<AppScope> Json = Json {
     ignoreUnknownKeys = true
+    coerceInputValues = true
     this.serializersModule = serializersModule
   }
 
