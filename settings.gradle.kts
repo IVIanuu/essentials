@@ -7,6 +7,7 @@ include(
   ":billing",
   ":compiler",
   ":core",
+  ":db",
   ":donation",
   ":foreground",
   ":gestures",
