@@ -25,7 +25,7 @@ import kotlinx.serialization.*
 
 interface PremiumVersionManager {
   val premiumSkuDetails: Flow<SkuDetails>
-  val isPremiumVersion: StateFlow<Boolean>
+  val isPremiumVersion: Flow<Boolean>
 
   suspend fun purchasePremiumVersion(): Boolean
 
@@ -49,7 +49,7 @@ interface PremiumVersionManager {
   override val premiumSkuDetails: Flow<SkuDetails> =
     flow { emit(billingManager.getSkuDetails(premiumVersionSku)!!) }
 
-  override val isPremiumVersion = scope.moleculeStateFlow {
+  override val isPremiumVersion = moleculeFlow {
     val isPremiumVersion = (oldPremiumVersionSkus + premiumVersionSku)
       .map { billingManager.isPurchased(it).state(null) == true }
       .any { it }
@@ -64,6 +64,8 @@ interface PremiumVersionManager {
 
     isPremiumVersion
   }
+    .filterNotNull()
+    .shareIn(scope, SharingStarted.Eagerly, 1)
 
   override suspend fun purchasePremiumVersion() =
     billingManager.purchase(premiumVersionSku, true, true)
