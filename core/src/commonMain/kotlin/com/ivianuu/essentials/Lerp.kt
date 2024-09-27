@@ -30,7 +30,7 @@ fun lerp(start: Float, stop: Float, fraction: Float): Float =
   start * (1f - fraction) + stop * fraction
 
 fun unlerp(start: Float, stop: Float, value: Float): Float =
-  (if (stop - start == 0f) 0f else (value - start) / (stop - start)).coerceIn(0f, 1f)
+  (if (stop - start == 0f) 1f else (value - start) / (stop - start)).coerceIn(0f, 1f)
 
 @Provide val FloatLerper = Lerper<Float>(
   lerp = { start, stop, fraction -> lerp(start, stop, fraction) },
@@ -41,7 +41,7 @@ fun lerp(start: Double, stop: Double, fraction: Float): Double =
   start * (1.0 - fraction) + stop * fraction
 
 fun unlerp(start: Double, stop: Double, value: Double): Float =
-  (if (stop - start == 0.0) 0.0 else (value - start) / (stop - start)).coerceIn(0.0, 1.0)
+  (if (stop - start == 0.0) 1.0 else (value - start) / (stop - start)).coerceIn(0.0, 1.0)
     .toFloat()
 
 @Provide val DoubleLerper = Lerper<Double>(
