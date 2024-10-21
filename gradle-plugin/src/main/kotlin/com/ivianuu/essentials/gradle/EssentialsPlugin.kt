@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.gradle
 
-import com.google.auto.service.*
 import com.ivianuu.injekt.gradle.*
 import org.gradle.api.*
 import org.gradle.api.provider.*
@@ -12,7 +11,6 @@ import org.jetbrains.kotlin.gradle.dsl.*
 import org.jetbrains.kotlin.gradle.plugin.*
 import org.jetbrains.kotlin.gradle.plugin.mpp.*
 
-@AutoService(KotlinCompilerPluginSupportPlugin::class)
 open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
   override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean =
     kotlinCompilation.target.project.plugins.hasPlugin(EssentialsPlugin::class.java)
@@ -20,9 +18,9 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
   override fun apply(target: Project) {
     target.plugins.apply(InjektPlugin::class.java)
     target.plugins.apply("com.ivianuu.injekt")
-    target.plugins.apply("kotlinx-atomicfu")
+    target.plugins.apply("org.jetbrains.kotlinx.atomicfu")
     target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
-    target.plugins.apply("com.ivianuu.essentials.compose")
+    target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
     target.plugins.apply("com.google.devtools.ksp")
     target.dependencies.add(
       "ksp",

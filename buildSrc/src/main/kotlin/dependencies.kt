@@ -15,7 +15,7 @@ object Build {
 
 object Deps {
   object Accompanist {
-    private const val version = "0.30.1"
+    private const val version = "0.36.0"
     const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
     const val pagerIndicators = "com.google.accompanist:accompanist-pager-indicators:$version"
   }
@@ -24,7 +24,7 @@ object Deps {
 
   object AndroidX {
     object Activity {
-      private const val version = "1.7.0"
+      private const val version = "1.9.3"
       const val activity = "androidx.activity:activity:$version"
       const val compose = "androidx.activity:activity-compose:$version"
     }
@@ -57,7 +57,7 @@ object Deps {
   }
 
   object AtomicFu {
-    private const val version = "0.23.2"
+    private const val version = "0.25.0"
     const val gradlePlugin = "org.jetbrains.kotlinx:atomicfu-gradle-plugin:$version"
     const val runtime = "org.jetbrains.kotlinx:atomicfu:$version"
   }
@@ -77,9 +77,8 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.6.0"
-    const val compilerVersion = "1.5.9-kt-2.0.0-Beta4"
-    const val compiler = "androidx.compose.compiler:compiler:$compilerVersion"
+    const val version = "1.7.0"
+    const val gradlePlugin = "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${Kotlin.version}"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
     const val googleFonts = "androidx.compose.ui:ui-text-google-fonts:$version"
     const val material = "org.jetbrains.compose.material:material:$version"
@@ -91,7 +90,7 @@ object Deps {
   const val composeIconsFontAwesome = "br.com.devsrsouza.compose.icons:font-awesome:1.1.0"
 
   object Coroutines {
-    private const val version = "1.8.0"
+    private const val version = "1.9.0"
     const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
     const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
     const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
@@ -99,7 +98,7 @@ object Deps {
 
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.8.10"
 
-  const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1262"
+  const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1273"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:22.6.0"
@@ -113,7 +112,7 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.4.1"
 
   object Injekt {
-    private const val version = "0.0.1-dev743"
+    private const val version = "0.0.1-dev745"
     const val common = "com.ivianuu.injekt:common:$version"
     const val core = "com.ivianuu.injekt:core:$version"
     const val compiler = "com.ivianuu.injekt:compiler:$version"
@@ -127,7 +126,7 @@ object Deps {
   const val kotestAssertions = "io.kotest:kotest-assertions-core:5.4.2"
 
   object Kotlin {
-    const val version = "2.0.0-Beta4"
+    const val version = "2.0.21"
     const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
     const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
@@ -142,11 +141,11 @@ object Deps {
 
   object KotlinSerialization {
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
-    const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"
+    const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3"
   }
 
   object Ksp {
-    const val version = "2.0.0-Beta4-1.0.17"
+    const val version = "2.0.21-1.0.25"
     const val api = "com.google.devtools.ksp:symbol-processing-api:$version"
     const val gradlePlugin = "com.google.devtools.ksp:symbol-processing-gradle-plugin:$version"
     const val symbolProcessing = "com.google.devtools.ksp:symbol-processing:$version"
@@ -158,9 +157,9 @@ object Deps {
 
   const val mockk = "io.mockk:mockk:1.12.8"
 
-  const val molecule = "app.cash.molecule:molecule-runtime:1.3.2"
+  const val molecule = "app.cash.molecule:molecule-runtime:2.0.0"
 
-  const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.24.0"
+  const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.30.0"
 
   const val playBillingKtx = "com.android.billingclient:billing-ktx:6.0.1"
 

@@ -79,7 +79,7 @@ interface DropdownMenuScope : ColumnScope {
 @Composable fun DropdownMenuButton(
   modifier: Modifier = Modifier,
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  indication: Indication? = rememberRipple(bounded = false, radius = 24.dp),
+  indication: Indication? = ripple(bounded = false, radius = 24.dp),
   enabled: Boolean = true,
   dropdownContent: @Composable DropdownMenuScope.() -> Unit
 ) {

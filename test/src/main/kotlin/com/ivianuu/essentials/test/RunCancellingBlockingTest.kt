@@ -10,7 +10,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 import kotlin.coroutines.*
 
-fun runCancellingBlockingTest(
+/*fun runCancellingBlockingTest(
   context: CoroutineContext = EmptyCoroutineContext,
   testBody: suspend TestCoroutineScope.() -> Unit
 ) {
@@ -55,3 +55,4 @@ fun TestCoroutineScope.runCancellingBlockingTest(
 
 val TestCoroutineScope.dispatcher: TestCoroutineDispatcher
   get() = (coroutineContext as CoroutineContext)[CoroutineDispatcher]!! as TestCoroutineDispatcher
+*/

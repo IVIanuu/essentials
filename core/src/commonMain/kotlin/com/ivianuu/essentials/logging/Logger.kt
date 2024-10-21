@@ -7,7 +7,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.*
 
-@Provide @JvmInline value class Logger(val kermitLogger: KermitLogger) {
+@Provide @JvmInline value class Logger(val kermitLogger: co.touchlab.kermit.Logger) {
   inline fun v(throwable: Throwable? = null, sourceKey: SourceKey = inject, message: () -> String) =
     kermitLogger.v(throwable, sourceKey.value, message)
 
@@ -27,12 +27,8 @@ import com.ivianuu.injekt.common.*
     kermitLogger.a(throwable, sourceKey.value, message)
 
   @Provide companion object {
-    @Provide fun kermitLogger(): @Scoped<AppScope> KermitLogger =
-      KermitLogger(loggerConfigInit(platformLogWriter()))
+    @Provide fun kermitLogger(): @Scoped<AppScope> co.touchlab.kermit.Logger =
+      co.touchlab.kermit.Logger(loggerConfigInit(platformLogWriter()))
   }
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.CLASS)
-annotation class KermitLoggerTag
-
-typealias KermitLogger = @KermitLoggerTag co.touchlab.kermit.Logger

@@ -8,7 +8,6 @@ plugins {
   id("java-gradle-plugin")
   kotlin("jvm")
   id("com.github.gmazzo.buildconfig") version "3.0.2"
-  id("com.google.devtools.ksp")
 }
 
 gradlePlugin {
@@ -32,18 +31,13 @@ buildConfig {
   className("BuildConfig")
   packageName("com.ivianuu.essentials.gradle")
   buildConfigField("String", "VERSION", "\"${property("VERSION_NAME")}\"")
-  buildConfigField("String", "COMPOSE_GROUP_ID", "\"org.jetbrains.compose.compiler\"")
-  buildConfigField("String", "COMPOSE_COMPILER_ARTIFACT_ID", "\"compiler\"")
-  buildConfigField("String", "COMPOSE_COMPILER_VERSION", "\"${Deps.Compose.compilerVersion}\"")
 }
 
 dependencies {
-  implementation(Deps.AutoService.annotations)
-  ksp(Deps.AutoService.processor)
-
   implementation(Deps.Kotlin.gradlePlugin)
   implementation(Deps.Kotlin.gradlePluginApi)
 
+  api(Deps.Compose.gradlePlugin)
   api(Deps.AtomicFu.gradlePlugin)
   api(Deps.androidGradlePlugin)
   api(Deps.Firebase.crashlyticsGradlePlugin)

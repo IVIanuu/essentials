@@ -258,7 +258,7 @@ class ColorPickerScreen(
             .clickable(
               onClick = onClick,
               interactionSource = remember { MutableInteractionSource() },
-              indication = rememberRipple(bounded = false)
+              indication = ripple(bounded = false)
             ),
           contentAlignment = Alignment.Center
         ) {
