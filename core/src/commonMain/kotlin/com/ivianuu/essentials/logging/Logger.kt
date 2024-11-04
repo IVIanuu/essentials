@@ -4,7 +4,6 @@ import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.*
 
 @Provide @JvmInline value class Logger(val kermitLogger: co.touchlab.kermit.Logger) {
