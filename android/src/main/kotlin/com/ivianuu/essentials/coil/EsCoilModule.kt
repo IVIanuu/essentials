@@ -11,18 +11,23 @@ import coil.intercept.*
 import coil.key.*
 import coil.map.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 import kotlin.reflect.*
 
+@OptIn(ExperimentalStdlibApi::class)
 @Provide object EsCoilModule {
   @Provide fun imageLoader(
     appContext: AppContext,
+    coroutineContexts: CoroutineContexts,
     decoderFactories: List<Decoder.Factory>,
     fetcherFactories: List<FetcherFactoryBinding<*>>,
     keyers: List<KeyerBinding<*>>,
     interceptors: List<Interceptor>,
     mappers: List<MapperBinding<*>>,
   ): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(appContext)
+    .dispatcher(coroutineContexts.io[CoroutineDispatcher]!!)
     .components {
       decoderFactories.forEach { add(it) }
       interceptors.forEach { add(it) }
