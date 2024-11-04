@@ -27,7 +27,11 @@ import kotlin.reflect.*
     interceptors: List<Interceptor>,
     mappers: List<MapperBinding<*>>,
   ): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(appContext)
-    .dispatcher(coroutineContexts.io[CoroutineDispatcher]!!)
+    .let { builder ->
+      coroutineContexts.io[CoroutineDispatcher]
+        ?.let { builder.dispatcher(it) }
+        ?: builder
+    }
     .components {
       decoderFactories.forEach { add(it) }
       interceptors.forEach { add(it) }
