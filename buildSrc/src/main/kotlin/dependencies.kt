@@ -101,15 +101,15 @@ object Deps {
   const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1273"
 
   object Firebase {
-    const val ads = "com.google.firebase:firebase-ads:22.6.0"
-    const val analytics = "com.google.firebase:firebase-analytics-ktx:21.5.1"
-    const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.6.2"
-    const val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.9"
+    const val ads = "com.google.firebase:firebase-ads:23.5.0"
+    const val analytics = "com.google.firebase:firebase-analytics-ktx:22.1.2"
+    const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx:19.2.1"
+    const val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:3.0.2"
   }
 
   const val flowExt = "io.github.hoc081098:FlowExt:0.8.1-Beta"
 
-  const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.4.1"
+  const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.4.2"
 
   object Injekt {
     private const val version = "0.0.1-dev745"

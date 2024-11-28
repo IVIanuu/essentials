@@ -97,20 +97,19 @@ import kotlin.time.Duration.Companion.seconds
       logger.d { "ad loaded" }
 
       val result: suspend () -> Boolean = {
-        if (rateLimiter.tryAcquire()) {
-          logger.d { "show ad" }
-          lock.withLock { deferredAd = null }
-          if (appScope.scopeOfOrNull<AppVisibleScope>() != null) {
+        if (appScope.scopeOfOrNull<AppVisibleScope>() != null) {
+          if (rateLimiter.tryAcquire()) {
+            logger.d { "show ad" }
+            lock.withLock { deferredAd = null }
             withContext(coroutineContexts.main) {
               ad.show(activity)
             }
             true
-          } else
+          } else {
+            logger.d { "do not show ad due to rate limit" }
             false
-        } else {
-          logger.d { "do not show ad due to rate limit" }
-          false
-        }
+          }
+        } else false
       }
 
       result
