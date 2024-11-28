@@ -33,7 +33,7 @@ class AdsScreen : Screen<Unit> {
           }
 
           item {
-            Button(onClick = scopedAction { fullScreenAd.loadAndShowAdWithTimeout() }) {
+            Button(onClick = scopedAction { fullScreenAd.showAd() }) {
               Text("Show full screen ad")
             }
           }

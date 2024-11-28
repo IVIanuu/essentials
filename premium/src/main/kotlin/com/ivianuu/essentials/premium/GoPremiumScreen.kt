@@ -60,13 +60,13 @@ class GoPremiumScreen(
         }
       }
       val tryBasicVersion = scopedAction {
-        fullScreenAdManager.loadAndShowAdWithTimeout()
+        fullScreenAdManager.showAd()
         navigator.pop(screen, false)
       }
 
       BackHandler(onBack = scopedAction {
         if (screen.allowBackNavigation) {
-          fullScreenAdManager.loadAndShowAdWithTimeout()
+          fullScreenAdManager.showAd()
           navigator.pop(screen, false)
         }
       })
