@@ -39,28 +39,25 @@ interface StateScope<T> : CoroutineScope {
       .onLeft { value = it.error() }
   }
 
-@Composable fun <T> StateFlow<T>.scopedState(vararg keys: Any?, sourceKey: SourceKey = inject): T =
+@Composable fun <T> StateFlow<T>.scopedState(vararg keys: Any?): T =
   scopedState(initial = value, keys = keys)
 
 @Composable fun <T> Flow<T>.scopedState(
   initial: T,
-  vararg keys: Any?,
-  sourceKey: SourceKey = inject,
+  vararg keys: Any?
 ): T = scopedState(initial, keys = keys) { collect { value = it } }
 
 @Composable fun <T> Flow<T>.scopedResourceState(
-  vararg keys: Any?,
-  sourceKey: SourceKey = inject,
+  vararg keys: Any?
 ): Resource<T> = scopedResourceState(keys = keys) { collect { value = it.success() } }
 
 @Composable fun <T> scopedState(
   initial: T,
   vararg keys: Any?,
-  sourceKey: SourceKey = inject,
   block: suspend StateScope<T>.() -> Unit,
 ): T {
-  val state = rememberScoped(sourceKey = SourceKey("a_$sourceKey")) { mutableStateOf(initial) }
-  LaunchedScopedEffect(keys = keys, sourceKey = SourceKey("b_$sourceKey")) {
+  val state = rememberScoped { mutableStateOf(initial) }
+  LaunchedScopedEffect(keys = keys) {
     block(
       object : StateScope<T>, CoroutineScope by this {
         override var value: T by state
@@ -72,7 +69,6 @@ interface StateScope<T> : CoroutineScope {
 
 @Composable fun <T> scopedResourceState(
   vararg keys: Any?,
-  sourceKey: SourceKey = inject,
   block: suspend StateScope<Resource<T>>.() -> Unit,
 ): Resource<T> =
   scopedState<Resource<T>>(Resource.Loading, keys = keys) {
