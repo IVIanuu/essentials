@@ -25,8 +25,6 @@ dependencies {
   api(Deps.composeIconsFontAwesome)
   api(Deps.materialMotionCompose)
   api(project(":core"))
-  api(Deps.Accompanist.flowLayout)
-  api(Deps.Accompanist.pagerIndicators)
   api(Deps.AndroidX.Activity.compose)
   api(Deps.AndroidX.core)
 }

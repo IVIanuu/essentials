@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.*
             )
           }
           .distinctBy { it.packageName }
-          .sortedBy { it.appName.toLowerCase() }
+          .sortedBy { it.appName.lowercase() }
       }
     }
     .distinctUntilChanged()

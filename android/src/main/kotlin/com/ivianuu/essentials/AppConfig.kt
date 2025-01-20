@@ -27,7 +27,7 @@ data class AppConfig(
         isDebug = appInfo.flags.hasFlag(ApplicationInfo.FLAG_DEBUGGABLE),
         appName = appInfo.loadLabel(appContext.packageManager).toString(),
         packageName = appInfo.packageName,
-        versionName = packageInfo.versionName,
+        versionName = packageInfo.versionName!!,
         versionCode = packageInfo.versionCode,
         sdk = Build.VERSION.SDK_INT,
         deviceModel = Build.MODEL,

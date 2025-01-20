@@ -4,23 +4,12 @@
 
 package com.ivianuu.essentials.tile
 
-import android.graphics.*
-import android.graphics.drawable.*
 import android.service.quicksettings.*
-import android.view.*
-import android.view.View.MeasureSpec
-import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.platform.*
-import androidx.compose.ui.unit.*
-import androidx.core.view.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
-import kotlin.coroutines.*
 import kotlin.reflect.*
 
 @Provide @AndroidComponent class EsTileService1(
