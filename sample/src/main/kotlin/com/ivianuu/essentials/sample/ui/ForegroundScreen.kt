@@ -6,6 +6,7 @@ package com.ivianuu.essentials.sample.ui
 
 import android.annotation.*
 import android.app.*
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.compose.*
@@ -14,6 +15,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.channels.*
@@ -30,9 +32,10 @@ class ForegroundScreen : Screen<Unit> {
     ) = Ui<ForegroundScreen> {
       ScreenScaffold(topBar = { AppBar { Text("Foreground") } }) {
         var isEnabled by remember { mutableStateOf(false) }
+        var removeNotification by remember { mutableStateOf(true) }
 
         if (isEnabled)
-          foregroundManager.Foreground(removeNotification = false) {
+          foregroundManager.Foreground(removeNotification = removeNotification) {
             notificationFactory.create(
               "foreground",
               "Foreground",
@@ -49,8 +52,16 @@ class ForegroundScreen : Screen<Unit> {
             }
           }
 
-        Button(onClick = { isEnabled = !isEnabled }) {
-          Text(if (isEnabled) "Stop foreground" else "Start foreground")
+        Column {
+          Button(onClick = { isEnabled = !isEnabled }) {
+            Text(if (isEnabled) "Stop foreground" else "Start foreground")
+          }
+
+          SwitchListItem(
+            value = removeNotification,
+            onValueChange = { removeNotification = it },
+            title = { Text("Remove notification") }
+          )
         }
       }
     }

@@ -28,19 +28,25 @@ import kotlinx.coroutines.*
     removeNotification: Boolean = true,
     notification: (@Composable () -> Notification)? = null,
   ) {
-    val state = remember(id.value) { ForegroundState(id.value, removeNotification, notification) }
+    key(id.value) {
+      val state = remember {
+        ForegroundState(id.value, removeNotification, notification)
+      }
+      state.removeNotification = removeNotification
+      state.notification = notification
 
-    LaunchedEffect(state) {
-      states += state
-      logger.d { "start foreground ${id.value} $states" }
-      ContextCompat.startForegroundService(
-        appContext,
-        Intent(appContext, ForegroundService::class.java)
-      )
-      onCancel {
-        state.seen.await()
-        states -= state
-        logger.d { "stop foreground ${id.value} $states" }
+      LaunchedEffect(state) {
+        states += state
+        logger.d { "start foreground ${id.value} $states" }
+        ContextCompat.startForegroundService(
+          appContext,
+          Intent(appContext, ForegroundService::class.java)
+        )
+        onCancel {
+          state.seen.await()
+          states -= state
+          logger.d { "stop foreground ${id.value} $states" }
+        }
       }
     }
   }
