@@ -6,7 +6,6 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -18,6 +17,7 @@ import kotlin.reflect.*
 @Composable fun <T> ResourceBox(
   resource: Resource<T>,
   modifier: Modifier = Modifier,
+  contentAlignment: Alignment = Alignment.TopStart,
   transitionSpec: ElementTransitionSpec<ResourceBoxItem<T>> = ResourceBoxDefaults.transitionSpec(),
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
@@ -33,6 +33,7 @@ import kotlin.reflect.*
   AnimatedContent(
     state = currentItem,
     modifier = modifier,
+    contentAlignment = contentAlignment,
     transitionSpec = transitionSpec
   ) { itemToRender ->
     when (val value = itemToRender.value) {
