@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.ui.util
 
-import androidx.compose.material.*
+import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.lerp
 import com.ivianuu.essentials.Lerper
@@ -38,69 +38,48 @@ fun String.toColorOrNull(): Color? = catch { toColor() }.getOrNull()
   override fun deserialize(decoder: Decoder): Color = Color(decoder.decodeInt())
 }
 
-@Provide val ColorsLerper = Lerper<Colors>(
+@Provide val ColorSchemeLerper = Lerper<ColorScheme>(
   lerp = { start, stop, fraction ->
-    Colors(
-      isLight = if (fraction < 0.5) start.isLight else stop.isLight,
+    ColorScheme(
       primary = lerp(start.primary, stop.primary, fraction),
-      primaryVariant = lerp(start.primaryVariant, stop.primaryVariant, fraction),
-      secondary = lerp(start.secondary, stop.secondary, fraction),
-      secondaryVariant = lerp(start.secondaryVariant, stop.secondaryVariant, fraction),
-      background = lerp(start.background, stop.background, fraction),
-      surface = lerp(start.surface, stop.surface, fraction),
-      error = lerp(start.error, stop.error, fraction),
       onPrimary = lerp(start.onPrimary, stop.onPrimary, fraction),
+      primaryContainer = lerp(start.primaryContainer, stop.primaryContainer, fraction),
+      onPrimaryContainer = lerp(start.onPrimaryContainer, stop.onPrimaryContainer, fraction),
+      inversePrimary = lerp(start.inversePrimary, stop.inversePrimary, fraction),
+      secondary = lerp(start.secondary, stop.secondary, fraction),
       onSecondary = lerp(start.onSecondary, stop.onSecondary, fraction),
+      secondaryContainer = lerp(start.secondaryContainer, stop.secondaryContainer, fraction),
+      onSecondaryContainer = lerp(start.onSecondaryContainer, stop.onSecondaryContainer, fraction),
+      tertiary = lerp(start.tertiary, stop.tertiary, fraction),
+      onTertiary = lerp(start.onTertiary, stop.onTertiary, fraction),
+      tertiaryContainer = lerp(start.tertiaryContainer, stop.tertiaryContainer, fraction),
+      onTertiaryContainer = lerp(start.onTertiaryContainer, stop.onTertiaryContainer, fraction),
+      background = lerp(start.background, stop.background, fraction),
       onBackground = lerp(start.onBackground, stop.onBackground, fraction),
+      surface = lerp(start.surface, stop.surface, fraction),
       onSurface = lerp(start.onSurface, stop.onSurface, fraction),
-      onError = lerp(start.onError, stop.onError, fraction)
+      surfaceVariant = lerp(start.surfaceVariant, stop.surfaceVariant, fraction),
+      onSurfaceVariant = lerp(start.onSurfaceVariant, stop.onSurfaceVariant, fraction),
+      surfaceTint = lerp(start.surfaceTint, stop.surfaceTint, fraction),
+      inverseSurface = lerp(start.inverseSurface, stop.inverseSurface, fraction),
+      inverseOnSurface = lerp(start.inverseOnSurface, stop.inverseOnSurface, fraction),
+      error = lerp(start.error, stop.error, fraction),
+      onError = lerp(start.onError, stop.onError, fraction),
+      errorContainer = lerp(start.errorContainer, stop.errorContainer, fraction),
+      onErrorContainer = lerp(start.onErrorContainer, stop.onErrorContainer, fraction),
+      outline = lerp(start.outline, stop.outline, fraction),
+      outlineVariant = lerp(start.outlineVariant, stop.outlineVariant, fraction),
+      scrim = lerp(start.scrim, stop.scrim, fraction),
+      surfaceBright = lerp(start.surfaceBright, stop.surfaceBright, fraction),
+      surfaceDim = lerp(start.surfaceDim, stop.surfaceDim, fraction),
+      surfaceContainer = lerp(start.surfaceContainer, stop.surfaceContainer, fraction),
+      surfaceContainerHigh = lerp(start.surfaceContainerHigh, stop.surfaceContainerHigh, fraction),
+      surfaceContainerHighest = lerp(start.surfaceContainerHighest, stop.surfaceContainerHighest, fraction),
+      surfaceContainerLow = lerp(start.surfaceContainerLow, stop.surfaceContainerLow, fraction),
+      surfaceContainerLowest = lerp(start.surfaceContainerLowest, stop.surfaceContainerLowest, fraction),
     )
   },
   unlerp = { start, stop, current ->
     unlerp(start.primary.alpha, stop.primary.alpha, current.primary.alpha)
   }
 )
-
-fun colors(
-  isLight: Boolean = true,
-  primary: Color = if (isLight) Color(0xFF6200EE) else Color(0xFFBB86FC),
-  primaryVariant: Color = if (isLight) Color(0xFF3700B3) else Color(0xFF3700B3),
-  secondary: Color = if (isLight) Color(0xFF03DAC6) else Color(0xFF03DAC6),
-  secondaryVariant: Color = if (isLight) Color(0xFF018786) else Color(0xFF03DAC6),
-  background: Color = if (isLight) Color.White else Color(0xFF121212),
-  surface: Color = if (isLight) Color.White else Color(0xFF121212),
-  error: Color = if (isLight) Color(0xFFB00020) else Color(0xFFCF6679),
-  onPrimary: Color = if (primary.isDark) Color.White else Color.Black,
-  onSecondary: Color = if (secondary.isDark) Color.White else Color.Black,
-  onBackground: Color = if (background.isDark) Color.White else Color.Black,
-  onSurface: Color = if (surface.isDark) Color.White else Color.Black,
-  onError: Color = if (error.isDark) Color.White else Color.Black,
-) = if (isLight) {
-  lightColors(
-    primary = primary,
-    primaryVariant = primaryVariant,
-    secondary = secondary,
-    secondaryVariant = secondaryVariant,
-    background = background,
-    surface = surface,
-    error = error,
-    onPrimary = onPrimary,
-    onSecondary = onSecondary,
-    onBackground = onBackground,
-    onSurface = onSurface,
-    onError = onError
-  )
-} else {
-  darkColors(
-    primary, primaryVariant,
-    secondary = secondary,
-    background = background,
-    surface = surface,
-    error = error,
-    onPrimary = onPrimary,
-    onSecondary = onSecondary,
-    onBackground = onBackground,
-    onSurface = onSurface,
-    onError = onError
-  )
-}

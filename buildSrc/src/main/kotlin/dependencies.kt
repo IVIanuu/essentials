@@ -75,7 +75,7 @@ object Deps {
     const val gradlePlugin = "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${Kotlin.version}"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
     const val googleFonts = "androidx.compose.ui:ui-text-google-fonts:$version"
-    const val material = "org.jetbrains.compose.material:material:$version"
+    const val material3 = "org.jetbrains.compose.material3:material3:$version"
     const val materialIconsExtended = "org.jetbrains.compose.material:material-icons-extended:$version"
     const val runtime = "org.jetbrains.compose.runtime:runtime:$version"
     const val runtimeSaveable = "org.jetbrains.compose.runtime:runtime-saveable:$version"
@@ -92,7 +92,7 @@ object Deps {
 
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:2.0.0"
 
-  const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1274"
+  const val essentialsGradlePlugin = "com.ivianuu.essentials:gradle-plugin:0.0.1-dev1275"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:23.5.0"

@@ -7,28 +7,30 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.material.EsListItem
 
 @Composable fun ColorListItem(
   value: Color,
   onValueChangeRequest: () -> Unit,
+  headlineContent: @Composable () -> Unit,
   modifier: Modifier = Modifier,
-  title: (@Composable () -> Unit)? = null,
-  subtitle: (@Composable () -> Unit)? = null,
-  leading: (@Composable () -> Unit)? = null,
+  supportingContent: (@Composable () -> Unit)? = null,
+  leadingContent: (@Composable () -> Unit)? = null,
 ) {
-  ListItem(
-    modifier = modifier,
+  EsListItem(
     onClick = onValueChangeRequest,
-    title = title,
-    subtitle = subtitle,
-    leading = leading,
-    trailing = {
+    modifier = modifier,
+    headlineContent = headlineContent,
+    supportingContent = supportingContent,
+    leadingContent = leadingContent,
+    trailingContent = {
       Surface(
         modifier = Modifier.requiredSize(48.dp),
         color = value,

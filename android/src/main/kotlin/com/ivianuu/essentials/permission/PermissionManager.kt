@@ -30,14 +30,17 @@ import kotlin.reflect.*
     permissions.map { permissionKey ->
       val permission = remember { this.permissions[permissionKey]!!() }
       val stateProvider = remember { stateProviders[permissionKey]!!() }
-      permissionRefreshes
-        .onStart<Any?> { emit(Unit) }
-        .map {
-          withContext(coroutineContexts.io) {
-            stateProvider.permissionState(permission)
+      produceState<Boolean?>(null) {
+        permissionRefreshes
+          .onStart<Any?> { emit(Unit) }
+          .map {
+            withContext(coroutineContexts.io) {
+              stateProvider.permissionState(permission)
+            }
           }
-        }
-        .state(null)
+          .collect { value = it }
+      }
+        .value
     }
       .takeIf { it.all { it != null } }
       ?.all { it == true }

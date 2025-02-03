@@ -5,13 +5,12 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -21,11 +20,11 @@ import com.ivianuu.injekt.*
 class DecoratorsScreen : Screen<Unit> {
   @Provide companion object {
     @Provide val ui = Ui<DecoratorsScreen> {
-      ScreenScaffold(topBar = { AppBar { Text("Decorators") } }) {
-        VerticalList {
+      EsScaffold(topBar = { EsAppBar { Text("Decorators") } }) {
+        EsLazyColumn {
           (1..10).forEach { itemIndex ->
             item {
-              ListItem(title = { Text("Item $itemIndex") })
+              EsListItem(headlineContent = { Text("Item $itemIndex") })
             }
           }
         }
@@ -57,25 +56,23 @@ class DecoratorsScreen : Screen<Unit> {
     return@decorator
   } else {
     Column {
-      Box(modifier = Modifier.weight(1f)) {
-        val currentInsets = LocalInsets.current
-        CompositionLocalProvider(
-          LocalInsets provides currentInsets.copy(bottom = 0.dp),
-          content = content
-        )
-      }
+      Box(
+        modifier = Modifier
+          .weight(1f)
+          .consumeWindowInsets(WindowInsets.navigationBars)
+      ) { content() }
 
-      Surface(color = MaterialTheme.colors.primary, elevation = 8.dp) {
-        InsetsPadding(top = false) {
-          Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-          ) {
-            Text(
-              text = "This is a bottom decorator",
-              style = MaterialTheme.typography.h3
-            )
-          }
+      Surface(color = MaterialTheme.colorScheme.primary, shadowElevation = 8.dp) {
+        Box(
+          modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding(),
+          contentAlignment = Alignment.Center
+        ) {
+          Text(
+            text = "This is a bottom decorator",
+            style = MaterialTheme.typography.displaySmall
+          )
         }
       }
     }

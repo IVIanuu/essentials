@@ -7,13 +7,13 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.overlay.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.systembars.*
@@ -32,7 +32,7 @@ class DynamicSystemBarsScreen : Screen<Unit> {
             .flatMap { it.colors }
             .shuffled()
         }
-        VerticalList(contentPadding = PaddingValues(0.dp)) {
+        EsLazyColumn(contentPadding = PaddingValues(0.dp)) {
           // todo use items once fixed
           items(colors) { color ->
             Box(
@@ -48,9 +48,10 @@ class DynamicSystemBarsScreen : Screen<Unit> {
           }
         }
 
-        AppBar(
-          backgroundColor = Color.Transparent,
-          elevation = 0.dp,
+        EsAppBar(
+          colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent
+          ),
           title = { Text("Dynamic system bars") }
         )
       }

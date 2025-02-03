@@ -8,14 +8,17 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.common.ProvideContentColorTextStyle
 
 @Composable fun Step(
   step: Int,
@@ -45,14 +48,14 @@ import com.ivianuu.essentials.ui.material.*
         .height(48.dp),
       verticalAlignment = Alignment.CenterVertically
     ) {
-      val targetBackgroundColor = if (isCurrent || isCompleted) MaterialTheme.colors.secondary
-      else LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
-      val backgroundColor = animateColorAsState(targetBackgroundColor).value
-      val contentColor = animateColorAsState(guessingContentColorFor(targetBackgroundColor)).value
+      val targetContainerColor = if (isCurrent || isCompleted) MaterialTheme.colorScheme.secondary
+      else LocalContentColor.current.copy(alpha = 0.38f)
+      val containerColor = animateColorAsState(targetContainerColor).value
+      val contentColor = animateColorAsState(guessingContentColorFor(targetContainerColor)).value
       Box(
         modifier = Modifier
           .size(24.dp)
-          .background(backgroundColor, CircleShape),
+          .background(containerColor, CircleShape),
         contentAlignment = Alignment.Center
       ) {
         CompositionLocalProvider(LocalContentColor provides contentColor) {
@@ -65,7 +68,7 @@ import com.ivianuu.essentials.ui.material.*
           } else {
             Text(
               text = step.toString(),
-              style = MaterialTheme.typography.caption
+              style = MaterialTheme.typography.bodySmall
             )
           }
         }
@@ -73,9 +76,9 @@ import com.ivianuu.essentials.ui.material.*
 
       Spacer(Modifier.width(16.dp))
 
-      CompositionLocalProvider(
-        LocalTextStyle provides MaterialTheme.typography.subtitle1,
-        LocalContentAlpha provides ContentAlpha.high,
+      ProvideContentColorTextStyle(
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        textStyle = MaterialTheme.typography.titleLarge,
         content = title
       )
     }
@@ -88,9 +91,9 @@ import com.ivianuu.essentials.ui.material.*
     ) {
       Column {
         if (content != null) {
-          CompositionLocalProvider(
-            LocalTextStyle provides MaterialTheme.typography.body2,
-            LocalContentAlpha provides ContentAlpha.medium,
+          ProvideContentColorTextStyle(
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            textStyle = MaterialTheme.typography.bodyMedium,
             content = content
           )
 

@@ -7,7 +7,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.annotation.*
 import android.app.*
 import android.os.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*

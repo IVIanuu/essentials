@@ -5,22 +5,26 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.ui.common.ProvideContentColorTextStyle
 
 @Composable fun Subheader(modifier: Modifier = Modifier, text: @Composable () -> Unit) {
   Box(
-    modifier = Modifier.height(48.dp)
+    modifier = Modifier
+      .height(48.dp)
       .fillMaxWidth()
       .padding(horizontal = 16.dp)
       .then(modifier),
     contentAlignment = Alignment.CenterStart
   ) {
-    CompositionLocalProvider(
-      LocalTextStyle provides MaterialTheme.typography.body2,
-      LocalContentColor provides MaterialTheme.colors.secondary,
+    ProvideContentColorTextStyle(
+      contentColor = MaterialTheme.colorScheme.secondary,
+      textStyle = MaterialTheme.typography.bodyMedium,
       content = text
     )
   }

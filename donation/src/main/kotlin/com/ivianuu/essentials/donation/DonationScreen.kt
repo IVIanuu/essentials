@@ -6,20 +6,19 @@ package com.ivianuu.essentials.donation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import arrow.fx.coroutines.parMap
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.dialog.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.material.TextButton
+import com.ivianuu.essentials.ui.material.EsListItem
+import com.ivianuu.essentials.ui.overlay.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
@@ -33,20 +32,21 @@ class DonationScreen : DialogScreen<Unit> {
       screen: DonationScreen,
       toaster: Toaster
     ) = Ui<DonationScreen> {
-      val skus = scopedResourceState {
-        value = donations
-          .value
-          .parMap { donation ->
-            val details = billingManager.getSkuDetails(donation.sku)!!
-            UiDonation(
-              donation,
-              details.title
-                .replaceAfterLast("(", "")
-                .removeSuffix("("),
-              details.price
-            )
-          }
-          .success()
+      val skus by produceScopedState(Resource.Idle()) {
+        value = catchResource {
+          donations
+            .value
+            .parMap { donation ->
+              val details = billingManager.getSkuDetails(donation.sku)!!
+              UiDonation(
+                donation,
+                details.title
+                  .replaceAfterLast("(", "")
+                  .removeSuffix("("),
+                details.price
+              )
+            }
+        }
       }
 
       Dialog(
@@ -64,9 +64,9 @@ class DonationScreen : DialogScreen<Unit> {
               )
             }
           ) { donations ->
-            VerticalList {
+            EsLazyColumn {
               items(donations) { donation ->
-                ListItem(
+                EsListItem(
                   modifier = Modifier.padding(horizontal = 8.dp),
                   onClick = scopedAction {
                     if (billingManager.purchase(donation.donation.sku, true, true)) {
@@ -74,15 +74,9 @@ class DonationScreen : DialogScreen<Unit> {
                       toaster.toast("Thanks for your support! \uD83D\uDC9B")
                     }
                   },
-                  title = { Text(donation.title) },
-                  leading = donation.donation.icon,
-                  trailing = {
-                    Text(
-                      text = donation.price,
-                      style = MaterialTheme.typography.body2,
-                      color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
-                    )
-                  }
+                  headlineContent = { Text(donation.title) },
+                  leadingContent = donation.donation.icon,
+                  trailingContent = { Text(text = donation.price) }
                 )
               }
             }

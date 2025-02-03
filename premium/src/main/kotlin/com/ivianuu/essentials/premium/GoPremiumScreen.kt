@@ -7,11 +7,13 @@ package com.ivianuu.essentials.premium
 import android.content.res.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.*
@@ -23,9 +25,9 @@ import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.insets.*
-import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.systembars.systemBarStyle
+import com.ivianuu.essentials.ui.util.isLight
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.slack.circuit.foundation.internal.*
@@ -52,7 +54,11 @@ class GoPremiumScreen(
       screen: GoPremiumScreen,
       toaster: Toaster
     ) = Ui<GoPremiumScreen> {
-      val premiumSkuDetails = premiumVersionManager.premiumSkuDetails.scopedResourceState()
+      val premiumSkuDetails by produceScopedState(Resource.Idle()) {
+        premiumVersionManager.premiumSkuDetails
+          .flowAsResource()
+          .collect { value = it }
+      }
       val goPremium = scopedAction {
         if (premiumVersionManager.purchasePremiumVersion()) {
           navigator.pop(screen, true)
@@ -71,8 +77,14 @@ class GoPremiumScreen(
         }
       })
 
-      Surface {
-        InsetsPadding {
+      Surface(
+        modifier = Modifier.fillMaxSize()
+          .systemBarStyle(
+            bgColor = Color.Transparent,
+            darkIcons = MaterialTheme.colorScheme.surface.isLight
+          )
+      ) {
+        Box(modifier = Modifier.safeContentPadding()) {
           if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
             Column(
               modifier = Modifier.padding(16.dp),
@@ -133,21 +145,20 @@ class GoPremiumScreen(
             .fillMaxWidth()
             .padding(16.dp)
             .size(36.dp),
-          tint = MaterialTheme.colors.primary,
+          tint = MaterialTheme.colorScheme.primary,
           contentDescription = null
         )
 
         Text(
           text = "Go premium",
-          style = MaterialTheme.typography.h5,
+          style = MaterialTheme.typography.headlineMedium,
           fontWeight = FontWeight.Bold
         )
 
         Text(
           modifier = Modifier.padding(top = 8.dp),
           text = "Unlock all features",
-          style = MaterialTheme.typography.body2,
-          color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+          style = MaterialTheme.typography.bodyMedium
         )
       }
     }
@@ -168,7 +179,7 @@ class GoPremiumScreen(
               contentAlignment = Alignment.Center
             ) {
               CompositionLocalProvider(
-                LocalContentColor provides MaterialTheme.colors.primary,
+                LocalContentColor provides MaterialTheme.colorScheme.primary,
                 content = feature.icon
               )
             }
@@ -188,7 +199,7 @@ class GoPremiumScreen(
               text = it.title,
               maxLines = 1,
               overflow = TextOverflow.Ellipsis,
-              style = MaterialTheme.typography.subtitle2
+              style = MaterialTheme.typography.titleMedium
             )
           }
         }
@@ -201,8 +212,7 @@ class GoPremiumScreen(
           Text(
             modifier = Modifier.height(32.dp),
             text = "Premium",
-            style = MaterialTheme.typography.button,
-            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+            style = MaterialTheme.typography.labelLarge
           )
 
           features.forEach { feature ->
@@ -212,7 +222,7 @@ class GoPremiumScreen(
               modifier = Modifier
                 .size(48.dp)
                 .center(),
-              tint = MaterialTheme.colors.primary,
+              tint = MaterialTheme.colorScheme.primary,
               contentDescription = null
             )
           }
@@ -225,8 +235,7 @@ class GoPremiumScreen(
           Text(
             modifier = Modifier.height(32.dp),
             text = "Basic",
-            style = MaterialTheme.typography.button,
-            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+            style = MaterialTheme.typography.labelLarge
           )
 
           features.forEach { feature ->
@@ -236,7 +245,7 @@ class GoPremiumScreen(
               modifier = Modifier
                 .size(48.dp)
                 .center(),
-              tint = MaterialTheme.colors.primary,
+              tint = MaterialTheme.colorScheme.primary,
               contentDescription = null
             )
           }
@@ -267,16 +276,15 @@ class GoPremiumScreen(
               }
             }
           },
-          style = MaterialTheme.typography.caption,
-          color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
-        )
+          style = MaterialTheme.typography.bodySmall
+          )
 
         Button(
           modifier = Modifier
             .padding(top = 8.dp)
             .height(72.dp)
             .fillMaxWidth(),
-          colors = ButtonDefaults.esButtonColors(backgroundColor = MaterialTheme.colors.primary),
+          colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
           onClick = onGoPremiumClick
         ) {
           Text("Go premium")

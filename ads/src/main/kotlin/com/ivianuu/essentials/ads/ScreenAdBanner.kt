@@ -5,12 +5,12 @@
 package com.ivianuu.essentials.ads
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
@@ -41,20 +41,24 @@ typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
     }
 
     Column {
-      Box(modifier = Modifier.weight(1f)) {
-        val currentInsets = LocalInsets.current
-        CompositionLocalProvider(
-          LocalInsets provides if (!adsEnabledState.value.value) currentInsets
-          else currentInsets.copy(bottom = 0.dp),
-          content = content
-        )
+      Box(
+        modifier = Modifier
+          .weight(1f)
+          .then(
+            if (adsEnabledState.value.value)
+              Modifier.consumeWindowInsets(WindowInsets.navigationBars)
+            else Modifier
+          )
+      ) {
+        content()
       }
 
       if (adsEnabledState.value.value)
-        Surface(elevation = 8.dp) {
-          InsetsPadding(top = false) {
-            AdBanner(config)
-          }
+        Surface(tonalElevation = 8.dp) {
+          AdBanner(
+            modifier = Modifier.navigationBarsPadding(),
+            config = config
+          )
         }
     }
   }

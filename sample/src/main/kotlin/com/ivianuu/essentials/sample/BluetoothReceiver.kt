@@ -39,7 +39,7 @@ import kotlin.time.Duration.Companion.seconds
             logger.d { "finalize apply configs $it" }
           }
         )
-      }.state(false)
+      }.collectAsState(false).value
     )
       return
   }

@@ -4,22 +4,34 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.sample.R
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.compose.scopedAction
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.injekt.*
 
 @Provide val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationScreen() }
@@ -29,16 +41,13 @@ class BottomNavigationScreen : Screen<Unit> {
     @Provide val ui = Ui<BottomNavigationScreen> {
       var selectedItem by remember { mutableStateOf(BottomNavItem.entries.first()) }
 
-      ScreenScaffold(
-        topBar = { AppBar { Text("Bottom navigation") } },
+      EsScaffold(
+        topBar = { EsAppBar { Text("Bottom navigation") } },
         bottomBar = {
-          NavigationBar(
-            backgroundColor = MaterialTheme.colors.primary,
-            elevation = 0.dp
-          ) {
+          EsNavigationBar {
             BottomNavItem.entries.forEach { item ->
               NavigationBarItem(
-                alwaysShowLabel = false,
+                alwaysShowLabel = true,
                 selected = item == selectedItem,
                 onClick = { selectedItem = item },
                 icon = { Icon(item.icon, null) },
@@ -46,58 +55,145 @@ class BottomNavigationScreen : Screen<Unit> {
               )
             }
           }
-        },
-        floatingActionButton = {
-          FloatingActionButton(onClick = {}) {
-            Icon(Icons.Default.Done, null)
-          }
         }
       ) {
-        AnimatedContent(selectedItem) { item ->
-          VerticalList(
-            modifier = Modifier.fillMaxSize()
-              .background(item.color)
-          ) {
-            (1..100).forEach { item ->
-              item {
-                ListItem(title = { Text("Item $item") })
+        CompositionLocalProvider(
+          LocalContentPadding provides LocalContentPadding.current.let {
+            PaddingValues(
+              start = it.calculateStartPadding(LocalLayoutDirection.current),
+              top = it.calculateTopPadding(),
+              end = it.calculateEndPadding(LocalLayoutDirection.current),
+              bottom = it.calculateBottomPadding() + CollapsedPlayerHeight + CollapsedPlayerPadding
+            )
+          }
+        ) {
+          Box(modifier = Modifier.fillMaxSize()) {
+            AnimatedContent(selectedItem) { item ->
+              EsLazyColumn {
+                (1..100).forEach { item ->
+                  item {
+                    EsListItem(headlineContent = { Text("Item $item") })
+                  }
+                }
               }
             }
           }
+
         }
       }
+
+      PlaybackUiTest()
     }
 
     private enum class BottomNavItem(
       val title: String,
-      val icon: ImageVector,
-      val color: Color
+      val icon: ImageVector
     ) {
       HOME(
         title = "Home",
-        icon = Icons.Default.Home,
-        color = Color.Yellow
+        icon = Icons.Default.Home
       ),
       MAILS(
         title = "Mails",
-        icon = Icons.Default.Email,
-        color = Color.Red
+        icon = Icons.Default.Email
       ),
       SEARCH(
         title = "Search",
-        icon = Icons.Default.Search,
-        color = Color.Blue
+        icon = Icons.Default.Search
       ),
       SCHEDULE(
         title = "Schedule",
-        icon = Icons.Default.ViewAgenda,
-        color = Color.Cyan
+        icon = Icons.Default.ViewAgenda
       ),
       SETTINGS(
         title = "Settings",
-        icon = Icons.Default.Settings,
-        color = Color.Green
+        icon = Icons.Default.Settings
       )
     }
+  }
+}
+
+@Composable fun PlaybackUiTest() {
+  var isExpanded by remember { mutableStateOf(false) }
+
+  val containerColor = MaterialTheme.colorScheme.primary
+
+  CollapsedPlayer(containerColor) { isExpanded = true }
+
+  BackHandler(isExpanded) { isExpanded = false }
+
+  if (isExpanded) {
+    ExpandedPlayer(containerColor) { isExpanded = false }
+  }
+}
+
+val CollapsedPlayerHeight = 56.dp
+val CollapsedPlayerPadding = 12.dp
+
+@Composable fun CollapsedPlayer(
+  containerColor: Color,
+  onExpandClick: () -> Unit
+) {
+  Box(
+    modifier = Modifier
+      .align(Alignment.BottomCenter)
+      .systemBarsPadding()
+      .padding(bottom = 80.dp)
+      .padding(CollapsedPlayerPadding)
+  ) {
+    Card(
+      modifier = Modifier
+        .fillMaxWidth()
+        .height(CollapsedPlayerHeight),
+      colors = CardDefaults.cardColors(containerColor = containerColor),
+      onClick = onExpandClick,
+      elevation = CardDefaults.elevatedCardElevation(),
+      shape = MaterialTheme.shapes.large
+    ) {
+      Row(
+        modifier = Modifier.fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        IconButton(onClick = scopedAction {  }) {
+          Icon(Icons.Default.Pause, null)
+        }
+
+        Column(modifier = Modifier.weight(1f)) {
+          ProvideContentColorTextStyle(
+            MaterialTheme.colorScheme.onPrimary,
+            MaterialTheme.typography.labelLarge
+          ) {
+            Text("Geiles Leben")
+          }
+
+          ProvideContentColorTextStyle(
+            MaterialTheme.colorScheme.onPrimary,
+            MaterialTheme.typography.bodySmall
+          ) {
+            Text("HBZ")
+          }
+        }
+      }
+    }
+  }
+}
+
+@Composable fun ExpandedPlayer(
+  containerColor: Color,
+  onCollapseClick: () -> Unit
+) {
+  Card(
+    modifier = Modifier
+      .fillMaxSize()
+      .systemBarStyle(
+        bgColor = containerColor,
+        zIndex = Int.MAX_VALUE
+      ),
+    colors = CardDefaults.cardColors(containerColor = containerColor),
+    onClick = onCollapseClick,
+    elevation = CardDefaults.elevatedCardElevation(),
+    shape = MaterialTheme.shapes.large
+  ) {
+
   }
 }

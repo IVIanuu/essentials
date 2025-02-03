@@ -10,7 +10,7 @@ import android.app.*
 import android.content.*
 import android.os.*
 import androidx.compose.foundation.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.ui.graphics.vector.*
 import androidx.compose.ui.res.*
 import arrow.core.*

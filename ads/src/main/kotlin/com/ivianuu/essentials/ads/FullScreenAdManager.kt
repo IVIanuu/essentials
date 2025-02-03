@@ -91,9 +91,12 @@ import kotlin.time.Duration.Companion.seconds
     }
   }
 
-  suspend fun showAd(timeout: Duration = 2.seconds): Boolean = withTimeoutOrNull(timeout) {
-    snapshotFlow { currentAd }.first { it != null }!!.show()
-  } ?: false
+  suspend fun showAd(timeout: Duration = 2.seconds): Boolean {
+    if (!adsEnabledState.value.value) return false
+    return withTimeoutOrNull(timeout) {
+      snapshotFlow { currentAd }.first { it != null }!!.show()
+    } ?: false
+  }
 
   private inner class FullScreenAd(private val interstitial: InterstitialAd) {
     var wasShown by mutableStateOf(false)

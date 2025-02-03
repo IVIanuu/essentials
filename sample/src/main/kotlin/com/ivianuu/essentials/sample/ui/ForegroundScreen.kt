@@ -6,14 +6,18 @@ package com.ivianuu.essentials.sample.ui
 
 import android.annotation.*
 import android.app.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.foreground.*
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.*
@@ -30,7 +34,7 @@ class ForegroundScreen : Screen<Unit> {
       foregroundManager: ForegroundManager,
       notificationFactory: NotificationFactory
     ) = Ui<ForegroundScreen> {
-      ScreenScaffold(topBar = { AppBar { Text("Foreground") } }) {
+      EsScaffold(topBar = { EsAppBar { Text("Foreground") } }) {
         var isEnabled by remember { mutableStateOf(false) }
         var removeNotification by remember { mutableStateOf(true) }
 
@@ -44,15 +48,21 @@ class ForegroundScreen : Screen<Unit> {
               setSmallIcon(R.drawable.ic_launcher_foreground)
               setContentTitle("Foreground")
               setContentText("Current progress ${
-                ticker(1000)
-                  .receiveAsFlow()
-                  .runningFold(0) { acc, _ -> acc.inc() }
-                  .state(0)
+                produceState(0) {
+                  ticker(1000)
+                    .receiveAsFlow()
+                    .runningFold(0) { acc, _ -> acc.inc() }
+                    .collect { value = it } 
+                }.value
               }")
             }
           }
 
-        Column {
+        Column(
+          modifier = Modifier.fillMaxSize(),
+          verticalArrangement = Arrangement.Center,
+          horizontalAlignment = Alignment.CenterHorizontally
+        ) {
           Button(onClick = { isEnabled = !isEnabled }) {
             Text(if (isEnabled) "Stop foreground" else "Start foreground")
           }
@@ -60,7 +70,7 @@ class ForegroundScreen : Screen<Unit> {
           SwitchListItem(
             value = removeNotification,
             onValueChange = { removeNotification = it },
-            title = { Text("Remove notification") }
+            headlineContent = { Text("Remove notification") }
           )
         }
       }

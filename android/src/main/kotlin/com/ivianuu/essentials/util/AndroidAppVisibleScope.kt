@@ -14,9 +14,8 @@ import com.ivianuu.injekt.*
 
 @Provide fun appVisibleScopeWorker(
   appVisibleScopeFactory: () -> Scope<AppVisibleScope>,
-  activity: ComponentActivity,
-  coroutineContexts: CoroutineContexts,
-) = ScopeWorker<UiScope> worker@{
+  activity: ComponentActivity
+) = ScopeWorker<UiScope> worker@ {
   if (activity is EsActivity)
     activity.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
       bracketCase(

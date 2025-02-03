@@ -51,7 +51,11 @@ interface PremiumVersionManager {
 
   override val isPremiumVersion = moleculeFlow {
     val isPremiumVersion = (oldPremiumVersionSkus + premiumVersionSku)
-      .map { billingManager.isPurchased(it).state(null) == true }
+      .map {
+        produceState(nullOf()) {
+          billingManager.isPurchased(it).collect { value = it }
+        }.value == true
+      }
       .any { it }
 
     LaunchedEffect(isPremiumVersion) {

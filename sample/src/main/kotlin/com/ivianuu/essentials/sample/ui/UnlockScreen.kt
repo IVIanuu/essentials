@@ -5,12 +5,12 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
@@ -26,7 +26,7 @@ class UnlockScreen : Screen<Unit> {
       scope: ScopedCoroutineScope<ScreenScope>,
       toaster: Toaster
     ) = Ui<UnlockScreen> {
-      ScreenScaffold(topBar = { AppBar { Text("Unlock") } }) {
+      EsScaffold(topBar = { EsAppBar { Text("Unlock") } }) {
         Column(
           modifier = Modifier.fillMaxSize(),
           verticalArrangement = Arrangement.Center,

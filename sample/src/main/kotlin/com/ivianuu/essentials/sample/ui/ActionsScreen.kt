@@ -5,13 +5,16 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
@@ -27,8 +30,12 @@ class ActionsScreen : Screen<Unit> {
       repository: ActionRepository,
       toaster: Toaster
     ) = Ui<ActionsScreen> {
-      ScreenScaffold(topBar = { AppBar { Text("Actions") } }) {
-        Column {
+      EsScaffold(topBar = { EsAppBar { Text("Actions") } }) {
+        Column(
+          modifier = Modifier.fillMaxSize(),
+          verticalArrangement = Arrangement.Center,
+          horizontalAlignment = Alignment.CenterHorizontally
+        ) {
           Button(
             onClick = scopedAction {
               val actionId = navigator.push(ActionPickerScreen())

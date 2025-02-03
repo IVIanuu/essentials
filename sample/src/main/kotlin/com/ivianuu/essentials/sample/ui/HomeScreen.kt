@@ -8,15 +8,17 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
-import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.overlay.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
@@ -32,23 +34,26 @@ import com.ivianuu.injekt.*
       toaster: Toaster
     ) = Ui<HomeScreen> {
       val finalItems = remember { itemsFactory().sortedBy { it.title } }
-      ScreenScaffold(
+      EsScaffold(
         topBar = {
-          AppBar(
+          EsAppBar(
             title = { Text("Home") },
             actions = {
-              DropdownMenuButton {
-                listOf("Option 1", "Option 2", "Option 3").forEach { title ->
-                  DropdownMenuItem(onClick = { toaster.toast("Selected $title") }) {
-                    Text(title)
-                  }
-                }
+              BottomSheetLauncherButton {
+                EsListItem(
+                  onClick = {
+                    toaster.toast("Clicked")
+                    dismiss()
+                  },
+                  headlineContent = { Text("Test") },
+                  leadingContent = { Icon(Icons.Default.Add, null) }
+                )
               }
             }
           )
         }
       ) {
-        VerticalList {
+        EsLazyColumn {
           items(finalItems) { item ->
             val color = rememberSaveable(item) {
               ColorPickerPalette.entries
@@ -66,8 +71,8 @@ import com.ivianuu.injekt.*
           }
 
           item {
-            ListItem(
-              title = {
+            EsListItem(
+              headlineContent = {
                 Text(
                   if (isXposedRunning.value) "Xposed is running"
                   else "Xposed is NOT running"
@@ -80,27 +85,32 @@ import com.ivianuu.injekt.*
     }
 
     @Composable private fun HomeItem(color: Color, onClick: () -> Unit, item: HomeItem) {
-      ListItem(
+      EsListItem(
         onClick = onClick,
-        title = {
-          Text(
-            item.title,
-            style = MaterialTheme.typography.subtitle1
-          )
+        headlineContent = {
+          Text(item.title)
         },
-        leading = {
+        overlineContent = {
+          Text("Overline")
+        },
+        supportingContent = {
+          Text("Supporting")
+        },
+        leadingContent = {
           Box(
             modifier = Modifier
               .size(40.dp)
               .background(color, CircleShape)
           )
         },
-        trailing = {
-          DropdownMenuButton {
-            (0..100).forEach { index ->
-              DropdownMenuItem(onClick = {}) {
-                Text(index.toString())
-              }
+        trailingContent = {
+          BottomSheetLauncherButton {
+            (0..40).forEach { index ->
+              EsListItem(
+                onClick = { dismiss() },
+                headlineContent = { Text(index.toString()) },
+                leadingContent = { Icon(Icons.Default.Add, null) }
+              )
             }
           }
         }

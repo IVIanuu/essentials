@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*

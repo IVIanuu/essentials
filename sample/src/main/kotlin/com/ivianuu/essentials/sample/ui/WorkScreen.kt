@@ -5,13 +5,13 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.ui.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.work.*
 import com.ivianuu.injekt.*
@@ -24,7 +24,7 @@ import kotlin.time.Duration.Companion.seconds
 class WorkScreen : Screen<Unit> {
   @Provide companion object {
     @Provide fun ui(workManager: WorkManager) = Ui<WorkScreen> {
-      ScreenScaffold(topBar = { AppBar { Text("Work") } }) {
+      EsScaffold(topBar = { EsAppBar { Text("Work") } }) {
         Column {
           if (workManager.isWorkerRunning(SampleWorkId))
             CircularProgressIndicator()

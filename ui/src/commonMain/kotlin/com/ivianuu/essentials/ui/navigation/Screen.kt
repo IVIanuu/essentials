@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.animation.*
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
@@ -19,12 +18,7 @@ interface RootScreen : Screen<Unit>
 interface OverlayScreen<T> : Screen<T> {
   @Provide companion object {
     @Provide fun <T : OverlayScreen<*>> screenConfig() =
-      ScreenConfig<T>(opaque = true, transitionSpec = {
-        if (isPush)
-          ContentKey entersWith fadeIn()
-        else
-          ContentKey exitsWith fadeOut()
-      })
+      ScreenConfig<T>(opaque = true)
   }
 }
 

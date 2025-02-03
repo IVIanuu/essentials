@@ -5,15 +5,15 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
@@ -26,7 +26,7 @@ object ChildNavGraph
 @Provide fun childNavigationUi(
   screenContextComponent: ScreenContextComponent<ChildNavGraph>
 ) = Ui<ChildNavigationScreen> {
-  ScreenScaffold(topBar = { AppBar { Text("Child Navigation") } }) {
+  EsScaffold(topBar = { EsAppBar { Text("Child Navigation") } }) {
     Column {
       (1..3).forEach { navigationIndex ->
         key(navigationIndex) {

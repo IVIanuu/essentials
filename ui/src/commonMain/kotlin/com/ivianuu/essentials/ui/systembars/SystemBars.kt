@@ -5,7 +5,8 @@
 package com.ivianuu.essentials.ui.systembars
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.geometry.*
@@ -13,17 +14,18 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.app.*
-import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.util.*
 import com.ivianuu.injekt.*
+
+val LocalZIndex = compositionLocalOf { 0 }
 
 @Composable fun overlaySystemBarBgColor(color: Color) =
   if (color.isLight) Color.White.copy(alpha = 0.4f) else Color.Black.copy(alpha = 0.2f)
 
 @Composable fun Modifier.systemBarStyle(
-  bgColor: Color = overlaySystemBarBgColor(MaterialTheme.colors.surface),
+  bgColor: Color = overlaySystemBarBgColor(MaterialTheme.colorScheme.surface),
   darkIcons: Boolean = bgColor.isLight,
-  zIndex: Int = 0
+  zIndex: Int = LocalZIndex.current
 ): Modifier = composed {
   val style = remember { SystemBarStyle(bgColor, darkIcons, zIndex) }
   style.barColor = bgColor
@@ -44,7 +46,10 @@ import com.ivianuu.injekt.*
     Surface(
       modifier = Modifier
         .fillMaxSize()
-        .systemBarStyle(zIndex = -1),
+        .systemBarStyle(
+          zIndex = -1,
+          bgColor = Color.Transparent
+        ),
       content = content
     )
   }
@@ -67,16 +72,10 @@ import com.ivianuu.injekt.*
   var barColor by mutableStateOf(barColor)
   var darkIcons by mutableStateOf(darkIcons)
   var bounds by mutableStateOf(Rect(0f, 0f, 0f, 0f))
-  var zIndex by mutableStateOf(zIndex)
+  var zIndex by mutableIntStateOf(zIndex)
 }
 
-fun interface SystemBarManagerProvider : AppUiDecorator {
-  @Provide companion object {
-    @Provide val loadingOrder
-      get() = LoadingOrder<SystemBarManagerProvider>()
-        .after<WindowInsetsProvider>()
-  }
-}
+fun interface SystemBarManagerProvider : AppUiDecorator
 
 val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager> {
   error("No system bar manager provided")

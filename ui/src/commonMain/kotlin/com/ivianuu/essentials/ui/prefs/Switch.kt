@@ -4,24 +4,25 @@
 
 package com.ivianuu.essentials.ui.prefs
 
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import com.ivianuu.essentials.ui.material.*
+import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.ui.material.EsListItem
 
 @Composable fun SwitchListItem(
   value: Boolean,
   onValueChange: (Boolean) -> Unit,
+  headlineContent: @Composable () -> Unit,
   modifier: Modifier = Modifier,
-  title: (@Composable () -> Unit)? = null,
-  subtitle: (@Composable () -> Unit)? = null,
-  leading: (@Composable () -> Unit)? = null,
+  supportingContent: (@Composable () -> Unit)? = null,
+  leadingContent: (@Composable () -> Unit)? = null,
 ) {
-  ListItem(
+  EsListItem(
     modifier = modifier,
     onClick = { onValueChange(!value) },
-    title = title,
-    subtitle = subtitle,
-    leading = leading,
-    trailing = { Switch(checked = value, onCheckedChange = null) }
+    headlineContent = headlineContent,
+    supportingContent = supportingContent,
+    leadingContent = leadingContent,
+    trailingContent = { Switch(checked = value, onCheckedChange = null) }
   )
 }

@@ -10,15 +10,14 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
-import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.android.R
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -35,8 +34,8 @@ class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit> {
         )
       }
 
-      ScreenScaffold(topBar = { AppBar { Text("Help") } }) {
-        VerticalList {
+      EsScaffold(topBar = { EsAppBar { Text("Help") } }) {
+        EsLazyColumn {
           screen.categories.forEach { category ->
             if (category.title != null) {
               item {
@@ -81,40 +80,42 @@ class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit> {
           modifier = Modifier.fillMaxWidth(),
           verticalAlignment = Alignment.CenterVertically
         ) {
-          CompositionLocalProvider(
-            LocalTextStyle provides MaterialTheme.typography.subtitle1,
-            LocalContentAlpha provides ContentAlpha.high
+          ProvideContentColorTextStyle(
+            contentColor = MaterialTheme.colorScheme.onSurface,
+            textStyle = MaterialTheme.typography.titleLarge
           ) {
             Text(item.question)
           }
 
           Spacer(Modifier.weight(1f))
 
+          Spacer(Modifier.width(8.dp))
+
           val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
           Icon(
             Icons.Default.ExpandMore,
             modifier = Modifier
-              .size(24.dp)
+              .requiredSize(24.dp)
               .rotate(iconRotation),
-            tint = MaterialTheme.colors.primary,
+            tint = MaterialTheme.colorScheme.primary,
             contentDescription = null
           )
         }
 
         if (isExpanded) {
-          CompositionLocalProvider(
-            LocalTextStyle provides MaterialTheme.typography.body2,
-            LocalContentAlpha provides ContentAlpha.medium
+          Spacer(Modifier.height(8.dp))
+
+          ProvideContentColorTextStyle(
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            textStyle = MaterialTheme.typography.bodyMedium
           ) {
-            Text(
-              modifier = Modifier.padding(top = 8.dp),
-              text = item.answer
-            )
+            Text(text = item.answer)
           }
 
           if (item.actions != null) {
+            Spacer(Modifier.height(8.dp))
+
             Row(
-              modifier = Modifier.padding(top = 8.dp),
               horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
               verticalAlignment = Alignment.CenterVertically
             ) {

@@ -4,11 +4,12 @@
 
 package com.ivianuu.essentials.backup
 
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.compose.scopedAction
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -21,10 +22,10 @@ class BackupAndRestoreScreen : Screen<Unit> {
       backupManager: BackupManager,
       toaster: Toaster,
     ) = Ui<BackupAndRestoreScreen> {
-      ScreenScaffold(topBar = { AppBar { Text("Backup/Restore") } }) {
-        VerticalList {
+      EsScaffold(topBar = { EsAppBar { Text("Backup/Restore") } }) {
+        EsLazyColumn {
           item {
-            ListItem(
+            EsListItem(
               onClick = scopedAction {
                 catch { backupManager.createBackup() }
                   .onLeft {
@@ -32,13 +33,13 @@ class BackupAndRestoreScreen : Screen<Unit> {
                     toaster.toast("Failed to backup your data!")
                   }
               },
-              leading = { Icon(Icons.Default.Save, null) },
-              title = { Text("Backup") },
-              subtitle = { Text("Export your data") }
+              leadingContent = { Icon(Icons.Default.Save, null) },
+              headlineContent = { Text("Backup") },
+              supportingContent = { Text("Export your data") }
             )
           }
           item {
-            ListItem(
+            EsListItem(
               onClick = scopedAction {
                 catch { backupManager.restoreBackup() }
                   .onLeft {
@@ -46,9 +47,9 @@ class BackupAndRestoreScreen : Screen<Unit> {
                     toaster.toast("Failed to restore your data!")
                   }
               },
-              leading = { Icon(Icons.Default.Restore, null) },
-              title = { Text("Restore") },
-              subtitle = { Text("Restore your data") }
+              leadingContent = { Icon(Icons.Default.Restore, null) },
+              headlineContent = { Text("Restore") },
+              supportingContent = { Text("Restore your data") }
             )
           }
         }

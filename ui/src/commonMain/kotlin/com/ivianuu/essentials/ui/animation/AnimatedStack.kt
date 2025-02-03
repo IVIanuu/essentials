@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.ui.animation
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
@@ -233,6 +234,7 @@ class AnimatedStackScope<T>(
   val currentSize: IntSize
     get() = animatedSize?.value ?: measuredSize
 
+  @SuppressLint("RestrictedApi")
   @Composable fun createSizeAnimationModifier(
     sizeTransform: State<SizeTransform?>
   ): Modifier = if (sizeTransform.value != null) {
@@ -251,9 +253,11 @@ class AnimatedStackScope<T>(
   }
 
   private inner class SizeModifier(
+    @SuppressLint("RestrictedApi")
     val sizeAnimation: Transition<List<T>>.DeferredAnimation<IntSize, AnimationVector2D>,
     val sizeTransform: State<SizeTransform?>,
   ) : LayoutModifier {
+    @SuppressLint("RestrictedApi")
     override fun MeasureScope.measure(
       measurable: Measurable,
       constraints: Constraints

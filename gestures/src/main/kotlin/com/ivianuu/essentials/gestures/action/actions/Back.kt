@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R

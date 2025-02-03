@@ -4,20 +4,21 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.overlay.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.*
 import kotlinx.serialization.*
+import androidx.compose.runtime.*
 
 @Provide val prefsHomeItem = HomeItem("Prefs") { PrefsScreen() }
 
@@ -27,17 +28,17 @@ class PrefsScreen : Screen<Unit> {
       navigator: Navigator,
       pref: DataStore<SamplePrefs>
     ) = Ui<PrefsScreen> {
-      val prefs = pref.data.scopedState(SamplePrefs())
-      ScreenScaffold(topBar = { AppBar { Text("Prefs") } }) {
-        VerticalList {
+      val prefs by pref.data.collectAsScopedState(SamplePrefs())
+      EsScaffold(topBar = { EsAppBar { Text("Prefs") } }) {
+        EsLazyColumn {
           item {
             SwitchListItem(
               value = prefs.switch,
               onValueChange = action { value ->
                 pref.updateData { copy(switch = value) }
               },
-              leading = { Icon(Icons.Default.ThumbUp, null) },
-              title = { Text("Switch") }
+              leadingContent = { Icon(Icons.Default.ThumbUp, null) },
+              headlineContent = { Text("Switch") }
             )
           }
 
@@ -52,10 +53,10 @@ class PrefsScreen : Screen<Unit> {
                 pref.updateData { copy(slider = value) }
               },
               modifier = Modifier.interactive(prefs.switch),
-              leading = { Icon(Icons.Default.ThumbUp, null) },
-              title = { Text("Slider") },
+              leadingContent = { Icon(Icons.Default.ThumbUp, null) },
+              headlineContent = { Text("Slider") },
               valueRange = 0..100,
-              valueText = { Text(it.toString()) }
+              trailingContent = { Text(it.toString()) }
             )
           }
 
@@ -66,10 +67,10 @@ class PrefsScreen : Screen<Unit> {
                 pref.updateData { copy(slider = value) }
               },
               modifier = Modifier.interactive(prefs.switch),
-              leading = { Icon(Icons.Default.ThumbUp, null) },
-              title = { Text("Slider") },
+              leadingContent = { Icon(Icons.Default.ThumbUp, null) },
+              headlineContent = { Text("Slider") },
               valueRange = 0..100,
-              valueText = { Text(it.toString()) }
+              trailingContent = { Text(it.toString()) }
             )
           }
 
@@ -80,12 +81,11 @@ class PrefsScreen : Screen<Unit> {
                 pref.updateData { copy(steppedSlider = value) }
               },
               modifier = Modifier.interactive(prefs.switch),
-              leading = { Icon(Icons.Default.ThumbUp, null) },
-              title = { Text("Stepped slider") },
-              subtitle = { Text("This is a stepped slider preference") },
+              leadingContent = { Icon(Icons.Default.ThumbUp, null) },
+              headlineContent = { Text("Stepped slider") },
               stepPolicy = incrementingStepPolicy(0.05f),
               valueRange = 0.75f..1.5f,
-              valueText = { ScaledPercentageUnitText(it) }
+              trailingContent = { ScaledPercentageUnitText(it) }
             )
           }
 
@@ -96,22 +96,21 @@ class PrefsScreen : Screen<Unit> {
           }
 
           item {
-            ListItem(
+            EsListItem(
               modifier = Modifier.interactive(prefs.switch),
-              onClick = action {
+              onClick = scopedAction {
                 val newTextInput = navigator.push(
                   TextInputScreen(
                     initial = prefs.textInput,
                     label = "Input",
-                    title = "Text input",
                     predicate = { it.isNotEmpty() }
                   )
-                ) ?: return@action
+                ) ?: return@scopedAction
                 pref.updateData { copy(textInput = newTextInput) }
               },
-              leading = { Icon(Icons.Default.ThumbUp, null) },
-              title = { Text("Text input") },
-              subtitle = { Text("This is a text input preference") }
+              leadingContent = { Icon(Icons.Default.ThumbUp, null) },
+              headlineContent = { Text("Text input") },
+              supportingContent = { Text("This is a text input preference") }
             )
           }
 
@@ -125,9 +124,9 @@ class PrefsScreen : Screen<Unit> {
                 pref.updateData { copy(color = newColor) }
               },
               modifier = Modifier.interactive(prefs.switch),
-              leading = { Icon(Icons.Default.ThumbUp, null) },
-              title = { Text("Color") },
-              subtitle = { Text("This is a color preference") }
+              leadingContent = { Icon(Icons.Default.ThumbUp, null) },
+              headlineContent = { Text("Color") },
+              supportingContent = { Text("This is a color preference") }
             )
           }
 
@@ -139,9 +138,8 @@ class PrefsScreen : Screen<Unit> {
               onSelectionChanged = action { values ->
                 pref.updateData { copy(multiChoice = values) }
               },
-              leading = { Icon(Icons.Default.ThumbUp, null) },
-              title = { Text("Multi select list") },
-              subtitle = { Text("This is a multi select list preference") }
+              leadingContent = { Icon(Icons.Default.ThumbUp, null) },
+              headlineContent = { Text("Multi select list") }
             )
           }
 
@@ -153,9 +151,8 @@ class PrefsScreen : Screen<Unit> {
               onSelectionChanged = action { value ->
                 pref.updateData { copy(singleChoice = value) }
               },
-              leading = { Icon(Icons.Default.ThumbUp, null) },
-              title = { Text("Single item list") },
-              subtitle = { Text("This is a single item list preference") }
+              leadingContent = { Icon(Icons.Default.ThumbUp, null) },
+              headlineContent = { Text("Single item list") }
             )
           }
         }

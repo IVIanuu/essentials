@@ -6,7 +6,7 @@ package com.ivianuu.essentials.ui.app
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.*
@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.material.contentColor
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.systembars.*
 import com.ivianuu.essentials.ui.util.*
@@ -29,7 +30,29 @@ data class AppColors(
   }
 }
 
-typealias AppFont = @AppFontTag FontFamily
+data class AppColorSchemes(
+  val light: ColorScheme,
+  val dark: ColorScheme
+) {
+  @Provide companion object {
+    @Provide fun default(colors: AppColors) = AppColorSchemes(
+      light = lightColorScheme(
+        primary = colors.primary,
+        onPrimary = colors.primary.contentColor,
+        secondary = colors.secondary,
+        onSecondary = colors.secondary.contentColor
+      ),
+      dark = darkColorScheme(
+        primary = colors.primary,
+        onPrimary = colors.primary.contentColor,
+        secondary = colors.secondary,
+        onSecondary = colors.secondary.contentColor
+      )
+    )
+  }
+}
+
+typealias AppFont = @AppFontTag FontFamily?
 
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
 annotation class AppFontTag
@@ -39,87 +62,28 @@ typealias AppTypography = @AppTypographyTag Typography
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
 annotation class AppTypographyTag {
   @Provide companion object {
-    @Provide fun default(font: AppFont? = null): AppTypography = Typography(
-      h1 = TextStyle(
-        fontSize = 57.sp,
-        lineHeight = 64.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = (-0.2).sp,
-        fontFamily = font
-      ),
-      h2 = TextStyle(
-        fontSize = 45.sp,
-        lineHeight = 52.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = 0.0.sp,
-        fontFamily = font
-      ),
-      h3 = TextStyle(
-        fontSize = 45.sp,
-        lineHeight = 52.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = 0.0.sp,
-        fontFamily = font
-      ),
-      h5 = TextStyle(
-        fontSize = 28.sp,
-        lineHeight = 32.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = 0.0.sp,
-        fontFamily = font
-      ),
-      h6 = TextStyle(
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = 0.0.sp,
-        fontFamily = font
-      ),
-      subtitle1 = TextStyle(
-        fontSize = 18.sp,
-        lineHeight = 24.sp,
-        fontWeight = FontWeight.Medium,
-        letterSpacing = 0.2.sp,
-        fontFamily = font
-      ),
-      subtitle2 = TextStyle(
-        fontSize = 16.sp,
-        lineHeight = 20.sp,
-        fontWeight = FontWeight.Medium,
-        letterSpacing = 0.1.sp,
-        fontFamily = font
-      ),
-      body2 = TextStyle(
-        fontSize = 16.sp,
-        lineHeight = 20.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = 0.2.sp,
-        fontFamily = font
-      ),
-      button = TextStyle(
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        fontWeight = FontWeight.Medium,
-        letterSpacing = 0.1.sp,
-        fontFamily = font
-      ),
-      caption = TextStyle(
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        fontWeight = FontWeight.Medium,
-        letterSpacing = 0.5.sp,
-        fontFamily = font
-      ),
-      overline = TextStyle(
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        fontWeight = FontWeight.Medium,
-        letterSpacing = 0.5.sp,
-        fontFamily = font
-      )
-    )
+    @Provide fun default(font: AppFont? = null): AppTypography = Typography()
+      .withFontFamily(font)
   }
 }
+
+fun Typography.withFontFamily(fontFamily: FontFamily?): Typography = copy(
+  displayLarge = displayLarge.copy(fontFamily = fontFamily),
+  displayMedium = displayMedium.copy(fontFamily = fontFamily),
+  displaySmall = displaySmall.copy(fontFamily = fontFamily),
+  headlineLarge = headlineLarge.copy(fontFamily = fontFamily),
+  headlineMedium = headlineMedium.copy(fontFamily = fontFamily),
+  headlineSmall = headlineSmall.copy(fontFamily = fontFamily),
+  titleLarge = titleLarge.copy(fontFamily = fontFamily),
+  titleMedium = titleMedium.copy(fontFamily = fontFamily),
+  titleSmall = titleSmall.copy(fontFamily = fontFamily),
+  bodyLarge = bodyLarge.copy(fontFamily = fontFamily),
+  bodyMedium = bodyMedium.copy(fontFamily = fontFamily),
+  bodySmall = bodySmall.copy(fontFamily = fontFamily),
+  labelLarge = labelLarge.copy(fontFamily = fontFamily),
+  labelMedium = labelMedium.copy(fontFamily = fontFamily),
+  labelSmall = labelSmall.copy(fontFamily = fontFamily)
+)
 
 typealias AppShapes = @AppShapesTag Shapes
 
@@ -127,11 +91,7 @@ typealias AppShapes = @AppShapesTag Shapes
 annotation class AppShapesTag {
   @Provide companion object {
     @Provide val default: AppShapes
-      get() = Shapes(
-        small = RoundedCornerShape(12.dp),
-        medium = RoundedCornerShape(16.dp),
-        large = RoundedCornerShape(20.dp)
-      )
+      get() = Shapes()
   }
 }
 
@@ -146,25 +106,14 @@ annotation class AppTransitionScreenSpecTag {
 }
 
 @Provide fun appThemeDecorator(
-  colors: AppColors,
+  colorSchemes: AppColorSchemes,
   shapes: AppShapes,
   typography: AppTypography,
   transitionSpec: AppScreenTransitionSpec
 ) = AppThemeDecorator { content ->
   MaterialTheme(
-    colors = if (isSystemInDarkTheme()) colors(
-      isLight = false,
-      primary = colors.primary,
-      primaryVariant = colors.primary,
-      secondary = colors.secondary,
-      secondaryVariant = colors.secondary
-    ) else colors(
-      isLight = true,
-      primary = colors.primary,
-      primaryVariant = colors.primary,
-      secondary = colors.secondary,
-      secondaryVariant = colors.secondary
-    ),
+    colorScheme = if (isSystemInDarkTheme()) colorSchemes.dark
+    else colorSchemes.light,
     typography = typography,
     shapes = shapes
   ) {

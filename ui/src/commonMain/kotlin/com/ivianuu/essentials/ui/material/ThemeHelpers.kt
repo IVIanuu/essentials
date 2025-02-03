@@ -4,20 +4,28 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.ui.util.*
 
-@Composable fun guessingContentColorFor(color: Color): Color = with(MaterialTheme.colors) {
-  when (color) {
-    primary -> onPrimary
-    primaryVariant -> onPrimary
-    secondary -> onSecondary
-    secondaryVariant -> onSecondary
-    background -> onBackground
-    surface -> onSurface
-    error -> onError
-    else -> if (color.isDark) Color.White else Color.Black
+@Composable fun guessingContentColorFor(color: Color): Color =
+  with(MaterialTheme.colorScheme) {
+    when (color) {
+      primary -> onPrimary
+      secondary -> onSecondary
+      tertiary -> onTertiary
+      background -> onBackground
+      surface -> onSurface
+      error -> onError
+      inverseSurface -> inverseOnSurface
+      primaryContainer -> onPrimaryContainer
+      secondaryContainer -> onSecondaryContainer
+      tertiaryContainer -> onTertiaryContainer
+      errorContainer -> onErrorContainer
+      else -> color.contentColor
+    }
   }
-}
+
+val Color.contentColor: Color
+  get() = if (isDark) Color.White else Color.Black

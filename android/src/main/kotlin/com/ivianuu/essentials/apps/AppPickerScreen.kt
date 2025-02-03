@@ -7,11 +7,13 @@ package com.ivianuu.essentials.apps
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.*
-import androidx.compose.ui.*
+import androidx.compose.material3.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import coil.compose.*
 import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -28,20 +30,23 @@ class AppPickerScreen(
       repository: AppRepository,
       screen: AppPickerScreen
     ) = Ui<AppPickerScreen> {
-      ScreenScaffold(
-        topBar = { AppBar { Text(screen.title ?: "Pick an app") } }
+      EsScaffold(
+        topBar = { EsAppBar { Text(screen.title ?: "Pick an app") } }
       ) {
         ResourceBox(
-          repository.installedApps
-            .map { it.filter { screen.appPredicate.test(it) } }
-            .scopedResourceState()
+          produceScopedState(Resource.Idle()) {
+            repository.installedApps
+              .map { it.filter { screen.appPredicate.test(it) } }
+              .flowAsResource()
+              .collect { value = it }
+          }.value
         ) { apps ->
-          VerticalList {
+          EsLazyColumn {
             items(apps) { app ->
-              ListItem(
-                onClick = action { navigator.pop(screen, app) },
-                title = { Text(app.appName) },
-                leading = {
+              EsListItem(
+                onClick = scopedAction { navigator.pop(screen, app) },
+                headlineContent = { Text(app.appName) },
+                leadingContent = {
                   Image(
                     painter = rememberAsyncImagePainter(AppIcon(packageName = app.packageName)),
                     modifier = Modifier.size(40.dp),

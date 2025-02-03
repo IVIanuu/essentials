@@ -34,7 +34,8 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
       freeCompilerArgs = freeCompilerArgs + listOf(
         "-XXLanguage:+NewInference",
         "-Xskip-prerelease-check",
-        "-opt-in=androidx.compose.animation.ExperimentalAnimationApi"
+        "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
+        "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
       )
       if (kotlinCompilation is KotlinJvmCompilation ||
         kotlinCompilation is KotlinJvmAndroidCompilation)

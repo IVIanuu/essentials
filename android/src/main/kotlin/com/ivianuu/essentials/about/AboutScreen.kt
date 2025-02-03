@@ -3,13 +3,13 @@ package com.ivianuu.essentials.about
 import android.content.*
 import android.net.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.compose.scopedAction
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -28,95 +28,105 @@ class AboutScreen(
       navigator: Navigator,
       screen: AboutScreen
     ) = Ui<AboutScreen> {
-      ScreenScaffold(topBar = { AppBar { Text("About") } }) {
-        VerticalList {
+      EsScaffold(topBar = { EsAppBar { Text("About") } }) {
+        EsLazyColumn {
           item {
-            ListItem(
-              leading = { Icon(Icons.Default.Info, null) },
-              title = { Text("Version") },
-              subtitle = { Text(appConfig.versionName) }
+            EsListItem(
+              leadingContent = { Icon(Icons.Default.Info, null) },
+              headlineContent = { Text("Version") },
+              supportingContent = { Text(appConfig.versionName) }
             )
           }
 
           item {
-            ListItem(
-              onClick = scopedAction { navigator.push(PlayStoreAppDetailsKey(appConfig.packageName)) },
-              leading = { Icon(Icons.Default.Star, null) },
-              title = { Text("Rate") },
-              subtitle = { Text("I'll be happy if you give me 5 stars") }
+            EsListItem(
+              onClick = scopedAction {
+                navigator.push(PlayStoreAppDetailsKey(appConfig.packageName)) 
+              },
+              leadingContent = { Icon(Icons.Default.Star, null) },
+              headlineContent = { Text("Rate") },
+              supportingContent = { Text("I'll be happy if you give me 5 stars") }
             )
           }
 
           if (screen.donationScreen != null)
             item {
-              ListItem(
-                onClick = scopedAction { navigator.push(screen.donationScreen) },
-                leading = { Icon(Icons.Default.Favorite, null) },
-                title = { Text("Donate") }
+              EsListItem(
+                onClick = scopedAction {
+                  navigator.push(screen.donationScreen) 
+                },
+                leadingContent = { Icon(Icons.Default.Favorite, null) },
+                headlineContent = { Text("Donate") }
               )
             }
 
           item {
-            ListItem(
+            EsListItem(
               onClick = scopedAction {
                 navigator.push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
               },
-              leading = { Icon(Icons.Default.ShoppingBag, null) },
-              title = { Text("More apps") },
-              subtitle = { Text("Check out my other apps on Google Play") }
+              leadingContent = { Icon(Icons.Default.ShoppingBag, null) },
+              headlineContent = { Text("More apps") },
+              supportingContent = { Text("Check out my other apps on Google Play") }
             )
           }
 
           item {
-            ListItem(
+            EsListItem(
               onClick = scopedAction {
                 navigator.push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
               },
-              leading = {
+              leadingContent = {
                 Icon(
                   imageVector = FontAwesomeIcons.Brands.RedditAlien,
                   modifier = Modifier.size(24.dp),
                   contentDescription = null
                 )
               },
-              title = { Text("Reddit") },
-              subtitle = { Text("If you need help or have questions, my subreddit is a good place to go") }
+              headlineContent = { Text("Reddit") },
+              supportingContent = {
+                Text("If you need help or have questions, my subreddit is a good place to go") 
+              }
             )
           }
 
           item {
-            ListItem(
-              onClick = scopedAction { navigator.push(UrlScreen("https://github.com/IVIanuu")) },
-              leading = {
+            EsListItem(
+              onClick = scopedAction {
+                navigator.push(UrlScreen("https://github.com/IVIanuu"))
+              },
+              leadingContent = {
                 Icon(
                   imageVector = FontAwesomeIcons.Brands.Github,
                   modifier = Modifier.size(24.dp),
                   contentDescription = null
                 )
               },
-              title = { Text("Github") },
-              subtitle = { Text("Check out my work on Github") }
+              headlineContent = { Text("Github") },
+              supportingContent = { Text("Check out my work on Github") }
             )
           }
 
           item {
-            ListItem(
-              onClick = scopedAction { navigator.push(UrlScreen("https://twitter.com/IVIanuu")) },
-              leading = {
+            EsListItem(
+              onClick = scopedAction {
+                navigator.push(UrlScreen("https://twitter.com/IVIanuu"))
+              },
+              leadingContent = {
                 Icon(
                   imageVector = FontAwesomeIcons.Brands.Twitter,
                   modifier = Modifier.size(24.dp),
                   contentDescription = null
                 )
               },
-              title = { Text("Twitter") },
-              subtitle = { Text("Follow me on Twitter") }
+              headlineContent = { Text("Twitter") },
+              supportingContent = { Text("Follow me on Twitter") }
             )
           }
 
           item {
             val email = "ivianuu@gmail.com"
-            ListItem(
+            EsListItem(
               onClick = scopedAction {
                 navigator.push(
                   Intent(Intent.ACTION_SENDTO).apply {
@@ -130,18 +140,20 @@ class AboutScreen(
                     .asScreen()
                 )
               },
-              leading = { Icon(Icons.Default.Email, null) },
-              title = { Text("Send feedback") },
-              subtitle = { Text(email) }
+              leadingContent = { Icon(Icons.Default.Email, null) },
+              headlineContent = { Text("Send feedback") },
+              supportingContent = { Text(email) }
             )
           }
 
           if (screen.privacyPolicyUrl != null)
             item {
-              ListItem(
-                onClick = scopedAction { navigator.push(UrlScreen(screen.privacyPolicyUrl)) },
-                leading = { Icon(Icons.Default.Policy, null) },
-                title = { Text("Privacy policy") }
+              EsListItem(
+                onClick = scopedAction {
+                  navigator.push(UrlScreen(screen.privacyPolicyUrl))
+                },
+                leadingContent = { Icon(Icons.Default.Policy, null) },
+                headlineContent = { Text("Privacy policy") }
               )
             }
         }

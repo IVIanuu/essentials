@@ -6,11 +6,12 @@ package com.ivianuu.essentials.gestures.action.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.gestures.action.*
@@ -38,34 +39,37 @@ class ActionPickerScreen(
       repository: ActionRepository,
       screen: ActionPickerScreen
     ) = Ui<ActionPickerScreen> {
-      val items = scopedResourceState {
-        value = buildList<ActionPickerItem> {
-          if (screen.showDefaultOption)
-            this += ActionPickerItem.SpecialOption(title = "Default", getResult = { Result.Default })
+      val items by produceScopedState(Resource.Idle()) {
+        value = catchResource {
+          buildList<ActionPickerItem> {
+            if (screen.showDefaultOption)
+              this += ActionPickerItem.SpecialOption(title = "Default", getResult = { Result.Default })
 
-          if (screen.showNoneOption)
-            this += ActionPickerItem.SpecialOption(title = "None", getResult = { Result.None })
+            if (screen.showNoneOption)
+              this += ActionPickerItem.SpecialOption(title = "None", getResult = { Result.None })
 
-          this += (
-              (repository.getActionPickerDelegates()
-                .map { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
-                .map {
-                  ActionPickerItem.ActionItem(
-                    it,
-                    repository.getActionSettingsKey(it.id)
-                  )
-                }))
-            .sortedBy { it.title }
-        }.success()
+            this += (
+                (repository.getActionPickerDelegates()
+                  .map { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
+                  .map {
+                    ActionPickerItem.ActionItem(
+                      it,
+                      repository.getActionSettingsKey(it.id)
+                    )
+                  }))
+              .sortedBy { it.title }
+          }
+        }
       }
 
-      ScreenScaffold(topBar = { AppBar { Text("Pick an action") } }) {
+      EsScaffold(topBar = { EsAppBar { Text("Pick an action") } }) {
         ResourceBox(items) { items ->
-          VerticalList {
+          EsLazyColumn {
             items(items) { item ->
-              ListItem(
+              EsListItem(
                 onClick = scopedAction {
-                  val result = item.getResult(navigator) ?: return@scopedAction
+                  val result = item.getResult(navigator)
+                    ?: return@scopedAction
                   if (result is Result.Action) {
                     val action = repository.getAction(result.actionId)
                     if (!permissionManager.requestPermissions(action.permissions))
@@ -73,14 +77,14 @@ class ActionPickerScreen(
                   }
                   navigator.pop(screen, result)
                 },
-                leading = { item.Icon(Modifier.size(24.dp)) },
-                trailing = if (item.settingsScreen == null) null
+                leadingContent = { item.Icon(Modifier.size(24.dp)) },
+                trailingContent = if (item.settingsScreen == null) null
                 else ({
                   IconButton(onClick = scopedAction { navigator.push(item.settingsScreen!!) }) {
                     Icon(Icons.Default.Settings, null)
                   }
                 }),
-                title = { Text(item.title) }
+                headlineContent = { Text(item.title) }
               )
             }
           }

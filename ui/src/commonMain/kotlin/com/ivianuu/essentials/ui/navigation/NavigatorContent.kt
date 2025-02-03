@@ -9,6 +9,7 @@ import androidx.compose.ui.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.systembars.LocalZIndex
 import com.slack.circuit.foundation.internal.*
 import kotlin.collections.set
 
@@ -77,8 +78,14 @@ import kotlin.collections.set
 
       with(spec) { invoke() }
     }
-  ) {
-    screenContexts[it]?.let { ScreenContent(it) }
+  ) { screen ->
+    screenContexts[screen]?.let {
+      CompositionLocalProvider(
+        LocalZIndex provides LocalZIndex.current + navigator.backStack.indexOf(screen)
+      ) {
+        ScreenContent(it)
+      }
+    }
   }
 }
 

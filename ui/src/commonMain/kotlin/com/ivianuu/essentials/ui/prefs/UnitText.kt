@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import kotlin.math.*
 

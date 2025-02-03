@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.ads.*
 import com.ivianuu.essentials.compose.*
@@ -22,13 +22,13 @@ class AdsScreen : Screen<Unit> {
       adsEnabledState: MutableState<AdsEnabled>,
       fullScreenAd: FullScreenAdManager
     ) = Ui<AdsScreen> {
-      ScreenScaffold(topBar = { AppBar { Text("Ads") } }) {
-        VerticalList {
+      EsScaffold(topBar = { EsAppBar { Text("Ads") } }) {
+        EsLazyColumn {
           item {
             SwitchListItem(
               value = adsEnabledState.value.value,
               onValueChange = { adsEnabledState.value = AdsEnabled(it) },
-              title = { Text("Show ads") }
+              headlineContent = { Text("Show ads") }
             )
           }
 

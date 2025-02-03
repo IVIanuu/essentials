@@ -6,7 +6,7 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
@@ -21,6 +21,7 @@ import kotlin.reflect.*
   transitionSpec: ElementTransitionSpec<ResourceBoxItem<T>> = ResourceBoxDefaults.transitionSpec(),
   error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
+  idle: @Composable () -> Unit = ResourceBoxDefaults.idle,
   success: @Composable (T) -> Unit
 ) {
   // we only wanna animate if the resource type has changed
@@ -37,6 +38,7 @@ import kotlin.reflect.*
     transitionSpec = transitionSpec
   ) { itemToRender ->
     when (val value = itemToRender.value) {
+      is Resource.Idle -> idle()
       is Resource.Loading -> loading()
       is Resource.Success -> success(value.value)
       is Resource.Error -> error(value.error)
@@ -65,11 +67,12 @@ object ResourceBoxDefaults {
         .verticalScroll(rememberScrollState())
         .padding(16.dp),
       text = it.stackTraceToString(),
-      color = MaterialTheme.colors.error,
-      style = MaterialTheme.typography.body2
+      color = MaterialTheme.colorScheme.error,
+      style = MaterialTheme.typography.bodyMedium
     )
   }
   val loading: @Composable () -> Unit = {
     CircularProgressIndicator(modifier = Modifier.center())
   }
+  val idle: @Composable () -> Unit = loading
 }

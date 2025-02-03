@@ -8,7 +8,7 @@ import android.content.*
 import android.graphics.*
 import android.util.*
 import androidx.compose.foundation.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*

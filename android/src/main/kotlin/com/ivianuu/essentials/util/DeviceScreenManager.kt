@@ -47,7 +47,7 @@ import kotlin.time.Duration.Companion.seconds
     .distinctUntilChanged()
 
   val screenRotation: Flow<ScreenRotation> = moleculeFlow(RecompositionMode.Immediate) {
-    val screenState = screenState.state(ScreenState.OFF)
+    val screenState by screenState.collectAsState(ScreenState.OFF)
     var displayRotation by remember { mutableStateOf(getCurrentDisplayRotation()) }
 
     if (screenState.isOn)

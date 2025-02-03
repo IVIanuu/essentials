@@ -7,7 +7,8 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.*
 import android.provider.*
 import android.view.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.compose.*
@@ -60,10 +61,10 @@ class MediaActionSettingsScreen : Screen<Unit> {
       intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
       pref: DataStore<MediaActionPrefs>
     ) = Ui<MediaActionSettingsScreen> {
-      ScreenScaffold(topBar = { AppBar { Text("Media action settings") } }) {
-        VerticalList {
+      EsScaffold(topBar = { EsAppBar { Text("Media action settings") } }) {
+        EsLazyColumn {
           item {
-            ListItem(
+            EsListItem(
               onClick = scopedAction {
                 val newMediaApp = navigator.push(
                   AppPickerScreen(
@@ -73,10 +74,10 @@ class MediaActionSettingsScreen : Screen<Unit> {
                 if (newMediaApp != null)
                   pref.updateData { copy(mediaApp = newMediaApp.packageName) }
               },
-              title = { Text("Media app") },
-              subtitle = {
-                val mediaAppName = pref.data.scopedState(null)?.mediaApp
-                  ?.let { appRepository.appInfo(it).scopedState(null)?.appName }
+              headlineContent = { Text("Media app") },
+              supportingContent = {
+                val mediaAppName = pref.data.collectAsScopedState(null).value?.mediaApp
+                  ?.let { appRepository.appInfo(it).collectAsScopedState(null).value?.appName }
                 Text(
                   "Define the target app for the media actions (current: ${mediaAppName ?: "None"})"
                 )

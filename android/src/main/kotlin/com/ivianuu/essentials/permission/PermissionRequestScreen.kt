@@ -8,15 +8,16 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.Text
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
@@ -33,7 +34,7 @@ class PermissionRequestScreen(
       requestHandlers: Map<KClass<out Permission>, () -> PermissionRequestHandler<Permission>>,
       screen: PermissionRequestScreen
     ) = Ui<PermissionRequestScreen> {
-      LaunchedEffect(true) {
+      LaunchedScopedEffect(true) {
         permissionManager.permissionState(screen.permissionsKeys).first { it }
         navigator.pop(screen, true)
       }
@@ -44,17 +45,20 @@ class PermissionRequestScreen(
 
       val permissionsToGrant = keysByPermission
         .keys
-        .filterNot {
-          key(keysByPermission[it]) {
-            permissionManager.permissionState(listOf(keysByPermission[it]!!))
-              .scopedState(false)
+        .filterNot { permission ->
+          key(permission) {
+            produceScopedState(false) {
+              permissionManager.permissionState(listOf(keysByPermission[permission]!!))
+                .collect { value = it }
+            }
+              .value
           }
         }
 
-      ScreenScaffold(topBar = { AppBar { Text("Required permissions") } }) {
-        VerticalList {
+      EsScaffold(topBar = { EsAppBar { Text("Required permissions") } }) {
+        EsLazyColumn {
           items(permissionsToGrant) { permission ->
-            ListItem(
+            EsListItem(
               modifier = Modifier
                 .padding(start = 8.dp, top = 8.dp, end = 8.dp)
                 .border(
@@ -62,19 +66,16 @@ class PermissionRequestScreen(
                   LocalContentColor.current.copy(alpha = 0.12f),
                   RoundedCornerShape(8.dp)
                 ),
-              textPadding = PaddingValues(start = 16.dp),
-              title = { Text(permission.title) },
-              subtitle = permission.desc?.let { { Text(it) } },
-              leading = { permission.icon?.invoke() },
-              trailing = {
+              headlineContent = { Text(permission.title) },
+              supportingContent = permission.desc?.let { { Text(it) } },
+              leadingContent = { permission.icon?.invoke() },
+              trailingContent = {
                 Row(horizontalArrangement = Arrangement.End) {
                   TextButton(
-                    modifier = Modifier.width(56.dp),
                     onClick = action { navigator.pop(screen, false) }
                   ) { Text("Deny") }
 
                   TextButton(
-                    modifier = Modifier.width(56.dp),
                     onClick = scopedAction {
                       requestHandlers[keysByPermission[permission]!!]!!().requestPermission(permission)
                       appUiStarter.startAppUi()

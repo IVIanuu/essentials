@@ -4,10 +4,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.ui.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.compose.*
@@ -15,7 +16,6 @@ import com.ivianuu.essentials.notificationlistener.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
@@ -27,7 +27,7 @@ class PermissionsScreen : Screen<Unit> {
       permissionManager: PermissionManager,
       permissions: List<SamplePermission>
     ) = Ui<PermissionsScreen> {
-      ScreenScaffold(topBar = { AppBar { Text("Permissions") } }) {
+      EsScaffold(topBar = { EsAppBar { Text("Permissions") } }) {
         Button(
           modifier = Modifier.center(),
           onClick = scopedAction {

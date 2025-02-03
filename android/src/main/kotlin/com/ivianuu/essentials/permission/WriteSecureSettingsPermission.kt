@@ -11,9 +11,9 @@ import android.provider.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
@@ -21,9 +21,6 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.material.OutlinedButton
-import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
@@ -85,15 +82,15 @@ class WriteSecureSettingsScreen(
           },
           enabled = if (currentStep > completedStep) false
           else when (completedStep) {
-            1 -> developerModeDataStore.data.scopedState(null) != 0
-            2 -> adbEnabledDataStore.data.scopedState(null) != 0
+            1 -> developerModeDataStore.data.collectAsScopedState(null).value != 0
+            2 -> adbEnabledDataStore.data.collectAsScopedState(null).value != 0
             3 -> true
-            4 -> scopedState(false) {
+            4 -> produceScopedState(false) {
               while (true) {
                 value = permissionManager.permissionState(listOf(screen.permissionClass)).first()
                 delay(1.seconds)
               }
-            }
+            }.value
             else -> true
           }
         ) { Text(text) }
@@ -101,11 +98,13 @@ class WriteSecureSettingsScreen(
 
       val openStep = { step: Int -> currentStep = step }
 
-      ScreenScaffold(
-        topBar = { AppBar { Text("PC instructions") } },
+      EsScaffold(
+        topBar = { EsAppBar { Text("PC instructions") } },
         bottomBar = {
           Snackbar(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+              .navigationBarsPadding()
+              .padding(16.dp),
             action = {
               TextButton(onClick = scopedAction {
                 shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
@@ -128,14 +127,14 @@ class WriteSecureSettingsScreen(
           }
         }
       ) {
-        VerticalList {
+        EsLazyColumn {
           item {
             Text(
               text = "The WRITE_SECURE_SETTINGS permission can be granted from the browser on your PC! " +
                   "You don\'t have to install any drivers or programs.\n" +
                   "You can grant the permission with a single click on rooted devices.",
               modifier = Modifier.padding(all = 16.dp),
-              style = MaterialTheme.typography.body2
+              style = MaterialTheme.typography.bodyMedium
             )
           }
 
@@ -150,7 +149,7 @@ class WriteSecureSettingsScreen(
                 Text(
                   text = ") Click \"Open about phone\"\n" +
                       "2) Click \"Build Number\" multiple times until the \"Developer options\" are active",
-                  style = MaterialTheme.typography.body2
+                  style = MaterialTheme.typography.bodyMedium
                 )
               },
               actions = {
@@ -180,7 +179,7 @@ class WriteSecureSettingsScreen(
                 Text(
                   text = "1) Click \"Open developer options\"\n" +
                       "2) Enable \"USB debugging\"",
-                  style = MaterialTheme.typography.body2
+                  style = MaterialTheme.typography.bodyMedium
                 )
               },
               actions = {
@@ -244,7 +243,7 @@ class WriteSecureSettingsScreen(
                     )
                     .padding(4.dp),
                   text = "pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS",
-                  style = MaterialTheme.typography.body2.copy(fontSize = 14.sp)
+                  style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp)
                 )
               },
               actions = { ContinueButton(text = "Complete") }
