@@ -30,16 +30,18 @@ import kotlin.collections.set
 
 @Composable fun <N> NavigatorContent(
   navigator: Navigator,
-  screenContextComponent: ScreenContextComponent<N>,
+  navigationComponent: NavigationComponent<N>,
   modifier: Modifier = Modifier,
   handleBack: Boolean = true,
   defaultTransitionSpec: ElementTransitionSpec<Screen<*>> = LocalScreenTransitionSpec.current
 ) {
-  val screenContexts = remember { mutableStateMapOf<Screen<*>, ScreenContext<*>>() }
+  val screenStates = remember {
+    mutableStateMapOf<Screen<*>, ScreenState<*>>()
+  }
 
   navigator.backStack.forEachIndexed { index, screen ->
     key(screen) {
-      screenContexts[screen] = rememberScreenContext(screen, navigator, screenContextComponent)
+      screenStates[screen] = rememberScreenState(screen, navigator, navigationComponent)
 
       key(index) {
         BackHandler(enabled = handleBack && index > 0, onBack = action {
@@ -49,14 +51,14 @@ import kotlin.collections.set
     }
   }
 
-  // clean up removed contexts
-  screenContexts.forEach { (screen, screenContext) ->
+  // clean up removed states
+  screenStates.forEach { (screen, screenContext) ->
     key(screenContext) {
       DisposableEffect(true) {
         screenContext.scope.addObserver(
           object : ScopeObserver<Any> {
             override fun onExit(scope: Scope<Any>) {
-              screenContexts.remove(screen)
+              screenStates.remove(screen)
             }
           }
         )
@@ -68,18 +70,18 @@ import kotlin.collections.set
   AnimatedStack(
     modifier = modifier,
     items = navigator.backStack,
-    contentOpaque = { screenContexts[it]?.config?.opaque ?: false },
+    contentOpaque = { screenStates[it]?.config?.opaque ?: false },
     transitionSpec = {
       val spec = (if (isPush)
-        screenContexts[target]?.config?.enterTransitionSpec
+        screenStates[target]?.config?.enterTransitionSpec
       else
-        screenContexts[initial]?.config?.exitTransitionSpec)
+        screenStates[initial]?.config?.exitTransitionSpec)
         ?: defaultTransitionSpec
 
       with(spec) { invoke() }
     }
   ) { screen ->
-    screenContexts[screen]?.let {
+    screenStates[screen]?.let {
       CompositionLocalProvider(
         LocalZIndex provides LocalZIndex.current + navigator.backStack.indexOf(screen)
       ) {

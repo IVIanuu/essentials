@@ -24,7 +24,7 @@ object ChildNavGraph
 @Provide val childNavigationHomeItem = HomeItem("Child Navigation") { ChildNavigationScreen() }
 
 @Provide fun childNavigationUi(
-  screenContextComponent: ScreenContextComponent<ChildNavGraph>
+  navigationComponent: NavigationComponent<ChildNavGraph>
 ) = Ui<ChildNavigationScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Child Navigation") } }) {
     Column {
@@ -40,7 +40,7 @@ object ChildNavGraph
               .weight(1f)
               .fillMaxWidth(),
             navigator = navigator,
-            screenContextComponent = screenContextComponent,
+            navigationComponent = navigationComponent,
             defaultTransitionSpec = { slideHorizontally() }
           )
         }

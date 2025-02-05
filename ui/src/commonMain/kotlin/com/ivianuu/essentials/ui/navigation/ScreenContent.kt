@@ -9,92 +9,92 @@ import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
 @Composable fun <S : Screen<*>> ScreenContent(screen: S) {
-  ScreenContent(rememberScreenContext(screen))
+  ScreenContent(rememberScreenState(screen))
 }
 
-@Composable fun <S : Screen<*>> ScreenContent(context: ScreenContext<S>) {
-  if (context.isDisposed) return
+@Composable fun <S : Screen<*>> ScreenContent(state: ScreenState<S>) {
+  if (state.isDisposed) return
 
   val compositionKey = currentCompositeKeyHash
 
   val savableStateRegistry = remember {
     SaveableStateRegistry(
-      restoredValues = context.savedState.remove(compositionKey),
+      restoredValues = state.savedState.remove(compositionKey),
       canBeSaved = { true }
     )
   }
 
   CompositionLocalProvider(
-    LocalScope provides context.scope,
+    LocalScope provides state.scope,
     LocalSaveableStateRegistry provides savableStateRegistry
   ) {
-    context.content()
+    state.content()
 
     DisposableEffect(true) {
-      context.isContentRemoved = false
+      state.isContentRemoved = false
       onDispose {
-        context.isContentRemoved = true
-        if (!context.isContextRemoved)
-          context.savedState[compositionKey] = savableStateRegistry.performSave()
-        context.disposeIfNeeded()
+        state.isContentRemoved = true
+        if (!state.isStateRemoved)
+          state.savedState[compositionKey] = savableStateRegistry.performSave()
+        state.disposeIfNeeded()
       }
     }
   }
 }
 
-@Stable class ScreenContext<S : Screen<*>>(
+@Stable class ScreenState<S : Screen<*>>(
   val screen: S,
   val config: ScreenConfig<S>? = null,
   val scope: Scope<ScreenScope>,
   val content: @Composable () -> Unit
 ) : RememberObserver {
   internal var isContentRemoved = false
-  internal var isContextRemoved = false
+  internal var isStateRemoved = false
   var isDisposed by mutableStateOf(false)
     private set
 
   internal var savedState = mutableMapOf<Any, Map<String, List<Any?>>>()
 
   override fun onRemembered() {
-    isContextRemoved = false
+    isStateRemoved = false
   }
 
   override fun onForgotten() {
-    isContextRemoved = true
+    isStateRemoved = true
   }
 
   override fun onAbandoned() {
-    isContextRemoved = true
+    isStateRemoved = true
   }
 
   fun disposeIfNeeded() {
-    if (isDisposed || !isContentRemoved || !isContextRemoved) return
+    if (isDisposed || !isContentRemoved || !isStateRemoved) return
     isDisposed = true
     scope.dispose()
   }
 }
 
-@Composable fun <S : Screen<*>> rememberScreenContext(
+@Composable fun <S : Screen<*>> rememberScreenState(
   screen: S,
   navigator: Navigator = LocalScope.current.navigator
-) = rememberScreenContext(
+) = rememberScreenState(
   screen,
   navigator,
-  LocalScope.current.service<ScreenContextComponent<RootNavGraph>>()
+  LocalScope.current.service<NavigationComponent<RootNavGraph>>()
 )
 
-@Composable fun <N, S : Screen<*>> rememberScreenContext(
+@Composable fun <N, S : Screen<*>> rememberScreenState(
   screen: S,
   navigator: Navigator = LocalScope.current.navigator,
-  component: ScreenContextComponent<N>
-): ScreenContext<S> = remember {
+  component: NavigationComponent<N>
+): ScreenState<S> = remember {
   val scope = component.screenScopeFactory(navigator, screen)
   val ui = component.uiFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
     ?: error("No ui factory found for $screen")
   val config = component.configFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
     ?: error("No config found for $screen")
   val decorateScreen = component.decorateScreenFactory(navigator, scope.cast(), screen)
-  ScreenContext(
+  ScreenState(
     screen = screen,
     config = config,
     content = {
@@ -106,7 +106,7 @@ import kotlin.reflect.*
   ).unsafeCast()
 }
 
-@Provide data class ScreenContextComponent<N>(
+@Provide data class NavigationComponent<N>(
   val uiFactories: Map<KClass<Screen<*>>, @NavGraph<N> UiFactory<Screen<*>>>,
   val configFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>>,
   val screenScopeFactory: (@Service<ScreenScope> Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>,
@@ -114,7 +114,7 @@ import kotlin.reflect.*
 ) {
   @Provide companion object {
     @Provide fun rootService(
-      factory: () -> ScreenContextComponent<RootNavGraph>
-    ) = ProvidedService<UiScope, _>(ScreenContextComponent::class, factory)
+      factory: () -> NavigationComponent<RootNavGraph>
+    ) = ProvidedService<UiScope, _>(NavigationComponent::class, factory)
   }
 }
