@@ -4,9 +4,10 @@
 
 package com.ivianuu.essentials.data
 
+import androidx.compose.runtime.*
 import kotlinx.coroutines.flow.*
 
-interface DataStore<T> {
+@Stable interface DataStore<T> {
   val data: Flow<T>
 
   suspend fun updateData(transform: T.() -> T): T

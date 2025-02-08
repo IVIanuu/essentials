@@ -41,11 +41,11 @@ class ScreenScope {
   override fun toString() = "ScreenScope"
 }
 
-fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
+@Stable fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
   @Composable fun DecoratedContent(content: @Composable () -> Unit)
 }
 
-@Provide class DecorateScreen(
+@Stable @Provide class DecorateScreen(
   private val records: List<ExtensionPointRecord<ScreenDecorator>>,
   private val logger: Logger
 ) {

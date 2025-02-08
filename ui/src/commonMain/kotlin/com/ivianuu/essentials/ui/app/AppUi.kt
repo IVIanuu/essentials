@@ -9,15 +9,15 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 
-fun interface AppUi {
+@Stable fun interface AppUi {
   @Composable fun Content()
 }
 
-fun interface AppUiDecorator : ExtensionPoint<AppUiDecorator> {
+@Stable fun interface AppUiDecorator : ExtensionPoint<AppUiDecorator> {
   @Composable fun DecoratedContent(content: @Composable () -> Unit)
 }
 
-@Provide class DecorateAppUi(
+@Stable @Provide class DecorateAppUi(
   private val records: List<ExtensionPointRecord<AppUiDecorator>>,
   private val logger: Logger
 ) {

@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials
 
+import androidx.compose.runtime.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 import kotlin.math.*
@@ -11,7 +12,7 @@ import kotlin.time.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.nanoseconds
 
-interface Lerper<T> {
+@Stable interface Lerper<T> {
   fun lerp(start: T, stop: T, fraction: Float): T
   fun unlerp(start: T, stop: T, value: T): Float
 

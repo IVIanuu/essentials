@@ -7,11 +7,12 @@ package com.ivianuu.essentials.systemoverlay
 import android.annotation.*
 import android.view.*
 import android.widget.*
+import androidx.compose.runtime.*
 import arrow.core.*
 import com.ivianuu.essentials.*
 
 @SuppressLint("ViewConstructor")
-class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {
+@Stable class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {
   var useDownTouchOffset = true
 
   private val thisDownLocation = intArrayOf(0, 0)

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
 import kotlin.collections.set
 
-class Navigator(
+@Stable class Navigator(
   private val scope: CoroutineScope,
   initialBackStack: List<Screen<*>> = emptyList(),
   private val screenInterceptors: List<ScreenInterceptor<*>> = emptyList(),

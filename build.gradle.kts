@@ -4,6 +4,7 @@
 
 import com.android.build.gradle.*
 import com.vanniktech.maven.publish.*
+import org.jetbrains.kotlin.compose.compiler.gradle.*
 import org.jetbrains.kotlin.gradle.tasks.*
 
 buildscript {
@@ -61,6 +62,17 @@ allprojects {
       }
       namespace = "com.ivianuu.essentials.${name.replace("-", ".")}"
     }
+    afterEvaluate {
+      extensions.getByType<ComposeCompilerGradlePluginExtension>()?.run {
+        reportsDestination.set(layout.buildDirectory.dir("compose_compiler"))
+        metricsDestination.set(layout.buildDirectory.dir("compose_compiler"))
+        stabilityConfigurationFile.set(
+          rootProject.file(
+            rootProject.file("compose-stability.conf")
+          )
+        )
+      }
+    }
   }
 
   plugins.withId("com.android.library") { setupAndroid() }
@@ -69,9 +81,13 @@ allprojects {
   tasks.withType<KotlinCompilationTask<*>> {
     compilerOptions.freeCompilerArgs.addAll(
       "-opt-in=kotlin.experimental.ExperimentalTypeInference",
+      "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
       "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
       "-opt-in=androidx.compose.animation.core.InternalAnimationApi",
-      "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
+      "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+      "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+      "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+      "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     )
   }
 }

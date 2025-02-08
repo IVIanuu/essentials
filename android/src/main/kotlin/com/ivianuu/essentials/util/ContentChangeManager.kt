@@ -7,13 +7,14 @@ package com.ivianuu.essentials.util
 import android.content.*
 import android.database.*
 import android.net.*
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.flowOn
 
-@Provide class ContentChangeManager(
+@Stable @Provide class ContentChangeManager(
   private val contentResolver: ContentResolver,
   private val coroutineContexts: CoroutineContexts,
 ) {

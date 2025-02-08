@@ -112,7 +112,7 @@ fun Modifier.systemWindowTrigger() = composed {
   }
 }
 
-@Provide class SystemWindowManager(
+@Stable @Provide class SystemWindowManager(
   private val context: Context,
   private val systemWindowScopeFactory: () -> Scope<SystemWindowScope>,
   val windowManager: @SystemService WindowManager
@@ -125,7 +125,7 @@ fun Modifier.systemWindowTrigger() = composed {
     content: @Composable () -> Unit
   ) {
     val contentView = remember {
-      lateinit var contentView: View
+      lateinit var contentView: OverlayComposeView
       contentView = OverlayComposeView(context) {
         val scope = remember(systemWindowScopeFactory)
         DisposableEffect(true) {
@@ -169,7 +169,7 @@ fun Modifier.systemWindowTrigger() = composed {
   }
 
   @Composable private fun Window(
-    contentView: View,
+    contentView: OverlayComposeView,
     state: SystemWindowState,
     content: @Composable () -> Unit
   ) {

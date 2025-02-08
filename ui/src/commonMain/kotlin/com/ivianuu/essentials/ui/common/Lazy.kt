@@ -69,7 +69,7 @@ import com.ivianuu.injekt.*
   }
 }
 
-fun interface ListDecorator : ExtensionPoint<ListDecorator> {
+@Stable fun interface ListDecorator : ExtensionPoint<ListDecorator> {
   fun ListDecoratorScope.decoratedItems()
 }
 

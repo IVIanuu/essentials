@@ -10,7 +10,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 
-@Provide class WakeLockManager(
+@Stable @Provide class WakeLockManager(
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val powerManager: @SystemService PowerManager

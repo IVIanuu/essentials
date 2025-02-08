@@ -16,7 +16,7 @@ import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.Duration.Companion.milliseconds
 
-@Provide @Scoped<AppScope> class BroadcastManager(
+@Stable @Provide @Scoped<AppScope> class BroadcastManager(
   private val appContext: AppContext,
   private val coroutineContexts: CoroutineContexts
 ) {

@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.ads
 
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
@@ -31,7 +32,7 @@ interface AdFeature
   }
 }
 
-@Provide class AdFeatureRepository(
+@Stable @Provide class AdFeatureRepository(
   private val featuresByScreen: Map<KClass<out Screen<*>>, AdFeatures<*>>
 ) {
   fun isEnabled(screenClass: KClass<out Screen<*>>, feature: AdFeature): Boolean =

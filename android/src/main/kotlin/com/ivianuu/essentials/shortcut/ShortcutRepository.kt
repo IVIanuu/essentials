@@ -8,6 +8,7 @@ import android.content.*
 import android.content.pm.*
 import android.graphics.*
 import android.graphics.drawable.*
+import androidx.compose.runtime.*
 import androidx.core.graphics.drawable.*
 import arrow.fx.coroutines.*
 import com.ivianuu.essentials.*
@@ -17,7 +18,7 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Provide class ShortcutRepository(
+@Stable @Provide class ShortcutRepository(
   private val appContext: AppContext,
   broadcastManager: BroadcastManager,
   private val coroutineContexts: CoroutineContexts,

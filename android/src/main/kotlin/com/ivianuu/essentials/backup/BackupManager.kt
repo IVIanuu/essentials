@@ -7,6 +7,7 @@ package com.ivianuu.essentials.backup
 import android.content.*
 import android.content.pm.*
 import android.icu.text.*
+import androidx.compose.runtime.*
 import androidx.core.content.*
 import app.cash.quiver.extensions.*
 import com.ivianuu.essentials.*
@@ -22,7 +23,7 @@ import java.io.*
 import java.util.*
 import java.util.zip.*
 
-@Provide class BackupManager(
+@Stable @Provide class BackupManager(
   private val appContext: AppContext,
   private val backupDir: BackupDir,
   private val backupFiles: List<BackupFile>,

@@ -5,13 +5,14 @@
 package com.ivianuu.essentials.util
 
 import android.content.*
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 import android.content.ClipboardManager as AndroidClipboardManager
 
-@Provide class ClipboardRepository(
+@Stable @Provide class ClipboardRepository(
   private val androidClipboardManager: @SystemService AndroidClipboardManager
 ) {
   val clipboardText: Flow<String?> = callbackFlow {

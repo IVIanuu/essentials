@@ -7,6 +7,7 @@ package com.ivianuu.essentials.gestures.action
 import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import arrow.core.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
@@ -19,7 +20,7 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Provide class ActionRepository(
+@Stable @Provide class ActionRepository(
   private val actions: Map<String, () -> Action<*>>,
   private val actionFactories: List<() -> ActionFactory>,
   private val actionsExecutors: Map<String, () -> ActionExecutor<*>>,

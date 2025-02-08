@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.billing
 
+import androidx.compose.runtime.*
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
-@Provide @Scoped<AppScope> class BillingManager(
+@Stable @Provide @Scoped<AppScope> class BillingManager(
   private val appScope: Scope<AppScope>,
   private val appUiStarter: AppUiStarter,
   private val billingClientFactory: () -> BillingClient,

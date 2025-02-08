@@ -16,7 +16,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 
-@Provide @Scoped<AppScope> class ForegroundManager(
+@Stable @Provide @Scoped<AppScope> class ForegroundManager(
   private val appContext: AppContext,
   private val logger: Logger
 ) {

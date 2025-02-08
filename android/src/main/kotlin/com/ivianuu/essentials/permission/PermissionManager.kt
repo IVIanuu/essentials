@@ -16,7 +16,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
-@Provide class PermissionManager(
+@Stable @Provide class PermissionManager(
   private val appUiStarter: AppUiStarter,
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,

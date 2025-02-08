@@ -6,6 +6,7 @@ package com.ivianuu.essentials.apps
 
 import android.content.*
 import android.content.pm.*
+import androidx.compose.runtime.*
 import arrow.fx.coroutines.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
@@ -14,7 +15,7 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Provide class AppRepository(
+@Stable @Provide class AppRepository(
   private val broadcastManager: BroadcastManager,
   private val coroutineContexts: CoroutineContexts,
   private val packageManager: PackageManager

@@ -4,13 +4,14 @@
 
 package com.ivianuu.essentials.accessibility
 
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Provide @Scoped<AppScope> class CurrentAppProvider(
+@Stable @Provide @Scoped<AppScope> class CurrentAppProvider(
   accessibilityManager: AccessibilityManager,
   logger: Logger,
   scope: ScopedCoroutineScope<AppScope>

@@ -4,13 +4,14 @@
 
 package com.ivianuu.essentials.coroutines
 
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
-class ScopedCoroutineScope<N> @Provide @Scoped<N> constructor(
+@Stable class ScopedCoroutineScope<N> @Provide @Scoped<N> constructor(
   context: @ScopeCoroutineContextTag<N> CoroutineContext
 ): CoroutineScope, Disposable {
   override val coroutineContext: CoroutineContext = context + SupervisorJob()

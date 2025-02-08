@@ -106,7 +106,7 @@ import kotlin.reflect.*
   ).unsafeCast()
 }
 
-@Provide data class NavigationComponent<N>(
+@Stable @Provide data class NavigationComponent<N>(
   val uiFactories: Map<KClass<Screen<*>>, @NavGraph<N> UiFactory<Screen<*>>>,
   val configFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>>,
   val screenScopeFactory: (@Service<ScreenScope> Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>,

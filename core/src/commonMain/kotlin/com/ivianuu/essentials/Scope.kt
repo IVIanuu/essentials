@@ -12,7 +12,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
-@Provide class Scope<N : Any>(
+@Stable @Provide class Scope<N : Any>(
   val name: KClass<N>,
   val parent: @ParentScope Scope<*>? = null,
   observers: (Scope<N>, @ParentScope Scope<*>?) -> List<ExtensionPointRecord<ScopeObserver<N>>>,
@@ -178,7 +178,7 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
   }
 }
 
-interface ScopeObserver<N : Any> : ExtensionPoint<ScopeObserver<N>> {
+@Stable interface ScopeObserver<N : Any> : ExtensionPoint<ScopeObserver<N>> {
   fun onEnter(scope: Scope<N>) {
   }
 

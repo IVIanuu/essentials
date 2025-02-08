@@ -15,11 +15,11 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlin.reflect.*
 
-fun interface ScopeWorker<N : Any> : ExtensionPoint<ScopeWorker<N>> {
+@Stable fun interface ScopeWorker<N : Any> : ExtensionPoint<ScopeWorker<N>> {
   suspend fun doWork()
 }
 
-fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
+@Stable fun interface ScopeComposition<N : Any> : ScopeWorker<N> {
   @Composable fun Content()
 
   override suspend fun doWork() {

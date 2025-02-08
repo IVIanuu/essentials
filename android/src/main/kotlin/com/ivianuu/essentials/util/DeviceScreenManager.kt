@@ -22,7 +22,7 @@ import java.util.concurrent.*
 import kotlin.collections.set
 import kotlin.time.Duration.Companion.seconds
 
-@Provide class DeviceScreenManager(
+@Stable @Provide class DeviceScreenManager(
   private val appContext: AppContext,
   broadcastManager: BroadcastManager,
   private val keyguardManager: @SystemService KeyguardManager,

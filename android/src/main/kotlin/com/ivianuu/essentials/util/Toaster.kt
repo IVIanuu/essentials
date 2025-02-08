@@ -5,12 +5,13 @@
 package com.ivianuu.essentials.util
 
 import android.widget.*
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Provide class Toaster(
+@Stable @Provide class Toaster(
   private val appContext: AppContext,
   private val coroutineContexts: CoroutineContexts,
   private val scope: ScopedCoroutineScope<AppScope>

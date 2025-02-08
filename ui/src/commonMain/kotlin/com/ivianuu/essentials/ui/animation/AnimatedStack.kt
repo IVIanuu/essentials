@@ -222,7 +222,7 @@ private fun <T> List<T>.filterVisible(contentOpaque: (T) -> Boolean): List<T> = 
   }
 }
 
-class AnimatedStackScope<T>(
+@Stable class AnimatedStackScope<T>(
   private val transition: Transition<List<T>>,
   var contentAlignment: Alignment
 ) {
@@ -372,6 +372,6 @@ private class AnimatedStackMeasurePolicy(val scope: AnimatedStackScope<*>) : Mea
   ) = measurables.asSequence().map { it.maxIntrinsicHeight(width) }.maxOrNull() ?: 0
 }
 
-fun interface ElementTransitionSpec<T> {
+@Stable fun interface ElementTransitionSpec<T> {
   operator fun ElementTransitionBuilder<T>.invoke()
 }

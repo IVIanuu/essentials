@@ -24,7 +24,7 @@ import kotlin.math.*
 import kotlin.time.*
 import kotlin.time.Duration.Companion.seconds
 
-@Provide @Scoped<UiScope> class FullScreenAdManager(
+@Stable @Provide @Scoped<UiScope> class FullScreenAdManager(
   private val activity: ComponentActivity,
   private val appContext: AppContext,
   private val appScope: Scope<AppScope>,

@@ -14,8 +14,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 
 @SuppressLint("ViewConstructor")
-@Provide
-class OverlayComposeView(
+@Stable @Provide class OverlayComposeView(
   context: Context,
   private val content: @Composable () -> Unit,
 ) : AbstractComposeView(context),

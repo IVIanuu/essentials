@@ -11,7 +11,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Provide class NotificationRepository(private val appScope: Scope<AppScope>) {
+@Stable @Provide class NotificationRepository(private val appScope: Scope<AppScope>) {
   val notificationEvents: Flow<NotificationEvent> =
     snapshotFlow { appScope.scopeOfOrNull<NotificationScope>() }
       .flatMapLatest { it?.notificationListenerService?.events ?: emptyFlow() }

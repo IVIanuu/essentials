@@ -1,12 +1,13 @@
 package com.ivianuu.essentials.logging
 
+import androidx.compose.runtime.*
 import co.touchlab.kermit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-@Provide @JvmInline value class Logger(val kermitLogger: co.touchlab.kermit.Logger) {
+@Stable @Provide @JvmInline value class Logger(val kermitLogger: co.touchlab.kermit.Logger) {
   inline fun v(throwable: Throwable? = null, sourceKey: SourceKey = inject, message: () -> String) =
     kermitLogger.v(throwable, sourceKey.value, message)
 

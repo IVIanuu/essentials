@@ -2,9 +2,23 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.ivianuu.essentials.sample.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.BoundsTransform
+import androidx.compose.animation.EnterExitState
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,16 +30,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.*
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import com.ivianuu.essentials.compose.scopedAction
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.common.*
@@ -113,17 +130,35 @@ class BottomNavigationScreen : Screen<Unit> {
   }
 }
 
+enum class SlideUpPanelState {
+  EXPANDED, COLLAPSED
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable fun PlaybackUiTest() {
   var isExpanded by remember { mutableStateOf(false) }
+  BackHandler(isExpanded) { isExpanded = false }
 
   val containerColor = MaterialTheme.colorScheme.primary
 
-  CollapsedPlayer(containerColor) { isExpanded = true }
-
-  BackHandler(isExpanded) { isExpanded = false }
-
-  if (isExpanded) {
-    ExpandedPlayer(containerColor) { isExpanded = false }
+  SharedTransitionLayout {
+    AnimatedContent(
+      targetState = isExpanded
+    ) { currentExpanded ->
+      if (currentExpanded) {
+        ExpandedPlayer(
+          containerColor = containerColor,
+          animatedVisibilityScope = this,
+          sharedTransitionScope = this@SharedTransitionLayout
+        ) { isExpanded = false }
+      } else {
+        CollapsedPlayer(
+          containerColor = containerColor,
+          animatedVisibilityScope = this,
+          sharedTransitionScope = this@SharedTransitionLayout
+        ) { isExpanded = true }
+      }
+    }
   }
 }
 
@@ -132,6 +167,8 @@ val CollapsedPlayerPadding = 12.dp
 
 @Composable fun CollapsedPlayer(
   containerColor: Color,
+  animatedVisibilityScope: AnimatedVisibilityScope,
+  sharedTransitionScope: SharedTransitionScope,
   onExpandClick: () -> Unit
 ) {
   Box(
@@ -141,10 +178,28 @@ val CollapsedPlayerPadding = 12.dp
       .padding(bottom = 80.dp)
       .padding(CollapsedPlayerPadding)
   ) {
+    val roundedCornerAnim by animatedVisibilityScope.transition
+      .animateDp { enterExit ->
+        when (enterExit) {
+          EnterExitState.PreEnter -> 0.dp
+          EnterExitState.Visible -> 12.dp
+          EnterExitState.PostExit -> 0.dp
+        }
+      }
+
     Card(
-      modifier = Modifier
-        .fillMaxWidth()
-        .height(CollapsedPlayerHeight),
+      modifier = with(sharedTransitionScope) {
+        Modifier
+          .fillMaxWidth()
+          .height(CollapsedPlayerHeight)
+          .sharedBounds(
+            sharedContentState = rememberSharedContentState("card"),
+            animatedVisibilityScope = animatedVisibilityScope,
+            clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(roundedCornerAnim)),
+            enter = fadeIn(tween(1000)),
+            exit = fadeOut(tween(1000))
+          )
+      },
       colors = CardDefaults.cardColors(containerColor = containerColor),
       onClick = onExpandClick,
       elevation = CardDefaults.elevatedCardElevation(),
@@ -180,15 +235,34 @@ val CollapsedPlayerPadding = 12.dp
 
 @Composable fun ExpandedPlayer(
   containerColor: Color,
+  animatedVisibilityScope: AnimatedVisibilityScope,
+  sharedTransitionScope: SharedTransitionScope,
   onCollapseClick: () -> Unit
 ) {
+  val roundedCornerAnim by animatedVisibilityScope.transition
+    .animateDp { enterExit ->
+      when (enterExit) {
+        EnterExitState.PreEnter -> 12.dp
+        EnterExitState.Visible -> 0.dp
+        EnterExitState.PostExit -> 12.dp
+      }
+    }
   Card(
-    modifier = Modifier
-      .fillMaxSize()
-      .systemBarStyle(
-        bgColor = containerColor,
-        zIndex = Int.MAX_VALUE
-      ),
+    modifier = with(sharedTransitionScope) {
+      Modifier
+        .fillMaxSize()
+        .systemBarStyle(
+          bgColor = containerColor,
+          zIndex = Int.MAX_VALUE
+        )
+        .sharedBounds(
+          sharedContentState = rememberSharedContentState("card"),
+          animatedVisibilityScope = animatedVisibilityScope,
+          clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(roundedCornerAnim)),
+          enter = fadeIn(tween(1000)),
+          exit = fadeOut(tween(1000))
+        )
+    },
     colors = CardDefaults.cardColors(containerColor = containerColor),
     onClick = onCollapseClick,
     elevation = CardDefaults.elevatedCardElevation(),
