@@ -23,6 +23,7 @@ import kotlinx.coroutines.*
           use = {
             logger.d { "${id.value} acquire wake lock" }
             it.acquire()
+            awaitCancellation()
           },
           release = { wakeLock, _ ->
             logger.d { "${id.value} release wake lock" }
