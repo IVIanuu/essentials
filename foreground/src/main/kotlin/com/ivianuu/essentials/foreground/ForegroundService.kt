@@ -9,6 +9,7 @@ import android.app.Service
 import android.content.*
 import android.os.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.*
 import app.cash.molecule.*
 import arrow.fx.coroutines.*
 import com.ivianuu.essentials.*
@@ -19,6 +20,7 @@ import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
+import kotlin.math.*
 import kotlin.time.Duration.Companion.seconds
 
 @Provide @AndroidComponent class ForegroundService(
@@ -38,77 +40,102 @@ import kotlin.time.Duration.Companion.seconds
     logger.d { "foreground service started" }
 
     job = scope.launchMolecule {
-      val states = foregroundManager.states
-      var removeServiceNotification by remember { mutableStateOf(true) }
+      logger.d { "compose main body" }
 
-      if (states.isEmpty()) {
+      DisposableEffect(true) {
+        val foregroundScope = foregroundScopeFactory()
+        onDispose { foregroundScope.dispose() }
+      }
+
+      val defaultState = remember {
+        ForegroundManager.ForegroundState(
+          "default_foreground_id",
+          true
+        ) {
+          notificationFactory.create(
+            "default_foreground",
+            "Foreground",
+            NotificationManager.IMPORTANCE_LOW
+          ) {
+            setContentTitle("${appConfig.appName} is running!")
+            setSmallIcon(R.drawable.ic_sync)
+            setContentIntent(remoteActionFactory<StartAppRemoteAction, _>())
+          }
+        }
+      }
+
+      val currentStates by remember {
+        derivedStateOf {
+          if (foregroundManager.states.isEmpty()) emptyList()
+          else {
+            val statesWithNotification =
+              foregroundManager.states.count { it.notification != null }
+            if (statesWithNotification > 0) foregroundManager.states
+            else foregroundManager.states + defaultState
+          }
+        }
+      }
+
+      val mainState by remember {
+        derivedStateOf { currentStates.firstOrNull() }
+      }
+
+      var removeServiceNotification by remember { mutableStateOf(true) }
+      LaunchedEffect(mainState, mainState?.removeNotification) {
+        if (mainState != null)
+          removeServiceNotification = mainState!!.removeNotification
+      }
+
+      if (currentStates.isEmpty()) {
         LaunchedEffect(removeServiceNotification) {
+          logger.d { "stop foreground -> remove notification $removeServiceNotification" }
+          stopForeground(
+            if (removeServiceNotification) STOP_FOREGROUND_REMOVE
+            else STOP_FOREGROUND_DETACH
+          )
+
           onCancel(
             fa = {
-              logger.d { "stop foreground -> remove notification $removeServiceNotification" }
-              stopForeground(
-                if (removeServiceNotification) STOP_FOREGROUND_REMOVE
-                else STOP_FOREGROUND_DETACH
-              )
-              logger.d { "dispatch delayed foreground stop" }
+              logger.d { "dispatch delayed service stop" }
               delay(6.seconds)
+
+              logger.d { "stop self" }
               stopSelf()
-            },
-            onCancel = { logger.d { "cancel delayed foreground stop" } }
-          )
+            }
+          ) { logger.d { "cancel stopping" } }
         }
       } else {
-        val notifications = states.mapNotNullTo(mutableListOf()) { state ->
+        currentStates.fastForEach { state ->
           key(state.id) {
-            state.notification?.invoke()
-              ?.let { Triple(state.id, state.removeNotification, it) }
-          }
-        }
-
-        if (notifications.isEmpty())
-          notifications += remember {
-            Triple(
-              "default_foreground_id",
-              true,
-              notificationFactory.create(
-                "default_foreground",
-                "Foreground",
-                NotificationManager.IMPORTANCE_LOW
-              ) {
-                setContentTitle("${appConfig.appName} is running!")
-                setSmallIcon(R.drawable.ic_sync)
-                setContentIntent(remoteActionFactory<StartAppRemoteAction, _>())
-              }
+            ForegroundNotification(
+              isMainNotification = { mainState == state },
+              state = state
             )
           }
-
-        notifications.forEachIndexed { index, (id, removeNotification, notification) ->
-          key(id) {
-            DisposableEffect(index, id, notification) {
-              logger.d { "$id update foreground notification" }
-
-              if (index == 0) {
-                removeServiceNotification = removeNotification
-                startForeground(id.hashCode(), notification)
-                onDispose {  }
-              } else {
-                notificationManager.notify(id.hashCode(), notification)
-                onDispose {
-                  if (removeNotification)
-                    notificationManager.cancel(id.hashCode())
-                }
-              }
-            }
-          }
         }
+      }
+    }
+  }
 
-        LaunchedEffect(states) {
-          states.forEach { it.seen.complete(Unit) }
+  @Composable private fun ForegroundNotification(
+    isMainNotification: () -> Boolean,
+    state: ForegroundManager.ForegroundState
+  ) {
+    logger.d { "compose notification ${state.id}" }
+    val notification = state.notification?.invoke()
+    DisposableEffect(notification, isMainNotification()) {
+      logger.d { "${state.id} update foreground notification" }
+
+      val notificationId = state.id.hashCode()
+      if (isMainNotification()) {
+        startForeground(notificationId, notification)
+        onDispose {
         }
-
-        DisposableEffect(true) {
-          val foregroundScope = foregroundScopeFactory()
-          onDispose { foregroundScope.dispose() }
+      } else {
+        notificationManager.notify(notificationId, notification)
+        onDispose {
+          if (state.removeNotification)
+            notificationManager.cancel(notificationId)
         }
       }
     }

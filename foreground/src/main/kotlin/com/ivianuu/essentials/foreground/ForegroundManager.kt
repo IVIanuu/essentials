@@ -8,6 +8,7 @@ import android.app.*
 import android.content.*
 import androidx.compose.runtime.*
 import androidx.core.content.*
+import arrow.fx.coroutines.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.coroutines.*
@@ -35,28 +36,29 @@ import kotlinx.coroutines.*
       state.removeNotification = removeNotification
       state.notification = notification
 
-      LaunchedEffect(state) {
+      DisposableEffect(state) {
         states += state
         logger.d { "start foreground ${id.value} $states" }
-        ContextCompat.startForegroundService(
-          appContext,
-          Intent(appContext, ForegroundService::class.java)
-        )
-        onCancel {
-          state.seen.await()
+        onDispose {
           states -= state
           logger.d { "stop foreground ${id.value} $states" }
         }
       }
+
+      LaunchedEffect(true) {
+        ContextCompat.startForegroundService(
+          appContext,
+          Intent(appContext, ForegroundService::class.java)
+        )
+      }
     }
   }
 
-  internal class ForegroundState(
+  @Stable internal class ForegroundState(
     val id: String,
     removeNotification: Boolean,
     notification: (@Composable () -> Notification)?,
   ) {
-    val seen = CompletableDeferred<Unit>()
     var removeNotification by mutableStateOf(removeNotification)
     var notification by mutableStateOf(notification)
   }
