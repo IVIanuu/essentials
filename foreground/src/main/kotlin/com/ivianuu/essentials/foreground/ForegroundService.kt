@@ -123,22 +123,23 @@ import kotlin.time.Duration.Companion.seconds
   ) {
     logger.d { "compose notification ${state.id}" }
     val notification = state.notification?.invoke()
-    DisposableEffect(notification, isMainNotification()) {
-      logger.d { "${state.id} update foreground notification" }
+    if (notification != null)
+      DisposableEffect(notification, isMainNotification()) {
+        logger.d { "${state.id} update foreground notification" }
 
-      val notificationId = state.id.hashCode()
-      if (isMainNotification()) {
-        startForeground(notificationId, notification)
-        onDispose {
-        }
-      } else {
-        notificationManager.notify(notificationId, notification)
-        onDispose {
-          if (state.removeNotification)
-            notificationManager.cancel(notificationId)
+        val notificationId = state.id.hashCode()
+        if (isMainNotification()) {
+          startForeground(notificationId, notification)
+          onDispose {
+          }
+        } else {
+          notificationManager.notify(notificationId, notification)
+          onDispose {
+            if (state.removeNotification)
+              notificationManager.cancel(notificationId)
+          }
         }
       }
-    }
   }
 
   override fun onDestroy() {
