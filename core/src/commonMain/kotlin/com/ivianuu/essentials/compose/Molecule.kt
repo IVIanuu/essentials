@@ -7,12 +7,16 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*
 
-fun <T> moleculeFlow(block: @Composable () -> T): Flow<T> = 
-  moleculeFlow(RecompositionMode.Immediate, block)
+fun <T> moleculeFlow(
+  context: CoroutineContext = AndroidUiDispatcher.Main,
+  block: @Composable () -> T
+): Flow<T> =
+  moleculeFlow(RecompositionMode.ContextClock, block)
+    .flowOn(context)
 
 fun CoroutineScope.launchMolecule(
-  mode: RecompositionMode = RecompositionMode.Immediate,
-  context: CoroutineContext = EmptyCoroutineContext,
+  mode: RecompositionMode = RecompositionMode.ContextClock,
+  context: CoroutineContext = AndroidUiDispatcher.Main,
   block: @Composable () -> Unit
 ): Job {
   val job = Job(coroutineContext.job)
@@ -21,6 +25,6 @@ fun CoroutineScope.launchMolecule(
 }
 
 fun <T> CoroutineScope.moleculeStateFlow(
-  context: CoroutineContext = EmptyCoroutineContext,
+  context: CoroutineContext = AndroidUiDispatcher.Main,
   block: @Composable () -> T,
 ): StateFlow<T> = launchMolecule(RecompositionMode.Immediate, context, body = block)
