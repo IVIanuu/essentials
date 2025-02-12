@@ -98,7 +98,7 @@ import kotlin.time.Duration.Companion.seconds
     } ?: false
   }
 
-  private inner class FullScreenAd(private val interstitial: InterstitialAd) {
+  @Stable private inner class FullScreenAd(private val interstitial: InterstitialAd) {
     var wasShown by mutableStateOf(false)
 
     suspend fun show(): Boolean {

@@ -57,7 +57,7 @@ import kotlin.reflect.*
   tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
 ) : AbstractEsTileService(logger, tileScopeFactory)
 
-abstract class AbstractEsTileService(
+@Stable abstract class AbstractEsTileService(
   private val logger: Logger,
   private val tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
 ) : TileService() {

@@ -23,7 +23,7 @@ import kotlinx.coroutines.*
 import kotlin.math.*
 import kotlin.time.Duration.Companion.seconds
 
-@Provide @AndroidComponent class ForegroundService(
+@Stable @Provide @AndroidComponent class ForegroundService(
   private val appConfig: AppConfig,
   private val foregroundManager: ForegroundManager,
   private val notificationFactory: NotificationFactory,
