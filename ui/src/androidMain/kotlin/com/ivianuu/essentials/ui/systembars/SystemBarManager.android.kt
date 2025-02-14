@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.*
+import androidx.compose.ui.util.fastLastOrNull
 import androidx.core.view.*
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
@@ -27,16 +28,14 @@ import com.ivianuu.injekt.*
 }
 
 private class AndroidSystemBarManager : SystemBarManager {
-  private var styles by mutableStateOf(emptyList<SystemBarStyle>())
+  private val styles = mutableStateListOf<SystemBarStyle>()
 
   override fun registerStyle(style: SystemBarStyle) {
-    styles = (styles + style)
-      .sortedByDescending { it.zIndex }
+    styles += style
   }
 
   override fun unregisterStyle(style: SystemBarStyle) {
-    styles -= (styles + style)
-      .sortedByDescending { it.zIndex }
+    styles -= style
   }
 
   @Composable fun Apply() {
@@ -51,39 +50,21 @@ private class AndroidSystemBarManager : SystemBarManager {
     }
 
     val density = LocalDensity.current
-    val statusBarHitPointY by rememberUpdatedState(
-      with(density) {
-        WindowInsets.statusBars.getTop(density) / 2f
-      }
-    )
-
-    val statusBarColor by remember {
-      derivedStateOf {
-        styles
-          .lastOrNull { statusBarHitPointY in it.bounds.top..it.bounds.bottom }
-          ?.barColor
-      }
+    val statusBarHitPointY = with(density) {
+      WindowInsets.statusBars.getTop(density) / 2f
     }
 
-    DisposableEffect(activity, statusBarColor) {
+    val statusBarStyle = styles
+      .sortedBy { it.zIndex }
+      .fastLastOrNull { statusBarHitPointY in it.bounds.top..it.bounds.bottom }
+
+    DisposableEffect(activity, statusBarStyle?.barColor, statusBarStyle?.darkIcons) {
       activity.window.statusBarColor =
-        (statusBarColor ?: Color.Black.copy(alpha = 0.2f)).toArgb()
-      onDispose {  }
-    }
-
-    val statusBarDarkIcons by remember {
-      derivedStateOf {
-        styles
-          .lastOrNull { statusBarHitPointY in it.bounds.top..it.bounds.bottom }
-          ?.darkIcons
-      }
-    }
-
-    DisposableEffect(activity, statusBarDarkIcons) {
+        (statusBarStyle?.barColor ?: Color.Black.copy(alpha = 0.2f)).toArgb()
       activity.window.decorView.systemUiVisibility =
         activity.window.decorView.systemUiVisibility.setFlag(
           View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
-          statusBarDarkIcons == true
+          statusBarStyle?.darkIcons ?: false
         )
       onDispose { }
     }
@@ -103,38 +84,22 @@ private class AndroidSystemBarManager : SystemBarManager {
       }
     }
 
-    val navBarColor by remember {
-      derivedStateOf {
-        styles
-          .lastOrNull { navBarHitPointY in it.bounds.top..it.bounds.bottom }
-          ?.barColor
-      }
-    }
+    val navBarStyle = styles
+      .sortedBy { it.zIndex }
+      .fastLastOrNull { navBarHitPointY in it.bounds.top..it.bounds.bottom }
 
-    DisposableEffect(activity, navBarColor) {
+    DisposableEffect(activity, navBarStyle?.barColor, navBarStyle?.darkIcons) {
       activity.window.navigationBarColor =
         (
-            navBarColor ?: Color.Black
+            navBarStyle?.barColor ?: Color.Black
               .copy(alpha = 0.2f)
             ).toArgb()
-      onDispose { }
-    }
-
-    val navBarDarkIcons by remember {
-      derivedStateOf {
-        styles
-          .lastOrNull { navBarHitPointY in it.bounds.top..it.bounds.bottom }
-          ?.darkIcons
-      }
-    }
-
-    DisposableEffect(activity, navBarColor) {
       activity.window.decorView.systemUiVisibility =
         activity.window.decorView.systemUiVisibility.setFlag(
           View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
-          navBarDarkIcons == true
+          navBarStyle?.darkIcons ?: false
         )
-      onDispose {  }
+      onDispose { }
     }
   }
 }
