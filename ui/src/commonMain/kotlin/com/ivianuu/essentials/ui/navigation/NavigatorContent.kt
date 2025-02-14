@@ -52,10 +52,10 @@ import kotlin.collections.set
   }
 
   // clean up removed states
-  screenStates.forEach { (screen, screenContext) ->
-    key(screenContext) {
+  screenStates.forEach { (screen, screenState) ->
+    key(screenState) {
       DisposableEffect(true) {
-        screenContext.scope.addObserver(
+        screenState.scope.addObserver(
           object : ScopeObserver<Any> {
             override fun onExit(scope: Scope<Any>) {
               screenStates.remove(screen)
@@ -70,7 +70,7 @@ import kotlin.collections.set
   AnimatedStack(
     modifier = modifier,
     items = navigator.backStack,
-    contentOpaque = { screenStates[it]?.config?.opaque ?: false },
+    contentOpaque = { screenStates[it]?.config?.opaque == true },
     transitionSpec = {
       val spec = (if (isPush)
         screenStates[target]?.config?.enterTransitionSpec

@@ -46,7 +46,7 @@ import kotlin.reflect.*
   }
 }
 
-class ResourceBoxItem<T>(
+@Stable class ResourceBoxItem<T>(
   val clazz: KClass<out Resource<T>>,
   value: Resource<T>
 ) {
