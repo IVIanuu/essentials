@@ -71,6 +71,7 @@ allprojects {
             rootProject.file("compose-stability.conf")
           )
         )
+        enableNonSkippingGroupOptimization.set(true)
       }
     }
   }

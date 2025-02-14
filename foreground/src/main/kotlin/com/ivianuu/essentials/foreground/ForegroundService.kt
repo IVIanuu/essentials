@@ -20,7 +20,6 @@ import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
-import kotlin.math.*
 import kotlin.time.Duration.Companion.seconds
 
 @Stable @Provide @AndroidComponent class ForegroundService(
@@ -64,9 +63,11 @@ import kotlin.time.Duration.Companion.seconds
         }
       }
 
+      var hasEverCalledStartForeground by remember { mutableStateOf(false) }
+
       val currentStates by remember {
         derivedStateOf {
-          if (foregroundManager.states.isEmpty()) emptyList()
+          if (foregroundManager.states.isEmpty() && hasEverCalledStartForeground) emptyList()
           else {
             val statesWithNotification =
               foregroundManager.states.count { it.notification != null }
@@ -86,8 +87,10 @@ import kotlin.time.Duration.Companion.seconds
           removeServiceNotification = mainState!!.removeNotification
       }
 
-      if (currentStates.isEmpty()) {
+      if (currentStates.isEmpty() && hasEverCalledStartForeground) {
         LaunchedEffect(removeServiceNotification) {
+          delay(1.seconds)
+
           logger.d { "stop foreground -> remove notification $removeServiceNotification" }
           stopForeground(
             if (removeServiceNotification) STOP_FOREGROUND_REMOVE
@@ -108,8 +111,9 @@ import kotlin.time.Duration.Companion.seconds
         currentStates.fastForEach { state ->
           key(state.id) {
             ForegroundNotification(
-              isMainNotification = { mainState == state },
-              state = state
+              state = state,
+              onStartForegroundCalled = { hasEverCalledStartForeground = true },
+              isMainNotification = { mainState == state }
             )
           }
         }
@@ -118,8 +122,9 @@ import kotlin.time.Duration.Companion.seconds
   }
 
   @Composable private fun ForegroundNotification(
+    state: ForegroundManager.ForegroundState,
     isMainNotification: () -> Boolean,
-    state: ForegroundManager.ForegroundState
+    onStartForegroundCalled: () -> Unit
   ) {
     logger.d { "compose notification ${state.id}" }
     val notification = state.notification?.invoke()
@@ -130,6 +135,7 @@ import kotlin.time.Duration.Companion.seconds
         val notificationId = state.id.hashCode()
         if (isMainNotification()) {
           startForeground(notificationId, notification)
+          onStartForegroundCalled()
           onDispose {
           }
         } else {
