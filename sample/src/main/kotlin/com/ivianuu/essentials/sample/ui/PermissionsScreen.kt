@@ -10,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.ui.*
+import androidx.compose.ui.util.fastMap
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.notificationlistener.*
@@ -31,7 +32,7 @@ class PermissionsScreen : Screen<Unit> {
         Button(
           modifier = Modifier.center(),
           onClick = scopedAction {
-            permissionManager.requestPermissions(permissions.map { it::class })
+            permissionManager.requestPermissions(permissions.fastMap { it::class })
           }
         ) {
           Text("Request")

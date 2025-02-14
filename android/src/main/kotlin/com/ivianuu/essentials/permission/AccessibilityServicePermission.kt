@@ -8,6 +8,8 @@ import android.accessibilityservice.*
 import android.content.*
 import android.provider.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastMap
 import androidx.core.os.*
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
@@ -28,10 +30,10 @@ abstract class AccessibilityServicePermission(
         Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
       )
         ?.split(":")
-        ?.map {
+        ?.fastMap {
           it.split("/").first()
         }
-        ?.any { it == appContext.packageName } == true
+        ?.fastAny { it == appContext.packageName } == true
     }
 
     @Provide fun <P : AccessibilityServicePermission> showFindPermissionHint() =

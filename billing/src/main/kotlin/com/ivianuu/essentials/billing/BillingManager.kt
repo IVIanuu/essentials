@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.billing
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastFirstOrNull
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
@@ -74,7 +75,7 @@ import kotlin.time.Duration.Companion.seconds
   suspend fun getSkuDetails(sku: Sku): SkuDetails? = billingClient.use(Unit) {
     it.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
-      ?.firstOrNull { it.sku == sku.skuString }
+      ?.fastFirstOrNull { it.sku == sku.skuString }
       .also { logger.d { "got sku details $it for $sku" } }
   }
 
@@ -165,6 +166,6 @@ import kotlin.time.Duration.Companion.seconds
         .build()
     )
       .purchasesList
-      .firstOrNull { sku.skuString in it.skus }
+      .fastFirstOrNull { sku.skuString in it.skus }
       .also { logger.d { "got purchase $it for $sku" } }
 }

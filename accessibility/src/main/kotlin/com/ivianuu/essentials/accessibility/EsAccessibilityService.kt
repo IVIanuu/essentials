@@ -6,6 +6,9 @@ package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.*
 import android.content.*
+import androidx.compose.ui.util.fastFold
+import androidx.compose.ui.util.fastMap
+import androidx.compose.ui.util.fastMinByOrNull
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
@@ -29,19 +32,20 @@ import kotlinx.coroutines.flow.*
     logger.d { "update accessibility configs $configs" }
     serviceInfo = serviceInfo.apply {
       eventTypes = configs
-        .map { it.eventTypes }
-        .fold(0) { acc, events -> acc.addFlag(events) }
+        .fastMap { it.eventTypes }
+        .fastFold(0) { acc, events -> acc.addFlag(events) }
 
       flags = configs
-        .map { it.flags }
-        .fold(0) { acc, flags -> acc.addFlag(flags) }
+        .fastMap { it.flags }
+        .fastFold(0) { acc, flags -> acc.addFlag(flags) }
 
       // first one wins
       configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
       feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
 
       notificationTimeout = configs
-        .minOfOrNull { it.notificationTimeout } ?: 0L
+        .fastMinByOrNull { it.notificationTimeout }
+        ?.notificationTimeout ?: 0L
 
       packageNames = null
     }

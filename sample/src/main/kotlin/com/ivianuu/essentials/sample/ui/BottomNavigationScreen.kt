@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.vector.*
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
+import androidx.compose.ui.util.fastForEach
 import com.ivianuu.essentials.compose.scopedAction
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.common.*
@@ -62,7 +63,7 @@ class BottomNavigationScreen : Screen<Unit> {
         topBar = { EsAppBar { Text("Bottom navigation") } },
         bottomBar = {
           EsNavigationBar {
-            BottomNavItem.entries.forEach { item ->
+            BottomNavItem.entries.fastForEach { item ->
               NavigationBarItem(
                 alwaysShowLabel = true,
                 selected = item == selectedItem,

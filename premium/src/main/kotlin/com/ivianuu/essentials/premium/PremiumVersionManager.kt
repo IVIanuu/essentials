@@ -5,6 +5,8 @@
 package com.ivianuu.essentials.premium
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastMap
 import arrow.fx.coroutines.*
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
@@ -51,12 +53,12 @@ interface PremiumVersionManager {
 
   override val isPremiumVersion = moleculeFlow {
     val isPremiumVersion = (oldPremiumVersionSkus + premiumVersionSku)
-      .map {
+      .fastMap {
         produceState(nullOf()) {
           billingManager.isPurchased(it).collect { value = it }
         }.value == true
       }
-      .any { it }
+      .fastAny { it }
 
     LaunchedEffect(isPremiumVersion) {
       if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {

@@ -10,6 +10,8 @@ import androidx.compose.ui.draw.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastForEachIndexed
 import kotlin.collections.set
 
 @Composable fun AnimatedVisibility(
@@ -61,7 +63,7 @@ import kotlin.collections.set
     transition.currentState.filterVisible(contentOpaque).toMutableStateList()
   }
 
-  transition.targetState.filterVisible(contentOpaque).forEach {
+  transition.targetState.filterVisible(contentOpaque).fastForEach {
     if (it !in currentlyVisible)
       currentlyVisible.add(it)
   }
@@ -138,7 +140,7 @@ import kotlin.collections.set
 
         // Remove all visible items which shouldn't be visible anymore
         // from top to bottom
-        itemsToRemove.forEachIndexed { i, item ->
+        itemsToRemove.fastForEachIndexed { i, item ->
           updateTransitions(
             item,
             null,
@@ -148,7 +150,7 @@ import kotlin.collections.set
         }
 
         // Add any new items to the stack from bottom to top
-        itemsToAdd.forEachIndexed { i, item ->
+        itemsToAdd.fastForEachIndexed { i, item ->
           updateTransitions(
             targetVisibleItems.getOrNull(i - 1),
             item,
@@ -320,14 +322,14 @@ private class AnimatedStackMeasurePolicy(val scope: AnimatedStackScope<*>) : Mea
   ): MeasureResult {
     val placeables = arrayOfNulls<Placeable>(measurables.size)
     // Measure the target composable first (but place it on top unless zIndex is specified)
-    measurables.forEachIndexed { index, measurable ->
+    measurables.fastForEachIndexed { index, measurable ->
       if ((measurable.parentData as? AnimatedStackScope.ChildData)?.isTarget == true) {
         placeables[index] = measurable.measure(constraints)
       }
     }
     // Measure the non-target composables after target, since these have no impact on
     // container size in the size animation.
-    measurables.forEachIndexed { index, measurable ->
+    measurables.fastForEachIndexed { index, measurable ->
       if (placeables[index] == null) {
         placeables[index] = measurable.measure(constraints)
       }

@@ -8,6 +8,11 @@ import android.content.*
 import android.content.pm.*
 import android.icu.text.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastDistinctBy
+import androidx.compose.ui.util.fastFilter
+import androidx.compose.ui.util.fastFlatMap
+import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastMap
 import androidx.core.content.*
 import app.cash.quiver.extensions.*
 import com.ivianuu.essentials.*
@@ -50,10 +55,10 @@ import java.util.zip.*
     ZipOutputStream(backupFile.outputStream()).use { zipOutputStream ->
       backupFiles
         .flatMap { it.walkTopDown() }
-        .filterNot { it.isDirectory }
-        .filterNot { it.absolutePath in BACKUP_BLACKLIST }
-        .filter { it.exists() }
-        .forEach { file ->
+        .fastFilter { !it.isDirectory }
+        .fastFilter { it.absolutePath !in BACKUP_BLACKLIST }
+        .fastFilter { it.exists() }
+        .fastForEach { file ->
           logger.d { "backup file $file" }
           val entry = ZipEntry(file.relativeTo(dataDir).toString())
           zipOutputStream.putNextEntry(entry)
@@ -75,9 +80,9 @@ import java.util.zip.*
     }
     packageManager
       .queryIntentActivities(intent, PackageManager.MATCH_ALL)
-      .map { it.activityInfo.packageName }
-      .distinct()
-      .forEach {
+      .fastMap { it.activityInfo.packageName }
+      .fastDistinctBy { it }
+      .fastForEach {
         appContext.grantUriPermission(
           it,
           uri,

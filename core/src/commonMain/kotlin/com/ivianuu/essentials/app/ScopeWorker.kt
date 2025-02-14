@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.app
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastMap
 import arrow.fx.coroutines.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
@@ -46,7 +47,7 @@ class ScopeWorkerManager<N : Any> @Provide @ScopedService<N> constructor(
 
             logger.d { "${nameKey.simpleName} run scope workers ${workers.map { it.key.qualifiedName }}" }
 
-            val jobs = workers.map { record ->
+            val jobs = workers.fastMap { record ->
               launch(start = CoroutineStart.UNDISPATCHED) { record.instance.doWork() }
             }
 

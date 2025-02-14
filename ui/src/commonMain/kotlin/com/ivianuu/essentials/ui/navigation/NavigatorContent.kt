@@ -6,6 +6,7 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.util.fastForEachIndexed
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.animation.*
@@ -39,7 +40,7 @@ import kotlin.collections.set
     mutableStateMapOf<Screen<*>, ScreenState<*>>()
   }
 
-  navigator.backStack.forEachIndexed { index, screen ->
+  navigator.backStack.fastForEachIndexed { index, screen ->
     key(screen) {
       screenStates[screen] = rememberScreenState(screen, navigator, navigationComponent)
 

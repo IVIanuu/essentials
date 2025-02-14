@@ -5,6 +5,8 @@
 package com.ivianuu.essentials.billing
 
 import android.app.*
+import androidx.compose.ui.util.fastFilter
+import androidx.compose.ui.util.fastMap
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
@@ -83,7 +85,7 @@ class TestBillingClient(
       delay(10)
       listener.onSkuDetailsResponse(
         successResult(),
-        skus.filter { it.sku in params.skusList }
+        skus.fastFilter { it.sku in params.skusList }
       )
     }
   }
@@ -121,7 +123,7 @@ class TestBillingClient(
     listener: AcknowledgePurchaseResponseListener
   ) {
     purchases = purchases
-      .map {
+      .fastMap {
         Purchase(
           it.orderId,
           it.packageName,

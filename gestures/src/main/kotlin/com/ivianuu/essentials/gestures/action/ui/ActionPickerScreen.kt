@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.util.fastMap
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.permission.*
@@ -50,8 +51,8 @@ class ActionPickerScreen(
 
             this += (
                 (repository.getActionPickerDelegates()
-                  .map { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
-                  .map {
+                  .fastMap { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
+                  .fastMap {
                     ActionPickerItem.ActionItem(
                       it,
                       repository.getActionSettingsKey(it.id)

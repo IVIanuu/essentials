@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ads
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastFilter
 import arrow.core.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.data.*
@@ -59,7 +60,7 @@ private fun Navigator.launchEvents(adFeatureRepository: AdFeatureRepository): Fl
   return snapshotFlow { backStack }
     .mapNotNull { currentBackStack ->
       val launchedScreens = currentBackStack
-        .filter {
+        .fastFilter {
           it !in lastBackStack &&
               adFeatureRepository.isEnabled(it::class, ScreenLaunchFullscreenAdFeature)
         }

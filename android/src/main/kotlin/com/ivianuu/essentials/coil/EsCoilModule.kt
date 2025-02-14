@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.coil
 
+import androidx.compose.ui.util.fastForEach
 import coil.*
 import coil.decode.*
 import coil.fetch.*
@@ -33,13 +34,13 @@ import kotlin.reflect.*
         ?: builder
     }
     .components {
-      decoderFactories.forEach { add(it) }
-      interceptors.forEach { add(it) }
-      keyers.forEach { add(it.keyer as Keyer<Any>, it.type.java as Class<Any>) }
+      decoderFactories.fastForEach { add(it) }
+      interceptors.fastForEach { add(it) }
+      keyers.fastForEach { add(it.keyer as Keyer<Any>, it.type.java as Class<Any>) }
       fetcherFactories
-        .forEach { add(it.factory as Fetcher.Factory<Any>, it.type.java as Class<Any>) }
+        .fastForEach { add(it.factory as Fetcher.Factory<Any>, it.type.java as Class<Any>) }
       mappers
-        .forEach { add(it.mapper as Mapper<Any, Any>, it.type.java as Class<Any>) }
+        .fastForEach { add(it.mapper as Mapper<Any, Any>, it.type.java as Class<Any>) }
     }
     .build()
 

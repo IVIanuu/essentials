@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import androidx.compose.ui.util.fastFlatMap
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.logging.*
@@ -21,7 +22,7 @@ fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
 ) = ScopeWorker<UiScope> {
   val userflowScreens = records
     .sortedWithLoadingOrder()
-    .flatMap { it.instance.createUserflow() }
+    .fastFlatMap { it.instance.createUserflow() }
 
   logger.d { "Userflow -> $userflowScreens" }
 

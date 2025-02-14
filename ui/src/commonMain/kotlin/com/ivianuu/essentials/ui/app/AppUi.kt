@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ui.app
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastFold
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
@@ -25,7 +26,7 @@ import com.ivianuu.injekt.*
     val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
       records
         .sortedWithLoadingOrder()
-        .fold({ it() }) { acc, record ->
+        .fastFold({ it() }) { acc, record ->
           { content ->
             acc {
               logger.d { "decorate app ui ${record.key.qualifiedName}" }

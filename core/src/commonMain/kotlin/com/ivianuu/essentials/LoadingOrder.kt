@@ -4,6 +4,11 @@
 
 package com.ivianuu.essentials
 
+import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastFilter
+import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastMap
+import androidx.compose.ui.util.fastMapNotNull
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
@@ -89,12 +94,12 @@ private fun LoadingOrder.Topological<*>.dependents(): Set<KClass<*>> {
   return result
 }
 
-fun <T> Collection<T>.sortedWithLoadingOrder(
+fun <T> List<T>.sortedWithLoadingOrder(
   descriptor: LoadingOrder.Descriptor<T> = inject
 ): List<T> {
   if (isEmpty() || size == 1) return toList()
 
-  val first = mapNotNull {
+  val first = fastMapNotNull {
     if (descriptor.loadingOrder(it) is LoadingOrder.Static.First)
       descriptor.key(it)
     else null
@@ -103,10 +108,10 @@ fun <T> Collection<T>.sortedWithLoadingOrder(
   val dependencies = mutableMapOf<KClass<*>, MutableSet<KClass<*>>>()
 
   // collect dependencies for each item
-  for (item in this) {
+  fastForEach { item ->
     val key = descriptor.key(item)
 
-    if (key in first) continue
+    if (key in first) return@fastForEach
 
     val loadingOrder = descriptor.loadingOrder(item)
 
@@ -115,7 +120,7 @@ fun <T> Collection<T>.sortedWithLoadingOrder(
     when (loadingOrder) {
       is LoadingOrder.Static.First -> throw AssertionError()
       is LoadingOrder.Static.Last -> {
-        itemDependencies += filter { other ->
+        itemDependencies += fastFilter { other ->
           when (val otherLoadingOrder = descriptor.loadingOrder(other)) {
             is LoadingOrder.Static.Last -> false
             is LoadingOrder.Topological -> otherLoadingOrder.dependencies()
@@ -123,7 +128,7 @@ fun <T> Collection<T>.sortedWithLoadingOrder(
 
             else -> true
           }
-        }.map { descriptor.key(it) }
+        }.fastMap { descriptor.key(it) }
       }
       is LoadingOrder.Topological -> {
         itemDependencies += loadingOrder.dependencies()
@@ -150,10 +155,10 @@ fun <T> Collection<T>.sortedWithLoadingOrder(
     }
     lastItems = unprocessedItems
     sortedItems += unprocessedItems
-      .filter { item ->
+      .fastFilter { item ->
         dependencies[descriptor.key(item)]?.all { dependency ->
-          sortedItems.any { descriptor.key(it) == dependency }
-        } ?: true
+          sortedItems.fastAny { descriptor.key(it) == dependency }
+        } != false
       }
   }
 

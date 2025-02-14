@@ -12,6 +12,8 @@ import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.util.fastFilter
+import androidx.compose.ui.util.fastFlatMap
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.overlay.*
 import com.ivianuu.essentials.ui.material.*
@@ -28,8 +30,8 @@ class DynamicSystemBarsScreen : Screen<Unit> {
       Box {
         val colors = rememberSaveable {
           ColorPickerPalette.entries
-            .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
-            .flatMap { it.colors }
+            .fastFilter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
+            .fastFlatMap { it.colors }
             .shuffled()
         }
         EsLazyColumn(contentPadding = PaddingValues(0.dp)) {

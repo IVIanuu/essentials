@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.permission
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastFilter
 import arrow.fx.coroutines.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
@@ -94,7 +95,7 @@ interface PermissionRevokeHandler {
 ) = ScopeWorker<UiScope> {
   handlers.parMap { handler ->
     val revokedPermissions = handler.permissions
-      .filter { !permissionManager.permissionState(listOf(it)).first() }
+      .fastFilter { !permissionManager.permissionState(listOf(it)).first() }
     if (revokedPermissions.isNotEmpty())
       handler.onPermissionRevoked(revokedPermissions)
   }

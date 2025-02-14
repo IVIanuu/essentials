@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.xposed
 
+import androidx.compose.ui.util.fastForEach
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import de.robv.android.xposed.*
@@ -19,7 +20,7 @@ abstract class EsXposedInit(
     this.lpparam = lpparam
     xposedScope = buildXposedScope()
     xposedScope.service<XposedHooksComponent>().run {
-      hooks.forEach { it.hook(config) }
+      hooks.fastForEach { it.hook(config) }
     }
   }
 

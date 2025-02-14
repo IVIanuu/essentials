@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.util.fastFold
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.app.*
 import com.ivianuu.essentials.ui.material.LocalContentPadding
@@ -100,7 +101,7 @@ private fun LazyListScope.decoratedContent(
   content: LazyListScope.() -> Unit
 ) {
   decorators
-    .fold(content) { acc, record ->
+    .fastFold(content) { acc, record ->
       decorator@{
         with(record.instance) {
           val scope = object : ListDecoratorScope, LazyListScope by this@decorator {

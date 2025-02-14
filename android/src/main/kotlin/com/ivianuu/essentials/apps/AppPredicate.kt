@@ -6,6 +6,7 @@ package com.ivianuu.essentials.apps
 
 import android.content.*
 import android.content.pm.*
+import androidx.compose.ui.util.fastMap
 import com.ivianuu.injekt.*
 
 fun interface AppPredicate {
@@ -27,7 +28,7 @@ val DefaultAppPredicate = AppPredicate { true }
 ) : AppPredicate {
   private val apps by lazy {
     packageManager.queryIntentActivities(intent, 0)
-      .map { it.activityInfo.applicationInfo.packageName }
+      .fastMap { it.activityInfo.applicationInfo.packageName }
   }
   override fun test(app: AppInfo): Boolean = app.packageName in apps
 }

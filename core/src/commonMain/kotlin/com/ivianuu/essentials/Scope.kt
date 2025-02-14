@@ -5,6 +5,7 @@
 package com.ivianuu.essentials
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastForEach
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.atomicfu.locks.*
@@ -36,7 +37,7 @@ import kotlin.reflect.*
   init {
     observers(this@Scope, this@Scope)
       .sortedWithLoadingOrder()
-      .forEach { addObserver(it.instance) }
+      .fastForEach { addObserver(it.instance) }
   }
 
   private val parentDisposable = parent?.registerChild(this)
@@ -92,14 +93,14 @@ import kotlin.reflect.*
         synchronized(observers) {
           observers.toList()
             .also { observers.clear() }
-        }.forEach {
+        }.fastForEach {
           it.cast<ScopeObserver<N>>().onExit(this)
         }
 
         synchronized(cache) {
           cache.values.toList()
             .also { cache.clear() }
-        }.forEach { cachedValue ->
+        }.fastForEach { cachedValue ->
           if (cachedValue is Disposable)
             cachedValue.dispose()
         }

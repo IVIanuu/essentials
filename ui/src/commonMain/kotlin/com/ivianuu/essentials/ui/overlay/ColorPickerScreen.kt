@@ -20,6 +20,9 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastFilter
+import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastMap
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.animation.*
@@ -124,9 +127,9 @@ class ColorPickerScreen(
           palette
             .safeAs<ColorPickerPalette>()
             ?.colors
-            ?.map { ColorGridItem.Color(it) }
+            ?.fastMap { ColorGridItem.Color(it) }
             ?.let { listOf(ColorGridItem.Back) + it }
-            ?: colors.map { ColorGridItem.Color(it.front) }
+            ?: colors.fastMap { ColorGridItem.Color(it.front) }
         }
 
         BoxWithConstraints(
@@ -134,7 +137,7 @@ class ColorPickerScreen(
             .then(modifier)
         ) {
           LazyColumn {
-            items.chunked(4).forEach { rowItems ->
+            items.chunked(4).fastForEach { rowItems ->
               item {
                 ColorGridRow(
                   items = rowItems,
@@ -176,7 +179,7 @@ class ColorPickerScreen(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
       ) {
-        items.forEach { item ->
+        items.fastForEach { item ->
           key(item) {
             Box(
               modifier = Modifier.size(maxWidth / 4),
@@ -282,8 +285,8 @@ class ColorPickerScreen(
         )
 
         ColorComponent.entries
-          .filter { it != ColorComponent.ALPHA || showAlphaSelector }
-          .forEach { component ->
+          .fastFilter { it != ColorComponent.ALPHA || showAlphaSelector }
+          .fastForEach { component ->
             key(component) {
               ColorComponentItem(
                 component = component,

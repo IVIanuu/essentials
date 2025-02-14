@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.util.fastFilter
 import coil.compose.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.resource.Resource
@@ -36,7 +37,7 @@ class AppPickerScreen(
         ResourceBox(
           produceScopedState(Resource.Idle()) {
             repository.installedApps
-              .map { it.filter { screen.appPredicate.test(it) } }
+              .map { it.fastFilter { screen.appPredicate.test(it) } }
               .flowAsResource()
               .collect { value = it }
           }.value

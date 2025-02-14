@@ -7,6 +7,7 @@ package com.ivianuu.essentials.apps
 import android.content.*
 import android.content.pm.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastDistinctBy
 import arrow.fx.coroutines.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
@@ -31,7 +32,7 @@ import kotlinx.coroutines.flow.*
               packageName = it.packageName
             )
           }
-          .distinctBy { it.packageName }
+          .fastDistinctBy { it.packageName }
           .sortedBy { it.appName.lowercase() }
       }
     }

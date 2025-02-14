@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastMap
 import arrow.core.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
@@ -43,7 +44,7 @@ import kotlinx.coroutines.flow.*
       actions[id]
         ?.invoke()
         ?: actionFactories
-          .map { it() }
+          .fastMap { it() }
           .firstNotNullOfOrNull { it.createAction(id) }
     }
       .printErrors()
@@ -60,7 +61,7 @@ import kotlinx.coroutines.flow.*
       actionsExecutors[id]
         ?.invoke()
         ?: actionFactories
-          .map { it() }
+          .fastMap { it() }
           .firstNotNullOfOrNull { it.createExecutor(id) }
     }.getOrNull()
       ?: ActionExecutor { toaster.toast(RECONFIGURE_ACTION_MESSAGE) }
@@ -70,7 +71,7 @@ import kotlinx.coroutines.flow.*
     withContext(coroutineContexts.computation) { actionSettings[id]?.invoke() }
 
   suspend fun getActionPickerDelegates() =
-    withContext(coroutineContexts.computation) { actionPickerDelegates.map { it() } }
+    withContext(coroutineContexts.computation) { actionPickerDelegates.fastMap { it() } }
 
   suspend fun executeAction(id: String): Boolean = withContext(coroutineContexts.computation) {
     catch {

@@ -51,7 +51,6 @@ val LocalContentPadding = compositionLocalOf {
     contentColor = contentColor,
     contentWindowInsets = contentWindowInsets
   ) { contentPadding ->
-    println("content padding $contentPadding content window insets $contentWindowInsets")
     Box(
       modifier = Modifier
         .padding(

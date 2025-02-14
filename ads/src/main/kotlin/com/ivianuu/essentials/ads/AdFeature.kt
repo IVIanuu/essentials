@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ads
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastFilter
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
@@ -17,7 +18,7 @@ interface AdFeature
       AdFeatures(allFeatures)
 
     @Provide fun <T : RootScreen> defaultRootAdFeatures(allFeatures: List<AdFeature>): AdFeatures<T> =
-      AdFeatures(allFeatures.filter { it != ListAdBannerFeature })
+      AdFeatures(allFeatures.fastFilter { it != ListAdBannerFeature })
 
     @Provide fun <T : OverlayScreen<*>> defaultOverlayAdFeatures(): AdFeatures<T> =
       AdFeatures(emptyList())

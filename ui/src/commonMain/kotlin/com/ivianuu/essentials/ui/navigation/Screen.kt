@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastFold
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.animation.*
@@ -53,7 +54,7 @@ class ScreenScope {
     val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
       records
         .sortedWithLoadingOrder()
-        .fold({ it() }) { acc, record ->
+        .fastFold({ it() }) { acc, record ->
           { content ->
             acc {
               logger.d { "decorate screen with ${record.key.qualifiedName}" }

@@ -9,6 +9,7 @@ import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.util.fastMinByOrNull
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -110,7 +111,7 @@ fun <T : Comparable<T>> StepPolicy<T>.stepValue(
   val valueFraction = lerper.unlerp(valueRange.start, valueRange.endInclusive, value)
 
   val steppedFraction = stepFractions
-    .minByOrNull { (it - valueFraction).absoluteValue }
+    .fastMinByOrNull { (it - valueFraction).absoluteValue }
     ?: valueFraction
 
   return lerper.lerp(valueRange.start, valueRange.endInclusive, steppedFraction)

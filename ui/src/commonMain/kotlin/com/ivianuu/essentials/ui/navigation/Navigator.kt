@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastFilter
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.*
@@ -80,7 +81,7 @@ suspend fun <R> Navigator.setRoot(screen: Screen<R>): R? {
 }
 
 suspend fun <R> Navigator.push(screen: Screen<R>): R? {
-  setBackStack(backStack.filter { it != screen } + screen)
+  setBackStack(backStack.fastFilter { it != screen } + screen)
   return awaitResult(screen)
 }
 
@@ -94,7 +95,7 @@ suspend fun <R> Navigator.replaceTop(screen: Screen<R>): R? {
 }
 
 suspend fun <R> Navigator.pop(screen: Screen<R>, result: R? = null) {
-  setBackStack(backStack.filter { it != screen }, mapOf(screen to result))
+  setBackStack(backStack.fastFilter { it != screen }, mapOf(screen to result))
 }
 
 suspend fun Navigator.popTop(): Boolean {

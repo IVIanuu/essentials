@@ -6,6 +6,7 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.ui.*
 import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.util.fastForEach
 
 fun Modifier.consumeGestures(consume: Boolean = true): Modifier = if (!consume) this
 else pointerInput(Unit) {
@@ -14,7 +15,7 @@ else pointerInput(Unit) {
     while (true) {
       awaitPointerEvent(pass = PointerEventPass.Initial)
         .changes
-        .forEach {
+        .fastForEach {
           if (it.pressed != it.previousPressed)
             it.consume()
         }

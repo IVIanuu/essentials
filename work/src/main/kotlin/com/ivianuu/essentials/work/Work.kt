@@ -7,6 +7,7 @@ package com.ivianuu.essentials.work
 import android.annotation.*
 import android.content.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastAny
 import androidx.work.*
 import arrow.fx.coroutines.*
 import com.ivianuu.essentials.*
@@ -156,7 +157,7 @@ fun interface Worker<I : WorkId> {
 
       val scheduleHash = SCHEDULE_HASH_PREFIX + schedule.toString().hashCode()
 
-      if (existingWork.none { existing ->
+      if (!existingWork.fastAny { existing ->
           (existing.state == WorkInfo.State.ENQUEUED ||
               existing.state == WorkInfo.State.RUNNING) &&
               existing.tags.any { it == scheduleHash }

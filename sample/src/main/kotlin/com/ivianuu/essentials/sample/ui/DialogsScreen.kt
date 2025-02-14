@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.util.fastForEach
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.overlay.*
@@ -39,7 +40,7 @@ class DialogsScreen : Screen<Unit> {
               onClick = scopedAction {
                 navigator.push(
                   BottomSheetScreen {
-                    items.forEach { item ->
+                    items.fastForEach { item ->
                       RadioListItem(
                         value = item == selected,
                         onValueChange = {
@@ -63,7 +64,7 @@ class DialogsScreen : Screen<Unit> {
               onClick = action {
                 navigator.push(
                   BottomSheetScreen {
-                    items.forEach { item ->
+                    items.fastForEach { item ->
                       CheckboxListItem(
                         value = item in selected,
                         onValueChange = {

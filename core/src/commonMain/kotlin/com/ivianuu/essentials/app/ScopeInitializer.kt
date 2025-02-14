@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.app
 
+import androidx.compose.ui.util.fastForEach
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.logging.*
@@ -24,7 +25,7 @@ interface ScopeInitializerRunner<N : Any> : ScopeObserver<N>
   override fun onEnter(scope: Scope<N>) {
     initializers(scope.cast())
       .sortedWithLoadingOrder()
-      .forEach {
+      .fastForEach {
         logger(scope.cast()).d { "${name().simpleName} initialize ${it.key}" }
         it.instance.initialize()
       }

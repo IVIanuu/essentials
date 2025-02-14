@@ -18,6 +18,8 @@ import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.util.fastFlatMap
+import androidx.compose.ui.util.fastForEach
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -29,14 +31,14 @@ class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit> {
       var expandedItem: HelpItem? by remember {
         mutableStateOf(
           screen.categories
-            .flatMap { it.items }
+            .fastFlatMap { it.items }
             .firstOrNull()
         )
       }
 
       EsScaffold(topBar = { EsAppBar { Text("Help") } }) {
         EsLazyColumn {
-          screen.categories.forEach { category ->
+          screen.categories.fastForEach { category ->
             if (category.title != null) {
               item {
                 Subheader { Text(category.title) }

@@ -16,6 +16,7 @@ import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.util.fastFilter
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.overlay.*
@@ -57,7 +58,7 @@ import com.ivianuu.injekt.*
           items(finalItems) { item ->
             val color = rememberSaveable(item) {
               ColorPickerPalette.entries
-                .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
+                .fastFilter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
                 .shuffled()
                 .first()
                 .front

@@ -19,6 +19,7 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.util.fastForEach
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.ads.*
 import com.ivianuu.essentials.billing.*
@@ -173,7 +174,7 @@ class GoPremiumScreen(
           modifier = Modifier.padding(top = 32.dp),
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
-          features.forEach { feature ->
+          features.fastForEach { feature ->
             Box(
               modifier = Modifier.height(48.dp),
               contentAlignment = Alignment.Center
@@ -191,7 +192,7 @@ class GoPremiumScreen(
             .padding(start = 16.dp, top = 32.dp, end = 16.dp)
             .weight(1f)
         ) {
-          features.forEach {
+          features.fastForEach {
             Text(
               modifier = Modifier
                 .height(48.dp)
@@ -215,7 +216,7 @@ class GoPremiumScreen(
             style = MaterialTheme.typography.labelLarge
           )
 
-          features.forEach { feature ->
+          features.fastForEach { feature ->
             Icon(
               if (feature.inPremium) Icons.Default.Done
               else Icons.Default.Remove,
@@ -238,7 +239,7 @@ class GoPremiumScreen(
             style = MaterialTheme.typography.labelLarge
           )
 
-          features.forEach { feature ->
+          features.fastForEach { feature ->
             Icon(
               if (feature.inPremium) Icons.Default.Remove
               else Icons.Default.Done,

@@ -5,6 +5,8 @@
 package com.ivianuu.essentials.permission
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.util.fastAll
+import androidx.compose.ui.util.fastMap
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.coroutines.*
@@ -27,7 +29,7 @@ import kotlin.reflect.*
     permissions[key]!!().unsafeCast()
 
   fun permissionState(permissions: List<KClass<out Permission>>): Flow<Boolean> = moleculeFlow {
-    permissions.map { permissionKey ->
+    permissions.fastMap { permissionKey ->
       val permission = remember { this.permissions[permissionKey]!!() }
       val stateProvider = remember { stateProviders[permissionKey]!!() }
       produceState<Boolean?>(null) {
@@ -42,14 +44,14 @@ import kotlin.reflect.*
       }
         .value
     }
-      .takeIf { it.all { it != null } }
-      ?.all { it == true }
+      .takeIf { it.fastAll { it != null } }
+      ?.fastAll { it == true }
   }.filterNotNull()
 
   suspend fun requestPermissions(permissions: List<KClass<out Permission>>): Boolean {
     logger.d { "request permissions $permissions" }
 
-    val result = permissions.all { permissionState(listOf(it)).first() } || run {
+    val result = permissions.fastAll { permissionState(listOf(it)).first() } || run {
       appUiStarter.startAppUi()
         .cast<UiScopeOwner>()
         .uiScope
