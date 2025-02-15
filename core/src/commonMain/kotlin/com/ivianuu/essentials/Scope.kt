@@ -26,21 +26,24 @@ import kotlin.reflect.*
   @PublishedApi internal val cache = hashMapOf<Any, Any?>()
   private val observers = mutableListOf<ScopeObserver<*>>()
 
-  private val services = buildMap {
-    for (service in services(this@Scope, this@Scope))
-      this[service.key] = service
+  private val services: Map<KClass<*>, ProvidedService<*, *>>? = run {
+    val providedServices = services(this@Scope, this@Scope)
+    if (providedServices.isEmpty()) null
+    else buildMap {
+      for (providedService in providedServices)
+        this[providedService.key] = providedService
+    }
   }
 
   var children by mutableStateOf(emptySet<Scope<*>>())
     private set
 
   init {
+    parent?.registerChild(this)
     observers(this@Scope, this@Scope)
       .sortedWithLoadingOrder()
       .fastForEach { addObserver(it.instance) }
   }
-
-  private val parentDisposable = parent?.registerChild(this)
 
   fun addObserver(observer: ScopeObserver<*>): Disposable {
     if (isDisposed) return Disposable {}
@@ -58,24 +61,27 @@ import kotlin.reflect.*
     }
   }
 
-  fun <T : Any> serviceOrNull(key: KClass<T> = inject): T? = services[key]?.let {
+  fun <T : Any> serviceOrNull(key: KClass<T> = inject): T? = services?.get(key)?.let {
     return it.factory().unsafeCast()
   } ?: parent?.serviceOrNull(key)
 
   fun <T : Any> service(key: KClass<T> = inject): T =
     serviceOrNull(key) ?: error("No service found for ${key.qualifiedName} in ${name.qualifiedName}")
 
-  inline fun <T> scoped(key: Any, compute: () -> T): T = synchronized(cache) {
-    checkDisposed()
-    val value = cache.getOrPut(key) {
-      compute()
-        .also {
-          if (it is ScopeObserver<*>)
-            addObserver(it)
-        }
-        ?: NULL
+  inline fun <T> scoped(key: Any, compute: () -> T): T {
+    cache[key]?.let { if (it !== NULL) return it.unsafeCast() }
+    return synchronized(cache) {
+      checkDisposed()
+      val value = cache.getOrPut(key) {
+        compute()
+          .also {
+            if (it is ScopeObserver<*>)
+              addObserver(it)
+          }
+          ?: NULL
+      }
+      (if (value !== NULL) value else null).unsafeCast()
     }
-    (if (value !== NULL) value else null).unsafeCast()
   }
 
   inline fun <T : Any> scoped(key: TypeKey<T> = inject, compute: () -> T): T =
@@ -88,7 +94,7 @@ import kotlin.reflect.*
 
         _isDisposed = true
 
-        parentDisposable?.dispose()
+        parent?.unregisterChild(this)
 
         synchronized(observers) {
           observers.toList()
@@ -108,9 +114,12 @@ import kotlin.reflect.*
     }
   }
 
-  private fun registerChild(child: Scope<*>): Disposable {
+  private fun registerChild(child: Scope<*>) {
     children += child
-    return Disposable { children -= child }
+  }
+
+  private fun unregisterChild(child: Scope<*>) {
+    children -= child
   }
 
   @PublishedApi internal fun checkDisposed() {
