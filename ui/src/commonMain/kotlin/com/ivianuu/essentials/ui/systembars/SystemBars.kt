@@ -15,7 +15,7 @@ import androidx.compose.ui.layout.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.app.*
 import com.ivianuu.essentials.ui.util.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 val LocalZIndex = compositionLocalOf { 0 }
 

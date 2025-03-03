@@ -7,7 +7,7 @@ package com.ivianuu.essentials.ads
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastFilter
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 interface AdFeature

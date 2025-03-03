@@ -14,7 +14,7 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.work.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds

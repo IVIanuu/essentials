@@ -11,7 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.util.fastMinByOrNull
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlin.math.*
 import kotlin.time.*

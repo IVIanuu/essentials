@@ -11,7 +11,7 @@ import androidx.compose.runtime.*
 import androidx.core.app.*
 import androidx.core.os.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 abstract class NotificationListenerPermission(

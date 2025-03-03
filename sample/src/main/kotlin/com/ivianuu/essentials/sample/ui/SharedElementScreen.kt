@@ -22,7 +22,7 @@ import com.ivianuu.essentials.ui.material.EsScaffold
 import com.ivianuu.essentials.ui.navigation.LocalScreenAnimationScope
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.Ui
-import com.ivianuu.injekt.Provide
+import injekt.Provide
 
 @Provide val SharedElementHomeItem = HomeItem(
   title = "Shared element",

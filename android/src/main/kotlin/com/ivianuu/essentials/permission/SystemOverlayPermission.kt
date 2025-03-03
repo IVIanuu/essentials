@@ -9,7 +9,7 @@ import android.provider.*
 import androidx.compose.runtime.*
 import androidx.core.net.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 abstract class SystemOverlayPermission(
   override val title: String,

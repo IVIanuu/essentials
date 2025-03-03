@@ -9,7 +9,7 @@ import androidx.compose.ui.util.fastFilter
 import androidx.compose.ui.util.fastMap
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 
 class TestBillingClient(

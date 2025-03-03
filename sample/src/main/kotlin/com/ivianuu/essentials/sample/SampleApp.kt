@@ -6,6 +6,6 @@ package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 class SampleApp : EsApp({ inject() })

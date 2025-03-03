@@ -7,7 +7,7 @@ package com.ivianuu.essentials.shell
 import arrow.core.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
+import injekt.*
 import eu.chainfire.libsuperuser.Shell.*
 import kotlinx.coroutines.*
 

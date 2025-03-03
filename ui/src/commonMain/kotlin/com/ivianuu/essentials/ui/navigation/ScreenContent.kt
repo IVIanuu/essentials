@@ -5,7 +5,7 @@ import androidx.compose.runtime.saveable.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.ui.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 @Composable fun <S : Screen<*>> ScreenContent(screen: S) {

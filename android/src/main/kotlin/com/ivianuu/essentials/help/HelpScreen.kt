@@ -23,7 +23,7 @@ import androidx.compose.ui.util.fastForEach
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit> {
   @Provide companion object {

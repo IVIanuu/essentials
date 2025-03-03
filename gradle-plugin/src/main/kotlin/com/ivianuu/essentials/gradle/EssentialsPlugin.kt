@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.gradle
 
-import com.ivianuu.injekt.gradle.*
+import injekt.gradle.*
 import org.gradle.api.*
 import org.gradle.api.provider.*
 import org.jetbrains.kotlin.gradle.dsl.*
@@ -17,7 +17,7 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
 
   override fun apply(target: Project) {
     target.plugins.apply(InjektPlugin::class.java)
-    target.plugins.apply("com.ivianuu.injekt")
+    target.plugins.apply("injekt")
     target.plugins.apply("org.jetbrains.kotlinx.atomicfu")
     target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")

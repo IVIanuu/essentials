@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.runtime.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Stable fun interface UiRenderer<in T> {
   fun render(x: T): String

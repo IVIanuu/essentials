@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.material.EsListItem
 import com.ivianuu.essentials.ui.overlay.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 class DonationScreen : DialogScreen<Unit> {
   @Provide companion object {

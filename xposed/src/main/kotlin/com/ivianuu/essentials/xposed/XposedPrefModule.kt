@@ -10,7 +10,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
+import injekt.*
 import de.robv.android.xposed.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*

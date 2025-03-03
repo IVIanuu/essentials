@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 interface ExtensionPoint<T : ExtensionPoint<T>>

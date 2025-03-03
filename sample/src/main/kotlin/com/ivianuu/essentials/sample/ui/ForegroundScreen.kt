@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 

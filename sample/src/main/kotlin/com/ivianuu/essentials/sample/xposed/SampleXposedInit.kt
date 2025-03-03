@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.sample.xposed
 
 import com.ivianuu.essentials.xposed.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 class SampleXposedInit : EsXposedInit({
   @Provide val modulePackageName = ModulePackageName("com.ivianuu.essentials.sample")

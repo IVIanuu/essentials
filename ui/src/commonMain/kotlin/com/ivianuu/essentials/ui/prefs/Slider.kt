@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.common.ProvideContentColorTextStyle
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 

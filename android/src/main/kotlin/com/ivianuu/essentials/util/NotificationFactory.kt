@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.*
 import androidx.core.app.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.app.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide class NotificationFactory(
   @PublishedApi internal val appContext: AppContext,

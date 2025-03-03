@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.serialization
 
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import kotlinx.serialization.modules.*

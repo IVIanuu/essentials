@@ -14,7 +14,7 @@ import androidx.compose.ui.util.fastFold
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.app.*
 import com.ivianuu.essentials.ui.material.LocalContentPadding
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Composable fun EsLazyColumn(
   modifier: Modifier = Modifier,

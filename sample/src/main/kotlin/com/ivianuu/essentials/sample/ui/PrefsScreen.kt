@@ -16,7 +16,7 @@ import com.ivianuu.essentials.ui.overlay.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.serialization.*
 import androidx.compose.runtime.*
 

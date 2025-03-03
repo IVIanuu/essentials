@@ -8,7 +8,7 @@ import android.app.*
 import android.service.notification.*
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.flow.*
 
 @Stable @Provide class NotificationRepository(private val appScope: Scope<AppScope>) {

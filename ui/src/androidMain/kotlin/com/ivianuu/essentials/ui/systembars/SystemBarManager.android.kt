@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.*
 import androidx.compose.ui.util.fastLastOrNull
 import androidx.core.view.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide /*actual*/ val systemBarManagerProvider = SystemBarManagerProvider { content ->
   val systemBarManager = remember { AndroidSystemBarManager() }

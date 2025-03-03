@@ -12,7 +12,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Composable fun <T> SingleChoiceToggleButtonGroupListItem(
   values: Collection<T>,

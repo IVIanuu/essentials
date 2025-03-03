@@ -5,7 +5,7 @@
 
 package com.ivianuu.essentials.time
 
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.time.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.nanoseconds

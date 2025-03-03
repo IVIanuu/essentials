@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.util.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 class ColorPickerScreen(
   val initialColor: Color,

@@ -10,7 +10,7 @@ import androidx.compose.ui.res.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide object BackActionId : ActionId("back") {
   @Provide val action get() = Action(

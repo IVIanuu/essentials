@@ -6,8 +6,8 @@ package com.ivianuu.essentials
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastForEach
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import injekt.*
+import injekt.common.*
 import kotlinx.atomicfu.locks.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*

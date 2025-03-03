@@ -7,7 +7,7 @@ package com.ivianuu.essentials.sample.ui
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.donation.*
-import com.ivianuu.injekt.*
+import injekt.*
 import org.json.*
 
 @Provide val donationHomeItem = HomeItem("Donation") { DonationScreen() }

@@ -8,7 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastFold
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Stable fun interface AppUi {
   @Composable fun Content()

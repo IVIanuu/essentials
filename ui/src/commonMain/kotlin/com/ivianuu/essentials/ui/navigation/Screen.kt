@@ -10,7 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastFold
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 @Stable interface Screen<T>

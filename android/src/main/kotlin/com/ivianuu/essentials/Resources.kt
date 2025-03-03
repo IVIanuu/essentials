@@ -5,7 +5,7 @@
 package com.ivianuu.essentials
 
 import android.graphics.drawable.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide class Resources(private val appContext: AppContext) {
   fun loadIcon(id: Int): Icon = Icon.createWithResource(appContext, id)

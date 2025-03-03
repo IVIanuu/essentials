@@ -9,7 +9,7 @@ import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 @Provide @AndroidComponent class EsTileService1(

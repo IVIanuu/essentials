@@ -3,7 +3,7 @@ package com.ivianuu.essentials.util
 import android.hardware.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.*

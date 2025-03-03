@@ -6,7 +6,7 @@ package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide fun sampleFirstRunHandler(logger: Logger) = FirstRunHandler {
   logger.d { "hello" }

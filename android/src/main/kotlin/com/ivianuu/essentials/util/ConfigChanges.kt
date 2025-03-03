@@ -8,7 +8,7 @@ import android.content.*
 import android.content.res.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.flowOn

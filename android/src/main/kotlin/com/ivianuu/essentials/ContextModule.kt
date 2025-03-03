@@ -6,7 +6,7 @@ package com.ivianuu.essentials
 
 import android.content.*
 import android.content.pm.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide object ContextModule {
   @Provide fun packageManager(appContext: AppContext): PackageManager =

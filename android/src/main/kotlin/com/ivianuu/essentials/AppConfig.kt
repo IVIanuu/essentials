@@ -6,7 +6,7 @@ package com.ivianuu.essentials
 
 import android.content.pm.*
 import android.os.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 data class AppConfig(
   val isDebug: Boolean,

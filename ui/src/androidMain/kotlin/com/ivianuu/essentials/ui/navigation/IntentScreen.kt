@@ -7,7 +7,7 @@ import androidx.activity.result.contract.*
 import arrow.core.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.coroutines.*

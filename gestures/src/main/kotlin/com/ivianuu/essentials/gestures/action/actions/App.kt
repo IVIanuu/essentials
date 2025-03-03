@@ -13,7 +13,7 @@ import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.flow.*
 
 @Provide class AppActionFactory(

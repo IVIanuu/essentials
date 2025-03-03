@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.injekt.*
+import injekt.*
 
 fun interface Hooks {
   fun hook(@Provide config: XposedConfig)

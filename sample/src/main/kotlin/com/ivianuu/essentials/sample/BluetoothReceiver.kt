@@ -8,7 +8,7 @@ import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.Duration.Companion.seconds

@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.xposed
 
 import android.content.pm.*
-import com.ivianuu.injekt.*
+import injekt.*
 import de.robv.android.xposed.callbacks.*
 
 data class XposedConfig(

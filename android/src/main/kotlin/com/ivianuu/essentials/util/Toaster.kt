@@ -8,7 +8,7 @@ import android.widget.*
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 
 @Stable @Provide class Toaster(

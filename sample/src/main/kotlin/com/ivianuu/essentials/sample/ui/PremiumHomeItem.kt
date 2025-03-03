@@ -10,7 +10,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.premium.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide val premiumHomeItem = HomeItem("Premium") {
   GoPremiumScreen(showTryBasicOption = true)

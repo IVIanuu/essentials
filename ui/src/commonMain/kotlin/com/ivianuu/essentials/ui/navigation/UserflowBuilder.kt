@@ -9,7 +9,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
   suspend fun createUserflow(): List<Screen<*>>

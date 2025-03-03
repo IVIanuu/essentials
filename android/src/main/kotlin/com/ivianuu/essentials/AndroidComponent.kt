@@ -6,7 +6,7 @@ package com.ivianuu.essentials
 
 import android.app.*
 import android.content.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)

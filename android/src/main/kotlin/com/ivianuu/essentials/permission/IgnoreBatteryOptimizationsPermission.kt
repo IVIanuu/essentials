@@ -12,7 +12,7 @@ import androidx.compose.runtime.*
 import androidx.core.net.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 abstract class IgnoreBatteryOptimizationsPermission(
   override val title: String,

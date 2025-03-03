@@ -8,7 +8,7 @@ import androidx.compose.ui.util.fastForEach
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 fun interface ScopeInitializer<N : Any> : ExtensionPoint<ScopeInitializer<N>> {

@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.resource.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import injekt.*
+import injekt.common.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.CoroutineContext

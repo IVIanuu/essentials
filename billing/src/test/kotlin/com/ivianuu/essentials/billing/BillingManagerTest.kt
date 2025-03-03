@@ -11,7 +11,7 @@ import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.test.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 import io.kotest.matchers.booleans.*
 import io.mockk.*
 import kotlinx.coroutines.*

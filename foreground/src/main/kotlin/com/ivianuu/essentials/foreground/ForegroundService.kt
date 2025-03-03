@@ -18,7 +18,7 @@ import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 

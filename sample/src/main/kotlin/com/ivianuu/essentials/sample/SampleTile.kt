@@ -3,7 +3,7 @@ package com.ivianuu.essentials.sample
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.tile.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide fun sampleTilePresenter(resources: Resources) = Presenter {
   var count by remember { mutableIntStateOf(0) }

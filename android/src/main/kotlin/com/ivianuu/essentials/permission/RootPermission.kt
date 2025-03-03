@@ -7,7 +7,7 @@ package com.ivianuu.essentials.permission
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 abstract class RootPermission(
   override val title: String,

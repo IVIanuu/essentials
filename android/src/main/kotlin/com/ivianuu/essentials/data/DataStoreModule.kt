@@ -8,7 +8,7 @@ import androidx.datastore.core.*
 import androidx.datastore.core.Serializer
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*

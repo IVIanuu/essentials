@@ -15,7 +15,7 @@ import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*

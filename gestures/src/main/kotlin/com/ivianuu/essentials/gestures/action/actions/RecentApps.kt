@@ -8,7 +8,7 @@ import android.accessibilityservice.AccessibilityService.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide object RecentAppsActionId : ActionId("recent_apps") {
   @Provide val action

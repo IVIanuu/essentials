@@ -28,7 +28,7 @@ import androidx.core.content.*
 import arrow.fx.coroutines.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlin.math.*
 

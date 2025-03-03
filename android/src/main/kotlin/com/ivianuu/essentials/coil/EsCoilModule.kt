@@ -13,7 +13,7 @@ import coil.key.*
 import coil.map.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlin.reflect.*
 

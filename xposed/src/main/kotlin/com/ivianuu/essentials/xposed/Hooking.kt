@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.xposed
 
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 import de.robv.android.xposed.*
 import java.lang.reflect.*
 import kotlin.reflect.*

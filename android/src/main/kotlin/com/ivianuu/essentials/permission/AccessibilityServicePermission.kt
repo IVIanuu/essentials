@@ -12,7 +12,7 @@ import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
 import androidx.core.os.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 abstract class AccessibilityServicePermission(

@@ -7,7 +7,7 @@ package com.ivianuu.essentials.apps
 import android.content.*
 import android.content.pm.*
 import androidx.compose.ui.util.fastMap
-import com.ivianuu.injekt.*
+import injekt.*
 
 fun interface AppPredicate {
   fun test(app: AppInfo): Boolean

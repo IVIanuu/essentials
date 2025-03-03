@@ -12,7 +12,7 @@ import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide object AutoRotationActionId : ActionId("auto_rotation") {
   @Provide fun action(autoRotationDataStore: DataStore<AutoRotation>) = Action(

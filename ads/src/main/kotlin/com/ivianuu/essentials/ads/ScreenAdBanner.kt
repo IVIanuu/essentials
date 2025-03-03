@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide object ScreenAdBannerFeature : AdFeature
 

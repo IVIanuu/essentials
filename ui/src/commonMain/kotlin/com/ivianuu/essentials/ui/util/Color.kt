@@ -11,7 +11,7 @@ import com.ivianuu.essentials.Lerper
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.serialization.*
 import com.ivianuu.essentials.unlerp
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*

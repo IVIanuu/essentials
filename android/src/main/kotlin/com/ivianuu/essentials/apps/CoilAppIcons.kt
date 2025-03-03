@@ -12,7 +12,7 @@ import coil.key.*
 import coil.request.*
 import coil.size.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 data class AppIcon(val packageName: String)
 

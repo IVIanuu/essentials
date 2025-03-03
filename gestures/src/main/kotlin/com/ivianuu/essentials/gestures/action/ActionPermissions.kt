@@ -9,7 +9,7 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.permission.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide class ActionAccessibilityPermission : AccessibilityServicePermission(
   serviceClass = EsAccessibilityService::class,

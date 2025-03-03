@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.injekt.Provide
+import injekt.Provide
 
 @Composable fun BottomSheetLauncherButton(
   modifier: Modifier = Modifier,

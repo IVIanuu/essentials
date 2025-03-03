@@ -18,7 +18,7 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.shortcut.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 import java.io.*
 
 @Provide class ShortcutActionFactory(private val intentSender: ActionIntentSender) : ActionFactory {

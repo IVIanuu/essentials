@@ -7,7 +7,7 @@ package com.ivianuu.essentials.sample.xposed
 import android.media.AudioTrack
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.xposed.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide fun sampleHooks(logger: Logger) = Hooks { config ->
   logger.d { "hello ${config.packageName}" }

@@ -7,7 +7,7 @@ package com.ivianuu.essentials.ui
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import com.ivianuu.essentials.ui.app.AppUiDecorator
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide val savableStateRegistryProvider = AppUiDecorator { content ->
   CompositionLocalProvider(

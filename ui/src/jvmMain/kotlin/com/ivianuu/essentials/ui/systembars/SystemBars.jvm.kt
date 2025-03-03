@@ -4,6 +4,6 @@
 
 package com.ivianuu.essentials.ui.systembars
 
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide actual val systemBarManagerProvider = SystemBarManagerProvider { it() }

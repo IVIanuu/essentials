@@ -4,7 +4,7 @@ import android.content.*
 import android.content.pm.*
 import android.provider.*
 import androidx.core.net.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 class DefaultIntentScreen internal constructor(val intent: Intent) : IntentScreen {
   @Provide companion object {

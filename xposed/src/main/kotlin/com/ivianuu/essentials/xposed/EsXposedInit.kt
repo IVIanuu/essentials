@@ -6,7 +6,7 @@ package com.ivianuu.essentials.xposed
 
 import androidx.compose.ui.util.fastForEach
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam
 

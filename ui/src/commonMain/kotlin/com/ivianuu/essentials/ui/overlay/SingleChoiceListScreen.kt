@@ -10,7 +10,7 @@ import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.EsListItem
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 class SingleChoiceListScreen<T : Any>(
   val items: List<T>,

@@ -8,7 +8,7 @@ import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.googlefonts.*
 import com.ivianuu.essentials.font.*
 import com.ivianuu.essentials.ui.app.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 private val googleFont = GoogleFont("Rubik")
 @Provide val Rubik: AppFont = FontFamily(

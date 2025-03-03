@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.data
 
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 import java.io.*
 
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)

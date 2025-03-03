@@ -6,7 +6,7 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.ui.app.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide fun defaultAppUi(navigator: Navigator) = AppUi {
   NavigatorContent(navigator = navigator)

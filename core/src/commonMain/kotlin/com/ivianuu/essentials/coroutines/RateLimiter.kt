@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.essentials.time.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
 import kotlin.time.*

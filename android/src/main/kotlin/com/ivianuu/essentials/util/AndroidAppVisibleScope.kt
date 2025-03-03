@@ -10,7 +10,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide fun appVisibleScopeWorker(
   appVisibleScopeFactory: () -> Scope<AppVisibleScope>,

@@ -6,8 +6,8 @@ import arrow.fx.coroutines.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import injekt.*
+import injekt.common.*
 import kotlinx.coroutines.*
 
 @Stable @Provide class WakeLockManager(

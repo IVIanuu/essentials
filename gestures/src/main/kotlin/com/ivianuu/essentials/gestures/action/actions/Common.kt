@@ -20,7 +20,7 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 fun staticActionImage(data: Any) = ActionIcon {
   AsyncImage(

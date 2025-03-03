@@ -8,7 +8,7 @@ import androidx.compose.runtime.*
 import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 @Immutable data class Action<I : ActionId>(

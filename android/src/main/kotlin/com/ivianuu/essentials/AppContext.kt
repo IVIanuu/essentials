@@ -6,7 +6,7 @@ package com.ivianuu.essentials
 
 import android.app.*
 import android.content.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
 annotation class AppContextTag {

@@ -9,7 +9,7 @@ import android.content.pm.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.flow.*
 
 @Provide fun androidAppUiStarter(

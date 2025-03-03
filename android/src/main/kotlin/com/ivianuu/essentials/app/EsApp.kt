@@ -6,7 +6,7 @@ package com.ivianuu.essentials.app
 
 import android.app.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 abstract class EsApp(buildAppScope: (@Provide EsApp).() -> Scope<AppScope>) : Application(), AppScopeOwner {
   override val appScope by lazy { buildAppScope() }

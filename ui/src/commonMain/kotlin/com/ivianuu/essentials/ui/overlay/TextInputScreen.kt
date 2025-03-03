@@ -18,7 +18,7 @@ import androidx.compose.ui.text.input.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.material.EsModalBottomSheet
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 class TextInputScreen(
   val label: String,

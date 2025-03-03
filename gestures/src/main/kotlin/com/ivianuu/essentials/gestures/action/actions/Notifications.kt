@@ -14,7 +14,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.accessibility.AccessibilityManager
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide object NotificationsActionId : ActionId("notifications") {
   @Provide val action get() = Action(

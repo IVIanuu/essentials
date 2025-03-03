@@ -17,7 +17,7 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*

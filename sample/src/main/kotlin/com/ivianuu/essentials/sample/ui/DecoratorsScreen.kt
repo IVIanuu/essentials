@@ -13,7 +13,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsScreen() }
 

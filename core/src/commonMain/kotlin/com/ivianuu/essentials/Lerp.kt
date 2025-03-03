@@ -5,7 +5,7 @@
 package com.ivianuu.essentials
 
 import androidx.compose.runtime.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.flow.*
 import kotlin.math.*
 import kotlin.time.*

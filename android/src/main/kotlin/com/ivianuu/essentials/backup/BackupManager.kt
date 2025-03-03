@@ -21,8 +21,8 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.Tag
+import injekt.*
+import injekt.Tag
 import kotlinx.coroutines.*
 import java.io.*
 import java.util.*

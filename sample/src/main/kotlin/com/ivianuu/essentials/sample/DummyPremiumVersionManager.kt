@@ -2,7 +2,7 @@ package com.ivianuu.essentials.sample
 
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.premium.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 

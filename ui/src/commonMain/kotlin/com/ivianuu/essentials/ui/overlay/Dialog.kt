@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.common.ProvideContentColorTextStyle
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 import com.slack.circuit.foundation.internal.*
 import kotlinx.coroutines.*
 import soup.compose.material.motion.*

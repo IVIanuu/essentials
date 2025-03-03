@@ -8,7 +8,7 @@ import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @Provide object ListAdBannerFeature : AdFeature
 

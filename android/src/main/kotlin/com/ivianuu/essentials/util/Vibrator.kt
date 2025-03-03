@@ -2,7 +2,7 @@ package com.ivianuu.essentials.util
 
 import android.os.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.time.*
 import android.os.Vibrator as AndroidVibrator
 

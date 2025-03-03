@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.RadioListItem
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 class TestSharedElementScreen : OverlayScreen<Unit>
 

@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.material.contentColor
 import com.ivianuu.essentials.ui.systembars.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 data class AppColors(
   val primary: Color,

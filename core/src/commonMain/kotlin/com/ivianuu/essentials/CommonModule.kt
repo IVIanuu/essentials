@@ -1,6 +1,6 @@
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 @Provide object CommonModule {

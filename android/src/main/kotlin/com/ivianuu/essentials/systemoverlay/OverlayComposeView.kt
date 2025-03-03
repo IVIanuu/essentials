@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.*
 import androidx.lifecycle.*
 import androidx.savedstate.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import injekt.*
 
 @SuppressLint("ViewConstructor")
 @Stable @Provide class OverlayComposeView(

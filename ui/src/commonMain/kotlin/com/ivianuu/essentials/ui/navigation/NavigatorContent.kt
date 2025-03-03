@@ -31,7 +31,7 @@ import androidx.compose.ui.util.fastLastOrNull
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.systembars.LocalZIndex
-import com.ivianuu.injekt.Provide
+import injekt.Provide
 import com.slack.circuit.foundation.internal.*
 import soup.compose.material.motion.animation.materialFadeIn
 import soup.compose.material.motion.animation.materialFadeThroughIn

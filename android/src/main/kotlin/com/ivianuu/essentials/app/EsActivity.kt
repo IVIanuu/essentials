@@ -13,7 +13,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.app.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlinx.coroutines.*
 
 @Provide @AndroidComponent class EsActivity(

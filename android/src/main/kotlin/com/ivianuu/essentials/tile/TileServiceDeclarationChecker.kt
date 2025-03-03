@@ -8,7 +8,7 @@ import android.content.*
 import android.content.pm.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
-import com.ivianuu.injekt.*
+import injekt.*
 import kotlin.reflect.*
 
 @Provide fun tileServiceDeclarationChecker(
