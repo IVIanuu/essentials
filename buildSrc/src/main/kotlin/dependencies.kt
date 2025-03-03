@@ -5,7 +5,7 @@
 @file:Suppress("ClassName", "unused")
 
 object Build {
-  const val applicationId = "com.ivianuu.essentials.sample"
+  const val applicationId = "essentials.sample"
   const val compileSdk = 35
   const val minSdk = 28
   const val targetSdk = 31

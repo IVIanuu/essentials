@@ -13,12 +13,12 @@ plugins {
 gradlePlugin {
   plugins {
     create("essentialsPlugin") {
-      id = "com.ivianuu.essentials"
-      implementationClass = "com.ivianuu.essentials.gradle.EssentialsPlugin"
+      id = "essentials"
+      implementationClass = "essentials.gradle.EssentialsPlugin"
     }
     create("composePlugin") {
-      id = "com.ivianuu.essentials.compose"
-      implementationClass = "com.ivianuu.essentials.gradle.ComposePlugin"
+      id = "essentials.compose"
+      implementationClass = "essentials.gradle.ComposePlugin"
     }
   }
 }
@@ -29,7 +29,7 @@ tasks.withType<KotlinCompile> {
 
 buildConfig {
   className("BuildConfig")
-  packageName("com.ivianuu.essentials.gradle")
+  packageName("essentials.gradle")
   buildConfigField("String", "VERSION", "\"${property("VERSION_NAME")}\"")
 }
 
