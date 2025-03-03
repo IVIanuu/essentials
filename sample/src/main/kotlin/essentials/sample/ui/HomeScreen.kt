@@ -4,10 +4,6 @@
 
 package essentials.sample.ui
 
-import android.app.Activity
-import android.content.Context
-import androidx.compose.animation.EnterExitState
-import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -25,11 +21,10 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.fastFilter
 import essentials.compose.*
-import essentials.nullOf
 import essentials.ui.common.*
-import essentials.ui.overlay.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
+import essentials.ui.overlay.*
 import essentials.util.*
 import essentials.xposed.*
 import injekt.*

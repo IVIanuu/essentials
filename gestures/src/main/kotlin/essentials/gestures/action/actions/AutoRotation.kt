@@ -5,11 +5,10 @@
 package essentials.gestures.action.actions
 
 import android.provider.*
-import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.collectAsState
-import essentials.compose.*
 import essentials.data.*
 import essentials.gestures.action.*
 import injekt.*

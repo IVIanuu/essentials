@@ -7,7 +7,6 @@ package essentials.sample
 import androidx.compose.runtime.*
 import essentials.*
 import essentials.app.*
-import essentials.compose.*
 import essentials.logging.*
 import injekt.*
 

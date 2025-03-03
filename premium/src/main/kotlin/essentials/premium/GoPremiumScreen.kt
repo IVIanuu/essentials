@@ -7,9 +7,9 @@ package essentials.premium
 import android.content.res.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.fastForEach
 import com.android.billingclient.api.*
+import com.slack.circuit.foundation.internal.*
 import essentials.ads.*
 import essentials.billing.*
 import essentials.compose.*
@@ -31,7 +32,6 @@ import essentials.ui.systembars.systemBarStyle
 import essentials.ui.util.isLight
 import essentials.util.*
 import injekt.*
-import com.slack.circuit.foundation.internal.*
 
 data class AppFeature(
   val title: String,

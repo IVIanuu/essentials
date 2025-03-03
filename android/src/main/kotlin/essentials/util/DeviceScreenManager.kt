@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import app.cash.molecule.*
 import essentials.*
-import essentials.compose.*
 import essentials.coroutines.*
 import essentials.logging.*
 import injekt.*

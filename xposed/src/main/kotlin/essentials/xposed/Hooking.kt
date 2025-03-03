@@ -4,9 +4,9 @@
 
 package essentials.xposed
 
+import de.robv.android.xposed.*
 import essentials.*
 import injekt.*
-import de.robv.android.xposed.*
 import java.lang.reflect.*
 import kotlin.reflect.*
 

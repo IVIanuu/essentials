@@ -6,10 +6,8 @@ package essentials
 
 import androidx.compose.runtime.*
 import injekt.*
-import kotlinx.coroutines.flow.*
 import kotlin.math.*
 import kotlin.time.*
-import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.nanoseconds
 
 @Stable interface Lerper<T> {

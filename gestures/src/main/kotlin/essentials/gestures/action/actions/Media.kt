@@ -8,7 +8,6 @@ import android.content.*
 import android.provider.*
 import android.view.*
 import androidx.compose.material3.*
-import androidx.compose.ui.Modifier
 import essentials.*
 import essentials.apps.*
 import essentials.compose.*

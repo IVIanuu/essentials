@@ -9,7 +9,6 @@ import androidx.compose.ui.util.fastFilter
 import androidx.compose.ui.util.fastMap
 import com.android.billingclient.api.*
 import essentials.*
-import injekt.*
 import kotlinx.coroutines.*
 
 class TestBillingClient(

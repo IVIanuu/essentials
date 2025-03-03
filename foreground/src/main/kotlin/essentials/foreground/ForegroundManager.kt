@@ -8,14 +8,11 @@ import android.app.*
 import android.content.*
 import androidx.compose.runtime.*
 import androidx.core.content.*
-import arrow.fx.coroutines.*
 import essentials.*
 import essentials.Scoped
-import essentials.coroutines.*
 import essentials.logging.*
 import injekt.*
 import injekt.common.*
-import kotlinx.coroutines.*
 
 @Stable @Provide @Scoped<AppScope> class ForegroundManager(
   private val appContext: AppContext,

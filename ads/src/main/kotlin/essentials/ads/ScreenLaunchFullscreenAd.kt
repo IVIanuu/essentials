@@ -6,7 +6,6 @@ package essentials.ads
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastFilter
-import arrow.core.*
 import essentials.app.*
 import essentials.data.*
 import essentials.logging.*

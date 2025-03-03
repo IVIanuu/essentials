@@ -24,12 +24,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.*
-import androidx.core.content.*
-import arrow.fx.coroutines.*
 import essentials.*
-import essentials.coroutines.*
 import injekt.*
-import kotlinx.coroutines.*
 import kotlin.math.*
 
 data object SystemWindowScope

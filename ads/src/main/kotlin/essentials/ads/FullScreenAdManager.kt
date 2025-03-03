@@ -6,7 +6,6 @@ package essentials.ads
 
 import androidx.activity.*
 import androidx.compose.runtime.*
-import arrow.fx.coroutines.*
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.*
 import essentials.*
@@ -18,9 +17,7 @@ import essentials.ui.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.*
 import kotlin.coroutines.*
-import kotlin.math.*
 import kotlin.time.*
 import kotlin.time.Duration.Companion.seconds
 

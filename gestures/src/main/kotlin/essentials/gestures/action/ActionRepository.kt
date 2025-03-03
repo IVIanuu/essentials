@@ -4,9 +4,9 @@
 
 package essentials.gestures.action
 
-import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastMap
 import arrow.core.*

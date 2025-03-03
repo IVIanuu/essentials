@@ -11,7 +11,6 @@ import android.provider.*
 import androidx.compose.runtime.*
 import androidx.core.net.*
 import essentials.*
-import essentials.permission.*
 import injekt.*
 
 abstract class IgnoreBatteryOptimizationsPermission(

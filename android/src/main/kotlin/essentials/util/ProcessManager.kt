@@ -5,10 +5,10 @@
 package essentials.util
 
 import androidx.compose.runtime.*
+import com.jakewharton.processphoenix.*
 import essentials.*
 import essentials.logging.*
 import injekt.*
-import com.jakewharton.processphoenix.*
 
 @Stable @Provide class ProcessManager(private val appContext: AppContext, private val logger: Logger) {
   suspend fun restart() {

@@ -5,8 +5,8 @@
 package essentials.xposed
 
 import android.content.pm.*
-import injekt.*
 import de.robv.android.xposed.callbacks.*
+import injekt.*
 
 data class XposedConfig(
   val packageName: String,

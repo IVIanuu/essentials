@@ -8,7 +8,6 @@ package essentials.time
 import injekt.*
 import kotlin.time.*
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.nanoseconds
 
 fun interface Clock {
   fun now(): Duration

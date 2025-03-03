@@ -4,7 +4,6 @@
 
 package essentials.sample
 
-import essentials.AppScope
 import essentials.app.*
 import injekt.*
 

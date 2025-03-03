@@ -7,8 +7,8 @@ package essentials.shell
 import arrow.core.*
 import essentials.*
 import essentials.coroutines.*
-import injekt.*
 import eu.chainfire.libsuperuser.Shell.*
+import injekt.*
 import kotlinx.coroutines.*
 
 @Provide class Shell(private val coroutineContexts: CoroutineContexts) {

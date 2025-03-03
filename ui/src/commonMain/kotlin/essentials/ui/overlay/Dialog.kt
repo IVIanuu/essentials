@@ -1,7 +1,6 @@
 package essentials.ui.overlay
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
@@ -12,14 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.unit.*
+import com.slack.circuit.foundation.internal.*
 import essentials.*
 import essentials.ui.common.ProvideContentColorTextStyle
 import essentials.ui.navigation.*
-import injekt.*
-import com.slack.circuit.foundation.internal.*
 import kotlinx.coroutines.*
-import soup.compose.material.motion.*
-import soup.compose.material.motion.animation.*
 
 @Composable fun Dialog(
   modifier: Modifier = Modifier,

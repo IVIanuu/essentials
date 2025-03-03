@@ -5,7 +5,6 @@ import androidx.compose.runtime.*
 import arrow.fx.coroutines.*
 import essentials.*
 import essentials.app.*
-import essentials.compose.*
 import essentials.logging.*
 import essentials.util.*
 import injekt.*

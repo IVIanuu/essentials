@@ -4,10 +4,9 @@
 
 package essentials.sample.ui
 
-import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import androidx.compose.ui.res.*
+import androidx.compose.material3.*
 import essentials.billing.*
 import essentials.premium.*
 import injekt.*

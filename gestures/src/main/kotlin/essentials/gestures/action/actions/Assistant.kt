@@ -8,16 +8,12 @@ import android.annotation.*
 import android.app.*
 import android.os.*
 import androidx.compose.material3.*
-import androidx.compose.material.icons.*
-import androidx.compose.ui.res.*
-import essentials.*
-import essentials.gestures.*
-import essentials.gestures.R
-import essentials.gestures.action.*
-import injekt.*
 import compose.icons.*
 import compose.icons.fontawesomeicons.*
 import compose.icons.fontawesomeicons.brands.*
+import essentials.*
+import essentials.gestures.action.*
+import injekt.*
 
 @Provide object AssistantActionId : ActionId("assistant") {
   @Provide val action get() = Action(

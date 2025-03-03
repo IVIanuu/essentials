@@ -5,10 +5,10 @@
 package essentials.xposed
 
 import androidx.compose.ui.util.fastForEach
-import essentials.*
-import injekt.*
 import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam
+import essentials.*
+import injekt.*
 
 abstract class EsXposedInit(
   private val buildXposedScope: (@Provide EsXposedInit).() -> Scope<XposedScope>

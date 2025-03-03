@@ -6,12 +6,11 @@ package essentials.gestures.action.actions
 
 import android.hardware.camera2.*
 import android.hardware.camera2.CameraManager.*
-import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.collectAsState
 import essentials.*
-import essentials.compose.*
 import essentials.coroutines.*
 import essentials.gestures.action.*
 import essentials.util.*
