@@ -4,6 +4,13 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.app.Activity
+import android.content.Context
+import androidx.compose.animation.EnterExitState
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -18,6 +25,7 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.fastFilter
 import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.nullOf
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.overlay.*
 import com.ivianuu.essentials.ui.material.*
@@ -55,7 +63,7 @@ import com.ivianuu.injekt.*
         }
       ) {
         EsLazyColumn {
-          items(finalItems) { item ->
+          itemsIndexed(finalItems) { index, item ->
             val color = rememberSaveable(item) {
               ColorPickerPalette.entries
                 .fastFilter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
@@ -66,8 +74,14 @@ import com.ivianuu.injekt.*
 
             HomeItem(
               item = item,
+              index = index,
               color = color,
-              onClick = action { navigator.push(item.screenFactory(color)) }
+              onClick = action {
+                navigator.push(
+                  item.screenFactoryWithIndex?.invoke(index, color)
+                    ?: item.screenFactory(color)
+                )
+              }
             )
           }
 
@@ -85,39 +99,68 @@ import com.ivianuu.injekt.*
       }
     }
 
-    @Composable private fun HomeItem(color: Color, onClick: () -> Unit, item: HomeItem) {
-      EsListItem(
-        onClick = onClick,
-        headlineContent = {
-          Text(item.title)
+    @Composable private fun HomeItem(
+      index: Int,
+      color: Color,
+      onClick: () -> Unit,
+      item: HomeItem
+    ) {
+      Surface(
+        modifier = with(LocalScreenAnimationScope.current) {
+          Modifier
+            .sharedBounds(
+              rememberSharedContentState(ContainerKey + index),
+              this,
+              boundsTransform = { _, _ -> tween(400) },
+              enter = fadeIn(tween(400)),
+              exit = fadeOut(tween(400))
+            )
         },
-        overlineContent = {
-          Text("Overline")
-        },
-        supportingContent = {
-          Text("Supporting")
-        },
-        leadingContent = {
-          Box(
-            modifier = Modifier
-              .size(40.dp)
-              .background(color, CircleShape)
-          )
-        },
-        trailingContent = {
-          BottomSheetLauncherButton {
-            (0..40).forEach { index ->
-              EsListItem(
-                onClick = { dismiss() },
-                headlineContent = { Text(index.toString()) },
-                leadingContent = { Icon(Icons.Default.Add, null) }
-              )
+      ) {
+        EsListItem(
+          onClick = onClick,
+          headlineContent = {
+            Text(item.title)
+          },
+          overlineContent = {
+            Text("Overline")
+          },
+          supportingContent = {
+            Text("Supporting")
+          },
+          leadingContent = {
+            Box(
+              modifier = with(LocalScreenAnimationScope.current) {
+                Modifier
+                  .size(40.dp)
+                  .background(color, CircleShape)
+                  .sharedElement(
+                    rememberSharedContentState(ColorKey + index),
+                    this,
+                    boundsTransform = { _, _ -> tween(400) }
+                  )
+              }
+            )
+          },
+          trailingContent = {
+            BottomSheetLauncherButton {
+              (0..40).forEach { index ->
+                EsListItem(
+                  onClick = { dismiss() },
+                  headlineContent = { Text(index.toString()) },
+                  leadingContent = { Icon(Icons.Default.Add, null) }
+                )
+              }
             }
           }
-        }
-      )
+        )
+      }
     }
   }
 }
 
-data class HomeItem(val title: String, val screenFactory: (Color) -> Screen<*>)
+data class HomeItem(
+  val title: String,
+  val screenFactoryWithIndex: ((Int, Color) -> Screen<*>)? = null,
+  val screenFactory: (Color) -> Screen<*>
+)

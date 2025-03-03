@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ui.overlay
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.*
 import androidx.compose.foundation.layout.*
@@ -25,7 +26,6 @@ import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -58,8 +58,7 @@ class ColorPickerScreen(
           AnimatedContent(
             modifier = Modifier.height(300.dp)
               .padding(start = 24.dp, end = 24.dp),
-            state = currentScreen,
-            transitionSpec = { materialSharedAxisY() }
+            targetState = currentScreen
           ) { currentScreen ->
             when (currentScreen) {
               ColorPickerTab.COLORS -> {
@@ -119,9 +118,8 @@ class ColorPickerScreen(
       modifier: Modifier = Modifier
     ) {
       var palettesStack by remember { mutableStateOf(listOf(NoPalette)) }
-      AnimatedStack(
-        items = palettesStack,
-        transitionSpec = { materialSharedAxisX() }
+      AnimatedContent(
+        targetState = palettesStack.lastOrNull()
       ) { palette ->
         val items = remember {
           palette

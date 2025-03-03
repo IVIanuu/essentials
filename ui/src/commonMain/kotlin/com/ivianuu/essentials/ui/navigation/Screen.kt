@@ -4,11 +4,12 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ContentTransform
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastFold
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
@@ -16,26 +17,19 @@ import kotlin.reflect.*
 
 interface RootScreen : Screen<Unit>
 
-interface OverlayScreen<T> : Screen<T> {
-  @Provide companion object {
-    @Provide fun <T : OverlayScreen<*>> screenConfig() =
-      ScreenConfig<T>(opaque = true)
-  }
-}
+interface OverlayScreen<T> : Screen<T>
 
 interface CriticalUserFlowScreen<T> : Screen<T>
 
 val Scope<*>.screen: Screen<*> get() = service()
 
+typealias ScreenTransitionSpec = AnimatedContentTransitionScope<Screen<*>>.() -> ContentTransform
+
 data class ScreenConfig<T : Screen<*>>(
-  val enterTransitionSpec: (ElementTransitionSpec<Screen<*>>)? = null,
-  val exitTransitionSpec: (ElementTransitionSpec<Screen<*>>)? = null,
-  val opaque: Boolean = false,
+  val enterTransitionSpec: (ScreenTransitionSpec)? = null,
+  val exitTransitionSpec: (ScreenTransitionSpec)? = null
 ) {
-  constructor(
-    opaque: Boolean = false,
-    transitionSpec: ElementTransitionSpec<Screen<*>>
-  ) : this(transitionSpec, transitionSpec, opaque)
+  constructor(transitionSpec: ScreenTransitionSpec) : this(transitionSpec, transitionSpec)
 }
 
 class ScreenScope {

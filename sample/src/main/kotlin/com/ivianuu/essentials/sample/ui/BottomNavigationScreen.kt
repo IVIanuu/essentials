@@ -6,6 +6,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -45,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.fastForEach
 import com.ivianuu.essentials.compose.scopedAction
-import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -86,6 +86,7 @@ class BottomNavigationScreen : Screen<Unit> {
           }
         ) {
           Box(modifier = Modifier.fillMaxSize()) {
+            @SuppressLint("UnusedContentLambdaTargetStateParameter")
             AnimatedContent(selectedItem) { item ->
               EsLazyColumn {
                 (1..100).forEach { item ->

@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -40,8 +39,7 @@ object ChildNavGraph
               .weight(1f)
               .fillMaxWidth(),
             navigator = navigator,
-            navigationComponent = navigationComponent,
-            defaultTransitionSpec = { slideHorizontally() }
+            navigationComponent = navigationComponent
           )
         }
       }

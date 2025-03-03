@@ -4,10 +4,14 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.ivianuu.essentials.compose.*
 import com.ivianuu.essentials.ui.common.*
@@ -18,6 +22,34 @@ import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.RadioListItem
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+
+class TestSharedElementScreen : OverlayScreen<Unit>
+
+@Provide fun testSharedElementUi() = Ui<TestSharedElementScreen> {
+  Box(
+    contentAlignment = Alignment.Center,
+    modifier = with(LocalScreenAnimationScope.current) {
+      Modifier.fillMaxSize()
+        .background(Color.Black.copy(alpha =0.3f))
+        .animateEnterExit()
+    }
+  ) {
+    Surface(
+      onClick = {},
+      modifier = with(LocalScreenAnimationScope.current) {
+        Modifier
+          .size(300.dp)
+          .sharedElement(
+            rememberSharedContentState("key"),
+            this
+          )
+      },
+      color = MaterialTheme.colorScheme.primaryContainer
+    ) {
+
+    }
+  }
+}
 
 @Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsScreen() }
 
@@ -100,6 +132,22 @@ class DialogsScreen : Screen<Unit> {
                     initial = current
                   )
                 )?.let { current = it }
+              }
+            ) { Text("Text") }
+          }
+          item {
+            Button(
+              modifier = with(LocalScreenAnimationScope.current) {
+                Modifier
+                  .sharedElement(
+                    rememberSharedContentState("key"),
+                    this
+                  )
+              },
+              onClick = action {
+                navigator.push(
+                  TestSharedElementScreen()
+                )
               }
             ) { Text("Text") }
           }

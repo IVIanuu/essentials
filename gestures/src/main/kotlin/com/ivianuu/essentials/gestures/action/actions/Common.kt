@@ -23,8 +23,8 @@ import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 
 fun staticActionImage(data: Any) = ActionIcon {
-  Image(
-    painter = rememberAsyncImagePainter(data),
+  AsyncImage(
+    model = data,
     modifier = LocalActionImageSizeModifier.current,
     contentDescription = null
   )

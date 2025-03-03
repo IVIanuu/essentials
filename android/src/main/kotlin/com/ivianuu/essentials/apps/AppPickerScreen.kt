@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.fastFilter
 import coil.compose.*
 import com.ivianuu.essentials.compose.*
+import com.ivianuu.essentials.coroutines.CoroutineContexts
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.ui.common.*
@@ -27,6 +28,7 @@ class AppPickerScreen(
 ) : Screen<AppInfo> {
   @Provide companion object {
     @Provide fun ui(
+      coroutineContexts: CoroutineContexts,
       navigator: Navigator,
       repository: AppRepository,
       screen: AppPickerScreen
@@ -39,18 +41,20 @@ class AppPickerScreen(
             repository.installedApps
               .map { it.fastFilter { screen.appPredicate.test(it) } }
               .flowAsResource()
+              .flowOn(coroutineContexts.computation)
               .collect { value = it }
           }.value
         ) { apps ->
           EsLazyColumn {
             items(apps) { app ->
               EsListItem(
+                modifier = Modifier.animateItem(),
                 onClick = scopedAction { navigator.pop(screen, app) },
                 headlineContent = { Text(app.appName) },
                 leadingContent = {
-                  Image(
-                    painter = rememberAsyncImagePainter(AppIcon(packageName = app.packageName)),
+                  AsyncImage(
                     modifier = Modifier.size(40.dp),
+                    model = AppIcon(packageName = app.packageName),
                     contentDescription = null
                   )
                 }

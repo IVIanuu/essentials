@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.common.ProvideContentColorTextStyle
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -42,7 +41,6 @@ import soup.compose.material.motion.animation.*
 
   Box(
     modifier = Modifier
-      .animationElement(DialogScrimKey)
       .pointerInput(true) {
         detectTapGestures { onDismissRequest() }
       }
@@ -54,7 +52,6 @@ import soup.compose.material.motion.animation.*
     Box(
       modifier = Modifier
         .safeContentPadding()
-        .animationElement(DialogKey)
         .pointerInput(true) { detectTapGestures { } }
         .wrapContentSize(align = Alignment.Center)
         .padding(all = 32.dp)
@@ -144,29 +141,4 @@ import soup.compose.material.motion.animation.*
   }
 }
 
-interface DialogScreen<T> : OverlayScreen<T> {
-  @Provide companion object {
-    @Provide fun <T : DialogScreen<*>> config() = ScreenConfig<T>(opaque = true) {
-      if (isPush) {
-        DialogKey entersWith materialFadeIn()
-        DialogScrimKey entersWith fadeIn(
-          animationSpec = tween(
-            durationMillis = 150.ForFade,
-            easing = LinearEasing
-          )
-        )
-      } else {
-        DialogKey exitsWith materialFadeOut()
-        DialogScrimKey exitsWith fadeOut(
-          animationSpec = tween(
-            durationMillis = MotionConstants.DefaultFadeOutDuration,
-            easing = LinearEasing
-          )
-        )
-      }
-    }
-  }
-}
-
-const val DialogKey = "dialog"
-const val DialogScrimKey = "dialog_scrim"
+interface DialogScreen<T> : OverlayScreen<T>

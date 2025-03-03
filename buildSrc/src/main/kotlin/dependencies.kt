@@ -147,7 +147,7 @@ object Deps {
 
   const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
 
-  const val materialMotionCompose = "io.github.fornewid:material-motion-compose-core:0.12.3"
+  const val materialMotionCompose = "io.github.fornewid:material-motion-compose-core:2.0.1"
 
   const val mockk = "io.mockk:mockk:1.12.8"
 

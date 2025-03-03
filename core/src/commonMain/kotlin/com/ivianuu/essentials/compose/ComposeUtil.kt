@@ -11,6 +11,10 @@ import kotlinx.coroutines.flow.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
+@Composable fun RestartableScope(block: @Composable () -> Unit) {
+  block()
+}
+
 @Composable fun <T> produceScopedState(
   initialValue: T,
   vararg keys: Any?,

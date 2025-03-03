@@ -5,19 +5,12 @@
 package com.ivianuu.essentials.ui.app
 
 import androidx.compose.foundation.*
-import androidx.compose.foundation.shape.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
-import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.material.contentColor
-import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.systembars.*
-import com.ivianuu.essentials.ui.util.*
 import com.ivianuu.injekt.*
 
 data class AppColors(
@@ -95,33 +88,18 @@ annotation class AppShapesTag {
   }
 }
 
-typealias AppScreenTransitionSpec = @AppTransitionScreenSpecTag ElementTransitionSpec<Screen<*>>
-
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class AppTransitionScreenSpecTag {
-  @Provide companion object {
-    @Provide val default: AppScreenTransitionSpec
-      get() = AppScreenTransitionSpec { fadeUpwards() }
-  }
-}
-
 @Provide fun appThemeDecorator(
   colorSchemes: AppColorSchemes,
   shapes: AppShapes,
-  typography: AppTypography,
-  transitionSpec: AppScreenTransitionSpec
+  typography: AppTypography
 ) = AppThemeDecorator { content ->
   MaterialTheme(
     colorScheme = if (isSystemInDarkTheme()) colorSchemes.dark
     else colorSchemes.light,
     typography = typography,
-    shapes = shapes
-  ) {
-    CompositionLocalProvider(
-      LocalScreenTransitionSpec provides transitionSpec,
-      content = content
-    )
-  }
+    shapes = shapes,
+    content = content
+  )
 }
 
 fun interface AppThemeDecorator : AppUiDecorator {
