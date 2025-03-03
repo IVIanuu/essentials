@@ -4,8 +4,8 @@
 
 package essentials.sample.ui
 
-import com.ivianuu.essentials.about.*
-import com.ivianuu.essentials.donation.*
+import essentials.about.*
+import essentials.donation.*
 import injekt.*
 
 @Provide val aboutHomeItem = HomeItem("About") {

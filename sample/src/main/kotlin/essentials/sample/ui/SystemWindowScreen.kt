@@ -11,12 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.systemoverlay.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
+import essentials.coroutines.*
+import essentials.permission.*
+import essentials.systemoverlay.*
+import essentials.ui.common.*
+import essentials.ui.material.*
+import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.*
 

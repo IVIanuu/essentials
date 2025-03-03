@@ -26,10 +26,10 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 
--keep,includedescriptorclasses class com.ivianuu.**$$serializer { *; } # <-- change package name to your app's
+-keep,includedescriptorclasses essentials.**$$serializer { *; } # <-- change package name to your app's
 -keepclassmembers class com.ivianuu.** { # <-- change package name to your app's
     *** Companion;
 }
--keepclasseswithmembers class com.ivianuu.** { # <-- change package name to your app's
+-keepclasseswithmembers class essentials.** { # <-- change package name to your app's
     kotlinx.serialization.KSerializer serializer(...);
 }

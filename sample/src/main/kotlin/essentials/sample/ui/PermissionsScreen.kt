@@ -11,13 +11,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.ui.*
 import androidx.compose.ui.util.fastMap
-import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.notificationlistener.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
+import essentials.accessibility.*
+import essentials.compose.*
+import essentials.notificationlistener.*
+import essentials.permission.*
+import essentials.ui.common.*
+import essentials.ui.material.*
+import essentials.ui.navigation.*
 import injekt.*
 
 @Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsScreen() }

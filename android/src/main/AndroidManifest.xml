@@ -6,11 +6,11 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:appComponentFactory="com.ivianuu.essentials.app.EsAppComponentFactory"
+        android:appComponentFactory="essentials.app.EsAppComponentFactory"
         tools:replace="android:appComponentFactory">
 
         <activity
-            android:name="com.ivianuu.essentials.app.EsActivity"
+            android:name="essentials.app.EsActivity"
             android:configChanges="colorMode|density|fontScale|keyboard|keyboardHidden|layoutDirection|locale|mcc|mnc
             |navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
             android:launchMode="singleTask"
@@ -24,13 +24,13 @@
         </activity>
 
         <activity
-            android:name="com.ivianuu.essentials.util.UnlockActivity"
+            android:name="essentials.util.UnlockActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
             android:theme="@style/Theme.Es.Translucent"
             android:exported="true" />
 
         <receiver
-            android:name="com.ivianuu.essentials.util.RemoteActionReceiver"
+            android:name="essentials.util.RemoteActionReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="execute_remote_action" />
@@ -38,7 +38,7 @@
         </receiver>
 
         <provider
-            android:name="com.ivianuu.essentials.backup.BackupFileProvider"
+            android:name="essentials.backup.BackupFileProvider"
             android:authorities="${applicationId}.backupprovider"
             android:exported="false"
             android:grantUriPermissions="true">

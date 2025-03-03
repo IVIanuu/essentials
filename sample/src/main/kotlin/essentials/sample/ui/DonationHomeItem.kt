@@ -5,8 +5,8 @@
 package essentials.sample.ui
 
 import com.android.billingclient.api.*
-import com.ivianuu.essentials.billing.*
-import com.ivianuu.essentials.donation.*
+import essentials.billing.*
+import essentials.donation.*
 import injekt.*
 import org.json.*
 

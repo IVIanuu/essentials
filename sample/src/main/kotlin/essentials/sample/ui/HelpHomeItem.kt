@@ -6,7 +6,7 @@ package essentials.sample.ui
 
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import com.ivianuu.essentials.help.*
+import essentials.help.*
 import injekt.*
 
 @Provide val helpHomeItem = HomeItem("Help") {

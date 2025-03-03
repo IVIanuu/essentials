@@ -14,12 +14,12 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.fastFilter
 import androidx.compose.ui.util.fastFlatMap
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.overlay.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.systembars.*
-import com.ivianuu.essentials.ui.util.*
+import essentials.ui.common.*
+import essentials.ui.overlay.*
+import essentials.ui.material.*
+import essentials.ui.navigation.*
+import essentials.ui.systembars.*
+import essentials.ui.util.*
 import injekt.*
 
 @Provide val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsScreen() }

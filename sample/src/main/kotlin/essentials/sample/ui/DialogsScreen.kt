@@ -13,14 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
-import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.overlay.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.prefs.CheckboxListItem
-import com.ivianuu.essentials.ui.prefs.RadioListItem
-import com.ivianuu.essentials.util.*
+import essentials.compose.*
+import essentials.ui.common.*
+import essentials.ui.overlay.*
+import essentials.ui.material.*
+import essentials.ui.navigation.*
+import essentials.ui.prefs.CheckboxListItem
+import essentials.ui.prefs.RadioListItem
+import essentials.util.*
 import injekt.*
 
 class TestSharedElementScreen : OverlayScreen<Unit>

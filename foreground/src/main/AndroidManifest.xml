@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <application>
         <service
-            android:name="com.ivianuu.essentials.foreground.ForegroundService"
+            android:name="essentials.foreground.ForegroundService"
             android:exported="true" />
     </application>
 </manifest>

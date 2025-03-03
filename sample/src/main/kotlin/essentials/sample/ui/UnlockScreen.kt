@@ -9,10 +9,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
+import essentials.coroutines.*
+import essentials.ui.material.*
+import essentials.ui.navigation.*
+import essentials.util.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*

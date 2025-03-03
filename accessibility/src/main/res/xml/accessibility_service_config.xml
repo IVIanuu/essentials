@@ -4,5 +4,5 @@
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:canRetrieveWindowContent="true"
     android:description="@string/accessibility_service_desc"
-    android:settingsActivity="com.ivianuu.essentials.app.EsActivity"
+    android:settingsActivity="essentials.app.EsActivity"
     android:summary="@string/accessibility_service_summary" />

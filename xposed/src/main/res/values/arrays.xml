@@ -4,6 +4,6 @@
 
 <resources>
     <array name="xposed_module_scope">
-        <item>com.ivianuu.essentials.sample</item>
+        <item>essentials.sample</item>
     </array>
 </resources>

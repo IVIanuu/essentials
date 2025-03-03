@@ -5,8 +5,8 @@
 package essentials.sample.xposed
 
 import android.media.AudioTrack
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.xposed.*
+import essentials.logging.*
+import essentials.xposed.*
 import injekt.*
 
 @Provide fun sampleHooks(logger: Logger) = Hooks { config ->

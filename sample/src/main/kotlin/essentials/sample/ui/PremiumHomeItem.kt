@@ -8,8 +8,8 @@ import androidx.compose.material3.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.res.*
-import com.ivianuu.essentials.billing.*
-import com.ivianuu.essentials.premium.*
+import essentials.billing.*
+import essentials.premium.*
 import injekt.*
 
 @Provide val premiumHomeItem = HomeItem("Premium") {

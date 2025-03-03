@@ -4,8 +4,8 @@
 
 package essentials.sample
 
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.app.*
+import essentials.AppScope
+import essentials.app.*
 import injekt.*
 
 class SampleApp : EsApp({ inject() })

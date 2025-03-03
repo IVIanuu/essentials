@@ -16,12 +16,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.common.EsLazyColumn
-import com.ivianuu.essentials.ui.material.EsAppBar
-import com.ivianuu.essentials.ui.material.EsScaffold
-import com.ivianuu.essentials.ui.navigation.LocalScreenAnimationScope
-import com.ivianuu.essentials.ui.navigation.Screen
-import com.ivianuu.essentials.ui.navigation.Ui
+import essentials.ui.common.EsLazyColumn
+import essentials.ui.material.EsAppBar
+import essentials.ui.material.EsScaffold
+import essentials.ui.navigation.LocalScreenAnimationScope
+import essentials.ui.navigation.Screen
+import essentials.ui.navigation.Ui
 import injekt.Provide
 
 @Provide val SharedElementHomeItem = HomeItem(

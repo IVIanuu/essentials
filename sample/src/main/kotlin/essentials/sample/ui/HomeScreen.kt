@@ -24,14 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.fastFilter
-import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.nullOf
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.overlay.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.essentials.xposed.*
+import essentials.compose.*
+import essentials.nullOf
+import essentials.ui.common.*
+import essentials.ui.overlay.*
+import essentials.ui.material.*
+import essentials.ui.navigation.*
+import essentials.util.*
+import essentials.xposed.*
 import injekt.*
 
 @Provide class HomeScreen : RootScreen {

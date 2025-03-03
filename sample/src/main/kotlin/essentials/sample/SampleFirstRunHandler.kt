@@ -4,8 +4,8 @@
 
 package essentials.sample
 
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.logging.*
+import essentials.app.*
+import essentials.logging.*
 import injekt.*
 
 @Provide fun sampleFirstRunHandler(logger: Logger) = FirstRunHandler {

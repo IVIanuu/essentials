@@ -9,10 +9,10 @@ import androidx.compose.material3.*
 import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
+import essentials.*
+import essentials.ui.common.*
+import essentials.ui.material.*
+import essentials.ui.navigation.*
 import injekt.*
 
 @Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsScreen() }

@@ -60,7 +60,7 @@ allprojects {
         minSdk = Build.minSdk
         targetSdk = Build.targetSdk
       }
-      namespace = "com.ivianuu.essentials.${name.replace("-", ".")}"
+      namespace = "essentials.${name.replace("-", ".")}"
     }
     afterEvaluate {
       extensions.getByType<ComposeCompilerGradlePluginExtension>()?.run {

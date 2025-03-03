@@ -11,9 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
-import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
+import essentials.compose.*
+import essentials.ui.material.*
+import essentials.ui.navigation.*
 import injekt.*
 
 class ChildNavigationScreen : Screen<Unit>

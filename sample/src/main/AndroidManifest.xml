@@ -46,7 +46,7 @@
             tools:replace="android:resource" />
 
         <service
-            android:name="com.ivianuu.essentials.tile.EsTileService1"
+            android:name="essentials.tile.EsTileService1"
             android:icon="@drawable/ic_launcher_foreground"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
@@ -58,7 +58,7 @@
         </service>
 
         <receiver
-            android:name="com.ivianuu.essentials.util.EsBroadcastReceiver"
+            android:name="essentials.util.EsBroadcastReceiver"
             tools:ignore="Instantiatable"
             android:exported="true">
             <intent-filter>

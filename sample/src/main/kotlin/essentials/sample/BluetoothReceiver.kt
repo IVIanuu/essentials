@@ -3,11 +3,11 @@ package essentials.sample
 import android.bluetooth.*
 import androidx.compose.runtime.*
 import arrow.fx.coroutines.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.util.*
+import essentials.*
+import essentials.app.*
+import essentials.compose.*
+import essentials.logging.*
+import essentials.util.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*

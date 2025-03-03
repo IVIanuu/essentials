@@ -9,11 +9,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.ui.*
-import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.work.*
+import essentials.compose.*
+import essentials.ui.common.*
+import essentials.ui.material.*
+import essentials.ui.navigation.*
+import essentials.work.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.hours

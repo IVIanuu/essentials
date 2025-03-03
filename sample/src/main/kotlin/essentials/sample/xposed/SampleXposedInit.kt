@@ -4,10 +4,10 @@
 
 package essentials.sample.xposed
 
-import com.ivianuu.essentials.xposed.*
+import essentials.xposed.*
 import injekt.*
 
 class SampleXposedInit : EsXposedInit({
-  @Provide val modulePackageName = ModulePackageName("com.ivianuu.essentials.sample")
+  @Provide val modulePackageName = ModulePackageName("essentials.sample")
   inject()
 })

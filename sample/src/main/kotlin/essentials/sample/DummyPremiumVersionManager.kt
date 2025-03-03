@@ -1,7 +1,7 @@
 package essentials.sample
 
 import com.android.billingclient.api.*
-import com.ivianuu.essentials.premium.*
+import essentials.premium.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*

@@ -45,11 +45,11 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.fastForEach
-import com.ivianuu.essentials.compose.scopedAction
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.systembars.systemBarStyle
+import essentials.compose.scopedAction
+import essentials.ui.common.*
+import essentials.ui.material.*
+import essentials.ui.navigation.*
+import essentials.ui.systembars.systemBarStyle
 import injekt.*
 
 @Provide val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationScreen() }

@@ -5,10 +5,10 @@
 package essentials.sample
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.compose.*
-import com.ivianuu.essentials.logging.*
+import essentials.*
+import essentials.app.*
+import essentials.compose.*
+import essentials.logging.*
 import injekt.*
 
 @Provide fun scopeLogger(logger: Logger, appScope: Scope<AppScope>) = ScopeComposition<AppScope> {
