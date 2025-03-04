@@ -31,6 +31,7 @@ import kotlin.time.Duration.Companion.seconds
   private val remoteActionFactory: RemoteActionFactory
 ) : Service() {
   private var job: Job? = null
+  private var needsStartForegroundCall by mutableStateOf(true)
 
   override fun onCreate() {
     super.onCreate()
@@ -61,11 +62,9 @@ import kotlin.time.Duration.Companion.seconds
         }
       }
 
-      var hasEverCalledStartForeground by remember { mutableStateOf(false) }
-
       val currentStates by remember {
         derivedStateOf {
-          if (foregroundManager.states.isEmpty() && hasEverCalledStartForeground) emptyList()
+          if (foregroundManager.states.isEmpty() && !needsStartForegroundCall) emptyList()
           else {
             val statesWithNotification =
               foregroundManager.states.count { it.notification != null }
@@ -85,7 +84,7 @@ import kotlin.time.Duration.Companion.seconds
           removeServiceNotification = mainState!!.removeNotification
       }
 
-      if (currentStates.isEmpty() && hasEverCalledStartForeground) {
+      if (currentStates.isEmpty() && !needsStartForegroundCall) {
         LaunchedEffect(removeServiceNotification) {
           delay(1.seconds)
 
@@ -110,8 +109,8 @@ import kotlin.time.Duration.Companion.seconds
           key(state.id) {
             ForegroundNotification(
               state = state,
-              onStartForegroundCalled = { hasEverCalledStartForeground = true },
-              isMainNotification = { mainState == state }
+              onStartForegroundCalled = { needsStartForegroundCall = false },
+              shouldStartForeground = { mainState == state && needsStartForegroundCall }
             )
           }
         }
@@ -119,31 +118,45 @@ import kotlin.time.Duration.Companion.seconds
     }
   }
 
+  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    logger.d { "on start command $intent" }
+    needsStartForegroundCall = true
+    return super.onStartCommand(intent, flags, startId)
+  }
+
   @Composable private fun ForegroundNotification(
     state: ForegroundManager.ForegroundState,
-    isMainNotification: () -> Boolean,
+    shouldStartForeground: () -> Boolean,
     onStartForegroundCalled: () -> Unit
   ) {
-    logger.d { "compose notification ${state.id}" }
     val notification = state.notification?.invoke()
-    if (notification != null)
-      DisposableEffect(notification, isMainNotification()) {
-        logger.d { "${state.id} update foreground notification" }
+    val notificationId = state.id.hashCode()
+    if (notification != null) {
+      DisposableEffect(notificationId) {
+        onDispose {
+          if (state.removeNotification) {
+            logger.d { "remove notification $notificationId" }
+            notificationManager.cancel(notificationId)
+          }
+        }
+      }
 
-        val notificationId = state.id.hashCode()
-        if (isMainNotification()) {
+      if (shouldStartForeground())
+        DisposableEffect(true) {
+          logger.d { "${state.id} call start foreground" }
           startForeground(notificationId, notification)
           onStartForegroundCalled()
           onDispose {
           }
-        } else {
-          notificationManager.notify(notificationId, notification)
-          onDispose {
-            if (state.removeNotification)
-              notificationManager.cancel(notificationId)
-          }
+        }
+
+      DisposableEffect(notification) {
+        logger.d { "${state.id} update notification" }
+        notificationManager.notify(notificationId, notification)
+        onDispose {
         }
       }
+    }
   }
 
   override fun onDestroy() {

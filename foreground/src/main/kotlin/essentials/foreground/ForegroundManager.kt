@@ -22,27 +22,28 @@ import injekt.common.*
     private set
 
   @Composable fun Foreground(
-    id: SourceKey = inject,
+    id: String,
     removeNotification: Boolean = true,
     notification: (@Composable () -> Notification)? = null,
   ) {
-    key(id.value) {
+    key(id) {
       val state = remember {
-        ForegroundState(id.value, removeNotification, notification)
+        ForegroundState(id, removeNotification, notification)
       }
       state.removeNotification = removeNotification
       state.notification = notification
 
       DisposableEffect(state) {
         states += state
-        logger.d { "start foreground ${id.value} $states" }
+        logger.d { "add state $id $states" }
         onDispose {
           states -= state
-          logger.d { "stop foreground ${id.value} $states" }
+          logger.d { "remove state $id $states" }
         }
       }
 
       LaunchedEffect(true) {
+        logger.d { "start foreground service $id $states" }
         ContextCompat.startForegroundService(
           appContext,
           Intent(appContext, ForegroundService::class.java)
