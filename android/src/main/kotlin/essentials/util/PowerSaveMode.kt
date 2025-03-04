@@ -1,24 +1,17 @@
 package essentials.util
 
 import android.os.*
+import androidx.compose.runtime.*
 import essentials.*
-import essentials.coroutines.*
 import injekt.*
-import kotlinx.coroutines.flow.*
 
-@JvmInline value class PowerSaveMode(val value: Boolean) {
-  @Provide companion object {
-    @Provide fun powerSaveMode(
-      broadcastManager: BroadcastManager,
-      powerManager: @SystemService PowerManager,
-      scope: ScopedCoroutineScope<AppScope>,
-    ): @Scoped<AppScope> StateFlow<PowerSaveMode> =
+@Provide class PowerSaveModeProducer(
+  private val broadcastManager: BroadcastManager,
+  private val powerManager: @SystemService PowerManager
+) {
+  @Composable fun isPowerSaveMode(): Boolean =
+    produceState(remember { powerManager.isPowerSaveMode }) {
       broadcastManager.broadcasts(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
-        .map { PowerSaveMode(powerManager.isPowerSaveMode) }
-        .stateIn(
-          scope,
-          SharingStarted.WhileSubscribed(),
-          PowerSaveMode(powerManager.isPowerSaveMode)
-        )
-  }
+        .collect { value = powerManager.isPowerSaveMode }
+    }.value
 }
