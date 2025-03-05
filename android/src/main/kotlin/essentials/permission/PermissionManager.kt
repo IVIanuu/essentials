@@ -30,7 +30,7 @@ import kotlin.reflect.*
 
   fun permissionState(permissions: List<KClass<out Permission>>): Flow<Boolean> = moleculeFlow {
     permissions.fastMap { permissionKey ->
-      val permission = remember { this.permissions[permissionKey]!!() }
+      val permission = remember { permission(permissionKey) }
       val stateProvider = remember { stateProviders[permissionKey]!!() }
       produceState<Boolean?>(null) {
         permissionRefreshes
