@@ -23,29 +23,28 @@ import essentials.ui.overlay.*
 import essentials.util.*
 import injekt.*
 
-class DonationScreen : DialogScreen<Unit> {
+class DonationScreen(
+  val donations: List<Donation> = Donation.DefaultDonations
+) : DialogScreen<Unit> {
   @Provide companion object {
     @Provide fun ui(
       billingManager: BillingManager,
-      donations: Donations,
       navigator: Navigator,
       screen: DonationScreen,
       toaster: Toaster
     ) = Ui<DonationScreen> {
       val skus by produceScopedState(Resource.Idle()) {
         value = catchResource {
-          donations
-            .value
-            .parMap { donation ->
-              val details = billingManager.getSkuDetails(donation.sku)!!
-              UiDonation(
-                donation,
-                details.title
-                  .replaceAfterLast("(", "")
-                  .removeSuffix("("),
-                details.price
-              )
-            }
+          screen.donations.parMap { donation ->
+            val details = billingManager.getSkuDetails(donation.sku)!!
+            UiDonation(
+              donation,
+              details.title
+                .replaceAfterLast("(", "")
+                .removeSuffix("("),
+              details.price
+            )
+          }
         }
       }
 
@@ -94,25 +93,21 @@ class DonationScreen : DialogScreen<Unit> {
   }
 }
 
-data class Donation(val sku: Sku, val icon: @Composable () -> Unit)
-
-@JvmInline value class Donations(val value: List<Donation>) {
-  @Provide companion object {
-    @Provide val default get() = Donations(
-        listOf(
-          Donation(Sku("donation_crossaint", Sku.Type.IN_APP)) {
-            Icon(Icons.Default.BakeryDining, null)
-          },
-          Donation(Sku("donation_coffee_2", Sku.Type.IN_APP)) {
-            Icon(Icons.Default.BreakfastDining, null)
-          },
-          Donation(Sku("donation_burger_menu", Sku.Type.IN_APP)) {
-            Icon(Icons.Default.BreakfastDining, null)
-          },
-          Donation(Sku("donation_movie", Sku.Type.IN_APP)) {
-            Icon(Icons.Default.Theaters, null)
-          }
-        )
-      )
+data class Donation(val sku: Sku, val icon: @Composable () -> Unit) {
+  companion object {
+    val DefaultDonations get() = listOf(
+      Donation(Sku("donation_crossaint", Sku.Type.IN_APP)) {
+        Icon(Icons.Default.BakeryDining, null)
+      },
+      Donation(Sku("donation_coffee_2", Sku.Type.IN_APP)) {
+        Icon(Icons.Default.BreakfastDining, null)
+      },
+      Donation(Sku("donation_burger_menu", Sku.Type.IN_APP)) {
+        Icon(Icons.Default.BreakfastDining, null)
+      },
+      Donation(Sku("donation_movie", Sku.Type.IN_APP)) {
+        Icon(Icons.Default.Theaters, null)
+      }
+    )
   }
 }

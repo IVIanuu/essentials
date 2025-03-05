@@ -130,11 +130,7 @@ class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit> {
   }
 }
 
-data class HelpCategory(val title: String? = null, val items: List<HelpItem>) {
-  companion object {
-    @Provide val defaultCategories get() = emptyList<HelpCategory>()
-  }
-}
+data class HelpCategory(val title: String? = null, val items: List<HelpItem>)
 
 data class HelpItem(
   val question: String,
