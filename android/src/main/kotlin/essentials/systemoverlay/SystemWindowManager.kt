@@ -28,86 +28,6 @@ import essentials.*
 import injekt.*
 import kotlin.math.*
 
-data object SystemWindowScope
-
-class SystemWindowState(
-  width: Int = WindowManager.LayoutParams.MATCH_PARENT,
-  height: Int = WindowManager.LayoutParams.MATCH_PARENT,
-  x: Int = 0,
-  y: Int = 0,
-  interceptor: (WindowManager.LayoutParams) -> Unit = {}
-) {
-  var width by mutableIntStateOf(width)
-  var height by mutableIntStateOf(height)
-  var x by mutableIntStateOf(x)
-  var y by mutableIntStateOf(y)
-  var interceptor by mutableStateOf(interceptor)
-}
-
-fun Modifier.systemWindowTrigger() = composed {
-  val ownerView = LocalView.current
-  val triggerView = remember { TriggerView(ownerView) }
-  val systemWindowManager = LocalSystemWindowManager.current
-  val layoutParams = remember {
-    WindowManager.LayoutParams().apply {
-      gravity = Gravity.LEFT or Gravity.TOP
-
-      type =
-        if (systemWindowManager.accessibilityAvailable)
-          WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
-        else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-      format = PixelFormat.TRANSLUCENT
-
-      flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-          WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-          WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
-          WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
-          WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
-    }
-  }
-
-  DisposableEffect(true) {
-    onDispose {
-      catch {
-        systemWindowManager.windowManager.removeViewImmediate(triggerView)
-      }
-    }
-  }
-
-  onGloballyPositioned { coords ->
-    var dirty = false
-
-    layoutParams.apply {
-      if (width != coords.size.width) {
-        width = coords.size.width
-        dirty = true
-      }
-      if (height != coords.size.height) {
-        height = coords.size.height
-        dirty = true
-      }
-
-      val ownerLoc = intArrayOf(0, 0)
-      ownerView.getLocationOnScreen(ownerLoc)
-      val positionInWindow = coords.positionInWindow()
-
-      val newX = positionInWindow.x.roundToInt() + ownerLoc[0]
-      if (x != newX) {
-        x = newX
-        dirty = true
-      }
-      val newY = positionInWindow.y.roundToInt() + ownerLoc[1]
-      if (y != newY) {
-        y = newY
-        dirty = true
-      }
-
-      if (dirty)
-        systemWindowManager.windowManager.addOrUpdateView(triggerView, layoutParams)
-    }
-  }
-}
-
 @Stable @Provide class SystemWindowManager(
   private val context: Context,
   private val systemWindowScopeFactory: () -> Scope<SystemWindowScope>,
@@ -194,6 +114,86 @@ fun Modifier.systemWindowTrigger() = composed {
       LocalSystemWindowManager provides this,
       content = content
     )
+  }
+}
+
+data object SystemWindowScope
+
+class SystemWindowState(
+  width: Int = WindowManager.LayoutParams.MATCH_PARENT,
+  height: Int = WindowManager.LayoutParams.MATCH_PARENT,
+  x: Int = 0,
+  y: Int = 0,
+  interceptor: (WindowManager.LayoutParams) -> Unit = {}
+) {
+  var width by mutableIntStateOf(width)
+  var height by mutableIntStateOf(height)
+  var x by mutableIntStateOf(x)
+  var y by mutableIntStateOf(y)
+  var interceptor by mutableStateOf(interceptor)
+}
+
+fun Modifier.systemWindowTrigger() = composed {
+  val ownerView = LocalView.current
+  val triggerView = remember { TriggerView(ownerView) }
+  val systemWindowManager = LocalSystemWindowManager.current
+  val layoutParams = remember {
+    WindowManager.LayoutParams().apply {
+      gravity = Gravity.LEFT or Gravity.TOP
+
+      type =
+        if (systemWindowManager.accessibilityAvailable)
+          WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+        else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+      format = PixelFormat.TRANSLUCENT
+
+      flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+          WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+          WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
+          WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+          WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
+    }
+  }
+
+  DisposableEffect(true) {
+    onDispose {
+      catch {
+        systemWindowManager.windowManager.removeViewImmediate(triggerView)
+      }
+    }
+  }
+
+  onGloballyPositioned { coords ->
+    var dirty = false
+
+    layoutParams.apply {
+      if (width != coords.size.width) {
+        width = coords.size.width
+        dirty = true
+      }
+      if (height != coords.size.height) {
+        height = coords.size.height
+        dirty = true
+      }
+
+      val ownerLoc = intArrayOf(0, 0)
+      ownerView.getLocationOnScreen(ownerLoc)
+      val positionInWindow = coords.positionInWindow()
+
+      val newX = positionInWindow.x.roundToInt() + ownerLoc[0]
+      if (x != newX) {
+        x = newX
+        dirty = true
+      }
+      val newY = positionInWindow.y.roundToInt() + ownerLoc[1]
+      if (y != newY) {
+        y = newY
+        dirty = true
+      }
+
+      if (dirty)
+        systemWindowManager.windowManager.addOrUpdateView(triggerView, layoutParams)
+    }
   }
 }
 

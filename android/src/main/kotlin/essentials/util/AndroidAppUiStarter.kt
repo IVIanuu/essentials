@@ -8,22 +8,27 @@ import android.content.*
 import android.content.pm.*
 import essentials.*
 import essentials.app.*
+import essentials.coroutines.CoroutineContexts
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 
 @Provide fun androidAppUiStarter(
   appContext: AppContext,
   appConfig: AppConfig,
   appScope: Scope<AppScope>,
+  coroutineContexts: CoroutineContexts,
   packageManager: PackageManager,
 ) = AppUiStarter {
-  val intent = packageManager.getLaunchIntentForPackage(appConfig.packageName)!!
-  appContext.startActivity(
-    intent.apply {
-      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-  )
+  withContext(coroutineContexts.main) {
+    val intent = packageManager.getLaunchIntentForPackage(appConfig.packageName)!!
+    appContext.startActivity(
+      intent.apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      }
+    )
 
-  appScope.scopeOf<AppVisibleScope>().first().service()
+    appScope.scopeOf<AppVisibleScope>().first().service()
+  }
 }

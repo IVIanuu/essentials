@@ -23,8 +23,3 @@ fun CoroutineScope.launchMolecule(
   childCoroutineScope(job).launchMolecule(mode, {}, context, body = block)
   return job
 }
-
-fun <T> CoroutineScope.moleculeStateFlow(
-  context: CoroutineContext = AndroidUiDispatcher.Main,
-  block: @Composable () -> T,
-): StateFlow<T> = launchMolecule(RecompositionMode.Immediate, context, body = block)

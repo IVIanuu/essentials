@@ -14,7 +14,7 @@ data class TileState<out T : AbstractEsTileService>(
   val icon: Icon? = null,
   val description: String? = null,
   val status: Status = Status.ACTIVE,
-  val onClick: () -> Unit = {}
+  val onClick: (() -> Unit)? = null
 ) {
   enum class Status { UNAVAILABLE, ACTIVE, INACTIVE }
 

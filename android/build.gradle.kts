@@ -14,7 +14,8 @@ dependencies {
   api(Deps.AndroidX.Lifecycle.runtime)
   api(Deps.Compose.googleFonts)
 
-  api(Deps.AndroidX.dataStore)
+  api(Deps.AndroidX.DataStore.dataStore)
+  api(Deps.AndroidX.DataStore.preferences)
   api(Deps.superUser)
   api(Deps.Coroutines.android)
 

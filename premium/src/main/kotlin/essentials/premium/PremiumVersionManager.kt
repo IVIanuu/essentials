@@ -7,6 +7,8 @@ package essentials.premium
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import arrow.fx.coroutines.*
 import com.android.billingclient.api.*
 import essentials.*
@@ -42,7 +44,7 @@ interface PremiumVersionManager {
   private val deviceScreenManager: DeviceScreenManager,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
   private val logger: Logger,
-  private val pref: DataStore<PremiumVersionPrefs>,
+  private val preferencesStore: DataStore<Preferences>,
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
   private val scope: ScopedCoroutineScope<AppScope>,
@@ -61,11 +63,11 @@ interface PremiumVersionManager {
       .fastAny { it }
 
     LaunchedEffect(isPremiumVersion) {
-      if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
+      if (!isPremiumVersion && preferencesStore.data.first()[WasPremiumVersionKey] == true) {
         logger.d { "handle premium version downgrade" }
         downgradeHandlers().parMap { it.onPremiumDowngrade() }
       }
-      pref.updateData { copy(wasPremiumVersion = isPremiumVersion) }
+      preferencesStore.edit { this[WasPremiumVersionKey] = isPremiumVersion }
     }
 
     isPremiumVersion
@@ -124,13 +126,7 @@ typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
   return state
 }
 
-@Serializable data class PremiumVersionPrefs(val wasPremiumVersion: Boolean = false) {
-  @Provide companion object {
-    @Provide val dataStoreModule = DataStoreModule("premium_version_prefs") {
-      PremiumVersionPrefs()
-    }
-  }
-}
+private val WasPremiumVersionKey = booleanPreferencesKey("was_premium_version")
 
 fun interface PremiumDowngradeHandler {
   suspend fun onPremiumDowngrade()

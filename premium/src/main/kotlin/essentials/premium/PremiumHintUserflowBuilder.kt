@@ -4,30 +4,32 @@
 
 package essentials.premium
 
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import essentials.*
 import essentials.app.*
+import essentials.data.DataStore
+import essentials.data.edit
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.flow.*
 
 @Provide class PremiumHintUserflowBuilder(
-  private val isFirstRun: suspend () -> IsFirstRun,
+  private val preferencesStore: DataStore<Preferences>,
   private val premiumVersionManager: PremiumVersionManager
 ) : UserflowBuilder {
-  override suspend fun createUserflow(): List<Screen<*>> =
-    if (hintShown || premiumVersionManager.isPremiumVersion.first()) emptyList()
-    else listOf(
-      GoPremiumScreen(
-        showTryBasicOption = isFirstRun().value,
-        allowBackNavigation = !isFirstRun().value
-      )
-    ).also { hintShown = true }
+  override suspend fun createUserflow(): List<Screen<*>> {
+    val hintShown = preferencesStore.data.first()[HintShownKey] == true
+    return if (hintShown || premiumVersionManager.isPremiumVersion.first()) emptyList()
+    else listOf(GoPremiumScreen(showTryBasicOption = true, allowBackNavigation = false))
+      .also { preferencesStore.edit { this[HintShownKey] = true } }
+  }
 
   companion object {
-    private var hintShown = false
-
     @Provide val loadingOrder: LoadingOrder<PremiumHintUserflowBuilder>
       get() = LoadingOrder<PremiumHintUserflowBuilder>()
         .last()
   }
 }
+
+private val HintShownKey = booleanPreferencesKey("hint_shown")

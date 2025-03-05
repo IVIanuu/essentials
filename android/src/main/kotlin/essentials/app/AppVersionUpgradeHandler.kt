@@ -4,6 +4,8 @@
 
 package essentials.app
 
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.intPreferencesKey
 import arrow.fx.coroutines.*
 import essentials.*
 import essentials.data.*
@@ -13,7 +15,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
 
 fun interface AppVersionUpgradeHandler {
-  suspend fun onAppVersionUpgrade(lastAppVersion: Int, appVersion: Int)
+  suspend fun onAppVersionUpgrade(lastAppVersion: Int?, appVersion: Int)
 
   @Provide companion object {
     @Provide val defaultHandlers get() = emptyList<AppVersionUpgradeHandler>()
@@ -24,21 +26,18 @@ fun interface AppVersionUpgradeHandler {
   appConfig: AppConfig,
   handlers: () -> List<AppVersionUpgradeHandler>,
   logger: Logger,
-  pref: DataStore<AppVersionUpgradePrefs>
+  preferencesStore: DataStore<Preferences>
 ) = ScopeWorker<AppScope> {
-  val prefs = pref.data.first()
+  val lastAppVersion = preferencesStore.data.first()[LastAppVersionPrefKey]
 
-  if (appConfig.versionCode <= prefs.lastAppVersion) return@ScopeWorker
+  if (lastAppVersion == null ||
+    appConfig.versionCode <= lastAppVersion) return@ScopeWorker
 
-  logger.d { "upgrade from app version ${prefs.lastAppVersion} to ${appConfig.versionCode}" }
+  logger.d { "upgrade from app version $lastAppVersion to ${appConfig.versionCode}" }
 
-  handlers().parMap { it.onAppVersionUpgrade(prefs.lastAppVersion, appConfig.versionCode) }
+  handlers().parMap { it.onAppVersionUpgrade(lastAppVersion, appConfig.versionCode) }
 
-  pref.updateData { copy(lastAppVersion = appConfig.versionCode) }
+  preferencesStore.edit { this[LastAppVersionPrefKey] = appConfig.versionCode }
 }
 
-@Serializable data class AppVersionUpgradePrefs(val lastAppVersion: Int = 0) {
-  @Provide companion object {
-    @Provide val dataStoreModule = DataStoreModule("app_version_upgrade") { AppVersionUpgradePrefs() }
-  }
-}
+private val LastAppVersionPrefKey = intPreferencesKey("last_app_version")

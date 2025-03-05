@@ -37,32 +37,12 @@ import kotlin.reflect.*
   tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
 ) : AbstractEsTileService(logger, tileScopeFactory)
 
-@Provide @AndroidComponent class EsTileService6(
-  logger: Logger,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService(logger, tileScopeFactory)
-
-@Provide @AndroidComponent class EsTileService7(
-  logger: Logger,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService(logger, tileScopeFactory)
-
-@Provide @AndroidComponent class EsTileService8(
-  logger: Logger,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService(logger, tileScopeFactory)
-
-@Provide @AndroidComponent class EsTileService9(
-  logger: Logger,
-  tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
-) : AbstractEsTileService(logger, tileScopeFactory)
-
 @Stable abstract class AbstractEsTileService(
   private val logger: Logger,
   private val tileScopeFactory: (AbstractEsTileService) -> Scope<TileScope>
 ) : TileService() {
   private var tileScope: Scope<TileScope>? = null
-  private var currentState: TileState<*>? = null
+  private var currentOnClick: (() -> Unit)? = null
 
   override fun onStartListening() {
     super.onStartListening()
@@ -76,7 +56,7 @@ import kotlin.reflect.*
       }
 
       val currentState = presenter.present()
-        .also { this.currentState = it }
+        .also { this.currentOnClick = it.onClick }
 
       LaunchedEffect(currentState) {
         val qsTile = qsTile ?: return@LaunchedEffect
@@ -96,7 +76,7 @@ import kotlin.reflect.*
   override fun onClick() {
     super.onClick()
     logger.d { "${this::class} on click" }
-    currentState?.onClick?.invoke()
+    currentOnClick?.invoke()
   }
 
   override fun onStopListening() {

@@ -15,18 +15,18 @@ import kotlinx.coroutines.*
   private val logger: Logger,
   private val powerManager: @SystemService PowerManager
 ) {
-  @Composable fun WakeLock(id: SourceKey = inject) {
+  @Composable fun WakeLock(id: String) {
     LaunchedEffect(id) {
       withContext(coroutineContexts.io) {
         bracketCase(
-          acquire = { powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, id.value) },
+          acquire = { powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, id) },
           use = {
-            logger.d { "${id.value} acquire wake lock" }
+            logger.d { "$id acquire wake lock" }
             it.acquire()
             awaitCancellation()
           },
           release = { wakeLock, _ ->
-            logger.d { "${id.value} release wake lock" }
+            logger.d { "$id release wake lock" }
             wakeLock.release()
           }
         )

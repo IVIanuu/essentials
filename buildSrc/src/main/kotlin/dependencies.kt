@@ -25,7 +25,11 @@ object Deps {
 
     const val core = "androidx.core:core-ktx:1.9.0"
 
-    const val dataStore = "androidx.datastore:datastore:1.0.0"
+    object DataStore {
+      private const val version = "1.1.3"
+      const val dataStore = "androidx.datastore:datastore:$version"
+      const val preferences = "androidx.datastore:datastore-preferences:$version"
+    }
 
     object Lifecycle {
       private const val version = "2.6.1"

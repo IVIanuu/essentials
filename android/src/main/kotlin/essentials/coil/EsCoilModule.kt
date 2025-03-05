@@ -12,6 +12,7 @@ import coil.intercept.*
 import coil.key.*
 import coil.map.*
 import essentials.*
+import essentials.app.ScopeInitializer
 import essentials.coroutines.*
 import injekt.*
 import kotlinx.coroutines.*
@@ -19,6 +20,9 @@ import kotlin.reflect.*
 
 @OptIn(ExperimentalStdlibApi::class)
 @Provide object EsCoilModule {
+  @Provide fun coilInitializer(imageLoaderFactory: () -> ImageLoader) =
+    ScopeInitializer<AppScope> { Coil.setImageLoader(imageLoaderFactory) }
+
   @Provide fun imageLoader(
     appContext: AppContext,
     coroutineContexts: CoroutineContexts,
