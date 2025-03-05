@@ -62,17 +62,19 @@ import kotlin.collections.set
       val screenState = rememberScreenState(screen, navigator, navigationComponent)
       screenStates[screen] = screenState
 
-      LaunchedEffect(screenState) {
-        snapshotFlow { screenState.scope.isDisposed }
-          .filter { it }
-          .collect { screenStates.remove(screen) }
-      }
-
       key(index) {
         BackHandler(enabled = handleBack && index > 0, onBack = action {
           navigator.pop(screen)
         })
       }
+    }
+  }
+
+  screenStates.forEach { (screen, screenState) ->
+    LaunchedEffect(screenState) {
+      snapshotFlow { screenState.scope.isDisposed }
+        .filter { it }
+        .collect { screenStates.remove(screen) }
     }
   }
 
@@ -196,7 +198,7 @@ fun interface ScreenTransitionDecorator : ScreenDecorator {
     content: @Composable (() -> Unit)
   ) {
     val screen = LocalScope.current.screen
-    if (screen is OverlayScreen<*> || screen !is OverlayScreen<*>) {
+    if (screen is OverlayScreen<*>) {
       content()
       return
     }
