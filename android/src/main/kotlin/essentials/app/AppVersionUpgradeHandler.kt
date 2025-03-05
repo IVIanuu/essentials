@@ -4,6 +4,7 @@
 
 package essentials.app
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import arrow.fx.coroutines.*
@@ -27,17 +28,19 @@ fun interface AppVersionUpgradeHandler {
   handlers: () -> List<AppVersionUpgradeHandler>,
   logger: Logger,
   preferencesStore: DataStore<Preferences>
-) = ScopeWorker<AppScope> {
-  val lastAppVersion = preferencesStore.data.first()[LastAppVersionPrefKey]
+) = ScopeComposition<AppScope> {
+  LaunchedEffect(true) {
+    val lastAppVersion = preferencesStore.data.first()[LastAppVersionPrefKey]
 
-  if (lastAppVersion == null ||
-    appConfig.versionCode <= lastAppVersion) return@ScopeWorker
+    if (lastAppVersion == null ||
+      appConfig.versionCode <= lastAppVersion) return@LaunchedEffect
 
-  logger.d { "upgrade from app version $lastAppVersion to ${appConfig.versionCode}" }
+    logger.d { "upgrade from app version $lastAppVersion to ${appConfig.versionCode}" }
 
-  handlers().parMap { it.onAppVersionUpgrade(lastAppVersion, appConfig.versionCode) }
+    handlers().parMap { it.onAppVersionUpgrade(lastAppVersion, appConfig.versionCode) }
 
-  preferencesStore.edit { this[LastAppVersionPrefKey] = appConfig.versionCode }
+    preferencesStore.edit { this[LastAppVersionPrefKey] = appConfig.versionCode }
+  }
 }
 
 private val LastAppVersionPrefKey = intPreferencesKey("last_app_version")

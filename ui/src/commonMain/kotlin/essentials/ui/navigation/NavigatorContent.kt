@@ -28,6 +28,7 @@ import essentials.*
 import essentials.compose.*
 import essentials.ui.systembars.LocalZIndex
 import injekt.Provide
+import kotlinx.coroutines.flow.filter
 import soup.compose.material.motion.animation.materialSharedAxisXIn
 import soup.compose.material.motion.animation.materialSharedAxisXOut
 import soup.compose.material.motion.animation.rememberSlideDistance
@@ -58,28 +59,19 @@ import kotlin.collections.set
 
   navigator.backStack.fastForEachIndexed { index, screen ->
     key(screen) {
-      screenStates[screen] = rememberScreenState(screen, navigator, navigationComponent)
+      val screenState = rememberScreenState(screen, navigator, navigationComponent)
+      screenStates[screen] = screenState
+
+      LaunchedEffect(screenState) {
+        snapshotFlow { screenState.scope.isDisposed }
+          .filter { it }
+          .collect { screenStates.remove(screen) }
+      }
 
       key(index) {
         BackHandler(enabled = handleBack && index > 0, onBack = action {
           navigator.pop(screen)
         })
-      }
-    }
-  }
-
-  // clean up removed states
-  screenStates.forEach { (screen, screenState) ->
-    key(screenState) {
-      DisposableEffect(true) {
-        screenState.scope.addObserver(
-          object : ScopeObserver<Any> {
-            override fun onExit(scope: Scope<Any>) {
-              screenStates.remove(screen)
-            }
-          }
-        )
-        onDispose {  }
       }
     }
   }

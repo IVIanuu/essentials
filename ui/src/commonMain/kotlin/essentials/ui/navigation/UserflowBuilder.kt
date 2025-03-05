@@ -4,6 +4,7 @@
 
 package essentials.ui.navigation
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.util.fastFlatMap
 import essentials.*
 import essentials.app.*
@@ -15,18 +16,20 @@ fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
   suspend fun createUserflow(): List<Screen<*>>
 }
 
-@Provide fun userflowBuilderWorker(
+@Provide fun userflowBuilderComposition(
   records: List<ExtensionPointRecord<UserflowBuilder>>,
   logger: Logger,
   navigator: Navigator
-) = ScopeWorker<UiScope> {
-  val userflowScreens = records
-    .sortedWithLoadingOrder()
-    .fastFlatMap { it.instance.createUserflow() }
+) = ScopeComposition<UiScope> {
+  LaunchedEffect(true) {
+    val userflowScreens = records
+      .sortedWithLoadingOrder()
+      .fastFlatMap { it.instance.createUserflow() }
 
-  logger.d { "Userflow -> $userflowScreens" }
+    logger.d { "Userflow -> $userflowScreens" }
 
-  if (userflowScreens.isEmpty()) return@ScopeWorker
+    if (userflowScreens.isEmpty()) return@LaunchedEffect
 
-  navigator.setBackStack(backStack = navigator.backStack + userflowScreens)
+    navigator.setBackStack(backStack = navigator.backStack + userflowScreens)
+  }
 }

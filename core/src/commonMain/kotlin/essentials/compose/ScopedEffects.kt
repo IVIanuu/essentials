@@ -29,7 +29,7 @@ import kotlinx.coroutines.*
   vararg keys: Any?,
   block: suspend CoroutineScope.() -> Unit
 ) {
-  val coroutineScope = scopedCoroutineScope
+  val coroutineScope = LocalScope.current.coroutineScope
   rememberScoped(keys = keys) {
     object : RememberObserver {
       private var job: Job? = null

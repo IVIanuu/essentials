@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.*
 @Provide object DummyPremiumVersionManager : PremiumVersionManager {
   override val isPremiumVersion = MutableStateFlow(true)
 
-  override val premiumSkuDetails: Flow<SkuDetails>
-    get() = flow { awaitCancellation() }
+  override suspend fun getPremiumSkuDetails(): SkuDetails =
+    awaitCancellation()
 
   override suspend fun consumePremiumVersion(): Boolean = false
 

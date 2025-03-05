@@ -25,11 +25,11 @@ import injekt.*
 import injekt.Tag
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.serialization.*
 
 interface PremiumVersionManager {
-  val premiumSkuDetails: Flow<SkuDetails>
   val isPremiumVersion: Flow<Boolean>
+
+  suspend fun getPremiumSkuDetails(): SkuDetails
 
   suspend fun purchasePremiumVersion(): Boolean
 
@@ -50,9 +50,6 @@ interface PremiumVersionManager {
   private val scope: ScopedCoroutineScope<AppScope>,
   private val toaster: Toaster
 ) : PremiumVersionManager {
-  override val premiumSkuDetails: Flow<SkuDetails> =
-    flow { emit(billingManager.getSkuDetails(premiumVersionSku)!!) }
-
   override val isPremiumVersion = moleculeFlow {
     val isPremiumVersion = (oldPremiumVersionSkus + premiumVersionSku)
       .fastMap {
@@ -74,6 +71,9 @@ interface PremiumVersionManager {
   }
     .filterNotNull()
     .shareIn(scope, SharingStarted.Eagerly, 1)
+
+  override suspend fun getPremiumSkuDetails(): SkuDetails =
+    billingManager.getSkuDetails(premiumVersionSku)!!
 
   override suspend fun purchasePremiumVersion() =
     billingManager.purchase(premiumVersionSku, true, true)

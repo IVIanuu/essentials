@@ -6,6 +6,7 @@ package essentials
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastForEach
+import essentials.compose.launchMolecule
 import injekt.*
 import injekt.common.*
 import kotlinx.atomicfu.locks.*
@@ -16,48 +17,45 @@ import kotlin.reflect.*
 @Stable @Provide class Scope<N : Any>(
   val name: KClass<N>,
   val parent: @ParentScope Scope<*>? = null,
-  observers: (Scope<N>, @ParentScope Scope<*>?) -> List<ExtensionPointRecord<ScopeObserver<N>>>,
-  services: (Scope<N>, @ParentScope Scope<*>?) -> List<ProvidedService<N, *>>
+  config: (Scope<N>, @ParentScope Scope<*>?) -> ScopeConfig<N>
 ) : SynchronizedObject() {
-  @PublishedApi internal var _isDisposed = false
-  val isDisposed: Boolean
-    get() = synchronized(this) { _isDisposed }
+  var isDisposed by mutableStateOf(false)
+    private set
 
   @PublishedApi internal val cache = hashMapOf<Any, Any?>()
-  private val observers = mutableListOf<ScopeObserver<*>>()
 
-  private val services: Map<KClass<*>, ProvidedService<*, *>>? = run {
-    val providedServices = services(this@Scope, this@Scope)
-    if (providedServices.isEmpty()) null
-    else buildMap {
-      for (providedService in providedServices)
-        this[providedService.key] = providedService
-    }
-  }
+  private val services: Map<KClass<*>, ProvidedService<*, *>>?
 
   var children by mutableStateOf(emptySet<Scope<*>>())
     private set
 
   init {
     parent?.registerChild(this)
-    observers(this@Scope, this@Scope)
-      .sortedWithLoadingOrder()
-      .fastForEach { addObserver(it.instance) }
-  }
 
-  fun addObserver(observer: ScopeObserver<*>): Disposable {
-    if (isDisposed) return Disposable {}
-
-    synchronized(observers) {
-      if (observer in observers) return Disposable {}
-      observers += observer
+    val config = config(this@Scope, this@Scope)
+    services = if (config.services.isEmpty()) null
+    else hashMapOf<KClass<*>, ProvidedService<*, *>>().apply {
+      for (providedService in config.services)
+        this[providedService.key] = providedService
     }
 
-    observer.cast<ScopeObserver<N>>().onEnter(this)
+    config.initializers
+      .sortedWithLoadingOrder()
+      .fastForEach { it.instance.initialize() }
 
-    return Disposable {
-      observer.cast<ScopeObserver<N>>().onExit(this)
-      synchronized(observers) { observers -= observer }
+    val compositions = config.compositions()
+    if (compositions.isNotEmpty()) {
+      compositions
+        .sortedWithLoadingOrder()
+        .let { compositions ->
+          coroutineScope.launchMolecule {
+            compositions.fastForEach {
+              key(it.key) {
+                it.instance.Content()
+              }
+            }
+          }
+        }
     }
   }
 
@@ -72,14 +70,7 @@ import kotlin.reflect.*
     cache[key]?.let { if (it !== NULL) return it.unsafeCast() }
     return synchronized(cache) {
       checkDisposed()
-      val value = cache.getOrPut(key) {
-        compute()
-          .also {
-            if (it is ScopeObserver<*>)
-              addObserver(it)
-          }
-          ?: NULL
-      }
+      val value = cache.getOrPut(key) { compute() ?: NULL }
       (if (value !== NULL) value else null).unsafeCast()
     }
   }
@@ -89,19 +80,12 @@ import kotlin.reflect.*
 
   fun dispose() {
     synchronized(this) {
-      if (!_isDisposed) {
+      if (!isDisposed) {
         children.forEach { it.dispose() }
 
-        _isDisposed = true
+        isDisposed = true
 
         parent?.unregisterChild(this)
-
-        synchronized(observers) {
-          observers.toList()
-            .also { observers.clear() }
-        }.fastForEach {
-          it.cast<ScopeObserver<N>>().onExit(this)
-        }
 
         synchronized(cache) {
           cache.values.toList()
@@ -123,13 +107,19 @@ import kotlin.reflect.*
   }
 
   @PublishedApi internal fun checkDisposed() {
-    check(!_isDisposed) { "Cannot use a disposed scope" }
+    check(!isDisposed) { "Cannot use a disposed scope" }
   }
 
   @Provide companion object {
     @PublishedApi internal val NULL = Any()
   }
 }
+
+@Provide data class ScopeConfig<N : Any>(
+  val initializers: List<ExtensionPointRecord<ScopeInitializer<N>>>,
+  val compositions: () -> List<ExtensionPointRecord<ScopeComposition<N>>>,
+  val services: List<ProvidedService<N, *>>
+)
 
 val Scope<*>.allScopes: Set<Scope<*>> get() = buildSet {
   fun Scope<*>.collect() {
@@ -188,18 +178,6 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
   }
 }
 
-@Stable interface ScopeObserver<N : Any> : ExtensionPoint<ScopeObserver<N>> {
-  fun onEnter(scope: Scope<N>) {
-  }
-
-  fun onExit(scope: Scope<N>) {
-  }
-
-  @Provide companion object {
-    @Provide fun <N : Any> defaultObservers() = emptyList<ScopeObserver<N>>()
-  }
-}
-
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
 annotation class Scoped<N> {
   @Provide companion object {
@@ -244,18 +222,18 @@ annotation class Eager<N : Any> {
   @Provide companion object {
     @Provide fun <@AddOn T : @Eager<N> S, S : Any, N : Any> scoped(value: T): @Scoped<N> S = value
 
-    @Provide inline fun <@AddOn T : @Eager<N> S, S : Any, N : Any> observer(
-      key: KClass<S>,
+    @Provide inline fun <@AddOn T : @Eager<N> S, S : Any, N : Any> initializer(
       crossinline factory: () -> S
-    ): ScopeObserver<N> = object : ScopeObserver<N> {
-      override fun onEnter(scope: Scope<N>) {
-        factory()
-      }
-    }
+    ): ScopeInitializer<N> = ScopeInitializer { factory() }
   }
 }
 
 val LocalScope = compositionLocalOf<Scope<*>> { error("No provided scope") }
 
-val scopedCoroutineScope: CoroutineScope
-  @Composable get() = LocalScope.current.coroutineScope
+fun interface ScopeInitializer<N : Any> : ExtensionPoint<ScopeInitializer<N>> {
+  fun initialize()
+}
+
+fun interface ScopeComposition<N : Any> : ExtensionPoint<ScopeComposition<N>> {
+  @Composable fun Content()
+}

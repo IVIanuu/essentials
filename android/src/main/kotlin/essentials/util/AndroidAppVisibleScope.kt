@@ -5,6 +5,7 @@
 package essentials.util
 
 import androidx.activity.*
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.*
 import essentials.*
 import essentials.app.*
@@ -15,12 +16,14 @@ import injekt.*
 @Provide fun appVisibleScopeWorker(
   appVisibleScopeFactory: () -> Scope<AppVisibleScope>,
   activity: ComponentActivity
-) = ScopeWorker<UiScope> worker@ {
+) = ScopeComposition<UiScope> worker@ {
   if (activity is EsActivity)
-    activity.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-      bracketCase(
-        acquire = { appVisibleScopeFactory() },
-        release = { scope, _ -> scope.dispose() }
-      )
+    LaunchedEffect(true) {
+      activity.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        bracketCase(
+          acquire = { appVisibleScopeFactory() },
+          release = { scope, _ -> scope.dispose() }
+        )
+      }
     }
 }

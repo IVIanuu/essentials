@@ -146,44 +146,46 @@ fun interface Worker<I : WorkId> {
   logger: Logger,
   schedules: Map<String, PeriodicWorkSchedule<*>>,
   androidWorkManager: androidx.work.WorkManager,
-) = ScopeWorker<AppScope> {
-  withContext(coroutineContexts.computation) {
-    schedules.forEach { (workId, schedule) ->
-      val existingWork = androidWorkManager.getWorkInfosForUniqueWork(
-        workId
-      ).await()
+) = ScopeComposition<AppScope> {
+  LaunchedEffect(true) {
+    withContext(coroutineContexts.computation) {
+      schedules.forEach { (workId, schedule) ->
+        val existingWork = androidWorkManager.getWorkInfosForUniqueWork(
+          workId
+        ).await()
 
-      val scheduleHash = SCHEDULE_HASH_PREFIX + schedule.toString().hashCode()
+        val scheduleHash = SCHEDULE_HASH_PREFIX + schedule.toString().hashCode()
 
-      if (!existingWork.fastAny { existing ->
-          (existing.state == WorkInfo.State.ENQUEUED ||
-              existing.state == WorkInfo.State.RUNNING) &&
-              existing.tags.any { it == scheduleHash }
-        }) {
-        logger.d { "enqueue work $workId with $schedule" }
+        if (!existingWork.fastAny { existing ->
+            (existing.state == WorkInfo.State.ENQUEUED ||
+                existing.state == WorkInfo.State.RUNNING) &&
+                existing.tags.any { it == scheduleHash }
+          }) {
+          logger.d { "enqueue work $workId with $schedule" }
 
-        androidWorkManager.enqueueUniquePeriodicWork(
-          workId,
-          ExistingPeriodicWorkPolicy.UPDATE,
-          PeriodicWorkRequestBuilder<EsWorker>(schedule.interval.toJavaDuration())
-            .setConstraints(
-              Constraints.Builder()
-                .setRequiresCharging(schedule.constraints.requiresCharging)
-                .setRequiredNetworkType(
-                  when (schedule.constraints.networkType) {
-                    WorkConstraints.NetworkType.ANY -> NetworkType.NOT_REQUIRED
-                    WorkConstraints.NetworkType.CONNECTED -> NetworkType.CONNECTED
-                    WorkConstraints.NetworkType.UNMETERED -> NetworkType.UNMETERED
-                  }
-                )
-                .build()
-            )
-            .setInputData(workDataOf(WORK_ID to workId))
-            .addTag(scheduleHash)
-            .build()
-        )
-      } else {
-        logger.d { "do not reenqueue work $workId with $schedule" }
+          androidWorkManager.enqueueUniquePeriodicWork(
+            workId,
+            ExistingPeriodicWorkPolicy.UPDATE,
+            PeriodicWorkRequestBuilder<EsWorker>(schedule.interval.toJavaDuration())
+              .setConstraints(
+                Constraints.Builder()
+                  .setRequiresCharging(schedule.constraints.requiresCharging)
+                  .setRequiredNetworkType(
+                    when (schedule.constraints.networkType) {
+                      WorkConstraints.NetworkType.ANY -> NetworkType.NOT_REQUIRED
+                      WorkConstraints.NetworkType.CONNECTED -> NetworkType.CONNECTED
+                      WorkConstraints.NetworkType.UNMETERED -> NetworkType.UNMETERED
+                    }
+                  )
+                  .build()
+              )
+              .setInputData(workDataOf(WORK_ID to workId))
+              .addTag(scheduleHash)
+              .build()
+          )
+        } else {
+          logger.d { "do not reenqueue work $workId with $schedule" }
+        }
       }
     }
   }

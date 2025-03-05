@@ -12,7 +12,6 @@ import coil.intercept.*
 import coil.key.*
 import coil.map.*
 import essentials.*
-import essentials.app.ScopeInitializer
 import essentials.coroutines.*
 import injekt.*
 import kotlinx.coroutines.*

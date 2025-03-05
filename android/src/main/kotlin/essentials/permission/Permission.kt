@@ -56,8 +56,8 @@ fun interface PermissionRequestHandler<P : Permission> {
 
 internal val permissionRefreshes = EventFlow<Unit>()
 
-@Provide fun permissionRefreshesWorker() = ScopeWorker<UiScope> {
-  permissionRefreshes.emit(Unit)
+@Provide fun permissionRefreshesWorker() = ScopeInitializer<UiScope> {
+  permissionRefreshes.tryEmit(Unit)
 }
 
 private fun <P : Permission> PermissionRequestHandler<P>.intercept() = PermissionRequestHandler<P> {
@@ -92,11 +92,13 @@ interface PermissionRevokeHandler {
 @Provide fun permissionRevokeWorker(
   handlers: List<PermissionRevokeHandler>,
   permissionManager: PermissionManager
-) = ScopeWorker<UiScope> {
-  handlers.parMap { handler ->
-    val revokedPermissions = handler.permissions
-      .fastFilter { !permissionManager.permissionState(listOf(it)).first() }
-    if (revokedPermissions.isNotEmpty())
-      handler.onPermissionRevoked(revokedPermissions)
+) = ScopeComposition<UiScope> {
+  LaunchedEffect(true) {
+    handlers.parMap { handler ->
+      val revokedPermissions = handler.permissions
+        .fastFilter { !permissionManager.permissionState(listOf(it)).first() }
+      if (revokedPermissions.isNotEmpty())
+        handler.onPermissionRevoked(revokedPermissions)
+    }
   }
 }

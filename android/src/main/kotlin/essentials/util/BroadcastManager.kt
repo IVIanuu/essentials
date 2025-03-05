@@ -44,43 +44,15 @@ import kotlin.time.Duration.Companion.milliseconds
 }
 
 @Provide @AndroidComponent class EsBroadcastReceiver(
-  private val appScope: Scope<AppScope>,
   private val broadcastManager: BroadcastManager,
-  private val broadcastScopeFactory: (@Service<BroadcastScope> Intent) -> Scope<BroadcastScope>,
-  private val logger: Logger
+  private val logger: Logger,
+  private val scope: ScopedCoroutineScope<AppScope>
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     logger.d { "on receive $intent" }
-    val broadcastScope = broadcastScopeFactory(intent)
-    broadcastScope.coroutineScope.launch {
-      try {
-        val broadcastWorkerManager = broadcastScope.service<ScopeWorkerManager<BroadcastScope>>()
-
-        par(
-          {
-            snapshotFlow { appScope.service<ScopeWorkerManager<AppScope>>().state }.first {
-              it != ScopeWorkerManager.State.IDLE
-            }
-          },
-          {
-            snapshotFlow { broadcastWorkerManager.state }.first {
-              it != ScopeWorkerManager.State.IDLE
-            }
-          }
-        )
-
-        // todo find a better way
-        delay(100.milliseconds)
-
-        broadcastManager.explicitBroadcasts.emit(intent)
-
-        snapshotFlow { broadcastWorkerManager.state }
-          .first { it == ScopeWorkerManager.State.COMPLETED }
-      } finally {
-        broadcastScope.dispose()
-      }
+    scope.launch {
+      delay(100)
+      broadcastManager.explicitBroadcasts.emit(intent)
     }
   }
 }
-
-data object BroadcastScope

@@ -56,8 +56,7 @@ class GoPremiumScreen(
       toaster: Toaster
     ) = Ui<GoPremiumScreen> {
       val premiumSkuDetails by produceScopedState(Resource.Idle()) {
-        premiumVersionManager.premiumSkuDetails
-          .flowAsResource()
+        resourceFlow { emit(premiumVersionManager.getPremiumSkuDetails()) }
           .collect { value = it }
       }
       val goPremium = scopedAction {
