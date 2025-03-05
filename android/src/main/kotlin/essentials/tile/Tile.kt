@@ -15,7 +15,7 @@ import essentials.logging.Logger
 import injekt.*
 
 abstract class EsTileService : TileService() {
-  @Composable abstract fun state(): TileState
+  @Composable protected abstract fun state(): TileState
 
   private var currentOnClick: (() -> Unit)? = null
 
