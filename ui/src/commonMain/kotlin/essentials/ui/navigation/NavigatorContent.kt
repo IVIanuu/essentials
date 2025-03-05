@@ -71,10 +71,12 @@ import kotlin.collections.set
   }
 
   screenStates.forEach { (screen, screenState) ->
-    LaunchedEffect(screenState) {
-      snapshotFlow { screenState.scope.isDisposed }
-        .filter { it }
-        .collect { screenStates.remove(screen) }
+    key(screen) {
+      LaunchedEffect(screenState) {
+        snapshotFlow { screenState.scope.isDisposed }
+          .filter { it }
+          .collect { screenStates.remove(screen) }
+      }
     }
   }
 
