@@ -8,6 +8,9 @@ import android.content.*
 import android.provider.*
 import android.view.*
 import androidx.compose.material3.*
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.compose.runtime.*
 import essentials.*
 import essentials.apps.*
 import essentials.compose.*
@@ -17,33 +20,19 @@ import essentials.ui.material.*
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.flow.*
-import kotlinx.serialization.*
 
 @Provide class MediaActionSender(
   private val appContext: AppContext,
-  private val pref: DataStore<MediaActionPrefs>
+  private val preferencesStore: DataStore<Preferences>
 ) {
   suspend fun sendMediaAction(keycode: Int) {
-    val currentPrefs = pref.data.first()
+    val mediaApp = preferencesStore.data.first()[MediaActionAppKey]
     fun mediaIntentFor(keyEvent: Int) = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
-      putExtra(
-        Intent.EXTRA_KEY_EVENT,
-        KeyEvent(keyEvent, keycode)
-      )
-
-      val mediaApp = currentPrefs.mediaApp
-      if (mediaApp != null) {
-        `package` = mediaApp
-      }
+      putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent(keyEvent, keycode))
+      if (mediaApp != null) `package` = mediaApp
     }
     appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN), null)
     appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP), null)
-  }
-}
-
-@Serializable data class MediaActionPrefs(val mediaApp: String? = null) {
-  @Provide companion object {
-    @Provide val dataStoreModule = DataStoreModule("media_action_prefs") { MediaActionPrefs() }
   }
 }
 
@@ -53,7 +42,7 @@ class MediaActionSettingsScreen : Screen<Unit> {
       appRepository: AppRepository,
       navigator: Navigator,
       intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
-      pref: DataStore<MediaActionPrefs>
+      preferencesStore: DataStore<Preferences>
     ) = Ui<MediaActionSettingsScreen> {
       EsScaffold(topBar = { EsAppBar { Text("Media action settings") } }) {
         EsLazyColumn {
@@ -66,12 +55,20 @@ class MediaActionSettingsScreen : Screen<Unit> {
                   )
                 )
                 if (newMediaApp != null)
-                  pref.updateData { copy(mediaApp = newMediaApp.packageName) }
+                  preferencesStore.edit { this[MediaActionAppKey] = newMediaApp.packageName }
               },
               headlineContent = { Text("Media app") },
               supportingContent = {
-                val mediaAppName = pref.data.collectAsScopedState(null).value?.mediaApp
-                  ?.let { appRepository.appInfo(it).collectAsScopedState(null).value?.appName }
+                val mediaAppName by produceScopedState(nullOf()) {
+                  preferencesStore.data
+                    .map { it[MediaActionAppKey] }
+                    .flatMapLatest {
+                      if (it == null) flowOf(null)
+                      else appRepository.appInfo(it).map { it?.appName }
+                    }
+                    .collect { value = it }
+                }
+
                 Text(
                   "Define the target app for the media actions (current: ${mediaAppName ?: "None"})"
                 )
@@ -83,3 +80,5 @@ class MediaActionSettingsScreen : Screen<Unit> {
     }
   }
 }
+
+private val MediaActionAppKey = stringPreferencesKey("media_action_app")

@@ -6,6 +6,8 @@ package essentials.ads
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastFilter
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.intPreferencesKey
 import essentials.ScopeComposition
 import essentials.app.*
 import essentials.data.*
@@ -24,12 +26,6 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   }
 }
 
-@Serializable data class ScreenLaunchPrefs(val screenLaunchCount: Int = 0) {
-  @Provide companion object {
-    @Provide val dataStoreModule = DataStoreModule("screen_launch_prefs") { ScreenLaunchPrefs() }
-  }
-}
-
 @Provide fun screenLaunchFullScreenObserver(
   adsEnabledProducer: AdsEnabledProducer,
   adFeatureRepository: AdFeatureRepository,
@@ -37,23 +33,27 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   fullScreenAdManager: FullScreenAdManager,
   logger: Logger,
   navigator: Navigator,
-  pref: DataStore<ScreenLaunchPrefs>
+  preferencesStore: DataStore<Preferences>
 ) = ScopeComposition<UiScope> {
   if (adsEnabledProducer.adsEnabled())
     LaunchedEffect(true) {
       navigator.launchEvents(adFeatureRepository).collectLatest {
-        val launchCount = pref
-          .updateData { copy(screenLaunchCount = screenLaunchCount + 1) }
-          .screenLaunchCount
+        val launchCount = preferencesStore
+          .edit {
+            this[FullScreenAdScreenLaunchCount] =
+              (this[FullScreenAdScreenLaunchCount]?.inc() ?: 1)
+          }[FullScreenAdScreenLaunchCount]!!
         logger.d { "screen launched $launchCount" }
         if (launchCount >= config.screenLaunchToShowAdCount) {
           logger.d { "try to show full screen ad $launchCount" }
           if (fullScreenAdManager.showAd())
-            pref.updateData { copy(screenLaunchCount = 0) }
+            preferencesStore.edit { this[FullScreenAdScreenLaunchCount] = 0 }
         }
       }
     }
 }
+
+private val FullScreenAdScreenLaunchCount = intPreferencesKey("full_screen_ad_screen_launch_count")
 
 private fun Navigator.launchEvents(adFeatureRepository: AdFeatureRepository): Flow<Screen<*>> {
   var lastBackStack = backStack
