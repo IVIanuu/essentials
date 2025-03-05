@@ -38,7 +38,7 @@ class ColorPickerScreen(
   val title: String? = null,
   val allowCustomArgb: Boolean = true,
   val showAlphaSelector: Boolean = false,
-) : DialogScreen<Color> {
+) : OverlayScreen<Color> {
   @Provide companion object {
     @Provide fun ui(
       navigator: Navigator,
@@ -51,36 +51,11 @@ class ColorPickerScreen(
         ColorPickerTab.EDITOR -> ColorPickerTab.COLORS
       }
 
+      EsModalBottomSheet(onDismissRequest = action { navigator.pop(screen, currentColor) }) {
+        if (screen.title != null)
+          Subheader { Text(screen.title) }
 
-      Dialog(
-        title = screen.title?.let { { Text(it) } },
-        content = {
-          AnimatedContent(
-            modifier = Modifier.height(300.dp)
-              .padding(start = 24.dp, end = 24.dp),
-            targetState = currentScreen
-          ) { currentScreen ->
-            when (currentScreen) {
-              ColorPickerTab.COLORS -> {
-                ColorGrid(
-                  modifier = Modifier.fillMaxSize(),
-                  currentColor = currentColor,
-                  colors = screen.colorPalettes,
-                  onColorSelected = { currentColor = it }
-                )
-              }
-              ColorPickerTab.EDITOR -> {
-                ColorEditor(
-                  modifier = Modifier.fillMaxSize(),
-                  color = currentColor,
-                  onColorChanged = { currentColor = it },
-                  showAlphaSelector = screen.showAlphaSelector
-                )
-              }
-            }
-          }
-        },
-        buttons = {
+        Row {
           if (screen.allowCustomArgb) {
             TextButton(
               onClick = { currentScreen = otherScreen },
@@ -96,17 +71,35 @@ class ColorPickerScreen(
               )
             }
           }
-
-          TextButton(onClick = scopedAction { navigator.pop(screen) }) { Text("Cancel") }
-
-          TextButton(
-            onClick = scopedAction { navigator.pop(screen, currentColor) },
-            colors = ButtonDefaults.textButtonColors(
-              contentColor = currentColor
-            )
-          ) { Text("OK") }
         }
-      )
+
+        AnimatedContent(
+          modifier = Modifier
+            .height(300.dp)
+            .padding(start = 24.dp, end = 24.dp),
+          targetState = currentScreen
+        ) { currentScreen ->
+          when (currentScreen) {
+            ColorPickerTab.COLORS -> {
+              ColorGrid(
+                modifier = Modifier.fillMaxSize(),
+                currentColor = currentColor,
+                colors = screen.colorPalettes,
+                onColorSelected = { currentColor = it }
+              )
+            }
+
+            ColorPickerTab.EDITOR -> {
+              ColorEditor(
+                modifier = Modifier.fillMaxSize(),
+                color = currentColor,
+                onColorChanged = { currentColor = it },
+                showAlphaSelector = screen.showAlphaSelector
+              )
+            }
+          }
+        }
+      }
     }
 
     private val NoPalette = Any()
@@ -131,7 +124,8 @@ class ColorPickerScreen(
         }
 
         BoxWithConstraints(
-          modifier = Modifier.padding(all = 4.dp)
+          modifier = Modifier
+            .padding(all = 4.dp)
             .then(modifier)
         ) {
           LazyColumn {
@@ -212,7 +206,8 @@ class ColorPickerScreen(
       BaseColorGridItem(onClick = onClick) {
         val shape = RoundedCornerShape(50)
         Box(
-          modifier = Modifier.fillMaxSize()
+          modifier = Modifier
+            .fillMaxSize()
             .background(color, shape)
             .border(
               BorderStroke(
@@ -344,7 +339,9 @@ class ColorPickerScreen(
       onValueChanged: (Float) -> Unit
     ) {
       Row(
-        modifier = Modifier.height(48.dp).fillMaxWidth(),
+        modifier = Modifier
+          .height(48.dp)
+          .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
       ) {
         Text(
@@ -362,7 +359,8 @@ class ColorPickerScreen(
           Slider(
             value = value,
             onValueChange = onValueChanged,
-            modifier = Modifier.padding(horizontal = 8.dp)
+            modifier = Modifier
+              .padding(horizontal = 8.dp)
               .weight(1f)
           )
         }

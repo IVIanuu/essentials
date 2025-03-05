@@ -12,15 +12,11 @@ import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEach
 import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import essentials.ui.overlay.*
-import essentials.ui.prefs.CheckboxListItem
-import essentials.ui.prefs.RadioListItem
-import essentials.util.*
 import injekt.*
 
 class TestSharedElementScreen : OverlayScreen<Unit>
@@ -55,10 +51,7 @@ class TestSharedElementScreen : OverlayScreen<Unit>
 
 class DialogsScreen : Screen<Unit> {
   @Provide companion object {
-    @Provide fun ui(
-      navigator: Navigator,
-      toaster: Toaster
-    ) = Ui<DialogsScreen> {
+    @Provide fun ui(navigator: Navigator) = Ui<DialogsScreen> {
       EsScaffold(topBar = { EsAppBar { Text("Dialogs") } }) {
         EsLazyColumn(
           modifier = Modifier.fillMaxSize(),
@@ -71,19 +64,12 @@ class DialogsScreen : Screen<Unit> {
             Button(
               onClick = scopedAction {
                 navigator.push(
-                  BottomSheetScreen {
-                    items.fastForEach { item ->
-                      RadioListItem(
-                        value = item == selected,
-                        onValueChange = {
-                          selected = item
-                          dismiss()
-                        },
-                        headlineContent = { Text(item.toString()) }
-                      )
-                    }
-                  }
+                  SingleChoiceListScreen(
+                    items = items,
+                    selected = selected
+                  ) { it.toString() }
                 )
+                  ?.let { selected = it }
               }
             ) {
               Text("Single choice")
@@ -95,19 +81,12 @@ class DialogsScreen : Screen<Unit> {
             Button(
               onClick = action {
                 navigator.push(
-                  BottomSheetScreen {
-                    items.fastForEach { item ->
-                      CheckboxListItem(
-                        value = item in selected,
-                        onValueChange = {
-                          if (it) selected += item
-                          else selected -= item
-                        },
-                        headlineContent = { Text(item) }
-                      )
-                    }
-                  }
+                  MultiChoiceListScreen(
+                    items = items,
+                    selected = selected
+                  )
                 )
+                  ?.let { selected = it }
               }
             ) { Text("Multi choice") }
           }
@@ -132,22 +111,6 @@ class DialogsScreen : Screen<Unit> {
                     initial = current
                   )
                 )?.let { current = it }
-              }
-            ) { Text("Text") }
-          }
-          item {
-            Button(
-              modifier = with(LocalScreenAnimationScope.current) {
-                Modifier
-                  .sharedElement(
-                    rememberSharedContentState("key"),
-                    this
-                  )
-              },
-              onClick = action {
-                navigator.push(
-                  TestSharedElementScreen()
-                )
               }
             ) { Text("Text") }
           }
