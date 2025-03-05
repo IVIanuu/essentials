@@ -47,7 +47,7 @@ class SystemWindowScreen : Screen<Unit> {
           modifier = Modifier.center(),
           onClick = {
             scope.launch {
-              if (permissionManager.requestPermissions(listOf(SampleSystemOverlayPermission::class)))
+              if (permissionManager.ensurePermissions(listOf(SampleSystemOverlayPermission::class)))
                 showSystemWindow = true
             }
           }

@@ -82,7 +82,7 @@ import kotlinx.coroutines.flow.*
       if (!permissionManager.permissionState(action.permissions).first()) {
         logger.d { "didn't had permissions for $id ${action.permissions}" }
         deviceScreenManager.unlockScreen()
-        permissionManager.requestPermissions(action.permissions)
+        permissionManager.ensurePermissions(action.permissions)
         return@catch false
       }
 

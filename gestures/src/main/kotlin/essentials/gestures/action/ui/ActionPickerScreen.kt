@@ -73,7 +73,7 @@ class ActionPickerScreen(
                     ?: return@scopedAction
                   if (result is Result.Action) {
                     val action = repository.getAction(result.actionId)
-                    if (!permissionManager.requestPermissions(action.permissions))
+                    if (!permissionManager.ensurePermissions(action.permissions))
                       return@scopedAction
                   }
                   navigator.pop(screen, result)

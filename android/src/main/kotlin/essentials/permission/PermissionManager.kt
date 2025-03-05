@@ -48,8 +48,8 @@ import kotlin.reflect.*
       ?.fastAll { it == true }
   }.filterNotNull()
 
-  suspend fun requestPermissions(permissions: List<KClass<out Permission>>): Boolean {
-    logger.d { "request permissions $permissions" }
+  suspend fun ensurePermissions(permissions: List<KClass<out Permission>>): Boolean {
+    logger.d { "ensure permissions $permissions" }
 
     val result = permissions.fastAll { permissionState(listOf(it)).first() } || run {
       appUiStarter.startAppUi()
@@ -59,7 +59,7 @@ import kotlin.reflect.*
         .push(PermissionRequestScreen(permissions)) == true
     }
 
-    logger.d { "request permissions result $permissions -> $result" }
+    logger.d { "ensure permissions result $permissions -> $result" }
     return result
   }
 }

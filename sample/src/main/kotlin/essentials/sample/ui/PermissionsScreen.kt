@@ -32,7 +32,7 @@ class PermissionsScreen : Screen<Unit> {
         Button(
           modifier = Modifier.center(),
           onClick = scopedAction {
-            permissionManager.requestPermissions(permissions.fastMap { it::class })
+            permissionManager.ensurePermissions(permissions.fastMap { it::class })
           }
         ) {
           Text("Request")
