@@ -37,13 +37,7 @@ import java.io.*
       closeSystemDialogs = true,
       enabled = true,
       permissions = listOf(ActionSystemOverlayPermission::class),
-      icon = {
-        Image(
-          modifier = LocalActionImageSizeModifier.current,
-          bitmap = icon,
-          contentDescription = null
-        )
-      }
+      icon = { Image(bitmap = icon, contentDescription = null) }
     )
   }
 

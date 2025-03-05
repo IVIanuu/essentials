@@ -19,7 +19,7 @@ import kotlin.reflect.*
   val closeSystemDialogs: Boolean = false,
   val turnScreenOn: Boolean = false,
   val enabled: Boolean = true,
-  val icon: ActionIcon
+  val icon: @Composable () -> Unit
 ) {
   constructor(
     id: I,
@@ -29,12 +29,8 @@ import kotlin.reflect.*
     closeSystemDialogs: Boolean = false,
     turnScreenOn: Boolean = false,
     enabled: Boolean = true,
-    icon: ActionIcon
+    icon: @Composable () -> Unit
   ) : this(id.value, title, permissions, unlockScreen, closeSystemDialogs, turnScreenOn, enabled, icon)
-}
-
-fun interface ActionIcon {
-  @Composable fun Content()
 }
 
 abstract class ActionId(val value: String)

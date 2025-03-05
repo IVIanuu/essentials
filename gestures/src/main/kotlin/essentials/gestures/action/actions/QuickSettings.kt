@@ -9,6 +9,7 @@ import android.accessibilityservice.AccessibilityService.*
 import android.view.accessibility.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
 import arrow.core.*
 import essentials.*
 import essentials.accessibility.*
@@ -21,7 +22,7 @@ import injekt.*
     id = QuickSettingsActionId,
     title = "Quick settings",
     permissions = accessibilityActionPermissions,
-    icon = staticActionIcon(Icons.Default.Settings)
+    icon = { Icon(Icons.Default.Settings, null) }
   )
 
   @Provide fun executor(

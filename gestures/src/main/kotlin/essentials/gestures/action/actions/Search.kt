@@ -7,6 +7,7 @@ package essentials.gestures.action.actions
 import android.content.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
 import essentials.gestures.action.*
 import injekt.*
 
@@ -15,8 +16,8 @@ import injekt.*
     get() = Action(
       id = SearchActionId,
       title = "Search",
-      icon = staticActionIcon(Icons.Default.Search),
-      permissions = listOf(ActionSystemOverlayPermission::class)
+      permissions = listOf(ActionSystemOverlayPermission::class),
+      icon = { Icon(Icons.Default.Search, null) }
     )
 
   @Provide fun executor(intentSender: ActionIntentSender) =

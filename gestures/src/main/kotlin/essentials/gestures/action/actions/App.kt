@@ -9,6 +9,7 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import coil.compose.AsyncImage
 import essentials.apps.*
 import essentials.gestures.action.*
 import essentials.gestures.action.ui.*
@@ -33,7 +34,7 @@ import kotlinx.coroutines.flow.*
       closeSystemDialogs = true,
       enabled = true,
       permissions = listOf(ActionSystemOverlayPermission::class),
-      icon = staticActionImage(AppIcon(packageName))
+      icon = { AsyncImage(AppIcon(packageName), null) }
     )
   }
 

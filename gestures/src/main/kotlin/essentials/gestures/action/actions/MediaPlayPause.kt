@@ -7,6 +7,7 @@ package essentials.gestures.action.actions
 import android.view.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
 import essentials.gestures.action.*
 import essentials.ui.navigation.*
 import injekt.*
@@ -16,7 +17,7 @@ import injekt.*
     get() = Action(
       id = PlayPauseActionId,
       title = "Media play/Pause",
-      icon = staticActionIcon(Icons.Default.PlayArrow)
+      icon = { Icon(Icons.Default.PlayArrow, null) }
     )
 
   @Provide fun executor(

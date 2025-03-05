@@ -10,6 +10,7 @@ import android.app.*
 import android.content.*
 import android.os.*
 import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.*
 import androidx.compose.ui.res.*
 import arrow.core.*
@@ -20,30 +21,6 @@ import essentials.gestures.action.*
 import essentials.gestures.action.ui.*
 import essentials.util.*
 import injekt.*
-
-fun staticActionImage(data: Any) = ActionIcon {
-  AsyncImage(
-    model = data,
-    modifier = LocalActionImageSizeModifier.current,
-    contentDescription = null
-  )
-}
-
-fun staticActionIcon(icon: ImageVector) = ActionIcon {
-  Icon(
-    imageVector = icon,
-    modifier = LocalActionIconSizeModifier.current,
-    contentDescription = null
-  )
-}
-
-fun staticActionIcon(id: Int) = ActionIcon {
-  Icon(
-    painter = painterResource(id),
-    modifier = LocalActionIconSizeModifier.current,
-    contentDescription = null
-  )
-}
 
 @Provide class ActionIntentSender(
   private val appContext: AppContext,

@@ -5,6 +5,8 @@
 package essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService.*
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
 import essentials.accessibility.*
 import essentials.gestures.R
 import essentials.gestures.action.*
@@ -15,7 +17,7 @@ import injekt.*
     get() = Action(
       id = RecentAppsActionId,
       title = "Recent apps",
-      icon = staticActionIcon(R.drawable.ic_action_recent_apps)
+      icon = { Icon(painterResource(R.drawable.ic_action_recent_apps), null) }
     )
 
   @Provide fun executor(

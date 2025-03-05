@@ -7,6 +7,8 @@ package essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService.*
 import android.content.*
 import android.os.*
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
 import essentials.accessibility.*
 import essentials.gestures.R
 import essentials.gestures.action.*
@@ -19,7 +21,7 @@ import injekt.*
       title = "Home",
       permissions = if (needsHomeIntentWorkaround) emptyList()
       else accessibilityActionPermissions,
-      icon = staticActionIcon(R.drawable.ic_action_home)
+      icon = { Icon(painterResource(R.drawable.ic_action_home), null) }
     )
 
   @Provide fun homeActionExecutor(
