@@ -11,7 +11,7 @@ import essentials.logging.*
 import injekt.*
 import kotlinx.coroutines.flow.*
 
-@Stable @Provide @Scoped<AppScope> class CurrentAppProvider(
+@Stable @Provide @Scoped<AppScope> class CurrentAppProducer(
   accessibilityManager: AccessibilityManager,
   logger: Logger,
   scope: ScopedCoroutineScope<AppScope>

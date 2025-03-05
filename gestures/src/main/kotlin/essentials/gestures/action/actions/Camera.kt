@@ -40,7 +40,7 @@ import kotlin.coroutines.*
     actionIntentSender: ActionIntentSender,
     appScope: Scope<AppScope>,
     cameraManager: @SystemService CameraManager,
-    currentAppProvider: CurrentAppProvider,
+    currentAppProducer: CurrentAppProducer,
     deviceScreenManager: DeviceScreenManager,
     logger: Logger,
     packageManager: PackageManager
@@ -68,7 +68,7 @@ import kotlin.coroutines.*
       (currentScreenState == ScreenState.UNLOCKED ||
           appScope.scopeOfOrNull<AccessibilityScope>()
             ?.accessibilityService?.rootInActiveWindow?.packageName != "com.android.systemui") &&
-      cameraApp.activityInfo!!.packageName == currentAppProvider.currentApp.first()
+      cameraApp.activityInfo!!.packageName == currentAppProducer.currentApp.first()
     )
       suspendCancellableCoroutine<Boolean> { cont ->
         cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
