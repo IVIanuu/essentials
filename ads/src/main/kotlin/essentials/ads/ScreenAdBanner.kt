@@ -28,7 +28,7 @@ annotation class ScreenAdBannerConfigTag {
 typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 
 @Provide class AdBannerScreenDecorator(
-  private val adsEnabledState: State<AdsEnabled>,
+  private val adsEnabledProducer: AdsEnabledProducer,
   private val adFeatureRepository: AdFeatureRepository,
   private val config: @FinalAdConfig ScreenAdBannerConfig,
   private val screen: Screen<*>
@@ -39,12 +39,14 @@ typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
       return
     }
 
+    val adsEnabled by rememberUpdatedState(adsEnabledProducer.adsEnabled())
+
     Column {
       Box(
         modifier = Modifier
           .weight(1f)
           .then(
-            if (adsEnabledState.value.value)
+            if (adsEnabled)
               Modifier.consumeWindowInsets(WindowInsets.navigationBars)
             else Modifier
           )
@@ -52,7 +54,7 @@ typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
         content()
       }
 
-      if (adsEnabledState.value.value)
+      if (adsEnabled)
         Surface(tonalElevation = 8.dp) {
           AdBanner(
             modifier = Modifier.navigationBarsPadding(),

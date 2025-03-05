@@ -113,17 +113,12 @@ annotation class OldPremiumVersionSkuTag {
 }
 typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
-@Provide fun premiumAdsEnabled(
-  premiumVersionManager: PremiumVersionManager,
-  scope: ScopedCoroutineScope<AppScope>
-): @Scoped<AppScope> State<AdsEnabled> {
-  val state = mutableStateOf(AdsEnabled(false))
-  scope.launch {
-    premiumVersionManager.isPremiumVersion
-      .map { AdsEnabled(!it) }
-      .collect { state.value = it }
-  }
-  return state
+@Provide fun premiumAdsEnabledProducer(
+  premiumVersionManager: PremiumVersionManager
+) = AdsEnabledProducer {
+  produceState(false) {
+    premiumVersionManager.isPremiumVersion.collect { value = !it }
+  }.value
 }
 
 private val WasPremiumVersionKey = booleanPreferencesKey("was_premium_version")

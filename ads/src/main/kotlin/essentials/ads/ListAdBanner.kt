@@ -4,7 +4,6 @@
 
 package essentials.ads
 
-import androidx.compose.runtime.*
 import essentials.*
 import essentials.ui.common.*
 import essentials.ui.navigation.*
@@ -27,7 +26,7 @@ annotation class ListAdBannerConfigTag {
 typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
 
 @Provide class AdBannerListDecorator(
-  private val adsEnabled: State<AdsEnabled>,
+  private val adsEnabledProducer: AdsEnabledProducer,
   private val adFeatureRepository: AdFeatureRepository,
   private val config: @FinalAdConfig ListAdBannerConfig
 ) : ListDecorator {
@@ -35,8 +34,9 @@ typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
     if (isVertical)
       item(null) {
         val screen = catch { LocalScope.current.screen::class }.getOrNull()
-        if ((screen == null || adFeatureRepository.isEnabled(screen, ListAdBannerFeature)) &&
-          adsEnabled.value.value)
+        if ((screen == null ||
+              adFeatureRepository.isEnabled(screen, ListAdBannerFeature)) &&
+          adsEnabledProducer.adsEnabled())
           AdBanner(config)
       }
     content()

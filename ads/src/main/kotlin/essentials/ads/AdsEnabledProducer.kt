@@ -4,4 +4,8 @@
 
 package essentials.ads
 
-@JvmInline value class AdsEnabled(val value: Boolean)
+import androidx.compose.runtime.Composable
+
+fun interface AdsEnabledProducer {
+  @Composable fun adsEnabled(): Boolean
+}

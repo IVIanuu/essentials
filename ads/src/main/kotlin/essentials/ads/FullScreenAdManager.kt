@@ -25,7 +25,7 @@ import kotlin.time.Duration.Companion.seconds
   private val activity: ComponentActivity,
   private val appContext: AppContext,
   private val appScope: Scope<AppScope>,
-  private val adsEnabledState: State<AdsEnabled>,
+  private val adsEnabledProducer: AdsEnabledProducer,
   config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
@@ -33,10 +33,13 @@ import kotlin.time.Duration.Companion.seconds
 ) {
   private var currentAd by mutableStateOf<FullScreenAd?>(null)
   private val rateLimiter = RateLimiter(1, config.adsInterval)
+  private var adsEnabled by mutableStateOf(false)
 
   init {
     scope.launchMolecule {
-      if (!adsEnabledState.value.value) {
+      adsEnabled = adsEnabledProducer.adsEnabled()
+
+      if (!adsEnabled) {
         logger.d { "ads not enabled" }
         return@launchMolecule
       }
@@ -89,7 +92,7 @@ import kotlin.time.Duration.Companion.seconds
   }
 
   suspend fun showAd(timeout: Duration = 2.seconds): Boolean {
-    if (!adsEnabledState.value.value) return false
+    if (!adsEnabled) return false
     return withTimeoutOrNull(timeout) {
       snapshotFlow { currentAd }.first { it != null }!!.show()
     } ?: false

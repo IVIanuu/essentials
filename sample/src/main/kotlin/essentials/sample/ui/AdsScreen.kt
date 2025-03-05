@@ -18,16 +18,13 @@ import injekt.*
 
 class AdsScreen : Screen<Unit> {
   @Provide companion object {
-    @Provide fun ui(
-      adsEnabledState: MutableState<AdsEnabled>,
-      fullScreenAd: FullScreenAdManager
-    ) = Ui<AdsScreen> {
+    @Provide fun ui(fullScreenAd: FullScreenAdManager) = Ui<AdsScreen> {
       EsScaffold(topBar = { EsAppBar { Text("Ads") } }) {
         EsLazyColumn {
           item {
             SwitchListItem(
-              value = adsEnabledState.value.value,
-              onValueChange = { adsEnabledState.value = AdsEnabled(it) },
+              value = showAds,
+              onValueChange = { showAds = it },
               headlineContent = { Text("Show ads") }
             )
           }
@@ -43,7 +40,8 @@ class AdsScreen : Screen<Unit> {
   }
 }
 
-@Provide val showAds = mutableStateOf(AdsEnabled(false))
+var showAds by mutableStateOf(false)
+@Provide val AdsEnabledProducer = AdsEnabledProducer { showAds }
 @Provide val fullScreenAdConfig: FullScreenAdConfig = FullScreenAdConfig("")
 @Provide val listAdBannerConfig: ListAdBannerConfig = ListAdBannerConfig("")
 @Provide val screenAdBannerConfig: ScreenAdBannerConfig = ScreenAdBannerConfig("")
