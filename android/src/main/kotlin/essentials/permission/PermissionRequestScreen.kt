@@ -56,7 +56,7 @@ class PermissionRequestScreen(
 
       EsScaffold(topBar = { EsAppBar { Text("Required permissions") } }) {
         EsLazyColumn {
-          items(permissionsToGrant) { permission ->
+          items(permissionsToGrant, { it }) { permission ->
             EsListItem(
               modifier = Modifier
                 .padding(start = 8.dp, top = 8.dp, end = 8.dp)
@@ -64,7 +64,8 @@ class PermissionRequestScreen(
                   1.dp,
                   LocalContentColor.current.copy(alpha = 0.12f),
                   RoundedCornerShape(8.dp)
-                ),
+                )
+                .animateItem(),
               headlineContent = { Text(permission.title) },
               supportingContent = permission.desc?.let { { Text(it) } },
               leadingContent = { permission.icon?.invoke() },

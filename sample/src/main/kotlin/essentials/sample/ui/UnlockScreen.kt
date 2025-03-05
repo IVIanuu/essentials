@@ -7,8 +7,10 @@ package essentials.sample.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
+import essentials.compose.moleculeFlow
 import essentials.coroutines.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
@@ -36,7 +38,7 @@ class UnlockScreen : Screen<Unit> {
             onClick = {
               scope.launch {
                 toaster.toast("Turn the screen off")
-                deviceScreenManager.screenState.first { !it.isOn }
+                moleculeFlow { deviceScreenManager.screenState() }.first { !it.isOn }
                 delay(1500)
                 val unlocked = deviceScreenManager.unlockScreen()
                 toaster.toast("Screen unlocked $unlocked")
@@ -50,7 +52,7 @@ class UnlockScreen : Screen<Unit> {
             onClick = {
               scope.launch {
                 toaster.toast("Turn the screen off")
-                deviceScreenManager.screenState.first { !it.isOn }
+                moleculeFlow { deviceScreenManager.screenState() }.first { !it.isOn }
                 delay(1500)
                 val screenOn = deviceScreenManager.turnScreenOn()
                 toaster.toast("Screen activated $screenOn")

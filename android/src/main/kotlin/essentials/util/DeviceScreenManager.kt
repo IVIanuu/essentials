@@ -23,44 +23,45 @@ import kotlin.time.Duration.Companion.seconds
 
 @Stable @Provide class DeviceScreenManager(
   private val appContext: AppContext,
-  broadcastManager: BroadcastManager,
+  private val broadcastManager: BroadcastManager,
   private val keyguardManager: @SystemService KeyguardManager,
   private val logger: Logger,
   private val powerManager: @SystemService PowerManager,
   private val windowManager: @SystemService WindowManager
 ) {
-  val screenState: Flow<ScreenState> = broadcastManager.broadcasts(
+  @Composable fun screenState(): ScreenState = broadcastManager.broadcastState(
     Intent.ACTION_SCREEN_OFF,
     Intent.ACTION_SCREEN_ON,
     Intent.ACTION_USER_PRESENT
-  )
-    .onStart<Any?> { emit(Unit) }
-    .map {
-      if (powerManager.isInteractive) {
-        if (keyguardManager.isDeviceLocked) ScreenState.LOCKED
-        else ScreenState.UNLOCKED
-      } else {
-        ScreenState.OFF
-      }
+  ) {
+    if (powerManager.isInteractive) {
+      if (keyguardManager.isDeviceLocked) ScreenState.LOCKED
+      else ScreenState.UNLOCKED
+    } else {
+      ScreenState.OFF
     }
-    .distinctUntilChanged()
+  }
 
-  val screenRotation: Flow<ScreenRotation> = moleculeFlow(RecompositionMode.Immediate) {
-    val screenState by screenState.collectAsState(ScreenState.OFF)
-    var displayRotation by remember { mutableStateOf(getCurrentDisplayRotation()) }
+  @Composable fun screenRotation(): ScreenRotation {
+    var displayRotation by remember {
+      mutableStateOf(getCurrentDisplayRotation())
+    }
 
-    if (screenState.isOn)
+    if (screenState().isOn)
       DisposableEffect(true) {
-        val listener = object : OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {
-          override fun onOrientationChanged(orientation: Int) {
-            displayRotation = getCurrentDisplayRotation()
+        val listener = object : OrientationEventListener(
+          appContext,
+          SensorManager.SENSOR_DELAY_NORMAL
+        ) {
+            override fun onOrientationChanged(orientation: Int) {
+              displayRotation = getCurrentDisplayRotation()
+            }
           }
-        }
         listener.enable()
         onDispose { listener.disable() }
       }
 
-    displayRotation
+    return displayRotation
   }
 
   private fun getCurrentDisplayRotation() = when (windowManager.defaultDisplay.rotation) {

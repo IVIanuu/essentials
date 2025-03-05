@@ -34,18 +34,21 @@ class DonationScreen(
       toaster: Toaster
     ) = Ui<DonationScreen> {
       val skus by produceScopedState(Resource.Idle()) {
-        value = catchResource {
-          screen.donations.parMap { donation ->
-            val details = billingManager.getSkuDetails(donation.sku)!!
-            UiDonation(
-              donation,
-              details.title
-                .replaceAfterLast("(", "")
-                .removeSuffix("("),
-              details.price
-            )
-          }
+        resourceFlow {
+          emit(
+            screen.donations.parMap { donation ->
+              val details = billingManager.getSkuDetails(donation.sku)!!
+              UiDonation(
+                donation,
+                details.title
+                  .replaceAfterLast("(", "")
+                  .removeSuffix("("),
+                details.price
+              )
+            }
+          )
         }
+          .collect { value = it }
       }
 
       Dialog(

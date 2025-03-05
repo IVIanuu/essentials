@@ -22,6 +22,13 @@ import kotlin.time.Duration.Companion.milliseconds
 ) {
   internal val explicitBroadcasts = EventFlow<Intent>()
 
+  @Composable fun <T> broadcastState(
+    vararg actions: String,
+    compute: (Intent?) -> T
+  ): T = produceState(remember { compute(null) }) {
+    broadcasts(*actions).collect { value = compute(it) }
+  }.value
+
   fun broadcasts(vararg actions: String): Flow<Intent> = merge(
     explicitBroadcasts.filter { it.action in actions },
     callbackFlow {

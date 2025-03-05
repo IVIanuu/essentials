@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import essentials.*
 import essentials.accessibility.*
+import essentials.compose.moleculeFlow
 import essentials.gestures.action.*
 import essentials.logging.*
 import essentials.util.*
@@ -59,7 +60,8 @@ import kotlin.coroutines.*
             CameraCharacteristics.LENS_FACING_FRONT
       }
 
-    val currentScreenState = deviceScreenManager.screenState.first()
+    val currentScreenState = moleculeFlow { deviceScreenManager.screenState() }
+      .first()
 
     val frontFacing = if (frontCamera != null &&
       currentScreenState != ScreenState.OFF &&
