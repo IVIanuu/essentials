@@ -10,7 +10,10 @@ import essentials.*
 import essentials.logging.*
 import injekt.*
 
-@Stable @Provide class ProcessManager(private val appContext: AppContext, private val logger: Logger) {
+@Stable @Provide class ProcessManager(
+  private val appContext: AppContext,
+  private val logger: Logger
+) {
   suspend fun restart() {
     logger.d { "restart process" }
     ProcessPhoenix.triggerRebirth(appContext)

@@ -5,12 +5,14 @@
 package essentials.data
 
 import android.content.*
+import android.database.ContentObserver
 import android.provider.*
 import essentials.*
 import essentials.coroutines.*
 import essentials.util.*
 import injekt.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 
 class AndroidSettingModule<T : Any>(
@@ -19,7 +21,6 @@ class AndroidSettingModule<T : Any>(
   private val defaultValue: T
 ) {
   @Provide fun dataStore(
-    contentChangeManager: ContentChangeManager,
     contentResolver: ContentResolver,
     coroutineContexts: CoroutineContexts,
     scope: ScopedCoroutineScope<AppScope>
@@ -50,13 +51,24 @@ class AndroidSettingModule<T : Any>(
       }.unsafeCast()
     }
 
-    override val data: Flow<T> = contentChangeManager.contentChanges(
-      when (type) {
-        AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)
-        AndroidSettingsType.SECURE -> Settings.Secure.getUriFor(name)
-        AndroidSettingsType.SYSTEM -> Settings.System.getUriFor(name)
+    override val data: Flow<T> = callbackFlow {
+      val observer = object : ContentObserver(null) {
+        override fun onChange(selfChange: Boolean) {
+          super.onChange(selfChange)
+          trySend(Unit)
+        }
       }
-    )
+      contentResolver.registerContentObserver(
+        when (type) {
+          AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)
+          AndroidSettingsType.SECURE -> Settings.Secure.getUriFor(name)
+          AndroidSettingsType.SYSTEM -> Settings.System.getUriFor(name)
+        },
+        false,
+        observer
+      )
+      awaitClose { contentResolver.unregisterContentObserver(observer) }
+    }
       .onStart { emit(Unit) }
       .map { get() }
       .shareIn(scope, SharingStarted.WhileSubscribed(), 1)

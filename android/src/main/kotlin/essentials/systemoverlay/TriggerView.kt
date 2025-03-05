@@ -51,8 +51,6 @@ import essentials.*
     }
 
     // compose crashes in some situations
-    return catch { delegate.dispatchTouchEvent(ev) }
-      .printErrors()
-      .getOrElse { false }
+    return delegate.dispatchTouchEvent(ev)
   }
 }
