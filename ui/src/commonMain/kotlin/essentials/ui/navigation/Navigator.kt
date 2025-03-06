@@ -114,10 +114,6 @@ suspend fun Navigator.popTo(screen: Screen<*>) {
   setBackStack(backStack.take(index + 1))
 }
 
-suspend fun Navigator.clear() {
-  setBackStack(emptyList())
-}
-
 val Scope<*>.navigator: Navigator get() = service()
 
 @Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
