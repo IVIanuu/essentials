@@ -174,6 +174,4 @@ object Deps {
   const val superUser = "eu.chainfire:libsuperuser:1.1.1"
 
   const val turbine = "app.cash.turbine:turbine:0.10.0"
-
-  const val xposed = "de.robv.android.xposed:api:82"
 }

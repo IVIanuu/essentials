@@ -17,7 +17,6 @@ buildscript {
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     maven("https://androidx.dev/storage/compose-compiler/repository")
     maven("https://jitpack.io")
-    maven("https://api.xposed.info/")
   }
 
   dependencies {
@@ -36,8 +35,6 @@ allprojects {
     mavenCentral()
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://jitpack.io")
-    maven("https://api.xposed.info/")
-    maven("https://androidx.dev/storage/compose-compiler/repository")
   }
 
   plugins.withId("com.vanniktech.maven.publish") {

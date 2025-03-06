@@ -28,8 +28,6 @@ dependencies {
   implementation(project(":premium"))
   implementation(project(":rubik"))
   implementation(project(":work"))
-  implementation(project(":xposed"))
-  compileOnly(project(":xposed-provided"))
   testImplementation(project(":android-test"))
   testImplementation(project(":test"))
 }

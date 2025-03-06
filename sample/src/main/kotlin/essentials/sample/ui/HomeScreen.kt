@@ -25,13 +25,11 @@ import essentials.ui.material.*
 import essentials.ui.navigation.*
 import essentials.ui.overlay.*
 import essentials.util.*
-import essentials.xposed.*
 import injekt.*
 
 @Provide class HomeScreen : RootScreen {
   @Provide companion object {
     @Provide fun ui(
-      isXposedRunning: IsXposedRunning,
       itemsFactory: () -> List<HomeItem>,
       navigator: Navigator,
       toaster: Toaster
@@ -72,17 +70,6 @@ import injekt.*
                 navigator.push(
                   item.screenFactoryWithIndex?.invoke(index, color)
                     ?: item.screenFactory(color)
-                )
-              }
-            )
-          }
-
-          item {
-            EsListItem(
-              headlineContent = {
-                Text(
-                  if (isXposedRunning.value) "Xposed is running"
-                  else "Xposed is NOT running"
                 )
               }
             )
