@@ -76,17 +76,8 @@ import kotlin.reflect.*
 
 @Composable fun <S : Screen<*>> rememberScreenState(
   screen: S,
-  navigator: Navigator = LocalScope.current.navigator
-) = rememberScreenState(
-  screen,
-  navigator,
-  LocalScope.current.service<NavigationComponent<RootNavGraph>>()
-)
-
-@Composable fun <N, S : Screen<*>> rememberScreenState(
-  screen: S,
   navigator: Navigator = LocalScope.current.navigator,
-  component: NavigationComponent<N>
+  component: NavigationComponent<*> = LocalScope.current.service<NavigationComponent<RootNavGraph>>()
 ): ScreenState<S> = remember {
   val scope = component.screenScopeFactory(navigator, screen)
   val ui = component.uiFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
