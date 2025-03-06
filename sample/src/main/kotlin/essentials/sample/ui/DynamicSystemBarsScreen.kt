@@ -29,13 +29,9 @@ class DynamicSystemBarsScreen : Screen<Unit> {
     @Provide val ui = Ui<DynamicSystemBarsScreen> {
       Box {
         val colors = rememberSaveable {
-          ColorPickerPalette.entries
-            .fastFilter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
-            .fastFlatMap { it.colors }
-            .shuffled()
+          DefaultColorPalette.shuffled()
         }
         EsLazyColumn(contentPadding = PaddingValues(0.dp)) {
-          // todo use items once fixed
           items(colors) { color ->
             Box(
               modifier = Modifier

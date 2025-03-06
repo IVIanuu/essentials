@@ -60,11 +60,9 @@ import injekt.*
         EsLazyColumn {
           itemsIndexed(finalItems) { index, item ->
             val color = rememberSaveable(item) {
-              ColorPickerPalette.entries
-                .fastFilter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
+              DefaultColorPalette
                 .shuffled()
                 .first()
-                .front
             }
 
             HomeItem(
