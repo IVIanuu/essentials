@@ -15,13 +15,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import essentials.*
 import essentials.compose.*
 import essentials.ui.navigation.*
-import essentials.ui.systembars.*
-import essentials.ui.util.*
 
 @Composable fun EsAppBar(
   modifier: Modifier = Modifier,
@@ -31,18 +28,11 @@ import essentials.ui.util.*
   windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
   colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
   scrollBehavior: TopAppBarScrollBehavior? = LocalAppBarScrollBehavior.current,
-  applySystemBarStyle: Boolean = true,
   title: @Composable () -> Unit
 ) {
-  val systemBarStyleModifier = if (applySystemBarStyle) {
-    Modifier.systemBarStyle(
-      bgColor = Color.Transparent,
-      darkIcons = colors.containerColor.isLight
-    )
-  } else Modifier
   CenterAlignedTopAppBar(
     title = title,
-    modifier = modifier.then(systemBarStyleModifier),
+    modifier = modifier,
     navigationIcon = navigationIcon,
     actions = actions,
     expandedHeight = expandedHeight,

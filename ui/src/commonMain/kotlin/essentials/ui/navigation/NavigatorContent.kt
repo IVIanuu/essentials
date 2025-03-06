@@ -26,7 +26,6 @@ import androidx.compose.ui.util.fastLastOrNull
 import com.slack.circuit.foundation.internal.*
 import essentials.*
 import essentials.compose.*
-import essentials.ui.systembars.LocalZIndex
 import injekt.Provide
 import kotlinx.coroutines.flow.filter
 import soup.compose.material.motion.animation.materialSharedAxisXIn
@@ -108,7 +107,6 @@ import kotlin.collections.set
       ) { (screen) ->
         screenStates[screen]?.let {
           CompositionLocalProvider(
-            LocalZIndex provides LocalZIndex.current + navigator.backStack.indexOf(screen),
             LocalScreenAnimationScope provides remember(
               screenTransition,
               this@SharedTransitionLayout,
@@ -154,7 +152,6 @@ import kotlin.collections.set
       ) { (screen) ->
         screenStates[screen]?.let {
           CompositionLocalProvider(
-            LocalZIndex provides LocalZIndex.current + navigator.backStack.indexOf(screen),
             LocalScreenAnimationScope provides remember(
               overlayTransition,
               this@SharedTransitionLayout,

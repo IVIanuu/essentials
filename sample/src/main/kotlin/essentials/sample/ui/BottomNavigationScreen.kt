@@ -45,7 +45,6 @@ import essentials.compose.scopedAction
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
-import essentials.ui.systembars.systemBarStyle
 import injekt.*
 
 @Provide val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationScreen() }
@@ -249,10 +248,6 @@ val CollapsedPlayerPadding = 12.dp
     modifier = with(sharedTransitionScope) {
       Modifier
         .fillMaxSize()
-        .systemBarStyle(
-          bgColor = containerColor,
-          zIndex = Int.MAX_VALUE
-        )
         .sharedBounds(
           sharedContentState = rememberSharedContentState("card"),
           animatedVisibilityScope = animatedVisibilityScope,

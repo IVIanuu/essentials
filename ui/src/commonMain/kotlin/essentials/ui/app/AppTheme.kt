@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.font.*
 import essentials.*
 import essentials.ui.material.contentColor
-import essentials.ui.systembars.*
 import injekt.*
 
 data class AppColors(
@@ -106,6 +105,6 @@ fun interface AppThemeDecorator : AppUiDecorator {
   @Provide companion object {
     @Provide val loadingOrder
       get() = LoadingOrder<AppThemeDecorator>()
-        .after<SystemBarManagerProvider>()
+        .first()
   }
 }

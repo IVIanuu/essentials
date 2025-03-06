@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import essentials.ui.systembars.systemBarStyle
 import essentials.ui.util.isLight
 
 @Composable fun EsNavigationBar(
@@ -19,18 +18,10 @@ import essentials.ui.util.isLight
   contentColor: Color = MaterialTheme.colorScheme.contentColorFor(containerColor),
   tonalElevation: Dp = NavigationBarDefaults.Elevation,
   windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
-  applySystemBarStyle: Boolean = true,
   content: @Composable RowScope.() -> Unit
 ) {
-  val systemBarStyleModifier = if (applySystemBarStyle) {
-    Modifier.systemBarStyle(
-      bgColor = Color.Transparent,
-      darkIcons = containerColor.isLight
-    )
-  } else Modifier
-
   NavigationBar(
-    modifier.then(systemBarStyleModifier),
+    modifier,
     containerColor,
     contentColor,
     tonalElevation,

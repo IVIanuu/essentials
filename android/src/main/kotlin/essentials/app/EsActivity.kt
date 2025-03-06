@@ -7,6 +7,7 @@ package essentials.app
 import android.os.*
 import androidx.activity.*
 import androidx.activity.compose.*
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import essentials.*
@@ -34,6 +35,11 @@ import kotlinx.coroutines.*
     val esActivityComponent = uiScope.service<EsActivityComponent>()
 
     setContent {
+      DisposableEffect(isSystemInDarkTheme()) {
+        enableEdgeToEdge()
+        onDispose {  }
+      }
+
       CompositionLocalProvider(LocalScope provides uiScope) {
         esActivityComponent.decorateAppUi.DecoratedContent {
           esActivityComponent.appUi.Content()

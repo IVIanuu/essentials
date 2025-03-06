@@ -28,7 +28,6 @@ import essentials.compose.*
 import essentials.resource.*
 import essentials.ui.common.*
 import essentials.ui.navigation.*
-import essentials.ui.systembars.systemBarStyle
 import essentials.ui.util.isLight
 import essentials.util.*
 import injekt.*
@@ -77,13 +76,7 @@ class GoPremiumScreen(
         }
       })
 
-      Surface(
-        modifier = Modifier.fillMaxSize()
-          .systemBarStyle(
-            bgColor = Color.Transparent,
-            darkIcons = MaterialTheme.colorScheme.surface.isLight
-          )
-      ) {
+      Surface(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.safeContentPadding()) {
           if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
             Column(
