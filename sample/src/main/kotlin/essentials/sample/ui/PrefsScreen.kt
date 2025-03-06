@@ -129,32 +129,6 @@ class PrefsScreen : Screen<Unit> {
               supportingContent = { Text("This is a color preference") }
             )
           }
-
-          item {
-            MultiChoiceToggleButtonGroupListItem(
-              modifier = Modifier.interactive(prefs.switch),
-              values = listOf("A", "B", "C"),
-              selected = prefs.multiChoice,
-              onSelectionChanged = action { values ->
-                pref.updateData { copy(multiChoice = values) }
-              },
-              leadingContent = { Icon(Icons.Default.ThumbUp, null) },
-              headlineContent = { Text("Multi select list") }
-            )
-          }
-
-          item {
-            SingleChoiceToggleButtonGroupListItem(
-              modifier = Modifier.interactive(prefs.switch),
-              values = listOf("A", "B", "C"),
-              selected = prefs.singleChoice,
-              onSelectionChanged = action { value ->
-                pref.updateData { copy(singleChoice = value) }
-              },
-              leadingContent = { Icon(Icons.Default.ThumbUp, null) },
-              headlineContent = { Text("Single item list") }
-            )
-          }
         }
       }
     }
