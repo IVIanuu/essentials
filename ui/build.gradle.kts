@@ -23,6 +23,8 @@ dependencies {
   api(Deps.Compose.material3)
   api(Deps.Compose.materialIconsExtended)
   api(Deps.composeIconsFontAwesome)
+  api(Deps.composeReordable)
+  api(Deps.materialKolor)
   api(Deps.materialMotionCompose)
   api(project(":core"))
   api(Deps.AndroidX.Activity.compose)

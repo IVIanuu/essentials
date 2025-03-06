@@ -86,6 +86,7 @@ object Deps {
   }
 
   const val composeIconsFontAwesome = "br.com.devsrsouza.compose.icons:font-awesome:1.1.0"
+  const val composeReordable = "sh.calvin.reorderable:reorderable:2.4.3"
 
   object Coroutines {
     private const val version = "1.10.1"
@@ -151,6 +152,7 @@ object Deps {
 
   const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
 
+  const val materialKolor = "com.materialkolor:material-kolor:2.0.2"
   const val materialMotionCompose = "io.github.fornewid:material-motion-compose-core:2.0.1"
 
   const val mockk = "io.mockk:mockk:1.12.8"

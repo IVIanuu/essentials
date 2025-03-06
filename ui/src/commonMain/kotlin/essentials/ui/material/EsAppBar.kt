@@ -22,7 +22,7 @@ import essentials.ui.navigation.*
 
 @Composable fun EsAppBar(
   modifier: Modifier = Modifier,
-  navigationIcon: @Composable () -> Unit = { NavigationIcon() },
+  navigationIcon: @Composable () -> Unit = { BackPressButton() },
   actions: @Composable RowScope.() -> Unit = {},
   expandedHeight: Dp = TopAppBarDefaults.TopAppBarExpandedHeight,
   windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
@@ -52,7 +52,7 @@ val LocalAppBarScrollBehaviorProvider = compositionLocalOf {
 
 val LocalAppBarScrollBehavior = compositionLocalOf<TopAppBarScrollBehavior?> { null }
 
-@Composable fun NavigationIcon() {
+@Composable fun BackPressButton() {
   val navigator = catch { LocalScope.current.navigator }.getOrNull()
   val screen = catch { LocalScope.current.screen }.getOrNull()
   val canGoBack = remember {
