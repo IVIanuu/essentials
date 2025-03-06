@@ -57,10 +57,6 @@ class DonationScreen(
       EsModalBottomSheet(
         onDismissRequest = action { navigator.pop(screen, null) }
       ) {
-        Subheader {
-          Text("Support development \uD83D\uDC9B")
-        }
-
         skus.getOrNull()?.fastForEach { donation ->
           EsListItem(
             modifier = Modifier.padding(horizontal = 8.dp),

@@ -9,6 +9,7 @@ import android.content.pm.*
 import essentials.*
 import essentials.app.*
 import essentials.coroutines.CoroutineContexts
+import essentials.ui.UiScope
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.flow.*
@@ -29,6 +30,6 @@ import kotlinx.coroutines.withContext
       }
     )
 
-    appScope.scopeOf<AppVisibleScope>().first().service()
+    appScope.scopeOf<UiScope>().first().service()
   }
 }

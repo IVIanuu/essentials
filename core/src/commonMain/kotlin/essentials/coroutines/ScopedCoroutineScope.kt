@@ -13,7 +13,7 @@ import kotlin.coroutines.*
 
 @Stable class ScopedCoroutineScope<N> @Provide @Scoped<N> constructor(
   context: @ScopeCoroutineContextTag<N> CoroutineContext
-): CoroutineScope, Disposable {
+): CoroutineScope, DisposableHandle {
   override val coroutineContext: CoroutineContext = context + SupervisorJob()
   override fun dispose() {
     coroutineContext.cancel()

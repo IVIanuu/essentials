@@ -18,7 +18,7 @@ import kotlin.reflect.*
   val name: KClass<N>,
   val parent: @ParentScope Scope<*>? = null,
   config: (Scope<N>, @ParentScope Scope<*>?) -> ScopeConfig<N>
-) : SynchronizedObject() {
+) : SynchronizedObject(), DisposableHandle {
   var isDisposed by mutableStateOf(false)
     private set
 
@@ -78,7 +78,7 @@ import kotlin.reflect.*
   inline fun <T : Any> scoped(key: TypeKey<T> = inject, compute: () -> T): T =
     scoped(key.value, compute)
 
-  fun dispose() {
+  override fun dispose() {
     synchronized(this) {
       if (!isDisposed) {
         children.forEach { it.dispose() }
@@ -91,7 +91,7 @@ import kotlin.reflect.*
           cache.values.toList()
             .also { cache.clear() }
         }.fastForEach { cachedValue ->
-          if (cachedValue is Disposable)
+          if (cachedValue is DisposableHandle)
             cachedValue.dispose()
         }
       }

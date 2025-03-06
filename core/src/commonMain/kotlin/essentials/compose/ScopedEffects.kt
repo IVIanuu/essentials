@@ -78,7 +78,7 @@ import kotlinx.coroutines.*
   return value
 }
 
-private class ScopedHolder : Disposable {
+private class ScopedHolder : DisposableHandle {
   var value: Any? = Uninitialized
   var keys: Array<out Any?>? = null
   var rememberedValue = false
@@ -88,7 +88,7 @@ private class ScopedHolder : Disposable {
   }
 
   fun updateValue(newValue: Any?, newKeys: Array<out Any?>?) {
-    value.safeAs<Disposable>()?.dispose()
+    value.safeAs<DisposableHandle>()?.dispose()
     value.safeAs<RememberObserver>()?.onForgotten()
     rememberedValue = false
     value = newValue

@@ -12,10 +12,6 @@ import injekt.*
 import kotlinx.coroutines.flow.*
 
 @Stable @Provide class NotificationRepository(private val appScope: Scope<AppScope>) {
-  val notificationEvents: Flow<NotificationEvent> =
-    snapshotFlow { appScope.scopeOfOrNull<NotificationScope>() }
-      .flatMapLatest { it?.notificationListenerService?.events ?: emptyFlow() }
-
   val notifications: List<StatusBarNotification>
     get() = appScope.scopeOfOrNull<NotificationScope>()
       ?.notificationListenerService?.notifications ?: emptyList()
@@ -32,10 +28,4 @@ import kotlinx.coroutines.flow.*
     appScope.scopeOf<NotificationScope>().first()
       .notificationListenerService.cancelAllNotifications()
   }
-}
-
-sealed interface NotificationEvent {
-  data class NotificationPosted(val sbn: StatusBarNotification) : NotificationEvent
-  data class NotificationRemoved(val sbn: StatusBarNotification) : NotificationEvent
-  data class RankingUpdate(val map: NotificationListenerService.RankingMap) : NotificationEvent
 }

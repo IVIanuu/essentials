@@ -20,9 +20,6 @@ import kotlinx.coroutines.flow.*
   var notifications by mutableStateOf(emptyList<StatusBarNotification>())
     private set
 
-  private val _events: MutableSharedFlow<NotificationEvent> = EventFlow()
-  internal val events: Flow<NotificationEvent> by this::_events
-
   private var notificationScope: Scope<NotificationScope>? = null
 
   override fun onListenerConnected() {
@@ -36,21 +33,18 @@ import kotlinx.coroutines.flow.*
     super.onNotificationPosted(sbn)
     logger.d { "notification posted $sbn" }
     updateNotifications()
-    _events.tryEmit(NotificationEvent.NotificationPosted(sbn))
   }
 
   override fun onNotificationRemoved(sbn: StatusBarNotification) {
     super.onNotificationRemoved(sbn)
     logger.d { "notification removed $sbn" }
     updateNotifications()
-    _events.tryEmit(NotificationEvent.NotificationRemoved(sbn))
   }
 
   override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
     super.onNotificationRankingUpdate(rankingMap)
     logger.d { "notification ranking update $rankingMap" }
     updateNotifications()
-    _events.tryEmit(NotificationEvent.RankingUpdate(rankingMap))
   }
 
   override fun onListenerDisconnected() {

@@ -7,6 +7,7 @@ package essentials.xposed
 import de.robv.android.xposed.*
 import essentials.*
 import injekt.*
+import kotlinx.coroutines.DisposableHandle
 import java.lang.reflect.*
 import kotlin.reflect.*
 
@@ -124,4 +125,4 @@ inline fun <T : Any> hookAllConstructors(
   .map { it.asDisposable() }
 
 // todo remove once fir supports nested java classes lol
-fun XC_MethodHook.Unhook.asDisposable() = Disposable { unhook() }
+fun XC_MethodHook.Unhook.asDisposable() = DisposableHandle { unhook() }
