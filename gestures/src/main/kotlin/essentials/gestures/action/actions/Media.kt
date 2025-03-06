@@ -8,15 +8,14 @@ import android.content.*
 import android.provider.*
 import android.view.*
 import androidx.compose.material3.*
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.compose.runtime.*
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import essentials.*
 import essentials.apps.*
 import essentials.compose.*
-import essentials.data.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*

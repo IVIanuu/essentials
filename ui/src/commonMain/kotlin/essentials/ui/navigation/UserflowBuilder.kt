@@ -7,7 +7,6 @@ package essentials.ui.navigation
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.util.fastFlatMap
 import essentials.*
-import essentials.app.*
 import essentials.logging.*
 import essentials.ui.*
 import injekt.*

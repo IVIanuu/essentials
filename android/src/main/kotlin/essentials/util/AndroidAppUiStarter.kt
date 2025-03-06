@@ -7,7 +7,6 @@ package essentials.util
 import android.content.*
 import android.content.pm.*
 import essentials.*
-import essentials.app.*
 import essentials.coroutines.CoroutineContexts
 import essentials.ui.UiScope
 import essentials.ui.navigation.*

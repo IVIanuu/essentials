@@ -8,8 +8,6 @@ import android.annotation.*
 import android.view.*
 import android.widget.*
 import androidx.compose.runtime.*
-import arrow.core.*
-import essentials.*
 
 @SuppressLint("ViewConstructor")
 @Stable class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {

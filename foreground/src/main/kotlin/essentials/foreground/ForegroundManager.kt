@@ -12,7 +12,6 @@ import essentials.*
 import essentials.Scoped
 import essentials.logging.*
 import injekt.*
-import injekt.common.*
 
 @Stable @Provide @Scoped<AppScope> class ForegroundManager(
   private val appContext: AppContext,

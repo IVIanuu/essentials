@@ -5,7 +5,6 @@
 package essentials.donation
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -17,12 +16,9 @@ import arrow.fx.coroutines.parMap
 import essentials.billing.*
 import essentials.compose.*
 import essentials.resource.*
-import essentials.ui.common.*
 import essentials.ui.material.EsListItem
 import essentials.ui.material.EsModalBottomSheet
-import essentials.ui.material.Subheader
 import essentials.ui.navigation.*
-import essentials.ui.overlay.*
 import essentials.util.*
 import injekt.*
 

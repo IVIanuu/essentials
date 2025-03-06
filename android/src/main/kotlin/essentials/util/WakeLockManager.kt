@@ -7,7 +7,6 @@ import essentials.*
 import essentials.coroutines.*
 import essentials.logging.*
 import injekt.*
-import injekt.common.*
 import kotlinx.coroutines.*
 
 @Stable @Provide class WakeLockManager(

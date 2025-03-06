@@ -13,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.*
@@ -28,7 +27,6 @@ import essentials.compose.*
 import essentials.resource.*
 import essentials.ui.common.*
 import essentials.ui.navigation.*
-import essentials.ui.util.isLight
 import essentials.util.*
 import injekt.*
 

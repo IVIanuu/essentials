@@ -9,16 +9,9 @@ import android.annotation.*
 import android.app.*
 import android.content.*
 import android.os.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.*
-import androidx.compose.ui.res.*
 import arrow.core.*
-import coil.compose.*
 import essentials.*
 import essentials.accessibility.*
-import essentials.gestures.action.*
-import essentials.gestures.action.ui.*
 import essentials.util.*
 import injekt.*
 

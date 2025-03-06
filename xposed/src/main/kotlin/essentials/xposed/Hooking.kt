@@ -5,7 +5,6 @@
 package essentials.xposed
 
 import de.robv.android.xposed.*
-import essentials.*
 import injekt.*
 import kotlinx.coroutines.DisposableHandle
 import java.lang.reflect.*
