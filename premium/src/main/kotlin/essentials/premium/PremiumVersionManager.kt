@@ -7,8 +7,10 @@ package essentials.premium
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
+import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
 import arrow.fx.coroutines.*
 import com.android.billingclient.api.*
 import essentials.*
@@ -64,7 +66,7 @@ interface PremiumVersionManager {
         logger.d { "handle premium version downgrade" }
         downgradeHandlers().parMap { it.onPremiumDowngrade() }
       }
-      preferencesStore.edit { this[WasPremiumVersionKey] = isPremiumVersion }
+      preferencesStore.edit { it[WasPremiumVersionKey] = isPremiumVersion }
     }
 
     isPremiumVersion

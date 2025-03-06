@@ -4,12 +4,12 @@
 
 package essentials.premium
 
+import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
 import essentials.*
 import essentials.app.*
-import essentials.data.DataStore
-import essentials.data.edit
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.flow.*
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.*
     val hintShown = preferencesStore.data.first()[HintShownKey] == true
     return if (hintShown || premiumVersionManager.isPremiumVersion.first()) emptyList()
     else listOf(GoPremiumScreen(showTryBasicOption = true, allowBackNavigation = false))
-      .also { preferencesStore.edit { this[HintShownKey] = true } }
+      .also { preferencesStore.edit { it[HintShownKey] = true } }
   }
 
   companion object {

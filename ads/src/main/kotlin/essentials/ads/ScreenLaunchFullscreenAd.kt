@@ -6,7 +6,9 @@ package essentials.ads
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastFilter
+import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import essentials.ScopeComposition
 import essentials.app.*
@@ -40,14 +42,14 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
       navigator.launchEvents(adFeatureRepository).collectLatest {
         val launchCount = preferencesStore
           .edit {
-            this[FullScreenAdScreenLaunchCount] =
-              (this[FullScreenAdScreenLaunchCount]?.inc() ?: 1)
+            it[FullScreenAdScreenLaunchCount] =
+              (it[FullScreenAdScreenLaunchCount]?.inc() ?: 1)
           }[FullScreenAdScreenLaunchCount]!!
         logger.d { "screen launched $launchCount" }
         if (launchCount >= config.screenLaunchToShowAdCount) {
           logger.d { "try to show full screen ad $launchCount" }
           if (fullScreenAdManager.showAd())
-            preferencesStore.edit { this[FullScreenAdScreenLaunchCount] = 0 }
+            preferencesStore.edit { it[FullScreenAdScreenLaunchCount] = 0 }
         }
       }
     }

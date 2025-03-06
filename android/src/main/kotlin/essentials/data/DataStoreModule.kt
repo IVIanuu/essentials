@@ -22,7 +22,7 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
     prefsDir: () -> PrefsDir,
     scope: ScopedCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<T> {
-    val androidDataStore = DataStoreFactory.create(
+    return DataStoreFactory.create(
       object : Serializer<T> {
         override val defaultValue: T get() = default()
 
@@ -46,12 +46,5 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
       produceFile = { prefsDir().resolve(name) },
       scope = scope.childCoroutineScope(coroutineContexts.io)
     )
-
-    return object : DataStore<T> {
-      override val data: Flow<T> = androidDataStore.data
-
-      override suspend fun updateData(transform: T.() -> T): T =
-        androidDataStore.updateData { transform(it) }
-    }
   }
 }

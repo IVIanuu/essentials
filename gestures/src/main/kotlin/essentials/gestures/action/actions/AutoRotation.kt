@@ -9,6 +9,7 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.collectAsState
+import androidx.datastore.core.DataStore
 import essentials.data.*
 import essentials.gestures.action.*
 import injekt.*
@@ -30,7 +31,7 @@ import injekt.*
   @Provide fun executor(
     autoRotationDataStore: DataStore<AutoRotation>,
   ) = ActionExecutor<AutoRotationActionId> {
-    autoRotationDataStore.updateData { if (this != 1) 1 else 0 }
+    autoRotationDataStore.updateData { if (it != 1) 1 else 0 }
   }
 }
 

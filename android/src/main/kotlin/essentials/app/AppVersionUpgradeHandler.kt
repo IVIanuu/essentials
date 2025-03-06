@@ -5,7 +5,9 @@
 package essentials.app
 
 import androidx.compose.runtime.LaunchedEffect
+import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import arrow.fx.coroutines.*
 import essentials.*
@@ -39,7 +41,7 @@ fun interface AppVersionUpgradeHandler {
 
     handlers().parMap { it.onAppVersionUpgrade(lastAppVersion, appConfig.versionCode) }
 
-    preferencesStore.edit { this[LastAppVersionPrefKey] = appConfig.versionCode }
+    preferencesStore.edit { it[LastAppVersionPrefKey] = appConfig.versionCode }
   }
 }
 

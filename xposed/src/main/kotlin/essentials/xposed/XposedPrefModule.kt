@@ -6,6 +6,7 @@ package essentials.xposed
 
 import android.annotation.*
 import android.content.*
+import androidx.datastore.core.DataStore
 import de.robv.android.xposed.*
 import essentials.*
 import essentials.coroutines.*
@@ -70,7 +71,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
 
       @SuppressLint("ApplySharedPref")
-      override suspend fun updateData(transform: T.() -> T): T = mutex.withLock {
+      override suspend fun updateData(transform: suspend (T) -> T): T = mutex.withLock {
         with(coroutineContexts.io) {
           val previousData = readData()
           val newData = transform(previousData)

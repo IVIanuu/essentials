@@ -7,6 +7,7 @@ package essentials.data
 import android.content.*
 import android.database.ContentObserver
 import android.provider.*
+import androidx.datastore.core.DataStore
 import essentials.*
 import essentials.coroutines.*
 import essentials.util.*
@@ -74,7 +75,7 @@ class AndroidSettingModule<T : Any>(
       .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
       .distinctUntilChanged()
 
-    override suspend fun updateData(transform: T.() -> T): T {
+    override suspend fun updateData(transform: suspend (T) -> T): T {
       val currentValue = get()
       val newValue = transform(currentValue)
       if (currentValue != newValue)

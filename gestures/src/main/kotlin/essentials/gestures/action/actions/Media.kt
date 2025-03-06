@@ -11,6 +11,8 @@ import androidx.compose.material3.*
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.compose.runtime.*
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.edit
 import essentials.*
 import essentials.apps.*
 import essentials.compose.*
@@ -55,7 +57,7 @@ class MediaActionSettingsScreen : Screen<Unit> {
                   )
                 )
                 if (newMediaApp != null)
-                  preferencesStore.edit { this[MediaActionAppKey] = newMediaApp.packageName }
+                  preferencesStore.edit { it[MediaActionAppKey] = newMediaApp.packageName }
               },
               headlineContent = { Text("Media app") },
               supportingContent = {

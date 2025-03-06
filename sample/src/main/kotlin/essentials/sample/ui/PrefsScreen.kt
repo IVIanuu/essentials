@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
+import androidx.datastore.core.DataStore
 import essentials.compose.*
 import essentials.data.*
 import essentials.ui.common.*
@@ -35,7 +36,7 @@ class PrefsScreen : Screen<Unit> {
             SwitchListItem(
               value = prefs.switch,
               onValueChange = action { value ->
-                pref.updateData { copy(switch = value) }
+                pref.updateData { it.copy(switch = value) }
               },
               leadingContent = { Icon(Icons.Default.ThumbUp, null) },
               headlineContent = { Text("Switch") }
@@ -50,7 +51,7 @@ class PrefsScreen : Screen<Unit> {
             SliderListItem(
               value = prefs.slider,
               onValueChangeFinished = action { value ->
-                pref.updateData { copy(slider = value) }
+                pref.updateData { it.copy(slider = value) }
               },
               modifier = Modifier.interactive(prefs.switch),
               leadingContent = { Icon(Icons.Default.ThumbUp, null) },
@@ -64,7 +65,7 @@ class PrefsScreen : Screen<Unit> {
             SliderListItem(
               value = prefs.slider,
               onValueChangeFinished = action { value ->
-                pref.updateData { copy(slider = value) }
+                pref.updateData { it.copy(slider = value) }
               },
               modifier = Modifier.interactive(prefs.switch),
               leadingContent = { Icon(Icons.Default.ThumbUp, null) },
@@ -78,7 +79,7 @@ class PrefsScreen : Screen<Unit> {
             SliderListItem(
               value = prefs.steppedSlider,
               onValueChangeFinished = action { value ->
-                pref.updateData { copy(steppedSlider = value) }
+                pref.updateData { it.copy(steppedSlider = value) }
               },
               modifier = Modifier.interactive(prefs.switch),
               leadingContent = { Icon(Icons.Default.ThumbUp, null) },
@@ -106,7 +107,7 @@ class PrefsScreen : Screen<Unit> {
                     predicate = { it.isNotEmpty() }
                   )
                 ) ?: return@scopedAction
-                pref.updateData { copy(textInput = newTextInput) }
+                pref.updateData { it.copy(textInput = newTextInput) }
               },
               leadingContent = { Icon(Icons.Default.ThumbUp, null) },
               headlineContent = { Text("Text input") },
@@ -121,7 +122,7 @@ class PrefsScreen : Screen<Unit> {
                 val newColor = navigator.push(
                   ColorPickerScreen(initialColor = prefs.color)
                 ) ?: return@action
-                pref.updateData { copy(color = newColor) }
+                pref.updateData { it.copy(color = newColor) }
               },
               modifier = Modifier.interactive(prefs.switch),
               leadingContent = { Icon(Icons.Default.ThumbUp, null) },
