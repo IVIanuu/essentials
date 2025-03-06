@@ -7,10 +7,10 @@ import androidx.compose.material3.*
 import androidx.compose.ui.util.fastForEach
 import essentials.compose.*
 import essentials.ui.common.*
-import essentials.ui.material.EsListItem
 import essentials.ui.material.EsModalBottomSheet
 import essentials.ui.material.Subheader
 import essentials.ui.navigation.*
+import essentials.ui.prefs.RadioListItem
 import injekt.*
 
 class SingleChoiceListScreen<T : Any>(
@@ -31,15 +31,12 @@ class SingleChoiceListScreen<T : Any>(
           Subheader { Text(screen.title) }
 
         screen.items.fastForEach { item ->
-          EsListItem(
-            onClick = scopedAction { navigator.pop(screen, item) },
-            headlineContent = { Text(screen.renderable.render(item)) },
-            trailingContent = {
-              RadioButton(
-                selected = item == screen.selected,
-                onClick = null
-              )
-            }
+          RadioListItem(
+            value = item == screen.selected,
+            onValueChange = scopedAction { value ->
+              navigator.pop(screen, item)
+            },
+            headlineContent = { Text(screen.renderable.render(item)) }
           )
         }
       }

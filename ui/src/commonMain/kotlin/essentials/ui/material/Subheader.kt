@@ -5,25 +5,29 @@
 package essentials.ui.material
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
-import essentials.ui.common.ProvideContentColorTextStyle
 
-@Composable fun Subheader(modifier: Modifier = Modifier, text: @Composable () -> Unit) {
-  Box(
-    modifier = Modifier
+@Composable fun Subheader(
+  modifier: Modifier = Modifier,
+  title: @Composable () -> Unit
+) {
+  Row(
+    modifier = modifier
       .height(48.dp)
-      .fillMaxWidth()
-      .padding(horizontal = 16.dp)
-      .then(modifier),
-    contentAlignment = Alignment.CenterStart
+      .fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically
   ) {
-    ProvideContentColorTextStyle(
-      contentColor = MaterialTheme.colorScheme.secondary,
-      textStyle = MaterialTheme.typography.bodyMedium,
-      content = text
+    Spacer(Modifier.width(16.dp))
+
+    CompositionLocalProvider(
+      LocalTextStyle provides MaterialTheme.typography.titleLarge,
+      content = title
     )
+
+    Spacer(Modifier.width(16.dp))
   }
 }

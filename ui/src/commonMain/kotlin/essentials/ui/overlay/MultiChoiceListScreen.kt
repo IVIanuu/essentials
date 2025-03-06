@@ -14,6 +14,7 @@ import essentials.ui.material.EsListItem
 import essentials.ui.material.EsModalBottomSheet
 import essentials.ui.material.Subheader
 import essentials.ui.navigation.*
+import essentials.ui.prefs.CheckboxListItem
 import injekt.*
 
 class MultiChoiceListScreen<T : Any>(
@@ -36,20 +37,15 @@ class MultiChoiceListScreen<T : Any>(
           Subheader { Text(screen.title) }
         screen.items.fastForEach { item ->
           val selected = item in selectedItems
-          EsListItem(
-            onClick = scopedAction {
+          CheckboxListItem(
+            value = selected,
+            onValueChange = {
               val newSelectedItems = selectedItems.toMutableSet()
               if (!selected) newSelectedItems += item
               else newSelectedItems -= item
               selectedItems = newSelectedItems
             },
-            headlineContent = { Text(screen.renderable.render(item)) },
-            trailingContent = {
-              Switch(
-                checked = selected,
-                onCheckedChange = null
-              )
-            }
+            headlineContent = { Text(screen.renderable.render(item)) }
           )
         }
       }
