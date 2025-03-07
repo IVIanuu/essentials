@@ -22,7 +22,7 @@ import kotlin.reflect.*
   var isDisposed by mutableStateOf(false)
     private set
 
-  @PublishedApi internal val cache = hashMapOf<Any, Any?>()
+  @PublishedApi internal val cache = hashMapOf<Any, Any>()
 
   private val services: Map<KClass<*>, ProvidedService<*, *>>?
 
@@ -67,7 +67,7 @@ import kotlin.reflect.*
     serviceOrNull(key) ?: error("No service found for ${key.qualifiedName} in ${name.qualifiedName}")
 
   inline fun <T> scoped(key: Any, compute: () -> T): T {
-    cache[key]?.let { if (it !== NULL) return it.unsafeCast() }
+    cache[key]?.let { return (if (it !== NULL) it else null).unsafeCast() }
     return synchronized(cache) {
       checkDisposed()
       val value = cache.getOrPut(key) { compute() ?: NULL }
