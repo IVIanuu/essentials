@@ -29,7 +29,7 @@ class ShortcutPickerScreen : Screen<Shortcut>
   navigator: Navigator,
   repository: ShortcutRepository,
   screen: ShortcutPickerScreen,
-  toaster: Toaster
+  showToast: showToast
 ): Ui<ShortcutPickerScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Pick an shortcut") } }) {
     ResourceBox(
@@ -51,7 +51,7 @@ class ShortcutPickerScreen : Screen<Shortcut>
                 navigator.pop(screen, finalShortcut)
               }.onLeft {
                 it.printStackTrace()
-                toaster.toast("Failed to pick a shortcut!")
+                showToast("Failed to pick a shortcut!")
               }
             },
             leadingContent = {

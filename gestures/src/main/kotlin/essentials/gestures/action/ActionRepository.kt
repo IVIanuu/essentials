@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.*
   private val logger: Logger,
   private val permissionManager: PermissionManager,
   private val systemDialogController: SystemDialogController,
-  private val toaster: Toaster
+  private val showToast: showToast
 ) {
   suspend fun getAllActions() = withContext(coroutineContexts.computation) {
     actions.values.map { it() }
@@ -64,7 +64,7 @@ import kotlinx.coroutines.flow.*
           .fastMap { it() }
           .firstNotNullOfOrNull { it.createExecutor(id) }
     }.getOrNull()
-      ?: ActionExecutor { toaster.toast(RECONFIGURE_ACTION_MESSAGE) }
+      ?: ActionExecutor { showToast(RECONFIGURE_ACTION_MESSAGE) }
   }
 
   suspend fun getActionSettingsKey(id: String) =
@@ -110,7 +110,7 @@ import kotlinx.coroutines.flow.*
       return@catch true
     }.onLeft {
       it.printStackTrace()
-      toaster.toast("Failed to execute action $id!")
+      showToast("Failed to execute action $id!")
     }.getOrElse { false }
   }
 

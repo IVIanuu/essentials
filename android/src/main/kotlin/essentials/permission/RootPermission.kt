@@ -20,10 +20,10 @@ abstract class RootPermission(
 
     @Provide suspend fun <P : RootPermission> request(
       shell: Shell,
-      toaster: Toaster
+      showToast: showToast
     ): PermissionRequestResult<P> {
       if (!shell.isAvailable())
-        toaster.toast("Your device is not rooted!")
+        showToast("Your device is not rooted!")
     }
   }
 }

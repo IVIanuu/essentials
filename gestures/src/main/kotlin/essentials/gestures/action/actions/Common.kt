@@ -17,7 +17,7 @@ import injekt.*
 
 @Provide class ActionIntentSender(
   private val appContext: AppContext,
-  private val toaster: Toaster
+  private val showToast: showToast
 ) {
   fun sendIntent(intent: Intent, options: Bundle?) {
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -31,7 +31,7 @@ import injekt.*
       ).send()
     }.onLeft {
       it.printStackTrace()
-      toaster.toast("Failed to launch screen!")
+      showToast("Failed to launch screen!")
     }
   }
 }

@@ -52,7 +52,7 @@ class GoPremiumScreen(
   navigator: Navigator,
   premiumVersionManager: PremiumVersionManager,
   screen: GoPremiumScreen,
-  toaster: Toaster
+  showToast: showToast
 ): Ui<GoPremiumScreen> {
   val premiumSkuDetails by produceScopedState(Resource.Idle()) {
     resourceFlow { emit(premiumVersionManager.getPremiumSkuDetails()) }
@@ -61,7 +61,7 @@ class GoPremiumScreen(
   val goPremium = scopedAction {
     if (premiumVersionManager.purchasePremiumVersion()) {
       navigator.pop(screen, true)
-      toaster.toast("Premium version is now active!")
+      showToast("Premium version is now active!")
     }
   }
   val tryBasicVersion = scopedAction {

@@ -29,7 +29,7 @@ class ActionsScreen : Screen<Unit>
 @Provide @Composable fun ActionsUi(
   navigator: Navigator,
   repository: ActionRepository,
-  toaster: Toaster
+  showToast: showToast
 ): Ui<ActionsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Actions") } }) {
     Column(
@@ -47,7 +47,7 @@ class ActionsScreen : Screen<Unit>
 
           delay(1.seconds)
 
-          toaster.toast("Execute action ${action.title}")
+          showToast("Execute action ${action.title}")
 
           repository.executeAction(actionId)
         }
@@ -64,7 +64,7 @@ class ActionsScreen : Screen<Unit>
           delay(1.seconds)
 
           while (true) {
-            toaster.toast("Execute action ${action.title}")
+            showToast("Execute action ${action.title}")
 
             repository.executeAction(actionId)
 

@@ -64,7 +64,7 @@ class WriteSecureSettingsScreen(
   permissionManager: PermissionManager,
   screen: WriteSecureSettingsScreen,
   shell: Shell,
-  toaster: Toaster
+  showToast: showToast
 ): Ui<WriteSecureSettingsScreen> {
   var currentStep by remember { mutableIntStateOf(1) }
   var completedStep by remember { mutableIntStateOf(1) }
@@ -109,13 +109,13 @@ class WriteSecureSettingsScreen(
             shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
               .onRight {
                 if (permissionManager.permissionState(listOf(screen.permissionClass)).first()) {
-                  toaster.toast("Permission granted!")
+                  showToast("Permission granted!")
                   navigator.pop(screen)
                 }
               }
               .onLeft {
                 it.printStackTrace()
-                toaster.toast("Your device is not rooted!")
+                showToast("Your device is not rooted!")
               }
           }) {
             Text("Grant")
@@ -157,7 +157,7 @@ class WriteSecureSettingsScreen(
               raceOf(
                 {
                   navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).asScreen())
-                    ?.onLeft { toaster.toast("Couldn't open phone! Please open manually") }
+                    ?.onLeft { showToast("Couldn't open phone! Please open manually") }
                 },
                 { developerModeDataStore.data.first { it != 0 } }
               )
@@ -187,7 +187,7 @@ class WriteSecureSettingsScreen(
               raceOf(
                 {
                   navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).asScreen())
-                    ?.onLeft { toaster.toast("Couldn\'t open developer options! Please open manually") }
+                    ?.onLeft { showToast("Couldn\'t open developer options! Please open manually") }
                 },
                 { adbEnabledDataStore.data.first { it != 0 } }
               )

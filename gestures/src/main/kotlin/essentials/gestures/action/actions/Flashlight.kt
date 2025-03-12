@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.*
   @Provide fun executor(
     cameraManager: @SystemService CameraManager,
     coroutineContexts: CoroutineContexts,
-    toaster: Toaster
+    showToast: showToast
   ) = ActionExecutor<FlashlightActionId> {
     withContext(coroutineContexts.main) {
       val state = cameraManager.flashlightState(coroutineContexts).first()
@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.*
         cameraManager.setTorchMode(cameraId, !state)
       }.onLeft {
         it.printStackTrace()
-        toaster.toast("Failed to enable flashlight!")
+        showToast("Failed to enable flashlight!")
       }
     }
   }

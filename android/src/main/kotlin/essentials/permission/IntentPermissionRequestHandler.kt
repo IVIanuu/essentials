@@ -25,15 +25,15 @@ data class IntentPermissionRequestParams<P : Permission>(
   appConfig: AppConfig,
   navigator: Navigator,
   permissionManager: PermissionManager,
-  toaster: Toaster
+  showToast: showToast
 ): PermissionRequestResult<P> = raceOf(
   {
     if (data.showFindHint)
-      toaster.toast("Find ${appConfig.appName} here")
+      showToast("Find ${appConfig.appName} here")
     // wait until user navigates back from the permission screen
     catch { navigator.push(data.intent.asScreen()) }
       .printErrors()
-      .onLeft { toaster.toast("Couldn\'t open settings screen! Please grant the permission manually") }
+      .onLeft { showToast("Couldn\'t open settings screen! Please grant the permission manually") }
   },
   {
     // wait until user granted permission

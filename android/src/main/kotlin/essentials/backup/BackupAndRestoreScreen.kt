@@ -20,7 +20,7 @@ class BackupAndRestoreScreen : Screen<Unit>
 
 @Provide @Composable fun BackupAndRestoreUi(
   backupManager: BackupManager,
-  toaster: Toaster,
+  showToast: showToast,
 ): Ui<BackupAndRestoreScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Backup/Restore") } }) {
     EsLazyColumn {
@@ -30,7 +30,7 @@ class BackupAndRestoreScreen : Screen<Unit>
             catch { backupManager.createBackup() }
               .onLeft {
                 it.printStackTrace()
-                toaster.toast("Failed to backup your data!")
+                showToast("Failed to backup your data!")
               }
           },
           leadingContent = { Icon(Icons.Default.Save, null) },
@@ -44,7 +44,7 @@ class BackupAndRestoreScreen : Screen<Unit>
             catch { backupManager.restoreBackup() }
               .onLeft {
                 it.printStackTrace()
-                toaster.toast("Failed to restore your data!")
+                showToast("Failed to restore your data!")
               }
           },
           leadingContent = { Icon(Icons.Default.Restore, null) },

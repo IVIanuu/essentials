@@ -30,7 +30,7 @@ class DonationScreen(
   billingManager: BillingManager,
   navigator: Navigator,
   screen: DonationScreen,
-  toaster: Toaster
+  showToast: showToast,
 ): Ui<DonationScreen> {
   val skus by produceScopedState(Resource.Idle()) {
     resourceFlow {
@@ -59,7 +59,7 @@ class DonationScreen(
         onClick = scopedAction {
           if (billingManager.purchase(donation.donation.sku, true, true)) {
             billingManager.consumePurchase(donation.donation.sku)
-            toaster.toast("Thanks for your support! \uD83D\uDC9B")
+            showToast("Thanks for your support! \uD83D\uDC9B")
           }
         },
         headlineContent = { Text(donation.title) },

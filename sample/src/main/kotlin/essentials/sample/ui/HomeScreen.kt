@@ -32,7 +32,7 @@ import injekt.*
 @Provide @Composable fun HomeUi(
   itemsFactory: () -> List<HomeItem>,
   navigator: Navigator,
-  toaster: Toaster
+  showToast: showToast
 ): Ui<HomeScreen> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   EsScaffold(
@@ -43,7 +43,7 @@ import injekt.*
           BottomSheetLauncherButton {
             EsListItem(
               onClick = {
-                toaster.toast("Clicked")
+                showToast("Clicked")
                 dismiss()
               },
               headlineContent = { Text("Test") },

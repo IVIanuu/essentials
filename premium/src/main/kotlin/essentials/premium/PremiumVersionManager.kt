@@ -49,7 +49,7 @@ interface PremiumVersionManager {
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
   private val scope: ScopedCoroutineScope<AppScope>,
-  private val toaster: Toaster
+  private val showToast: showToast
 ) : PremiumVersionManager {
   override val isPremiumVersion = moleculeFlow {
     val isPremiumVersion = (oldPremiumVersionSkus + premiumVersionSku)
@@ -85,7 +85,7 @@ interface PremiumVersionManager {
     if (isPremiumVersion.first()) return block()
 
     scope.launch {
-      toaster.toast("This functionality is only available in the premium version!")
+      showToast("This functionality is only available in the premium version!")
       if (!deviceScreenManager.unlockScreen()) return@launch
       appUiStarter.startAppUi()
         .cast<UiScopeOwner>()

@@ -5,24 +5,25 @@
 package essentials.util
 
 import android.widget.*
-import androidx.compose.runtime.*
 import essentials.*
 import essentials.coroutines.*
 import injekt.*
 import kotlinx.coroutines.*
 
-@Stable @Provide class Toaster(
-  private val appContext: AppContext,
-  private val coroutineContexts: CoroutineContexts,
-  private val scope: ScopedCoroutineScope<AppScope>
-) {
-  fun toast(message: String) {
-    scope.launch(coroutineContexts.main) {
-      Toast.makeText(
-        appContext,
-        message,
-        Toast.LENGTH_SHORT
-      ).show()
-    }
+@Tag typealias showToastResult = Unit
+typealias showToast = (String) -> showToastResult
+
+@Provide fun showToast(
+  message: String,
+  appContext: AppContext,
+  coroutineContexts: CoroutineContexts,
+  scope: ScopedCoroutineScope<AppScope>
+): showToastResult {
+  scope.launch(coroutineContexts.main) {
+    Toast.makeText(
+      appContext,
+      message,
+      Toast.LENGTH_SHORT
+    ).show()
   }
 }

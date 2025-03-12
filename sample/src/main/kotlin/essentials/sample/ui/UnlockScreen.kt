@@ -26,7 +26,7 @@ class UnlockScreen : Screen<Unit>
 @Provide @Composable fun UnlockUi(
   deviceScreenManager: DeviceScreenManager,
   scope: ScopedCoroutineScope<ScreenScope>,
-  toaster: Toaster
+  showToast: showToast
 ): Ui<UnlockScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Unlock") } }) {
     Column(
@@ -37,11 +37,11 @@ class UnlockScreen : Screen<Unit>
       Button(
         onClick = {
           scope.launch {
-            toaster.toast("Turn the screen off")
+            showToast("Turn the screen off")
             moleculeFlow { deviceScreenManager.screenState() }.first { !it.isOn }
             delay(1500)
             val unlocked = deviceScreenManager.unlockScreen()
-            toaster.toast("Screen unlocked $unlocked")
+            showToast("Screen unlocked $unlocked")
           }
         }
       ) { Text("Unlock") }
@@ -51,11 +51,11 @@ class UnlockScreen : Screen<Unit>
       Button(
         onClick = {
           scope.launch {
-            toaster.toast("Turn the screen off")
+            showToast("Turn the screen off")
             moleculeFlow { deviceScreenManager.screenState() }.first { !it.isOn }
             delay(1500)
             val screenOn = deviceScreenManager.turnScreenOn()
-            toaster.toast("Screen activated $screenOn")
+            showToast("Screen activated $screenOn")
           }
         }
       ) { Text("Activate") }
