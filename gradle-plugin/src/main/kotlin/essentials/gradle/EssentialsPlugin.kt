@@ -17,7 +17,7 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
 
   override fun apply(target: Project) {
     target.plugins.apply(InjektPlugin::class.java)
-    target.plugins.apply("injekt")
+    target.plugins.apply("io.github.ivianuu.injekt")
     target.plugins.apply("org.jetbrains.kotlinx.atomicfu")
     target.plugins.apply("org.jetbrains.kotlin.plugin.serialization")
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")

@@ -20,30 +20,28 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
     serializerFactory: () -> KSerializer<T>,
     prefsDir: () -> PrefsDir,
     scope: ScopedCoroutineScope<AppScope>
-  ): @Scoped<AppScope> DataStore<T> {
-    return DataStoreFactory.create(
-      object : Serializer<T> {
-        override val defaultValue: T get() = default()
+  ): @Scoped<AppScope> DataStore<T> = DataStoreFactory.create(
+    object : Serializer<T> {
+      override val defaultValue: T get() = default()
 
-        private val serializer by lazy(serializerFactory)
+      private val serializer by lazy(serializerFactory)
 
-        override suspend fun readFrom(input: InputStream): T =
-          try {
-            json().decodeFromStream(serializer, input)
-          } catch (e: SerializationException) {
-            throw CorruptionException("Could not read ${String(input.readBytes())}", e)
-          }
-
-        override suspend fun writeTo(t: T, output: OutputStream) {
-          try {
-            json().encodeToStream(serializer, t, output)
-          } catch (e: SerializationException) {
-            throw CorruptionException("Could not write $t", e)
-          }
+      override suspend fun readFrom(input: InputStream): T =
+        try {
+          json().decodeFromStream(serializer, input)
+        } catch (e: SerializationException) {
+          throw CorruptionException("Could not read ${String(input.readBytes())}", e)
         }
-      },
-      produceFile = { prefsDir().resolve(name) },
-      scope = scope.childCoroutineScope(coroutineContexts.io)
-    )
-  }
+
+      override suspend fun writeTo(t: T, output: OutputStream) {
+        try {
+          json().encodeToStream(serializer, t, output)
+        } catch (e: SerializationException) {
+          throw CorruptionException("Could not write $t", e)
+        }
+      }
+    },
+    produceFile = { prefsDir().resolve(name) },
+    scope = scope.childCoroutineScope(coroutineContexts.io)
+  )
 }

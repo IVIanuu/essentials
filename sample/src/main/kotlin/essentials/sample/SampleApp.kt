@@ -7,4 +7,4 @@ package essentials.sample
 import essentials.app.*
 import injekt.*
 
-class SampleApp : EsApp({ inject() })
+class SampleApp : EsApp({ create() })
