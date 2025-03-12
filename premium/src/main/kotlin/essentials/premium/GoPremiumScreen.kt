@@ -43,255 +43,255 @@ class GoPremiumScreen(
 ) : CriticalUserFlowScreen<Boolean> {
   @Provide companion object {
     @Provide fun adFeatures() = AdFeatures<GoPremiumScreen>(emptyList())
+  }
+}
 
-    @Provide fun ui(
-      features: List<AppFeature>,
-      fullScreenAdManager: FullScreenAdManager,
-      navigator: Navigator,
-      premiumVersionManager: PremiumVersionManager,
-      screen: GoPremiumScreen,
-      toaster: Toaster
-    ) = Ui<GoPremiumScreen> {
-      val premiumSkuDetails by produceScopedState(Resource.Idle()) {
-        resourceFlow { emit(premiumVersionManager.getPremiumSkuDetails()) }
-          .collect { value = it }
-      }
-      val goPremium = scopedAction {
-        if (premiumVersionManager.purchasePremiumVersion()) {
-          navigator.pop(screen, true)
-          toaster.toast("Premium version is now active!")
+@Provide @Composable fun GoPremiumUi(
+  features: List<AppFeature>,
+  fullScreenAdManager: FullScreenAdManager,
+  navigator: Navigator,
+  premiumVersionManager: PremiumVersionManager,
+  screen: GoPremiumScreen,
+  toaster: Toaster
+): Ui<GoPremiumScreen> {
+  val premiumSkuDetails by produceScopedState(Resource.Idle()) {
+    resourceFlow { emit(premiumVersionManager.getPremiumSkuDetails()) }
+      .collect { value = it }
+  }
+  val goPremium = scopedAction {
+    if (premiumVersionManager.purchasePremiumVersion()) {
+      navigator.pop(screen, true)
+      toaster.toast("Premium version is now active!")
+    }
+  }
+  val tryBasicVersion = scopedAction {
+    fullScreenAdManager.showAd()
+    navigator.pop(screen, false)
+  }
+
+  BackHandler(onBack = scopedAction {
+    if (screen.allowBackNavigation) {
+      fullScreenAdManager.showAd()
+      navigator.pop(screen, false)
+    }
+  })
+
+  Surface(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.safeContentPadding()) {
+      if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        Column(
+          modifier = Modifier.padding(16.dp),
+          horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+          PremiumUiHeader()
+
+          Spacer(Modifier.height(32.dp))
+
+          PremiumUiFeatures(Modifier.weight(1f), features)
+
+          Spacer(Modifier.height(8.dp))
+
+          PremiumUiFooter(
+            skuDetails = premiumSkuDetails.getOrNull(),
+            showTryBasicOption = screen.showTryBasicOption,
+            onGoPremiumClick = goPremium,
+            onTryBasicVersionClick = tryBasicVersion
+          )
         }
-      }
-      val tryBasicVersion = scopedAction {
-        fullScreenAdManager.showAd()
-        navigator.pop(screen, false)
-      }
+      } else {
+        Row(
+          modifier = Modifier.padding(16.dp),
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          Column(modifier = Modifier.weight(1f)) {
+            PremiumUiHeader()
 
-      BackHandler(onBack = scopedAction {
-        if (screen.allowBackNavigation) {
-          fullScreenAdManager.showAd()
-          navigator.pop(screen, false)
-        }
-      })
+            Spacer(Modifier.height(8.dp))
 
-      Surface(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.safeContentPadding()) {
-          if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Column(
-              modifier = Modifier.padding(16.dp),
-              horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-              PremiumUiHeader()
+            PremiumUiFooter(
+              skuDetails = premiumSkuDetails.getOrNull(),
+              showTryBasicOption = screen.showTryBasicOption,
+              onGoPremiumClick = goPremium,
+              onTryBasicVersionClick = tryBasicVersion
+            )
+          }
 
-              Spacer(Modifier.height(32.dp))
+          Spacer(Modifier.width(16.dp))
 
-              PremiumUiFeatures(Modifier.weight(1f), features)
-
-              Spacer(Modifier.height(8.dp))
-
-              PremiumUiFooter(
-                skuDetails = premiumSkuDetails.getOrNull(),
-                showTryBasicOption = screen.showTryBasicOption,
-                onGoPremiumClick = goPremium,
-                onTryBasicVersionClick = tryBasicVersion
-              )
-            }
-          } else {
-            Row(
-              modifier = Modifier.padding(16.dp),
-              verticalAlignment = Alignment.CenterVertically
-            ) {
-              Column(modifier = Modifier.weight(1f)) {
-                PremiumUiHeader()
-
-                Spacer(Modifier.height(8.dp))
-
-                PremiumUiFooter(
-                  skuDetails = premiumSkuDetails.getOrNull(),
-                  showTryBasicOption = screen.showTryBasicOption,
-                  onGoPremiumClick = goPremium,
-                  onTryBasicVersionClick = tryBasicVersion
-                )
-              }
-
-              Spacer(Modifier.width(16.dp))
-
-              Column(modifier = Modifier.weight(1f)) {
-                PremiumUiFeatures(Modifier.weight(1f), features)
-              }
-            }
+          Column(modifier = Modifier.weight(1f)) {
+            PremiumUiFeatures(Modifier.weight(1f), features)
           }
         }
       }
     }
+  }
+}
 
-    @Composable private fun PremiumUiHeader() {
-      Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-      ) {
-        Icon(
-          painter = painterResource(R.drawable.ic_medal),
+@Composable private fun PremiumUiHeader() {
+  Column(
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
+    Icon(
+      painter = painterResource(R.drawable.ic_medal),
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)
+        .size(36.dp),
+      tint = MaterialTheme.colorScheme.primary,
+      contentDescription = null
+    )
+
+    Text(
+      text = "Go premium",
+      style = MaterialTheme.typography.headlineMedium,
+      fontWeight = FontWeight.Bold
+    )
+
+    Text(
+      modifier = Modifier.padding(top = 8.dp),
+      text = "Unlock all features",
+      style = MaterialTheme.typography.bodyMedium
+    )
+  }
+}
+
+@Composable private fun PremiumUiFeatures(modifier: Modifier, features: List<AppFeature>) {
+  Row(
+    modifier = modifier
+      .fillMaxWidth()
+      .verticalScroll(rememberScrollState())
+  ) {
+    Column(
+      modifier = Modifier.padding(top = 32.dp),
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      features.fastForEach { feature ->
+        Box(
+          modifier = Modifier.height(48.dp),
+          contentAlignment = Alignment.Center
+        ) {
+          CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colorScheme.primary,
+            content = feature.icon
+          )
+        }
+      }
+    }
+
+    Column(
+      modifier = Modifier
+        .padding(start = 16.dp, top = 32.dp, end = 16.dp)
+        .weight(1f)
+    ) {
+      features.fastForEach {
+        Text(
           modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .size(36.dp),
+            .height(48.dp)
+            .align(Alignment.CenterStart),
+          text = it.title,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+          style = MaterialTheme.typography.titleMedium
+        )
+      }
+    }
+
+    Column(
+      modifier = Modifier.padding(end = 16.dp),
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      Text(
+        modifier = Modifier.height(32.dp),
+        text = "Premium",
+        style = MaterialTheme.typography.labelLarge
+      )
+
+      features.fastForEach { feature ->
+        Icon(
+          if (feature.inPremium) Icons.Default.Done
+          else Icons.Default.Remove,
+          modifier = Modifier
+            .size(48.dp)
+            .center(),
           tint = MaterialTheme.colorScheme.primary,
           contentDescription = null
         )
-
-        Text(
-          text = "Go premium",
-          style = MaterialTheme.typography.headlineMedium,
-          fontWeight = FontWeight.Bold
-        )
-
-        Text(
-          modifier = Modifier.padding(top = 8.dp),
-          text = "Unlock all features",
-          style = MaterialTheme.typography.bodyMedium
-        )
       }
     }
 
-    @Composable private fun PremiumUiFeatures(modifier: Modifier, features: List<AppFeature>) {
-      Row(
-        modifier = modifier
-          .fillMaxWidth()
-          .verticalScroll(rememberScrollState())
-      ) {
-        Column(
-          modifier = Modifier.padding(top = 32.dp),
-          horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-          features.fastForEach { feature ->
-            Box(
-              modifier = Modifier.height(48.dp),
-              contentAlignment = Alignment.Center
-            ) {
-              CompositionLocalProvider(
-                LocalContentColor provides MaterialTheme.colorScheme.primary,
-                content = feature.icon
-              )
-            }
-          }
-        }
-
-        Column(
-          modifier = Modifier
-            .padding(start = 16.dp, top = 32.dp, end = 16.dp)
-            .weight(1f)
-        ) {
-          features.fastForEach {
-            Text(
-              modifier = Modifier
-                .height(48.dp)
-                .align(Alignment.CenterStart),
-              text = it.title,
-              maxLines = 1,
-              overflow = TextOverflow.Ellipsis,
-              style = MaterialTheme.typography.titleMedium
-            )
-          }
-        }
-
-        Column(
-          modifier = Modifier.padding(end = 16.dp),
-          verticalArrangement = Arrangement.Center,
-          horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-          Text(
-            modifier = Modifier.height(32.dp),
-            text = "Premium",
-            style = MaterialTheme.typography.labelLarge
-          )
-
-          features.fastForEach { feature ->
-            Icon(
-              if (feature.inPremium) Icons.Default.Done
-              else Icons.Default.Remove,
-              modifier = Modifier
-                .size(48.dp)
-                .center(),
-              tint = MaterialTheme.colorScheme.primary,
-              contentDescription = null
-            )
-          }
-        }
-
-        Column(
-          verticalArrangement = Arrangement.Center,
-          horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-          Text(
-            modifier = Modifier.height(32.dp),
-            text = "Basic",
-            style = MaterialTheme.typography.labelLarge
-          )
-
-          features.fastForEach { feature ->
-            Icon(
-              if (feature.inPremium) Icons.Default.Remove
-              else Icons.Default.Done,
-              modifier = Modifier
-                .size(48.dp)
-                .center(),
-              tint = MaterialTheme.colorScheme.primary,
-              contentDescription = null
-            )
-          }
-        }
-      }
-    }
-
-    @Composable private fun PremiumUiFooter(
-      skuDetails: SkuDetails?,
-      showTryBasicOption: Boolean,
-      onGoPremiumClick: () -> Unit,
-      onTryBasicVersionClick: () -> Unit
+    Column(
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally
     ) {
-      Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-      ) {
-        if (skuDetails != null)
-          Text(
-          text = when (skuDetails.type.toSkuType()) {
-            Sku.Type.IN_APP -> "One time fee of ${skuDetails.price}"
-            Sku.Type.SUBS -> {
-              if (skuDetails.freeTrialPeriod.toIso8601Duration().amount == 0) {
-                "${skuDetails.price}/${skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()}"
-              } else {
-                "${skuDetails.price}/${skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()} " +
-                    "after ${skuDetails.freeTrialPeriod.toIso8601Duration().toReadableString()} free trial"
-              }
-            }
-          },
-          style = MaterialTheme.typography.bodySmall
-          )
+      Text(
+        modifier = Modifier.height(32.dp),
+        text = "Basic",
+        style = MaterialTheme.typography.labelLarge
+      )
 
-        Button(
+      features.fastForEach { feature ->
+        Icon(
+          if (feature.inPremium) Icons.Default.Remove
+          else Icons.Default.Done,
           modifier = Modifier
-            .padding(top = 8.dp)
-            .height(72.dp)
-            .fillMaxWidth(),
-          colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-          onClick = onGoPremiumClick
-        ) {
-          Text("Go premium")
-        }
+            .size(48.dp)
+            .center(),
+          tint = MaterialTheme.colorScheme.primary,
+          contentDescription = null
+        )
+      }
+    }
+  }
+}
 
-        if (showTryBasicOption) {
-          TextButton(
-            modifier = Modifier
-              .padding(top = 8.dp)
-              .height(72.dp)
-              .fillMaxWidth(),
-            onClick = onTryBasicVersionClick
-          ) {
-            Text("Try limited version")
+@Composable private fun PremiumUiFooter(
+  skuDetails: SkuDetails?,
+  showTryBasicOption: Boolean,
+  onGoPremiumClick: () -> Unit,
+  onTryBasicVersionClick: () -> Unit
+) {
+  Column(
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
+    if (skuDetails != null)
+      Text(
+        text = when (skuDetails.type.toSkuType()) {
+          Sku.Type.IN_APP -> "One time fee of ${skuDetails.price}"
+          Sku.Type.SUBS -> {
+            if (skuDetails.freeTrialPeriod.toIso8601Duration().amount == 0) {
+              "${skuDetails.price}/${skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()}"
+            } else {
+              "${skuDetails.price}/${skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()} " +
+                  "after ${skuDetails.freeTrialPeriod.toIso8601Duration().toReadableString()} free trial"
+            }
           }
-        }
+        },
+        style = MaterialTheme.typography.bodySmall
+      )
+
+    Button(
+      modifier = Modifier
+        .padding(top = 8.dp)
+        .height(72.dp)
+        .fillMaxWidth(),
+      colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+      onClick = onGoPremiumClick
+    ) {
+      Text("Go premium")
+    }
+
+    if (showTryBasicOption) {
+      TextButton(
+        modifier = Modifier
+          .padding(top = 8.dp)
+          .height(72.dp)
+          .fillMaxWidth(),
+        onClick = onTryBasicVersionClick
+      ) {
+        Text("Try limited version")
       }
     }
   }

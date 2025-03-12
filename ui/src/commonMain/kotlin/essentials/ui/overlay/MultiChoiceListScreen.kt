@@ -20,33 +20,31 @@ class MultiChoiceListScreen<T : Any>(
   val selected: Set<T>,
   val title: String? = null,
   val renderable: UiRenderer<T> = inject
-) : OverlayScreen<Set<T>> {
-  @Provide companion object {
-    @Provide fun ui(
-      navigator: Navigator,
-      screen: MultiChoiceListScreen<Any>,
-    ) = Ui<MultiChoiceListScreen<Any>> {
-      var selectedItems by remember { mutableStateOf(screen.selected) }
+) : OverlayScreen<Set<T>>
 
-      EsModalBottomSheet(
-        onDismissRequest = action { navigator.pop(screen, selectedItems) }
-      ) {
-        if (screen.title != null)
-          Subheader { Text(screen.title) }
-        screen.items.fastForEach { item ->
-          val selected = item in selectedItems
-          CheckboxListItem(
-            value = selected,
-            onValueChange = {
-              val newSelectedItems = selectedItems.toMutableSet()
-              if (!selected) newSelectedItems += item
-              else newSelectedItems -= item
-              selectedItems = newSelectedItems
-            },
-            headlineContent = { Text(screen.renderable.render(item)) }
-          )
-        }
-      }
+@Provide @Composable fun MultiChoiceListUi(
+  navigator: Navigator,
+  screen: MultiChoiceListScreen<Any>,
+): Ui<MultiChoiceListScreen<Any>> {
+  var selectedItems by remember { mutableStateOf(screen.selected) }
+
+  EsModalBottomSheet(
+    onDismissRequest = action { navigator.pop(screen, selectedItems) }
+  ) {
+    if (screen.title != null)
+      Subheader { Text(screen.title) }
+    screen.items.fastForEach { item ->
+      val selected = item in selectedItems
+      CheckboxListItem(
+        value = selected,
+        onValueChange = {
+          val newSelectedItems = selectedItems.toMutableSet()
+          if (!selected) newSelectedItems += item
+          else newSelectedItems -= item
+          selectedItems = newSelectedItems
+        },
+        headlineContent = { Text(screen.renderable.render(item)) }
+      )
     }
   }
 }

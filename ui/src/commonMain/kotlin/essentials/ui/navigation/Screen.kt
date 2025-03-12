@@ -65,31 +65,31 @@ class ScreenScope {
 }
 
 @Provide object ScreenProviders {
-  @Provide fun <@AddOn T : Ui<S>, S : Screen<*>> rootNavGraphUiFactory(
+  @Provide fun <@AddOn T : @UiTag<S> Unit, S : Screen<*>> rootNavGraphUiFactory(
     screenClass: KClass<S>,
-    uiFactory: UiFactory<S>
-  ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> UiFactory<Screen<*>>> =
-    (screenClass to uiFactory).unsafeCast()
+    uiContent: @Composable (Navigator, Scope<ScreenScope>, S) -> @UiTag<S> Unit
+  ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> UiContent<Screen<*>>> =
+    (screenClass to uiContent).unsafeCast()
 
-  @Provide fun <@AddOn T : Ui<S>, S : Screen<*>> rootNavGraphConfigFactory(
+  @Provide fun <@AddOn T : @UiTag<S> Unit, S : Screen<*>> rootNavGraphConfigFactory(
     screenClass: KClass<S>,
     screenConfigFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
   ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> ScreenConfigFactory<Screen<*>>> =
     (screenClass to screenConfigFactory).unsafeCast()
 
-  @Provide fun <@AddOn T : @NavGraph<N> Ui<S>, N, S : Screen<*>> navGraphUiFactory(
+  @Provide fun <@AddOn T : @NavGraph<N> @UiTag<S> Unit, N, S : Screen<*>> navGraphUiFactory(
     screenClass: KClass<S>,
-    uiFactory: (Navigator, Scope<ScreenScope>, S) -> @NavGraph<N> Ui<S>
-  ): Pair<KClass<Screen<*>>, @NavGraph<N> UiFactory<Screen<*>>> =
-    (screenClass to uiFactory).unsafeCast()
+    uiContent: @Composable (Navigator, Scope<ScreenScope>, S) -> @NavGraph<N> @UiTag<S> Unit
+  ): Pair<KClass<Screen<*>>, @NavGraph<N> UiContent<Screen<*>>> =
+    (screenClass to uiContent).unsafeCast()
 
-  @Provide fun <@AddOn T : @NavGraph<N> Ui<S>, N, S : Screen<*>> navGraphConfigFactory(
+  @Provide fun <@AddOn T : @NavGraph<N> @UiTag<S> Unit, N, S : Screen<*>> navGraphConfigFactory(
     screenClass: KClass<S>,
     screenConfigFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
   ): Pair<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>> =
     (screenClass to screenConfigFactory).unsafeCast()
 }
 
-typealias UiFactory<S> = (Navigator, Scope<ScreenScope>, S) -> Ui<S>
+typealias UiContent<S> = @Composable (Navigator, Scope<ScreenScope>, S) -> @UiTag<S> Unit
 
 typealias ScreenConfigFactory<S> = (Navigator, Scope<ScreenScope>, S) -> ScreenConfig<S>

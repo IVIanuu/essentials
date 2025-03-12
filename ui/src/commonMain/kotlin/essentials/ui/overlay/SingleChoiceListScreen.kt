@@ -4,6 +4,7 @@
 
 package essentials.ui.overlay
 import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.util.fastForEach
 import essentials.compose.*
 import essentials.ui.common.*
@@ -18,28 +19,26 @@ class SingleChoiceListScreen<T : Any>(
   val selected: T,
   val title: String? = null,
   val renderable: UiRenderer<T> = inject
-) : OverlayScreen<T> {
-  @Provide companion object {
-    @Provide fun ui(
-      navigator: Navigator,
-      screen: SingleChoiceListScreen<Any>,
-    ) = Ui<SingleChoiceListScreen<Any>> {
-      EsModalBottomSheet(
-        onDismissRequest = action { navigator.pop(screen, null) }
-      ) {
-        if (screen.title != null)
-          Subheader { Text(screen.title) }
+) : OverlayScreen<T>
 
-        screen.items.fastForEach { item ->
-          RadioListItem(
-            value = item == screen.selected,
-            onValueChange = scopedAction { value ->
-              navigator.pop(screen, item)
-            },
-            headlineContent = { Text(screen.renderable.render(item)) }
-          )
-        }
-      }
+@Provide @Composable fun SingleChoiceListUi(
+  navigator: Navigator,
+  screen: SingleChoiceListScreen<Any>,
+): Ui<SingleChoiceListScreen<Any>> {
+  EsModalBottomSheet(
+    onDismissRequest = action { navigator.pop(screen, null) }
+  ) {
+    if (screen.title != null)
+      Subheader { Text(screen.title) }
+
+    screen.items.fastForEach { item ->
+      RadioListItem(
+        value = item == screen.selected,
+        onValueChange = scopedAction { value ->
+          navigator.pop(screen, item)
+        },
+        headlineContent = { Text(screen.renderable.render(item)) }
+      )
     }
   }
 }

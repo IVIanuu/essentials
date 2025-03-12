@@ -49,82 +49,80 @@ import injekt.*
 
 @Provide val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationScreen() }
 
-class BottomNavigationScreen : Screen<Unit> {
-  @Provide companion object {
-    @Provide val ui = Ui<BottomNavigationScreen> {
-      var selectedItem by remember { mutableStateOf(BottomNavItem.entries.first()) }
+class BottomNavigationScreen : Screen<Unit>
 
-      EsScaffold(
-        topBar = { EsAppBar { Text("Bottom navigation") } },
-        bottomBar = {
-          EsNavigationBar {
-            BottomNavItem.entries.fastForEach { item ->
-              NavigationBarItem(
-                alwaysShowLabel = true,
-                selected = item == selectedItem,
-                onClick = { selectedItem = item },
-                icon = { Icon(item.icon, null) },
-                label = { Text(item.title) }
-              )
-            }
-          }
+@Provide @Composable fun BottomNavigationUi(): Ui<BottomNavigationScreen> {
+  var selectedItem by remember { mutableStateOf(BottomNavItem.entries.first()) }
+
+  EsScaffold(
+    topBar = { EsAppBar { Text("Bottom navigation") } },
+    bottomBar = {
+      EsNavigationBar {
+        BottomNavItem.entries.fastForEach { item ->
+          NavigationBarItem(
+            alwaysShowLabel = true,
+            selected = item == selectedItem,
+            onClick = { selectedItem = item },
+            icon = { Icon(item.icon, null) },
+            label = { Text(item.title) }
+          )
         }
-      ) {
-        CompositionLocalProvider(
-          LocalContentPadding provides LocalContentPadding.current.let {
-            PaddingValues(
-              start = it.calculateStartPadding(LocalLayoutDirection.current),
-              top = it.calculateTopPadding(),
-              end = it.calculateEndPadding(LocalLayoutDirection.current),
-              bottom = it.calculateBottomPadding() + CollapsedPlayerHeight + CollapsedPlayerPadding
-            )
-          }
-        ) {
-          Box(modifier = Modifier.fillMaxSize()) {
-            @SuppressLint("UnusedContentLambdaTargetStateParameter")
-            AnimatedContent(selectedItem) { item ->
-              EsLazyColumn {
-                (1..100).forEach { item ->
-                  item {
-                    EsListItem(headlineContent = { Text("Item $item") })
-                  }
-                }
+      }
+    }
+  ) {
+    CompositionLocalProvider(
+      LocalContentPadding provides LocalContentPadding.current.let {
+        PaddingValues(
+          start = it.calculateStartPadding(LocalLayoutDirection.current),
+          top = it.calculateTopPadding(),
+          end = it.calculateEndPadding(LocalLayoutDirection.current),
+          bottom = it.calculateBottomPadding() + CollapsedPlayerHeight + CollapsedPlayerPadding
+        )
+      }
+    ) {
+      Box(modifier = Modifier.fillMaxSize()) {
+        @SuppressLint("UnusedContentLambdaTargetStateParameter")
+        AnimatedContent(selectedItem) { item ->
+          EsLazyColumn {
+            (1..100).forEach { item ->
+              item {
+                EsListItem(headlineContent = { Text("Item $item") })
               }
             }
           }
-
         }
       }
 
-      PlaybackUiTest()
-    }
-
-    private enum class BottomNavItem(
-      val title: String,
-      val icon: ImageVector
-    ) {
-      HOME(
-        title = "Home",
-        icon = Icons.Default.Home
-      ),
-      MAILS(
-        title = "Mails",
-        icon = Icons.Default.Email
-      ),
-      SEARCH(
-        title = "Search",
-        icon = Icons.Default.Search
-      ),
-      SCHEDULE(
-        title = "Schedule",
-        icon = Icons.Default.ViewAgenda
-      ),
-      SETTINGS(
-        title = "Settings",
-        icon = Icons.Default.Settings
-      )
     }
   }
+
+  PlaybackUiTest()
+}
+
+private enum class BottomNavItem(
+  val title: String,
+  val icon: ImageVector
+) {
+  HOME(
+    title = "Home",
+    icon = Icons.Default.Home
+  ),
+  MAILS(
+    title = "Mails",
+    icon = Icons.Default.Email
+  ),
+  SEARCH(
+    title = "Search",
+    icon = Icons.Default.Search
+  ),
+  SCHEDULE(
+    title = "Schedule",
+    icon = Icons.Default.ViewAgenda
+  ),
+  SETTINGS(
+    title = "Settings",
+    icon = Icons.Default.Settings
+  )
 }
 
 enum class SlideUpPanelState {

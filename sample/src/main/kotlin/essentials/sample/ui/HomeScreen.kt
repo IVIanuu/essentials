@@ -27,114 +27,112 @@ import essentials.ui.overlay.*
 import essentials.util.*
 import injekt.*
 
-@Provide class HomeScreen : RootScreen {
-  @Provide companion object {
-    @Provide fun ui(
-      itemsFactory: () -> List<HomeItem>,
-      navigator: Navigator,
-      toaster: Toaster
-    ) = Ui<HomeScreen> {
-      val finalItems = remember { itemsFactory().sortedBy { it.title } }
-      EsScaffold(
-        topBar = {
-          EsAppBar(
-            title = { Text("Home") },
-            actions = {
-              BottomSheetLauncherButton {
-                EsListItem(
-                  onClick = {
-                    toaster.toast("Clicked")
-                    dismiss()
-                  },
-                  headlineContent = { Text("Test") },
-                  leadingContent = { Icon(Icons.Default.Add, null) }
-                )
-              }
-            }
-          )
-        }
-      ) {
-        EsLazyColumn {
-          itemsIndexed(finalItems) { index, item ->
-            val color = rememberSaveable(item) {
-              DefaultColorPalette
-                .shuffled()
-                .first()
-            }
+@Provide class HomeScreen : RootScreen
 
-            HomeItem(
-              item = item,
-              index = index,
-              color = color,
-              onClick = action {
-                navigator.push(
-                  item.screenFactoryWithIndex?.invoke(index, color)
-                    ?: item.screenFactory(color)
-                )
-              }
+@Provide @Composable fun HomeUi(
+  itemsFactory: () -> List<HomeItem>,
+  navigator: Navigator,
+  toaster: Toaster
+): Ui<HomeScreen> {
+  val finalItems = remember { itemsFactory().sortedBy { it.title } }
+  EsScaffold(
+    topBar = {
+      EsAppBar(
+        title = { Text("Home") },
+        actions = {
+          BottomSheetLauncherButton {
+            EsListItem(
+              onClick = {
+                toaster.toast("Clicked")
+                dismiss()
+              },
+              headlineContent = { Text("Test") },
+              leadingContent = { Icon(Icons.Default.Add, null) }
             )
           }
         }
-      }
+      )
     }
+  ) {
+    EsLazyColumn {
+      itemsIndexed(finalItems) { index, item ->
+        val color = rememberSaveable(item) {
+          DefaultColorPalette
+            .shuffled()
+            .first()
+        }
 
-    @Composable private fun HomeItem(
-      index: Int,
-      color: Color,
-      onClick: () -> Unit,
-      item: HomeItem
-    ) {
-      Surface(
-        modifier = with(LocalScreenAnimationScope.current) {
-          Modifier
-            .sharedBounds(
-              rememberSharedContentState(ContainerKey + index),
-              this,
-              boundsTransform = { _, _ -> tween(400) },
-              enter = fadeIn(tween(400)),
-              exit = fadeOut(tween(400))
+        HomeItem(
+          item = item,
+          index = index,
+          color = color,
+          onClick = action {
+            navigator.push(
+              item.screenFactoryWithIndex?.invoke(index, color)
+                ?: item.screenFactory(color)
             )
-        },
-      ) {
-        EsListItem(
-          onClick = onClick,
-          headlineContent = {
-            Text(item.title)
-          },
-          overlineContent = {
-            Text("Overline")
-          },
-          supportingContent = {
-            Text("Supporting")
-          },
-          leadingContent = {
-            Box(
-              modifier = with(LocalScreenAnimationScope.current) {
-                Modifier
-                  .size(40.dp)
-                  .background(color, CircleShape)
-                  .sharedElement(
-                    rememberSharedContentState(ColorKey + index),
-                    this,
-                    boundsTransform = { _, _ -> tween(400) }
-                  )
-              }
-            )
-          },
-          trailingContent = {
-            BottomSheetLauncherButton {
-              (0..40).forEach { index ->
-                EsListItem(
-                  onClick = { dismiss() },
-                  headlineContent = { Text(index.toString()) },
-                  leadingContent = { Icon(Icons.Default.Add, null) }
-                )
-              }
-            }
           }
         )
       }
     }
+  }
+}
+
+@Composable private fun HomeItem(
+  index: Int,
+  color: Color,
+  onClick: () -> Unit,
+  item: HomeItem
+) {
+  Surface(
+    modifier = with(LocalScreenAnimationScope.current) {
+      Modifier
+        .sharedBounds(
+          rememberSharedContentState(ContainerKey + index),
+          this,
+          boundsTransform = { _, _ -> tween(400) },
+          enter = fadeIn(tween(400)),
+          exit = fadeOut(tween(400))
+        )
+    },
+  ) {
+    EsListItem(
+      onClick = onClick,
+      headlineContent = {
+        Text(item.title)
+      },
+      overlineContent = {
+        Text("Overline")
+      },
+      supportingContent = {
+        Text("Supporting")
+      },
+      leadingContent = {
+        Box(
+          modifier = with(LocalScreenAnimationScope.current) {
+            Modifier
+              .size(40.dp)
+              .background(color, CircleShape)
+              .sharedElement(
+                rememberSharedContentState(ColorKey + index),
+                this,
+                boundsTransform = { _, _ -> tween(400) }
+              )
+          }
+        )
+      },
+      trailingContent = {
+        BottomSheetLauncherButton {
+          (0..40).forEach { index ->
+            EsListItem(
+              onClick = { dismiss() },
+              headlineContent = { Text(index.toString()) },
+              leadingContent = { Icon(Icons.Default.Add, null) }
+            )
+          }
+        }
+      }
+    )
   }
 }
 

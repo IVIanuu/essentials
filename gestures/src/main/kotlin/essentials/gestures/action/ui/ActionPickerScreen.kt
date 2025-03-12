@@ -32,63 +32,61 @@ class ActionPickerScreen(
     data object Default : Result
     data object None : Result
   }
+}
 
-  @Provide companion object {
-    @Provide fun ui(
-      navigator: Navigator,
-      permissionManager: PermissionManager,
-      repository: ActionRepository,
-      screen: ActionPickerScreen
-    ) = Ui<ActionPickerScreen> {
-      val items by produceScopedState(Resource.Idle()) {
-        value = catchResource {
-          buildList<ActionPickerItem> {
-            if (screen.showDefaultOption)
-              this += ActionPickerItem.SpecialOption(title = "Default", getResult = { Result.Default })
+@Provide @Composable fun ActionPickerUi(
+  navigator: Navigator,
+  permissionManager: PermissionManager,
+  repository: ActionRepository,
+  screen: ActionPickerScreen
+): Ui<ActionPickerScreen> {
+  val items by produceScopedState(Resource.Idle()) {
+    value = catchResource {
+      buildList<ActionPickerItem> {
+        if (screen.showDefaultOption)
+          this += ActionPickerItem.SpecialOption(title = "Default", getResult = { ActionPickerScreen.Result.Default })
 
-            if (screen.showNoneOption)
-              this += ActionPickerItem.SpecialOption(title = "None", getResult = { Result.None })
+        if (screen.showNoneOption)
+          this += ActionPickerItem.SpecialOption(title = "None", getResult = { ActionPickerScreen.Result.None })
 
-            this += (
-                (repository.getActionPickerDelegates()
-                  .fastMap { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
-                  .fastMap {
-                    ActionPickerItem.ActionItem(
-                      it,
-                      repository.getActionSettingsKey(it.id)
-                    )
-                  }))
-              .sortedBy { it.title }
-          }
-        }
+        this += (
+            (repository.getActionPickerDelegates()
+              .fastMap { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
+              .fastMap {
+                ActionPickerItem.ActionItem(
+                  it,
+                  repository.getActionSettingsKey(it.id)
+                )
+              }))
+          .sortedBy { it.title }
       }
+    }
+  }
 
-      EsScaffold(topBar = { EsAppBar { Text("Pick an action") } }) {
-        ResourceBox(items) { items ->
-          EsLazyColumn {
-            items(items) { item ->
-              EsListItem(
-                onClick = scopedAction {
-                  val result = item.getResult(navigator)
-                    ?: return@scopedAction
-                  if (result is Result.Action) {
-                    val action = repository.getAction(result.actionId)
-                    if (!permissionManager.ensurePermissions(action.permissions))
-                      return@scopedAction
-                  }
-                  navigator.pop(screen, result)
-                },
-                leadingContent = { item.Icon(Modifier.size(24.dp)) },
-                trailingContent = if (item.settingsScreen == null) null
-                else ({
-                  IconButton(onClick = scopedAction { navigator.push(item.settingsScreen!!) }) {
-                    Icon(Icons.Default.Settings, null)
-                  }
-                }),
-                headlineContent = { Text(item.title) }
-              )
-            }
-          }
+  EsScaffold(topBar = { EsAppBar { Text("Pick an action") } }) {
+    ResourceBox(items) { items ->
+      EsLazyColumn {
+        items(items) { item ->
+          EsListItem(
+            onClick = scopedAction {
+              val result = item.getResult(navigator)
+                ?: return@scopedAction
+              if (result is ActionPickerScreen.Result.Action) {
+                val action = repository.getAction(result.actionId)
+                if (!permissionManager.ensurePermissions(action.permissions))
+                  return@scopedAction
+              }
+              navigator.pop(screen, result)
+            },
+            leadingContent = { item.Icon(Modifier.size(24.dp)) },
+            trailingContent = if (item.settingsScreen == null) null
+            else ({
+              IconButton(onClick = scopedAction { navigator.push(item.settingsScreen!!) }) {
+                Icon(Icons.Default.Settings, null)
+              }
+            }),
+            headlineContent = { Text(item.title) }
+          )
         }
       }
     }

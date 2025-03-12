@@ -63,10 +63,10 @@ class BottomSheetScreen(
   val content: @Composable BottomSheetScope.() -> Unit
 ) : OverlayScreen<Unit>
 
-@Provide fun bottomSheetUi(
+@Provide @Composable fun BottomSheetUi(
   navigator: Navigator,
   screen: BottomSheetScreen
-) = Ui<BottomSheetScreen> {
+): Ui<BottomSheetScreen> {
   val sheetState = rememberModalBottomSheetState()
 
   val hideAndDismissAction = action {

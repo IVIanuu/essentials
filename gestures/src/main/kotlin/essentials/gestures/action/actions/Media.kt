@@ -37,46 +37,44 @@ import kotlinx.coroutines.flow.*
   }
 }
 
-class MediaActionSettingsScreen : Screen<Unit> {
-  @Provide companion object {
-    @Provide fun ui(
-      appRepository: AppRepository,
-      navigator: Navigator,
-      intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
-      preferencesStore: DataStore<Preferences>
-    ) = Ui<MediaActionSettingsScreen> {
-      EsScaffold(topBar = { EsAppBar { Text("Media action settings") } }) {
-        EsLazyColumn {
-          item {
-            EsListItem(
-              onClick = scopedAction {
-                val newMediaApp = navigator.push(
-                  AppPickerScreen(
-                    intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
-                  )
-                )
-                if (newMediaApp != null)
-                  preferencesStore.edit { it[MediaActionAppKey] = newMediaApp.packageName }
-              },
-              headlineContent = { Text("Media app") },
-              supportingContent = {
-                val mediaAppName by produceScopedState(nullOf()) {
-                  preferencesStore.data
-                    .map { it[MediaActionAppKey] }
-                    .flatMapLatest {
-                      if (it == null) flowOf(null)
-                      else appRepository.appInfo(it).map { it?.appName }
-                    }
-                    .collect { value = it }
-                }
+class MediaActionSettingsScreen : Screen<Unit>
 
-                Text(
-                  "Define the target app for the media actions (current: ${mediaAppName ?: "None"})"
-                )
-              }
+@Provide @Composable fun MediaActionSettingsUi(
+  appRepository: AppRepository,
+  navigator: Navigator,
+  intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
+  preferencesStore: DataStore<Preferences>
+): Ui<MediaActionSettingsScreen> {
+  EsScaffold(topBar = { EsAppBar { Text("Media action settings") } }) {
+    EsLazyColumn {
+      item {
+        EsListItem(
+          onClick = scopedAction {
+            val newMediaApp = navigator.push(
+              AppPickerScreen(
+                intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
+              )
+            )
+            if (newMediaApp != null)
+              preferencesStore.edit { it[MediaActionAppKey] = newMediaApp.packageName }
+          },
+          headlineContent = { Text("Media app") },
+          supportingContent = {
+            val mediaAppName by produceScopedState(nullOf()) {
+              preferencesStore.data
+                .map { it[MediaActionAppKey] }
+                .flatMapLatest {
+                  if (it == null) flowOf(null)
+                  else appRepository.appInfo(it).map { it?.appName }
+                }
+                .collect { value = it }
+            }
+
+            Text(
+              "Define the target app for the media actions (current: ${mediaAppName ?: "None"})"
             )
           }
-        }
+        )
       }
     }
   }

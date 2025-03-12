@@ -55,202 +55,200 @@ abstract class WriteSecureSettingsPermission(
 
 class WriteSecureSettingsScreen(
   val permissionClass: KClass<out WriteSecureSettingsPermission>
-) : CriticalUserFlowScreen<Boolean> {
-  @Provide companion object {
-    @Provide fun ui(
-      adbEnabledDataStore: DataStore<AdbEnabled>,
-      appUiStarter: AppUiStarter,
-      appConfig: AppConfig,
-      navigator: Navigator,
-      developerModeDataStore: DataStore<DeveloperMode>,
-      permissionManager: PermissionManager,
-      screen: WriteSecureSettingsScreen,
-      shell: Shell,
-      toaster: Toaster
-    ) = Ui<WriteSecureSettingsScreen> {
-      var currentStep by remember { mutableIntStateOf(1) }
-      var completedStep by remember { mutableIntStateOf(1) }
+) : CriticalUserFlowScreen<Boolean>
 
-      @Composable fun ContinueButton(text: String = "Continue") {
-        Button(
-          onClick = action {
-            if (completedStep == 4)
-              navigator.pop(screen, true)
-            else {
-              completedStep++
-              currentStep = completedStep
-            }
-          },
-          enabled = if (currentStep > completedStep) false
-          else when (completedStep) {
-            1 -> developerModeDataStore.data.collectAsScopedState(null).value != 0
-            2 -> adbEnabledDataStore.data.collectAsScopedState(null).value != 0
-            3 -> true
-            4 -> produceScopedState(false) {
-              while (true) {
-                value = permissionManager.permissionState(listOf(screen.permissionClass)).first()
-                delay(1.seconds)
-              }
-            }.value
-            else -> true
+@Provide @Composable fun WriteSecureSettingsUi(
+  adbEnabledDataStore: DataStore<AdbEnabled>,
+  appUiStarter: AppUiStarter,
+  appConfig: AppConfig,
+  navigator: Navigator,
+  developerModeDataStore: DataStore<DeveloperMode>,
+  permissionManager: PermissionManager,
+  screen: WriteSecureSettingsScreen,
+  shell: Shell,
+  toaster: Toaster
+): Ui<WriteSecureSettingsScreen> {
+  var currentStep by remember { mutableIntStateOf(1) }
+  var completedStep by remember { mutableIntStateOf(1) }
+
+  @Composable fun ContinueButton(text: String = "Continue") {
+    Button(
+      onClick = action {
+        if (completedStep == 4)
+          navigator.pop(screen, true)
+        else {
+          completedStep++
+          currentStep = completedStep
+        }
+      },
+      enabled = if (currentStep > completedStep) false
+      else when (completedStep) {
+        1 -> developerModeDataStore.data.collectAsScopedState(null).value != 0
+        2 -> adbEnabledDataStore.data.collectAsScopedState(null).value != 0
+        3 -> true
+        4 -> produceScopedState(false) {
+          while (true) {
+            value = permissionManager.permissionState(listOf(screen.permissionClass)).first()
+            delay(1.seconds)
           }
-        ) { Text(text) }
+        }.value
+        else -> true
       }
+    ) { Text(text) }
+  }
 
-      val openStep = { step: Int -> currentStep = step }
+  val openStep = { step: Int -> currentStep = step }
 
-      EsScaffold(
-        topBar = { EsAppBar { Text("PC instructions") } },
-        bottomBar = {
-          Snackbar(
-            modifier = Modifier
-              .navigationBarsPadding()
-              .padding(16.dp),
-            action = {
-              TextButton(onClick = scopedAction {
-                shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
-                  .onRight {
-                    if (permissionManager.permissionState(listOf(screen.permissionClass)).first()) {
-                      toaster.toast("Permission granted!")
-                      navigator.pop(screen)
-                    }
-                  }
-                  .onLeft {
-                    it.printStackTrace()
-                    toaster.toast("Your device is not rooted!")
-                  }
-              }) {
-                Text("Grant")
+  EsScaffold(
+    topBar = { EsAppBar { Text("PC instructions") } },
+    bottomBar = {
+      Snackbar(
+        modifier = Modifier
+          .navigationBarsPadding()
+          .padding(16.dp),
+        action = {
+          TextButton(onClick = scopedAction {
+            shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
+              .onRight {
+                if (permissionManager.permissionState(listOf(screen.permissionClass)).first()) {
+                  toaster.toast("Permission granted!")
+                  navigator.pop(screen)
+                }
               }
-            }
-          ) {
-            Text("Grant permission using root")
+              .onLeft {
+                it.printStackTrace()
+                toaster.toast("Your device is not rooted!")
+              }
+          }) {
+            Text("Grant")
           }
         }
       ) {
-        EsLazyColumn {
-          item {
+        Text("Grant permission using root")
+      }
+    }
+  ) {
+    EsLazyColumn {
+      item {
+        Text(
+          text = "The WRITE_SECURE_SETTINGS permission can be granted from the browser on your PC! " +
+              "You don\'t have to install any drivers or programs.\n" +
+              "You can grant the permission with a single click on rooted devices.",
+          modifier = Modifier.padding(all = 16.dp),
+          style = MaterialTheme.typography.bodyMedium
+        )
+      }
+
+      item {
+        Step(
+          step = 1,
+          isCompleted = completedStep > 1,
+          isCurrent = currentStep == 1,
+          onClick = { openStep(1) },
+          title = { Text("Enable Developer options") },
+          content = {
             Text(
-              text = "The WRITE_SECURE_SETTINGS permission can be granted from the browser on your PC! " +
-                  "You don\'t have to install any drivers or programs.\n" +
-                  "You can grant the permission with a single click on rooted devices.",
-              modifier = Modifier.padding(all = 16.dp),
+              text = ") Click \"Open about phone\"\n" +
+                  "2) Click \"Build Number\" multiple times until the \"Developer options\" are active",
               style = MaterialTheme.typography.bodyMedium
             )
+          },
+          actions = {
+            ContinueButton()
+            OutlinedButton(onClick = scopedAction {
+              raceOf(
+                {
+                  navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).asScreen())
+                    ?.onLeft { toaster.toast("Couldn't open phone! Please open manually") }
+                },
+                { developerModeDataStore.data.first { it != 0 } }
+              )
+              appUiStarter.startAppUi()
+            }) { Text("Open about phone") }
           }
+        )
+      }
 
-          item {
-            Step(
-              step = 1,
-              isCompleted = completedStep > 1,
-              isCurrent = currentStep == 1,
-              onClick = { openStep(1) },
-              title = { Text("Enable Developer options") },
-              content = {
-                Text(
-                  text = ") Click \"Open about phone\"\n" +
-                      "2) Click \"Build Number\" multiple times until the \"Developer options\" are active",
-                  style = MaterialTheme.typography.bodyMedium
-                )
-              },
-              actions = {
-                ContinueButton()
-                OutlinedButton(onClick = scopedAction {
-                  raceOf(
-                    {
-                      navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).asScreen())
-                        ?.onLeft { toaster.toast("Couldn't open phone! Please open manually") }
-                    },
-                    { developerModeDataStore.data.first { it != 0 } }
-                  )
-                  appUiStarter.startAppUi()
-                }) { Text("Open about phone") }
-              }
+      item {
+        Step(
+          step = 2,
+          isCompleted = completedStep > 2,
+          isCurrent = currentStep == 2,
+          onClick = { openStep(2) },
+          title = { Text("Enable USB debugging") },
+          content = {
+            Text(
+              text = "1) Click \"Open developer options\"\n" +
+                  "2) Enable \"USB debugging\"",
+              style = MaterialTheme.typography.bodyMedium
             )
+          },
+          actions = {
+            ContinueButton()
+            OutlinedButton(onClick = scopedAction {
+              raceOf(
+                {
+                  navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).asScreen())
+                    ?.onLeft { toaster.toast("Couldn\'t open developer options! Please open manually") }
+                },
+                { adbEnabledDataStore.data.first { it != 0 } }
+              )
+              appUiStarter.startAppUi()
+            }) {
+              Text("Open developer options")
+            }
           }
+        )
+      }
 
-          item {
-            Step(
-              step = 2,
-              isCompleted = completedStep > 2,
-              isCurrent = currentStep == 2,
-              onClick = { openStep(2) },
-              title = { Text("Enable USB debugging") },
-              content = {
-                Text(
-                  text = "1) Click \"Open developer options\"\n" +
-                      "2) Enable \"USB debugging\"",
-                  style = MaterialTheme.typography.bodyMedium
-                )
-              },
-              actions = {
-                ContinueButton()
-                OutlinedButton(onClick = scopedAction {
-                  raceOf(
-                    {
-                      navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).asScreen())
-                        ?.onLeft { toaster.toast("Couldn\'t open developer options! Please open manually") }
-                    },
-                    { adbEnabledDataStore.data.first { it != 0 } }
-                  )
-                  appUiStarter.startAppUi()
-                }) {
-                  Text("Open developer options")
-                }
-              }
+      item {
+        Step(
+          step = 3,
+          isCompleted = completedStep > 3,
+          isCurrent = currentStep == 3,
+          onClick = { openStep(3) },
+          title = { Text("Connect your phone to WebADB") },
+          content = {
+            Text(
+              "1) Open \"www.webadb.com\" on your PC\n" +
+                  "2) Connect your phone with your PC\n" +
+                  "3) On your PC click \"Start\"\n" +
+                  "4) Click \"Add device\"\n" +
+                  "5) Click *YOUR DEVICE*\\n" +
+                  "6) Click \"Connect\" on the pop up\n" +
+                  "7) Click \"Connect\" next to the \"Add device\" button\n" +
+                  "8) On your phone click \"Allow\""
             )
-          }
+          },
+          actions = { ContinueButton() }
+        )
+      }
 
-          item {
-            Step(
-              step = 3,
-              isCompleted = completedStep > 3,
-              isCurrent = currentStep == 3,
-              onClick = { openStep(3) },
-              title = { Text("Connect your phone to WebADB") },
-              content = {
-                Text(
-                  "1) Open \"www.webadb.com\" on your PC\n" +
-                      "2) Connect your phone with your PC\n" +
-                      "3) On your PC click \"Start\"\n" +
-                      "4) Click \"Add device\"\n" +
-                      "5) Click *YOUR DEVICE*\\n" +
-                      "6) Click \"Connect\" on the pop up\n" +
-                      "7) Click \"Connect\" next to the \"Add device\" button\n" +
-                      "8) On your phone click \"Allow\""
+      item {
+        Step(
+          step = 4,
+          isCompleted = completedStep > 4,
+          isCurrent = currentStep == 4,
+          onClick = { openStep(4) },
+          title = { Text("Grant permission") },
+          content = {
+            Text("1) On your PC click \"Interactive shell\" in the left panel" +
+                "\n2) In the terminal window type the command below and hit the enter button")
+
+            Text(
+              modifier = Modifier
+                .padding(top = 8.dp)
+                .background(
+                  LocalContentColor.current.copy(alpha = 0.12f),
+                  RoundedCornerShape(4.dp)
                 )
-              },
-              actions = { ContinueButton() }
+                .padding(4.dp),
+              text = "pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS",
+              style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp)
             )
-          }
-
-          item {
-            Step(
-              step = 4,
-              isCompleted = completedStep > 4,
-              isCurrent = currentStep == 4,
-              onClick = { openStep(4) },
-              title = { Text("Grant permission") },
-              content = {
-                Text("1) On your PC click \"Interactive shell\" in the left panel" +
-                    "\n2) In the terminal window type the command below and hit the enter button")
-
-                Text(
-                  modifier = Modifier
-                    .padding(top = 8.dp)
-                    .background(
-                      LocalContentColor.current.copy(alpha = 0.12f),
-                      RoundedCornerShape(4.dp)
-                    )
-                    .padding(4.dp),
-                  text = "pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS",
-                  style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp)
-                )
-              },
-              actions = { ContinueButton(text = "Complete") }
-            )
-          }
-        }
+          },
+          actions = { ContinueButton(text = "Complete") }
+        )
       }
     }
   }

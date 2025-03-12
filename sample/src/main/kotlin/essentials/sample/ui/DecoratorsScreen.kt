@@ -6,6 +6,7 @@ package essentials.sample.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
@@ -17,16 +18,14 @@ import injekt.*
 
 @Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsScreen() }
 
-class DecoratorsScreen : Screen<Unit> {
-  @Provide companion object {
-    @Provide val ui = Ui<DecoratorsScreen> {
-      EsScaffold(topBar = { EsAppBar { Text("Decorators") } }) {
-        EsLazyColumn {
-          (1..10).forEach { itemIndex ->
-            item {
-              EsListItem(headlineContent = { Text("Item $itemIndex") })
-            }
-          }
+class DecoratorsScreen : Screen<Unit>
+
+@Provide @Composable fun DecoratorsUi(): Ui<DecoratorsScreen> {
+  EsScaffold(topBar = { EsAppBar { Text("Decorators") } }) {
+    EsLazyColumn {
+      (1..10).forEach { itemIndex ->
+        item {
+          EsListItem(headlineContent = { Text("Item $itemIndex") })
         }
       }
     }

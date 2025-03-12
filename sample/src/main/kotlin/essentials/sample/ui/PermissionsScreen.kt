@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
 import androidx.compose.ui.util.fastMap
 import essentials.accessibility.*
@@ -22,22 +23,20 @@ import injekt.*
 
 @Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsScreen() }
 
-class PermissionsScreen : Screen<Unit> {
-  @Provide companion object {
-    @Provide fun ui(
-      permissionManager: PermissionManager,
-      permissions: List<SamplePermission>
-    ) = Ui<PermissionsScreen> {
-      EsScaffold(topBar = { EsAppBar { Text("Permissions") } }) {
-        Button(
-          modifier = Modifier.center(),
-          onClick = scopedAction {
-            permissionManager.ensurePermissions(permissions.fastMap { it::class })
-          }
-        ) {
-          Text("Request")
-        }
+class PermissionsScreen : Screen<Unit>
+
+@Provide @Composable fun PermissionsUi(
+  permissionManager: PermissionManager,
+  permissions: List<SamplePermission>
+): Ui<PermissionsScreen> {
+  EsScaffold(topBar = { EsAppBar { Text("Permissions") } }) {
+    Button(
+      modifier = Modifier.center(),
+      onClick = scopedAction {
+        permissionManager.ensurePermissions(permissions.fastMap { it::class })
       }
+    ) {
+      Text("Request")
     }
   }
 }

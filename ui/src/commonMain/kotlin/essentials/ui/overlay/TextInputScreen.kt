@@ -25,42 +25,40 @@ class TextInputScreen(
   val initial: String = "",
   val keyboardOptions: KeyboardOptions = KeyboardOptions(),
   val predicate: (String) -> Boolean = { true }
-) : OverlayScreen<String> {
-  @Provide companion object {
-    @Provide fun ui(
-      navigator: Navigator,
-      screen: TextInputScreen
-    ) = Ui<TextInputScreen> {
-      EsModalBottomSheet {
-        var currentValue by remember {
-          mutableStateOf(TextFieldValue(screen.initial, TextRange(screen.initial.length)))
-        }
+) : OverlayScreen<String>
 
-        val focusRequester = remember { FocusRequester() }
-        DisposableEffect(true) {
-          focusRequester.requestFocus()
-          onDispose { }
-        }
+@Provide @Composable fun TextInputUi(
+  navigator: Navigator,
+  screen: TextInputScreen
+): Ui<TextInputScreen> {
+  EsModalBottomSheet {
+    var currentValue by remember {
+      mutableStateOf(TextFieldValue(screen.initial, TextRange(screen.initial.length)))
+    }
 
-        Row(
-          verticalAlignment = Alignment.CenterVertically
-        ) {
-          TextField(
-            modifier = Modifier.focusRequester(focusRequester).weight(1f),
-            value = currentValue,
-            onValueChange = { currentValue = it },
-            keyboardOptions = screen.keyboardOptions,
-            textStyle = MaterialTheme.typography.titleLarge,
-            label = { Text(screen.label) }
-          )
+    val focusRequester = remember { FocusRequester() }
+    DisposableEffect(true) {
+      focusRequester.requestFocus()
+      onDispose { }
+    }
 
-          val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
-          IconButton(
-            onClick = scopedAction { navigator.pop(screen, currentValue.text) },
-            enabled = currentValueIsOk
-          ) { Icon(Icons.Default.Send, null) }
-        }
-      }
+    Row(
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      TextField(
+        modifier = Modifier.focusRequester(focusRequester).weight(1f),
+        value = currentValue,
+        onValueChange = { currentValue = it },
+        keyboardOptions = screen.keyboardOptions,
+        textStyle = MaterialTheme.typography.titleLarge,
+        label = { Text(screen.label) }
+      )
+
+      val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
+      IconButton(
+        onClick = scopedAction { navigator.pop(screen, currentValue.text) },
+        enabled = currentValueIsOk
+      ) { Icon(Icons.Default.Send, null) }
     }
   }
 }

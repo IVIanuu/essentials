@@ -22,9 +22,9 @@ object ChildNavGraph
 
 @Provide val childNavigationHomeItem = HomeItem("Child Navigation") { ChildNavigationScreen() }
 
-@Provide fun childNavigationUi(
+@Provide @Composable fun ChildNavigationUi(
   navigationComponent: NavigationComponent<ChildNavGraph>
-) = Ui<ChildNavigationScreen> {
+): Ui<ChildNavigationScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Child Navigation") } }) {
     Column {
       (1..3).forEach { navigationIndex ->
@@ -50,48 +50,47 @@ object ChildNavGraph
 data class ChildNavigationItemScreen(
   val navigationIndex: Int,
   val index: Int
-) : Screen<Unit> {
-  @Provide companion object {
-    @Provide fun ui(
-      navigator: Navigator,
-      screen: ChildNavigationItemScreen
-    ): @NavGraph<ChildNavGraph> Ui<ChildNavigationItemScreen> = Ui {
-      val color = Colors.shuffled().first()
+) : Screen<Unit>
 
-      Surface(
-        color = color,
-        contentColor = guessingContentColorFor(color)
+@Provide @Composable fun ChildNavigationItemUi(
+  navigator: Navigator,
+  screen: ChildNavigationItemScreen
+): @NavGraph<ChildNavGraph> Ui<ChildNavigationItemScreen> {
+  val color = Colors.shuffled().first()
+
+  Surface(
+    color = color,
+    contentColor = guessingContentColorFor(color)
+  ) {
+    Row(
+      modifier = Modifier
+        .fillMaxSize(),
+      horizontalArrangement = Arrangement.Center,
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Text("${screen.navigationIndex} ${screen.index}")
+
+      Button(
+        enabled = screen.index > 0,
+        onClick = action { navigator.popTop() }
       ) {
-        Row(
-          modifier = Modifier
-            .fillMaxSize(),
-          horizontalArrangement = Arrangement.Center,
-          verticalAlignment = Alignment.CenterVertically
-        ) {
-          Text("${screen.navigationIndex} ${screen.index}")
+        Text("Previous")
+      }
 
-          Button(
-            enabled = screen.index > 0,
-            onClick = action { navigator.popTop() }
-          ) {
-            Text("Previous")
-          }
-
-          Button(onClick = action {
-            navigator.push(screen.copy(index = screen.index.inc()))
-          }) {
-            Text("Next")
-          }
-        }
+      Button(onClick = action {
+        navigator.push(screen.copy(index = screen.index.inc()))
+      }) {
+        Text("Next")
       }
     }
-
-    private val Colors = listOf(
-      Color.Red,
-      Color.Green,
-      Color.Blue,
-      Color.Magenta,
-      Color.Cyan
-    )
   }
 }
+
+private val Colors = listOf(
+  Color.Red,
+  Color.Green,
+  Color.Blue,
+  Color.Magenta,
+  Color.Cyan
+)
+

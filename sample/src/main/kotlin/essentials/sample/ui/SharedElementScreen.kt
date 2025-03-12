@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -27,9 +28,9 @@ class SharedElementScreen(val index: Int, val color: Color) : Screen<Unit>
 const val ColorKey = "image"
 const val ContainerKey = "container"
 
-@Provide fun sharedElementUi(
+@Provide @Composable fun SharedElementUi(
   screen: SharedElementScreen
-) = Ui<SharedElementScreen> {
+): Ui<SharedElementScreen> {
   Surface(
     shadowElevation = 8.dp,
     modifier = with(LocalScreenAnimationScope.current) {

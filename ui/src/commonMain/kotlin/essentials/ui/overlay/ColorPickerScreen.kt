@@ -33,178 +33,176 @@ class ColorPickerScreen(
   val initialColor: Color,
   val colorPalette: List<Color> = DefaultColorPalette,
   val includeAlpha: Boolean = false,
-) : OverlayScreen<Color> {
-  @Provide companion object {
-    @Provide fun ui(
-      navigator: Navigator,
-      screen: ColorPickerScreen
-    ) = Ui<ColorPickerScreen> {
-      var currentHex by remember {
-        mutableStateOf(screen.initialColor.toHexString(includeAlpha = screen.includeAlpha))
-      }
-      val currentColor by remember {
-        derivedStateOf { currentHex.toColorOrNull() ?: Color.Transparent }
-      }
+) : OverlayScreen<Color>
 
-      EsModalBottomSheet(onDismissRequest = action { navigator.pop(screen, currentColor) }) {
-        val textFieldContentColor = if (currentColor == Color.Transparent) LocalContentColor.current
-        else guessingContentColorFor(currentColor)
+@Provide @Composable fun ColorPickerUi(
+  navigator: Navigator,
+  screen: ColorPickerScreen
+): Ui<ColorPickerScreen> {
+  var currentHex by remember {
+    mutableStateOf(screen.initialColor.toHexString(includeAlpha = screen.includeAlpha))
+  }
+  val currentColor by remember {
+    derivedStateOf { currentHex.toColorOrNull() ?: Color.Transparent }
+  }
 
-        val textInputShape = MaterialTheme.shapes.small
-        TextField(
+  EsModalBottomSheet(onDismissRequest = action { navigator.pop(screen, currentColor) }) {
+    val textFieldContentColor = if (currentColor == Color.Transparent) LocalContentColor.current
+    else guessingContentColorFor(currentColor)
+
+    val textInputShape = MaterialTheme.shapes.small
+    TextField(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp)
+        .border(1.dp, LocalContentColor.current, textInputShape),
+      prefix = { Text("#") },
+      value = currentHex,
+      onValueChange = { newValue ->
+        if ((screen.includeAlpha && newValue.length > 8) ||
+          (!screen.includeAlpha && newValue.length > 6)
+        ) return@TextField
+
+        currentHex = newValue
+      },
+      colors = TextFieldDefaults.colors(
+        focusedContainerColor = currentColor,
+        unfocusedContainerColor = currentColor,
+        focusedTextColor = textFieldContentColor,
+        unfocusedTextColor = textFieldContentColor,
+        focusedPrefixColor = textFieldContentColor,
+        unfocusedPrefixColor = textFieldContentColor,
+        unfocusedIndicatorColor = Color.Transparent,
+        focusedIndicatorColor = Color.Transparent
+      ),
+      shape = textInputShape
+    )
+
+    Spacer(Modifier.height(8.dp))
+
+    EsLazyRow(
+      horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+      items(screen.colorPalette) { color ->
+        Box(
           modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .border(1.dp, LocalContentColor.current, textInputShape),
-          prefix = { Text("#") },
-          value = currentHex,
-          onValueChange = { newValue ->
-            if ((screen.includeAlpha && newValue.length > 8) ||
-              (!screen.includeAlpha && newValue.length > 6)
-            ) return@TextField
-
-            currentHex = newValue
-          },
-          colors = TextFieldDefaults.colors(
-            focusedContainerColor = currentColor,
-            unfocusedContainerColor = currentColor,
-            focusedTextColor = textFieldContentColor,
-            unfocusedTextColor = textFieldContentColor,
-            focusedPrefixColor = textFieldContentColor,
-            unfocusedPrefixColor = textFieldContentColor,
-            unfocusedIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent
-          ),
-          shape = textInputShape
-        )
-
-        Spacer(Modifier.height(8.dp))
-
-        EsLazyRow(
-          horizontalArrangement = Arrangement.spacedBy(8.dp)
+            .size(48.dp)
+            .background(color, CircleShape)
+            .border(1.dp, LocalContentColor.current, CircleShape)
+            .clickable(
+              interactionSource = remember { MutableInteractionSource() },
+              indication = ripple(bounded = false)
+            ) { currentHex = color.toHexString(screen.includeAlpha) },
+          contentAlignment = Alignment.Center
         ) {
-          items(screen.colorPalette) { color ->
-            Box(
-              modifier = Modifier
-                .size(48.dp)
-                .background(color, CircleShape)
-                .border(1.dp, LocalContentColor.current, CircleShape)
-                .clickable(
-                  interactionSource = remember { MutableInteractionSource() },
-                  indication = ripple(bounded = false)
-                ) { currentHex = color.toHexString(screen.includeAlpha) },
-              contentAlignment = Alignment.Center
-            ) {
-              androidx.compose.animation.AnimatedVisibility(
-                visible = currentColor == color,
-                enter = fadeIn(),
-                exit = fadeOut()
-              ) {
-                Icon(
-                  imageVector = Icons.Default.Check,
-                  contentDescription = null,
-                  tint = guessingContentColorFor(color)
-                )
-              }
-            }
+          androidx.compose.animation.AnimatedVisibility(
+            visible = currentColor == color,
+            enter = fadeIn(),
+            exit = fadeOut()
+          ) {
+            Icon(
+              imageVector = Icons.Default.Check,
+              contentDescription = null,
+              tint = guessingContentColorFor(color)
+            )
           }
         }
-
-        Spacer(Modifier.height(8.dp))
-
-        if (screen.includeAlpha)
-          ColorComponentItem(
-            title = "A",
-            color = LocalContentColor.current,
-            value = currentColor.alpha,
-            onValueChange = {
-              currentHex = currentHex
-                .toColor()
-                .copy(alpha = it)
-                .toHexString(screen.includeAlpha)
-            }
-          )
-
-        ColorComponentItem(
-          title = "R",
-          color = Color.Red,
-          value = currentColor.red,
-          onValueChange = {
-            currentHex = currentHex
-              .toColor()
-              .copy(red = it)
-              .toHexString(screen.includeAlpha)
-          }
-        )
-
-        ColorComponentItem(
-          title = "G",
-          color = Color.Green,
-          value = currentColor.green,
-          onValueChange = {
-            currentHex = currentHex
-              .toColor()
-              .copy(green = it)
-              .toHexString(screen.includeAlpha)
-          }
-        )
-
-        ColorComponentItem(
-          title = "B",
-          color = Color.Blue,
-          value = currentColor.blue,
-          onValueChange = {
-            currentHex = currentHex
-              .toColor()
-              .copy(blue = it)
-              .toHexString(screen.includeAlpha)
-          }
-        )
-
-        Spacer(Modifier.height(8.dp))
       }
     }
 
-    @Composable private fun ColorComponentItem(
-      title: String,
-      color: Color,
-      value: Float,
-      onValueChange: (Float) -> Unit
-    ) {
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .height(40.dp)
-          .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Text(
-          text = title,
-          style = MaterialTheme.typography.titleSmall
-        )
+    Spacer(Modifier.height(8.dp))
 
-        Spacer(Modifier.width(8.dp))
+    if (screen.includeAlpha)
+      ColorComponentItem(
+        title = "A",
+        color = LocalContentColor.current,
+        value = currentColor.alpha,
+        onValueChange = {
+          currentHex = currentHex
+            .toColor()
+            .copy(alpha = it)
+            .toHexString(screen.includeAlpha)
+        }
+      )
 
-        EsSlider(
-          modifier = Modifier.weight(1f),
-          value = value,
-          onValueChange = onValueChange,
-          colors = SliderDefaults.colors(
-            thumbColor = color,
-            activeTrackColor = color,
-            inactiveTrackColor = color
-          )
-        )
-
-        Spacer(Modifier.width(8.dp))
-
-        Text(
-          text = (255 * value).toInt().toString(),
-          style = MaterialTheme.typography.labelMedium,
-          textAlign = TextAlign.End
-        )
+    ColorComponentItem(
+      title = "R",
+      color = Color.Red,
+      value = currentColor.red,
+      onValueChange = {
+        currentHex = currentHex
+          .toColor()
+          .copy(red = it)
+          .toHexString(screen.includeAlpha)
       }
-    }
+    )
+
+    ColorComponentItem(
+      title = "G",
+      color = Color.Green,
+      value = currentColor.green,
+      onValueChange = {
+        currentHex = currentHex
+          .toColor()
+          .copy(green = it)
+          .toHexString(screen.includeAlpha)
+      }
+    )
+
+    ColorComponentItem(
+      title = "B",
+      color = Color.Blue,
+      value = currentColor.blue,
+      onValueChange = {
+        currentHex = currentHex
+          .toColor()
+          .copy(blue = it)
+          .toHexString(screen.includeAlpha)
+      }
+    )
+
+    Spacer(Modifier.height(8.dp))
+  }
+}
+
+@Composable private fun ColorComponentItem(
+  title: String,
+  color: Color,
+  value: Float,
+  onValueChange: (Float) -> Unit
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .height(40.dp)
+      .padding(horizontal = 16.dp),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Text(
+      text = title,
+      style = MaterialTheme.typography.titleSmall
+    )
+
+    Spacer(Modifier.width(8.dp))
+
+    EsSlider(
+      modifier = Modifier.weight(1f),
+      value = value,
+      onValueChange = onValueChange,
+      colors = SliderDefaults.colors(
+        thumbColor = color,
+        activeTrackColor = color,
+        inactiveTrackColor = color
+      )
+    )
+
+    Spacer(Modifier.width(8.dp))
+
+    Text(
+      text = (255 * value).toInt().toString(),
+      style = MaterialTheme.typography.labelMedium,
+      textAlign = TextAlign.End
+    )
   }
 }
 

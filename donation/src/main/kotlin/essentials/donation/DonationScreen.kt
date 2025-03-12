@@ -24,55 +24,53 @@ import injekt.*
 
 class DonationScreen(
   val donations: List<Donation> = Donation.DefaultDonations
-) : OverlayScreen<Unit> {
-  @Provide companion object {
-    @Provide fun ui(
-      billingManager: BillingManager,
-      navigator: Navigator,
-      screen: DonationScreen,
-      toaster: Toaster
-    ) = Ui<DonationScreen> {
-      val skus by produceScopedState(Resource.Idle()) {
-        resourceFlow {
-          emit(
-            screen.donations.parMap { donation ->
-              val details = billingManager.getSkuDetails(donation.sku)!!
-              UiDonation(
-                donation,
-                details.title
-                  .replaceAfterLast("(", "")
-                  .removeSuffix("("),
-                details.price
-              )
-            }
-          )
-        }
-          .collect { value = it }
-      }
+) : OverlayScreen<Unit>
 
-      EsModalBottomSheet(
-        onDismissRequest = action { navigator.pop(screen, null) }
-      ) {
-        skus.getOrNull()?.fastForEach { donation ->
-          EsListItem(
-            modifier = Modifier.padding(horizontal = 8.dp),
-            onClick = scopedAction {
-              if (billingManager.purchase(donation.donation.sku, true, true)) {
-                billingManager.consumePurchase(donation.donation.sku)
-                toaster.toast("Thanks for your support! \uD83D\uDC9B")
-              }
-            },
-            headlineContent = { Text(donation.title) },
-            leadingContent = donation.donation.icon,
-            trailingContent = { Text(text = donation.price) }
+@Provide @Composable fun DonationUi(
+  billingManager: BillingManager,
+  navigator: Navigator,
+  screen: DonationScreen,
+  toaster: Toaster
+): Ui<DonationScreen> {
+  val skus by produceScopedState(Resource.Idle()) {
+    resourceFlow {
+      emit(
+        screen.donations.parMap { donation ->
+          val details = billingManager.getSkuDetails(donation.sku)!!
+          UiDonation(
+            donation,
+            details.title
+              .replaceAfterLast("(", "")
+              .removeSuffix("("),
+            details.price
           )
         }
-      }
+      )
     }
+      .collect { value = it }
+  }
 
-    private data class UiDonation(val donation: Donation, val title: String, val price: String)
+  EsModalBottomSheet(
+    onDismissRequest = action { navigator.pop(screen, null) }
+  ) {
+    skus.getOrNull()?.fastForEach { donation ->
+      EsListItem(
+        modifier = Modifier.padding(horizontal = 8.dp),
+        onClick = scopedAction {
+          if (billingManager.purchase(donation.donation.sku, true, true)) {
+            billingManager.consumePurchase(donation.donation.sku)
+            toaster.toast("Thanks for your support! \uD83D\uDC9B")
+          }
+        },
+        headlineContent = { Text(donation.title) },
+        leadingContent = donation.donation.icon,
+        trailingContent = { Text(text = donation.price) }
+      )
+    }
   }
 }
+
+private data class UiDonation(val donation: Donation, val title: String, val price: String)
 
 data class Donation(val sku: Sku, val icon: @Composable () -> Unit) {
   companion object {

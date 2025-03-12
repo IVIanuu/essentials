@@ -21,7 +21,7 @@ import injekt.*
 
 class TestSharedElementScreen : OverlayScreen<Unit>
 
-@Provide fun testSharedElementUi() = Ui<TestSharedElementScreen> {
+@Provide @Composable fun TestSharedElementUi(): Ui<TestSharedElementScreen> {
   Box(
     contentAlignment = Alignment.Center,
     modifier = with(LocalScreenAnimationScope.current) {
@@ -49,72 +49,70 @@ class TestSharedElementScreen : OverlayScreen<Unit>
 
 @Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsScreen() }
 
-class DialogsScreen : Screen<Unit> {
-  @Provide companion object {
-    @Provide fun ui(navigator: Navigator) = Ui<DialogsScreen> {
-      EsScaffold(topBar = { EsAppBar { Text("Dialogs") } }) {
-        EsLazyColumn(
-          modifier = Modifier.fillMaxSize(),
-          horizontalAlignment = Alignment.CenterHorizontally,
-          verticalArrangement = Arrangement.Center
+class DialogsScreen : Screen<Unit>
+
+@Provide @Composable fun DialogsUi(navigator: Navigator): Ui<DialogsScreen> {
+  EsScaffold(topBar = { EsAppBar { Text("Dialogs") } }) {
+    EsLazyColumn(
+      modifier = Modifier.fillMaxSize(),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.Center
+    ) {
+      item {
+        val items = listOf(1, 2, 3, 4, 5)
+        var selected by remember { mutableIntStateOf(1) }
+        Button(
+          onClick = scopedAction {
+            navigator.push(
+              SingleChoiceListScreen(
+                items = items,
+                selected = selected
+              ) { it.toString() }
+            )
+              ?.let { selected = it }
+          }
         ) {
-          item {
-            val items = listOf(1, 2, 3, 4, 5)
-            var selected by remember { mutableIntStateOf(1) }
-            Button(
-              onClick = scopedAction {
-                navigator.push(
-                  SingleChoiceListScreen(
-                    items = items,
-                    selected = selected
-                  ) { it.toString() }
-                )
-                  ?.let { selected = it }
-              }
-            ) {
-              Text("Single choice")
-            }
-          }
-          item {
-            val items = listOf("A", "B", "C")
-            var selected by remember { mutableStateOf(items.toSet()) }
-            Button(
-              onClick = action {
-                navigator.push(
-                  MultiChoiceListScreen(
-                    items = items,
-                    selected = selected
-                  )
-                )
-                  ?.let { selected = it }
-              }
-            ) { Text("Multi choice") }
-          }
-          item {
-            val primaryColor = MaterialTheme.colorScheme.primary
-            var currentColor by remember { mutableStateOf(primaryColor) }
-            Button(
-              onClick = action {
-                navigator.push(
-                  ColorPickerScreen(initialColor = currentColor)
-                )?.let { currentColor = it }
-              }
-            ) { Text("Color choice") }
-          }
-          item {
-            var current by remember { mutableStateOf("") }
-            Button(
-              onClick = action {
-                navigator.push(
-                  TextInputScreen(
-                    label = "text...",
-                    initial = current
-                  )
-                )?.let { current = it }
-              }
-            ) { Text("Text") }
-          }
+          Text("Single choice")
         }
+      }
+      item {
+        val items = listOf("A", "B", "C")
+        var selected by remember { mutableStateOf(items.toSet()) }
+        Button(
+          onClick = action {
+            navigator.push(
+              MultiChoiceListScreen(
+                items = items,
+                selected = selected
+              )
+            )
+              ?.let { selected = it }
+          }
+        ) { Text("Multi choice") }
+      }
+      item {
+        val primaryColor = MaterialTheme.colorScheme.primary
+        var currentColor by remember { mutableStateOf(primaryColor) }
+        Button(
+          onClick = action {
+            navigator.push(
+              ColorPickerScreen(initialColor = currentColor)
+            )?.let { currentColor = it }
+          }
+        ) { Text("Color choice") }
+      }
+      item {
+        var current by remember { mutableStateOf("") }
+        Button(
+          onClick = action {
+            navigator.push(
+              TextInputScreen(
+                label = "text...",
+                initial = current
+              )
+            )?.let { current = it }
+          }
+        ) { Text("Text") }
       }
     }
   }

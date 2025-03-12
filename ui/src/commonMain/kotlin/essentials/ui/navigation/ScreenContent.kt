@@ -80,9 +80,10 @@ import kotlin.reflect.*
   component: NavigationComponent<*> = LocalScope.current.service<NavigationComponent<RootNavGraph>>()
 ): ScreenState<S> = remember {
   val scope = component.screenScopeFactory(navigator, screen)
-  val ui = component.uiFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
+  val ui = component.uiFactories[screen::class.cast()]
     ?: error("No ui factory found for $screen")
-  val config = component.configFactories[screen::class.cast()]?.invoke(navigator, scope.cast(), screen)
+  val config = component.configFactories[screen::class.cast()]
+    ?.invoke(navigator, scope.cast(), screen)
     ?: error("No config found for $screen")
   val decorateScreen = component.decorateScreenFactory(navigator, scope.cast(), screen)
   ScreenState(
@@ -90,7 +91,7 @@ import kotlin.reflect.*
     config = config,
     content = {
       decorateScreen.DecoratedContent {
-        ui.Content()
+        ui(navigator, scope.cast(), screen)
       }
     },
     scope = scope
@@ -98,7 +99,7 @@ import kotlin.reflect.*
 }
 
 @Stable @Provide data class NavigationComponent<N>(
-  val uiFactories: Map<KClass<Screen<*>>, @NavGraph<N> UiFactory<Screen<*>>>,
+  val uiFactories: Map<KClass<Screen<*>>, @NavGraph<N> UiContent<Screen<*>>>,
   val configFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>>,
   val screenScopeFactory: (@Service<ScreenScope> Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>,
   val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen

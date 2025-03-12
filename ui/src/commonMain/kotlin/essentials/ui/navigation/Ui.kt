@@ -4,8 +4,7 @@
 
 package essentials.ui.navigation
 
-import androidx.compose.runtime.*
+import injekt.Tag
 
-@Stable fun interface Ui<S : Screen<*>> {
-  @Composable fun Content()
-}
+@Tag annotation class UiTag<S : Screen<*>>
+typealias Ui<S> = @UiTag<S> Unit

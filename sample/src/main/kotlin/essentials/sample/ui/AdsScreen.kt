@@ -16,24 +16,22 @@ import injekt.*
 
 @Provide val adsHomeItem = HomeItem("Ads") { AdsScreen() }
 
-class AdsScreen : Screen<Unit> {
-  @Provide companion object {
-    @Provide fun ui(fullScreenAd: FullScreenAdManager) = Ui<AdsScreen> {
-      EsScaffold(topBar = { EsAppBar { Text("Ads") } }) {
-        EsLazyColumn {
-          item {
-            SwitchListItem(
-              value = showAds,
-              onValueChange = { showAds = it },
-              headlineContent = { Text("Show ads") }
-            )
-          }
+class AdsScreen : Screen<Unit>
 
-          item {
-            Button(onClick = scopedAction { fullScreenAd.showAd() }) {
-              Text("Show full screen ad")
-            }
-          }
+@Provide @Composable fun AdsUi(fullScreenAd: FullScreenAdManager): Ui<AdsScreen> {
+  EsScaffold(topBar = { EsAppBar { Text("Ads") } }) {
+    EsLazyColumn {
+      item {
+        SwitchListItem(
+          value = showAds,
+          onValueChange = { showAds = it },
+          headlineContent = { Text("Show ads") }
+        )
+      }
+
+      item {
+        Button(onClick = scopedAction { fullScreenAd.showAd() }) {
+          Text("Show full screen ad")
         }
       }
     }

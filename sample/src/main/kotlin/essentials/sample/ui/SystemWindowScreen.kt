@@ -22,39 +22,37 @@ import kotlinx.coroutines.*
 
 @Provide val systemWindowHomeItem = HomeItem("System Window") { SystemWindowScreen() }
 
-class SystemWindowScreen : Screen<Unit> {
-  @Provide companion object {
-    @Provide fun ui(
-      permissionManager: PermissionManager,
-      scope: ScopedCoroutineScope<ScreenScope>,
-      systemWindowManager: SystemWindowManager
-    ) = Ui<SystemWindowScreen> {
-      EsScaffold(topBar = { EsAppBar { Text("System window") } }) {
-        var showSystemWindow by remember { mutableStateOf(false) }
+class SystemWindowScreen : Screen<Unit>
 
-        if (showSystemWindow)
-          systemWindowManager.SystemWindow {
-            Box(
-              modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Red)
-                .systemWindowTrigger()
-                .clickable { showSystemWindow = false }
-            )
-          }
+@Provide @Composable fun SystemWindowUi(
+  permissionManager: PermissionManager,
+  scope: ScopedCoroutineScope<ScreenScope>,
+  systemWindowManager: SystemWindowManager
+): Ui<SystemWindowScreen> {
+  EsScaffold(topBar = { EsAppBar { Text("System window") } }) {
+    var showSystemWindow by remember { mutableStateOf(false) }
 
-        Button(
-          modifier = Modifier.center(),
-          onClick = {
-            scope.launch {
-              if (permissionManager.ensurePermissions(listOf(SampleSystemOverlayPermission::class)))
-                showSystemWindow = true
-            }
-          }
-        ) {
-          Text("Attach system window")
+    if (showSystemWindow)
+      systemWindowManager.SystemWindow {
+        Box(
+          modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Red)
+            .systemWindowTrigger()
+            .clickable { showSystemWindow = false }
+        )
+      }
+
+    Button(
+      modifier = Modifier.center(),
+      onClick = {
+        scope.launch {
+          if (permissionManager.ensurePermissions(listOf(SampleSystemOverlayPermission::class)))
+            showSystemWindow = true
         }
       }
+    ) {
+      Text("Attach system window")
     }
   }
 }

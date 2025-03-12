@@ -26,84 +26,82 @@ import kotlinx.coroutines.flow.*
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundScreen() }
 
-class ForegroundScreen : Screen<Unit> {
-  @Provide companion object {
-    @SuppressLint("NewApi")
-    @Provide fun ui(
-      foregroundManager: ForegroundManager,
-      notificationFactory: NotificationFactory
-    ) = Ui<ForegroundScreen> {
-      EsScaffold(topBar = { EsAppBar { Text("Foreground") } }) {
-        var isEnabled by remember { mutableStateOf(false) }
-        var isSecondEnabled by remember { mutableStateOf(false) }
-        var removeNotification by remember { mutableStateOf(true) }
+class ForegroundScreen : Screen<Unit>
 
-        if (isEnabled)
-          foregroundManager.Foreground(
-            id = "foreground",
-            removeNotification = removeNotification
-          ) {
-            notificationFactory.create(
-              "foreground",
-              "Foreground",
-              NotificationManager.IMPORTANCE_LOW
-            ) {
-              setSmallIcon(R.drawable.ic_launcher_foreground)
-              setContentTitle("Foreground")
-              setContentText("Current progress ${
-                produceState(0) {
-                  ticker(1000)
-                    .receiveAsFlow()
-                    .runningFold(0) { acc, _ -> acc.inc() }
-                    .collect { value = it } 
-                }.value
-              }")
-            }
-          }
+@Provide @Composable fun ForegroundUi(
+  foregroundManager: ForegroundManager,
+  notificationFactory: NotificationFactory
+): Ui<ForegroundScreen> {
+  EsScaffold(topBar = { EsAppBar { Text("Foreground") } }) {
+    var isEnabled by remember { mutableStateOf(false) }
+    var isSecondEnabled by remember { mutableStateOf(false) }
+    var removeNotification by remember { mutableStateOf(true) }
 
-        if (isSecondEnabled)
-          foregroundManager.Foreground(
-            id = "foreground2",
-            removeNotification = removeNotification
-          ) {
-            notificationFactory.create(
-              "foreground2",
-              "Foreground2",
-              NotificationManager.IMPORTANCE_LOW
-            ) {
-              setSmallIcon(R.drawable.ic_launcher_foreground)
-              setContentTitle("Foreground2")
-              setContentText("Current progress ${
-                produceState(0) {
-                  ticker(2000)
-                    .receiveAsFlow()
-                    .runningFold(0) { acc, _ -> acc.inc() }
-                    .collect { value = it }
-                }.value
-              }")
-            }
-          }
-
-        Column(
-          modifier = Modifier.fillMaxSize(),
-          verticalArrangement = Arrangement.Center,
-          horizontalAlignment = Alignment.CenterHorizontally
+    if (isEnabled)
+      foregroundManager.Foreground(
+        id = "foreground",
+        removeNotification = removeNotification
+      ) {
+        notificationFactory.create(
+          "foreground",
+          "Foreground",
+          NotificationManager.IMPORTANCE_LOW
         ) {
-          Button(onClick = { isEnabled = !isEnabled }) {
-            Text(if (isEnabled) "Stop foreground" else "Start foreground")
-          }
-
-          Button(onClick = { isSecondEnabled = !isSecondEnabled }) {
-            Text(if (isSecondEnabled) "Stop foreground2" else "Start foreground2")
-          }
-
-          SwitchListItem(
-            value = removeNotification,
-            onValueChange = { removeNotification = it },
-            headlineContent = { Text("Remove notification") }
-          )
+          setSmallIcon(R.drawable.ic_launcher_foreground)
+          setContentTitle("Foreground")
+          setContentText("Current progress ${
+            produceState(0) {
+              ticker(1000)
+                .receiveAsFlow()
+                .runningFold(0) { acc, _ -> acc.inc() }
+                .collect { value = it }
+            }.value
+          }")
         }
       }
+
+    if (isSecondEnabled)
+      foregroundManager.Foreground(
+        id = "foreground2",
+        removeNotification = removeNotification
+      ) {
+        notificationFactory.create(
+          "foreground2",
+          "Foreground2",
+          NotificationManager.IMPORTANCE_LOW
+        ) {
+          setSmallIcon(R.drawable.ic_launcher_foreground)
+          setContentTitle("Foreground2")
+          setContentText("Current progress ${
+            produceState(0) {
+              ticker(2000)
+                .receiveAsFlow()
+                .runningFold(0) { acc, _ -> acc.inc() }
+                .collect { value = it }
+            }.value
+          }")
+        }
+      }
+
+    Column(
+      modifier = Modifier.fillMaxSize(),
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      Button(onClick = { isEnabled = !isEnabled }) {
+        Text(if (isEnabled) "Stop foreground" else "Start foreground")
+      }
+
+      Button(onClick = { isSecondEnabled = !isSecondEnabled }) {
+        Text(if (isSecondEnabled) "Stop foreground2" else "Start foreground2")
+      }
+
+      SwitchListItem(
+        value = removeNotification,
+        onValueChange = { removeNotification = it },
+        headlineContent = { Text("Remove notification") }
+      )
     }
   }
 }
+
