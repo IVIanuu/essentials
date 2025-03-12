@@ -14,35 +14,31 @@ import kotlinx.coroutines.flow.*
 import splitties.coroutines.*
 import kotlin.reflect.*
 
-fun interface PermissionIntentFactory<P : Permission> {
-  fun createIntent(permission: P): Intent
-}
+data class IntentPermissionRequestParams<P : Permission>(
+  val intent: Intent,
+  val showFindHint: Boolean = false
+)
 
-@JvmInline value class ShowFindPermissionHint<P : Permission>(val value: Boolean)
-
-@Provide fun <P : Permission> intentPermissionRequestHandler(
-  appConfig: AppConfig,
+@Provide suspend fun <P : Permission> requestPermissionWithIntent(
+  data: IntentPermissionRequestParams<P>,
   key: KClass<P>,
-  intentFactory: PermissionIntentFactory<P>,
+  appConfig: AppConfig,
   navigator: Navigator,
   permissionManager: PermissionManager,
-  showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
   toaster: Toaster
-) = PermissionRequestHandler<P> { permission ->
-  raceOf(
-    {
-      if (showFindPermissionHint.value)
-        toaster.toast("Find ${appConfig.appName} here")
-      // wait until user navigates back from the permission screen
-      catch { navigator.push(intentFactory.createIntent(permission).asScreen()) }
-        .printErrors()
-        .onLeft { toaster.toast("Couldn\'t open settings screen! Please grant the permission manually") }
-    },
-    {
-      // wait until user granted permission
-      // we intentionally call it again and again to force a refresh
-      while (!permissionManager.permissionState(listOf(key)).first())
-        delay(100)
-    }
-  )
-}
+): PermissionRequestResult<P> = raceOf(
+  {
+    if (data.showFindHint)
+      toaster.toast("Find ${appConfig.appName} here")
+    // wait until user navigates back from the permission screen
+    catch { navigator.push(data.intent.asScreen()) }
+      .printErrors()
+      .onLeft { toaster.toast("Couldn\'t open settings screen! Please grant the permission manually") }
+  },
+  {
+    // wait until user granted permission
+    // we intentionally call it again and again to force a refresh
+    while (!permissionManager.permissionState(listOf(key)).first())
+      delay(100)
+  }
+)

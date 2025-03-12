@@ -17,17 +17,17 @@ abstract class WriteSettingsPermission(
   override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   @Provide companion object {
-    @Provide fun <P : WriteSettingsPermission> stateProvider(
+    @Provide fun <P : WriteSettingsPermission> state(
       appContext: AppContext
-    ) = PermissionStateProvider<P> { Settings.System.canWrite(appContext) }
+    ): PermissionState<P> = Settings.System.canWrite(appContext)
 
-    @Provide fun <P : WriteSettingsPermission> intentFactory(
+    @Provide fun <P : WriteSettingsPermission> requestParams(
       appConfig: AppConfig
-    ) = PermissionIntentFactory<P> {
+    ) = IntentPermissionRequestParams<P>(
       Intent(
         Settings.ACTION_MANAGE_WRITE_SETTINGS,
         "package:${appConfig.packageName}".toUri()
       )
-    }
+    )
   }
 }

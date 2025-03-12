@@ -19,22 +19,19 @@ abstract class IgnoreBatteryOptimizationsPermission(
   override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   @Provide companion object {
-    @Provide fun <P : IgnoreBatteryOptimizationsPermission> stateProvider(
+    @Provide fun <P : IgnoreBatteryOptimizationsPermission> state(
       appConfig: AppConfig,
       powerManager: @SystemService PowerManager
-    ) = PermissionStateProvider<P> {
-      powerManager.isIgnoringBatteryOptimizations(appConfig.packageName)
-    }
+    ): PermissionState<P> = powerManager.isIgnoringBatteryOptimizations(appConfig.packageName)
 
     @SuppressLint("BatteryLife")
-    @Provide
-    fun <P : IgnoreBatteryOptimizationsPermission> intentFactory(
+    @Provide fun <P : IgnoreBatteryOptimizationsPermission> requestParams(
       appConfig: AppConfig
-    ) = PermissionIntentFactory<P> {
+    ) = IntentPermissionRequestParams<P>(
       Intent(
         Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
         "package:${appConfig.packageName}".toUri()
       )
-    }
+    )
   }
 }

@@ -17,21 +17,18 @@ abstract class SystemOverlayPermission(
   override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   @Provide companion object {
-    @Provide fun <P : SystemOverlayPermission> stateProvider(
+    @Provide fun <P : SystemOverlayPermission> state(
       appContext: AppContext
-    ) = PermissionStateProvider<P> { Settings.canDrawOverlays(appContext) }
+    ): PermissionState<P> = Settings.canDrawOverlays(appContext)
 
-    @Provide fun <P : SystemOverlayPermission> showFindPermissionHint(
+    @Provide fun <P : SystemOverlayPermission> requestParams(
       appConfig: AppConfig
-    ) = ShowFindPermissionHint<P>(appConfig.sdk >= 30)
-
-    @Provide fun <P : SystemOverlayPermission> intentFactory(
-      appConfig: AppConfig
-    ) = PermissionIntentFactory<P> {
-      Intent(
+    ) = IntentPermissionRequestParams<P>(
+      intent = Intent(
         Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
         "package:${appConfig.packageName}".toUri()
-      )
-    }
+      ),
+      showFindHint = appConfig.sdk >= 30
+    )
   }
 }

@@ -18,16 +18,18 @@ abstract class RuntimePermission(
   override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   @Provide companion object {
-    @Provide fun <P : RuntimePermission> stateProvider(
+    @Provide fun <P : RuntimePermission> state(
+      permission: P,
       appContext: AppContext
-    ) = PermissionStateProvider<P> { permission ->
-      appContext.checkSelfPermission(permission.permissionName) == PackageManager.PERMISSION_GRANTED
-    }
+    ): PermissionState<P> =
+      appContext.checkSelfPermission(permission.permissionName) ==
+          PackageManager.PERMISSION_GRANTED
 
-    @Provide fun <P : RuntimePermission> requestHandler(
+    @Provide suspend fun <P : RuntimePermission> request(
+      permission: P,
       appContext: AppContext,
       navigator: Navigator
-    ) = PermissionRequestHandler<P> { permission ->
+    ): PermissionRequestResult<P> {
       val contract = ActivityResultContracts.RequestPermission()
       val intent = contract.createIntent(appContext, permission.permissionName)
       navigator.push(intent.asScreen())

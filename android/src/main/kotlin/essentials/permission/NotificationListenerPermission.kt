@@ -21,21 +21,18 @@ abstract class NotificationListenerPermission(
   override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   @Provide companion object {
-    @Provide fun <P : NotificationListenerPermission> showFindPermissionHint() =
-      ShowFindPermissionHint<P>(true)
-
-    @Provide fun <P : NotificationListenerPermission> stateProvider(
+    @Provide fun <P : NotificationListenerPermission> state(
       appContext: AppContext,
       appConfig: AppConfig
-    ) = PermissionStateProvider<P> {
+    ): PermissionState<P> =
       NotificationManagerCompat.getEnabledListenerPackages(appContext)
         .any { it == appConfig.packageName }
-    }
 
-    @Provide fun <P : NotificationListenerPermission> intentFactory(
+    @Provide fun <P : NotificationListenerPermission> requestParams(
+      permission: P,
       appConfig: AppConfig
-    ) = PermissionIntentFactory<P> { permission ->
-      Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
+    ) = IntentPermissionRequestParams<P>(
+      intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
         val componentName = "${appConfig.packageName}/${permission.serviceClass.java.name}"
         putExtra(":settings:fragment_args_key", componentName)
         putExtra(
@@ -43,7 +40,8 @@ abstract class NotificationListenerPermission(
             ":settings:fragment_args_key" to componentName
           )
         )
-      }
-    }
+      },
+      showFindHint = true
+    )
   }
 }

@@ -22,27 +22,23 @@ abstract class AccessibilityServicePermission(
   override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   @Provide companion object {
-    @Provide fun <P : AccessibilityServicePermission> stateProvider(
+    @Provide fun <P : AccessibilityServicePermission> state(
       appContext: AppContext
-    ) = PermissionStateProvider<P> provider@{
-      Settings.Secure.getString(
-        appContext.contentResolver,
-        Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-      )
-        ?.split(":")
-        ?.fastMap {
-          it.split("/").first()
-        }
-        ?.fastAny { it == appContext.packageName } == true
-    }
+    ): PermissionState<P> = Settings.Secure.getString(
+      appContext.contentResolver,
+      Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+    )
+      ?.split(":")
+      ?.fastMap {
+        it.split("/").first()
+      }
+      ?.fastAny { it == appContext.packageName } == true
 
-    @Provide fun <P : AccessibilityServicePermission> showFindPermissionHint() =
-      ShowFindPermissionHint<P>(true)
-
-    @Provide fun <P : AccessibilityServicePermission> intentFactory(
+    @Provide fun <P : AccessibilityServicePermission> requestParams(
+      permission: P,
       appConfig: AppConfig
-    ) = PermissionIntentFactory<P> { permission ->
-      Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
+    ) = IntentPermissionRequestParams<P>(
+      intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
         val componentName = "${appConfig.packageName}/${permission.serviceClass.java.name}"
         putExtra(":settings:fragment_args_key", componentName)
         putExtra(
@@ -50,7 +46,8 @@ abstract class AccessibilityServicePermission(
             ":settings:fragment_args_key" to componentName
           )
         )
-      }
-    }
+      },
+      showFindHint = true
+    )
   }
 }

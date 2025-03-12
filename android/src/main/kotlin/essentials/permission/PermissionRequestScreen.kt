@@ -30,7 +30,7 @@ class PermissionRequestScreen(
   appUiStarter: AppUiStarter,
   navigator: Navigator,
   permissionManager: PermissionManager,
-  requestHandlers: Map<KClass<out Permission>, () -> PermissionRequestHandler<Permission>>,
+  requestHandlers: Map<KClass<out Permission>, suspend (Permission) -> PermissionRequestResult<Permission>>,
   screen: PermissionRequestScreen
 ): Ui<PermissionRequestScreen> {
   LaunchedScopedEffect(true) {
@@ -77,7 +77,8 @@ class PermissionRequestScreen(
 
               TextButton(
                 onClick = scopedAction {
-                  requestHandlers[keysByPermission[permission]!!]!!().requestPermission(permission)
+                  requestHandlers[keysByPermission[permission]!!]!!(permission)
+                  permissionRefreshes.emit(Unit)
                   appUiStarter.startAppUi()
                 }
               ) { Text("Allow") }

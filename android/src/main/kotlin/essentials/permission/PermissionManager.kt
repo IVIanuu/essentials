@@ -23,7 +23,7 @@ import kotlin.reflect.*
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val permissions: Map<KClass<out Permission>, () -> Permission>,
-  private val stateProviders: Map<KClass<out Permission>, () -> PermissionStateProvider<Permission>>
+  private val stateProviders: Map<KClass<out Permission>, suspend (Permission) -> PermissionState<Permission>>
 ) {
   fun <T : Permission> permission(key: KClass<T>): T =
     permissions[key]!!().unsafeCast()
@@ -31,13 +31,13 @@ import kotlin.reflect.*
   fun permissionState(permissions: List<KClass<out Permission>>): Flow<Boolean> = moleculeFlow {
     permissions.fastMap { permissionKey ->
       val permission = remember { permission(permissionKey) }
-      val stateProvider = remember { stateProviders[permissionKey]!!() }
+      val stateProvider = stateProviders[permissionKey]!!
       produceState<Boolean?>(null) {
         permissionRefreshes
           .onStart<Any?> { emit(Unit) }
           .map {
             withContext(coroutineContexts.io) {
-              stateProvider.permissionState(permission)
+              stateProvider(permission)
             }
           }
           .collect { value = it }

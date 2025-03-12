@@ -28,38 +28,29 @@ interface Permission {
 
   @Provide fun <@AddOn T : Permission> requestHandlerBinding(
     key: KClass<T>,
-    requestHandler: () -> PermissionRequestHandler<T>
-  ): Pair<KClass<out Permission>, () -> PermissionRequestHandler<Permission>> =
-    (key to { requestHandler().intercept() }).cast()
+    requestHandler: suspend (T) -> PermissionRequestResult<T>
+  ): Pair<KClass<out Permission>, suspend (Permission) -> PermissionRequestResult<Permission>> =
+    (key to requestHandler).cast()
 
   @Provide val defaultRequestHandlers
-    get() = emptyList<Pair<KClass<out Permission>, () -> PermissionRequestHandler<Permission>>>()
+    get() = emptyList<Pair<KClass<out Permission>, suspend (Permission) -> PermissionRequestResult<Permission>>>()
 
   @Provide fun <@AddOn T : Permission> stateProvider(
     key: KClass<T>,
-    stateProvider: () -> PermissionStateProvider<T>
-  ): Pair<KClass<out Permission>, () -> PermissionStateProvider<Permission>> =
+    stateProvider: suspend (T) -> PermissionState<T>
+  ): Pair<KClass<out Permission>, suspend (Permission) -> PermissionState<Permission>> =
     (key to stateProvider).cast()
 
   @Provide val defaultStateProviders
-    get() = emptyList<Pair<KClass<out Permission>, () -> PermissionStateProvider<Permission>>>()
+    get() = emptyList<Pair<KClass<out Permission>, suspend (Permission) -> PermissionState<Permission>>>()
 }
 
-fun interface PermissionStateProvider<P : Permission> {
-  suspend fun permissionState(permission: P): Boolean
-}
+@Tag typealias PermissionState<P> = Boolean
 
-fun interface PermissionRequestHandler<P : Permission> {
-  suspend fun requestPermission(permission: P)
-}
+@Tag typealias PermissionRequestResult<P> = Unit
 
 internal val permissionRefreshes = EventFlow<Unit>()
 
 @Provide fun permissionRefreshesWorker() = ScopeInitializer<UiScope> {
   permissionRefreshes.tryEmit(Unit)
-}
-
-private fun <P : Permission> PermissionRequestHandler<P>.intercept() = PermissionRequestHandler<P> {
-  requestPermission(it)
-  permissionRefreshes.emit(Unit)
 }

@@ -37,17 +37,15 @@ abstract class WriteSecureSettingsPermission(
   override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   @Provide companion object {
-    @Provide fun <P : WriteSecureSettingsPermission> stateProvider(
+    @Provide fun <P : WriteSecureSettingsPermission> state(
       appContext: AppContext
-    ) = PermissionStateProvider<P> {
-      appContext
-        .checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED
-    }
+    ): PermissionState<P> = appContext
+      .checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED
 
-    @Provide fun <P : WriteSecureSettingsPermission> requestHandler(
-      navigator: Navigator,
-      key: KClass<P>
-    ) = PermissionRequestHandler<P> {
+    @Provide suspend fun <P : WriteSecureSettingsPermission> requestHandler(
+      key: KClass<P>,
+      navigator: Navigator
+    ): PermissionRequestResult<P> {
       navigator.push(WriteSecureSettingsScreen(key))
     }
   }
