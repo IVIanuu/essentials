@@ -16,8 +16,8 @@ import kotlin.reflect.*
 
 @Stable @Provide class Scope<N : Any>(
   val name: KClass<N>,
-  val parent: @ParentScope Scope<*>? = null,
-  config: (Scope<N>, @ParentScope Scope<*>?) -> ScopeConfig<N>
+  val parent: ParentScope? = null,
+  config: (Scope<N>, ParentScope?) -> ScopeConfig<N>
 ) : SynchronizedObject(), DisposableHandle {
   var isDisposed by mutableStateOf(false)
     private set
@@ -211,7 +211,7 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
   }
 }
 
-@Tag annotation class ParentScope
+@Tag typealias ParentScope = Scope<*>
 
 @Tag annotation class Eager<N : Any> {
   @Provide companion object {
