@@ -15,17 +15,15 @@ import kotlin.reflect.*
 
 interface IntentScreen : Screen<Either<ActivityNotFoundException, ActivityResult>> {
   @Provide companion object {
-    @Provide fun <@AddOn T : ScreenIntentFactory<K>, K : Any> intentFactoryBinding(
-      intentFactory: T,
-      keyClass: KClass<K>
-    ): Pair<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>> =
-      (keyClass to intentFactory).cast()
+    @Provide fun <@AddOn T : ScreenIntent<S>, S : IntentScreen> intentFactoryBinding(
+      intentFactory: (S) -> ScreenIntent<S>,
+      key: KClass<S>
+    ): Pair<KClass<IntentScreen>, (IntentScreen) -> Intent> =
+      (key to intentFactory).cast()
   }
 }
 
-fun interface ScreenIntentFactory<T> {
-  suspend fun createIntent(screen: T): Intent
-}
+@Tag typealias ScreenIntent<T> = Intent
 
 fun interface AppUiStarter {
   suspend fun startAppUi(): ComponentActivity
@@ -34,12 +32,12 @@ fun interface AppUiStarter {
 @Provide fun intentScreenInterceptor(
   appUiStarter: AppUiStarter,
   coroutineContexts: CoroutineContexts,
-  intentFactories: () -> Map<KClass<IntentScreen>, ScreenIntentFactory<IntentScreen>>
+  intentFactories: () -> Map<KClass<IntentScreen>, (IntentScreen) -> Intent>
 ) = ScreenInterceptor<Either<Throwable, ActivityResult>> handler@{ screen ->
   if (screen !is IntentScreen) return@handler null
   val intentFactory = intentFactories()[screen::class.cast()]
     ?: return@handler null
-  val intent = intentFactory.createIntent(screen)
+  val intent = intentFactory(screen)
   return@handler {
     val activity = appUiStarter.startAppUi()
     withContext(coroutineContexts.main) {
