@@ -15,37 +15,41 @@ import essentials.accessibility.*
 import essentials.util.*
 import injekt.*
 
-@Provide class ActionIntentSender(
-  private val appContext: AppContext,
-  private val showToast: showToast
-) {
-  fun sendIntent(intent: Intent, options: Bundle?) {
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    catch {
-      PendingIntent.getActivity(
-        appContext,
-        1000,
-        intent,
-        PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-        options
-      ).send()
-    }.onLeft {
-      it.printStackTrace()
-      showToast("Failed to launch screen!")
-    }
+@Tag typealias sendActionIntentResult = Unit
+typealias sendActionIntent = (Intent, Bundle?) -> sendActionIntentResult
+
+@Provide fun sendActionIntent(
+  intent: Intent,
+  options: Bundle?,
+  appContext: AppContext,
+  showToast: showToast
+): sendActionIntentResult {
+  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+  catch {
+    PendingIntent.getActivity(
+      appContext,
+      1000,
+      intent,
+      PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+      options
+    ).send()
+  }.onLeft {
+    it.printStackTrace()
+    showToast("Failed to launch screen!")
   }
 }
 
-@Provide class SystemDialogController(
-  private val appConfig: AppConfig,
-  private val appContext: AppContext,
-  private val accessibilityManager: AccessibilityManager,
-) {
-  @SuppressLint("MissingPermission", "InlinedApi")
-  suspend fun closeSystemDialogs(): Either<Throwable, Unit> = catch {
-    if (appConfig.sdk >= 31)
-      accessibilityManager.performGlobalAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
-    else
-      appContext.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
-  }
+@Tag typealias closeSystemDialogsResult = Either<Throwable, Unit>
+typealias closeSystemDialogs = suspend () -> closeSystemDialogsResult
+
+@SuppressLint("MissingPermission", "InlinedApi")
+@Provide suspend fun closeSystemDialogs(
+  appConfig: AppConfig,
+  appContext: AppContext,
+  performAccessibilityAction: performGlobalAccessibilityAction
+): closeSystemDialogsResult = catch {
+  if (appConfig.sdk >= 31)
+    performAccessibilityAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
+  else
+    appContext.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
 }

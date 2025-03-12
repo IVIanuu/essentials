@@ -19,8 +19,8 @@ import kotlinx.coroutines.flow.*
 
 @Provide class AppActionFactory(
   private val appRepository: AppRepository,
-  private val intentSender: ActionIntentSender,
-  private val packageManager: PackageManager
+  private val packageManager: PackageManager,
+  private val sendIntent: sendActionIntent
 ) : ActionFactory {
   override suspend fun createAction(id: String): Action<*>? {
     if (!id.startsWith(BASE_ID)) return null
@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.*
     val packageName = id.removePrefix(BASE_ID)
       .split(ACTION_DELIMITER)
       .first()
-    intentSender.sendIntent(
+    sendIntent(
       packageManager.getLaunchIntentForPackage(packageName)!!,
       null
     )

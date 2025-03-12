@@ -22,8 +22,8 @@ import injekt.*
     )
 
   @Provide suspend fun execute(
-    accessibilityManager: AccessibilityManager
+    performAction: performGlobalAccessibilityAction
   ): ActionExecutorResult<SplitScreenActionId> {
-    accessibilityManager.performGlobalAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
+    performAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
   }
 }

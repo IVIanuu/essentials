@@ -21,8 +21,8 @@ import injekt.*
     )
 
   @Provide suspend fun execute(
-    accessibilityManager: AccessibilityManager
+    performAction: performGlobalAccessibilityAction
   ): ActionExecutorResult<RecentAppsActionId> {
-    accessibilityManager.performGlobalAction(GLOBAL_ACTION_RECENTS)
+    performAction(GLOBAL_ACTION_RECENTS)
   }
 }

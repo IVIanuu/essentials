@@ -28,11 +28,11 @@ import kotlinx.coroutines.flow.*
   private val actionSettings: Map<String, () -> ActionSettingsScreen<ActionId>>,
   private val actionPickerDelegates: List<() -> ActionPickerDelegate>,
   private val appConfig: AppConfig,
+  private val closeSystemDialogs: closeSystemDialogs,
   private val coroutineContexts: CoroutineContexts,
   private val deviceScreenManager: DeviceScreenManager,
   private val logger: Logger,
   private val permissionManager: PermissionManager,
-  private val systemDialogController: SystemDialogController,
   private val showToast: showToast
 ) {
   suspend fun getAllActions() = withContext(coroutineContexts.computation) {
@@ -90,7 +90,7 @@ import kotlinx.coroutines.flow.*
       if (action.closeSystemDialogs &&
         (appConfig.sdk < 31 ||
             permissionManager.permissionState(listOf(ActionAccessibilityPermission::class)).first()))
-        systemDialogController.closeSystemDialogs()
+        closeSystemDialogs()
 
       logger.d { "fire $id" }
 

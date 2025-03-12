@@ -7,6 +7,9 @@ package essentials
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
+import app.cash.molecule.AndroidUiDispatcher
+import app.cash.molecule.RecompositionMode
+import app.cash.molecule.launchMolecule
 import essentials.compose.launchMolecule
 import injekt.*
 import injekt.common.*
@@ -178,7 +181,7 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
 
 @Tag annotation class Scoped<N> {
   @Provide companion object {
-    @Provide inline fun <@AddOn T : @Scoped<N> S, reified S : Any, N : Any> scoped(
+    @Provide inline fun <@AddOn T : @Scoped<N> S, reified S, N : Any> scoped(
       scope: Scope<N>,
       key: TypeKey<S>,
       crossinline init: () -> T,
@@ -213,9 +216,9 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
 
 @Tag annotation class Eager<N : Any> {
   @Provide companion object {
-    @Provide fun <@AddOn T : @Eager<N> S, S : Any, N : Any> scoped(value: T): @Scoped<N> S = value
+    @Provide fun <@AddOn T : @Eager<N> S, S, N : Any> scoped(value: T): @Scoped<N> S = value
 
-    @Provide inline fun <@AddOn T : @Eager<N> S, S : Any, N : Any> initializer(
+    @Provide inline fun <@AddOn T : @Eager<N> S, S, N : Any> initializer(
       crossinline factory: () -> S
     ): ScopeInitializer<N> = ScopeInitializer { factory() }
   }
@@ -231,3 +234,19 @@ fun interface ScopeInitializer<N : Any> : ExtensionPoint<ScopeInitializer<N>> {
 
 @Provide fun <N> defaultScopeCompositions() =
   emptyList<@Composable () -> ScopeCompositionResult<N>>()
+
+@Tag annotation class ComposeIn<N : Any> {
+  @Provide companion object {
+    @Provide @Composable fun <@AddOn T : @ComposeIn<N> S, S, N : Any> composeIn(
+      scope: Scope<N>,
+      key: TypeKey<StateFlow<S>>,
+      block: @Composable () -> T,
+    ): S = scope.scoped(key.value) {
+      scope.coroutineScope.launchMolecule(
+        RecompositionMode.ContextClock,
+        AndroidUiDispatcher.Main,
+        body = block
+      )
+    }.collectAsState().value
+  }
+}

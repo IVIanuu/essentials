@@ -21,7 +21,7 @@ import essentials.ui.navigation.*
 import injekt.*
 import java.io.*
 
-@Provide class ShortcutActionFactory(private val intentSender: ActionIntentSender) : ActionFactory {
+@Provide class ShortcutActionFactory(private val sendActionIntent: sendActionIntent) : ActionFactory {
   override suspend fun createAction(id: String): Action<*>? {
     if (!id.startsWith(BASE_ID)) return null
 
@@ -47,7 +47,7 @@ import java.io.*
 
     val tmp = id.split(ACTION_DELIMITER)
     val intent = Intent.getIntent(tmp[2])
-    return intentSender.sendIntent(intent, null)
+    return sendActionIntent(intent, null)
   }
 }
 

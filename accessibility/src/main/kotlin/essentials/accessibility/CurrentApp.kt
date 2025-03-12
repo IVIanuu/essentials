@@ -4,19 +4,21 @@
 
 package essentials.accessibility
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.produceState
 import essentials.*
-import essentials.coroutines.*
 import essentials.logging.*
 import injekt.*
 import kotlinx.coroutines.flow.*
 
-@Stable @Provide @Scoped<AppScope> class CurrentAppProducer(
-  accessibilityManager: AccessibilityManager,
-  logger: Logger,
-  scope: ScopedCoroutineScope<AppScope>
-) {
-  val currentApp = accessibilityManager.events
+@Tag typealias CurrentApp = String
+
+@Provide @Composable fun currentApp(
+  accessibilityEvents: Flow<AccessibilityEvent>,
+  logger: Logger
+): @ComposeIn<AppScope> CurrentApp? = produceState(nullOf()) {
+  accessibilityEvents
     .filter {
       it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
           it.isFullScreen &&
@@ -26,12 +28,10 @@ import kotlinx.coroutines.flow.*
     }
     .map { it.packageName!! }
     .onEach { logger.d { "current app changed $it" } }
-    .stateIn(scope, SharingStarted.Eagerly, null)
+    .collect { value = it }
+}.value
 
-  @Provide companion object {
-    @Provide val accessibilityConfig: AccessibilityConfig
-      get() = AccessibilityConfig(
-        eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-      )
-  }
-}
+@Provide val currentAppAccessibilityConfig: AccessibilityConfig
+  get() = AccessibilityConfig(
+    eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+  )

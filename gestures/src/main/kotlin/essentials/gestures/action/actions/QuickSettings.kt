@@ -13,7 +13,6 @@ import androidx.compose.material3.Icon
 import arrow.core.*
 import essentials.*
 import essentials.accessibility.*
-import essentials.accessibility.AccessibilityManager
 import essentials.gestures.action.*
 import injekt.*
 
@@ -26,10 +25,10 @@ import injekt.*
   )
 
   @Provide suspend fun execute(
-    accessibilityManager: AccessibilityManager,
     appScope: Scope<AppScope>,
     appContext: AppContext,
-    systemDialogController: SystemDialogController
+    closeSystemDialogs: closeSystemDialogs,
+    performAccessibilityAction: performGlobalAccessibilityAction
   ): ActionExecutorResult<QuickSettingsActionId> {
     val targetState = catch {
       val service = appScope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
@@ -55,9 +54,9 @@ import injekt.*
     }.getOrElse { true }
 
     if (targetState)
-      accessibilityManager.performGlobalAction(GLOBAL_ACTION_QUICK_SETTINGS)
+      performAccessibilityAction(GLOBAL_ACTION_QUICK_SETTINGS)
     else
-      systemDialogController.closeSystemDialogs()
+      closeSystemDialogs()
   }
 
   @Provide val accessibilityConfig: AccessibilityConfig

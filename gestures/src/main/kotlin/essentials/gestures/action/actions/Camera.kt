@@ -12,6 +12,7 @@ import android.provider.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
 import essentials.*
 import essentials.accessibility.*
 import essentials.compose.moleculeFlow
@@ -37,13 +38,13 @@ import kotlin.coroutines.*
   )
 
   @Provide suspend fun execute(
-    actionIntentSender: ActionIntentSender,
     appScope: Scope<AppScope>,
     cameraManager: @SystemService CameraManager,
-    currentAppProducer: CurrentAppProducer,
+    currentAppProducer: @Composable () -> CurrentApp?,
     deviceScreenManager: DeviceScreenManager,
     logger: Logger,
-    packageManager: PackageManager
+    packageManager: PackageManager,
+    sendIntent: sendActionIntent
   ): ActionExecutorResult<CameraActionId> {
     val cameraApp = packageManager.resolveActivity(
       Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
@@ -68,7 +69,7 @@ import kotlin.coroutines.*
       (currentScreenState == ScreenState.UNLOCKED ||
           appScope.scopeOfOrNull<AccessibilityScope>()
             ?.accessibilityService?.rootInActiveWindow?.packageName != "com.android.systemui") &&
-      cameraApp.activityInfo!!.packageName == currentAppProducer.currentApp.first()
+      cameraApp.activityInfo!!.packageName == moleculeFlow { currentAppProducer() }.first()
     )
       suspendCancellableCoroutine<Boolean> { cont ->
         cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
@@ -94,7 +95,7 @@ import kotlin.coroutines.*
     if (frontFacing != null)
       intent.addCameraFacingExtras(frontFacing)
 
-    actionIntentSender.sendIntent(intent, null)
+    sendIntent(intent, null)
   }
 
   private fun Intent.addCameraFacingExtras(frontFacing: Boolean) {

@@ -20,9 +20,9 @@ import injekt.*
       icon = { Icon(Icons.Default.Search, null) }
     )
 
-  @Provide fun execute(intentSender: ActionIntentSender):
+  @Provide fun execute(sendActionMediaIntent: sendActionIntent):
     ActionExecutorResult<SearchActionId> {
-      intentSender.sendIntent(
+      sendActionMediaIntent(
         Intent(Intent.ACTION_MAIN).apply {
           component = ComponentName(
             "com.google.android.googlequicksearchbox",

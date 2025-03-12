@@ -25,16 +25,15 @@ import injekt.*
     )
 
   @Provide suspend fun execute(
-    accessibilityManager: AccessibilityManager,
-    intentSender: ActionIntentSender,
-    systemDialogController: SystemDialogController,
+    closeSystemDialogs: closeSystemDialogs,
+    performAction: performGlobalAccessibilityAction,
+    sendIntent: sendActionIntent,
   ): ActionExecutorResult<HomeActionId> {
     if (!needsHomeIntentWorkaround) {
-      accessibilityManager.performGlobalAction(GLOBAL_ACTION_HOME)
+      performAction(GLOBAL_ACTION_HOME)
     } else {
-      systemDialogController.closeSystemDialogs()
-
-      intentSender.sendIntent(
+      closeSystemDialogs()
+      sendIntent(
         Intent(Intent.ACTION_MAIN).apply {
           addCategory(
             Intent.CATEGORY_HOME
