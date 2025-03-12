@@ -10,23 +10,19 @@ import androidx.compose.runtime.*
 import essentials.*
 import injekt.*
 
-@Provide class ConfigurationProducer(
-  private val appContext: AppContext
-) {
-  @Composable fun configuration(): Configuration =
-    produceState(appContext.resources.configuration) {
-      val callbacks = object : ComponentCallbacks2 {
-        override fun onConfigurationChanged(newConfig: Configuration) {
-          value = newConfig
-        }
-
-        override fun onLowMemory() {
-        }
-
-        override fun onTrimMemory(level: Int) {
-        }
+@Provide @Composable fun configuration(appContext: AppContext): Configuration =
+  produceState(appContext.resources.configuration) {
+    val callbacks = object : ComponentCallbacks2 {
+      override fun onConfigurationChanged(newConfig: Configuration) {
+        value = newConfig
       }
-      appContext.registerComponentCallbacks(callbacks)
-      awaitDispose { appContext.unregisterComponentCallbacks(callbacks) }
-    }.value
-}
+
+      override fun onLowMemory() {
+      }
+
+      override fun onTrimMemory(level: Int) {
+      }
+    }
+    appContext.registerComponentCallbacks(callbacks)
+    awaitDispose { appContext.unregisterComponentCallbacks(callbacks) }
+  }.value

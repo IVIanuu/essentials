@@ -4,6 +4,7 @@
 
 package essentials.ads
 
+import androidx.compose.runtime.Composable
 import essentials.*
 import essentials.ui.common.*
 import essentials.ui.navigation.*
@@ -21,7 +22,7 @@ import injekt.*
   else adConfig.copy(id = AdBannerConfig.TEST_ID)
 
 @Provide class AdBannerListDecorator(
-  private val adsEnabledProducer: AdsEnabledProducer,
+  private val adsEnabledProducer: @Composable () -> AdsEnabled,
   private val adFeatureRepository: AdFeatureRepository,
   private val config: @FinalAdConfig ListAdBannerConfig
 ) : ListDecorator {
@@ -31,7 +32,7 @@ import injekt.*
         val screen = catch { LocalScope.current.screen::class }.getOrNull()
         if ((screen == null ||
               adFeatureRepository.isEnabled(screen, ListAdBannerFeature)) &&
-          adsEnabledProducer.adsEnabled())
+          adsEnabledProducer())
           AdBanner(config)
       }
     content()

@@ -25,7 +25,7 @@ import kotlin.time.Duration.Companion.seconds
   private val activity: ComponentActivity,
   private val appContext: AppContext,
   private val appScope: Scope<AppScope>,
-  private val adsEnabledProducer: AdsEnabledProducer,
+  private val adsEnabledProducer: @Composable () -> AdsEnabled,
   config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
@@ -37,7 +37,7 @@ import kotlin.time.Duration.Companion.seconds
 
   init {
     scope.launchMolecule {
-      adsEnabled = adsEnabledProducer.adsEnabled()
+      adsEnabled = adsEnabledProducer()
 
       if (!adsEnabled) {
         logger.d { "ads not enabled" }

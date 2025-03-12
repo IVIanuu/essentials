@@ -109,13 +109,11 @@ interface PremiumVersionManager {
     get() = emptyList<OldPremiumVersionSku>()
 }
 
-@Provide fun premiumAdsEnabledProducer(
+@Provide @Composable fun premiumAdsEnabled(
   premiumVersionManager: PremiumVersionManager
-) = AdsEnabledProducer {
-  produceState(false) {
-    premiumVersionManager.isPremiumVersion.collect { value = !it }
-  }.value
-}
+): AdsEnabled = produceState(false) {
+  premiumVersionManager.isPremiumVersion.collect { value = !it }
+}.value
 
 private val WasPremiumVersionKey = booleanPreferencesKey("was_premium_version")
 

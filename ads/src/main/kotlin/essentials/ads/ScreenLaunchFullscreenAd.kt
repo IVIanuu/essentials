@@ -26,7 +26,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
 }
 
 @Provide fun screenLaunchFullScreenObserver(
-  adsEnabledProducer: AdsEnabledProducer,
+  adsEnabledProducer: @Composable () -> AdsEnabled,
   adFeatureRepository: AdFeatureRepository,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAdManager: FullScreenAdManager,
@@ -34,7 +34,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   navigator: Navigator,
   preferencesStore: DataStore<Preferences>
 ) = ScopeComposition<UiScope> {
-  if (adsEnabledProducer.adsEnabled())
+  if (adsEnabledProducer())
     LaunchedEffect(true) {
       navigator.launchEvents(adFeatureRepository).collectLatest {
         val launchCount = preferencesStore

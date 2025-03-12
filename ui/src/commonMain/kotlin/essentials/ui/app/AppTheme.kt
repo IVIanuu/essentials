@@ -26,31 +26,29 @@ data class AppColors(
   }
 }
 
-fun interface ColorSchemeProducer {
-  @Composable fun colorScheme(isDark: Boolean): ColorScheme
+@Tag typealias AppColorScheme = ColorScheme
+@Tag typealias IsDark = Boolean
 
-  @Provide companion object {
-    @Provide fun default(appColors: AppColors) = ColorSchemeProducer {
-      remember(it) {
-        dynamicColorScheme(
-          isDark = it,
-          isAmoled = false,
-          primary = appColors.primary,
-          secondary = appColors.secondary,
-          tertiary = appColors.tertiary,
-          style = PaletteStyle.Vibrant
-        )
-      }
-    }
-  }
+@Provide @Composable fun defaultAppColorScheme(
+  appColors: AppColors,
+  isDark: IsDark
+): AppColorScheme = remember(isDark) {
+  dynamicColorScheme(
+    isDark = isDark,
+    isAmoled = false,
+    primary = appColors.primary,
+    secondary = appColors.secondary,
+    tertiary = appColors.tertiary,
+    style = PaletteStyle.Vibrant
+  )
 }
 
 @Tag typealias AppFont = FontFamily
 
 @Tag typealias AppTypography = Typography
 
-@Provide fun defaultAppTypography(font: AppFont? = null): AppTypography = Typography()
-  .withFontFamily(font)
+@Provide fun defaultAppTypography(font: AppFont? = null): AppTypography =
+  Typography().withFontFamily(font)
 
 fun Typography.withFontFamily(fontFamily: FontFamily?): Typography = copy(
   displayLarge = displayLarge.copy(fontFamily = fontFamily),
@@ -83,12 +81,12 @@ fun interface AppThemeDecorator : AppUiDecorator {
 }
 
 @Provide fun appThemeDecorator(
-  colorSchemeProducer: ColorSchemeProducer,
+  colorSchemeProducer: @Composable (IsDark) -> AppColorScheme,
   shapes: AppShapes,
   typography: AppTypography
 ) = AppThemeDecorator { content ->
   MaterialTheme(
-    colorScheme = colorSchemeProducer.colorScheme(isSystemInDarkTheme()),
+    colorScheme = colorSchemeProducer(isSystemInDarkTheme()),
     typography = typography,
     shapes = shapes,
     content = content

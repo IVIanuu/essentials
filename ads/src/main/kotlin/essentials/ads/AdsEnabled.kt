@@ -4,8 +4,6 @@
 
 package essentials.ads
 
-import androidx.compose.runtime.Composable
+import injekt.Tag
 
-fun interface AdsEnabledProducer {
-  @Composable fun adsEnabled(): Boolean
-}
+@Tag typealias AdsEnabled = Boolean

@@ -40,8 +40,7 @@ class AdsScreen : Screen<Unit> {
   }
 }
 
-var showAds by mutableStateOf(false)
-@Provide val AdsEnabledProducer = AdsEnabledProducer { showAds }
+@Provide var showAds: AdsEnabled by mutableStateOf(false)
 @Provide val fullScreenAdConfig: FullScreenAdConfig = FullScreenAdConfig("")
 @Provide val listAdBannerConfig: ListAdBannerConfig = ListAdBannerConfig("")
 @Provide val screenAdBannerConfig: ScreenAdBannerConfig = ScreenAdBannerConfig("")

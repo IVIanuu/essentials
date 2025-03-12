@@ -24,7 +24,7 @@ import injekt.*
 else adConfig.copy(id = AdBannerConfig.TEST_ID)
 
 @Provide class AdBannerScreenDecorator(
-  private val adsEnabledProducer: AdsEnabledProducer,
+  private val adsEnabledProducer: @Composable () -> AdsEnabled,
   private val adFeatureRepository: AdFeatureRepository,
   private val config: @FinalAdConfig ScreenAdBannerConfig,
   private val screen: Screen<*>
@@ -35,7 +35,7 @@ else adConfig.copy(id = AdBannerConfig.TEST_ID)
       return
     }
 
-    val adsEnabled by rememberUpdatedState(adsEnabledProducer.adsEnabled())
+    val adsEnabled by rememberUpdatedState(adsEnabledProducer())
 
     Column {
       Box(
