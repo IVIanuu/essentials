@@ -237,15 +237,15 @@ fun interface ScopeInitializer<N : Any> : ExtensionPoint<ScopeInitializer<N>> {
 
 @Tag annotation class ComposeIn<N : Any> {
   @Provide companion object {
-    @Provide @Composable fun <@AddOn T : @ComposeIn<N> S, S, N : Any> composeIn(
+    @Provide @Composable inline fun <@AddOn T : @ComposeIn<N> S, S, N : Any> composeIn(
       scope: Scope<N>,
       key: TypeKey<StateFlow<S>>,
-      block: @Composable () -> T,
+      crossinline block: @Composable () -> T,
     ): S = scope.scoped(key.value) {
       scope.coroutineScope.launchMolecule(
         RecompositionMode.ContextClock,
         AndroidUiDispatcher.Main,
-        body = block
+        body = { block() }
       )
     }.collectAsState().value
   }
