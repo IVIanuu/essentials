@@ -4,10 +4,11 @@
 
 package essentials.app
 
+import androidx.compose.runtime.Composable
 import essentials.ui.app.*
 import essentials.ui.navigation.*
 import injekt.*
 
-@Provide fun defaultAppUi(navigator: Navigator) = AppUi {
+@Provide @Composable fun DefaultAppUi(navigator: Navigator): AppUi {
   NavigatorContent(navigator = navigator)
 }

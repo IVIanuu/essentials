@@ -41,8 +41,8 @@ import kotlinx.coroutines.*
       }
 
       CompositionLocalProvider(LocalScope provides uiScope) {
-        esActivityComponent.decorateAppUi.DecoratedContent {
-          esActivityComponent.appUi.Content()
+        esActivityComponent.decorateAppUi {
+          esActivityComponent.appUi()
         }
       }
     }
@@ -50,8 +50,8 @@ import kotlinx.coroutines.*
 }
 
 @Provide @Service<UiScope> data class EsActivityComponent(
-  val appUi: AppUi,
-  val decorateAppUi: DecorateAppUi
+  val appUi: @Composable () -> AppUi,
+  val decorateAppUi: @Composable (@Composable () -> Unit) -> DecoratedAppUi
 )
 
 val Scope<*>.activity: ComponentActivity get() = service()
