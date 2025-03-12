@@ -18,7 +18,7 @@ import kotlin.collections.set
 @Stable class Navigator(
   private val scope: CoroutineScope,
   initialBackStack: List<Screen<*>> = emptyList(),
-  private val screenInterceptors: List<ScreenInterceptor<*>> = emptyList(),
+  private val screenInterceptors: List<(Screen<*>) -> ScreenInterceptorResult<*>> = emptyList(),
 ) {
   var backStack by mutableStateOf(initialBackStack)
     private set
@@ -45,7 +45,7 @@ import kotlin.collections.set
             screen as Screen<Any?>
 
             val interceptedHandle = screenInterceptors.firstNotNullOfOrNull {
-              it.cast<ScreenInterceptor<Any?>>().intercept(screen)
+              it(screen)
             }
 
             if (interceptedHandle == null) add(screen)
@@ -62,7 +62,7 @@ import kotlin.collections.set
     @Provide fun rootNavigator(
       scope: ScopedCoroutineScope<UiScope>,
       rootScreen: RootScreen?,
-      screenInterceptors: List<ScreenInterceptor<*>>,
+      screenInterceptors: List<(Screen<*>) -> ScreenInterceptorResult<*>>,
     ): @ScopedService<UiScope> Navigator = Navigator(
       scope = scope,
       initialBackStack = listOfNotNull(rootScreen),
@@ -120,10 +120,7 @@ val Scope<*>.navigator: Navigator get() = service()
 
 object RootNavGraph
 
-fun interface ScreenInterceptor<R> {
-  suspend fun intercept(screen: Screen<R>): (suspend () -> R?)?
+@Tag typealias ScreenInterceptorResult<R> = (suspend () -> R?)?
 
-  @Provide companion object {
-    @Provide val defaultScreenInterceptors get() = emptyList<ScreenInterceptor<*>>()
-  }
-}
+@Provide val defaultScreenInterceptors
+  get() = emptyList<(Screen<*>) -> ScreenInterceptorResult<*>>()

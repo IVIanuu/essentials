@@ -29,16 +29,17 @@ fun interface AppUiStarter {
   suspend fun startAppUi(): ComponentActivity
 }
 
-@Provide fun intentScreenInterceptor(
+@Provide fun interceptIntentScreen(
+  screen: Screen<*>,
   appUiStarter: AppUiStarter,
   coroutineContexts: CoroutineContexts,
   intentFactories: () -> Map<KClass<IntentScreen>, (IntentScreen) -> Intent>
-) = ScreenInterceptor<Either<Throwable, ActivityResult>> handler@{ screen ->
-  if (screen !is IntentScreen) return@handler null
-  val intentFactory = intentFactories()[screen::class.cast()]
-    ?: return@handler null
+): ScreenInterceptorResult<Either<Throwable, ActivityResult>> {
+  if (screen !is IntentScreen) return null
+  val intentFactory = intentFactories()[screen::class]
+    ?: return null
   val intent = intentFactory(screen)
-  return@handler {
+  return {
     val activity = appUiStarter.startAppUi()
     withContext(coroutineContexts.main) {
       suspendCancellableCoroutine<Either<Throwable, ActivityResult>> { continuation ->
