@@ -20,9 +20,9 @@ import injekt.*
     icon = { Icon(Icons.Default.PowerSettingsNew, null) }
   )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     accessibilityManager: AccessibilityManager
-  ) = ActionExecutor<PowerDialogActionId> {
+  ): ActionExecutorResult<PowerDialogActionId> {
     accessibilityManager.performGlobalAction(GLOBAL_ACTION_POWER_DIALOG)
   }
 }

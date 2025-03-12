@@ -21,9 +21,9 @@ import injekt.*
       icon = { Icon(Icons.Default.ViewAgenda, null) }
     )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     accessibilityManager: AccessibilityManager
-  ) = ActionExecutor<SplitScreenActionId> {
+  ): ActionExecutorResult<SplitScreenActionId> {
     accessibilityManager.performGlobalAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
   }
 }

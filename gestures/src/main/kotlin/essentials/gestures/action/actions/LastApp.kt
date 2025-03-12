@@ -24,9 +24,9 @@ import kotlinx.coroutines.*
       icon = { Icon(Icons.Default.Repeat, null) }
     )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     accessibilityManager: AccessibilityManager
-  ) = ActionExecutor<LastAppActionId> {
+  ): ActionExecutorResult<LastAppActionId> {
     accessibilityManager.performGlobalAction(GLOBAL_ACTION_RECENTS)
     delay(100)
     accessibilityManager.performGlobalAction(GLOBAL_ACTION_RECENTS)

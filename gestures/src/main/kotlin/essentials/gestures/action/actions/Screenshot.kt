@@ -22,9 +22,9 @@ import kotlinx.coroutines.*
       permissions = listOf(ActionAccessibilityPermission::class)
     )
 
-  @Provide fun screenshotActionExecutor(
+  @Provide suspend fun execute(
     accessibilityManager: AccessibilityManager
-  ) = ActionExecutor<ScreenshotActionId> {
+  ): ActionExecutorResult<ScreenshotActionId> {
     delay(500)
     accessibilityManager.performGlobalAction(GLOBAL_ACTION_TAKE_SCREENSHOT)
   }

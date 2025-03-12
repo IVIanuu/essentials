@@ -25,12 +25,12 @@ import injekt.*
     icon = { Icon(Icons.Default.Settings, null) }
   )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     accessibilityManager: AccessibilityManager,
     appScope: Scope<AppScope>,
     appContext: AppContext,
     systemDialogController: SystemDialogController
-  ) = ActionExecutor<QuickSettingsActionId> {
+  ): ActionExecutorResult<QuickSettingsActionId> {
     val targetState = catch {
       val service = appScope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
 

@@ -20,9 +20,9 @@ import injekt.*
       icon = { Icon(Icons.Default.SkipPrevious, null) }
     )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     mediaActionSender: MediaActionSender
-  ) = ActionExecutor<SkipPreviousActionId> {
+  ): ActionExecutorResult<SkipPreviousActionId> {
     mediaActionSender.sendMediaAction(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
   }
 

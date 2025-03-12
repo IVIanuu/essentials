@@ -38,17 +38,16 @@ import kotlinx.coroutines.flow.*
     )
   }
 
-  override suspend fun createExecutor(id: String): ActionExecutor<*>? {
+  override suspend fun execute(id: String): ActionExecutorResult<*>? {
     if (!id.startsWith(BASE_ID)) return null
     val packageName = id.removePrefix(BASE_ID)
       .split(ACTION_DELIMITER)
       .first()
-    return ActionExecutor<ActionId> {
-      intentSender.sendIntent(
-        packageManager.getLaunchIntentForPackage(packageName)!!,
-        null
-      )
-    }
+    intentSender.sendIntent(
+      packageManager.getLaunchIntentForPackage(packageName)!!,
+      null
+    )
+    return ActionExecutorResult
   }
 }
 

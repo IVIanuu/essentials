@@ -25,12 +25,12 @@ import injekt.*
     icon = { Icon(Icons.Default.Notifications, null) }
   )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     accessibilityManager: AccessibilityManager,
     appContext: AppContext,
     appScope: Scope<AppScope>,
     systemDialogController: SystemDialogController
-  ) = ActionExecutor<NotificationsActionId> {
+  ): ActionExecutorResult<NotificationsActionId> {
     val targetState = catch {
       val service = appScope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
 

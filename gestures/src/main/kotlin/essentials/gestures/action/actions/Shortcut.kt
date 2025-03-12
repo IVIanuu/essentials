@@ -42,12 +42,12 @@ import java.io.*
   }
 
   @Suppress("DEPRECATION")
-  override suspend fun createExecutor(id: String): ActionExecutor<*>? {
+  override suspend fun execute(id: String): ActionExecutorResult<*>? {
     if (!id.startsWith(BASE_ID)) return null
 
     val tmp = id.split(ACTION_DELIMITER)
     val intent = Intent.getIntent(tmp[2])
-    return ActionExecutor<ActionId> { intentSender.sendIntent(intent, null) }
+    return intentSender.sendIntent(intent, null)
   }
 }
 

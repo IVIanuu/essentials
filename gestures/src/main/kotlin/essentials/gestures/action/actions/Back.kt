@@ -20,8 +20,8 @@ import injekt.*
     icon = { Icon(painterResource(R.drawable.ic_action_back), null) }
   )
 
-  @Provide fun executor(accessibilityManager: AccessibilityManager) =
-    ActionExecutor<BackActionId> {
-      accessibilityManager.performGlobalAction(GLOBAL_ACTION_BACK)
-    }
+  @Provide suspend fun execute(accessibilityManager: AccessibilityManager):
+      ActionExecutorResult<BackActionId> {
+    accessibilityManager.performGlobalAction(GLOBAL_ACTION_BACK)
+  }
 }

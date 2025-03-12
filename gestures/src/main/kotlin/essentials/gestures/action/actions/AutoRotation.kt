@@ -28,9 +28,9 @@ import injekt.*
     }
   )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     autoRotationDataStore: DataStore<AutoRotation>,
-  ) = ActionExecutor<AutoRotationActionId> {
+  ): ActionExecutorResult<AutoRotationActionId> {
     autoRotationDataStore.updateData { if (it != 1) 1 else 0 }
   }
 }

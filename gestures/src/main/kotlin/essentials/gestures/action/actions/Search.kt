@@ -20,8 +20,8 @@ import injekt.*
       icon = { Icon(Icons.Default.Search, null) }
     )
 
-  @Provide fun executor(intentSender: ActionIntentSender) =
-    ActionExecutor<SearchActionId> {
+  @Provide fun execute(intentSender: ActionIntentSender):
+    ActionExecutorResult<SearchActionId> {
       intentSender.sendIntent(
         Intent(Intent.ACTION_MAIN).apply {
           component = ComponentName(

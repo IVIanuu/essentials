@@ -37,11 +37,11 @@ import kotlinx.coroutines.flow.*
     }
   )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     cameraManager: @SystemService CameraManager,
     coroutineContexts: CoroutineContexts,
     showToast: showToast
-  ) = ActionExecutor<FlashlightActionId> {
+  ): ActionExecutorResult<FlashlightActionId> {
     withContext(coroutineContexts.main) {
       val state = cameraManager.flashlightState(coroutineContexts).first()
       catch {

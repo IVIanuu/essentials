@@ -20,9 +20,9 @@ import injekt.*
       icon = { Icon(Icons.Default.PlayArrow, null) }
     )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     mediaActionSender: MediaActionSender
-  ) = ActionExecutor<PlayPauseActionId> {
+  ): ActionExecutorResult<PlayPauseActionId> {
     mediaActionSender.sendMediaAction(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
   }
 

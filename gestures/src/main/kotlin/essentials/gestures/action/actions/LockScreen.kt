@@ -13,16 +13,16 @@ import essentials.gestures.action.*
 import injekt.*
 
 @Provide object LockScreenActionId : ActionId("lock_screen") {
-  @Provide val lockScreenAction get() = Action(
+  @Provide val action get() = Action(
       id = LockScreenActionId,
       title = "Lock screen",
       icon = { Icon(Icons.Default.SettingsPower, null) },
       permissions = listOf(ActionAccessibilityPermission::class)
     )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     accessibilityManager: AccessibilityManager
-  ) = ActionExecutor<LockScreenActionId> {
+  ): ActionExecutorResult<LockScreenActionId> {
     accessibilityManager.performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN)
   }
 }

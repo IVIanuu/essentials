@@ -36,7 +36,7 @@ import kotlin.coroutines.*
     closeSystemDialogs = true
   )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     actionIntentSender: ActionIntentSender,
     appScope: Scope<AppScope>,
     cameraManager: @SystemService CameraManager,
@@ -44,7 +44,7 @@ import kotlin.coroutines.*
     deviceScreenManager: DeviceScreenManager,
     logger: Logger,
     packageManager: PackageManager
-  ) = ActionExecutor<CameraActionId> {
+  ): ActionExecutorResult<CameraActionId> {
     val cameraApp = packageManager.resolveActivity(
       Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
       PackageManager.MATCH_DEFAULT_ONLY

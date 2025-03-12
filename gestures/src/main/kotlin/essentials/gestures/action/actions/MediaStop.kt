@@ -20,9 +20,9 @@ import injekt.*
       icon = { Icon(Icons.Default.Stop, null) }
     )
 
-  @Provide fun executor(
+  @Provide suspend fun execute(
     mediaActionSender: MediaActionSender
-  ) = ActionExecutor<StopActionId> {
+  ): ActionExecutorResult<StopActionId> {
     mediaActionSender.sendMediaAction(KeyEvent.KEYCODE_MEDIA_STOP)
   }
 

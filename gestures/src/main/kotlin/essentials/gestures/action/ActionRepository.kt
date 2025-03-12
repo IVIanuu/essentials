@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.*
 @Stable @Provide class ActionRepository(
   private val actions: Map<String, () -> Action<*>>,
   private val actionFactories: List<() -> ActionFactory>,
-  private val actionsExecutors: Map<String, () -> ActionExecutor<*>>,
+  private val actionsExecutors: Map<String, suspend () -> ActionExecutorResult<*>>,
   private val actionSettings: Map<String, () -> ActionSettingsScreen<ActionId>>,
   private val actionPickerDelegates: List<() -> ActionPickerDelegate>,
   private val appConfig: AppConfig,
@@ -54,17 +54,6 @@ import kotlinx.coroutines.flow.*
         title = RECONFIGURE_ACTION_MESSAGE,
         icon = { Icon(Icons.Default.Error, null) }
       )
-  }
-
-  suspend fun getActionExecutor(id: String) = withContext(coroutineContexts.computation) {
-    catch {
-      actionsExecutors[id]
-        ?.invoke()
-        ?: actionFactories
-          .fastMap { it() }
-          .firstNotNullOfOrNull { it.createExecutor(id) }
-    }.getOrNull()
-      ?: ActionExecutor { showToast(RECONFIGURE_ACTION_MESSAGE) }
   }
 
   suspend fun getActionSettingsKey(id: String) =
@@ -106,7 +95,16 @@ import kotlinx.coroutines.flow.*
       logger.d { "fire $id" }
 
       // fire
-      getActionExecutor(id).execute()
+      withContext(coroutineContexts.computation) {
+        catch {
+          actionsExecutors[id]
+            ?.invoke()
+            ?: actionFactories
+              .fastMap { it() }
+              .firstNotNullOfOrNull { it.execute(id) }
+        }.getOrNull()
+          ?: showToast(RECONFIGURE_ACTION_MESSAGE)
+      }
       return@catch true
     }.onLeft {
       it.printStackTrace()

@@ -5,6 +5,7 @@
 package essentials.gestures.action
 
 import androidx.compose.runtime.*
+import essentials.cast
 import essentials.gestures.action.ui.*
 import essentials.permission.*
 import essentials.ui.navigation.*
@@ -35,14 +36,12 @@ import kotlin.reflect.*
 
 abstract class ActionId(val value: String)
 
-fun interface ActionExecutor<I : ActionId> {
-  suspend fun execute()
-}
+@Tag typealias ActionExecutorResult<I> = Unit
 
 interface ActionFactory {
   suspend fun createAction(id: String): Action<*>?
 
-  suspend fun createExecutor(id: String): ActionExecutor<*>?
+  suspend fun execute(id: String): ActionExecutorResult<*>?
 }
 
 @Tag typealias ActionSettingsScreen<I> = Screen<Unit>
@@ -66,10 +65,10 @@ interface ActionPickerDelegate {
     provider: () -> T
   ): () -> ActionFactory = provider
 
-  @Provide fun <@AddOn T : ActionExecutor<I>, I : ActionId> actionExecutorBinding(
+  @Provide fun <@AddOn T : ActionExecutorResult<I>, I : ActionId> actionExecutorBinding(
     id: I,
-    provider: () -> T
-  ): Pair<String, () -> ActionExecutor<*>> = id.value to provider
+    provider: suspend () -> T
+  ): Pair<String, suspend () -> ActionExecutorResult<*>> = id.value to provider
 
   @Provide fun <@AddOn T : ActionPickerDelegate> actionPickerDelegateBinding(
     provider: () -> T

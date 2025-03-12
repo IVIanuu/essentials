@@ -24,11 +24,11 @@ import injekt.*
       icon = { Icon(painterResource(R.drawable.ic_action_home), null) }
     )
 
-  @Provide fun homeActionExecutor(
+  @Provide suspend fun execute(
     accessibilityManager: AccessibilityManager,
     intentSender: ActionIntentSender,
     systemDialogController: SystemDialogController,
-  ) = ActionExecutor<HomeActionId> {
+  ): ActionExecutorResult<HomeActionId> {
     if (!needsHomeIntentWorkaround) {
       accessibilityManager.performGlobalAction(GLOBAL_ACTION_HOME)
     } else {
