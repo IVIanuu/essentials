@@ -178,8 +178,7 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
   }
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class Scoped<N> {
+@Tag annotation class Scoped<N> {
   @Provide companion object {
     @Provide inline fun <@AddOn T : @Scoped<N> S, reified S : Any, N : Any> scoped(
       scope: Scope<N>,
@@ -189,8 +188,7 @@ annotation class Scoped<N> {
   }
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class Service<N> {
+@Tag annotation class Service<N> {
   @Provide companion object {
     @Provide fun <@AddOn T : @Service<N> S, S : Any, N> service(
       key: KClass<S>,
@@ -201,8 +199,7 @@ annotation class Service<N> {
   }
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class ScopedService<N> {
+@Tag annotation class ScopedService<N> {
   @Provide companion object {
     @Provide inline fun <@AddOn T : @ScopedService<N> S, reified S : Any, N : Any> scoped(
       init: () -> T,
@@ -214,11 +211,9 @@ annotation class ScopedService<N> {
   }
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class ParentScope
+@Tag annotation class ParentScope
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class Eager<N : Any> {
+@Tag annotation class Eager<N : Any> {
   @Provide companion object {
     @Provide fun <@AddOn T : @Eager<N> S, S : Any, N : Any> scoped(value: T): @Scoped<N> S = value
 

@@ -98,21 +98,16 @@ interface PremiumVersionManager {
   }
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class PremiumVersionSkuTag {
-  @Provide companion object {
-    @Provide val default: PremiumVersionSku get() = Sku("premium_version", Sku.Type.SUBS)
-  }
-}
-typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
+@Tag typealias PremiumVersionSku = Sku
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class OldPremiumVersionSkuTag {
-  @Provide companion object {
-    @Provide val defaultOldPermissionVersionSkus get() = emptyList<OldPremiumVersionSku>()
-  }
+@Tag typealias OldPremiumVersionSku = Sku
+
+@Provide object PremiumVersionSkuProviders {
+  @Provide val defaultPremiumVersionSku: PremiumVersionSku
+    get() = Sku("premium_version", Sku.Type.SUBS)
+  @Provide val defaultOldPermissionVersionSkus
+    get() = emptyList<OldPremiumVersionSku>()
 }
-typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
 @Provide fun premiumAdsEnabledProducer(
   premiumVersionManager: PremiumVersionManager

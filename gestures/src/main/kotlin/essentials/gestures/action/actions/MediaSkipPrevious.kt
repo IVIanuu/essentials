@@ -26,7 +26,7 @@ import injekt.*
     mediaActionSender.sendMediaAction(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
   }
 
-  @Provide inline val settingsScreen: @ActionSettingsScreen<SkipPreviousActionId> Screen<Unit>
+  @Provide inline val settingsScreen: ActionSettingsScreen<SkipPreviousActionId>
     get() = MediaActionSettingsScreen()
 }
 

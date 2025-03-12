@@ -15,17 +15,13 @@ import injekt.*
 
 @Provide object ScreenAdBannerFeature : AdFeature
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class ScreenAdBannerConfigTag {
-  @Provide companion object {
-    @Provide fun final(
-      adConfig: ScreenAdBannerConfig,
-      appConfig: AppConfig
-    ): @FinalAdConfig ScreenAdBannerConfig = if (!appConfig.isDebug) adConfig
-    else adConfig.copy(id = AdBannerConfig.TEST_ID)
-  }
-}
-typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
+@Tag typealias ScreenAdBannerConfig = AdBannerConfig
+
+@Provide fun finalScreenAdBannerConfig(
+  adConfig: ScreenAdBannerConfig,
+  appConfig: AppConfig
+): @FinalAdConfig ScreenAdBannerConfig = if (!appConfig.isDebug) adConfig
+else adConfig.copy(id = AdBannerConfig.TEST_ID)
 
 @Provide class AdBannerScreenDecorator(
   private val adsEnabledProducer: AdsEnabledProducer,

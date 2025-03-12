@@ -11,19 +11,14 @@ import injekt.*
 
 @Provide object ListAdBannerFeature : AdFeature
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class ListAdBannerConfigTag {
-  @Provide companion object {
-    @Provide fun final(
-      adConfig: ListAdBannerConfig,
-      appConfig: AppConfig
-    ): @FinalAdConfig ListAdBannerConfig =
-      if (!appConfig.isDebug) adConfig
-      else adConfig.copy(id = AdBannerConfig.TEST_ID)
-  }
-}
+@Tag typealias ListAdBannerConfig = AdBannerConfig
 
-typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
+@Provide fun finalListAdBannerConfig(
+  adConfig: ListAdBannerConfig,
+  appConfig: AppConfig
+): @FinalAdConfig ListAdBannerConfig =
+  if (!appConfig.isDebug) adConfig
+  else adConfig.copy(id = AdBannerConfig.TEST_ID)
 
 @Provide class AdBannerListDecorator(
   private val adsEnabledProducer: AdsEnabledProducer,

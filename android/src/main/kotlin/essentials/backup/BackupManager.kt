@@ -125,24 +125,18 @@ private val BACKUP_BLACKLIST = listOf(
   "com.google.android.datatransport.events-journal"
 )
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class BackupFileTag {
-  @Provide companion object {
-    @Provide fun backupPrefs(prefsDir: PrefsDir): BackupFile = prefsDir
+@Tag typealias BackupFile = File
 
-    @Provide fun backupDatabases(dataDir: DataDir): BackupFile = dataDir.resolve("databases")
+@Tag typealias BackupDir = File
 
-    @Provide fun backupSharedPrefs(dataDir: DataDir): BackupFile = dataDir.resolve("shared_prefs")
-  }
+@Provide object BackupFileProviders {
+  @Provide fun backupPrefs(prefsDir: PrefsDir): BackupFile = prefsDir
+
+  @Provide fun backupDatabases(dataDir: DataDir): BackupFile = dataDir.resolve("databases")
+
+  @Provide fun backupSharedPrefs(dataDir: DataDir): BackupFile = dataDir.resolve("shared_prefs")
+
+  @Provide fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
 }
-typealias BackupFile = @BackupFileTag File
-
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class BackupDirTag {
-  @Provide companion object {
-    @Provide fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
-  }
-}
-typealias BackupDir = @BackupDirTag File
 
 @Provide @AndroidComponent class BackupFileProvider : FileProvider()

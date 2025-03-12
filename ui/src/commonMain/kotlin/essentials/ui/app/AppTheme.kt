@@ -45,20 +45,12 @@ fun interface ColorSchemeProducer {
   }
 }
 
-typealias AppFont = @AppFontTag FontFamily?
+@Tag typealias AppFont = FontFamily
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class AppFontTag
+@Tag typealias AppTypography = Typography
 
-typealias AppTypography = @AppTypographyTag Typography
-
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class AppTypographyTag {
-  @Provide companion object {
-    @Provide fun default(font: AppFont? = null): AppTypography = Typography()
-      .withFontFamily(font)
-  }
-}
+@Provide fun defaultAppTypography(font: AppFont? = null): AppTypography = Typography()
+  .withFontFamily(font)
 
 fun Typography.withFontFamily(fontFamily: FontFamily?): Typography = copy(
   displayLarge = displayLarge.copy(fontFamily = fontFamily),
@@ -78,15 +70,10 @@ fun Typography.withFontFamily(fontFamily: FontFamily?): Typography = copy(
   labelSmall = labelSmall.copy(fontFamily = fontFamily)
 )
 
-typealias AppShapes = @AppShapesTag Shapes
+@Tag typealias AppShapes = Shapes
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class AppShapesTag {
-  @Provide companion object {
-    @Provide val default: AppShapes
-      get() = Shapes()
-  }
-}
+@Provide val defaultAppShapes: AppShapes
+  get() = Shapes()
 
 fun interface AppThemeDecorator : AppUiDecorator {
   @Provide companion object {

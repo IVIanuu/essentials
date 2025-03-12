@@ -45,8 +45,7 @@ interface ActionFactory {
   suspend fun createExecutor(id: String): ActionExecutor<*>?
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class ActionSettingsScreen<I : ActionId>
+@Tag typealias ActionSettingsScreen<I> = Screen<Unit>
 
 interface ActionPickerDelegate {
   val baseId: String
@@ -76,10 +75,10 @@ interface ActionPickerDelegate {
     provider: () -> T
   ): () -> ActionPickerDelegate = provider
 
-  @Provide fun <@AddOn T : @ActionSettingsScreen<I> Screen<Unit>, I : ActionId> actionSettingsKeyBinding(
+  @Provide fun <@AddOn T : ActionSettingsScreen<I>, I : ActionId> actionSettingsKeyBinding(
     id: I,
     provider: () -> T,
-  ): Pair<String, () -> @ActionSettingsScreen<ActionId> Screen<Unit>> = id.value to provider
+  ): Pair<String, () -> ActionSettingsScreen<ActionId>> = id.value to provider
 }
 
 const val ACTION_DELIMITER = "=:="

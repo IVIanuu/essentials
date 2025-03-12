@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.*
   private val actions: Map<String, () -> Action<*>>,
   private val actionFactories: List<() -> ActionFactory>,
   private val actionsExecutors: Map<String, () -> ActionExecutor<*>>,
-  private val actionSettings: Map<String, () -> @ActionSettingsScreen<ActionId> Screen<Unit>>,
+  private val actionSettings: Map<String, () -> ActionSettingsScreen<ActionId>>,
   private val actionPickerDelegates: List<() -> ActionPickerDelegate>,
   private val appConfig: AppConfig,
   private val coroutineContexts: CoroutineContexts,

@@ -40,5 +40,4 @@ interface AdFeature
     featuresByScreen[screenClass]?.value?.contains(feature) == true
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class FinalAdConfig
+@Tag annotation class FinalAdConfig

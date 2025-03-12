@@ -29,8 +29,7 @@ import kotlin.reflect.*
   }
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class InjektSerializer {
+@Tag annotation class InjektSerializer {
   @Provide companion object {
     @Provide val defaultSerializers get() = emptyList<Pair<KClass<*>, KSerializer<*>>>()
 

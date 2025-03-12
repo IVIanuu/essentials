@@ -116,8 +116,7 @@ suspend fun Navigator.popTo(screen: Screen<*>) {
 
 val Scope<*>.navigator: Navigator get() = service()
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class NavGraph<N>
+@Tag annotation class NavGraph<N>
 
 object RootNavGraph
 

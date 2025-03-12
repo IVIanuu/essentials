@@ -63,8 +63,7 @@ import kotlin.time.Duration.Companion.seconds
   )
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class DefaultSliderRange {
+@Tag annotation class DefaultSliderRange {
   @Provide companion object {
     @Provide val double: @DefaultSliderRange ClosedRange<Double> = 0.0..1.0
     @Provide val float: @DefaultSliderRange ClosedRange<Float> = 0f..1f

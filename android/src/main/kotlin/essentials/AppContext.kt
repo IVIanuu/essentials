@@ -8,11 +8,6 @@ import android.app.*
 import android.content.*
 import injekt.*
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class AppContextTag {
-  @Provide companion object {
-    @Provide fun appContext(app: Application): AppContext = app
-  }
-}
+@Tag typealias AppContext = Context
 
-typealias AppContext = @AppContextTag Context
+@Provide fun appContext(app: Application): AppContext = app

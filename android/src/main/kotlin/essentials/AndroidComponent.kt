@@ -9,8 +9,7 @@ import android.content.*
 import injekt.*
 import kotlin.reflect.*
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class AndroidComponent {
+@Tag annotation class AndroidComponent {
   @Provide companion object {
     @Provide fun <@AddOn T : @AndroidComponent S, S : Activity> activity(
       componentClass: KClass<T>,

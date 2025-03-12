@@ -35,9 +35,7 @@ import injekt.*
   }
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class AutoRotationTag
-internal typealias AutoRotation = @AutoRotationTag Int
+@Tag typealias AutoRotation = Int
 
 @Provide val autoRotationModule = AndroidSettingModule<AutoRotation>(
   Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM, 1

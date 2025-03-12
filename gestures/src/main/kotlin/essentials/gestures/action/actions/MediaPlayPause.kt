@@ -26,6 +26,6 @@ import injekt.*
     mediaActionSender.sendMediaAction(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
   }
 
-  @Provide inline val settingsScreen: @ActionSettingsScreen<PlayPauseActionId> Screen<Unit>
+  @Provide inline val settingsScreen: ActionSettingsScreen<PlayPauseActionId>
     get() = MediaActionSettingsScreen()
 }

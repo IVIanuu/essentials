@@ -12,7 +12,7 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
 @Stable class ScopedCoroutineScope<N> @Provide @Scoped<N> constructor(
-  context: @ScopeCoroutineContextTag<N> CoroutineContext
+  context: ScopeCoroutineContext<N>
 ): CoroutineScope, DisposableHandle {
   override val coroutineContext: CoroutineContext = context + SupervisorJob()
   override fun dispose() {
@@ -27,11 +27,8 @@ import kotlin.coroutines.*
   }
 }
 
-@Tag @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR)
-annotation class ScopeCoroutineContextTag<N> {
-  @Provide companion object {
-    @Provide fun <N> context(
-      contexts: CoroutineContexts
-    ): @ScopeCoroutineContextTag<N> CoroutineContext = contexts.main
-  }
-}
+@Tag typealias ScopeCoroutineContext<N> = CoroutineContext
+
+@Provide fun <N> scopeCoroutineContext(
+  contexts: CoroutineContexts
+): ScopeCoroutineContext<N> = contexts.main
