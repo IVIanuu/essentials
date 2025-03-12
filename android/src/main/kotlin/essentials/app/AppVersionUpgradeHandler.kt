@@ -4,6 +4,7 @@
 
 package essentials.app
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -15,20 +16,17 @@ import essentials.logging.*
 import injekt.*
 import kotlinx.coroutines.flow.*
 
-fun interface AppVersionUpgradeHandler {
-  suspend fun onAppVersionUpgrade(lastAppVersion: Int?, appVersion: Int)
+data class AppVersionUpgradeParams(val lastAppVersion: Int?, val appVersion: Int)
+@Tag typealias AppVersionUpgradeResult = Unit
+@Provide val defaultAppVersionUpgradeHandlers
+  get() = emptyList<suspend (AppVersionUpgradeParams) -> AppVersionUpgradeResult>()
 
-  @Provide companion object {
-    @Provide val defaultHandlers get() = emptyList<AppVersionUpgradeHandler>()
-  }
-}
-
-@Provide fun appVersionUpgradeWorker(
+@Provide @Composable fun AppVersionUpgradeHandler(
   appConfig: AppConfig,
-  handlers: () -> List<AppVersionUpgradeHandler>,
+  handlers: () -> List<suspend (AppVersionUpgradeParams) -> AppVersionUpgradeResult>,
   logger: Logger,
   preferencesStore: DataStore<Preferences>
-) = ScopeComposition<AppScope> {
+): ScopeCompositionResult<AppScope> {
   LaunchedEffect(true) {
     val lastAppVersion = preferencesStore.data.first()[LastAppVersionPrefKey]
 
@@ -37,7 +35,8 @@ fun interface AppVersionUpgradeHandler {
 
     logger.d { "upgrade from app version $lastAppVersion to ${appConfig.versionCode}" }
 
-    handlers().parMap { it.onAppVersionUpgrade(lastAppVersion, appConfig.versionCode) }
+    val params = AppVersionUpgradeParams(lastAppVersion, appConfig.versionCode)
+    handlers().parMap { it(params) }
 
     preferencesStore.edit { it[LastAppVersionPrefKey] = appConfig.versionCode }
   }

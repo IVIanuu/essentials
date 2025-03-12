@@ -43,7 +43,7 @@ interface PremiumVersionManager {
   private val appUiStarter: AppUiStarter,
   private val billingManager: BillingManager,
   private val deviceScreenManager: DeviceScreenManager,
-  private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
+  private val downgradeHandlers: () -> List<suspend () -> PremiumDowngradeResult>,
   private val logger: Logger,
   private val preferencesStore: DataStore<Preferences>,
   private val premiumVersionSku: PremiumVersionSku,
@@ -63,7 +63,7 @@ interface PremiumVersionManager {
     LaunchedEffect(isPremiumVersion) {
       if (!isPremiumVersion && preferencesStore.data.first()[WasPremiumVersionKey] == true) {
         logger.d { "handle premium version downgrade" }
-        downgradeHandlers().parMap { it.onPremiumDowngrade() }
+        downgradeHandlers().parMap { it() }
       }
       preferencesStore.edit { it[WasPremiumVersionKey] = isPremiumVersion }
     }
@@ -117,10 +117,7 @@ interface PremiumVersionManager {
 
 private val WasPremiumVersionKey = booleanPreferencesKey("was_premium_version")
 
-fun interface PremiumDowngradeHandler {
-  suspend fun onPremiumDowngrade()
+@Tag typealias PremiumDowngradeResult = Unit
 
-  @Provide companion object {
-    @Provide val defaultHandlers get() = emptyList<PremiumDowngradeHandler>()
-  }
-}
+@Provide val defaultPremiumDowngradeHandlers
+  get() = emptyList<suspend () -> PremiumDowngradeResult>()

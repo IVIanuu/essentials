@@ -5,6 +5,7 @@
 package essentials.util
 
 import androidx.activity.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.*
 import essentials.*
@@ -13,10 +14,10 @@ import essentials.coroutines.*
 import essentials.ui.*
 import injekt.*
 
-@Provide fun appVisibleScopeWorker(
+@Provide @Composable fun AppVisibleScopeManager(
   appVisibleScopeFactory: () -> Scope<AppVisibleScope>,
   activity: ComponentActivity
-) = ScopeComposition<UiScope> worker@ {
+): ScopeCompositionResult<UiScope> {
   if (activity is EsActivity)
     LaunchedEffect(true) {
       activity.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {

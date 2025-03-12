@@ -6,6 +6,7 @@ package essentials
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastForEachIndexed
 import essentials.compose.launchMolecule
 import injekt.*
 import injekt.common.*
@@ -43,20 +44,17 @@ import kotlin.reflect.*
       .sortedWithLoadingOrder()
       .fastForEach { it.instance.initialize() }
 
-    val compositions = config.compositions()
-    if (compositions.isNotEmpty()) {
-      compositions
-        .sortedWithLoadingOrder()
-        .let { compositions ->
-          coroutineScope.launchMolecule {
-            compositions.fastForEach {
-              key(it.key) {
-                it.instance.Content()
-              }
-            }
-          }
+    startScopeComposition(config)
+  }
+
+  private fun startScopeComposition(config: ScopeConfig<N>) {
+    val compositions = config.compositions
+    if (compositions.isNotEmpty())
+      coroutineScope.launchMolecule {
+        compositions.fastForEachIndexed { i, composition ->
+          key(i) { composition() }
         }
-    }
+      }
   }
 
   fun <T : Any> serviceOrNull(key: KClass<T> = inject): T? = services?.get(key)?.let {
@@ -117,7 +115,7 @@ import kotlin.reflect.*
 
 @Provide data class ScopeConfig<N : Any>(
   val initializers: List<ExtensionPointRecord<ScopeInitializer<N>>>,
-  val compositions: () -> List<ExtensionPointRecord<ScopeComposition<N>>>,
+  val compositions: List<@Composable () -> ScopeCompositionResult<N>>,
   val services: List<ProvidedService<N, *>>
 )
 
@@ -229,6 +227,7 @@ fun interface ScopeInitializer<N : Any> : ExtensionPoint<ScopeInitializer<N>> {
   fun initialize()
 }
 
-fun interface ScopeComposition<N : Any> : ExtensionPoint<ScopeComposition<N>> {
-  @Composable fun Content()
-}
+@Tag typealias ScopeCompositionResult<N> = Unit
+
+@Provide fun <N> defaultScopeCompositions() =
+  emptyList<@Composable () -> ScopeCompositionResult<N>>()

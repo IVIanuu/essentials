@@ -10,7 +10,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import essentials.ScopeComposition
+import essentials.ScopeCompositionResult
 import essentials.logging.*
 import essentials.ui.*
 import essentials.ui.navigation.*
@@ -25,16 +25,16 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   }
 }
 
-@Provide fun screenLaunchFullScreenObserver(
-  adsEnabledProducer: @Composable () -> AdsEnabled,
+@Provide @Composable fun ScreenLaunchFullScreenAdManager(
+  adsEnabled: AdsEnabled,
   adFeatureRepository: AdFeatureRepository,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAdManager: FullScreenAdManager,
   logger: Logger,
   navigator: Navigator,
   preferencesStore: DataStore<Preferences>
-) = ScopeComposition<UiScope> {
-  if (adsEnabledProducer())
+): ScopeCompositionResult<UiScope> {
+  if (adsEnabled)
     LaunchedEffect(true) {
       navigator.launchEvents(adFeatureRepository).collectLatest {
         val launchCount = preferencesStore

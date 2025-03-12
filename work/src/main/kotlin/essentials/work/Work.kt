@@ -140,12 +140,12 @@ fun interface Worker<I : WorkId> {
 }
 
 @SuppressLint("RestrictedApi")
-@Provide fun periodicWorkScheduler(
+@Provide @Composable fun PeriodicWorkScheduler(
   coroutineContexts: CoroutineContexts,
   logger: Logger,
   schedules: Map<String, PeriodicWorkSchedule<*>>,
   androidWorkManager: androidx.work.WorkManager,
-) = ScopeComposition<AppScope> {
+): ScopeCompositionResult<AppScope> {
   LaunchedEffect(true) {
     withContext(coroutineContexts.computation) {
       schedules.forEach { (workId, schedule) ->

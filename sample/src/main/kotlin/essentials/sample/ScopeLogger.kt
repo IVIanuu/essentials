@@ -9,7 +9,10 @@ import essentials.*
 import essentials.logging.*
 import injekt.*
 
-@Provide fun scopeLogger(logger: Logger, appScope: Scope<AppScope>) = ScopeComposition<AppScope> {
+@Provide @Composable fun ActiveScopeLogger(
+  logger: Logger,
+  appScope: Scope<AppScope>
+): ScopeCompositionResult<AppScope> {
   val activeScopes = appScope.allScopes
   LaunchedEffect(activeScopes) {
     logger.d { "active scopes ${activeScopes.map { it.name.simpleName }}" }

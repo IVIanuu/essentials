@@ -4,6 +4,7 @@
 
 package essentials.ui.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.util.fastFlatMap
 import essentials.*
@@ -15,11 +16,11 @@ fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
   suspend fun createUserflow(): List<Screen<*>>
 }
 
-@Provide fun userflowBuilderComposition(
+@Provide @Composable fun UserflowBuilder(
   records: List<ExtensionPointRecord<UserflowBuilder>>,
   logger: Logger,
   navigator: Navigator
-) = ScopeComposition<UiScope> {
+): ScopeCompositionResult<UiScope> {
   LaunchedEffect(true) {
     val userflowScreens = records
       .sortedWithLoadingOrder()
