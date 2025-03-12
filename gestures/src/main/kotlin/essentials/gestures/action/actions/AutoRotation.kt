@@ -37,6 +37,6 @@ import injekt.*
 
 @Tag typealias AutoRotation = Int
 
-@Provide val autoRotationModule = AndroidSettingModule<AutoRotation>(
+@Provide val autoRotationDataStoreProvider = AndroidSettingDataStoreProvider<AutoRotation>(
   Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM, 1
 )

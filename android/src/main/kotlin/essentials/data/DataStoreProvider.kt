@@ -13,7 +13,10 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import java.io.*
 
-class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
+class DataStoreProvider<T : Any>(
+  private val name: String,
+  private val default: () -> T
+) {
   @Provide fun dataStore(
     coroutineContexts: CoroutineContexts,
     json: () -> Json,

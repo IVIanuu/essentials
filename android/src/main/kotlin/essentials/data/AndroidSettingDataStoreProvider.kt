@@ -15,12 +15,12 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 
-class AndroidSettingModule<T : Any>(
+class AndroidSettingDataStoreProvider<T : Any>(
   private val name: String,
   private val type: AndroidSettingsType,
   private val defaultValue: T
 ) {
-  @Provide fun dataStore(
+  @Provide fun provide(
     contentResolver: ContentResolver,
     coroutineContexts: CoroutineContexts,
     scope: ScopedCoroutineScope<AppScope>

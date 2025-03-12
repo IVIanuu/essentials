@@ -10,7 +10,7 @@ import essentials.coroutines.ScopedCoroutineScope
 import essentials.coroutines.childCoroutineScope
 import injekt.Provide
 
-@Provide object PreferencesModule {
+@Provide object PreferencesProviders {
   @Provide fun preferencesDataStore(
     coroutineContexts: CoroutineContexts,
     prefsDir: () -> PrefsDir,

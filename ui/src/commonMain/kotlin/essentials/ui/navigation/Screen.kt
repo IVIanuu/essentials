@@ -64,7 +64,7 @@ class ScreenScope {
   }
 }
 
-@Provide object ScreenModule {
+@Provide object ScreenProviders {
   @Provide fun <@AddOn T : Ui<S>, S : Screen<*>> rootNavGraphUiFactory(
     screenClass: KClass<S>,
     uiFactory: UiFactory<S>

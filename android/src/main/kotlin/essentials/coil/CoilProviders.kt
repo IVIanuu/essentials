@@ -18,7 +18,7 @@ import kotlinx.coroutines.*
 import kotlin.reflect.*
 
 @OptIn(ExperimentalStdlibApi::class)
-@Provide object EsCoilModule {
+@Provide object CoilProviders {
   @Provide fun coilInitializer(imageLoaderFactory: () -> ImageLoader) =
     ScopeInitializer<AppScope> { Coil.setImageLoader(imageLoaderFactory) }
 

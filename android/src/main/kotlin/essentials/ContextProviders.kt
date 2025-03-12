@@ -8,7 +8,7 @@ import android.content.*
 import android.content.pm.*
 import injekt.*
 
-@Provide object ContextModule {
+@Provide object ContextProviders {
   @Provide fun packageManager(appContext: AppContext): PackageManager =
     appContext.packageManager
 

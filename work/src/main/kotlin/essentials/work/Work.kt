@@ -82,7 +82,7 @@ fun interface Worker<I : WorkId> {
     }
 }
 
-@Provide object WorkModule {
+@Provide object WorkProviders {
   @Provide fun <@AddOn I : WorkId> worker(
     id: I,
     worker: () -> Worker<I>,

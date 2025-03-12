@@ -17,7 +17,7 @@ interface Permission {
   val icon: (@Composable () -> Unit)? get() = null
 }
 
-@Provide object PermissionModule {
+@Provide object PermissionProviders {
   @Provide fun <@AddOn T : Permission> permission(
     key: KClass<T>,
     permission: () -> T
