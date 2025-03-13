@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.*
 import androidx.core.graphics.drawable.*
 import essentials.gestures.action.*
 import essentials.gestures.action.ui.*
-import essentials.shortcut.*
+import essentials.gestures.shortcut.ShortcutPickerScreen
 import essentials.ui.navigation.*
 import injekt.*
 import java.io.*

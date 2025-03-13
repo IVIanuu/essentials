@@ -2,13 +2,12 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package essentials.systemoverlay
+package essentials.gestures.overlay
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
-import essentials.ui.common.*
 import essentials.util.*
 
 data class TriggerGeometry(

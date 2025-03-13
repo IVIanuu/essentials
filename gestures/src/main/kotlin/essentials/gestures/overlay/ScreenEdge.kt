@@ -1,12 +1,8 @@
-/*
- * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
- */
+package essentials.gestures.overlay
 
-package essentials.systemoverlay
-
-import androidx.compose.ui.*
+import androidx.compose.ui.Alignment
 import essentials.android.R
-import essentials.util.*
+import essentials.util.ScreenRotation
 
 enum class ScreenEdge(
   val title: String,
@@ -17,7 +13,7 @@ enum class ScreenEdge(
   LEFT(
     title = "Left",
     iconRes = R.drawable.ic_trigger_left,
-    alignment = Alignment.TopStart,
+    alignment = Alignment.Companion.TopStart,
     isOnSide = true
   ) {
     override fun rotate(rotation: ScreenRotation) = when (rotation) {
@@ -37,7 +33,7 @@ enum class ScreenEdge(
   TOP(
     title = "Top",
     iconRes = R.drawable.ic_trigger_top,
-    alignment = Alignment.TopStart,
+    alignment = Alignment.Companion.TopStart,
     isOnSide = false
   ) {
     override fun rotate(rotation: ScreenRotation) = when (rotation) {
@@ -57,7 +53,7 @@ enum class ScreenEdge(
   RIGHT(
     title = "Right",
     iconRes = R.drawable.ic_trigger_right,
-    alignment = Alignment.TopEnd,
+    alignment = Alignment.Companion.TopEnd,
     isOnSide = true
   ) {
     override fun rotate(rotation: ScreenRotation) = when (rotation) {
@@ -77,7 +73,7 @@ enum class ScreenEdge(
   BOTTOM(
     title = "Bottom",
     iconRes = R.drawable.ic_trigger_bottom,
-    alignment = Alignment.BottomStart,
+    alignment = Alignment.Companion.BottomStart,
     isOnSide = false
   ) {
     override fun rotate(rotation: ScreenRotation) = when (rotation) {

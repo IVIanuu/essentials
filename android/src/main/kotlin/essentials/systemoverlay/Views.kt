@@ -5,9 +5,61 @@
 package essentials.systemoverlay
 
 import android.annotation.*
-import android.view.*
-import android.widget.*
+import android.content.*
+import android.view.MotionEvent
+import android.view.View
+import android.widget.FrameLayout
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.*
+import androidx.lifecycle.*
+import androidx.savedstate.*
+import injekt.*
+
+@SuppressLint("ViewConstructor")
+@Stable @Provide class OverlayComposeView(
+  context: Context,
+  private val content: @Composable () -> Unit,
+) : AbstractComposeView(context),
+  LifecycleOwner,
+  SavedStateRegistryOwner,
+  ViewModelStoreOwner {
+  private val _lifecycle = LifecycleRegistry(this)
+  override val lifecycle: Lifecycle
+    get() = _lifecycle
+  private val savedStateRegistryController = SavedStateRegistryController.create(this)
+  override val viewModelStore = ViewModelStore()
+
+  init {
+    setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
+    setViewTreeLifecycleOwner(this)
+    savedStateRegistryController.performRestore(null)
+    setViewTreeSavedStateRegistryOwner(this)
+    setViewTreeViewModelStoreOwner(this)
+    _lifecycle.currentState = Lifecycle.State.CREATED
+  }
+
+  @Composable override fun Content() {
+    content()
+  }
+
+  override fun onAttachedToWindow() {
+    super.onAttachedToWindow()
+    _lifecycle.currentState = Lifecycle.State.RESUMED
+  }
+
+  override fun onDetachedFromWindow() {
+    _lifecycle.currentState = Lifecycle.State.CREATED
+    super.onDetachedFromWindow()
+  }
+
+  override val savedStateRegistry: SavedStateRegistry
+    get() = savedStateRegistryController.savedStateRegistry
+
+  fun dispose() {
+    _lifecycle.currentState = Lifecycle.State.DESTROYED
+    viewModelStore.clear()
+  }
+}
 
 @SuppressLint("ViewConstructor")
 @Stable class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {

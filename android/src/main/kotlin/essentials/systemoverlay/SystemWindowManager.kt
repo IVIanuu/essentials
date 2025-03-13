@@ -133,9 +133,10 @@ class SystemWindowState(
   var interceptor by mutableStateOf(interceptor)
 }
 
-fun Modifier.systemWindowTrigger() = composed {
+fun Modifier.systemWindowTrigger(useDownTouchOffset: Boolean = true) = composed {
   val ownerView = LocalView.current
   val triggerView = remember { TriggerView(ownerView) }
+  triggerView.useDownTouchOffset = useDownTouchOffset
   val systemWindowManager = LocalSystemWindowManager.current
   val layoutParams = remember {
     WindowManager.LayoutParams().apply {
