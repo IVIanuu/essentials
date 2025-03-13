@@ -27,6 +27,7 @@ import kotlin.time.Duration.Companion.seconds
 class ActionsScreen : Screen<Unit>
 
 @Provide @Composable fun ActionsUi(
+  executeAction: executeAction,
   navigator: Navigator,
   repository: ActionRepository,
   showToast: showToast
@@ -49,7 +50,7 @@ class ActionsScreen : Screen<Unit>
 
           showToast("Execute action ${action.title}")
 
-          repository.executeAction(actionId)
+          executeAction(actionId)
         }
       ) { Text("Pick action") }
 
@@ -66,7 +67,7 @@ class ActionsScreen : Screen<Unit>
           while (true) {
             showToast("Execute action ${action.title}")
 
-            repository.executeAction(actionId)
+            executeAction(actionId)
 
             delay(3.seconds)
           }
