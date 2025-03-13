@@ -28,7 +28,7 @@ class RateLimiter(
     onLimitExceeded: () -> T?,
     onPermit: () -> T
   ): T = lock.withLock {
-    val now = clock.now()
+    val now = clock()
 
     when {
       now >= intervalEnd -> enterNextInterval(now)
@@ -36,7 +36,7 @@ class RateLimiter(
         val result = onLimitExceeded()
         if (result != null) return@withLock result
         delay(intervalEnd - now)
-        enterNextInterval(clock.now())
+        enterNextInterval(clock())
       }
       else -> remainingEvents -= 1
     }

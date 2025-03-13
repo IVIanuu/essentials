@@ -9,10 +9,6 @@ import injekt.*
 import kotlin.time.*
 import kotlin.time.Duration.Companion.milliseconds
 
-fun interface Clock {
-  fun now(): Duration
-
-  @Provide companion object {
-    @Provide val impl = Clock { System.currentTimeMillis().milliseconds }
-  }
-}
+@Tag typealias Now = Duration
+typealias Clock = () -> Now
+@Provide fun currentTime(): Now = System.currentTimeMillis().milliseconds
