@@ -17,18 +17,17 @@ import kotlinx.coroutines.*
 @Provide suspend fun getInstalledApps(
   coroutineContexts: CoroutineContexts,
   packageManager: PackageManager
-): InstalledApps =
-  withContext(coroutineContexts.io) {
-    packageManager.getInstalledApplications(0)
-      .parMap {
-        AppInfo(
-          appName = it.loadLabel(packageManager).toString(),
-          packageName = it.packageName
-        )
-      }
-      .fastDistinctBy { it.packageName }
-      .sortedBy { it.appName.lowercase() }
-  }
+): InstalledApps = withContext(coroutineContexts.io) {
+  packageManager.getInstalledApplications(0)
+    .parMap {
+      AppInfo(
+        appName = it.loadLabel(packageManager).toString(),
+        packageName = it.packageName
+      )
+    }
+    .fastDistinctBy { it.packageName }
+    .sortedBy { it.appName.lowercase() }
+}
 
 @Provide suspend fun getAppInfo(
   packageName: String,
