@@ -27,19 +27,13 @@ import kotlin.reflect.*
       contextual<Any>(kClass = it.key.cast(), serializer = it.value.cast())
     }
   }
+
+  @Provide fun <@AddOn T : @InjektSerializer KSerializer<S>, S : Any> serializerBinding(
+    clazz: KClass<S>,
+    serializer: T
+  ): Pair<KClass<*>, KSerializer<*>> = clazz to serializer
+
+  @Provide val defaultInjektSerializers get() = emptyList<Pair<KClass<*>, KSerializer<*>>>()
 }
 
-@Tag annotation class InjektSerializer {
-  @Provide companion object {
-    @Provide val defaultSerializers get() = emptyList<Pair<KClass<*>, KSerializer<*>>>()
-
-    @Provide fun <@AddOn T : @InjektSerializer KSerializer<S>, S : Any> serializerBinding(
-      clazz: KClass<S>,
-      serializer: T
-    ): Pair<KClass<*>, KSerializer<*>> = clazz to serializer
-
-    @Provide fun <@AddOn T : @InjektSerializer KSerializer<S>, S : Any> serializer(
-      serializer: T
-    ): KSerializer<S> = serializer
-  }
-}
+@Tag annotation class InjektSerializer

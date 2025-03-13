@@ -9,6 +9,7 @@ import androidx.activity.*
 import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import essentials.*
+import essentials.app.AndroidComponent
 import essentials.coroutines.*
 import essentials.logging.*
 import injekt.*

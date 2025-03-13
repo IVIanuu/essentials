@@ -10,6 +10,7 @@ import androidx.compose.ui.util.fastFold
 import androidx.compose.ui.util.fastMap
 import androidx.compose.ui.util.fastMinByOrNull
 import essentials.*
+import essentials.app.AndroidComponent
 import essentials.coroutines.*
 import essentials.logging.*
 import injekt.*

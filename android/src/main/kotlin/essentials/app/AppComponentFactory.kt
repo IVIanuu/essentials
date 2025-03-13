@@ -5,13 +5,32 @@
 package essentials.app
 
 import android.app.*
-import android.app.Service
 import android.content.*
 import essentials.*
+import essentials.Service
+import injekt.AddOn
+import injekt.Provide
+import injekt.Tag
+import kotlin.reflect.KClass
+
+@Tag annotation class AndroidComponent {
+  @Provide companion object {
+    @Provide fun <@AddOn T : @AndroidComponent S, S : Any> binding(
+      componentClass: KClass<T>,
+      factory: (Intent?) -> T
+    ): Pair<KClass<*>, (Intent?) -> Any> = componentClass to factory
+
+    @Provide val defaultAndroidComponents get() = emptyList<Pair<KClass<*>, (Intent?) -> Any>>()
+  }
+}
+
+@Provide @Service<AppScope> class AppComponentFactoryComponent(
+  val factories: List<Pair<KClass<*>, (Intent?) -> Any>>
+)
 
 class EsAppComponentFactory : AppComponentFactory() {
   private val factories: Map<String, (Intent?) -> Any> by lazy(LazyThreadSafetyMode.NONE) {
-    app.appScope.service<AndroidComponentFactoryComponent>()
+    app.appScope.service<AppComponentFactoryComponent>()
       .factories
       .toMap()
       .mapKeys { it.key.java.name }
@@ -23,7 +42,7 @@ class EsAppComponentFactory : AppComponentFactory() {
   override fun instantiateActivity(cl: ClassLoader, className: String, intent: Intent?): Activity =
     factories[className]?.invoke(intent)?.cast() ?: super.instantiateActivity(cl, className, intent)
 
-  override fun instantiateService(cl: ClassLoader, className: String, intent: Intent?): Service =
+  override fun instantiateService(cl: ClassLoader, className: String, intent: Intent?): android.app.Service =
     factories[className]?.invoke(intent)?.cast() ?: super.instantiateService(cl, className, intent)
 
   override fun instantiateReceiver(

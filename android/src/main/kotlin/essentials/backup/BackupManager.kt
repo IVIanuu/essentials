@@ -15,6 +15,7 @@ import androidx.compose.ui.util.fastMap
 import androidx.core.content.*
 import app.cash.quiver.extensions.*
 import essentials.*
+import essentials.app.AndroidComponent
 import essentials.coroutines.*
 import essentials.data.*
 import essentials.logging.*

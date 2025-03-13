@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import arrow.fx.coroutines.*
 import essentials.*
+import essentials.app.AndroidComponent
 import essentials.compose.*
 import essentials.coroutines.*
 import essentials.logging.*
