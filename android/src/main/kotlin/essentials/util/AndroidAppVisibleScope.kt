@@ -5,12 +5,11 @@
 package essentials.util
 
 import androidx.activity.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.lifecycle.*
+import androidx.lifecycle.compose.currentStateAsState
 import essentials.*
 import essentials.app.*
-import essentials.coroutines.*
 import essentials.ui.*
 import injekt.*
 
@@ -18,13 +17,12 @@ import injekt.*
   appVisibleScopeFactory: () -> Scope<AppVisibleScope>,
   activity: ComponentActivity
 ): ScopeContent<UiScope> {
-  if (activity is EsActivity)
-    LaunchedEffect(true) {
-      activity.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-        bracketCase(
-          acquire = { appVisibleScopeFactory() },
-          release = { scope, _ -> scope.dispose() }
-        )
+  if (activity is EsActivity) {
+    val state by activity.lifecycle.currentStateAsState()
+    if (state.isAtLeast(Lifecycle.State.STARTED))
+      DisposableEffect(true) {
+        val scope = appVisibleScopeFactory()
+        onDispose { scope.dispose() }
       }
-    }
+  }
 }

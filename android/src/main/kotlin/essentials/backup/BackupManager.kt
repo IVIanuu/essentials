@@ -30,7 +30,7 @@ import java.util.zip.*
 
 @Stable @Provide class BackupManager(
   private val appContext: AppContext,
-  private val backupDir: BackupDir,
+  private val backupDestinationDir: BackupDestinationDir,
   private val backupFiles: List<BackupFile>,
   private val appConfig: AppConfig,
   private val contentResolver: ContentResolver,
@@ -46,7 +46,7 @@ import java.util.zip.*
     val backupFileName =
       "${appConfig.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
 
-    val backupFile = backupDir.resolve("$backupFileName.zip")
+    val backupFile = backupDestinationDir.resolve("$backupFileName.zip")
       .also {
         it.parentFile.mkdirs()
         it.createNewFile()
@@ -128,7 +128,7 @@ private val BACKUP_BLACKLIST = listOf(
 
 @Tag typealias BackupFile = File
 
-@Tag typealias BackupDir = File
+@Tag typealias BackupDestinationDir = File
 
 @Provide object BackupFileProviders {
   @Provide fun backupPrefs(prefsDir: PrefsDir): BackupFile = prefsDir
@@ -137,7 +137,7 @@ private val BACKUP_BLACKLIST = listOf(
 
   @Provide fun backupSharedPrefs(dataDir: DataDir): BackupFile = dataDir.resolve("shared_prefs")
 
-  @Provide fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
+  @Provide fun backupDestinationDir(dataDir: DataDir): BackupDestinationDir = dataDir.resolve("files/backups")
 }
 
 @Provide @AndroidComponent class BackupFileProvider : FileProvider()

@@ -55,4 +55,3 @@ class BackupAndRestoreScreen : Screen<Unit>
     }
   }
 }
-
