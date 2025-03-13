@@ -42,12 +42,8 @@ import essentials.ui.navigation.*
   )
 }
 
-fun interface AppBarScrollBehaviorProvider {
-  @Composable fun provide(): TopAppBarScrollBehavior?
-}
-
-val LocalAppBarScrollBehaviorProvider = compositionLocalOf {
-  AppBarScrollBehaviorProvider { TopAppBarDefaults.pinnedScrollBehavior() }
+val LocalAppBarScrollBehaviorProvider = compositionLocalOf<@Composable () -> TopAppBarScrollBehavior?> {
+  { TopAppBarDefaults.pinnedScrollBehavior() }
 }
 
 val LocalAppBarScrollBehavior = compositionLocalOf<TopAppBarScrollBehavior?> { null }

@@ -29,8 +29,7 @@ val LocalContentPadding = compositionLocalOf {
   contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
   content: @Composable () -> Unit
 ) {
-  val scrollBehavior = LocalAppBarScrollBehaviorProvider
-    .current.provide()
+  val scrollBehavior = LocalAppBarScrollBehaviorProvider.current()
 
   Scaffold(
     modifier = modifier
