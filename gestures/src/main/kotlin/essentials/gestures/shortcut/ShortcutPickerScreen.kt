@@ -26,15 +26,15 @@ class ShortcutPickerScreen : Screen<Shortcut>
 
 @Provide @Composable fun ShortcutPickerUi(
   navigator: Navigator,
-  repository: ShortcutRepository,
+  getShortcuts: getShortcuts,
+  extractShortcut: extractShortcut,
   screen: ShortcutPickerScreen,
   showToast: showToast
 ): Ui<ShortcutPickerScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Pick an shortcut") } }) {
     ResourceBox(
       produceScopedState(Resource.Idle()) {
-        repository.shortcuts
-          .flowAsResource()
+        resourceFlow { emit(getShortcuts()) }
           .collect { value = it }
       }.value
     ) { shortcuts ->
@@ -46,7 +46,7 @@ class ShortcutPickerScreen : Screen<Shortcut>
                 val shortcutRequestResult = navigator.push(shortcut.intent.asScreen())
                   ?.getOrNull()
                   ?.data ?: return@catch
-                val finalShortcut = repository.extractShortcut(shortcutRequestResult)
+                val finalShortcut = extractShortcut(shortcutRequestResult)
                 navigator.pop(screen, finalShortcut)
               }.onLeft {
                 it.printStackTrace()

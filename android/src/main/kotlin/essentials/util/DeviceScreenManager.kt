@@ -3,6 +3,7 @@ package essentials.util
 import android.app.*
 import android.content.*
 import android.hardware.*
+import android.hardware.SensorManager
 import android.os.*
 import android.view.*
 import androidx.activity.*
@@ -74,7 +75,7 @@ enum class ScreenRotation(val isPortrait: Boolean) {
     DisposableEffect(true) {
       val listener = object : OrientationEventListener(
         appContext,
-        SensorManager.SENSOR_DELAY_NORMAL
+        android.hardware.SensorManager.SENSOR_DELAY_NORMAL
       ) {
         override fun onOrientationChanged(orientation: Int) {
           displayRotation = getCurrentDisplayRotation()

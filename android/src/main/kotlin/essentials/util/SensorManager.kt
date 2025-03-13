@@ -1,13 +1,11 @@
 package essentials.util
 
 import android.hardware.*
-import androidx.compose.runtime.Composable
+import android.hardware.SensorManager
+import androidx.compose.runtime.*
 import essentials.*
 import injekt.*
 import kotlin.time.*
-import android.hardware.SensorEvent
-import android.hardware.SensorManager
-import androidx.compose.runtime.DisposableEffect
 
 @Provide class SensorManager(
   private val sensorManager: @SystemService SensorManager,
