@@ -57,6 +57,7 @@ class ForegroundScreen : Screen<Unit>
                 .collect { value = it }
             }.value
           }")
+          setContentIntent(uiLauncherIntent())
         }
       }
 
@@ -80,6 +81,7 @@ class ForegroundScreen : Screen<Unit>
                 .collect { value = it }
             }.value
           }")
+          setContentIntent(uiLauncherIntent())
         }
       }
 

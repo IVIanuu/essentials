@@ -29,14 +29,6 @@
             android:theme="@style/Theme.Es.Translucent"
             android:exported="true" />
 
-        <receiver
-            android:name="essentials.util.RemoteActionReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="execute_remote_action" />
-            </intent-filter>
-        </receiver>
-
         <provider
             android:name="essentials.backup.BackupFileProvider"
             android:authorities="${applicationId}.backupprovider"

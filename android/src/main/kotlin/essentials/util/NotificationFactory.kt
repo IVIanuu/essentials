@@ -4,11 +4,13 @@
 
 package essentials.util
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.*
 import androidx.compose.ui.graphics.*
 import androidx.core.app.*
 import essentials.*
+import essentials.app.EsActivity
 import essentials.ui.app.*
 import injekt.*
 
@@ -41,4 +43,14 @@ import injekt.*
 }
 
 inline val NotificationCompat.Builder.context: Context
-  get() = @Suppress("RestrictedLint") mContext
+  @SuppressLint("RestrictedApi") get() = mContext
+
+inline fun NotificationCompat.Builder.uiLauncherIntent(
+  requestCode: Int = 1,
+  intentBuilder: Intent.() -> Unit = {}
+): PendingIntent = PendingIntent.getActivity(
+  context,
+  requestCode,
+  Intent(context, EsActivity::class.java).apply(intentBuilder),
+  PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+)

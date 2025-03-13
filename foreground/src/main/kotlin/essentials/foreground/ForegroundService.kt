@@ -27,8 +27,7 @@ import kotlin.time.Duration.Companion.seconds
   private val notificationManager: @SystemService NotificationManager,
   private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>,
-  private val foregroundScopeFactory: () -> Scope<ForegroundScope>,
-  private val remoteActionFactory: RemoteActionFactory
+  private val foregroundScopeFactory: () -> Scope<ForegroundScope>
 ) : Service() {
   private var job: Job? = null
   private var needsStartForegroundCall by mutableStateOf(true)
@@ -57,7 +56,7 @@ import kotlin.time.Duration.Companion.seconds
           ) {
             setContentTitle("${appConfig.appName} is running!")
             setSmallIcon(R.drawable.ic_sync)
-            setContentIntent(remoteActionFactory<StartAppRemoteAction, _>())
+            setContentIntent(uiLauncherIntent())
           }
         }
       }
