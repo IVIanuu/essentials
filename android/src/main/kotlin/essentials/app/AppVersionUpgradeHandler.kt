@@ -26,7 +26,7 @@ data class AppVersionUpgradeParams(val lastAppVersion: Int?, val appVersion: Int
   handlers: () -> List<suspend (AppVersionUpgradeParams) -> AppVersionUpgradeResult>,
   logger: Logger,
   preferencesStore: DataStore<Preferences>
-): ScopeCompositionResult<AppScope> {
+): ScopeContent<AppScope> {
   LaunchedEffect(true) {
     val lastAppVersion = preferencesStore.data.first()[LastAppVersionPrefKey]
 

@@ -20,7 +20,7 @@ fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
   records: List<ExtensionPointRecord<UserflowBuilder>>,
   logger: Logger,
   navigator: Navigator
-): ScopeCompositionResult<UiScope> {
+): ScopeContent<UiScope> {
   LaunchedEffect(true) {
     val userflowScreens = records
       .sortedWithLoadingOrder()

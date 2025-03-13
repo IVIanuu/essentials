@@ -86,7 +86,7 @@ interface Paywall {
   isPremiumVersion: IsPremiumVersion,
   logger: Logger,
   preferencesStore: DataStore<Preferences>
-): ScopeCompositionResult<AppScope> {
+): ScopeContent<AppScope> {
   if (isPremiumVersion != null)
     LaunchedEffect(isPremiumVersion) {
       if (!isPremiumVersion && preferencesStore.data.first()[WasPremiumVersionKey] == true) {

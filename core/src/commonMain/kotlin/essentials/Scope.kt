@@ -9,7 +9,6 @@ import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
 import app.cash.molecule.AndroidUiDispatcher
 import app.cash.molecule.RecompositionMode
-import app.cash.molecule.launchMolecule
 import essentials.compose.launchMolecule
 import essentials.compose.moleculeState
 import essentials.compose.rememberScoped
@@ -49,15 +48,15 @@ import kotlin.reflect.*
       .sortedWithLoadingOrder()
       .fastForEach { it.instance.initialize() }
 
-    startScopeComposition(config)
+    setContent(config)
   }
 
-  private fun startScopeComposition(config: ScopeConfig<N>) {
-    val compositions = config.compositions
-    if (compositions.isNotEmpty())
+  private fun setContent(config: ScopeConfig<N>) {
+    val content = config.content
+    if (content.isNotEmpty())
       coroutineScope.launchMolecule {
-        compositions.fastForEachIndexed { i, composition ->
-          key(i) { composition() }
+        content.fastForEachIndexed { i, content ->
+          key(i) { content() }
         }
       }
   }
@@ -120,7 +119,7 @@ import kotlin.reflect.*
 
 @Provide data class ScopeConfig<N : Any>(
   val initializers: List<ExtensionPointRecord<ScopeInitializer<N>>>,
-  val compositions: List<@Composable () -> ScopeCompositionResult<N>>,
+  val content: List<@Composable () -> ScopeContent<N>>,
   val services: List<ProvidedService<N, *>>
 )
 
@@ -232,10 +231,10 @@ fun interface ScopeInitializer<N : Any> : ExtensionPoint<ScopeInitializer<N>> {
   fun initialize()
 }
 
-@Tag typealias ScopeCompositionResult<N> = Unit
+@Tag typealias ScopeContent<N> = Unit
 
-@Provide fun <N> defaultScopeCompositions() =
-  emptyList<@Composable () -> ScopeCompositionResult<N>>()
+@Provide fun <N> defaultScopeContent() =
+  emptyList<@Composable () -> ScopeContent<N>>()
 
 @Tag annotation class ComposeIn<N : Any> {
   @Provide companion object {

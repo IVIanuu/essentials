@@ -17,7 +17,7 @@ import injekt.*
 @Provide @Composable fun AppVisibleScopeManager(
   appVisibleScopeFactory: () -> Scope<AppVisibleScope>,
   activity: ComponentActivity
-): ScopeCompositionResult<UiScope> {
+): ScopeContent<UiScope> {
   if (activity is EsActivity)
     LaunchedEffect(true) {
       activity.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {

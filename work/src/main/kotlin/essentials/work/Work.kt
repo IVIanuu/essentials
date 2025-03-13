@@ -141,7 +141,7 @@ data class WorkConstraints(
   logger: Logger,
   schedules: Map<String, PeriodicWorkSchedule<*>>,
   androidWorkManager: androidx.work.WorkManager,
-): ScopeCompositionResult<AppScope> {
+): ScopeContent<AppScope> {
   LaunchedEffect(true) {
     withContext(coroutineContexts.computation) {
       schedules.forEach { (workId, schedule) ->
