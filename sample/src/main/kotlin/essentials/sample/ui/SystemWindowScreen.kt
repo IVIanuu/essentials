@@ -6,16 +6,13 @@ package essentials.sample.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
 import essentials.coroutines.*
 import essentials.permission.*
 import essentials.systemoverlay.*
-import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import injekt.*

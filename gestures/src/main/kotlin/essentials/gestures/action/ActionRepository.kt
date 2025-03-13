@@ -8,7 +8,7 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.fastMap
+import androidx.compose.ui.util.*
 import arrow.core.*
 import essentials.*
 import essentials.coroutines.*

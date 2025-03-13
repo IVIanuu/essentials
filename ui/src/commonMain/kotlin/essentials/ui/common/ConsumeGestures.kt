@@ -6,7 +6,7 @@ package essentials.ui.common
 
 import androidx.compose.ui.*
 import androidx.compose.ui.input.pointer.*
-import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.*
 
 fun Modifier.consumeGestures(consume: Boolean = true): Modifier = if (!consume) this
 else pointerInput(Unit) {

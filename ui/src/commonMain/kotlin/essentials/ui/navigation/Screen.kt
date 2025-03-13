@@ -4,10 +4,9 @@
 
 package essentials.ui.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.fastFold
+import androidx.compose.ui.util.*
 import essentials.*
 import essentials.logging.*
 import injekt.*

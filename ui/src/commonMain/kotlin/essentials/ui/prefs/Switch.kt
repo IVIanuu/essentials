@@ -4,10 +4,10 @@
 
 package essentials.ui.prefs
 
-import androidx.compose.material3.Switch
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import essentials.ui.material.EsListItem
+import androidx.compose.ui.*
+import essentials.ui.material.*
 
 @Composable fun SwitchListItem(
   value: Boolean,

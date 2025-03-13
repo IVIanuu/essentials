@@ -7,7 +7,7 @@ package essentials.gestures.action.actions
 import android.content.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.Icon
+import androidx.compose.material3.*
 import essentials.gestures.action.*
 import injekt.*
 

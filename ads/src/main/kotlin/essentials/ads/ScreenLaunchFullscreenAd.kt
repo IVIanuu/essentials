@@ -5,12 +5,10 @@
 package essentials.ads
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.fastFilter
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import essentials.ScopeContent
+import androidx.compose.ui.util.*
+import androidx.datastore.core.*
+import androidx.datastore.preferences.core.*
+import essentials.*
 import essentials.logging.*
 import essentials.ui.*
 import essentials.ui.navigation.*

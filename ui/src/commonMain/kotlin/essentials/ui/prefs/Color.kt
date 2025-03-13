@@ -7,13 +7,12 @@ package essentials.ui.prefs
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.Surface
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
-import essentials.ui.material.EsListItem
+import essentials.ui.material.*
 
 @Composable fun ColorListItem(
   value: Color,

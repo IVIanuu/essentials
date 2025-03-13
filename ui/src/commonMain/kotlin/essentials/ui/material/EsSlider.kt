@@ -5,11 +5,10 @@
 package essentials.ui.material
 
 import androidx.compose.foundation.interaction.*
-import androidx.compose.material3.SliderColors
-import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.util.fastMinByOrNull
+import androidx.compose.ui.util.*
 import essentials.*
 import injekt.*
 import kotlinx.coroutines.*

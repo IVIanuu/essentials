@@ -4,13 +4,13 @@
 
 package essentials.util
 
-import android.annotation.SuppressLint
+import android.annotation.*
 import android.app.*
 import android.content.*
 import androidx.compose.ui.graphics.*
 import androidx.core.app.*
 import essentials.*
-import essentials.app.EsActivity
+import essentials.app.*
 import essentials.ui.app.*
 import injekt.*
 

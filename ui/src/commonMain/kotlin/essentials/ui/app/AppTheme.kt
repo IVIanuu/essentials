@@ -6,12 +6,10 @@ package essentials.ui.app
 
 import androidx.compose.foundation.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.font.*
-import com.materialkolor.PaletteStyle
-import com.materialkolor.dynamicColorScheme
+import com.materialkolor.*
 import essentials.*
 import injekt.*
 

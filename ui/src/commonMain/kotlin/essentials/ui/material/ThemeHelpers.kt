@@ -7,8 +7,7 @@ package essentials.ui.material
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
-import com.materialkolor.ktx.isLight
-import essentials.ui.util.*
+import com.materialkolor.ktx.*
 
 @Composable fun guessingContentColorFor(color: Color): Color =
   with(MaterialTheme.colorScheme) {

@@ -1,27 +1,19 @@
 package essentials.sample.ui
 
-import android.app.Notification
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.ClearAll
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import essentials.compose.action
-import essentials.notificationlistener.NotificationApi
-import essentials.permission.PermissionManager
-import essentials.ui.common.EsLazyColumn
-import essentials.ui.material.EsAppBar
-import essentials.ui.material.EsListItem
-import essentials.ui.material.EsScaffold
-import essentials.ui.navigation.Screen
-import essentials.ui.navigation.Ui
-import injekt.Provide
+import android.app.*
+import androidx.compose.animation.*
+import androidx.compose.foundation.lazy.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import essentials.compose.*
+import essentials.notificationlistener.*
+import essentials.permission.*
+import essentials.ui.common.*
+import essentials.ui.material.*
+import essentials.ui.navigation.*
+import injekt.*
 
 @Provide val notificationsHomeItem = HomeItem("Notifications") {
   NotificationsScreen()

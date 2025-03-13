@@ -8,8 +8,8 @@ import android.provider.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.collectAsState
-import androidx.datastore.core.DataStore
+import androidx.compose.runtime.*
+import androidx.datastore.core.*
 import essentials.data.*
 import essentials.gestures.action.*
 import injekt.*

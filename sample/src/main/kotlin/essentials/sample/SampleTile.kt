@@ -2,7 +2,7 @@ package essentials.sample
 
 import androidx.compose.runtime.*
 import essentials.*
-import essentials.app.AndroidComponent
+import essentials.app.*
 import essentials.tile.*
 import injekt.*
 

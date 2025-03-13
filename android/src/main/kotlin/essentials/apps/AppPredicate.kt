@@ -6,7 +6,7 @@ package essentials.apps
 
 import android.content.*
 import android.content.pm.*
-import androidx.compose.ui.util.fastMap
+import androidx.compose.ui.util.*
 import injekt.*
 
 fun interface AppPredicate {

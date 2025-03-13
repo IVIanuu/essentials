@@ -6,7 +6,6 @@ package essentials.coroutines
 
 import androidx.compose.runtime.*
 import essentials.*
-import essentials.Scoped
 import injekt.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*

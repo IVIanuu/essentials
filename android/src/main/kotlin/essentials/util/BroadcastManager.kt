@@ -7,7 +7,7 @@ package essentials.util
 import android.content.*
 import androidx.compose.runtime.*
 import essentials.*
-import essentials.app.AndroidComponent
+import essentials.app.*
 import essentials.coroutines.*
 import essentials.logging.*
 import injekt.*

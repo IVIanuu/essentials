@@ -5,13 +5,11 @@
 package essentials.permission
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.fastAll
-import androidx.compose.ui.util.fastMap
+import androidx.compose.ui.util.*
 import essentials.*
 import essentials.compose.*
 import essentials.coroutines.*
 import essentials.logging.*
-import essentials.ui.*
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.*

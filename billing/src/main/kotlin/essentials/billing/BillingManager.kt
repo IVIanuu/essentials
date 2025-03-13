@@ -4,9 +4,8 @@
 
 package essentials.billing
 
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.fastFirstOrNull
+import androidx.compose.ui.util.*
 import com.android.billingclient.api.*
 import essentials.*
 import essentials.app.*

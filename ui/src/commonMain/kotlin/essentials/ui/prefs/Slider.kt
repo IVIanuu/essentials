@@ -6,14 +6,11 @@ package essentials.ui.prefs
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import essentials.*
-import essentials.ui.common.ProvideContentColorTextStyle
+import essentials.ui.common.*
 import essentials.ui.material.*
 import injekt.*
 import kotlinx.coroutines.*

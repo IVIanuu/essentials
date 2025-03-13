@@ -10,10 +10,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.util.fastFold
+import androidx.compose.ui.util.*
 import essentials.*
 import essentials.ui.app.*
-import essentials.ui.material.LocalContentPadding
+import essentials.ui.material.*
 import injekt.*
 
 @Composable fun EsLazyColumn(

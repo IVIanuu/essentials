@@ -4,7 +4,7 @@
 
 package essentials.coil
 
-import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.*
 import coil.*
 import coil.decode.*
 import coil.fetch.*

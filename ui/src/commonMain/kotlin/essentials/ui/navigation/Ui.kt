@@ -4,7 +4,7 @@
 
 package essentials.ui.navigation
 
-import injekt.Tag
+import injekt.*
 
 @Tag annotation class UiTag<S : Screen<*>>
 typealias Ui<S> = @UiTag<S> Unit

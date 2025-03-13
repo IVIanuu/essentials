@@ -5,7 +5,7 @@
 package essentials.apps
 
 import android.content.pm.*
-import androidx.compose.ui.util.fastDistinctBy
+import androidx.compose.ui.util.*
 import arrow.fx.coroutines.*
 import essentials.*
 import essentials.coroutines.*

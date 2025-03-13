@@ -4,6 +4,4 @@
 
 package essentials.ui
 
-import essentials.*
-
 data object UiScope

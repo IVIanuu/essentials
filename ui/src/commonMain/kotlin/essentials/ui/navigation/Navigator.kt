@@ -5,7 +5,7 @@
 package essentials.ui.navigation
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.fastFilter
+import androidx.compose.ui.util.*
 import essentials.*
 import essentials.coroutines.*
 import essentials.ui.*
@@ -13,7 +13,6 @@ import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
-import kotlin.collections.set
 
 @Stable class Navigator(
   private val scope: CoroutineScope,

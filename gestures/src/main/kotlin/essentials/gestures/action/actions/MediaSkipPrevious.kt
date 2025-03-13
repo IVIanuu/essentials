@@ -9,7 +9,6 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import essentials.gestures.action.*
-import essentials.ui.navigation.*
 import injekt.*
 
 @Provide object SkipPreviousActionId : ActionId("media_skip_previous") {

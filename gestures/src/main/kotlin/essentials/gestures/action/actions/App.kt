@@ -9,15 +9,12 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import coil.compose.AsyncImage
+import coil.compose.*
 import essentials.apps.*
-import essentials.catch
 import essentials.gestures.action.*
 import essentials.gestures.action.ui.*
-import essentials.printErrors
 import essentials.ui.navigation.*
 import injekt.*
-import kotlinx.coroutines.flow.*
 
 @Provide class AppActionFactory(
   private val getAppInfo: suspend (String) -> AppInfo?,

@@ -6,7 +6,7 @@ package essentials.ui
 
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
-import essentials.ui.app.AppUiDecorator
+import essentials.ui.app.*
 import injekt.*
 
 @Provide val savableStateRegistryProvider = AppUiDecorator { content ->

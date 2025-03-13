@@ -8,11 +8,9 @@ import android.service.notification.*
 import androidx.compose.runtime.*
 import arrow.core.*
 import essentials.*
-import essentials.app.AndroidComponent
-import essentials.coroutines.*
+import essentials.app.*
 import essentials.logging.*
 import injekt.*
-import kotlinx.coroutines.flow.*
 
 @Provide @AndroidComponent class EsNotificationListenerService(
   private val logger: Logger,

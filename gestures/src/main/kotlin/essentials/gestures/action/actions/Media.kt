@@ -9,10 +9,8 @@ import android.provider.*
 import android.view.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.core.*
+import androidx.datastore.preferences.core.*
 import essentials.*
 import essentials.apps.*
 import essentials.compose.*

@@ -4,21 +4,16 @@
 
 package essentials.sample.ui
 
-import android.annotation.*
 import android.app.*
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.*
 import essentials.foreground.*
 import essentials.sample.R
 import essentials.ui.material.*
 import essentials.ui.navigation.*
-import essentials.ui.prefs.SwitchListItem
+import essentials.ui.prefs.*
 import essentials.util.*
 import injekt.*
 import kotlinx.coroutines.channels.*

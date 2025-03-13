@@ -4,6 +4,6 @@
 
 package essentials.ads
 
-import injekt.Tag
+import injekt.*
 
 @Tag typealias AdsEnabled = Boolean

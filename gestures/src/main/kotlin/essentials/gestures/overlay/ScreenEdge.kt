@@ -1,8 +1,8 @@
 package essentials.gestures.overlay
 
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.*
 import essentials.android.R
-import essentials.util.ScreenRotation
+import essentials.util.*
 
 enum class ScreenEdge(
   val title: String,

@@ -5,27 +5,21 @@
 package essentials.premium
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.fastAll
-import androidx.compose.ui.util.fastMap
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
+import androidx.compose.ui.util.*
+import androidx.datastore.core.*
+import androidx.datastore.preferences.core.*
 import arrow.fx.coroutines.*
 import essentials.*
 import essentials.ads.*
 import essentials.billing.*
-import essentials.compose.moleculeFlow
+import essentials.compose.*
 import essentials.coroutines.*
 import essentials.logging.*
-import essentials.ui.*
 import essentials.ui.navigation.*
 import essentials.util.*
 import injekt.*
-import injekt.Tag
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlin.collections.plus
 
 @Tag typealias IsPremiumVersion = Boolean?
 

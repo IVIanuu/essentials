@@ -7,11 +7,11 @@ package essentials.ui.material
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.nestedscroll.*
 import androidx.compose.ui.platform.*
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 
 val LocalContentPadding = compositionLocalOf {
   PaddingValues(0.dp)

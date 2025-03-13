@@ -8,10 +8,8 @@ import android.app.*
 import android.content.*
 import essentials.*
 import essentials.Service
-import injekt.AddOn
-import injekt.Provide
-import injekt.Tag
-import kotlin.reflect.KClass
+import injekt.*
+import kotlin.reflect.*
 
 @Tag annotation class AndroidComponent {
   @Provide companion object {

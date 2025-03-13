@@ -7,7 +7,7 @@ import androidx.activity.result.contract.*
 import arrow.core.*
 import essentials.*
 import essentials.coroutines.*
-import essentials.ui.UiScope
+import essentials.ui.*
 import injekt.*
 import kotlinx.coroutines.*
 import java.util.*

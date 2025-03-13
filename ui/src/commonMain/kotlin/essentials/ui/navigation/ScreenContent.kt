@@ -3,7 +3,6 @@ package essentials.ui.navigation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import essentials.*
-import essentials.Scope
 import essentials.ui.*
 import injekt.*
 import kotlin.reflect.*

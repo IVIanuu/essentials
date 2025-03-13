@@ -6,9 +6,8 @@ package essentials.systemoverlay
 
 import android.annotation.*
 import android.content.*
-import android.view.MotionEvent
-import android.view.View
-import android.widget.FrameLayout
+import android.view.*
+import android.widget.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.*
 import androidx.lifecycle.*

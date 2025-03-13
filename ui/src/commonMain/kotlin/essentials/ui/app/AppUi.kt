@@ -5,7 +5,7 @@
 package essentials.ui.app
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.fastFold
+import androidx.compose.ui.util.*
 import essentials.*
 import essentials.logging.*
 import injekt.*

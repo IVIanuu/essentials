@@ -1,11 +1,10 @@
 package essentials.compose
 
-import android.annotation.SuppressLint
+import android.annotation.*
 import androidx.compose.runtime.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.coroutines.*
 
 @Composable fun RestartableScope(block: @Composable () -> Unit) {
   block()

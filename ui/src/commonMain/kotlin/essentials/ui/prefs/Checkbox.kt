@@ -1,9 +1,9 @@
 package essentials.ui.prefs
 
-import androidx.compose.material3.Checkbox
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import essentials.ui.material.EsListItem
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import essentials.ui.material.*
 
 @Composable fun CheckboxListItem(
   value: Boolean,
