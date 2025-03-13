@@ -19,13 +19,13 @@ import injekt.*
 )
 
 @Provide class ActionSystemOverlayPermission : SystemOverlayPermission(
-    title = "System overlay",
-    desc = "Required to open apps from the background",
-    icon = { Icon(Icons.Default.Adb, null) }
-  )
+  title = "System overlay",
+  desc = "Required to open apps from the background",
+  icon = { Icon(Icons.Default.Adb, null) }
+)
 
 @Provide class ActionWriteSettingsPermission : WriteSettingsPermission(
-    title = "Write settings",
-    desc = "Required to change settings",
-    icon = { Icon(Icons.Default.Settings, null) }
-  )
+  title = "Write settings",
+  desc = "Required to change settings",
+  icon = { Icon(Icons.Default.Settings, null) }
+)
