@@ -10,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
 import essentials.coroutines.*
 import essentials.permission.*
@@ -44,7 +45,7 @@ class SystemWindowScreen : Screen<Unit>
       }
 
     Button(
-      modifier = Modifier.center(),
+      modifier = Modifier.fillMaxSize().wrapContentSize(),
       onClick = {
         scope.launch {
           if (permissionManager.ensurePermissions(listOf(SampleSystemOverlayPermission::class)))

@@ -15,6 +15,7 @@ import essentials.coroutines.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import essentials.util.*
+import essentials.util.ScreenState
 import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -26,6 +27,7 @@ class UnlockScreen : Screen<Unit>
 @Provide @Composable fun UnlockUi(
   deviceScreenManager: DeviceScreenManager,
   scope: ScopedCoroutineScope<ScreenScope>,
+  screenStateProducer: @Composable () -> ScreenState,
   showToast: showToast
 ): Ui<UnlockScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Unlock") } }) {
@@ -38,7 +40,7 @@ class UnlockScreen : Screen<Unit>
         onClick = {
           scope.launch {
             showToast("Turn the screen off")
-            moleculeFlow { deviceScreenManager.screenState() }.first { !it.isOn }
+            moleculeFlow { screenStateProducer() }.first { !it.isOn }
             delay(1500)
             val unlocked = deviceScreenManager.unlockScreen()
             showToast("Screen unlocked $unlocked")
@@ -52,7 +54,7 @@ class UnlockScreen : Screen<Unit>
         onClick = {
           scope.launch {
             showToast("Turn the screen off")
-            moleculeFlow { deviceScreenManager.screenState() }.first { !it.isOn }
+            moleculeFlow { screenStateProducer() }.first { !it.isOn }
             delay(1500)
             val screenOn = deviceScreenManager.turnScreenOn()
             showToast("Screen activated $screenOn")

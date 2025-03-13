@@ -7,6 +7,7 @@ package essentials.ui.material
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
+import com.materialkolor.ktx.isLight
 import essentials.ui.util.*
 
 @Composable fun guessingContentColorFor(color: Color): Color =
@@ -28,4 +29,4 @@ import essentials.ui.util.*
   }
 
 val Color.contentColor: Color
-  get() = if (isDark) Color.White else Color.Black
+  get() = if (isLight()) Color.Black else Color.White

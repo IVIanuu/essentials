@@ -10,6 +10,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
@@ -31,7 +32,7 @@ class WorkScreen : Screen<Unit>
         CircularProgressIndicator()
 
       Button(
-        modifier = Modifier.center(),
+        modifier = Modifier.fillMaxSize().wrapContentSize(),
         onClick = action { workManager.runWorker(SampleWorkId) }
       ) {
         Text("Run")

@@ -189,7 +189,8 @@ class GoPremiumScreen(
         Text(
           modifier = Modifier
             .height(48.dp)
-            .align(Alignment.CenterStart),
+            .fillMaxSize()
+            .wrapContentSize(Alignment.CenterStart),
           text = it.title,
           maxLines = 1,
           overflow = TextOverflow.Ellipsis,
@@ -215,7 +216,8 @@ class GoPremiumScreen(
           else Icons.Default.Remove,
           modifier = Modifier
             .size(48.dp)
-            .center(),
+            .fillMaxSize()
+            .wrapContentSize(),
           tint = MaterialTheme.colorScheme.primary,
           contentDescription = null
         )
@@ -238,7 +240,8 @@ class GoPremiumScreen(
           else Icons.Default.Done,
           modifier = Modifier
             .size(48.dp)
-            .center(),
+            .fillMaxSize()
+            .wrapContentSize(),
           tint = MaterialTheme.colorScheme.primary,
           contentDescription = null
         )

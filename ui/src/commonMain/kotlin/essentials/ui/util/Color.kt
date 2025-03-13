@@ -12,10 +12,6 @@ import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 
-val Color.isDark: Boolean get() = !isLight
-
-val Color.isLight: Boolean get() = luminance() > 0.5f
-
 //expect fun Color.toHexString(includeAlpha: Boolean = true): String
 
 fun Color.toHexStringOrNull(includeAlpha: Boolean = true): String? =

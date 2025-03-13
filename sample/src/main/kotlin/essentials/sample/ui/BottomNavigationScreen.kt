@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
@@ -168,7 +169,8 @@ val CollapsedPlayerPadding = 12.dp
 ) {
   Box(
     modifier = Modifier
-      .align(Alignment.BottomCenter)
+      .fillMaxSize()
+      .wrapContentSize(Alignment.BottomCenter)
       .systemBarsPadding()
       .padding(bottom = 80.dp)
       .padding(CollapsedPlayerPadding)

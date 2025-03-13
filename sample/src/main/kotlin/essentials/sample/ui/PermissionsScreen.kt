@@ -4,6 +4,8 @@
 
 package essentials.sample.ui
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Button
@@ -11,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastMap
 import essentials.accessibility.*
 import essentials.compose.*
@@ -31,7 +34,7 @@ class PermissionsScreen : Screen<Unit>
 ): Ui<PermissionsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Permissions") } }) {
     Button(
-      modifier = Modifier.center(),
+      modifier = Modifier.fillMaxSize().wrapContentSize(),
       onClick = scopedAction {
         permissionManager.ensurePermissions(permissions.fastMap { it::class })
       }

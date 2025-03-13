@@ -41,7 +41,7 @@ import kotlin.coroutines.*
     appScope: Scope<AppScope>,
     cameraManager: @SystemService CameraManager,
     currentAppProducer: @Composable () -> CurrentApp?,
-    deviceScreenManager: DeviceScreenManager,
+    screenStateProducer: @Composable () -> ScreenState,
     logger: Logger,
     packageManager: PackageManager,
     sendIntent: sendActionIntent
@@ -61,8 +61,7 @@ import kotlin.coroutines.*
             CameraCharacteristics.LENS_FACING_FRONT
       }
 
-    val currentScreenState = moleculeFlow { deviceScreenManager.screenState() }
-      .first()
+    val currentScreenState = moleculeFlow { screenStateProducer() }.first()
 
     val frontFacing = if (frontCamera != null &&
       currentScreenState != ScreenState.OFF &&

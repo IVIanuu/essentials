@@ -18,50 +18,47 @@ import java.util.concurrent.*
 import kotlin.collections.set
 import kotlin.time.Duration.Companion.seconds
 
-@Stable @Provide class DeviceScreenManager(
-  private val appContext: AppContext,
-  private val broadcastManager: BroadcastManager,
-  private val keyguardManager: @SystemService KeyguardManager,
-  private val logger: Logger,
-  private val powerManager: @SystemService PowerManager,
-  private val windowManager: @SystemService WindowManager
+enum class ScreenState(val isOn: Boolean) {
+  OFF(false), LOCKED(true), UNLOCKED(true)
+}
+
+@Provide @Composable fun screenState(
+  broadcastManager: BroadcastManager,
+  keyguardManager: @SystemService KeyguardManager,
+  powerManager: @SystemService PowerManager
+): ScreenState = broadcastManager.broadcastState(
+  Intent.ACTION_SCREEN_OFF,
+  Intent.ACTION_SCREEN_ON,
+  Intent.ACTION_USER_PRESENT
 ) {
-  @Composable fun screenState(): ScreenState = broadcastManager.broadcastState(
-    Intent.ACTION_SCREEN_OFF,
-    Intent.ACTION_SCREEN_ON,
-    Intent.ACTION_USER_PRESENT
-  ) {
-    if (powerManager.isInteractive) {
-      if (keyguardManager.isDeviceLocked) ScreenState.LOCKED
-      else ScreenState.UNLOCKED
-    } else {
-      ScreenState.OFF
-    }
+  if (powerManager.isInteractive) {
+    if (keyguardManager.isDeviceLocked) ScreenState.LOCKED
+    else ScreenState.UNLOCKED
+  } else {
+    ScreenState.OFF
   }
+}
 
-  @Composable fun screenRotation(): ScreenRotation {
-    var displayRotation by remember {
-      mutableStateOf(getCurrentDisplayRotation())
-    }
+enum class ScreenRotation(val isPortrait: Boolean) {
+  // 0 degrees
+  PORTRAIT_UP(true),
 
-    if (screenState().isOn)
-      DisposableEffect(true) {
-        val listener = object : OrientationEventListener(
-          appContext,
-          SensorManager.SENSOR_DELAY_NORMAL
-        ) {
-            override fun onOrientationChanged(orientation: Int) {
-              displayRotation = getCurrentDisplayRotation()
-            }
-          }
-        listener.enable()
-        onDispose { listener.disable() }
-      }
+  // 90 degrees
+  LANDSCAPE_LEFT(false),
 
-    return displayRotation
-  }
+  // 180 degrees
+  PORTRAIT_DOWN(true),
 
-  private fun getCurrentDisplayRotation() = when (windowManager.defaultDisplay.rotation) {
+  // 270 degrees
+  LANDSCAPE_RIGHT(false)
+}
+
+@Provide @Composable fun screenRotation(
+  appContext: AppContext,
+  screenState: ScreenState,
+  windowManager: @SystemService WindowManager
+): ScreenRotation {
+  fun getCurrentDisplayRotation() = when (windowManager.defaultDisplay.rotation) {
     Surface.ROTATION_0 -> ScreenRotation.PORTRAIT_UP
     Surface.ROTATION_90 -> ScreenRotation.LANDSCAPE_LEFT
     Surface.ROTATION_180 -> ScreenRotation.PORTRAIT_DOWN
@@ -69,6 +66,33 @@ import kotlin.time.Duration.Companion.seconds
     else -> error("Unexpected rotation")
   }
 
+  var displayRotation by remember {
+    mutableStateOf(getCurrentDisplayRotation())
+  }
+
+  if (screenState.isOn)
+    DisposableEffect(true) {
+      val listener = object : OrientationEventListener(
+        appContext,
+        SensorManager.SENSOR_DELAY_NORMAL
+      ) {
+        override fun onOrientationChanged(orientation: Int) {
+          displayRotation = getCurrentDisplayRotation()
+        }
+      }
+      listener.enable()
+      onDispose { listener.disable() }
+    }
+
+  return displayRotation
+}
+
+@Stable @Provide class DeviceScreenManager(
+  private val appContext: AppContext,
+  private val keyguardManager: @SystemService KeyguardManager,
+  private val logger: Logger,
+  private val powerManager: @SystemService PowerManager
+) {
   suspend fun turnScreenOn(): Boolean {
     logger.d { "on request is off ? ${!powerManager.isInteractive}" }
     if (powerManager.isInteractive) {
@@ -102,10 +126,6 @@ import kotlin.time.Duration.Companion.seconds
     )
     return result.await()
   }
-}
-
-enum class ScreenState(val isOn: Boolean) {
-  OFF(false), LOCKED(true), UNLOCKED(true)
 }
 
 private const val KEY_REQUEST_ID = "request_id"
@@ -204,18 +224,4 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
       }
     }
   }
-}
-
-enum class ScreenRotation(val isPortrait: Boolean) {
-  // 0 degrees
-  PORTRAIT_UP(true),
-
-  // 90 degrees
-  LANDSCAPE_LEFT(false),
-
-  // 180 degrees
-  PORTRAIT_DOWN(true),
-
-  // 270 degrees
-  LANDSCAPE_RIGHT(false)
 }

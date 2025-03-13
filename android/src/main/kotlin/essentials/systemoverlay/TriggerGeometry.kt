@@ -72,7 +72,8 @@ fun TriggerGeometry(
 
 fun Modifier.triggerGeometry(geometry: TriggerGeometry) = composed {
   with(LocalDensity.current) {
-    align(geometry.edge.alignment)
+    fillMaxSize()
+      .wrapContentSize(geometry.edge.alignment)
       .size(geometry.width.toDp(), geometry.height.toDp())
       .offset(
         geometry.horizontalMargin.toDp(),
