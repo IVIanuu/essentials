@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import essentials.resource.*
 
@@ -58,7 +59,9 @@ object ResourceBoxDefaults {
     )
   }
   val loading: @Composable () -> Unit = {
-    CircularProgressIndicator(modifier = Modifier.center())
+    CircularProgressIndicator(
+      modifier = Modifier.fillMaxSize().wrapContentSize()
+    )
   }
   val idle: @Composable () -> Unit = loading
 }
