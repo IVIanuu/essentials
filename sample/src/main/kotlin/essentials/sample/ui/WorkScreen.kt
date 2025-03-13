@@ -45,6 +45,7 @@ class WorkScreen : Screen<Unit>
 @Provide val sampleWorkSchedule: PeriodicWorkSchedule<SampleWorkId>
   get() = PeriodicWorkSchedule(8.hours)
 
-@Provide fun sampleWorker() = Worker<SampleWorkId> {
+@Provide suspend fun doSampleWork(): WorkerResult<SampleWorkId> {
   delay(3.seconds)
+  return WorkerResult.success()
 }

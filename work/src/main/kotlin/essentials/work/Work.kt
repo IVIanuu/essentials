@@ -34,19 +34,17 @@ data class WorkConstraints(
   enum class NetworkType { ANY, CONNECTED, UNMETERED }
 }
 
-fun interface Worker<I : WorkId> {
-  suspend fun doWork()
-}
+@Tag typealias WorkerResult<I> = ListenableWorker.Result
 
 @Provide @Scoped<AppScope> class WorkManager(
   private val androidWorkManager: AndroidWorkManager,
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>,
-  private val workersMap: Map<String, () -> Worker<*>>,
+  private val workersMap: Map<String, suspend () -> WorkerResult<*>>,
 ) : SynchronizedObject() {
   private val workerStates = mutableMapOf<String, MutableState<Boolean>>()
-  private val sharedWorkers = scope.sharedComputation<WorkId, Unit> { id ->
+  private val sharedWorkers = scope.sharedComputation<WorkId, WorkerResult<*>> { id ->
     logger.d { "run worker ${id.value}" }
 
     var workerState by synchronized(this@WorkManager) {
@@ -56,7 +54,7 @@ fun interface Worker<I : WorkId> {
     guaranteeCase(
       fa = {
         workerState = true
-        workersMap[id.value]!!.invoke().doWork()
+        workersMap[id.value]!!.invoke()
       },
       finalizer = {
         if (it is ExitCase.Failure) it.failure.printStackTrace()
@@ -70,12 +68,12 @@ fun interface Worker<I : WorkId> {
     workerStates.getOrPut(id.value) { mutableStateOf(false) }
   }.value
 
-  suspend fun <I : WorkId> runWorker(id: I): Unit =
+  suspend fun <I : WorkId> runWorker(id: I): WorkerResult<I> =
     withContext(scope.coroutineContext + coroutineContexts.computation) {
       if (id.value !in workersMap) {
         logger.d { "no worker found for ${id.value}" }
         androidWorkManager.cancelUniqueWork(id.value)
-        return@withContext
+        return@withContext WorkerResult.failure()
       }
 
       sharedWorkers(id)
@@ -85,10 +83,10 @@ fun interface Worker<I : WorkId> {
 @Provide object WorkProviders {
   @Provide fun <@AddOn I : WorkId> worker(
     id: I,
-    worker: () -> Worker<I>,
-  ): Pair<String, () -> Worker<*>> = id.value to worker
+    worker: suspend () -> WorkerResult<I>,
+  ): Pair<String, suspend () -> WorkerResult<*>> = id.value to worker
 
-  @Provide val defaultWorkers get() = emptyList<Pair<String, () -> Worker<*>>>()
+  @Provide val defaultWorkers get() = emptyList<Pair<String, suspend () -> WorkerResult<*>>>()
 
   @Provide fun <@AddOn I : WorkId> workSchedule(
     id: I,
@@ -107,9 +105,7 @@ fun interface Worker<I : WorkId> {
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
     val workId = inputData.getString(WORK_ID) ?: return Result.failure()
-    return catch { workManager.runWorker(object : WorkId(workId) {}) }
-      .printErrors()
-      .fold(ifLeft = { Result.retry() }, ifRight = { Result.success() })
+    return workManager.runWorker(object : WorkId(workId) {})
   }
 }
 
