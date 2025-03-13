@@ -17,8 +17,6 @@ import essentials.util.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlin.collections.filterNotNull
-import kotlin.collections.sortedBy
 
 data class Shortcut(val intent: Intent, val name: String, val icon: Drawable)
 

@@ -2,8 +2,6 @@ package essentials.util
 
 import android.app.*
 import android.content.*
-import android.hardware.*
-import android.hardware.SensorManager
 import android.os.*
 import android.view.*
 import androidx.activity.*
