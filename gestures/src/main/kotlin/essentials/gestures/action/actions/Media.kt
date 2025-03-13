@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.*
 class MediaActionSettingsScreen : Screen<Unit>
 
 @Provide @Composable fun MediaActionSettingsUi(
-  appRepository: AppRepository,
+  getAppInfo: suspend (String) -> AppInfo?,
   navigator: Navigator,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
   preferencesStore: DataStore<Preferences>
@@ -63,9 +63,9 @@ class MediaActionSettingsScreen : Screen<Unit>
             val mediaAppName by produceScopedState(nullOf()) {
               preferencesStore.data
                 .map { it[MediaActionAppKey] }
-                .flatMapLatest {
-                  if (it == null) flowOf(null)
-                  else appRepository.appInfo(it).map { it?.appName }
+                .mapLatest {
+                  if (it == null) null
+                  else getAppInfo(it)?.appName
                 }
                 .collect { value = it }
             }

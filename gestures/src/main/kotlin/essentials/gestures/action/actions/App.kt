@@ -11,14 +11,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import coil.compose.AsyncImage
 import essentials.apps.*
+import essentials.catch
 import essentials.gestures.action.*
 import essentials.gestures.action.ui.*
+import essentials.printErrors
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.flow.*
 
 @Provide class AppActionFactory(
-  private val appRepository: AppRepository,
+  private val getAppInfo: suspend (String) -> AppInfo?,
   private val packageManager: PackageManager,
   private val sendIntent: sendActionIntent
 ) : ActionFactory {
@@ -29,7 +31,7 @@ import kotlinx.coroutines.flow.*
       .first()
     return Action<ActionId>(
       id = id,
-      title = appRepository.appInfo(packageName).first()!!.appName,
+      title = getAppInfo(packageName)!!.appName,
       unlockScreen = true,
       closeSystemDialogs = true,
       enabled = true,

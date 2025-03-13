@@ -16,6 +16,7 @@ import essentials.compose.*
 import essentials.coroutines.CoroutineContexts
 import essentials.resource.Resource
 import essentials.resource.flowAsResource
+import essentials.resource.resourceFlow
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
@@ -29,8 +30,8 @@ class AppPickerScreen(
 
 @Provide @Composable fun AppPickerUi(
   coroutineContexts: CoroutineContexts,
+  getInstalledApps: suspend () -> InstalledApps,
   navigator: Navigator,
-  repository: AppRepository,
   screen: AppPickerScreen
 ): Ui<AppPickerScreen> {
   EsScaffold(
@@ -38,9 +39,12 @@ class AppPickerScreen(
   ) {
     ResourceBox(
       produceScopedState(Resource.Idle()) {
-        repository.installedApps
-          .map { it.fastFilter { screen.appPredicate.test(it) } }
-          .flowAsResource()
+        resourceFlow {
+          emit(
+            getInstalledApps()
+              .fastFilter { screen.appPredicate.test(it) }
+          )
+        }
           .flowOn(coroutineContexts.computation)
           .collect { value = it }
       }.value
