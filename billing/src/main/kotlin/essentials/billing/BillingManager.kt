@@ -64,13 +64,20 @@ import kotlin.time.Duration.Companion.seconds
     }
   )
 
-  fun isPurchased(sku: Sku): Flow<Boolean> = refreshes
-    .onStart { emit(BillingRefresh) }
-    .onEach { logger.d { "update is purchased for $sku" } }
-    .map { billingClient.use(Unit) { it.getIsPurchased(sku) } }
-    .distinctUntilChanged()
-    .onEach { logger.d { "is purchased for $sku -> $it" } }
-    .flowInScope<AppVisibleScope, _>(appScope)
+  @Composable fun isPurchased(sku: Sku): Boolean? {
+    var isPurchased: Boolean? by remember { mutableStateOf(null) }
+
+    if (appScope.scopeOfOrNull<AppVisibleScope>() != null) {
+      val version by produceState(0) { refreshes.collect { value += 1 } }
+
+      LaunchedEffect(version) {
+        isPurchased = billingClient.use(Unit) { it.getIsPurchased(sku) }
+        logger.d { "is purchased for $sku -> $isPurchased" }
+      }
+    }
+
+    return isPurchased
+  }
 
   suspend fun getSkuDetails(sku: Sku): SkuDetails? = billingClient.use(Unit) {
     it.querySkuDetails(sku.toSkuDetailsParams())

@@ -28,14 +28,10 @@ import kotlinx.coroutines.flow.*
   premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>
 ): @ComposeIn<AppScope> IsPremiumVersion {
-  val premiumVersionStates = (oldPremiumVersionSkus + premiumVersionSku)
-    .fastMap {
-      remember { billingManager.isPurchased(it) }
-        .collectAsState(nullOf()).value
-    }
-
+  val premiumVersionStates = remember { oldPremiumVersionSkus + premiumVersionSku }
+    .fastMap { billingManager.isPurchased(it) }
   return if (premiumVersionStates.fastAll { it == null }) null
-  else premiumVersionStates.any { it == true }
+  else premiumVersionStates.fastAny { it == true }
 }
 
 interface Paywall {

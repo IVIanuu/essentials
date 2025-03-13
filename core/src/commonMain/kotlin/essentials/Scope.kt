@@ -138,34 +138,6 @@ fun <N : Any> Scope<*>.scopeOf(name: KClass<N> = inject): Flow<Scope<N>> = snaps
   scopeOfOrNull<N>()
 }.filterNotNull()
 
-fun <N : Any, T> Flow<T>.flowInScope(scope: Scope<*>, name: KClass<N> = inject): Flow<T> = channelFlow {
-  scope.repeatInScope<N> {
-    collect { send(it) }
-  }
-}
-
-suspend fun <N : Any> Scope<*>.repeatInScope(name: KClass<N> = inject, block: suspend (Scope<N>) -> Unit) {
-  val jobs = mutableMapOf<Scope<*>, Job>()
-  try {
-    snapshotFlow { allScopesOf<N>() }.collect { scopes ->
-      jobs.keys.toList().forEach {
-        if (it !in scopes)
-          jobs.remove(it)?.cancel()
-      }
-
-      scopes.forEach { scope ->
-        jobs.getOrPut(scope) {
-          scope.coroutineScope.launch {
-            block(scope)
-          }
-        }
-      }
-    }
-  } finally {
-    jobs.values.forEach { it.cancel() }
-  }
-}
-
 val Scope<*>.root: Scope<*> get() = parent?.root ?: this
 
 val Scope<*>.coroutineScope: CoroutineScope get() = service()
