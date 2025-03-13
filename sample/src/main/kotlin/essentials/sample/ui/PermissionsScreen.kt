@@ -46,53 +46,53 @@ class PermissionsScreen : Screen<Unit>
 
 interface SamplePermission : Permission
 
-@Provide object BluetoothPermission : RuntimePermission(
+@Provide class BluetoothPermission : RuntimePermission(
   permissionName = android.Manifest.permission.BLUETOOTH,
   title = "Bluetooth",
   icon = { Icon(Icons.Default.Bluetooth, null) }
 ), SamplePermission
 
-@Provide object SampleCameraPermission : RuntimePermission(
+@Provide class SampleCameraPermission : RuntimePermission(
   permissionName = android.Manifest.permission.CAMERA,
   title = "Camera",
   desc = "This is a desc",
   icon = { Icon(Icons.Default.Camera, null) }
 ), SamplePermission
 
-@Provide object SamplePhonePermission : RuntimePermission(
+@Provide class SamplePhonePermission : RuntimePermission(
   permissionName = android.Manifest.permission.CALL_PHONE,
   title = "Call phone",
   desc = "This is a desc",
   icon = { Icon(Icons.Default.Phone, null) }
 ), SamplePermission
 
-@Provide object SampleAccessibilityPermission : AccessibilityServicePermission(
+@Provide class SampleAccessibilityPermission : AccessibilityServicePermission(
   serviceClass = EsAccessibilityService::class,
   title = "Accessibility",
   desc = "This is a desc",
   icon = { Icon(Icons.Default.Accessibility, null) }
 ), SamplePermission
 
-@Provide object SampleNotificationListenerPermission : NotificationListenerPermission(
+@Provide class SampleNotificationListenerPermission : NotificationListenerPermission(
   serviceClass = EsNotificationListenerService::class,
   title = "Notification listener",
   desc = "This is a desc",
   icon = { Icon(Icons.Default.Notifications, null) }
 ), SamplePermission
 
-@Provide object SampleSystemOverlayPermission : SystemOverlayPermission(
+@Provide class SampleSystemOverlayPermission : SystemOverlayPermission(
   title = "System overlay",
   desc = "This is a desc",
   icon = { Icon(Icons.Default.Window, null) }
 ), SamplePermission
 
-@Provide object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission(
+@Provide class SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission(
   title = "Write secure settings",
   desc = "This is a desc",
   icon = { Icon(Icons.Default.PowerSettingsNew, null) }
 ), SamplePermission
 
-@Provide object SampleWriteSettingsPermission : WriteSettingsPermission(
+@Provide class SampleWriteSettingsPermission : WriteSettingsPermission(
   title = "Write settings",
   desc = "This is a desc",
   icon = { Icon(Icons.Default.Settings, null) }
