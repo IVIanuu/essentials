@@ -47,19 +47,20 @@ class GoPremiumScreen(
 }
 
 @Provide @Composable fun GoPremiumUi(
+  billingManager: BillingManager,
   features: List<AppFeature>,
   fullScreenAdManager: FullScreenAdManager,
   navigator: Navigator,
-  premiumVersionManager: PremiumVersionManager,
+  premiumVersionSku: PremiumVersionSku,
   screen: GoPremiumScreen,
   showToast: showToast
 ): Ui<GoPremiumScreen> {
   val premiumSkuDetails by produceScopedState(Resource.Idle()) {
-    resourceFlow { emit(premiumVersionManager.getPremiumSkuDetails()) }
+    resourceFlow { emit(billingManager.getSkuDetails(premiumVersionSku)) }
       .collect { value = it }
   }
   val goPremium = scopedAction {
-    if (premiumVersionManager.purchasePremiumVersion()) {
+    if (billingManager.purchase(premiumVersionSku, true, true)) {
       navigator.pop(screen, true)
       showToast("Premium version is now active!")
     }
