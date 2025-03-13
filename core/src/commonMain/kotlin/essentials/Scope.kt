@@ -11,6 +11,8 @@ import app.cash.molecule.AndroidUiDispatcher
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import essentials.compose.launchMolecule
+import essentials.compose.moleculeState
+import essentials.compose.rememberScoped
 import injekt.*
 import injekt.common.*
 import kotlinx.atomicfu.locks.*
@@ -241,12 +243,12 @@ fun interface ScopeInitializer<N : Any> : ExtensionPoint<ScopeInitializer<N>> {
       scope: Scope<N>,
       key: TypeKey<StateFlow<S>>,
       crossinline block: @Composable () -> T,
-    ): S = scope.scoped(key.value) {
-      scope.coroutineScope.launchMolecule(
+    ): S = rememberScoped(scope = scope, key = key.value) {
+      scope.coroutineScope.moleculeState(
         RecompositionMode.ContextClock,
         AndroidUiDispatcher.Main,
         body = { block() }
       )
-    }.collectAsState().value
+    }.value
   }
 }

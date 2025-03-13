@@ -23,3 +23,27 @@ fun CoroutineScope.launchMolecule(
   childCoroutineScope(job).launchMolecule(mode, {}, context, body = block)
   return job
 }
+
+fun <T> CoroutineScope.moleculeState(
+  mode: RecompositionMode = RecompositionMode.ContextClock,
+  context: CoroutineContext = AndroidUiDispatcher.Main,
+  body: @Composable () -> T,
+): State<T> {
+  var state: MutableState<T>? = null
+
+  launchMolecule(
+    context = context,
+    mode = mode,
+    emitter = { value ->
+      val outputState = state
+      if (outputState != null) {
+        launch { outputState.value = value }
+      } else {
+        state = mutableStateOf(value)
+      }
+    },
+    body = body,
+  )
+
+  return state!!
+}
