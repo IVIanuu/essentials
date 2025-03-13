@@ -56,6 +56,7 @@ import kotlinx.coroutines.flow.*
 
   private fun updateNotifications() {
     notifications = catch { activeNotifications!!.toList() }
+      .printErrors()
       .getOrElse { emptyList() }
   }
 }
