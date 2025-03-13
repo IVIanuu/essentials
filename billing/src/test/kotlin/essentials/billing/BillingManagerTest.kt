@@ -25,7 +25,7 @@ import org.robolectric.annotation.*
 class BillingManagerTest {
   @Provide val logger = NoopLogger
   @Provide val appForegroundState = flowOf(AppForegroundState.FOREGROUND)
-  @Provide val appUiStarter = AppUiStarter { mockk() }
+  @Provide val uiLauncher = UiLauncher { mockk() }
 
   @Test fun testWithConnection() = runCancellingBlockingTest {
     @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()

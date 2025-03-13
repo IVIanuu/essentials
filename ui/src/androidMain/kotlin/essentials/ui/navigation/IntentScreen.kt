@@ -7,6 +7,7 @@ import androidx.activity.result.contract.*
 import arrow.core.*
 import essentials.*
 import essentials.coroutines.*
+import essentials.ui.UiScope
 import injekt.*
 import kotlinx.coroutines.*
 import java.util.*
@@ -25,13 +26,13 @@ interface IntentScreen : Screen<Either<ActivityNotFoundException, ActivityResult
 
 @Tag typealias ScreenIntent<T> = Intent
 
-fun interface AppUiStarter {
-  suspend fun startAppUi(): ComponentActivity
+fun interface UiLauncher {
+  suspend fun start(): Scope<UiScope>
 }
 
 @Provide fun interceptIntentScreen(
   screen: Screen<*>,
-  appUiStarter: AppUiStarter,
+  uiLauncher: UiLauncher,
   coroutineContexts: CoroutineContexts,
   intentFactories: () -> Map<KClass<IntentScreen>, (IntentScreen) -> Intent>
 ): ScreenInterceptorResult<Either<Throwable, ActivityResult>> {
@@ -40,7 +41,8 @@ fun interface AppUiStarter {
     ?: return null
   val intent = intentFactory(screen)
   return {
-    val activity = appUiStarter.startAppUi()
+    val activity = uiLauncher.start()
+      .service<ComponentActivity>()
     withContext(coroutineContexts.main) {
       suspendCancellableCoroutine<Either<Throwable, ActivityResult>> { continuation ->
         val launcher = activity.activityResultRegistry.register(

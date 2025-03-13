@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
 @Stable @Provide class PermissionManager(
-  private val appUiStarter: AppUiStarter,
+  private val uiLauncher: UiLauncher,
   private val coroutineContexts: CoroutineContexts,
   private val logger: Logger,
   private val permissions: Map<KClass<out Permission>, () -> Permission>,
@@ -52,11 +52,7 @@ import kotlin.reflect.*
     logger.d { "ensure permissions $permissions" }
 
     val result = permissions.fastAll { permissionState(listOf(it)).first() } || run {
-      appUiStarter.startAppUi()
-        .cast<UiScopeOwner>()
-        .uiScope
-        .navigator
-        .push(PermissionRequestScreen(permissions)) == true
+      uiLauncher.start().navigator.push(PermissionRequestScreen(permissions)) == true
     }
 
     logger.d { "ensure permissions result $permissions -> $result" }

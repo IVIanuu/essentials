@@ -49,7 +49,7 @@ interface Paywall {
 }
 
 @Provide fun paywall(
-  appUiStarter: AppUiStarter,
+  uiLauncher: UiLauncher,
   deviceScreenManager: DeviceScreenManager,
   isPremiumVersion: @Composable () -> IsPremiumVersion,
   scope: ScopedCoroutineScope<AppScope>,
@@ -61,11 +61,7 @@ interface Paywall {
     scope.launch {
       showToast("This functionality is only available in the premium version!")
       if (!deviceScreenManager.unlockScreen()) return@launch
-      appUiStarter.startAppUi()
-        .cast<UiScopeOwner>()
-        .uiScope
-        .navigator
-        .push(GoPremiumScreen(showTryBasicOption = false))
+      uiLauncher.start().navigator.push(GoPremiumScreen(showTryBasicOption = false))
     }
 
     return null

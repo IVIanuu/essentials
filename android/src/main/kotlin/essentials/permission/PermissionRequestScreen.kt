@@ -8,6 +8,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.*
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -15,11 +16,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import essentials.compose.*
+import essentials.nullOf
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import injekt.*
-import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
 class PermissionRequestScreen(
@@ -27,35 +28,41 @@ class PermissionRequestScreen(
 ) : CriticalUserFlowScreen<Boolean>
 
 @Provide @Composable fun PermissionRequestUi(
-  appUiStarter: AppUiStarter,
+  uiLauncher: UiLauncher,
   navigator: Navigator,
   permissionManager: PermissionManager,
   requestHandlers: Map<KClass<out Permission>, suspend (Permission) -> PermissionRequestResult<Permission>>,
   screen: PermissionRequestScreen
 ): Ui<PermissionRequestScreen> {
-  LaunchedScopedEffect(true) {
-    permissionManager.permissionState(screen.permissionsKeys).first { it }
-    navigator.pop(screen, true)
-  }
-
   val keysByPermission = remember {
     screen.permissionsKeys.associateBy { permissionManager.permission(it) }
   }
 
-  val permissionsToGrant = keysByPermission
-    .keys
-    .filterNot { permission ->
+  val permissionStates = keysByPermission
+    .mapValues { (permission, key) ->
       key(permission) {
-        produceScopedState(false) {
-          permissionManager.permissionState(listOf(keysByPermission[permission]!!))
+        produceScopedState(nullOf()) {
+          permissionManager.permissionState(listOf(key))
             .collect { value = it }
-        }
-          .value
+        }.value
       }
     }
 
+  LaunchedScopedEffect(permissionStates) {
+    if (permissionStates.all { it.value == true })
+      navigator.pop(screen, true)
+  }
+
+  val isLoading = permissionStates.any { it.value == null }
+
+  val permissionsToGrant = permissionStates
+    .filter { it.value == false }
+    .keys
+    .toList()
+
   EsScaffold(topBar = { EsAppBar { Text("Required permissions") } }) {
-    EsLazyColumn {
+    if (isLoading) CircularProgressIndicator(modifier = Modifier.fillMaxSize().wrapContentSize())
+    else EsLazyColumn {
       items(permissionsToGrant, { it }) { permission ->
         EsListItem(
           modifier = Modifier
@@ -79,7 +86,7 @@ class PermissionRequestScreen(
                 onClick = scopedAction {
                   requestHandlers[keysByPermission[permission]!!]!!(permission)
                   permissionRefreshes.emit(Unit)
-                  appUiStarter.startAppUi()
+                  uiLauncher.start()
                 }
               ) { Text("Allow") }
             }

@@ -7,7 +7,3 @@ package essentials.ui
 import essentials.*
 
 data object UiScope
-
-interface UiScopeOwner {
-  val uiScope: Scope<UiScope>
-}

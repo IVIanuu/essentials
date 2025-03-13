@@ -14,13 +14,13 @@ import injekt.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 
-@Provide fun androidAppUiStarter(
+@Provide fun androidUiLauncher(
   appContext: AppContext,
   appConfig: AppConfig,
   appScope: Scope<AppScope>,
   coroutineContexts: CoroutineContexts,
   packageManager: PackageManager,
-) = AppUiStarter {
+) = UiLauncher {
   withContext(coroutineContexts.main) {
     val intent = packageManager.getLaunchIntentForPackage(appConfig.packageName)!!
     appContext.startActivity(
@@ -29,6 +29,6 @@ import kotlinx.coroutines.withContext
       }
     )
 
-    appScope.scopeOf<UiScope>().first().service()
+    appScope.scopeOf<UiScope>().first()
   }
 }

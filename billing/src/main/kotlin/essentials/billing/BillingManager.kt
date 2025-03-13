@@ -4,6 +4,7 @@
 
 package essentials.billing
 
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.fastFirstOrNull
 import com.android.billingclient.api.*
@@ -20,7 +21,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Stable @Provide @Scoped<AppScope> class BillingManager(
   private val appScope: Scope<AppScope>,
-  private val appUiStarter: AppUiStarter,
+  private val uiLauncher: UiLauncher,
   private val billingClientFactory: () -> BillingClient,
   coroutineContexts: CoroutineContexts,
   private val logger: Logger,
@@ -93,7 +94,7 @@ import kotlin.time.Duration.Companion.seconds
         consumePurchase(sku)
     }
 
-    val activity = appUiStarter.startAppUi()
+    val activity = uiLauncher.start().activity
 
     val skuDetails = getSkuDetails(sku)
       ?: return@use false

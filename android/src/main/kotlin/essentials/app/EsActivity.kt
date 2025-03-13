@@ -19,15 +19,13 @@ import kotlinx.coroutines.*
 
 @Provide @AndroidComponent class EsActivity(
   private val uiScopeFactory: (@Service<UiScope> ComponentActivity) -> Scope<UiScope>
-) : ComponentActivity(), UiScopeOwner {
-  override lateinit var uiScope: Scope<UiScope>
-
+) : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
     onBackPressedDispatcher.addCallback { finish() }
 
-    uiScope = uiScopeFactory(this)
+    val uiScope = uiScopeFactory(this)
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
       onCancel { uiScope.dispose() }
     }

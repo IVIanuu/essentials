@@ -59,14 +59,14 @@ class NotificationsScreen : Screen<Unit>
             onClick = action { api.openNotification(notification.notification) },
             headlineContent = {
               Text(
-                notification.notification.extras.getString(Notification.EXTRA_TITLE)
-                  ?: ""
+                notification.notification.extras.getCharSequence(Notification.EXTRA_TITLE)
+                  ?.toString() ?: ""
               )
             },
             supportingContent = {
               Text(
-                notification.notification.extras.getString(Notification.EXTRA_TEXT)
-                  ?: ""
+                notification.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
+                  ?.toString() ?: ""
               )
             },
             trailingContent = {

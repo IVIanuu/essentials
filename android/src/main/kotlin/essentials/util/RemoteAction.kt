@@ -43,9 +43,9 @@ interface RemoteAction<I : Any?> {
     )
 }
 
-@Provide class StartAppRemoteAction(private val appUiStarter: AppUiStarter) : RemoteAction<Any?> {
+@Provide class StartAppRemoteAction(private val uiLauncher: UiLauncher) : RemoteAction<Any?> {
   override suspend fun execute() {
-    appUiStarter.startAppUi()
+    uiLauncher.start()
   }
 }
 
