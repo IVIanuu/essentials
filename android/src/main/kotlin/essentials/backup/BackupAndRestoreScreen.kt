@@ -20,7 +20,8 @@ import injekt.*
 class BackupAndRestoreScreen : Screen<Unit>
 
 @Provide @Composable fun BackupAndRestoreUi(
-  backupManager: BackupManager,
+  createBackup: createBackup,
+  restoreBackup: restoreBackup,
   showToast: showToast,
 ): Ui<BackupAndRestoreScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Backup/Restore") } }) {
@@ -28,7 +29,7 @@ class BackupAndRestoreScreen : Screen<Unit>
       item {
         EsListItem(
           onClick = scopedAction {
-            catch { backupManager.createBackup() }
+            catch { createBackup() }
               .onFailure {
                 it.printStackTrace()
                 showToast("Failed to backup your data!")
@@ -42,7 +43,7 @@ class BackupAndRestoreScreen : Screen<Unit>
       item {
         EsListItem(
           onClick = scopedAction {
-            catch { backupManager.restoreBackup() }
+            catch { restoreBackup() }
               .onFailure {
                 it.printStackTrace()
                 showToast("Failed to restore your data!")

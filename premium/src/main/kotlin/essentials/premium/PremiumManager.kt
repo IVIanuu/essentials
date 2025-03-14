@@ -67,32 +67,9 @@ interface Paywall {
 @Provide val defaultOldPermissionVersionSkus
   get() = emptyList<OldPremiumVersionSku>()
 
-@Provide @Composable fun PremiumVersionDowngradeManager(
-  downgradeHandlers: () -> List<suspend () -> PremiumDowngradeResult>,
-  isPremiumVersion: IsPremiumVersion,
-  logger: Logger,
-  preferencesStore: DataStore<Preferences>
-): ScopeContent<AppScope> {
-  if (isPremiumVersion != null)
-    LaunchedEffect(isPremiumVersion) {
-      if (!isPremiumVersion && preferencesStore.data.first()[WasPremiumVersionKey] == true) {
-        logger.d { "handle premium version downgrade" }
-        downgradeHandlers().parMap { it() }
-      }
-      preferencesStore.edit { it[WasPremiumVersionKey] = isPremiumVersion }
-    }
-}
-
-private val WasPremiumVersionKey = booleanPreferencesKey("was_premium_version")
-
-@Tag typealias PremiumDowngradeResult = Unit
-
 @Provide @Composable fun premiumAdsEnabled(
   isPremiumVersion: IsPremiumVersion
 ): AdsEnabled = isPremiumVersion != true
-
-@Provide val defaultPremiumDowngradeHandlers
-  get() = emptyList<suspend () -> PremiumDowngradeResult>()
 
 @Provide class PremiumHintUserflowBuilder(
   private val isPremiumVersion: @Composable () -> IsPremiumVersion,
