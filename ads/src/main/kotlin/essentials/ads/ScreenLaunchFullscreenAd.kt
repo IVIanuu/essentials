@@ -9,6 +9,7 @@ import androidx.compose.ui.util.*
 import androidx.datastore.core.*
 import androidx.datastore.preferences.core.*
 import essentials.*
+import essentials.data.preferencesDataStore
 import essentials.logging.*
 import essentials.ui.*
 import essentials.ui.navigation.*
@@ -28,13 +29,12 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   adFeatureRepository: AdFeatureRepository,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAdManager: FullScreenAdManager,
-  preferencesStore: DataStore<Preferences>,
   scope: Scope<UiScope> = inject
 ): ScopeContent<UiScope> {
   if (adsEnabled)
     LaunchedEffect(true) {
       navigator().launchEvents(adFeatureRepository).collectLatest {
-        val launchCount = preferencesStore
+        val launchCount = preferencesDataStore()
           .edit {
             it[FullScreenAdScreenLaunchCount] =
               (it[FullScreenAdScreenLaunchCount]?.inc() ?: 1)
@@ -43,7 +43,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
         if (launchCount >= config.screenLaunchToShowAdCount) {
           d { "try to show full screen ad $launchCount" }
           if (fullScreenAdManager.showAd())
-            preferencesStore.edit { it[FullScreenAdScreenLaunchCount] = 0 }
+            preferencesDataStore().edit { it[FullScreenAdScreenLaunchCount] = 0 }
         }
       }
     }

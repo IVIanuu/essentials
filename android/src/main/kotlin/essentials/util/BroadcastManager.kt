@@ -15,49 +15,42 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
-@Stable @Provide @Scoped<AppScope> class BroadcastManager(
-  private val appContext: AppContext,
-  private val coroutineContexts: CoroutineContexts
-) {
-  internal val explicitBroadcasts = EventFlow<Intent>()
+@Composable fun <T> broadcastState(
+  vararg actions: String,
+  scope: Scope<*> = inject,
+  compute: (Intent?) -> T
+): T = produceState(remember { compute(null) }) {
+  broadcastsOf(*actions).collect { value = compute(it) }
+}.value
 
-  @Composable fun <T> broadcastState(
-    vararg actions: String,
-    compute: (Intent?) -> T
-  ): T = produceState(remember { compute(null) }) {
-    broadcasts(*actions).collect { value = compute(it) }
-  }.value
-
-  fun broadcasts(vararg actions: String): Flow<Intent> = merge(
-    explicitBroadcasts.filter { it.action in actions },
-    callbackFlow {
-      val broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-          trySend(intent)
-        }
-      }
-      appContext.registerReceiver(broadcastReceiver, IntentFilter().apply {
-        actions.forEach { addAction(it) }
-      })
-      awaitClose {
-        catch {
-          appContext.unregisterReceiver(broadcastReceiver)
-        }
+fun broadcastsOf(vararg actions: String, scope: Scope<*> = inject): Flow<Intent> = merge(
+  explicitBroadcasts.filter { it.action in actions },
+  callbackFlow {
+    val broadcastReceiver = object : BroadcastReceiver() {
+      override fun onReceive(context: Context, intent: Intent) {
+        trySend(intent)
       }
     }
-      .flowOn(coroutineContexts.main)
-  )
-}
+    appContext().registerReceiver(broadcastReceiver, IntentFilter().apply {
+      actions.forEach { addAction(it) }
+    })
+    awaitClose {
+      catch { appContext().unregisterReceiver(broadcastReceiver) }
+    }
+  }
+    .flowOn(coroutineContexts().main)
+)
+
+private val explicitBroadcasts = EventFlow<Intent>()
 
 @Provide @AndroidComponent class EsBroadcastReceiver(
-  private val broadcastManager: BroadcastManager,
   @property:Provide private val scope: Scope<AppScope> = inject
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     d { "on receive $intent" }
     coroutineScope().launch {
       delay(100)
-      broadcastManager.explicitBroadcasts.emit(intent)
+      explicitBroadcasts.emit(intent)
     }
   }
 }

@@ -21,22 +21,19 @@ enum class ScreenState(val isOn: Boolean) {
   OFF(false), LOCKED(true), UNLOCKED(true)
 }
 
-@Provide @Composable fun screenState(
-  broadcastManager: BroadcastManager,
-  keyguardManager: @SystemService KeyguardManager,
-  powerManager: @SystemService PowerManager
-): ScreenState = broadcastManager.broadcastState(
-  Intent.ACTION_SCREEN_OFF,
-  Intent.ACTION_SCREEN_ON,
-  Intent.ACTION_USER_PRESENT
-) {
-  if (powerManager.isInteractive) {
-    if (keyguardManager.isDeviceLocked) ScreenState.LOCKED
-    else ScreenState.UNLOCKED
-  } else {
-    ScreenState.OFF
+@Provide @Composable fun screenState(scope: Scope<*> = inject): ScreenState =
+  broadcastState(
+    Intent.ACTION_SCREEN_OFF,
+    Intent.ACTION_SCREEN_ON,
+    Intent.ACTION_USER_PRESENT
+  ) {
+    if (systemService<PowerManager>().isInteractive) {
+      if (systemService<KeyguardManager>().isDeviceLocked) ScreenState.LOCKED
+      else ScreenState.UNLOCKED
+    } else {
+      ScreenState.OFF
+    }
   }
-}
 
 enum class ScreenRotation(val isPortrait: Boolean) {
   // 0 degrees
@@ -53,11 +50,10 @@ enum class ScreenRotation(val isPortrait: Boolean) {
 }
 
 @Provide @Composable fun screenRotation(
-  appContext: AppContext,
-  screenState: ScreenState,
-  windowManager: @SystemService WindowManager
+  scope: Scope<*> = inject,
+  screenState: ScreenState = screenState()
 ): ScreenRotation {
-  fun getCurrentDisplayRotation() = when (windowManager.defaultDisplay.rotation) {
+  fun getCurrentDisplayRotation() = when (systemService<WindowManager>().defaultDisplay.rotation) {
     Surface.ROTATION_0 -> ScreenRotation.PORTRAIT_UP
     Surface.ROTATION_90 -> ScreenRotation.LANDSCAPE_LEFT
     Surface.ROTATION_180 -> ScreenRotation.PORTRAIT_DOWN
@@ -69,6 +65,7 @@ enum class ScreenRotation(val isPortrait: Boolean) {
     mutableStateOf(getCurrentDisplayRotation())
   }
 
+  val appContext = appContext()
   if (screenState.isOn)
     DisposableEffect(true) {
       val listener = object : OrientationEventListener(

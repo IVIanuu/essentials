@@ -11,8 +11,10 @@ import injekt.*
     coroutineContexts: CoroutineContexts,
     prefsDir: () -> PrefsDir,
     scope: ScopedCoroutineScope<AppScope>
-  ): @Scoped<AppScope> DataStore<Preferences> = PreferenceDataStoreFactory
+  ): @ScopedService<AppScope> DataStore<Preferences> = PreferenceDataStoreFactory
     .create(scope = scope.childCoroutineScope(coroutineContexts.io)) {
       prefsDir().resolve("default.preferences_pb")
     }
 }
+
+fun preferencesDataStore(scope: Scope<*> = inject): DataStore<Preferences> = service()

@@ -8,6 +8,7 @@ import android.view.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import essentials.Scope
 import essentials.gestures.action.*
 import injekt.*
 
@@ -19,10 +20,8 @@ import injekt.*
       icon = { Icon(Icons.Default.PlayArrow, null) }
     )
 
-  @Provide suspend fun execute(
-    mediaActionSender: MediaActionSender
-  ): ActionExecutorResult<PlayPauseActionId> {
-    mediaActionSender.sendMediaAction(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
+  @Provide suspend fun execute(scope: Scope<*> = inject): ActionExecutorResult<PlayPauseActionId> {
+    sendMediaAction(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
   }
 
   @Provide inline val settingsScreen: ActionSettingsScreen<PlayPauseActionId>

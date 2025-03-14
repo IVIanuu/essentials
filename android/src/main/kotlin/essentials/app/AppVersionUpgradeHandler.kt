@@ -9,6 +9,7 @@ import androidx.datastore.core.*
 import androidx.datastore.preferences.core.*
 import arrow.fx.coroutines.*
 import essentials.*
+import essentials.data.preferencesDataStore
 import essentials.logging.*
 import injekt.*
 import kotlinx.coroutines.flow.*
@@ -20,11 +21,10 @@ data class AppVersionUpgradeParams(val lastAppVersion: Int?, val appVersion: Int
 
 @Provide @Composable fun AppVersionUpgradeHandler(
   handlers: () -> List<suspend (AppVersionUpgradeParams) -> AppVersionUpgradeResult>,
-  preferencesStore: DataStore<Preferences>,
   scope: Scope<AppScope> = inject
 ): ScopeContent<AppScope> {
   LaunchedEffect(true) {
-    val lastAppVersion = preferencesStore.data.first()[LastAppVersionPrefKey]
+    val lastAppVersion = preferencesDataStore().data.first()[LastAppVersionPrefKey]
 
     if (lastAppVersion == null ||
       appConfig().versionCode <= lastAppVersion) return@LaunchedEffect
@@ -34,7 +34,7 @@ data class AppVersionUpgradeParams(val lastAppVersion: Int?, val appVersion: Int
     val params = AppVersionUpgradeParams(lastAppVersion, appConfig().versionCode)
     handlers().parMap { it(params) }
 
-    preferencesStore.edit { it[LastAppVersionPrefKey] = appConfig().versionCode }
+    preferencesDataStore().edit { it[LastAppVersionPrefKey] = appConfig().versionCode }
   }
 }
 

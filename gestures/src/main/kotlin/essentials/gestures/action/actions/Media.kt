@@ -14,31 +14,26 @@ import androidx.datastore.preferences.core.*
 import essentials.*
 import essentials.apps.*
 import essentials.compose.*
+import essentials.data.preferencesDataStore
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.flow.*
 
-@Provide class MediaActionSender(
-  private val appContext: AppContext,
-  private val preferencesStore: DataStore<Preferences>
-) {
-  suspend fun sendMediaAction(keycode: Int) {
-    val mediaApp = preferencesStore.data.first()[MediaActionAppKey]
-    fun mediaIntentFor(keyEvent: Int) = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
-      putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent(keyEvent, keycode))
-      if (mediaApp != null) `package` = mediaApp
-    }
-    appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN), null)
-    appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP), null)
+suspend fun sendMediaAction(keycode: Int, scope: Scope<*> = inject) {
+  val mediaApp = preferencesDataStore().data.first()[MediaActionAppKey]
+  fun mediaIntentFor(keyEvent: Int) = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+    putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent(keyEvent, keycode))
+    if (mediaApp != null) `package` = mediaApp
   }
+  appContext().sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN), null)
+  appContext().sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP), null)
 }
 
 class MediaActionSettingsScreen : Screen<Unit>
 
 @Provide @Composable fun MediaActionSettingsUi(
-  preferencesStore: DataStore<Preferences>,
   scope: Scope<*> = inject
 ): Ui<MediaActionSettingsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Media action settings") } }) {
@@ -52,12 +47,12 @@ class MediaActionSettingsScreen : Screen<Unit>
               )
             )
             if (newMediaApp != null)
-              preferencesStore.edit { it[MediaActionAppKey] = newMediaApp.packageName }
+              preferencesDataStore().edit { it[MediaActionAppKey] = newMediaApp.packageName }
           },
           headlineContent = { Text("Media app") },
           supportingContent = {
             val mediaAppName by produceScopedState(nullOf()) {
-              preferencesStore.data
+              preferencesDataStore().data
                 .map { it[MediaActionAppKey] }
                 .mapLatest {
                   if (it == null) null

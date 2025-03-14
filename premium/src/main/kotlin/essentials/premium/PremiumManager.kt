@@ -13,6 +13,7 @@ import essentials.ads.*
 import essentials.billing.*
 import essentials.compose.*
 import essentials.coroutines.*
+import essentials.data.preferencesDataStore
 import essentials.ui.navigation.*
 import essentials.util.*
 import injekt.*
@@ -68,13 +69,13 @@ interface Paywall {
 
 @Provide class PremiumHintUserflowBuilder(
   private val isPremiumVersion: @Composable () -> IsPremiumVersion,
-  private val preferencesStore: DataStore<Preferences>
+  @property:Provide private val scope: Scope<*> = inject
 ) : UserflowBuilder {
   override suspend fun createUserflow(): List<Screen<*>> {
-    val hintShown = preferencesStore.data.first()[HintShownKey] == true
+    val hintShown = preferencesDataStore().data.first()[HintShownKey] == true
     return if (hintShown || moleculeFlow { isPremiumVersion() }.filterNotNull().first()) emptyList()
     else listOf(GoPremiumScreen(showTryBasicOption = true, allowBackNavigation = false))
-      .also { preferencesStore.edit { it[HintShownKey] = true } }
+      .also { preferencesDataStore().edit { it[HintShownKey] = true } }
   }
 
   companion object {

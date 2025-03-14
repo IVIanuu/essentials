@@ -8,6 +8,7 @@ import android.view.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import essentials.Scope
 import essentials.gestures.action.*
 import injekt.*
 
@@ -19,10 +20,8 @@ import injekt.*
       icon = { Icon(Icons.Default.SkipNext, null) }
     )
 
-  @Provide suspend fun execute(
-    mediaActionSender: MediaActionSender
-  ): ActionExecutorResult<SkipNextActionId> {
-    mediaActionSender.sendMediaAction(KeyEvent.KEYCODE_MEDIA_NEXT)
+  @Provide suspend fun execute(scope: Scope<*> = inject): ActionExecutorResult<SkipNextActionId> {
+    sendMediaAction(KeyEvent.KEYCODE_MEDIA_NEXT)
   }
 
   @Provide inline val settingsScreen: ActionSettingsScreen<SkipNextActionId>
