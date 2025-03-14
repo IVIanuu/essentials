@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
@@ -9,13 +10,15 @@ import android.annotation.*
 import android.app.*
 import android.content.*
 import android.os.*
-import arrow.core.*
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.onFailure
 import essentials.*
 import essentials.accessibility.*
+import essentials.gestures.action.ActionAccessibilityPermission
 import essentials.util.*
 import injekt.*
+
+val accessibilityActionPermissions = listOf(ActionAccessibilityPermission::class)
 
 @Tag typealias sendActionIntentResult = Unit
 typealias sendActionIntent = (Intent, Bundle?) -> sendActionIntentResult
