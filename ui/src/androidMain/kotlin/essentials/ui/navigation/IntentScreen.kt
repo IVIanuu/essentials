@@ -5,6 +5,7 @@ import androidx.activity.*
 import androidx.activity.result.*
 import androidx.activity.result.contract.*
 import arrow.core.*
+import com.github.michaelbull.result.Result
 import essentials.*
 import essentials.coroutines.*
 import essentials.ui.*
@@ -14,7 +15,7 @@ import java.util.*
 import kotlin.coroutines.*
 import kotlin.reflect.*
 
-interface IntentScreen : Screen<Either<ActivityNotFoundException, ActivityResult>> {
+interface IntentScreen : Screen<Result<ActivityResult, ActivityNotFoundException>> {
   @Provide companion object {
     @Provide fun <@AddOn T : ScreenIntent<S>, S : IntentScreen> intentFactoryBinding(
       intentFactory: (S) -> ScreenIntent<S>,

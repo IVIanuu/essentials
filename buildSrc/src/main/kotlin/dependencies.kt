@@ -143,6 +143,8 @@ object Deps {
     const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0"
   }
 
+  const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:2.0.1"
+
   object Ksp {
     const val version = "2.1.0-1.0.29"
     const val api = "com.google.devtools.ksp:symbol-processing-api:$version"
@@ -164,8 +166,6 @@ object Deps {
   const val playBillingKtx = "com.android.billingclient:billing-ktx:7.1.1"
 
   const val processPhoenix = "com.jakewharton:process-phoenix:2.1.2"
-
-  const val quiver = "app.cash.quiver:lib:0.5.0"
 
   const val roboelectric = "org.robolectric:robolectric:4.10.3"
 

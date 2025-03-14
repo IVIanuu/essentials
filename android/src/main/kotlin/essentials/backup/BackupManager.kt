@@ -10,7 +10,7 @@ import android.icu.text.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import androidx.core.content.*
-import app.cash.quiver.extensions.*
+import com.github.michaelbull.result.getOrThrow
 import essentials.*
 import essentials.app.*
 import essentials.coroutines.*
@@ -86,7 +86,7 @@ import java.util.zip.*
         )
       }
 
-    navigator.push(Intent.createChooser(intent, "Share File").asScreen())?.orThrow()
+    navigator.push(Intent.createChooser(intent, "Share File").asScreen())?.getOrThrow()
   }
 
   suspend fun restoreBackup() = withContext(coroutineContexts.io) {

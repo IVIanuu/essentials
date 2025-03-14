@@ -10,6 +10,7 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.github.michaelbull.result.onFailure
 import essentials.*
 import essentials.coroutines.*
 import essentials.gestures.action.*
@@ -47,7 +48,7 @@ import kotlinx.coroutines.flow.*
       catch {
         val cameraId = cameraManager.cameraIdList[0]
         cameraManager.setTorchMode(cameraId, !state)
-      }.onLeft {
+      }.onFailure {
         it.printStackTrace()
         showToast("Failed to enable flashlight!")
       }

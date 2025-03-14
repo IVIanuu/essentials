@@ -16,6 +16,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.datastore.core.*
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.onSuccess
 import essentials.*
 import essentials.compose.*
 import essentials.data.*
@@ -107,13 +109,13 @@ class WriteSecureSettingsScreen(
         action = {
           TextButton(onClick = scopedAction {
             shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
-              .onRight {
+              .onSuccess {
                 if (permissionManager.permissionState(listOf(screen.permissionClass)).first()) {
                   showToast("Permission granted!")
                   navigator.pop(screen)
                 }
               }
-              .onLeft {
+              .onFailure {
                 it.printStackTrace()
                 showToast("Your device is not rooted!")
               }
@@ -157,7 +159,7 @@ class WriteSecureSettingsScreen(
               raceOf(
                 {
                   navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).asScreen())
-                    ?.onLeft { showToast("Couldn't open phone! Please open manually") }
+                    ?.onFailure { showToast("Couldn't open phone! Please open manually") }
                 },
                 { developerModeDataStore.data.first { it != 0 } }
               )
@@ -187,7 +189,7 @@ class WriteSecureSettingsScreen(
               raceOf(
                 {
                   navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).asScreen())
-                    ?.onLeft { showToast("Couldn\'t open developer options! Please open manually") }
+                    ?.onFailure { showToast("Couldn\'t open developer options! Please open manually") }
                 },
                 { adbEnabledDataStore.data.first { it != 0 } }
               )

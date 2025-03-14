@@ -7,6 +7,7 @@ package essentials.notificationlistener
 import android.app.*
 import android.service.notification.*
 import androidx.compose.runtime.*
+import com.github.michaelbull.result.fold
 import essentials.*
 import injekt.*
 
@@ -30,7 +31,7 @@ sealed interface NotificationApi {
   else if (notificationListenerService.notifications.isEmpty()) NotificationApi.Empty
   else NotificationApi.Notifications(
     notifications = notificationListenerService.notifications,
-    openNotification = { catch { it.contentIntent.send() }.fold({ false }, { true }) },
+    openNotification = { catch { it.contentIntent.send() }.fold({ true }, { false }) },
     dismissNotification = notificationListenerService::cancelNotification,
     dismissAllNotifications = notificationListenerService::cancelAllNotifications
   )

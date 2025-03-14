@@ -10,6 +10,8 @@ import android.app.*
 import android.content.*
 import android.os.*
 import arrow.core.*
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.onFailure
 import essentials.*
 import essentials.accessibility.*
 import essentials.util.*
@@ -33,13 +35,13 @@ typealias sendActionIntent = (Intent, Bundle?) -> sendActionIntentResult
       PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
       options
     ).send()
-  }.onLeft {
+  }.onFailure {
     it.printStackTrace()
     showToast("Failed to launch screen!")
   }
 }
 
-@Tag typealias closeSystemDialogsResult = Either<Throwable, Unit>
+@Tag typealias closeSystemDialogsResult = Result<Unit, Throwable>
 typealias closeSystemDialogs = suspend () -> closeSystemDialogsResult
 
 @SuppressLint("MissingPermission", "InlinedApi")

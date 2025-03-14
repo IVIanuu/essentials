@@ -10,6 +10,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import arrow.core.*
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.onFailure
 import essentials.*
 import essentials.coroutines.*
 import essentials.gestures.action.actions.*
@@ -112,7 +114,7 @@ typealias executeAction = suspend (String) -> executeActionResult
     }.getOrNull()
       ?: showToast(RECONFIGURE_ACTION_MESSAGE)
     return@catch true
-  }.onLeft {
+  }.onFailure {
     it.printStackTrace()
     showToast("Failed to execute action $id!")
   }.getOrElse { false }

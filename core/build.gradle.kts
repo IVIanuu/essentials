@@ -26,8 +26,8 @@ dependencies {
   api(Deps.Injekt.core)
   api(Deps.kermit)
   api(Deps.KotlinSerialization.json)
+  api(Deps.kotlinResult)
   api(Deps.molecule)
-  api(Deps.quiver)
   api(Deps.splittiesCoroutines)
   testImplementation(project(":test"))
 }

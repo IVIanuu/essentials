@@ -13,6 +13,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import androidx.core.graphics.drawable.*
+import com.github.michaelbull.result.onFailure
 import essentials.*
 import essentials.compose.*
 import essentials.resource.*
@@ -48,7 +49,7 @@ class ShortcutPickerScreen : Screen<Shortcut>
                   ?.data ?: return@catch
                 val finalShortcut = extractShortcut(shortcutRequestResult)
                 navigator.pop(screen, finalShortcut)
-              }.onLeft {
+              }.onFailure {
                 it.printStackTrace()
                 showToast("Failed to pick a shortcut!")
               }

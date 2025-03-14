@@ -1,8 +1,10 @@
 package essentials.coroutines
 
-import app.cash.quiver.extensions.*
-import arrow.core.*
 import arrow.fx.coroutines.*
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.getOrThrow
+import com.github.michaelbull.result.onSuccess
 import essentials.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -33,10 +35,10 @@ fun <K, T> CoroutineScope.sharedComputation(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   block: suspend (K) -> T
 ): suspend (K) -> T {
-  val flows = sharedFlow<K, Either<Throwable, T>>(sharingStarted, 1) { key ->
+  val flows = sharedFlow<K, Result<T, Throwable>>(sharingStarted, 1) { key ->
     emit(catch { block(key) })
   }
-  return { flows(it).first().orThrow() }
+  return { flows(it).first().getOrThrow() }
 }
 
 data class Releasable<T>(val value: T, val release: () -> Unit)
@@ -46,7 +48,7 @@ fun <K, T> CoroutineScope.sharedResource(
   release: (suspend (K, T) -> Unit)? = null,
   create: suspend (K) -> T
 ): suspend (K) -> Releasable<T> {
-  val flows: (K) -> Flow<Either<Throwable, T>> = sharedFlow(sharingStarted, 1) { key: K ->
+  val flows: (K) -> Flow<Result<T, Throwable>> = sharedFlow(sharingStarted, 1) { key: K ->
     val value = catch { create(key) }
     bracketCase(
       acquire = { value },
@@ -54,9 +56,7 @@ fun <K, T> CoroutineScope.sharedResource(
         emit(value)
         awaitCancellation()
       },
-      release = { _, _ ->
-        value.onRight { release?.invoke(key, it) }
-      }
+      release = { _, _ -> value.onSuccess { release?.invoke(key, it) } }
     )
   }
 
@@ -66,8 +66,8 @@ fun <K, T> CoroutineScope.sharedResource(
       job = launch(cont.context) {
         flows(key).collect { value ->
           value.fold(
-            ifLeft = { cont.resumeWithException(it) },
-            ifRight = { cont.resume(Releasable(it) { job.cancel() }) }
+            success = { cont.resume(Releasable(it) { job.cancel() }) },
+            failure = { cont.resumeWithException(it) }
           )
           awaitCancellation()
         }

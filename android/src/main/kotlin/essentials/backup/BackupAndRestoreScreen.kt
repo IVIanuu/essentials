@@ -8,6 +8,7 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.github.michaelbull.result.onFailure
 import essentials.*
 import essentials.compose.*
 import essentials.ui.common.*
@@ -28,7 +29,7 @@ class BackupAndRestoreScreen : Screen<Unit>
         EsListItem(
           onClick = scopedAction {
             catch { backupManager.createBackup() }
-              .onLeft {
+              .onFailure {
                 it.printStackTrace()
                 showToast("Failed to backup your data!")
               }
@@ -42,7 +43,7 @@ class BackupAndRestoreScreen : Screen<Unit>
         EsListItem(
           onClick = scopedAction {
             catch { backupManager.restoreBackup() }
-              .onLeft {
+              .onFailure {
                 it.printStackTrace()
                 showToast("Failed to restore your data!")
               }

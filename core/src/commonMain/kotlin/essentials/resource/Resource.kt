@@ -65,9 +65,11 @@ fun <T> Flow<Resource<T>>.unwrapResource(): Flow<T> = flow {
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
   flow<Resource<T>> {
     emit(Resource.Loading)
-    catch {
+    try {
       block(FlowCollector<T> { value -> this@flow.emit(value.success()) })
-    }.onLeft { emit(it.error()) }
+    } catch (e: Throwable) {
+      emit(e.nonFatalOrThrow().error())
+    }
   }
 
 fun <V> Either<Throwable, V>.toResource(): Resource<V> = fold(

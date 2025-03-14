@@ -5,6 +5,7 @@
 package essentials.permission
 
 import android.content.*
+import com.github.michaelbull.result.onFailure
 import essentials.*
 import essentials.ui.navigation.*
 import essentials.util.*
@@ -33,7 +34,7 @@ data class IntentPermissionRequestParams<P : Permission>(
     // wait until user navigates back from the permission screen
     catch { navigator.push(data.intent.asScreen()) }
       .printErrors()
-      .onLeft { showToast("Couldn\'t open settings screen! Please grant the permission manually") }
+      .onFailure { showToast("Couldn\'t open settings screen! Please grant the permission manually") }
   },
   {
     // wait until user granted permission
