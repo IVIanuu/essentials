@@ -4,6 +4,8 @@
 
 package essentials.sample.ui
 
+import essentials.sample.R
+import android.app.NotificationManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -13,7 +15,12 @@ import essentials.foreground.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import essentials.ui.prefs.*
+import essentials.util.buildNotification
+import essentials.util.uiLauncherIntent
 import injekt.*
+import kotlinx.coroutines.channels.ticker
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.runningFold
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundScreen() }
 
@@ -30,7 +37,7 @@ class ForegroundScreen : Screen<Unit>
         id = "foreground",
         removeNotification = removeNotification
       ) {
-        /*buildNotification(
+        buildNotification(
           "foreground",
           "Foreground",
           NotificationManager.IMPORTANCE_LOW
@@ -46,7 +53,7 @@ class ForegroundScreen : Screen<Unit>
             }.value
           }")
           setContentIntent(uiLauncherIntent())
-        }*/ TODO()
+        }
       }
 
     if (isSecondEnabled)
@@ -54,7 +61,7 @@ class ForegroundScreen : Screen<Unit>
         id = "foreground2",
         removeNotification = removeNotification
       ) {
-        /*buildNotification(
+        buildNotification(
           "foreground2",
           "Foreground2",
           NotificationManager.IMPORTANCE_LOW
@@ -70,7 +77,7 @@ class ForegroundScreen : Screen<Unit>
             }.value
           }")
           setContentIntent(uiLauncherIntent())
-        }*/ TODO()
+        }
       }
 
     Column(

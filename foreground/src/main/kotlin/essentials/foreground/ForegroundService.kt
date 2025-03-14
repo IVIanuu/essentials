@@ -16,6 +16,8 @@ import essentials.app.*
 import essentials.compose.*
 import essentials.coroutines.*
 import essentials.logging.*
+import essentials.util.buildNotification
+import essentials.util.uiLauncherIntent
 import injekt.*
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
@@ -45,7 +47,7 @@ import kotlin.time.Duration.Companion.seconds
           "default_foreground_id",
           true
         ) {
-          /*buildNotification(
+          buildNotification(
             "default_foreground",
             "Foreground",
             NotificationManager.IMPORTANCE_LOW
@@ -53,7 +55,7 @@ import kotlin.time.Duration.Companion.seconds
             setContentTitle("${appConfig().appName} is running!")
             setSmallIcon(R.drawable.ic_sync)
             setContentIntent(uiLauncherIntent())
-          }*/ TODO()
+          }
         }
       }
 
