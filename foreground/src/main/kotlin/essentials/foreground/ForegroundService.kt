@@ -130,8 +130,8 @@ import kotlin.time.Duration.Companion.seconds
     onStartForegroundCalled: () -> Unit
   ) {
     val notification = state.notification?.invoke()
-    val notificationId = state.id.hashCode()
     if (notification != null) {
+      val notificationId = state.id.hashCode()
       DisposableEffect(notificationId) {
         onDispose {
           if (state.removeNotification) {
