@@ -11,12 +11,14 @@ import eu.chainfire.libsuperuser.Shell.*
 import injekt.*
 import kotlinx.coroutines.*
 
-@Provide class Shell(private val coroutineContexts: CoroutineContexts) {
-  suspend fun isAvailable() = withContext(coroutineContexts.io) {
+suspend fun isShellAvailable(scope: Scope<*> = inject) =
+  withContext(coroutineContexts().io) {
     catch { SU.available() }.getOrElse { false }
   }
 
-  suspend fun run(vararg commands: String) = withContext(coroutineContexts.io) {
-    catch { SU.run(commands)!! }
-  }
+suspend fun runShellCommand(
+  vararg commands: String,
+  scope: Scope<*> = inject
+) = withContext(coroutineContexts().io) {
+  catch { SU.run(commands)!! }
 }

@@ -53,16 +53,13 @@ abstract class WriteSecureSettingsPermission(
 }
 
 class WriteSecureSettingsScreen(
-  val permissionClass: KClass<out WriteSecureSettingsPermission>
+  val permissionKey: KClass<out WriteSecureSettingsPermission>
 ) : CriticalUserFlowScreen<Boolean>
 
 @Provide @Composable fun WriteSecureSettingsUi(
   adbEnabledDataStore: DataStore<AdbEnabled>,
-  uiLauncher: UiLauncher,
   developerModeDataStore: DataStore<DeveloperMode>,
-  permissionManager: PermissionManager,
   screen: WriteSecureSettingsScreen,
-  shell: Shell,
   scope: Scope<*> = inject
 ): Ui<WriteSecureSettingsScreen> {
   var currentStep by remember { mutableIntStateOf(1) }
@@ -85,7 +82,7 @@ class WriteSecureSettingsScreen(
         3 -> true
         4 -> produceScopedState(false) {
           while (true) {
-            value = permissionManager.permissionState(listOf(screen.permissionClass)).first()
+            value = listOf(screen.permissionKey).permissionState().first()
             delay(1.seconds)
           }
         }.value
@@ -105,9 +102,9 @@ class WriteSecureSettingsScreen(
           .padding(16.dp),
         action = {
           TextButton(onClick = scopedAction {
-            shell.run("pm grant ${appConfig().packageName} android.permission.WRITE_SECURE_SETTINGS")
+            runShellCommand("pm grant ${appConfig().packageName} android.permission.WRITE_SECURE_SETTINGS")
               .onSuccess {
-                if (permissionManager.permissionState(listOf(screen.permissionClass)).first()) {
+                if (listOf(screen.permissionKey).permissionState().first()) {
                   showToast("Permission granted!")
                   navigator().pop(screen)
                 }
@@ -160,7 +157,7 @@ class WriteSecureSettingsScreen(
                 },
                 { developerModeDataStore.data.first { it != 0 } }
               )
-              uiLauncher.start()
+              launchUi()
             }) { Text("Open about phone") }
           }
         )
@@ -190,7 +187,7 @@ class WriteSecureSettingsScreen(
                 },
                 { adbEnabledDataStore.data.first { it != 0 } }
               )
-              uiLauncher.start()
+              launchUi()
             }) {
               Text("Open developer options")
             }

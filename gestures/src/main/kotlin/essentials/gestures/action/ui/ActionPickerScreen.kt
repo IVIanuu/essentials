@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.*
+import essentials.Scope
 import essentials.compose.*
 import essentials.gestures.action.*
 import essentials.permission.*
@@ -34,10 +35,8 @@ class ActionPickerScreen(
 }
 
 @Provide @Composable fun ActionPickerUi(
-  navigator: Navigator,
-  permissionManager: PermissionManager,
-  repository: ActionRepository,
-  screen: ActionPickerScreen
+  screen: ActionPickerScreen,
+  scope: Scope<*> = inject
 ): Ui<ActionPickerScreen> {
   val items by produceScopedState(Resource.Idle()) {
     value = catchResource {
@@ -49,12 +48,12 @@ class ActionPickerScreen(
           this += ActionPickerItem.SpecialOption(title = "None", getResult = { ActionPickerScreen.Result.None })
 
         this += (
-            (repository.getActionPickerDelegates()
-              .fastMap { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
+            (getActionPickerDelegates()
+              .fastMap { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
               .fastMap {
                 ActionPickerItem.ActionItem(
                   it,
-                  repository.getActionSettingsKey(it.id)
+                  it.id.getActionSettingsKey()
                 )
               }))
           .sortedBy { it.title }
@@ -68,19 +67,19 @@ class ActionPickerScreen(
         items(items) { item ->
           EsListItem(
             onClick = scopedAction {
-              val result = item.getResult(navigator)
+              val result = item.getResult(navigator())
                 ?: return@scopedAction
               if (result is ActionPickerScreen.Result.Action) {
-                val action = repository.getAction(result.actionId)
-                if (!permissionManager.ensurePermissions(action.permissions))
+                val action = result.actionId.toAction()
+                if (!action.permissions.ensure())
                   return@scopedAction
               }
-              navigator.pop(screen, result)
+              navigator().pop(screen, result)
             },
             leadingContent = { item.Icon(Modifier.size(24.dp)) },
             trailingContent = if (item.settingsScreen == null) null
             else ({
-              IconButton(onClick = scopedAction { navigator.push(item.settingsScreen!!) }) {
+              IconButton(onClick = scopedAction { navigator().push(item.settingsScreen!!) }) {
                 Icon(Icons.Default.Settings, null)
               }
             }),

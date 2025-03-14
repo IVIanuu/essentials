@@ -7,6 +7,7 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import essentials.Scope
 import essentials.compose.*
 import essentials.notificationlistener.*
 import essentials.permission.*
@@ -23,7 +24,7 @@ class NotificationsScreen : Screen<Unit>
 
 @Provide @Composable fun NotificationsUi(
   api: NotificationApi,
-  permissionManager: PermissionManager
+  scope: Scope<*> = inject
 ): Ui<NotificationsScreen> {
   EsScaffold(
     topBar = { EsAppBar { Text("Notifications") } },
@@ -39,7 +40,7 @@ class NotificationsScreen : Screen<Unit>
     when (api) {
       is NotificationApi.Unavailable -> {
         LaunchedEffect(true) {
-          permissionManager.ensurePermissions(listOf(SampleNotificationListenerPermission::class))
+          listOf(SampleNotificationListenerPermission::class).ensure()
         }
 
         Text("Unavailable")

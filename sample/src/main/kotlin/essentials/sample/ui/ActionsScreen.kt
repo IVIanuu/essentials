@@ -23,11 +23,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class ActionsScreen : Screen<Unit>
 
-@Provide @Composable fun ActionsUi(
-  executeAction: executeAction,
-  repository: ActionRepository,
-  scope: Scope<*> = inject
-): Ui<ActionsScreen> {
+@Provide @Composable fun ActionsUi(scope: Scope<*> = inject): Ui<ActionsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Actions") } }) {
     Column(
       modifier = Modifier.fillMaxSize(),
@@ -40,13 +36,13 @@ class ActionsScreen : Screen<Unit>
             .safeAs<ActionPickerScreen.Result.Action>()
             ?.actionId ?: return@scopedAction
 
-          val action = repository.getAction(actionId)
+          val action = actionId.toAction()
 
           delay(1.seconds)
 
           showToast("Execute action ${action.title}")
 
-          executeAction(actionId)
+          actionId.executeAction()
         }
       ) { Text("Pick action") }
 
@@ -56,14 +52,14 @@ class ActionsScreen : Screen<Unit>
             .safeAs<ActionPickerScreen.Result.Action>()
             ?.actionId ?: return@scopedAction
 
-          val action = repository.getAction(actionId)
+          val action = actionId.toAction()
 
           delay(1.seconds)
 
           while (true) {
             showToast("Execute action ${action.title}")
 
-            executeAction(actionId)
+            actionId.executeAction()
 
             delay(3.seconds)
           }

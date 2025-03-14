@@ -10,6 +10,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
+import essentials.Scope
+import essentials.compose.action
 import essentials.coroutines.*
 import essentials.permission.*
 import essentials.systemoverlay.*
@@ -23,9 +25,8 @@ import kotlinx.coroutines.*
 class SystemWindowScreen : Screen<Unit>
 
 @Provide @Composable fun SystemWindowUi(
-  permissionManager: PermissionManager,
-  scope: ScopedCoroutineScope<ScreenScope>,
-  systemWindowManager: SystemWindowManager
+  systemWindowManager: SystemWindowManager,
+  scope: Scope<*> = inject
 ): Ui<SystemWindowScreen> {
   EsScaffold(topBar = { EsAppBar { Text("System window") } }) {
     var showSystemWindow by remember { mutableStateOf(false) }
@@ -43,11 +44,9 @@ class SystemWindowScreen : Screen<Unit>
 
     Button(
       modifier = Modifier.fillMaxSize().wrapContentSize(),
-      onClick = {
-        scope.launch {
-          if (permissionManager.ensurePermissions(listOf(SampleSystemOverlayPermission::class)))
-            showSystemWindow = true
-        }
+      onClick = action {
+        if (listOf(SampleSystemOverlayPermission::class).ensure())
+          showSystemWindow = true
       }
     ) {
       Text("Attach system window")

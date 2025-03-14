@@ -11,48 +11,48 @@ import essentials.compose.*
 import essentials.coroutines.*
 import essentials.logging.*
 import essentials.ui.navigation.*
+import essentials.util.launchUi
 import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
-@Stable @Provide class PermissionManager(
-  private val uiLauncher: UiLauncher,
-  @property:Provide private val scope: Scope<AppScope> = inject,
-  private val permissions: Map<KClass<out Permission>, () -> Permission>,
-  private val stateProviders: Map<KClass<out Permission>, suspend (Permission) -> PermissionState<Permission>>
-) {
-  fun <T : Permission> permission(key: KClass<T>): T =
-    permissions[key]!!().unsafeCast()
+@Provide @Service<AppScope> data class PermissionDependencies(
+  val permissions: Map<KClass<out Permission>, () -> Permission>,
+  val stateProviders: Map<KClass<out Permission>, suspend (Permission) -> PermissionState<Permission>>
+)
 
-  fun permissionState(permissions: List<KClass<out Permission>>): Flow<Boolean> = moleculeFlow {
-    permissions.fastMap { permissionKey ->
-      val permission = remember { permission(permissionKey) }
-      val stateProvider = stateProviders[permissionKey]!!
-      produceState<Boolean?>(null) {
-        permissionRefreshes
-          .onStart<Any?> { emit(Unit) }
-          .map {
-            withContext(coroutineContexts().io) {
-              stateProvider(permission)
-            }
+fun <T : Permission> KClass<T>.toPermission(scope: Scope<*> = inject): T =
+  service<PermissionDependencies>().permissions[this]!!().unsafeCast()
+
+fun List<KClass<out Permission>>.permissionState(scope: Scope<*> = inject): Flow<Boolean> = moleculeFlow {
+  fastMap { permissionKey ->
+    val permission = remember { permissionKey.toPermission() }
+    val stateProvider = service<PermissionDependencies>()
+      .stateProviders[permissionKey]!!
+    produceState<Boolean?>(null) {
+      permissionRefreshes
+        .onStart<Any?> { this.emit(Unit) }
+        .map {
+          withContext(coroutineContexts().io) {
+            stateProvider(permission)
           }
-          .collect { value = it }
-      }
-        .value
+        }
+        .collect { value = it }
     }
-      .takeIf { it.fastAll { it != null } }
-      ?.fastAll { it == true }
-  }.filterNotNull()
-
-  suspend fun ensurePermissions(permissions: List<KClass<out Permission>>): Boolean {
-    d { "ensure permissions $permissions" }
-
-    val result = permissions.fastAll { permissionState(listOf(it)).first() } || run {
-      navigator(uiLauncher.start()).push(PermissionRequestScreen(permissions)) == true
-    }
-
-    d { "ensure permissions result $permissions -> $result" }
-    return result
+      .value
   }
+    .takeIf { it.fastAll { it != null } }
+    ?.fastAll { it == true }
+}.filterNotNull()
+
+suspend fun List<KClass<out Permission>>.ensure(scope: Scope<*> = inject): Boolean {
+  d { "ensure permissions $this" }
+
+  val result = fastAll { listOf(it).permissionState().first() } || run {
+    navigator(launchUi()).push(PermissionRequestScreen(this@ensure)) == true
+  }
+
+  d { "ensure permissions result $this -> $result" }
+  return result
 }

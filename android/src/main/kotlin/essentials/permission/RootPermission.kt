@@ -16,14 +16,14 @@ abstract class RootPermission(
   override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   @Provide companion object {
-    @Provide suspend fun <P : RootPermission> state(shell: Shell): PermissionState<P> =
-      shell.isAvailable()
+    @Provide suspend fun <P : RootPermission> state(
+      scope: Scope<*> = inject
+    ): PermissionState<P> = isShellAvailable()
 
     @Provide suspend fun <P : RootPermission> request(
-      shell: Shell,
       scope: Scope<*> = inject
     ): PermissionRequestResult<P> {
-      if (!shell.isAvailable())
+      if (!isShellAvailable())
         showToast("Your device is not rooted!")
     }
   }

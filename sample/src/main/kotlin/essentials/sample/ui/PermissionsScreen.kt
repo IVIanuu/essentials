@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.util.*
+import essentials.Scope
 import essentials.accessibility.*
 import essentials.compose.*
 import essentials.notificationlistener.*
@@ -24,14 +25,14 @@ import injekt.*
 class PermissionsScreen : Screen<Unit>
 
 @Provide @Composable fun PermissionsUi(
-  permissionManager: PermissionManager,
-  permissions: List<SamplePermission>
+  permissions: List<SamplePermission>,
+  scope: Scope<*> = inject
 ): Ui<PermissionsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Permissions") } }) {
     Button(
       modifier = Modifier.fillMaxSize().wrapContentSize(),
       onClick = scopedAction {
-        permissionManager.ensurePermissions(permissions.fastMap { it::class })
+        permissions.fastMap { it::class }.ensure()
       }
     ) {
       Text("Request")

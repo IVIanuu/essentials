@@ -17,6 +17,7 @@ import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
+import essentials.util.launchUi
 import injekt.*
 import kotlin.reflect.*
 
@@ -25,29 +26,26 @@ class PermissionRequestScreen(
 ) : CriticalUserFlowScreen<Boolean>
 
 @Provide @Composable fun PermissionRequestUi(
-  uiLauncher: UiLauncher,
-  navigator: Navigator,
-  permissionManager: PermissionManager,
+  screen: PermissionRequestScreen,
   requestHandlers: Map<KClass<out Permission>, suspend (Permission) -> PermissionRequestResult<Permission>>,
-  screen: PermissionRequestScreen
+  scope: Scope<*> = inject
 ): Ui<PermissionRequestScreen> {
   val keysByPermission = remember {
-    screen.permissionsKeys.associateBy { permissionManager.permission(it) }
+    screen.permissionsKeys.associateBy { it.toPermission() }
   }
 
   val permissionStates = keysByPermission
     .mapValues { (permission, key) ->
       key(permission) {
         produceScopedState(nullOf()) {
-          permissionManager.permissionState(listOf(key))
-            .collect { value = it }
+          listOf(key).permissionState().collect { value = it }
         }.value
       }
     }
 
   LaunchedScopedEffect(permissionStates) {
     if (permissionStates.all { it.value == true })
-      navigator.pop(screen, true)
+      navigator().pop(screen, true)
   }
 
   val isLoading = permissionStates.any { it.value == null }
@@ -76,14 +74,15 @@ class PermissionRequestScreen(
           trailingContent = {
             Row(horizontalArrangement = Arrangement.End) {
               TextButton(
-                onClick = action { navigator.pop(screen, false) }
+                onClick = action { navigator().pop(screen, false) }
               ) { Text("Deny") }
 
               TextButton(
                 onClick = scopedAction {
-                  requestHandlers[keysByPermission[permission]!!]!!(permission)
+                  requestHandlers[keysByPermission[permission]!!]!!
+                    .invoke(permission)
                   permissionRefreshes.emit(Unit)
-                  uiLauncher.start()
+                  launchUi()
                 }
               ) { Text("Allow") }
             }
@@ -93,4 +92,3 @@ class PermissionRequestScreen(
     }
   }
 }
-

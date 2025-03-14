@@ -7,7 +7,6 @@ package essentials.gestures.action
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import com.github.michaelbull.result.*
 import essentials.*
@@ -20,24 +19,28 @@ import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Stable @Provide class ActionRepository(
-  private val actions: Map<String, () -> Action<*>>,
-  private val actionFactories: List<() -> ActionFactory>,
-  private val actionSettings: Map<String, () -> ActionSettingsScreen<ActionId>>,
-  private val actionPickerDelegates: List<() -> ActionPickerDelegate>,
-  private val coroutineContexts: CoroutineContexts
-) {
-  suspend fun getAllActions() = withContext(coroutineContexts.computation) {
-    actions.values.map { it() }
-  }
+@Provide @Service<AppScope> data class ActionDependencies(
+  val actions: Map<String, () -> Action<*>>,
+  val actionFactories: List<() -> ActionFactory>,
+  val actionsExecutors: Map<String, suspend () -> ActionExecutorResult<*>>,
+  val actionSettings: Map<String, () -> ActionSettingsScreen<ActionId>>,
+  val actionPickerDelegates: List<() -> ActionPickerDelegate>
+)
 
-  suspend fun getAction(id: String) = withContext(coroutineContexts.computation) {
+fun actionDependencies(scope: Scope<*> = inject): ActionDependencies = service()
+
+suspend fun getAllActions(scope: Scope<*> = inject) = withContext(coroutineContexts().computation) {
+  actionDependencies().actions.values.map { it() }
+}
+
+suspend fun String.toAction(scope: Scope<*> = inject) =
+  withContext(coroutineContexts().computation) {
     catch {
-      actions[id]
+      actionDependencies().actions[this@toAction]
         ?.invoke()
-        ?: actionFactories
+        ?: actionDependencies().actionFactories
           .fastMap { it() }
-          .firstNotNullOfOrNull { it.createAction(id) }
+          .firstNotNullOfOrNull { it.createAction(this@toAction) }
     }
       .printErrors()
       .getOrNull()
@@ -48,69 +51,63 @@ import kotlinx.coroutines.flow.*
       )
   }
 
-  suspend fun getActionSettingsKey(id: String) =
-    withContext(coroutineContexts.computation) { actionSettings[id]?.invoke() }
+suspend fun String.getActionSettingsKey(scope: Scope<*> = inject) =
+  withContext(coroutineContexts().computation) {
+    actionDependencies().actionSettings[this@getActionSettingsKey]?.invoke()
+  }
 
-  suspend fun getActionPickerDelegates() =
-    withContext(coroutineContexts.computation) { actionPickerDelegates.fastMap { it() } }
-}
+suspend fun getActionPickerDelegates(scope: Scope<*> = inject) =
+  withContext(coroutineContexts().computation) {
+    actionDependencies().actionPickerDelegates.fastMap { it() }
+  }
 
-@Tag typealias executeActionResult = Boolean
-typealias executeAction = suspend (String) -> executeActionResult
-
-@Provide suspend fun executeAction(
-  id: String,
-  actionsExecutors: Map<String, suspend () -> ActionExecutorResult<*>>,
-  actionFactories: List<() -> ActionFactory>,
-  actionRepository: ActionRepository,
-  permissionManager: PermissionManager,
-  scope: Scope<AppScope> = inject
-): executeActionResult = withContext(coroutineContexts().computation) {
-  catch {
-    d { "execute $id" }
-    val action = actionRepository.getAction(id)
-
-    // check permissions
-    if (!permissionManager.permissionState(action.permissions).first()) {
-      d { "didn't had permissions for $id ${action.permissions}" }
-      unlockScreen()
-      permissionManager.ensurePermissions(action.permissions)
-      return@catch false
-    }
-
-    if (action.turnScreenOn && !turnScreenOn()) {
-      d { "couldn't turn screen on for $id" }
-      return@catch false
-    }
-
-    // unlock screen
-    if (action.unlockScreen && !unlockScreen()) {
-      d { "couldn't unlock screen for $id" }
-      return@catch false
-    }
-
-    // close system dialogs
-    if (action.closeSystemDialogs &&
-      (appConfig().sdk < 31 ||
-          permissionManager.permissionState(listOf(ActionAccessibilityPermission::class)).first()))
-      closeSystemDialogs()
-
-    d { "fire $id" }
-
-    // fire
+suspend fun String.executeAction(scope: Scope<AppScope> = inject) =
+  withContext(coroutineContexts().computation) {
     catch {
-      actionsExecutors[id]
-        ?.invoke()
-        ?: actionFactories
-          .fastMap { it() }
-          .firstNotNullOfOrNull { it.execute(id) }
-    }.getOrNull()
-      ?: showToast(RECONFIGURE_ACTION_MESSAGE)
-    return@catch true
-  }.onFailure {
-    it.printStackTrace()
-    showToast("Failed to execute action $id!")
-  }.getOrElse { false }
-}
+      d { "execute ${this@executeAction}" }
+      val action = toAction()
+
+      // check permissions
+      if (!action.permissions.permissionState().first()) {
+        d { "didn't had permissions for ${this@executeAction} ${action.permissions}" }
+        unlockScreen()
+        action.permissions.ensure()
+        return@catch false
+      }
+
+      if (action.turnScreenOn && !turnScreenOn()) {
+        d { "couldn't turn screen on for ${this@executeAction}" }
+        return@catch false
+      }
+
+      // unlock screen
+      if (action.unlockScreen && !unlockScreen()) {
+        d { "couldn't unlock screen for ${this@executeAction}" }
+        return@catch false
+      }
+
+      // close system dialogs
+      if (action.closeSystemDialogs &&
+        (appConfig().sdk < 31 ||
+            listOf(ActionAccessibilityPermission::class).permissionState().first()))
+        closeSystemDialogs()
+
+      d { "fire ${this@executeAction}" }
+
+      // fire
+      catch {
+        actionDependencies().actionsExecutors[this@executeAction]
+          ?.invoke()
+          ?: actionDependencies().actionFactories
+            .fastMap { it() }
+            .firstNotNullOfOrNull { it.execute(this@executeAction) }
+      }.getOrNull()
+        ?: showToast(RECONFIGURE_ACTION_MESSAGE)
+      return@catch true
+    }.onFailure {
+      it.printStackTrace()
+      showToast("Failed to execute action ${this@executeAction}!")
+    }.getOrElse { false }
+  }
 
 private const val RECONFIGURE_ACTION_MESSAGE = "Error please reconfigure this action"

@@ -18,11 +18,10 @@ class DataStoreProvider<T : Any>(
   private val default: () -> T
 ) {
   @Provide fun dataStore(
-    coroutineContexts: CoroutineContexts,
     json: () -> Json,
     serializerFactory: () -> KSerializer<T>,
     prefsDir: () -> PrefsDir,
-    scope: ScopedCoroutineScope<AppScope>
+    scope: Scope<AppScope> = inject
   ): @Scoped<AppScope> DataStore<T> = DataStoreFactory.create(
     object : Serializer<T> {
       override val defaultValue: T get() = default()
@@ -45,6 +44,6 @@ class DataStoreProvider<T : Any>(
       }
     },
     produceFile = { prefsDir().resolve(name) },
-    scope = scope.childCoroutineScope(coroutineContexts.io)
+    scope = coroutineScope().childCoroutineScope(coroutineContexts().io)
   )
 }

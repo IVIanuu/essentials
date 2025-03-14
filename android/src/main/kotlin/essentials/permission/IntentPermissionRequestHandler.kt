@@ -23,7 +23,6 @@ data class IntentPermissionRequestParams<P : Permission>(
 @Provide suspend fun <P : Permission> requestPermissionWithIntent(
   data: IntentPermissionRequestParams<P>,
   key: KClass<P>,
-  permissionManager: PermissionManager,
   scope: Scope<*> = inject
 ): PermissionRequestResult<P> = raceOf(
   {
@@ -37,7 +36,7 @@ data class IntentPermissionRequestParams<P : Permission>(
   {
     // wait until user granted permission
     // we intentionally call it again and again to force a refresh
-    while (!permissionManager.permissionState(listOf(key)).first())
+    while (!listOf(key).permissionState().first())
       delay(100)
   }
 )
