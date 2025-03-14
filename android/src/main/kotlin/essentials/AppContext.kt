@@ -10,4 +10,8 @@ import injekt.*
 
 @Tag typealias AppContext = Context
 
-@Provide fun appContext(app: Application): AppContext = app
+@Provide object AppContextProviders {
+  @Provide fun appContext(app: Application): @Service<AppScope> AppContext = app
+}
+
+fun appContext(scope: Scope<*> = inject): AppContext = service()

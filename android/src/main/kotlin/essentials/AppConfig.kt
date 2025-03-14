@@ -19,7 +19,7 @@ data class AppConfig(
   val deviceManufacturer: String
 ) {
   @Provide companion object {
-    @Provide fun androidAppConfig(appContext: AppContext): @Scoped<AppScope> AppConfig {
+    @Provide fun androidAppConfig(appContext: AppContext): @ScopedService<AppScope> AppConfig {
       val appInfo = appContext.applicationInfo
       val packageInfo = appContext.packageManager
         .getPackageInfo(appInfo.packageName, 0)
@@ -36,3 +36,5 @@ data class AppConfig(
     }
   }
 }
+
+fun appConfig(scope: Scope<*> = inject): AppConfig = service()

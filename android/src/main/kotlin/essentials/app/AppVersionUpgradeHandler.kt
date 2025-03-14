@@ -19,23 +19,22 @@ data class AppVersionUpgradeParams(val lastAppVersion: Int?, val appVersion: Int
   get() = emptyList<suspend (AppVersionUpgradeParams) -> AppVersionUpgradeResult>()
 
 @Provide @Composable fun AppVersionUpgradeHandler(
-  appConfig: AppConfig,
   handlers: () -> List<suspend (AppVersionUpgradeParams) -> AppVersionUpgradeResult>,
-  logger: Logger,
-  preferencesStore: DataStore<Preferences>
+  preferencesStore: DataStore<Preferences>,
+  scope: Scope<*> = inject
 ): ScopeContent<AppScope> {
   LaunchedEffect(true) {
     val lastAppVersion = preferencesStore.data.first()[LastAppVersionPrefKey]
 
     if (lastAppVersion == null ||
-      appConfig.versionCode <= lastAppVersion) return@LaunchedEffect
+      appConfig().versionCode <= lastAppVersion) return@LaunchedEffect
 
-    logger.d { "upgrade from app version $lastAppVersion to ${appConfig.versionCode}" }
+    d { "upgrade from app version $lastAppVersion to ${appConfig().versionCode}" }
 
-    val params = AppVersionUpgradeParams(lastAppVersion, appConfig.versionCode)
+    val params = AppVersionUpgradeParams(lastAppVersion, appConfig().versionCode)
     handlers().parMap { it(params) }
 
-    preferencesStore.edit { it[LastAppVersionPrefKey] = appConfig.versionCode }
+    preferencesStore.edit { it[LastAppVersionPrefKey] = appConfig().versionCode }
   }
 }
 

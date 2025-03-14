@@ -13,6 +13,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.*
 import arrow.fx.coroutines.*
+import essentials.Scope
 import essentials.billing.*
 import essentials.compose.*
 import essentials.resource.*
@@ -28,9 +29,8 @@ class DonationScreen(
 
 @Provide @Composable fun DonationUi(
   billingManager: BillingManager,
-  navigator: Navigator,
   screen: DonationScreen,
-  showToast: showToast,
+  scope: Scope<*> = inject
 ): Ui<DonationScreen> {
   val skus by produceScopedState(Resource.Idle()) {
     resourceFlow {
@@ -51,7 +51,7 @@ class DonationScreen(
   }
 
   EsModalBottomSheet(
-    onDismissRequest = action { navigator.pop(screen, null) }
+    onDismissRequest = action { navigator().pop(screen, null) }
   ) {
     skus.getOrNull()?.fastForEach { donation ->
       EsListItem(

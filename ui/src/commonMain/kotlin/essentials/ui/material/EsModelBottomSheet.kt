@@ -12,7 +12,7 @@ import essentials.ui.navigation.*
 
 @Composable fun EsModalBottomSheet(
   onDismissRequest: () -> Unit = run {
-    val navigator = LocalScope.current.navigator
+    val navigator = navigator(LocalScope.current)
     action { navigator.popTop() }
   },
   modifier: Modifier = Modifier,

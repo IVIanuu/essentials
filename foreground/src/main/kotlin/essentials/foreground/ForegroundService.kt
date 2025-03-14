@@ -22,12 +22,7 @@ import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
 @Stable @Provide @AndroidComponent class ForegroundService(
-  private val appConfig: AppConfig,
-  private val foregroundManager: ForegroundManager,
-  private val notificationFactory: NotificationFactory,
-  private val notificationManager: @SystemService NotificationManager,
-  private val logger: Logger,
-  private val scope: ScopedCoroutineScope<AppScope>,
+  private val scope: ScopedCoroutineScope<AppScope> = inject,
   private val foregroundScopeFactory: () -> Scope<ForegroundScope>
 ) : Service() {
   private var job: Job? = null
@@ -35,10 +30,11 @@ import kotlin.time.Duration.Companion.seconds
 
   override fun onCreate() {
     super.onCreate()
-    logger.d { "foreground service started" }
+    d { "foreground service started" }
 
+    val foregroundServiceState = service<ForegroundServiceState>()
     job = scope.launchMolecule {
-      logger.d { "compose main body" }
+      d { "compose main body" }
 
       DisposableEffect(true) {
         val foregroundScope = foregroundScopeFactory()
@@ -46,30 +42,30 @@ import kotlin.time.Duration.Companion.seconds
       }
 
       val defaultState = remember {
-        ForegroundManager.ForegroundState(
+        ForegroundState(
           "default_foreground_id",
           true
         ) {
-          notificationFactory.create(
+          /*buildNotification(
             "default_foreground",
             "Foreground",
             NotificationManager.IMPORTANCE_LOW
           ) {
-            setContentTitle("${appConfig.appName} is running!")
+            setContentTitle("${appConfig().appName} is running!")
             setSmallIcon(R.drawable.ic_sync)
             setContentIntent(uiLauncherIntent())
-          }
+          }*/ TODO()
         }
       }
 
       val currentStates by remember {
         derivedStateOf {
-          if (foregroundManager.states.isEmpty() && !needsStartForegroundCall) emptyList()
+          if (foregroundServiceState.states.isEmpty() && !needsStartForegroundCall) emptyList()
           else {
             val statesWithNotification =
-              foregroundManager.states.count { it.notification != null }
-            if (statesWithNotification > 0) foregroundManager.states
-            else foregroundManager.states + defaultState
+              foregroundServiceState.states.count { it.notification != null }
+            if (statesWithNotification > 0) foregroundServiceState.states
+            else foregroundServiceState.states + defaultState
           }
         }
       }
@@ -88,7 +84,7 @@ import kotlin.time.Duration.Companion.seconds
         LaunchedEffect(removeServiceNotification) {
           delay(1.seconds)
 
-          logger.d { "stop foreground -> remove notification $removeServiceNotification" }
+          d { "stop foreground -> remove notification $removeServiceNotification" }
           stopForeground(
             if (removeServiceNotification) STOP_FOREGROUND_REMOVE
             else STOP_FOREGROUND_DETACH
@@ -96,13 +92,13 @@ import kotlin.time.Duration.Companion.seconds
 
           onCancel(
             fa = {
-              logger.d { "dispatch delayed service stop" }
+              d { "dispatch delayed service stop" }
               delay(6.seconds)
 
-              logger.d { "stop self" }
+              d { "stop self" }
               stopSelf()
             }
-          ) { logger.d { "cancel stopping" } }
+          ) { d { "cancel stopping" } }
         }
       } else {
         currentStates.fastForEach { state ->
@@ -119,13 +115,13 @@ import kotlin.time.Duration.Companion.seconds
   }
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    logger.d { "on start command $intent" }
+    d { "on start command $intent" }
     needsStartForegroundCall = true
     return super.onStartCommand(intent, flags, startId)
   }
 
   @Composable private fun ForegroundNotification(
-    state: ForegroundManager.ForegroundState,
+    state: ForegroundState,
     shouldStartForeground: () -> Boolean,
     onStartForegroundCalled: () -> Unit
   ) {
@@ -135,15 +131,15 @@ import kotlin.time.Duration.Companion.seconds
       DisposableEffect(notificationId) {
         onDispose {
           if (state.removeNotification) {
-            logger.d { "remove notification $notificationId" }
-            notificationManager.cancel(notificationId)
+            d { "remove notification $notificationId" }
+            systemService<NotificationManager>().cancel(notificationId)
           }
         }
       }
 
       if (shouldStartForeground())
         DisposableEffect(true) {
-          logger.d { "${state.id} call start foreground" }
+          d { "${state.id} call start foreground" }
           startForeground(notificationId, notification)
           onStartForegroundCalled()
           onDispose {
@@ -151,8 +147,8 @@ import kotlin.time.Duration.Companion.seconds
         }
 
       DisposableEffect(notification) {
-        logger.d { "${state.id} update notification" }
-        notificationManager.notify(notificationId, notification)
+        d { "${state.id} update notification" }
+        systemService<NotificationManager>().notify(notificationId, notification)
         onDispose {
         }
       }
@@ -160,7 +156,7 @@ import kotlin.time.Duration.Companion.seconds
   }
 
   override fun onDestroy() {
-    logger.d { "stop foreground service" }
+    d { "stop foreground service" }
     job?.cancel()
     super.onDestroy()
   }

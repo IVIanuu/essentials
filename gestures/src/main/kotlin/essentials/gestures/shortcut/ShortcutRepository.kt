@@ -20,15 +20,10 @@ import kotlinx.coroutines.flow.*
 
 data class Shortcut(val intent: Intent, val name: String, val icon: Drawable)
 
-@Tag typealias getShortcutsResult = List<Shortcut>
-typealias getShortcuts = suspend () -> getShortcutsResult
-
-@Provide suspend fun getShortcuts(
-  coroutineContexts: CoroutineContexts,
-  packageManager: PackageManager
-): getShortcutsResult = withContext(coroutineContexts.io) {
+suspend fun getShortcuts(scope: Scope<*> = inject): List<Shortcut> =
+  withContext(coroutineContexts().io) {
   val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
-  packageManager.queryIntentActivities(shortcutsIntent, 0)
+  packageManager().queryIntentActivities(shortcutsIntent, 0)
     .parMap { resolveInfo ->
       catch {
         Shortcut(
@@ -39,8 +34,8 @@ typealias getShortcuts = suspend () -> getShortcutsResult
               resolveInfo.activityInfo.name
             )
           },
-          name = resolveInfo.loadLabel(packageManager).toString(),
-          icon = resolveInfo.loadIcon(packageManager)
+          name = resolveInfo.loadLabel(packageManager()).toString(),
+          icon = resolveInfo.loadIcon(packageManager())
         )
       }.getOrNull()
     }
@@ -48,15 +43,10 @@ typealias getShortcuts = suspend () -> getShortcutsResult
     .sortedBy { it.name }
 }
 
-@Tag typealias extractShortcutResult = Shortcut
-typealias extractShortcut = suspend (Intent) -> extractShortcutResult
-
-@Provide suspend fun extractShortcut(
+suspend fun extractShortcut(
   shortcutRequestResult: Intent,
-  appContext: AppContext,
-  coroutineContexts: CoroutineContexts,
-  packageManager: PackageManager
-): extractShortcutResult = withContext(coroutineContexts.io) {
+  scope: Scope<*> = inject
+): Shortcut = withContext(coroutineContexts().io) {
   val intent =
     shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
   val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!
@@ -66,10 +56,10 @@ typealias extractShortcut = suspend (Intent) -> extractShortcutResult
     shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
 
   @Suppress("DEPRECATION") val icon = when {
-    bitmapIcon != null -> bitmapIcon.toDrawable(appContext.resources)
+    bitmapIcon != null -> bitmapIcon.toDrawable(appContext().resources)
     iconResource != null -> {
       val resources =
-        packageManager.getResourcesForApplication(iconResource.packageName)
+        packageManager().getResourcesForApplication(iconResource.packageName)
       val id =
         resources.getIdentifier(iconResource.resourceName, null, null)
       resources.getDrawable(id)

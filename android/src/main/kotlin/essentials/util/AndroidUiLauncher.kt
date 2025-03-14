@@ -14,21 +14,17 @@ import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Provide fun androidUiLauncher(
-  appContext: AppContext,
-  appConfig: AppConfig,
-  appScope: Scope<AppScope>,
-  coroutineContexts: CoroutineContexts,
-  packageManager: PackageManager,
-) = UiLauncher {
-  withContext(coroutineContexts.main) {
-    val intent = packageManager.getLaunchIntentForPackage(appConfig.packageName)!!
-    appContext.startActivity(
+suspend fun launchUi(scope: Scope<*> = inject): Scope<UiScope> =
+  withContext(coroutineContexts().main) {
+    val intent = packageManager()
+      .getLaunchIntentForPackage(appConfig().packageName)!!
+    appContext().startActivity(
       intent.apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
       }
     )
 
-    appScope.scopeOf<UiScope>().first()
+    scope.scopeOf<UiScope>().first()
   }
-}
+
+@Provide fun androidUiLauncher(scope: Scope<*> = inject) = UiLauncher { launchUi() }

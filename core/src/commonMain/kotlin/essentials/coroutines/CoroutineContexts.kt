@@ -1,5 +1,8 @@
 package essentials.coroutines
 
+import essentials.AppScope
+import essentials.Scope
+import essentials.Service
 import injekt.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*
@@ -12,6 +15,10 @@ data class CoroutineContexts(
   constructor(coroutineContext: CoroutineContext) : this(coroutineContext, coroutineContext, coroutineContext)
 
   @Provide companion object {
-    @Provide val default = CoroutineContexts()
+    @Provide val default:
+        @Service<AppScope> CoroutineContexts = CoroutineContexts()
   }
 }
+
+fun coroutineContexts(scope: Scope<*> = inject): CoroutineContexts =
+  scope.service()

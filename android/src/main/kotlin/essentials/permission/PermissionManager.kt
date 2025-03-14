@@ -18,8 +18,7 @@ import kotlin.reflect.*
 
 @Stable @Provide class PermissionManager(
   private val uiLauncher: UiLauncher,
-  private val coroutineContexts: CoroutineContexts,
-  private val logger: Logger,
+  @property:Provide private val scope: Scope<*> = inject,
   private val permissions: Map<KClass<out Permission>, () -> Permission>,
   private val stateProviders: Map<KClass<out Permission>, suspend (Permission) -> PermissionState<Permission>>
 ) {
@@ -34,7 +33,7 @@ import kotlin.reflect.*
         permissionRefreshes
           .onStart<Any?> { emit(Unit) }
           .map {
-            withContext(coroutineContexts.io) {
+            withContext(coroutineContexts().io) {
               stateProvider(permission)
             }
           }
@@ -47,13 +46,13 @@ import kotlin.reflect.*
   }.filterNotNull()
 
   suspend fun ensurePermissions(permissions: List<KClass<out Permission>>): Boolean {
-    logger.d { "ensure permissions $permissions" }
+    d { "ensure permissions $permissions" }
 
     val result = permissions.fastAll { permissionState(listOf(it)).first() } || run {
-      uiLauncher.start().navigator.push(PermissionRequestScreen(permissions)) == true
+      navigator(uiLauncher.start()).push(PermissionRequestScreen(permissions)) == true
     }
 
-    logger.d { "ensure permissions result $permissions -> $result" }
+    d { "ensure permissions result $permissions -> $result" }
     return result
   }
 }

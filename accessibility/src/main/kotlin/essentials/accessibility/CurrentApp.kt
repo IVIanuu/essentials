@@ -12,11 +12,8 @@ import kotlinx.coroutines.flow.*
 
 @Tag typealias CurrentApp = String
 
-@Provide @Composable fun currentApp(
-  accessibilityEvents: Flow<AccessibilityEvent>,
-  logger: Logger
-): @ComposeIn<AppScope> CurrentApp? = produceState(nullOf()) {
-  accessibilityEvents
+@Provide @Composable fun currentApp(scope: Scope<*> = inject): @ComposeIn<AppScope> CurrentApp? = produceState(nullOf()) {
+  accessibilityEvents()
     .filter {
       it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
           it.isFullScreen &&
@@ -25,7 +22,7 @@ import kotlinx.coroutines.flow.*
           it.packageName != "android"
     }
     .map { it.packageName!! }
-    .onEach { logger.d { "current app changed $it" } }
+    .onEach { d { "current app changed $it" } }
     .collect { value = it }
 }.value
 

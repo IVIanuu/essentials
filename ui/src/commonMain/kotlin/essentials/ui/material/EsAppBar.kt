@@ -44,8 +44,8 @@ val LocalAppBarScrollBehaviorProvider = compositionLocalOf<@Composable () -> Top
 val LocalAppBarScrollBehavior = compositionLocalOf<TopAppBarScrollBehavior?> { null }
 
 @Composable fun BackPressButton() {
-  val navigator = catch { LocalScope.current.navigator }.getOrNull()
-  val screen = catch { LocalScope.current.screen }.getOrNull()
+  val navigator = catch { navigator(LocalScope.current) }.getOrNull()
+  val screen = catch { screen(LocalScope.current) }.getOrNull()
   val canGoBack = remember {
     navigator?.backStack?.indexOf(screen)?.let { it > 0 } == true
   }

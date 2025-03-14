@@ -9,6 +9,7 @@ import android.content.*
 import android.os.*
 import androidx.compose.material3.*
 import androidx.compose.ui.res.*
+import essentials.Scope
 import essentials.accessibility.*
 import essentials.gestures.R
 import essentials.gestures.action.*
@@ -24,16 +25,12 @@ import injekt.*
       icon = { Icon(painterResource(R.drawable.ic_action_home), null) }
     )
 
-  @Provide suspend fun execute(
-    closeSystemDialogs: closeSystemDialogs,
-    performAction: performGlobalAccessibilityAction,
-    sendIntent: sendActionIntent,
-  ): ActionExecutorResult<HomeActionId> {
+  @Provide suspend fun execute(scope: Scope<*> = inject): ActionExecutorResult<HomeActionId> {
     if (!needsHomeIntentWorkaround) {
-      performAction(GLOBAL_ACTION_HOME)
+      performGlobalAccessibilityAction(GLOBAL_ACTION_HOME)
     } else {
       closeSystemDialogs()
-      sendIntent(
+      sendActionIntent(
         Intent(Intent.ACTION_MAIN).apply {
           addCategory(
             Intent.CATEGORY_HOME

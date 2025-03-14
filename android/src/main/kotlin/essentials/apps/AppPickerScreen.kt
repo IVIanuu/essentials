@@ -12,6 +12,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.*
 import coil.compose.*
+import essentials.Scope
 import essentials.compose.*
 import essentials.coroutines.*
 import essentials.resource.*
@@ -27,10 +28,8 @@ class AppPickerScreen(
 ) : Screen<AppInfo>
 
 @Provide @Composable fun AppPickerUi(
-  coroutineContexts: CoroutineContexts,
-  getInstalledApps: suspend () -> InstalledApps,
-  navigator: Navigator,
-  screen: AppPickerScreen
+  screen: AppPickerScreen,
+  scope: Scope<*> = inject
 ): Ui<AppPickerScreen> {
   EsScaffold(
     topBar = { EsAppBar { Text(screen.title ?: "Pick an app") } }
@@ -43,7 +42,7 @@ class AppPickerScreen(
               .fastFilter { screen.appPredicate.test(it) }
           )
         }
-          .flowOn(coroutineContexts.computation)
+          .flowOn(coroutineContexts().computation)
           .collect { value = it }
       }.value
     ) { apps ->
@@ -51,7 +50,7 @@ class AppPickerScreen(
         items(apps) { app ->
           EsListItem(
             modifier = Modifier.animateItem(),
-            onClick = scopedAction { navigator.pop(screen, app) },
+            onClick = scopedAction { navigator().pop(screen, app) },
             headlineContent = { Text(app.appName) },
             leadingContent = {
               AsyncImage(

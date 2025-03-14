@@ -8,6 +8,7 @@ import android.content.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import essentials.Scope
 import essentials.gestures.action.*
 import injekt.*
 
@@ -20,9 +21,9 @@ import injekt.*
       icon = { Icon(Icons.Default.Search, null) }
     )
 
-  @Provide fun execute(sendActionMediaIntent: sendActionIntent):
+  @Provide suspend fun execute(scope: Scope<*> = inject):
     ActionExecutorResult<SearchActionId> {
-      sendActionMediaIntent(
+      sendActionIntent(
         Intent(Intent.ACTION_MAIN).apply {
           component = ComponentName(
             "com.google.android.googlequicksearchbox",

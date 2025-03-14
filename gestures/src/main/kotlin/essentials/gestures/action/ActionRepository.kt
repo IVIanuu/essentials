@@ -65,44 +65,39 @@ typealias executeAction = suspend (String) -> executeActionResult
   actionsExecutors: Map<String, suspend () -> ActionExecutorResult<*>>,
   actionFactories: List<() -> ActionFactory>,
   actionRepository: ActionRepository,
-  appConfig: AppConfig,
-  closeSystemDialogs: closeSystemDialogs,
-  coroutineContexts: CoroutineContexts,
-  deviceScreenManager: DeviceScreenManager,
-  logger: Logger,
   permissionManager: PermissionManager,
-  showToast: showToast
-): executeActionResult = withContext(coroutineContexts.computation) {
+  scope: Scope<*> = inject
+): executeActionResult = withContext(coroutineContexts().computation) {
   catch {
-    logger.d { "execute $id" }
+    d { "execute $id" }
     val action = actionRepository.getAction(id)
 
     // check permissions
     if (!permissionManager.permissionState(action.permissions).first()) {
-      logger.d { "didn't had permissions for $id ${action.permissions}" }
-      deviceScreenManager.unlockScreen()
+      d { "didn't had permissions for $id ${action.permissions}" }
+      unlockScreen()
       permissionManager.ensurePermissions(action.permissions)
       return@catch false
     }
 
-    if (action.turnScreenOn && !deviceScreenManager.turnScreenOn()) {
-      logger.d { "couldn't turn screen on for $id" }
+    if (action.turnScreenOn && !turnScreenOn()) {
+      d { "couldn't turn screen on for $id" }
       return@catch false
     }
 
     // unlock screen
-    if (action.unlockScreen && !deviceScreenManager.unlockScreen()) {
-      logger.d { "couldn't unlock screen for $id" }
+    if (action.unlockScreen && !unlockScreen()) {
+      d { "couldn't unlock screen for $id" }
       return@catch false
     }
 
     // close system dialogs
     if (action.closeSystemDialogs &&
-      (appConfig.sdk < 31 ||
+      (appConfig().sdk < 31 ||
           permissionManager.permissionState(listOf(ActionAccessibilityPermission::class)).first()))
       closeSystemDialogs()
 
-    logger.d { "fire $id" }
+    d { "fire $id" }
 
     // fire
     catch {

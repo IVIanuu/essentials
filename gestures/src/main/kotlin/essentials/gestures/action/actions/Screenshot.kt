@@ -8,6 +8,7 @@ import android.accessibilityservice.AccessibilityService.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import essentials.Scope
 import essentials.accessibility.*
 import essentials.gestures.action.*
 import injekt.*
@@ -22,10 +23,8 @@ import kotlinx.coroutines.*
       permissions = listOf(ActionAccessibilityPermission::class)
     )
 
-  @Provide suspend fun execute(
-    performAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<ScreenshotActionId> {
+  @Provide suspend fun execute(scope: Scope<*> = inject): ActionExecutorResult<ScreenshotActionId> {
     delay(500)
-    performAction(GLOBAL_ACTION_TAKE_SCREENSHOT)
+    performGlobalAccessibilityAction(GLOBAL_ACTION_TAKE_SCREENSHOT)
   }
 }

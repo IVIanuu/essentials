@@ -12,52 +12,50 @@ import essentials.*
 import essentials.logging.*
 import injekt.*
 
-@Stable @Provide @Scoped<AppScope> class ForegroundManager(
-  private val appContext: AppContext,
-  private val logger: Logger
+@Composable fun Foreground(
+  id: String,
+  removeNotification: Boolean = true,
+  scope: Scope<*> = inject,
+  notification: (@Composable () -> Notification)? = null,
 ) {
-  internal var states by mutableStateOf(emptyList<ForegroundState>())
-    private set
+  val serviceState = service<ForegroundServiceState>()
+  key(id) {
+    val state = remember {
+      ForegroundState(id, removeNotification, notification)
+    }
+    state.removeNotification = removeNotification
+    state.notification = notification
 
-  @Composable fun Foreground(
-    id: String,
-    removeNotification: Boolean = true,
-    notification: (@Composable () -> Notification)? = null,
-  ) {
-    key(id) {
-      val state = remember {
-        ForegroundState(id, removeNotification, notification)
-      }
-      state.removeNotification = removeNotification
-      state.notification = notification
-
-      DisposableEffect(state) {
-        states += state
-        logger.d { "add state $id $states" }
-        onDispose {
-          states -= state
-          logger.d { "remove state $id $states" }
-        }
-      }
-
-      LaunchedEffect(true) {
-        logger.d { "start foreground service $id $states" }
-        ContextCompat.startForegroundService(
-          appContext,
-          Intent(appContext, ForegroundService::class.java)
-        )
+    DisposableEffect(state) {
+      serviceState.states += state
+      d { "add state $id ${serviceState.states}" }
+      onDispose {
+        serviceState.states -= state
+        d { "remove state $id ${serviceState.states}" }
       }
     }
-  }
 
-  @Stable internal class ForegroundState(
-    val id: String,
-    removeNotification: Boolean,
-    notification: (@Composable () -> Notification)?,
-  ) {
-    var removeNotification by mutableStateOf(removeNotification)
-    var notification by mutableStateOf(notification)
+    LaunchedEffect(true) {
+      d { "start foreground service $id ${serviceState.states}" }
+      ContextCompat.startForegroundService(
+        appContext(),
+        Intent(appContext(), ForegroundService::class.java)
+      )
+    }
   }
+}
+
+@Provide @ScopedService<AppScope> class ForegroundServiceState {
+  internal var states by mutableStateOf(emptyList<ForegroundState>())
+}
+
+@Stable internal class ForegroundState(
+  val id: String,
+  removeNotification: Boolean,
+  notification: (@Composable () -> Notification)?,
+) {
+  var removeNotification by mutableStateOf(removeNotification)
+  var notification by mutableStateOf(notification)
 }
 
 data object ForegroundScope

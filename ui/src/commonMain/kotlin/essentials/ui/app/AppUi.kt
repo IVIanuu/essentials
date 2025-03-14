@@ -20,7 +20,7 @@ import injekt.*
 
 @Provide @Composable fun DecoratedAppUi(
   records: List<ExtensionPointRecord<AppUiDecorator>>,
-  logger: Logger,
+  scope: Scope<*> = inject,
   content: @Composable () -> Unit
 ): DecoratedAppUi {
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
@@ -29,14 +29,14 @@ import injekt.*
       .fastFold({ it() }) { acc, record ->
         { content ->
           acc {
-            logger.d { "decorate app ui ${record.key.qualifiedName}" }
+            d { "decorate app ui ${record.key.qualifiedName}" }
             record.instance.DecoratedContent(content)
           }
         }
       }
   }
 
-  logger.d { "decorate app ui $content with combined $combinedDecorator" }
+  d { "decorate app ui $content with combined $combinedDecorator" }
 
   combinedDecorator(content)
 }

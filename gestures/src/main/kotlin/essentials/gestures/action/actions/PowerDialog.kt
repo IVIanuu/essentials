@@ -8,6 +8,7 @@ import android.accessibilityservice.AccessibilityService.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import essentials.Scope
 import essentials.accessibility.*
 import essentials.gestures.action.*
 import injekt.*
@@ -20,9 +21,7 @@ import injekt.*
     icon = { Icon(Icons.Default.PowerSettingsNew, null) }
   )
 
-  @Provide suspend fun execute(
-    performAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<PowerDialogActionId> {
-    performAction(GLOBAL_ACTION_POWER_DIALOG)
+  @Provide suspend fun execute(scope: Scope<*> = inject): ActionExecutorResult<PowerDialogActionId> {
+    performGlobalAccessibilityAction(GLOBAL_ACTION_POWER_DIALOG)
   }
 }

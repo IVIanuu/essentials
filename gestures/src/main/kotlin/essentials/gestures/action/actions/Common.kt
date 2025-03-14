@@ -20,19 +20,15 @@ import injekt.*
 
 val accessibilityActionPermissions = listOf(ActionAccessibilityPermission::class)
 
-@Tag typealias sendActionIntentResult = Unit
-typealias sendActionIntent = (Intent, Bundle?) -> sendActionIntentResult
-
-@Provide fun sendActionIntent(
+suspend fun sendActionIntent(
   intent: Intent,
   options: Bundle?,
-  appContext: AppContext,
-  showToast: showToast
-): sendActionIntentResult {
+  scope: Scope<*> = inject
+) {
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   catch {
     PendingIntent.getActivity(
-      appContext,
+      appContext(),
       1000,
       intent,
       PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
@@ -44,17 +40,10 @@ typealias sendActionIntent = (Intent, Bundle?) -> sendActionIntentResult
   }
 }
 
-@Tag typealias closeSystemDialogsResult = Result<Unit, Throwable>
-typealias closeSystemDialogs = suspend () -> closeSystemDialogsResult
-
 @SuppressLint("MissingPermission", "InlinedApi")
-@Provide suspend fun closeSystemDialogs(
-  appConfig: AppConfig,
-  appContext: AppContext,
-  performAccessibilityAction: performGlobalAccessibilityAction
-): closeSystemDialogsResult = catch {
-  if (appConfig.sdk >= 31)
-    performAccessibilityAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
+suspend fun closeSystemDialogs(scope: Scope<*> = inject) = catch {
+  if (appConfig().sdk >= 31)
+    performGlobalAccessibilityAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
   else
-    appContext.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+    appContext().sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
 }

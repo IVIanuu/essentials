@@ -196,7 +196,7 @@ fun interface ScreenTransitionDecorator : ScreenDecorator {
   @Composable override fun DecoratedContent(
     content: @Composable (() -> Unit)
   ) {
-    val screen = LocalScope.current.screen
+    val screen = screen(LocalScope.current)
     if (screen is OverlayScreen<*>) {
       content()
       return

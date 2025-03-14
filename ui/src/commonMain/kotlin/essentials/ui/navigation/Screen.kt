@@ -20,7 +20,7 @@ interface OverlayScreen<T> : Screen<T>
 
 interface CriticalUserFlowScreen<T> : Screen<T>
 
-val Scope<*>.screen: Screen<*> get() = service()
+fun screen(scope: Scope<*> = inject): Screen<*> = service()
 
 typealias ScreenTransitionSpec = AnimatedContentTransitionScope<Screen<*>>.() -> ContentTransform
 
@@ -41,7 +41,7 @@ class ScreenScope {
 
 @Stable @Provide class DecorateScreen(
   private val records: List<ExtensionPointRecord<ScreenDecorator>>,
-  private val logger: Logger
+  @property:Provide private val scope: Scope<*>
 ) {
   @Composable fun DecoratedContent(content: @Composable () -> Unit) {
     val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
@@ -50,14 +50,14 @@ class ScreenScope {
         .fastFold({ it() }) { acc, record ->
           { content ->
             acc {
-              logger.d { "decorate screen with ${record.key.qualifiedName}" }
+              d { "decorate screen with ${record.key.qualifiedName}" }
               record.instance.DecoratedContent(content)
             }
           }
         }
     }
 
-    logger.d { "decorate screen $content with combined $combinedDecorator" }
+    d { "decorate screen $content with combined $combinedDecorator" }
 
     combinedDecorator(content)
   }

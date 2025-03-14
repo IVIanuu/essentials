@@ -33,7 +33,7 @@ class DecoratorsScreen : Screen<Unit>
 
 @Provide val sampleListDecorator = ListDecorator {
   item(null) {
-    val screen = catch { LocalScope.current }.getOrNull()?.screen
+    val screen = catch { LocalScope.current }.getOrNull()?.let { screen(it) }
     if (screen is DecoratorsScreen)
       Text("Sample decorator before content $screen")
   }
@@ -41,14 +41,14 @@ class DecoratorsScreen : Screen<Unit>
   content()
 
   item(null) {
-    val screen = catch { LocalScope.current }.getOrNull()?.screen
+    val screen = catch { LocalScope.current }.getOrNull()?.let { screen(it) }
     if (screen is DecoratorsScreen)
       Text("Sample decorator after content $screen")
   }
 }
 
 @Provide val sampleKeyUiDecorator = ScreenDecorator decorator@ { content ->
-  val screen = LocalScope.current.screen
+  val screen = screen(LocalScope.current)
   if (screen !is DecoratorsScreen) {
     content()
     return@decorator

@@ -14,14 +14,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import androidx.core.graphics.drawable.*
+import essentials.Scope
 import essentials.gestures.action.*
 import essentials.gestures.action.ui.*
 import essentials.gestures.shortcut.*
 import essentials.ui.navigation.*
 import injekt.*
+import injekt.common.Scoped
 import java.io.*
 
-@Provide class ShortcutActionFactory(private val sendActionIntent: sendActionIntent) : ActionFactory {
+@Provide class ShortcutActionFactory(private val scope: Scope<*>) : ActionFactory {
   override suspend fun createAction(id: String): Action<*>? {
     if (!id.startsWith(BASE_ID)) return null
 

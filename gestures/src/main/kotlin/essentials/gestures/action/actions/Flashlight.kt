@@ -21,16 +21,13 @@ import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
 @Provide object FlashlightActionId : ActionId("flashlight") {
-  @Provide fun action(
-    cameraManager: @SystemService CameraManager,
-    coroutineContexts: CoroutineContexts
-  ) = Action(
+  @Provide fun action(scope: Scope<*> = inject) = Action(
     id = FlashlightActionId,
     title = "Flashlight",
     icon = {
       Icon(
         if (
-          cameraManager.flashlightState(coroutineContexts)
+          flashlightState()
             .collectAsState(false).value) Icons.Default.FlashlightOn
         else Icons.Default.FlashlightOff,
         null
@@ -38,14 +35,11 @@ import kotlinx.coroutines.flow.*
     }
   )
 
-  @Provide suspend fun execute(
-    cameraManager: @SystemService CameraManager,
-    coroutineContexts: CoroutineContexts,
-    showToast: showToast
-  ): ActionExecutorResult<FlashlightActionId> {
-    withContext(coroutineContexts.main) {
-      val state = cameraManager.flashlightState(coroutineContexts).first()
+  @Provide suspend fun execute(scope: Scope<*> = inject): ActionExecutorResult<FlashlightActionId> {
+    withContext(coroutineContexts().main) {
+      val state = flashlightState().first()
       catch {
+        val cameraManager = systemService<CameraManager>()
         val cameraId = cameraManager.cameraIdList[0]
         cameraManager.setTorchMode(cameraId, !state)
       }.onFailure {
@@ -55,15 +49,16 @@ import kotlinx.coroutines.flow.*
     }
   }
 
-  private fun CameraManager.flashlightState(coroutineContexts: CoroutineContexts) = callbackFlow {
-    val rearCameraId = cameraIdList[0]
+  private fun flashlightState(scope: Scope<*> = inject) = callbackFlow {
+    val cameraManager = systemService<CameraManager>()
+    val rearCameraId = cameraManager.cameraIdList[0]
     val callback = object : TorchCallback() {
       override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
         if (rearCameraId == cameraId)
           trySend(enabled)
       }
     }
-    registerTorchCallback(callback ,null)
-    awaitClose { unregisterTorchCallback(callback) }
-  }.flowOn(coroutineContexts.main)
+    cameraManager.registerTorchCallback(callback ,null)
+    awaitClose { cameraManager.unregisterTorchCallback(callback) }
+  }.flowOn(coroutineContexts().main)
 }

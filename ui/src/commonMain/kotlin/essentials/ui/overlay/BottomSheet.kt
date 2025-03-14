@@ -26,7 +26,7 @@ import injekt.*
   enabled: Boolean = true,
   menuContent: @Composable BottomSheetScope.() -> Unit
 ) {
-  val navigator = LocalScope.current.navigator
+  val navigator = navigator(LocalScope.current)
   Box(
     modifier = modifier
       .minimumInteractiveComponentSize()

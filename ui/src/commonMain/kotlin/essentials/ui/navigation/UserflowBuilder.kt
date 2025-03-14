@@ -9,6 +9,7 @@ import androidx.compose.ui.util.*
 import essentials.*
 import essentials.logging.*
 import essentials.ui.*
+import essentials.ui.navigation.navigator
 import injekt.*
 
 fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
@@ -17,18 +18,17 @@ fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
 
 @Provide @Composable fun UserflowBuilder(
   records: List<ExtensionPointRecord<UserflowBuilder>>,
-  logger: Logger,
-  navigator: Navigator
+  scope: Scope<*> = inject
 ): ScopeContent<UiScope> {
   LaunchedEffect(true) {
     val userflowScreens = records
       .sortedWithLoadingOrder()
       .fastFlatMap { it.instance.createUserflow() }
 
-    logger.d { "Userflow -> $userflowScreens" }
+    d { "Userflow -> $userflowScreens" }
 
     if (userflowScreens.isEmpty()) return@LaunchedEffect
 
-    navigator.setBackStack(backStack = navigator.backStack + userflowScreens)
+    navigator().setBackStack(backStack = navigator().backStack + userflowScreens)
   }
 }

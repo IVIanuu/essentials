@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import essentials.Scope
 import essentials.foreground.*
 import essentials.sample.R
 import essentials.ui.material.*
@@ -23,21 +24,18 @@ import kotlinx.coroutines.flow.*
 
 class ForegroundScreen : Screen<Unit>
 
-@Provide @Composable fun ForegroundUi(
-  foregroundManager: ForegroundManager,
-  notificationFactory: NotificationFactory
-): Ui<ForegroundScreen> {
+@Provide @Composable fun ForegroundUi(scope: Scope<*> = inject): Ui<ForegroundScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Foreground") } }) {
     var isEnabled by remember { mutableStateOf(false) }
     var isSecondEnabled by remember { mutableStateOf(false) }
     var removeNotification by remember { mutableStateOf(true) }
 
     if (isEnabled)
-      foregroundManager.Foreground(
+      Foreground(
         id = "foreground",
         removeNotification = removeNotification
       ) {
-        notificationFactory.create(
+        /*buildNotification(
           "foreground",
           "Foreground",
           NotificationManager.IMPORTANCE_LOW
@@ -53,15 +51,15 @@ class ForegroundScreen : Screen<Unit>
             }.value
           }")
           setContentIntent(uiLauncherIntent())
-        }
+        }*/ TODO()
       }
 
     if (isSecondEnabled)
-      foregroundManager.Foreground(
+      Foreground(
         id = "foreground2",
         removeNotification = removeNotification
       ) {
-        notificationFactory.create(
+        /*buildNotification(
           "foreground2",
           "Foreground2",
           NotificationManager.IMPORTANCE_LOW
@@ -77,7 +75,7 @@ class ForegroundScreen : Screen<Unit>
             }.value
           }")
           setContentIntent(uiLauncherIntent())
-        }
+        }*/ TODO()
       }
 
     Column(

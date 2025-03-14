@@ -10,18 +10,10 @@ import essentials.coroutines.*
 import injekt.*
 import kotlinx.coroutines.*
 
-@Tag typealias showToastResult = Unit
-typealias showToast = (String) -> showToastResult
-
-@Provide fun showToast(
-  message: String,
-  appContext: AppContext,
-  coroutineContexts: CoroutineContexts,
-  scope: ScopedCoroutineScope<AppScope>
-): showToastResult {
-  scope.launch(coroutineContexts.main) {
+fun showToast(message: String, scope: Scope<*> = inject) {
+  coroutineScope().launch(coroutineContexts().main) {
     Toast.makeText(
-      appContext,
+      appContext(),
       message,
       Toast.LENGTH_SHORT
     ).show()

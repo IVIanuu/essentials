@@ -25,9 +25,8 @@ class ActionsScreen : Screen<Unit>
 
 @Provide @Composable fun ActionsUi(
   executeAction: executeAction,
-  navigator: Navigator,
   repository: ActionRepository,
-  showToast: showToast
+  scope: Scope<*> = inject
 ): Ui<ActionsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Actions") } }) {
     Column(
@@ -37,7 +36,7 @@ class ActionsScreen : Screen<Unit>
     ) {
       Button(
         onClick = scopedAction {
-          val actionId = navigator.push(ActionPickerScreen())
+          val actionId = navigator().push(ActionPickerScreen())
             .safeAs<ActionPickerScreen.Result.Action>()
             ?.actionId ?: return@scopedAction
 
@@ -53,7 +52,7 @@ class ActionsScreen : Screen<Unit>
 
       Button(
         onClick = scopedAction {
-          val actionId = navigator.push(ActionPickerScreen())
+          val actionId = navigator().push(ActionPickerScreen())
             .safeAs<ActionPickerScreen.Result.Action>()
             ?.actionId ?: return@scopedAction
 

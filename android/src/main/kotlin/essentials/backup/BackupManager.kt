@@ -23,39 +23,33 @@ import java.io.*
 import java.util.*
 import java.util.zip.*
 
-@Tag typealias createBackupResult = Unit
-typealias createBackup = suspend () -> createBackupResult
+@Provide @ScopedService<AppScope> data class BackupDependencies(
+  val backupDestinationDir: BackupDestinationDir,
+  val backupFiles: List<BackupFile>,
+  val dataDir: DataDir
+)
 
-@Provide suspend fun createBackup(
-  appContext: AppContext,
-  backupDestinationDir: BackupDestinationDir,
-  backupFiles: List<BackupFile>,
-  appConfig: AppConfig,
-  coroutineContexts: CoroutineContexts,
-  dataDir: DataDir,
-  logger: Logger,
-  navigator: Navigator,
-  packageManager: PackageManager
-): createBackupResult = withContext(coroutineContexts.io) {
+suspend fun createBackup(scope: Scope<*> = inject) = withContext(coroutineContexts().io) {
+  val dependencies = service<BackupDependencies>()
   val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
   val backupFileName =
-    "${appConfig.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
+    "${appConfig().packageName.replace(".", "_")}_${dateFormat.format(Date())}"
 
-  val backupFile = backupDestinationDir.resolve("$backupFileName.zip")
+  val backupFile = dependencies.backupDestinationDir.resolve("$backupFileName.zip")
     .also {
       it.parentFile.mkdirs()
       it.createNewFile()
     }
 
   ZipOutputStream(backupFile.outputStream()).use { zipOutputStream ->
-    backupFiles
+    dependencies.backupFiles
       .flatMap { it.walkTopDown() }
       .fastFilter { !it.isDirectory }
       .fastFilter { it.absolutePath !in BACKUP_BLACKLIST }
       .fastFilter { it.exists() }
       .fastForEach { file ->
-        logger.d { "backup file $file" }
-        val entry = ZipEntry(file.relativeTo(dataDir).toString())
+        d { "backup file $file" }
+        val entry = ZipEntry(file.relativeTo(dependencies.dataDir).toString())
         zipOutputStream.putNextEntry(entry)
         file.inputStream().copyTo(zipOutputStream)
         zipOutputStream.closeEntry()
@@ -63,8 +57,8 @@ typealias createBackup = suspend () -> createBackupResult
   }
 
   val uri = FileProvider.getUriForFile(
-    appContext,
-    "${appConfig.packageName}.backupprovider",
+    appContext(),
+    "${appConfig().packageName}.backupprovider",
     backupFile
   )
   val intent = Intent(Intent.ACTION_SEND).apply {
@@ -73,33 +67,26 @@ typealias createBackup = suspend () -> createBackupResult
     putExtra(Intent.EXTRA_STREAM, uri)
     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
   }
-  packageManager
+  packageManager()
     .queryIntentActivities(intent, PackageManager.MATCH_ALL)
     .fastMap { it.activityInfo.packageName }
     .fastDistinctBy { it }
     .fastForEach {
-      appContext.grantUriPermission(
+      appContext().grantUriPermission(
         it,
         uri,
         Intent.FLAG_GRANT_READ_URI_PERMISSION
       )
     }
 
-  navigator.push(Intent.createChooser(intent, "Share File").asScreen())?.getOrThrow()
+  navigator().push(
+    Intent.createChooser(intent, "Share File")
+      .asScreen()
+  )?.getOrThrow()
 }
 
-@Tag typealias restoreBackupResult = Unit
-typealias restoreBackup = suspend () -> restoreBackupResult
-
-@Provide suspend fun restoreBackup(
-  contentResolver: ContentResolver,
-  coroutineContexts: CoroutineContexts,
-  dataDir: DataDir,
-  logger: Logger,
-  navigator: Navigator,
-  processManager: ProcessManager,
-): restoreBackupResult = withContext(coroutineContexts.io) {
-  val uri = navigator.push(
+suspend fun restoreBackup(scope: Scope<*> = inject) = withContext(coroutineContexts().io) {
+  val uri = navigator().push(
     Intent.createChooser(
       Intent(Intent.ACTION_GET_CONTENT).apply {
         type = "application/zip"
@@ -108,11 +95,11 @@ typealias restoreBackup = suspend () -> restoreBackupResult
     ).asScreen()
   )?.getOrNull()?.data?.data ?: return@withContext
 
-  ZipInputStream(contentResolver.openInputStream(uri)!!).use { zipInputStream ->
+  ZipInputStream(appContext().contentResolver.openInputStream(uri)!!).use { zipInputStream ->
     generateSequence { zipInputStream.nextEntry }
       .forEach { entry ->
-        val file = dataDir.resolve(entry.name)
-        logger.d { "restore file $file" }
+        val file = service<BackupDependencies>().dataDir.resolve(entry.name)
+        d { "restore file $file" }
         if (!file.exists()) {
           file.parentFile.mkdirs()
           file.createNewFile()
@@ -122,7 +109,7 @@ typealias restoreBackup = suspend () -> restoreBackupResult
       }
   }
 
-  processManager.restart()
+  restartProcess()
 }
 
 private val BACKUP_BLACKLIST = listOf(

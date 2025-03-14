@@ -29,7 +29,7 @@ import injekt.*
   override fun ListDecoratorScope.decoratedItems() {
     if (isVertical)
       item(null) {
-        val screen = catch { LocalScope.current.screen::class }.getOrNull()
+        val screen = catch { screen(LocalScope.current)::class }.getOrNull()
         if ((screen == null ||
               adFeatureRepository.isEnabled(screen, ListAdBannerFeature)) &&
           adsEnabledProducer())

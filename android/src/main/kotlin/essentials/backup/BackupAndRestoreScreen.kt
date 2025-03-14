@@ -19,11 +19,7 @@ import injekt.*
 
 class BackupAndRestoreScreen : Screen<Unit>
 
-@Provide @Composable fun BackupAndRestoreUi(
-  createBackup: createBackup,
-  restoreBackup: restoreBackup,
-  showToast: showToast,
-): Ui<BackupAndRestoreScreen> {
+@Provide @Composable fun BackupAndRestoreUi(scope: Scope<*> = inject): Ui<BackupAndRestoreScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Backup/Restore") } }) {
     EsLazyColumn {
       item {

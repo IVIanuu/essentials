@@ -86,45 +86,40 @@ enum class ScreenRotation(val isPortrait: Boolean) {
   return displayRotation
 }
 
-@Stable @Provide class DeviceScreenManager(
-  private val appContext: AppContext,
-  private val keyguardManager: @SystemService KeyguardManager,
-  private val logger: Logger,
-  private val powerManager: @SystemService PowerManager
-) {
-  suspend fun turnScreenOn(): Boolean {
-    logger.d { "on request is off ? ${!powerManager.isInteractive}" }
-    if (powerManager.isInteractive) {
-      logger.d { "already on" }
-      return true
+suspend fun turnScreenOn(scope: Scope<*> = inject): Boolean {
+  val powerManager = systemService<PowerManager>()
+  d { "on request is off ? ${!powerManager.isInteractive}" }
+  if (powerManager.isInteractive) {
+    d { "already on" }
+    return true
+  }
+
+  return startUnlockActivityForResult(REQUEST_TYPE_SCREEN_ON)
+}
+
+suspend fun unlockScreen(scope: Scope<*> = inject): Boolean {
+  val keyguardManager = systemService<KeyguardManager>()
+  d { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
+  if (!keyguardManager.isKeyguardLocked) {
+    d { "already unlocked" }
+    return true
+  }
+
+  return startUnlockActivityForResult(REQUEST_TYPE_UNLOCK)
+}
+
+private suspend fun startUnlockActivityForResult(requestType: Int): Boolean {
+  val result = CompletableDeferred<Boolean>()
+  val requestId = UUID.randomUUID().toString()
+  requestsById[requestId] = result
+  appContext().startActivity(
+    Intent(appContext(), UnlockActivity::class.java).apply {
+      putExtra(KEY_REQUEST_ID, requestId)
+      putExtra(KEY_REQUEST_TYPE, requestType)
+      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
-
-    return startUnlockActivityForResult(REQUEST_TYPE_SCREEN_ON)
-  }
-
-  suspend fun unlockScreen(): Boolean {
-    logger.d { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
-    if (!keyguardManager.isKeyguardLocked) {
-      logger.d { "already unlocked" }
-      return true
-    }
-
-    return startUnlockActivityForResult(REQUEST_TYPE_UNLOCK)
-  }
-
-  private suspend fun startUnlockActivityForResult(requestType: Int): Boolean {
-    val result = CompletableDeferred<Boolean>()
-    val requestId = UUID.randomUUID().toString()
-    requestsById[requestId] = result
-    appContext.startActivity(
-      Intent(appContext, UnlockActivity::class.java).apply {
-        putExtra(KEY_REQUEST_ID, requestId)
-        putExtra(KEY_REQUEST_TYPE, requestType)
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-      }
-    )
-    return result.await()
-  }
+  )
+  return result.await()
 }
 
 private const val KEY_REQUEST_ID = "request_id"
@@ -134,9 +129,7 @@ private const val REQUEST_TYPE_SCREEN_ON = 1
 private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
 
 @Provide @AndroidComponent class UnlockActivity(
-  private val keyguardManager: @SystemService KeyguardManager,
-  private val logger: Logger,
-  private val powerManager: @SystemService PowerManager
+  private val scope: Scope<*> = inject
 ) : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -153,7 +146,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
       return
     }
 
-    logger.d {
+    d {
       when (requestType) {
         REQUEST_TYPE_UNLOCK -> "unlock screen for $requestId"
         REQUEST_TYPE_SCREEN_ON -> "turn screen on $requestId"
@@ -164,7 +157,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
     var hasResult = false
 
     fun finishWithResult(success: Boolean) {
-      logger.d { "finish with result $success" }
+      d { "finish with result $success" }
       hasResult = true
       requestsById.remove(requestId)?.complete(success)
       finish()
@@ -186,25 +179,25 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
         REQUEST_TYPE_UNLOCK -> {
           delay(250)
 
-          keyguardManager.requestDismissKeyguard(
+          systemService<KeyguardManager>().requestDismissKeyguard(
             this@UnlockActivity,
             object :
               KeyguardManager.KeyguardDismissCallback() {
               override fun onDismissSucceeded() {
                 super.onDismissSucceeded()
-                logger.d { "dismiss succeeded" }
+                d { "dismiss succeeded" }
                 finishWithResult(true)
               }
 
               override fun onDismissError() {
                 super.onDismissError()
-                logger.d { "dismiss error" }
+                d { "dismiss error" }
                 finishWithResult(true)
               }
 
               override fun onDismissCancelled() {
                 super.onDismissCancelled()
-                logger.d { "dismiss cancelled" }
+                d { "dismiss cancelled" }
                 finishWithResult(false)
               }
             }
@@ -212,7 +205,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
         }
         REQUEST_TYPE_SCREEN_ON -> {
           withTimeoutOrNull(1.seconds) {
-            while (!powerManager.isInteractive)
+            while (!systemService<PowerManager>().isInteractive)
               yield()
           } ?: run {
             finishWithResult(false)

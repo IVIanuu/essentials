@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import app.cash.molecule.*
 import essentials.compose.*
+import essentials.coroutines.coroutineScope
 import injekt.*
 import injekt.common.*
 import kotlinx.atomicfu.locks.*
@@ -50,7 +51,7 @@ import kotlin.reflect.*
   private fun setContent(config: ScopeConfig<N>) {
     val content = config.content
     if (content.isNotEmpty())
-      coroutineScope.launchMolecule {
+      coroutineScope().launchMolecule {
         content.fastForEachIndexed { i, content ->
           key(i) { content() }
         }
@@ -140,7 +141,10 @@ fun <N : Any> Scope<*>.scopeOf(name: KClass<N> = inject): Flow<Scope<N>> = snaps
 
 val Scope<*>.root: Scope<*> get() = parent?.root ?: this
 
-val Scope<*>.coroutineScope: CoroutineScope get() = service()
+fun <T : Any> service(
+  scope: Scope<*> = inject,
+  key: KClass<T> = inject
+): T = scope.service()
 
 data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T) {
   @Provide companion object {
@@ -207,11 +211,11 @@ fun interface ScopeInitializer<N : Any> : ExtensionPoint<ScopeInitializer<N>> {
 @Tag annotation class ComposeIn<N : Any> {
   @Provide companion object {
     @Provide @Composable inline fun <@AddOn T : @ComposeIn<N> S, S, N : Any> composeIn(
-      scope: Scope<N>,
+      scope: Scope<N> = inject,
       key: TypeKey<StateFlow<S>>,
       crossinline block: @Composable () -> T,
     ): S = rememberScoped(scope = scope, key = key.value) {
-      scope.coroutineScope.moleculeState(
+      coroutineScope().moleculeState(
         RecompositionMode.ContextClock,
         AndroidUiDispatcher.Main,
         body = { block() }

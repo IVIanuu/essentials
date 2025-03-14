@@ -2,34 +2,35 @@ package essentials.compose
 
 import androidx.compose.runtime.*
 import essentials.*
+import essentials.coroutines.coroutineScope
 import kotlinx.coroutines.*
 
 @Composable inline fun scopedAction(crossinline block: suspend () -> Unit): () -> Unit =
-  action(LocalScope.current.coroutineScope, block)
+  action(coroutineScope(LocalScope.current), block)
 
 @Composable inline fun <P1> scopedAction(crossinline block: suspend (P1) -> Unit): (P1) -> Unit =
-  action(LocalScope.current.coroutineScope, block)
+  action(coroutineScope(LocalScope.current), block)
 
 @Composable inline fun <P1, P2> scopedAction(crossinline block: suspend (P1, P2) -> Unit): (P1, P2) -> Unit =
-  action(LocalScope.current.coroutineScope, block)
+  action(coroutineScope(LocalScope.current), block)
 
 @Composable inline fun <P1, P2, P3> scopedAction(
   crossinline block: suspend (P1, P2, P3) -> Unit
-): (P1, P2, P3) -> Unit = action(LocalScope.current.coroutineScope, block)
+): (P1, P2, P3) -> Unit = action(coroutineScope(LocalScope.current), block)
 
 @Composable inline fun <P1, P2, P3, P4> scopedAction(
   crossinline block: suspend (P1, P2, P3, P4) -> Unit
-): (P1, P2, P3, P4) -> Unit = action(LocalScope.current.coroutineScope, block)
+): (P1, P2, P3, P4) -> Unit = action(coroutineScope(LocalScope.current), block)
 
 @Composable inline fun <P1, P2, P3, P4, P5> scopedAction(
   crossinline block: suspend (P1, P2, P3, P4, P5) -> Unit
-): (P1, P2, P3, P4, P5) -> Unit = action(LocalScope.current.coroutineScope, block)
+): (P1, P2, P3, P4, P5) -> Unit = action(coroutineScope(LocalScope.current), block)
 
 @Composable fun LaunchedScopedEffect(
   vararg keys: Any?,
   block: suspend CoroutineScope.() -> Unit
 ) {
-  val coroutineScope = LocalScope.current.coroutineScope
+  val coroutineScope = coroutineScope(LocalScope.current)
   rememberScoped(keys = keys) {
     object : RememberObserver {
       private var job: Job? = null

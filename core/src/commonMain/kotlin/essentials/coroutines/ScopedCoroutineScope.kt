@@ -26,6 +26,8 @@ import kotlin.coroutines.*
   }
 }
 
+fun coroutineScope(scope: Scope<*> = inject): CoroutineScope = service()
+
 @Tag typealias ScopeCoroutineContext<N> = CoroutineContext
 
 @Provide fun <N> scopeCoroutineContext(

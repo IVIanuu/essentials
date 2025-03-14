@@ -12,7 +12,7 @@ import androidx.work.*
 import arrow.fx.coroutines.*
 import essentials.*
 import essentials.coroutines.*
-import essentials.logging.Logger
+import essentials.logging.d
 import injekt.*
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.coroutines.*
@@ -42,14 +42,12 @@ data class WorkConstraints(
 
 @Provide @Scoped<AppScope> class WorkManager(
   private val androidWorkManager: AndroidWorkManager,
-  private val coroutineContexts: CoroutineContexts,
-  private val logger: Logger,
-  private val scope: ScopedCoroutineScope<AppScope>,
+  private val scope: Scope<*> = inject,
   private val workersMap: Map<String, suspend () -> WorkerResult<*>>,
 ) : SynchronizedObject() {
   private val workerStates = mutableMapOf<String, MutableState<Boolean>>()
-  private val sharedWorkers = scope.sharedComputation<WorkId, WorkerResult<*>> { id ->
-    logger.d { "run worker ${id.value}" }
+  private val sharedWorkers = coroutineScope().sharedComputation<WorkId, WorkerResult<*>> { id ->
+    d { "run worker ${id.value}" }
 
     var workerState by synchronized(this@WorkManager) {
       workerStates.getOrPut(id.value) { mutableStateOf(false) }
@@ -63,7 +61,7 @@ data class WorkConstraints(
       finalizer = {
         if (it is ExitCase.Failure) it.failure.printStackTrace()
         workerState = false
-        logger.d { "run worker end ${id.value}" }
+        d { "run worker end ${id.value}" }
       }
     )
   }
@@ -73,9 +71,9 @@ data class WorkConstraints(
   }.value
 
   suspend fun <I : WorkId> runWorker(id: I): WorkerResult<I> =
-    withContext(scope.coroutineContext + coroutineContexts.computation) {
+    withContext(coroutineScope().coroutineContext + coroutineContexts().computation) {
       if (id.value !in workersMap) {
-        logger.d { "no worker found for ${id.value}" }
+        d { "no worker found for ${id.value}" }
         androidWorkManager.cancelUniqueWork(id.value)
         return@withContext WorkerResult.failure()
       }
@@ -141,13 +139,12 @@ data class WorkConstraints(
 
 @SuppressLint("RestrictedApi")
 @Provide @Composable fun PeriodicWorkScheduler(
-  coroutineContexts: CoroutineContexts,
-  logger: Logger,
-  schedules: Map<String, PeriodicWorkSchedule<*>>,
   androidWorkManager: androidx.work.WorkManager,
+  schedules: Map<String, PeriodicWorkSchedule<*>>,
+  scope: Scope<*> = inject
 ): ScopeContent<AppScope> {
   LaunchedEffect(true) {
-    withContext(coroutineContexts.computation) {
+    withContext(coroutineContexts().computation) {
       schedules.forEach { (workId, schedule) ->
         val existingWork = androidWorkManager.getWorkInfosForUniqueWork(
           workId
@@ -160,7 +157,7 @@ data class WorkConstraints(
                 existing.state == WorkInfo.State.RUNNING) &&
                 existing.tags.any { it == scheduleHash }
           }) {
-          logger.d { "enqueue work $workId with $schedule" }
+          d { "enqueue work $workId with $schedule" }
 
           androidWorkManager.enqueueUniquePeriodicWork(
             workId,
@@ -183,7 +180,7 @@ data class WorkConstraints(
               .build()
           )
         } else {
-          logger.d { "do not reenqueue work $workId with $schedule" }
+          d { "do not reenqueue work $workId with $schedule" }
         }
       }
     }

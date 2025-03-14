@@ -5,6 +5,7 @@
 package essentials.permission
 
 import androidx.compose.runtime.*
+import essentials.Scope
 import essentials.shell.*
 import essentials.util.*
 import injekt.*
@@ -20,7 +21,7 @@ abstract class RootPermission(
 
     @Provide suspend fun <P : RootPermission> request(
       shell: Shell,
-      showToast: showToast
+      scope: Scope<*> = inject
     ): PermissionRequestResult<P> {
       if (!shell.isAvailable())
         showToast("Your device is not rooted!")

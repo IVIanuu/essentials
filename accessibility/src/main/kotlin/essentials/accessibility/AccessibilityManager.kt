@@ -12,17 +12,15 @@ data object AccessibilityScope
 val Scope<*>.accessibilityService: EsAccessibilityService
   get() = service()
 
-@Provide fun accessibilityEvents(appScope: Scope<AppScope>): Flow<AccessibilityEvent> =
-  snapshotFlow { appScope.scopeOfOrNull<AccessibilityScope>() }
+fun accessibilityEvents(scope: Scope<*> = inject): Flow<AccessibilityEvent> =
+  snapshotFlow { scope.scopeOfOrNull<AccessibilityScope>() }
     .flatMapLatest { it?.accessibilityService?.events ?: neverFlow() }
 
-@Tag typealias performGlobalAccessibilityActionResult = Unit
-typealias performGlobalAccessibilityAction = suspend (Int) -> performGlobalAccessibilityActionResult
-@Provide suspend fun performGlobalAccessibilityAction(
+suspend fun performGlobalAccessibilityAction(
   action: Int,
-  appScope: Scope<AppScope>
-): performGlobalAccessibilityActionResult {
-  appScope.scopeOf<AccessibilityScope>().first().accessibilityService
+  scope: Scope<AppScope> = inject
+) {
+  scope.scopeOf<AccessibilityScope>().first().accessibilityService
     .performGlobalAction(action)
 }
 

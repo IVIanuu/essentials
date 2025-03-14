@@ -8,6 +8,7 @@ import android.accessibilityservice.AccessibilityService.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import essentials.Scope
 import essentials.accessibility.*
 import essentials.gestures.action.*
 import injekt.*
@@ -22,8 +23,8 @@ import injekt.*
     )
 
   @Provide suspend fun execute(
-    performAction: performGlobalAccessibilityAction
+    scope: Scope<*> = inject
   ): ActionExecutorResult<SplitScreenActionId> {
-    performAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
+    performGlobalAccessibilityAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
   }
 }

@@ -38,23 +38,20 @@ import kotlin.coroutines.*
   )
 
   @Provide suspend fun execute(
-    appScope: Scope<AppScope>,
-    cameraManager: @SystemService CameraManager,
     currentAppProducer: @Composable () -> CurrentApp?,
     screenStateProducer: @Composable () -> ScreenState,
-    logger: Logger,
-    packageManager: PackageManager,
-    sendIntent: sendActionIntent
+    scope: Scope<AppScope> = inject,
   ): ActionExecutorResult<CameraActionId> {
-    val cameraApp = packageManager.resolveActivity(
+    val cameraApp = packageManager().resolveActivity(
       Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
       PackageManager.MATCH_DEFAULT_ONLY
     )!!
 
     val intent = if (cameraApp.activityInfo!!.packageName == "com.motorola.camera2")
-      packageManager.getLaunchIntentForPackage("com.motorola.camera2")!!
+      packageManager().getLaunchIntentForPackage("com.motorola.camera2")!!
     else Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE)
 
+    val cameraManager = systemService<CameraManager>()
     val frontCamera = cameraManager.cameraIdList
       .firstOrNull {
         cameraManager.getCameraCharacteristics(it)[CameraCharacteristics.LENS_FACING] ==
@@ -66,7 +63,7 @@ import kotlin.coroutines.*
     val frontFacing = if (frontCamera != null &&
       currentScreenState != ScreenState.OFF &&
       (currentScreenState == ScreenState.UNLOCKED ||
-          appScope.scopeOfOrNull<AccessibilityScope>()
+          scope.scopeOfOrNull<AccessibilityScope>()
             ?.accessibilityService?.rootInActiveWindow?.packageName != "com.android.systemui") &&
       cameraApp.activityInfo!!.packageName == moleculeFlow { currentAppProducer() }.first()
     )
@@ -89,12 +86,12 @@ import kotlin.coroutines.*
       }
     else null
 
-    logger.d { "open camera with $frontFacing" }
+    d { "open camera with $frontFacing" }
 
     if (frontFacing != null)
       intent.addCameraFacingExtras(frontFacing)
 
-    sendIntent(intent, null)
+    sendActionIntent(intent, null)
   }
 
   private fun Intent.addCameraFacingExtras(frontFacing: Boolean) {

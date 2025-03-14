@@ -60,13 +60,11 @@ class WriteSecureSettingsScreen(
 @Provide @Composable fun WriteSecureSettingsUi(
   adbEnabledDataStore: DataStore<AdbEnabled>,
   uiLauncher: UiLauncher,
-  appConfig: AppConfig,
-  navigator: Navigator,
   developerModeDataStore: DataStore<DeveloperMode>,
   permissionManager: PermissionManager,
   screen: WriteSecureSettingsScreen,
   shell: Shell,
-  showToast: showToast
+  scope: Scope<*> = inject
 ): Ui<WriteSecureSettingsScreen> {
   var currentStep by remember { mutableIntStateOf(1) }
   var completedStep by remember { mutableIntStateOf(1) }
@@ -75,7 +73,7 @@ class WriteSecureSettingsScreen(
     Button(
       onClick = action {
         if (completedStep == 4)
-          navigator.pop(screen, true)
+          navigator().pop(screen, true)
         else {
           completedStep++
           currentStep = completedStep
@@ -108,11 +106,11 @@ class WriteSecureSettingsScreen(
           .padding(16.dp),
         action = {
           TextButton(onClick = scopedAction {
-            shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
+            shell.run("pm grant ${appConfig().packageName} android.permission.WRITE_SECURE_SETTINGS")
               .onSuccess {
                 if (permissionManager.permissionState(listOf(screen.permissionClass)).first()) {
                   showToast("Permission granted!")
-                  navigator.pop(screen)
+                  navigator().pop(screen)
                 }
               }
               .onFailure {
@@ -158,7 +156,7 @@ class WriteSecureSettingsScreen(
             OutlinedButton(onClick = scopedAction {
               raceOf(
                 {
-                  navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).asScreen())
+                  navigator().push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).asScreen())
                     ?.onFailure { showToast("Couldn't open phone! Please open manually") }
                 },
                 { developerModeDataStore.data.first { it != 0 } }
@@ -188,7 +186,7 @@ class WriteSecureSettingsScreen(
             OutlinedButton(onClick = scopedAction {
               raceOf(
                 {
-                  navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).asScreen())
+                  navigator().push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).asScreen())
                     ?.onFailure { showToast("Couldn\'t open developer options! Please open manually") }
                 },
                 { adbEnabledDataStore.data.first { it != 0 } }
@@ -243,7 +241,7 @@ class WriteSecureSettingsScreen(
                   RoundedCornerShape(4.dp)
                 )
                 .padding(4.dp),
-              text = "pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS",
+              text = "pm grant ${appConfig().packageName} android.permission.WRITE_SECURE_SETTINGS",
               style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp)
             )
           },

@@ -52,4 +52,4 @@ import kotlinx.coroutines.*
   val decorateAppUi: @Composable (@Composable () -> Unit) -> DecoratedAppUi
 )
 
-val Scope<*>.activity: ComponentActivity get() = service()
+fun activity(scope: Scope<*> = inject): ComponentActivity = service()

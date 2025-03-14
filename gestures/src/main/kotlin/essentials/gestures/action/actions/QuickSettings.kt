@@ -26,15 +26,12 @@ import injekt.*
   )
 
   @Provide suspend fun execute(
-    appScope: Scope<AppScope>,
-    appContext: AppContext,
-    closeSystemDialogs: closeSystemDialogs,
-    performAccessibilityAction: performGlobalAccessibilityAction
+    scope: Scope<AppScope> = inject
   ): ActionExecutorResult<QuickSettingsActionId> {
     val targetState = catch {
-      val service = appScope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
+      val service = scope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
 
-      val systemUiContext = appContext.createPackageContext(
+      val systemUiContext = appContext().createPackageContext(
         "com.android.systemui", 0
       )
 
@@ -55,7 +52,7 @@ import injekt.*
     }.getOrElse { true }
 
     if (targetState)
-      performAccessibilityAction(GLOBAL_ACTION_QUICK_SETTINGS)
+      performGlobalAccessibilityAction(GLOBAL_ACTION_QUICK_SETTINGS)
     else
       closeSystemDialogs()
   }

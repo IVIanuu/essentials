@@ -9,6 +9,7 @@ import android.service.quicksettings.*
 import androidx.compose.runtime.*
 import essentials.*
 import essentials.compose.*
+import essentials.coroutines.coroutineScope
 import essentials.logging.*
 import injekt.*
 
@@ -17,19 +18,19 @@ abstract class EsTileService : TileService() {
 
   private var currentOnClick: (() -> Unit)? = null
 
-  private val component by lazy {
+  @Provide private val appScope by lazy {
     applicationContext.cast<AppScopeOwner>()
       .appScope
-      .service<TileServiceComponent>()
   }
+  private val component by lazy { service<TileServiceComponent>() }
 
   private var tileScope: Scope<TileScope>? = null
 
   override fun onStartListening() {
     super.onStartListening()
-    component.logger.d { "${this::class} on start listening" }
+    d { "${this::class} on start listening" }
     tileScope = component.tileScopeFactory(this)
-    tileScope!!.coroutineScope.launchMolecule {
+    coroutineScope(tileScope!!).launchMolecule {
       val currentState = state()
         .also { this.currentOnClick = it.onClick }
 
@@ -50,20 +51,19 @@ abstract class EsTileService : TileService() {
 
   override fun onClick() {
     super.onClick()
-    component.logger.d { "${this::class} on click" }
+    d { "${this::class} on click" }
     currentOnClick?.invoke()
   }
 
   override fun onStopListening() {
     tileScope?.dispose()
     tileScope = null
-    component.logger.d { "${this::class} on stop listening" }
+    d { "${this::class} on stop listening" }
     super.onStopListening()
   }
 }
 
 @Provide @Service<AppScope> data class TileServiceComponent(
-  val logger: Logger,
   val tileScopeFactory: (EsTileService) -> Scope<TileScope>
 )
 

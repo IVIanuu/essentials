@@ -7,6 +7,7 @@ package essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService.*
 import androidx.compose.material3.*
 import androidx.compose.ui.res.*
+import essentials.Scope
 import essentials.accessibility.*
 import essentials.gestures.R
 import essentials.gestures.action.*
@@ -20,9 +21,7 @@ import injekt.*
       icon = { Icon(painterResource(R.drawable.ic_action_recent_apps), null) }
     )
 
-  @Provide suspend fun execute(
-    performAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<RecentAppsActionId> {
-    performAction(GLOBAL_ACTION_RECENTS)
+  @Provide suspend fun execute(scope: Scope<*> = inject): ActionExecutorResult<RecentAppsActionId> {
+    performGlobalAccessibilityAction(GLOBAL_ACTION_RECENTS)
   }
 }

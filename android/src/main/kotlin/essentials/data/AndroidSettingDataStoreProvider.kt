@@ -4,7 +4,6 @@
 
 package essentials.data
 
-import android.content.*
 import android.database.*
 import android.provider.*
 import androidx.datastore.core.*
@@ -20,12 +19,10 @@ class AndroidSettingDataStoreProvider<T : Any>(
   private val type: AndroidSettingsType,
   private val defaultValue: T
 ) {
-  @Provide fun provide(
-    contentResolver: ContentResolver,
-    coroutineContexts: CoroutineContexts,
-    scope: ScopedCoroutineScope<AppScope>
-  ): DataStore<T> = object : DataStore<T> {
-    private suspend fun get(): T = withContext(coroutineContexts.io) {
+  @Provide fun provide(scope: Scope<AppScope>): DataStore<T> = object : DataStore<T> {
+    private val contentResolver get() = appContext().contentResolver
+
+    private suspend fun get(): T = withContext(coroutineContexts().io) {
       when (defaultValue) {
         is Float -> when (type) {
           AndroidSettingsType.GLOBAL -> Settings.Global.getFloat(contentResolver, name, defaultValue)
@@ -71,14 +68,14 @@ class AndroidSettingDataStoreProvider<T : Any>(
     }
       .onStart { emit(Unit) }
       .map { get() }
-      .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
+      .shareIn(coroutineScope(), SharingStarted.WhileSubscribed(), 1)
       .distinctUntilChanged()
 
     override suspend fun updateData(transform: suspend (T) -> T): T {
       val currentValue = get()
       val newValue = transform(currentValue)
       if (currentValue != newValue)
-        withContext(coroutineContexts.io) {
+        withContext(coroutineContexts().io) {
           when (newValue) {
             is Float -> when (type) {
               AndroidSettingsType.GLOBAL -> Settings.Global.putFloat(contentResolver, name, newValue)

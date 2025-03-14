@@ -20,7 +20,7 @@ data class AppIcon(val packageName: String)
   Fetcher.Factory<AppIcon> {
   override fun create(data: AppIcon, options: Options, imageLoader: ImageLoader) =
     Fetcher {
-      val rawDrawable = appContext.packageManager.getApplicationIcon(data.packageName)
+      val rawDrawable = packageManager().getApplicationIcon(data.packageName)
       val finalDrawable = when (val size = options.size) {
         Size.ORIGINAL -> rawDrawable
         else -> rawDrawable.toBitmap(

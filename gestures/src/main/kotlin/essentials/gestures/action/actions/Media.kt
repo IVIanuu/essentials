@@ -38,19 +38,17 @@ import kotlinx.coroutines.flow.*
 class MediaActionSettingsScreen : Screen<Unit>
 
 @Provide @Composable fun MediaActionSettingsUi(
-  getAppInfo: suspend (String) -> AppInfo?,
-  navigator: Navigator,
-  intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
-  preferencesStore: DataStore<Preferences>
+  preferencesStore: DataStore<Preferences>,
+  scope: Scope<*> = inject
 ): Ui<MediaActionSettingsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Media action settings") } }) {
     EsLazyColumn {
       item {
         EsListItem(
           onClick = scopedAction {
-            val newMediaApp = navigator.push(
+            val newMediaApp = navigator().push(
               AppPickerScreen(
-                intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
+                intentAppPredicate(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER))
               )
             )
             if (newMediaApp != null)

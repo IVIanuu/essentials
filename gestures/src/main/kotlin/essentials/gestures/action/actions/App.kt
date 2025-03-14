@@ -10,17 +10,16 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import coil.compose.*
+import essentials.Scope
+import essentials.appContext
 import essentials.apps.*
 import essentials.gestures.action.*
 import essentials.gestures.action.ui.*
+import essentials.packageManager
 import essentials.ui.navigation.*
 import injekt.*
 
-@Provide class AppActionFactory(
-  private val getAppInfo: suspend (String) -> AppInfo?,
-  private val packageManager: PackageManager,
-  private val sendIntent: sendActionIntent
-) : ActionFactory {
+@Provide class AppActionFactory(@property:Provide private val scope: Scope<*> = inject) : ActionFactory {
   override suspend fun createAction(id: String): Action<*>? {
     if (!id.startsWith(BASE_ID)) return null
     val packageName = id.removePrefix(BASE_ID)
@@ -42,17 +41,15 @@ import injekt.*
     val packageName = id.removePrefix(BASE_ID)
       .split(ACTION_DELIMITER)
       .first()
-    sendIntent(
-      packageManager.getLaunchIntentForPackage(packageName)!!,
+    sendActionIntent(
+      packageManager().getLaunchIntentForPackage(packageName)!!,
       null
     )
     return ActionExecutorResult
   }
 }
 
-@Provide class AppActionPickerDelegate(
-  private val launchableAppPredicate: LaunchableAppPredicate
-) : ActionPickerDelegate {
+@Provide class AppActionPickerDelegate(@property:Provide private val scope: Scope<*> = inject) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String
@@ -61,7 +58,7 @@ import injekt.*
     get() = { Icon(Icons.Default.Apps, null) }
 
   override suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result? {
-    val app = navigator.push(AppPickerScreen(launchableAppPredicate)) ?: return null
+    val app = navigator.push(AppPickerScreen(launchableAppPredicate())) ?: return null
     return ActionPickerScreen.Result.Action("$BASE_ID${app.packageName}$ACTION_DELIMITER")
   }
 }

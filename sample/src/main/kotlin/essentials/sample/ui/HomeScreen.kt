@@ -18,6 +18,7 @@ import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
+import essentials.Scope
 import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
@@ -25,13 +26,13 @@ import essentials.ui.navigation.*
 import essentials.ui.overlay.*
 import essentials.util.*
 import injekt.*
+import injekt.common.Scoped
 
 @Provide class HomeScreen : RootScreen
 
 @Provide @Composable fun HomeUi(
   itemsFactory: () -> List<HomeItem>,
-  navigator: Navigator,
-  showToast: showToast
+  scope: Scope<*> = inject
 ): Ui<HomeScreen> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   EsScaffold(
@@ -66,7 +67,7 @@ import injekt.*
           index = index,
           color = color,
           onClick = action {
-            navigator.push(
+            navigator().push(
               item.screenFactoryWithIndex?.invoke(index, color)
                 ?: item.screenFactory(color)
             )

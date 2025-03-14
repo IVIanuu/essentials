@@ -7,6 +7,9 @@ package essentials.apps
 import android.content.*
 import android.content.pm.*
 import androidx.compose.ui.util.*
+import essentials.Scope
+import essentials.appContext
+import essentials.packageManager
 import injekt.*
 
 fun interface AppPredicate {
@@ -15,20 +18,19 @@ fun interface AppPredicate {
 
 val DefaultAppPredicate = AppPredicate { true }
 
-@Provide class LaunchableAppPredicate(private val packageManager: PackageManager): AppPredicate {
+fun launchableAppPredicate(scope: Scope<*> = inject): AppPredicate {
   val cache = mutableMapOf<String, Boolean>()
-  override fun test(app: AppInfo): Boolean = cache.getOrPut(app.packageName) {
-    packageManager.getLaunchIntentForPackage(app.packageName) != null
+  return AppPredicate {
+    cache.getOrPut(it.packageName) {
+      packageManager().getLaunchIntentForPackage(it.packageName) != null
+    }
   }
 }
 
-@Provide class IntentAppPredicate(
-  private val intent: Intent,
-  private val packageManager: PackageManager
-) : AppPredicate {
-  private val apps by lazy {
-    packageManager.queryIntentActivities(intent, 0)
+fun intentAppPredicate(intent: Intent, scope: Scope<*> = inject): AppPredicate {
+  val apps by lazy {
+    packageManager().queryIntentActivities(intent, 0)
       .fastMap { it.activityInfo.applicationInfo.packageName }
   }
-  override fun test(app: AppInfo): Boolean = app.packageName in apps
+  return AppPredicate { it.packageName in apps }
 }

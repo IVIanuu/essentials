@@ -70,6 +70,8 @@ import kotlinx.coroutines.sync.*
   }
 }
 
+fun navigator(scope: Scope<*> = inject): Navigator = service()
+
 suspend fun <R> Navigator.awaitResult(screen: Screen<R>): R? = results
   .firstOrNull { it.first == screen }
   ?.second as? R
@@ -112,8 +114,6 @@ suspend fun Navigator.popTo(screen: Screen<*>) {
   }
   setBackStack(backStack.take(index + 1))
 }
-
-val Scope<*>.navigator: Navigator get() = service()
 
 @Tag annotation class NavGraph<N>
 

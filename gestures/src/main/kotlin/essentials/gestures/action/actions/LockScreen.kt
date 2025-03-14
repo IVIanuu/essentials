@@ -8,6 +8,7 @@ import android.accessibilityservice.AccessibilityService.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import essentials.Scope
 import essentials.accessibility.*
 import essentials.gestures.action.*
 import injekt.*
@@ -20,9 +21,7 @@ import injekt.*
       permissions = listOf(ActionAccessibilityPermission::class)
     )
 
-  @Provide suspend fun execute(
-    performAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<LockScreenActionId> {
-    performAction(GLOBAL_ACTION_LOCK_SCREEN)
+  @Provide suspend fun execute(scope: Scope<*> = inject): ActionExecutorResult<LockScreenActionId> {
+    performGlobalAccessibilityAction(GLOBAL_ACTION_LOCK_SCREEN)
   }
 }

@@ -8,6 +8,7 @@ import android.accessibilityservice.AccessibilityService.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import essentials.Scope
 import essentials.accessibility.*
 import essentials.gestures.action.*
 import injekt.*
@@ -24,11 +25,9 @@ import kotlinx.coroutines.*
       icon = { Icon(Icons.Default.Repeat, null) }
     )
 
-  @Provide suspend fun execute(
-    performAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<LastAppActionId> {
-    performAction(GLOBAL_ACTION_RECENTS)
+  @Provide suspend fun execute(scope: Scope<*> = inject): ActionExecutorResult<LastAppActionId> {
+    performGlobalAccessibilityAction(GLOBAL_ACTION_RECENTS)
     delay(100)
-    performAction(GLOBAL_ACTION_RECENTS)
+    performGlobalAccessibilityAction(GLOBAL_ACTION_RECENTS)
   }
 }

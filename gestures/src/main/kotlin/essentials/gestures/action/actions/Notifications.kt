@@ -25,16 +25,11 @@ import injekt.*
     icon = { Icon(Icons.Default.Notifications, null) }
   )
 
-  @Provide suspend fun execute(
-    appContext: AppContext,
-    appScope: Scope<AppScope>,
-    closeSystemDialogs: closeSystemDialogs,
-    performAccessibilityAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<NotificationsActionId> {
+  @Provide suspend fun execute(scope: Scope<AppScope> = inject): ActionExecutorResult<NotificationsActionId> {
     val targetState = catch {
-      val service = appScope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
+      val service = scope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
 
-      val systemUiContext = appContext.createPackageContext(
+      val systemUiContext = appContext().createPackageContext(
         "com.android.systemui", 0
       )
 
@@ -55,7 +50,7 @@ import injekt.*
     }.getOrElse { true }
 
     if (targetState)
-      performAccessibilityAction(GLOBAL_ACTION_NOTIFICATIONS)
+      performGlobalAccessibilityAction(GLOBAL_ACTION_NOTIFICATIONS)
     else
       closeSystemDialogs()
   }

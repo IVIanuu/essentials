@@ -23,16 +23,14 @@ data class IntentPermissionRequestParams<P : Permission>(
 @Provide suspend fun <P : Permission> requestPermissionWithIntent(
   data: IntentPermissionRequestParams<P>,
   key: KClass<P>,
-  appConfig: AppConfig,
-  navigator: Navigator,
   permissionManager: PermissionManager,
-  showToast: showToast
+  scope: Scope<*> = inject
 ): PermissionRequestResult<P> = raceOf(
   {
     if (data.showFindHint)
-      showToast("Find ${appConfig.appName} here")
+      showToast("Find ${appConfig().appName} here")
     // wait until user navigates back from the permission screen
-    catch { navigator.push(data.intent.asScreen()) }
+    catch { navigator().push(data.intent.asScreen()) }
       .printErrors()
       .onFailure { showToast("Couldn\'t open settings screen! Please grant the permission manually") }
   },
