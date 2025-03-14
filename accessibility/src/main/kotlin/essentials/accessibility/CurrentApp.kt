@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.*
 
 @Tag typealias CurrentApp = String
 
-@Provide @Composable fun currentApp(scope: Scope<*> = inject): @ComposeIn<AppScope> CurrentApp? = produceState(nullOf()) {
+@Provide @Composable fun currentApp(scope: Scope<AppScope> = inject): @ComposeIn<AppScope> CurrentApp? = produceState(nullOf()) {
   accessibilityEvents()
     .filter {
       it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&

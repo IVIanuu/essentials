@@ -12,7 +12,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.*
 import coil.compose.*
-import essentials.Scope
+import essentials.*
 import essentials.compose.*
 import essentials.coroutines.*
 import essentials.resource.*

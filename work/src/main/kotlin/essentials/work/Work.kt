@@ -12,16 +12,12 @@ import androidx.work.*
 import arrow.fx.coroutines.*
 import essentials.*
 import essentials.coroutines.*
-import essentials.logging.d
+import essentials.logging.*
 import injekt.*
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.coroutines.*
-import kotlin.Boolean
-import kotlin.Pair
-import kotlin.String
 import kotlin.synchronized
 import kotlin.time.*
-import kotlin.to
 import androidx.work.WorkManager as AndroidWorkManager
 
 abstract class WorkId(val value: String)
@@ -42,7 +38,7 @@ data class WorkConstraints(
 
 @Provide @Scoped<AppScope> class WorkManager(
   private val androidWorkManager: AndroidWorkManager,
-  private val scope: Scope<*> = inject,
+  @property:Provide private val scope: Scope<AppScope> = inject,
   private val workersMap: Map<String, suspend () -> WorkerResult<*>>,
 ) : SynchronizedObject() {
   private val workerStates = mutableMapOf<String, MutableState<Boolean>>()

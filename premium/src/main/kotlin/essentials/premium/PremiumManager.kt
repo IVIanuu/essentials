@@ -8,13 +8,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import androidx.datastore.core.*
 import androidx.datastore.preferences.core.*
-import arrow.fx.coroutines.*
 import essentials.*
 import essentials.ads.*
 import essentials.billing.*
 import essentials.compose.*
 import essentials.coroutines.*
-import essentials.logging.*
 import essentials.ui.navigation.*
 import essentials.util.*
 import injekt.*

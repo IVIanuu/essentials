@@ -15,8 +15,10 @@ import injekt.*
 import kotlinx.coroutines.flow.*
 
 @Provide @AndroidComponent class EsAccessibilityService(
-  private val accessibilityScopeFactory: (@Service<AccessibilityScope> EsAccessibilityService) -> Scope<AccessibilityScope>,
-  private val scope: Scope<*> = inject
+  private val accessibilityScopeFactory: (
+    @Service<AccessibilityScope> EsAccessibilityService
+  ) -> @New Scope<AccessibilityScope>,
+  @property:Provide private val scope: Scope<AppScope> = inject
 ) : AccessibilityService() {
   private val _events = EventFlow<AccessibilityEvent>()
   val events: Flow<AccessibilityEvent> by this::_events

@@ -18,7 +18,7 @@ import kotlin.reflect.*
 
 @Stable @Provide class PermissionManager(
   private val uiLauncher: UiLauncher,
-  @property:Provide private val scope: Scope<*> = inject,
+  @property:Provide private val scope: Scope<AppScope> = inject,
   private val permissions: Map<KClass<out Permission>, () -> Permission>,
   private val stateProviders: Map<KClass<out Permission>, suspend (Permission) -> PermissionState<Permission>>
 ) {

@@ -8,7 +8,7 @@ import android.accessibilityservice.AccessibilityService.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import essentials.Scope
+import essentials.*
 import essentials.accessibility.*
 import essentials.gestures.action.*
 import injekt.*

@@ -5,11 +5,8 @@
 package essentials.apps
 
 import android.content.*
-import android.content.pm.*
 import androidx.compose.ui.util.*
-import essentials.Scope
-import essentials.appContext
-import essentials.packageManager
+import essentials.*
 import injekt.*
 
 fun interface AppPredicate {

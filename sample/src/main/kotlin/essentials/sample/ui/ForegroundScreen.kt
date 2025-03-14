@@ -4,21 +4,16 @@
 
 package essentials.sample.ui
 
-import android.app.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import essentials.Scope
+import essentials.*
 import essentials.foreground.*
-import essentials.sample.R
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import essentials.ui.prefs.*
-import essentials.util.*
 import injekt.*
-import kotlinx.coroutines.channels.*
-import kotlinx.coroutines.flow.*
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundScreen() }
 

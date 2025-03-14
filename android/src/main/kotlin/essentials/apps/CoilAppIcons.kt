@@ -16,7 +16,9 @@ import injekt.*
 
 data class AppIcon(val packageName: String)
 
-@Provide class AppIconFetcherFactory(private val appContext: AppContext) :
+@Provide class AppIconFetcherFactory(
+  @property:Provide private val scope: Scope<AppScope> = inject
+) :
   Fetcher.Factory<AppIcon> {
   override fun create(data: AppIcon, options: Options, imageLoader: ImageLoader) =
     Fetcher {
@@ -27,7 +29,7 @@ data class AppIcon(val packageName: String)
           width = size.width.pxOrElse { rawDrawable.intrinsicWidth },
           height = size.height.pxOrElse { rawDrawable.intrinsicHeight }
         )
-          .toDrawable(appContext.resources)
+          .toDrawable(appContext().resources)
       }
       DrawableResult(finalDrawable, false, DataSource.DISK)
     }

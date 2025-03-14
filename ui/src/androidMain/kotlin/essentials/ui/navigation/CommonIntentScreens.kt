@@ -1,8 +1,7 @@
 package essentials.ui.navigation
 
-import android.app.Application
+import android.app.*
 import android.content.*
-import android.content.pm.*
 import android.provider.*
 import androidx.core.net.*
 import injekt.*

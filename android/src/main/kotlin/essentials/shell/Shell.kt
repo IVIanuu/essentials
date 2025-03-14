@@ -4,8 +4,7 @@
 
 package essentials.shell
 
-import arrow.core.*
-import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.*
 import essentials.*
 import essentials.coroutines.*
 import eu.chainfire.libsuperuser.Shell.*

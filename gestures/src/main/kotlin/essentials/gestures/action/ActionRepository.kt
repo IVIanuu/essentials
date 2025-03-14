@@ -9,9 +9,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
-import arrow.core.*
-import com.github.michaelbull.result.getOrElse
-import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.*
 import essentials.*
 import essentials.coroutines.*
 import essentials.gestures.action.actions.*
@@ -66,7 +64,7 @@ typealias executeAction = suspend (String) -> executeActionResult
   actionFactories: List<() -> ActionFactory>,
   actionRepository: ActionRepository,
   permissionManager: PermissionManager,
-  scope: Scope<*> = inject
+  scope: Scope<AppScope> = inject
 ): executeActionResult = withContext(coroutineContexts().computation) {
   catch {
     d { "execute $id" }

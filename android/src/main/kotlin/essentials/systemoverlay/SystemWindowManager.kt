@@ -30,7 +30,7 @@ import kotlin.math.*
 
 @Stable @Provide class SystemWindowManager(
   private val context: Context,
-  private val systemWindowScopeFactory: () -> Scope<SystemWindowScope>,
+  private val systemWindowScopeFactory: () -> @New Scope<SystemWindowScope>,
   val windowManager: @SystemService WindowManager
 ) {
   val accessibilityAvailable: Boolean

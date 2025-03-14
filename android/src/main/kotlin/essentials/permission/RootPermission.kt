@@ -5,7 +5,7 @@
 package essentials.permission
 
 import androidx.compose.runtime.*
-import essentials.Scope
+import essentials.*
 import essentials.shell.*
 import essentials.util.*
 import injekt.*

@@ -8,7 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import app.cash.molecule.*
 import essentials.compose.*
-import essentials.coroutines.coroutineScope
+import essentials.coroutines.*
 import injekt.*
 import injekt.common.*
 import kotlinx.atomicfu.locks.*
@@ -16,7 +16,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
-@Stable @Provide class Scope<N : Any>(
+@Tag annotation class New
+
+@Stable @Provide @New class Scope<N : Any>(
   val name: KClass<N>,
   val parent: ParentScope? = null,
   config: (Scope<N>, ParentScope?) -> ScopeConfig<N>
@@ -63,7 +65,8 @@ import kotlin.reflect.*
   } ?: parent?.serviceOrNull(key)
 
   fun <T : Any> service(key: KClass<T> = inject): T =
-    serviceOrNull(key) ?: error("No service found for ${key.qualifiedName} in ${name.qualifiedName}")
+    serviceOrNull(key)
+      ?: error("No service found for ${key.qualifiedName} in ${name.qualifiedName}")
 
   inline fun <T> scoped(key: Any, compute: () -> T): T {
     cache[key]?.let { return (if (it !== NULL) it else null).unsafeCast() }
@@ -157,7 +160,7 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
     @Provide inline fun <@AddOn T : @Scoped<N> S, reified S, N : Any> scoped(
       scope: Scope<N>,
       key: TypeKey<S>,
-      crossinline init: () -> T,
+      noinline init: () -> T,
     ): S = scope.scoped(key) { init() }
   }
 }
@@ -176,7 +179,7 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
 @Tag annotation class ScopedService<N> {
   @Provide companion object {
     @Provide inline fun <@AddOn T : @ScopedService<N> S, reified S : Any, N : Any> scoped(
-      init: () -> T,
+      noinline init: () -> T,
     ): @Scoped<N> S = init()
 
     @Provide inline fun <@AddOn T : @ScopedService<N> S, reified S : Any, N : Any> service(
@@ -210,10 +213,10 @@ fun interface ScopeInitializer<N : Any> : ExtensionPoint<ScopeInitializer<N>> {
 
 @Tag annotation class ComposeIn<N : Any> {
   @Provide companion object {
-    @Provide @Composable inline fun <@AddOn T : @ComposeIn<N> S, S, N : Any> composeIn(
+    @Provide @Composable fun <@AddOn T : @ComposeIn<N> S, S, N : Any> composeIn(
       scope: Scope<N> = inject,
       key: TypeKey<StateFlow<S>>,
-      crossinline block: @Composable () -> T,
+      block: @Composable () -> T,
     ): S = rememberScoped(scope = scope, key = key.value) {
       coroutineScope().moleculeState(
         RecompositionMode.ContextClock,

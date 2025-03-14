@@ -4,7 +4,6 @@
 
 package essentials.ads
 
-import androidx.activity.*
 import androidx.compose.runtime.*
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.*
@@ -22,9 +21,9 @@ import kotlin.time.*
 import kotlin.time.Duration.Companion.seconds
 
 @Stable @Provide @Scoped<UiScope> class FullScreenAdManager(
-  private val uiScope: Scope<UiScope> = inject,
   private val adsEnabledProducer: @Composable () -> AdsEnabled,
-  config: @FinalAdConfig FullScreenAdConfig
+  config: @FinalAdConfig FullScreenAdConfig,
+  @property:Provide private val scope: Scope<UiScope> = inject
 ) {
   private var currentAd by mutableStateOf<FullScreenAd?>(null)
   private val rateLimiter = RateLimiter(1, config.adsInterval)
@@ -97,7 +96,7 @@ import kotlin.time.Duration.Companion.seconds
     var wasShown by mutableStateOf(false)
 
     suspend fun show(): Boolean {
-      if (uiScope.scopeOfOrNull<AppVisibleScope>() == null) return false
+      if (scope.scopeOfOrNull<AppVisibleScope>() == null) return false
         .also { d { "do not show -> not in foreground" } }
 
       if (!rateLimiter.tryAcquire()) return false

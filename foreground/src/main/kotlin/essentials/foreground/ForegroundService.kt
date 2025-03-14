@@ -16,14 +16,13 @@ import essentials.app.*
 import essentials.compose.*
 import essentials.coroutines.*
 import essentials.logging.*
-import essentials.util.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
 @Stable @Provide @AndroidComponent class ForegroundService(
-  private val scope: ScopedCoroutineScope<AppScope> = inject,
-  private val foregroundScopeFactory: () -> Scope<ForegroundScope>
+  @property:Provide private val scope: Scope<AppScope> = inject,
+  private val foregroundScopeFactory: () -> @New Scope<ForegroundScope>
 ) : Service() {
   private var job: Job? = null
   private var needsStartForegroundCall by mutableStateOf(true)
@@ -33,7 +32,7 @@ import kotlin.time.Duration.Companion.seconds
     d { "foreground service started" }
 
     val foregroundServiceState = service<ForegroundServiceState>()
-    job = scope.launchMolecule {
+    job = coroutineScope().launchMolecule {
       d { "compose main body" }
 
       DisposableEffect(true) {

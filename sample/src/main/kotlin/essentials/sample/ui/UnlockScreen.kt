@@ -9,7 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
-import essentials.Scope
+import essentials.*
 import essentials.compose.*
 import essentials.coroutines.*
 import essentials.ui.material.*
@@ -26,7 +26,7 @@ class UnlockScreen : Screen<Unit>
 
 @Provide @Composable fun UnlockUi(
   screenStateProducer: @Composable () -> ScreenState,
-  scope: Scope<*>
+  scope: Scope<*> = inject
 ): Ui<UnlockScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Unlock") } }) {
     Column(

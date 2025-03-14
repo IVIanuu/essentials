@@ -5,7 +5,7 @@
 package essentials.permission
 
 import android.content.*
-import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.*
 import essentials.*
 import essentials.ui.navigation.*
 import essentials.util.*

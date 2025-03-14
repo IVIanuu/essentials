@@ -2,7 +2,7 @@ package essentials.compose
 
 import androidx.compose.runtime.*
 import essentials.*
-import essentials.coroutines.coroutineScope
+import essentials.coroutines.*
 import kotlinx.coroutines.*
 
 @Composable inline fun scopedAction(crossinline block: suspend () -> Unit): () -> Unit =

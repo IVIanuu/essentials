@@ -10,8 +10,7 @@ import android.view.accessibility.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import arrow.core.*
-import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.*
 import essentials.*
 import essentials.accessibility.*
 import essentials.gestures.action.*

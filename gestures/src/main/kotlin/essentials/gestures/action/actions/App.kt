@@ -4,22 +4,21 @@
 
 package essentials.gestures.action.actions
 
-import android.content.pm.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import coil.compose.*
-import essentials.Scope
-import essentials.appContext
+import essentials.*
 import essentials.apps.*
 import essentials.gestures.action.*
 import essentials.gestures.action.ui.*
-import essentials.packageManager
 import essentials.ui.navigation.*
 import injekt.*
 
-@Provide class AppActionFactory(@property:Provide private val scope: Scope<*> = inject) : ActionFactory {
+@Provide class AppActionFactory(
+  @property:Provide private val scope: Scope<AppScope> = inject
+) : ActionFactory {
   override suspend fun createAction(id: String): Action<*>? {
     if (!id.startsWith(BASE_ID)) return null
     val packageName = id.removePrefix(BASE_ID)
@@ -49,7 +48,9 @@ import injekt.*
   }
 }
 
-@Provide class AppActionPickerDelegate(@property:Provide private val scope: Scope<*> = inject) : ActionPickerDelegate {
+@Provide class AppActionPickerDelegate(
+  @property:Provide private val scope: Scope<AppScope> = inject
+) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String

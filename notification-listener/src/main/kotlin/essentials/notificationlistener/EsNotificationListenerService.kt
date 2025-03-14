@@ -6,16 +6,17 @@ package essentials.notificationlistener
 
 import android.service.notification.*
 import androidx.compose.runtime.*
-import arrow.core.*
-import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.*
 import essentials.*
 import essentials.app.*
 import essentials.logging.*
 import injekt.*
 
 @Provide @AndroidComponent class EsNotificationListenerService(
-  private val notificationScopeFactory: (@Service<NotificationScope> EsNotificationListenerService) -> Scope<NotificationScope>,
-  private val appScope: Scope<*> = inject,
+  private val notificationScopeFactory: (
+    @Service<NotificationScope> EsNotificationListenerService
+  ) -> @New Scope<NotificationScope>,
+  @property:Provide private val scope: Scope<AppScope> = inject,
 ) : NotificationListenerService() {
   var notifications by mutableStateOf(emptyList<StatusBarNotification>())
     private set

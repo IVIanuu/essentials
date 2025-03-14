@@ -9,7 +9,6 @@ import androidx.compose.ui.util.*
 import essentials.*
 import essentials.logging.*
 import essentials.ui.*
-import essentials.ui.navigation.navigator
 import injekt.*
 
 fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {

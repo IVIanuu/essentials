@@ -8,6 +8,6 @@ import android.app.*
 import essentials.*
 import injekt.*
 
-abstract class EsApp(buildAppScope: (@Provide EsApp).() -> Scope<AppScope>) : Application(), AppScopeOwner {
+abstract class EsApp(buildAppScope: (@Provide EsApp).() -> @New Scope<AppScope>) : Application(), AppScopeOwner {
   override val appScope by lazy { buildAppScope() }
 }

@@ -51,7 +51,7 @@ import kotlinx.coroutines.flow.*
 
 @Provide @AndroidComponent class EsBroadcastReceiver(
   private val broadcastManager: BroadcastManager,
-  private val scope: Scope<AppScope> = inject
+  @property:Provide private val scope: Scope<AppScope> = inject
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     d { "on receive $intent" }

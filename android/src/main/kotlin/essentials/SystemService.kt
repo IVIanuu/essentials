@@ -1,7 +1,7 @@
 package essentials
 
 import android.content.*
-import android.content.pm.PackageManager
+import android.content.pm.*
 import injekt.*
 import kotlin.reflect.*
 

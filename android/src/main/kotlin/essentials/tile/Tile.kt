@@ -9,7 +9,7 @@ import android.service.quicksettings.*
 import androidx.compose.runtime.*
 import essentials.*
 import essentials.compose.*
-import essentials.coroutines.coroutineScope
+import essentials.coroutines.*
 import essentials.logging.*
 import injekt.*
 
@@ -64,7 +64,7 @@ abstract class EsTileService : TileService() {
 }
 
 @Provide @Service<AppScope> data class TileServiceComponent(
-  val tileScopeFactory: (EsTileService) -> Scope<TileScope>
+  val tileScopeFactory: (EsTileService) -> @New Scope<TileScope>
 )
 
 data class TileState(

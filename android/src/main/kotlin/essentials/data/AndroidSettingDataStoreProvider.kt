@@ -19,7 +19,7 @@ class AndroidSettingDataStoreProvider<T : Any>(
   private val type: AndroidSettingsType,
   private val defaultValue: T
 ) {
-  @Provide fun provide(scope: Scope<AppScope>): DataStore<T> = object : DataStore<T> {
+  @Provide fun provide(scope: Scope<AppScope> = inject): DataStore<T> = object : DataStore<T> {
     private val contentResolver get() = appContext().contentResolver
 
     private suspend fun get(): T = withContext(coroutineContexts().io) {

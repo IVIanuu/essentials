@@ -108,7 +108,10 @@ suspend fun unlockScreen(scope: Scope<*> = inject): Boolean {
   return startUnlockActivityForResult(REQUEST_TYPE_UNLOCK)
 }
 
-private suspend fun startUnlockActivityForResult(requestType: Int): Boolean {
+private suspend fun startUnlockActivityForResult(
+  requestType: Int,
+  scope: Scope<*> = inject
+): Boolean {
   val result = CompletableDeferred<Boolean>()
   val requestId = UUID.randomUUID().toString()
   requestsById[requestId] = result
@@ -129,7 +132,7 @@ private const val REQUEST_TYPE_SCREEN_ON = 1
 private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
 
 @Provide @AndroidComponent class UnlockActivity(
-  private val scope: Scope<*> = inject
+  @property:Provide private val scope: Scope<AppScope> = inject
 ) : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

@@ -5,7 +5,6 @@
 package essentials.util
 
 import android.content.*
-import android.content.pm.*
 import essentials.*
 import essentials.coroutines.*
 import essentials.ui.*
@@ -14,7 +13,7 @@ import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-suspend fun launchUi(scope: Scope<*> = inject): Scope<UiScope> =
+suspend fun launchUi(scope: Scope<AppScope> = inject): Scope<UiScope> =
   withContext(coroutineContexts().main) {
     val intent = packageManager()
       .getLaunchIntentForPackage(appConfig().packageName)!!
@@ -27,4 +26,4 @@ suspend fun launchUi(scope: Scope<*> = inject): Scope<UiScope> =
     scope.scopeOf<UiScope>().first()
   }
 
-@Provide fun androidUiLauncher(scope: Scope<*> = inject) = UiLauncher { launchUi() }
+@Provide fun androidUiLauncher(scope: Scope<AppScope> = inject) = UiLauncher { launchUi() }

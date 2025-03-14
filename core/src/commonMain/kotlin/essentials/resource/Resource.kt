@@ -8,7 +8,6 @@ package essentials.resource
 
 import androidx.compose.runtime.*
 import arrow.core.*
-import essentials.*
 import kotlinx.coroutines.flow.*
 
 @Stable sealed interface Resource<out T> {

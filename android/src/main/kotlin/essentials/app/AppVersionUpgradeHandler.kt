@@ -21,7 +21,7 @@ data class AppVersionUpgradeParams(val lastAppVersion: Int?, val appVersion: Int
 @Provide @Composable fun AppVersionUpgradeHandler(
   handlers: () -> List<suspend (AppVersionUpgradeParams) -> AppVersionUpgradeResult>,
   preferencesStore: DataStore<Preferences>,
-  scope: Scope<*> = inject
+  scope: Scope<AppScope> = inject
 ): ScopeContent<AppScope> {
   LaunchedEffect(true) {
     val lastAppVersion = preferencesStore.data.first()[LastAppVersionPrefKey]

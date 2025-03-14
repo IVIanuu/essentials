@@ -9,7 +9,7 @@ import android.content.pm.*
 import android.icu.text.*
 import androidx.compose.ui.util.*
 import androidx.core.content.*
-import com.github.michaelbull.result.getOrThrow
+import com.github.michaelbull.result.*
 import essentials.*
 import essentials.app.*
 import essentials.coroutines.*
