@@ -84,11 +84,12 @@ val LocalListDecorators = staticCompositionLocalOf<() -> List<ExtensionPointReco
   { emptyList() }
 }
 
-fun interface ListDecoratorsProvider : AppUiDecorator
+data object ListDecoratorsProvider
 
-@Provide inline fun listDecoratorsProvider(
-  crossinline decorators: () -> List<ExtensionPointRecord<ListDecorator>>
-) = ListDecoratorsProvider { content ->
+@Provide @Composable fun ProvideListDecorators(
+  decorators: () -> List<ExtensionPointRecord<ListDecorator>>,
+  content: @Composable () -> Unit
+): AppUiDecoration<ListDecoratorsProvider> {
   CompositionLocalProvider(
     LocalListDecorators provides { decorators().sortedWithLoadingOrder() },
     content = content

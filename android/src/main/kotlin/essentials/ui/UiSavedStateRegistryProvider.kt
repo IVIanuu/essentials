@@ -9,7 +9,10 @@ import androidx.compose.runtime.saveable.*
 import essentials.ui.app.*
 import injekt.*
 
-@Provide val savableStateRegistryProvider = AppUiDecorator { content ->
+data object SaveableStateRegistryProvider
+@Provide @Composable fun ProvideSaveableStateRegistry(
+  content: @Composable () -> Unit
+): AppUiDecoration<SaveableStateRegistryProvider> {
   CompositionLocalProvider(
     LocalSaveableStateRegistry provides SaveableStateRegistry(emptyMap()) { true },
     content = content

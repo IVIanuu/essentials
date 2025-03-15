@@ -74,20 +74,19 @@ fun Typography.withFontFamily(fontFamily: FontFamily?): Typography = copy(
 @Provide val defaultAppShapes: AppShapes
   get() = Shapes()
 
-fun interface AppThemeDecorator : AppUiDecorator {
-  @Provide companion object {
-    @Provide val loadingOrder
-      get() = LoadingOrder<AppThemeDecorator>().first()
-  }
+@Provide data object AppTheme {
+  @Provide val loadingOrder
+    get() = LoadingOrder<AppTheme>().first()
 }
 
-@Provide fun appThemeDecorator(
-  colorScheme: @Composable () -> AppColorScheme,
+@Provide @Composable fun AppThemeDecorator(
+  colorScheme: AppColorScheme,
   shapes: AppShapes,
-  typography: AppTypography
-) = AppThemeDecorator { content ->
+  typography: AppTypography,
+  content: @Composable () -> Unit
+): AppUiDecoration<AppTheme> {
   MaterialTheme(
-    colorScheme = colorScheme(),
+    colorScheme = colorScheme,
     typography = typography,
     shapes = shapes,
     content = content

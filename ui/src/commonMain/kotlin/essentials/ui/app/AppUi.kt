@@ -9,17 +9,23 @@ import androidx.compose.ui.util.*
 import essentials.*
 import essentials.logging.*
 import injekt.*
+import kotlin.reflect.*
 
 @Tag typealias AppUi = Unit
 
-@Stable fun interface AppUiDecorator : ExtensionPoint<AppUiDecorator> {
-  @Composable fun DecoratedContent(content: @Composable () -> Unit)
-}
+@Tag annotation class AppUiDecorationTag<K : Any>
+typealias AppUiDecoration<K> = @AppUiDecorationTag<K> Unit
+
+@Provide fun <@AddOn T : @AppUiDecorationTag<K> Unit, K : Any> appUiDecorationElement(
+  key: KClass<K>,
+  result: @Composable (@Composable () -> Unit) -> AppUiDecoration<K>,
+  loadingOrder: LoadingOrder<K> = LoadingOrder()
+) = LoadingOrderListElement<@Composable (@Composable () -> Unit) -> AppUiDecoration<*>>(key, result, loadingOrder)
 
 @Tag typealias DecoratedAppUi = Unit
 
 @Provide @Composable fun DecoratedAppUi(
-  records: List<ExtensionPointRecord<AppUiDecorator>>,
+  records: List<LoadingOrderListElement<@Composable (@Composable () -> Unit) -> AppUiDecoration<*>>>,
   logger: Logger,
   content: @Composable () -> Unit
 ): DecoratedAppUi {
@@ -30,7 +36,7 @@ import injekt.*
         { content ->
           acc {
             logger.d { "decorate app ui ${record.key.qualifiedName}" }
-            record.instance.DecoratedContent(content)
+            record.instance(content)
           }
         }
       }
