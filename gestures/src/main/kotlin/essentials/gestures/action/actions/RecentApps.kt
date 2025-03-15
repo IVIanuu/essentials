@@ -22,7 +22,7 @@ import injekt.*
 
   @Provide suspend fun execute(
     performAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<RecentAppsActionId> {
+  ): ExecuteActionResult<RecentAppsActionId> {
     performAction(GLOBAL_ACTION_RECENTS)
   }
 }

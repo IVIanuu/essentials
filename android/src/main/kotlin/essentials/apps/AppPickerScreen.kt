@@ -28,7 +28,7 @@ class AppPickerScreen(
 
 @Provide @Composable fun AppPickerUi(
   coroutineContexts: CoroutineContexts,
-  getInstalledApps: suspend () -> InstalledApps,
+  getInstalledApps: getInstalledApps,
   navigator: Navigator,
   screen: AppPickerScreen
 ): Ui<AppPickerScreen> {

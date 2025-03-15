@@ -21,7 +21,7 @@ import injekt.*
     )
 
   @Provide fun execute(sendActionMediaIntent: sendActionIntent):
-    ActionExecutorResult<SearchActionId> {
+    ExecuteActionResult<SearchActionId> {
       sendActionMediaIntent(
         Intent(Intent.ACTION_MAIN).apply {
           component = ComponentName(

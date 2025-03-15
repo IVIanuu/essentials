@@ -10,7 +10,6 @@ import android.view.accessibility.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import arrow.core.*
 import com.github.michaelbull.result.getOrElse
 import essentials.*
 import essentials.accessibility.*
@@ -30,7 +29,7 @@ import injekt.*
     appScope: Scope<AppScope>,
     closeSystemDialogs: closeSystemDialogs,
     performAccessibilityAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<NotificationsActionId> {
+  ): ExecuteActionResult<NotificationsActionId> {
     val targetState = catch {
       val service = appScope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
 

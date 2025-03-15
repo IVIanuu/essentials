@@ -9,7 +9,6 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
-import arrow.core.*
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
 import essentials.*
@@ -62,7 +61,8 @@ typealias executeAction = suspend (String) -> executeActionResult
 
 @Provide suspend fun executeAction(
   id: String,
-  actionsExecutors: Map<String, suspend () -> ActionExecutorResult<*>>,
+  actionIds: List<ActionId>,
+  actionsExecutors: Map<String, suspend (ActionId) -> ExecuteActionResult<*>>,
   actionFactories: List<() -> ActionFactory>,
   actionRepository: ActionRepository,
   appConfig: AppConfig,
@@ -107,7 +107,7 @@ typealias executeAction = suspend (String) -> executeActionResult
     // fire
     catch {
       actionsExecutors[id]
-        ?.invoke()
+        ?.invoke(actionIds.first { it.value == id })
         ?: actionFactories
           .fastMap { it() }
           .firstNotNullOfOrNull { it.execute(id) }

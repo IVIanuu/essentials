@@ -30,7 +30,7 @@ import injekt.*
 
   @Provide suspend fun execute(
     autoRotationDataStore: DataStore<AutoRotation>,
-  ): ActionExecutorResult<AutoRotationActionId> {
+  ): ExecuteActionResult<AutoRotationActionId> {
     autoRotationDataStore.updateData { if (it != 1) 1 else 0 }
   }
 }

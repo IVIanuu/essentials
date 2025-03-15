@@ -9,6 +9,7 @@ import injekt.*
 import kotlin.time.*
 import kotlin.time.Duration.Companion.milliseconds
 
-@Tag typealias Now = Duration
-typealias Clock = () -> Now
-@Provide fun currentTime(): Now = System.currentTimeMillis().milliseconds
+@Tag typealias Clock = () -> Duration
+@Provide fun clock(): Clock = {
+  System.currentTimeMillis().milliseconds
+}

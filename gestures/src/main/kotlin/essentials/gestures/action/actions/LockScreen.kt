@@ -22,7 +22,7 @@ import injekt.*
 
   @Provide suspend fun execute(
     performAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<LockScreenActionId> {
+  ): ExecuteActionResult<LockScreenActionId> {
     performAction(GLOBAL_ACTION_LOCK_SCREEN)
   }
 }

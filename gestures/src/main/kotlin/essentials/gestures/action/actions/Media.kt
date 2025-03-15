@@ -7,6 +7,11 @@ package essentials.gestures.action.actions
 import android.content.*
 import android.provider.*
 import android.view.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.datastore.core.*
@@ -14,24 +19,82 @@ import androidx.datastore.preferences.core.*
 import essentials.*
 import essentials.apps.*
 import essentials.compose.*
+import essentials.gestures.action.Action
+import essentials.gestures.action.ExecuteActionResult
+import essentials.gestures.action.ActionId
+import essentials.gestures.action.ActionSettingsScreen
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.flow.*
+import kotlin.collections.get
 
-@Provide class MediaActionSender(
-  private val appContext: AppContext,
-  private val preferencesStore: DataStore<Preferences>
+@Provide object PlayPauseActionId : MediaActionId(
+  "media_play_pause",
+  KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
 ) {
-  suspend fun sendMediaAction(keycode: Int) {
-    val mediaApp = preferencesStore.data.first()[MediaActionAppKey]
-    fun mediaIntentFor(keyEvent: Int) = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
-      putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent(keyEvent, keycode))
-      if (mediaApp != null) `package` = mediaApp
+  @Provide val action get() = Action(
+    id = PlayPauseActionId,
+    title = "Media play/Pause",
+    icon = { Icon(Icons.Default.PlayArrow, null) }
+  )
+}
+
+@Provide object SkipNextActionId : MediaActionId(
+  "media_skip_next",
+  KeyEvent.KEYCODE_MEDIA_NEXT
+) {
+  @Provide val action get() = Action(
+    id = SkipNextActionId,
+    title = "Media skip next",
+    icon = { Icon(Icons.Default.SkipNext, null) }
+  )
+}
+
+@Provide object SkipPreviousActionId : MediaActionId(
+  "media_skip_previous",
+  KeyEvent.KEYCODE_MEDIA_PREVIOUS
+) {
+  @Provide val action get() = Action(
+    id = SkipPreviousActionId,
+    title = "Media skip previous",
+    icon = { Icon(Icons.Default.SkipPrevious, null) }
+  )
+}
+
+@Provide object StopActionId : MediaActionId(
+  "media_stop",
+  KeyEvent.KEYCODE_MEDIA_STOP
+) {
+  @Provide val action get() = Action(
+    id = StopActionId,
+    title = "Media stop",
+    icon = { Icon(Icons.Default.Stop, null) }
+  )
+}
+
+abstract class MediaActionId(
+  value: String,
+  val keycode: Int
+) : ActionId(value) {
+  @Provide companion object {
+    @Provide suspend fun <@AddOn T : MediaActionId> execute(
+      id: T,
+      appContext: AppContext,
+      preferencesStore: DataStore<Preferences>
+    ): ExecuteActionResult<T> {
+      val mediaApp = preferencesStore.data.first()[MediaActionAppKey]
+      fun mediaIntentFor(keyEvent: Int) = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+        putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent(keyEvent, id.keycode))
+        if (mediaApp != null) `package` = mediaApp
+      }
+      appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN), null)
+      appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP), null)
     }
-    appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN), null)
-    appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP), null)
+
+    @Provide fun <@AddOn I : MediaActionId> settingsScreen(): ActionSettingsScreen<I> =
+      MediaActionSettingsScreen()
   }
 }
 

@@ -22,7 +22,7 @@ import injekt.*
 
   @Provide suspend fun execute(
     performAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<PowerDialogActionId> {
+  ): ExecuteActionResult<PowerDialogActionId> {
     performAction(GLOBAL_ACTION_POWER_DIALOG)
   }
 }

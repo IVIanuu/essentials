@@ -12,21 +12,23 @@ import essentials.coroutines.*
 import injekt.*
 import kotlinx.coroutines.*
 
-@Tag typealias InstalledApps = List<AppInfo>
+@Tag typealias getInstalledApps = suspend () -> List<AppInfo>
 
-@Provide suspend fun getInstalledApps(
+@Provide fun getInstalledApps(
   coroutineContexts: CoroutineContexts,
   packageManager: PackageManager
-): InstalledApps = withContext(coroutineContexts.io) {
-  packageManager.getInstalledApplications(0)
-    .parMap {
-      AppInfo(
-        appName = it.loadLabel(packageManager).toString(),
-        packageName = it.packageName
-      )
-    }
-    .fastDistinctBy { it.packageName }
-    .sortedBy { it.appName.lowercase() }
+): getInstalledApps = {
+  withContext(coroutineContexts.io) {
+    packageManager.getInstalledApplications(0)
+      .parMap {
+        AppInfo(
+          appName = it.loadLabel(packageManager).toString(),
+          packageName = it.packageName
+        )
+      }
+      .fastDistinctBy { it.packageName }
+      .sortedBy { it.appName.lowercase() }
+  }
 }
 
 @Provide suspend fun getAppInfo(

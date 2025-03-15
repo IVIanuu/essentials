@@ -23,7 +23,7 @@ import injekt.*
 
   @Provide suspend fun execute(
     performAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<SplitScreenActionId> {
+  ): ExecuteActionResult<SplitScreenActionId> {
     performAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
   }
 }

@@ -24,7 +24,7 @@ import kotlinx.coroutines.*
 
   @Provide suspend fun execute(
     performAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<ScreenshotActionId> {
+  ): ExecuteActionResult<ScreenshotActionId> {
     delay(500)
     performAction(GLOBAL_ACTION_TAKE_SCREENSHOT)
   }

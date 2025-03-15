@@ -26,7 +26,7 @@ import kotlinx.coroutines.*
 
   @Provide suspend fun execute(
     performAction: performGlobalAccessibilityAction
-  ): ActionExecutorResult<LastAppActionId> {
+  ): ExecuteActionResult<LastAppActionId> {
     performAction(GLOBAL_ACTION_RECENTS)
     delay(100)
     performAction(GLOBAL_ACTION_RECENTS)
