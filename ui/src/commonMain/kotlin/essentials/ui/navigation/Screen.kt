@@ -39,28 +39,27 @@ class ScreenScope {
   @Composable fun DecoratedContent(content: @Composable () -> Unit)
 }
 
-@Stable @Provide class DecorateScreen(
-  private val records: List<ExtensionPointRecord<ScreenDecorator>>,
-  private val logger: Logger
-) {
-  @Composable fun DecoratedContent(content: @Composable () -> Unit) {
-    val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
-      records
-        .sortedWithLoadingOrder()
-        .fastFold({ it() }) { acc, record ->
-          { content ->
-            acc {
-              logger.d { "decorate screen with ${record.key.qualifiedName}" }
-              record.instance.DecoratedContent(content)
-            }
+@Tag typealias DecoratedScreenContent = Unit
+
+@Provide @Composable fun DecoratedScreenContent(
+  logger: Logger,
+  records: List<ExtensionPointRecord<ScreenDecorator>>,
+  content: @Composable () -> Unit
+): DecoratedScreenContent {
+  val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
+    records
+      .sortedWithLoadingOrder()
+      .fastFold({ it() }) { acc, record ->
+        { content ->
+          acc {
+            logger.d { "decorate screen with ${record.key.qualifiedName}" }
+            record.instance.DecoratedContent(content)
           }
         }
-    }
-
-    logger.d { "decorate screen $content with combined $combinedDecorator" }
-
-    combinedDecorator(content)
+      }
   }
+
+  combinedDecorator(content)
 }
 
 @Provide object ScreenProviders {

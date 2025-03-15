@@ -84,12 +84,11 @@ import kotlin.reflect.*
   val config = component.configFactories[screen::class.cast()]
     ?.invoke(navigator, scope.cast(), screen)
     ?: error("No config found for $screen")
-  val decorateScreen = component.decorateScreenFactory(navigator, scope.cast(), screen)
   ScreenState(
     screen = screen,
     config = config,
     content = {
-      decorateScreen.DecoratedContent {
+      component.decorateScreen(navigator, scope, screen) {
         ui(navigator, scope.cast(), screen)
       }
     },
@@ -101,7 +100,7 @@ import kotlin.reflect.*
   val uiFactories: Map<KClass<Screen<*>>, @NavGraph<N> UiContent<Screen<*>>>,
   val configFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>>,
   val screenScopeFactory: (@Service<ScreenScope> Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>,
-  val decorateScreenFactory: (Navigator, Scope<ScreenScope>, Screen<*>) -> DecorateScreen
+  val decorateScreen: @Composable (Navigator, Scope<ScreenScope>, Screen<*>, @Composable () -> Unit) -> DecoratedScreenContent
 ) {
   @Provide companion object {
     @Provide fun rootService(
