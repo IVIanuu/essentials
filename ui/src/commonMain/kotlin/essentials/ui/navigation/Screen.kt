@@ -31,9 +31,7 @@ data class ScreenConfig<T : Screen<*>>(
   constructor(transitionSpec: ScreenTransitionSpec) : this(transitionSpec, transitionSpec)
 }
 
-class ScreenScope {
-  override fun toString() = "ScreenScope"
-}
+data object ScreenScope
 
 @Stable fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
   @Composable fun DecoratedContent(content: @Composable () -> Unit)
