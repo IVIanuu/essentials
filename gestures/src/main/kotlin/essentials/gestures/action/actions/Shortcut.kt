@@ -42,7 +42,7 @@ import java.io.*
   }
 
   @Suppress("DEPRECATION")
-  override suspend fun execute(id: String): ExecuteActionResult<*>? {
+  override suspend fun execute(id: String): ActionExecutorResult<*>? {
     if (!id.startsWith(BASE_ID)) return null
 
     val tmp = id.split(ACTION_DELIMITER)

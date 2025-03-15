@@ -26,7 +26,7 @@ import injekt.*
 
   @SuppressLint("DiscouragedPrivateApi")
   @Provide fun execute(searchManager: @SystemService SearchManager):
-      ExecuteActionResult<AssistantActionId> {
+      ActionExecutorResult<AssistantActionId> {
     val launchAssist = SearchManager::class.java
         .getDeclaredMethod("launchAssist", Bundle::class.java)
       launchAssist.invoke(searchManager, Bundle())

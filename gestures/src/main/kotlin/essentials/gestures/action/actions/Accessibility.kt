@@ -14,7 +14,7 @@ abstract class AccessibilityActionId(
     @Provide suspend fun <@AddOn T : AccessibilityActionId> execute(
       id: T,
       performAction: performGlobalAccessibilityAction
-    ): ExecuteActionResult<BackActionId> {
+    ): ActionExecutorResult<BackActionId> {
       performAction(id.accessibilityAction)
     }
   }

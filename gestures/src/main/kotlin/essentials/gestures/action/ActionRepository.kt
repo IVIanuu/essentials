@@ -61,7 +61,7 @@ typealias executeAction = suspend (String) -> executeActionResult
 @Provide suspend fun executeAction(
   id: String,
   actionIds: List<ActionId>,
-  actionsExecutors: Map<String, suspend (ActionId) -> ExecuteActionResult<*>>,
+  actionsExecutors: Map<String, suspend (ActionId) -> ActionExecutorResult<*>>,
   actionFactories: List<() -> ActionFactory>,
   actionRepository: ActionRepository,
   appConfig: AppConfig,

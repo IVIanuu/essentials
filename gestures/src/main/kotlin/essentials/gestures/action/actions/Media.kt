@@ -76,7 +76,7 @@ abstract class MediaActionId(
       id: T,
       appContext: AppContext,
       preferencesStore: DataStore<Preferences>
-    ): ExecuteActionResult<T> {
+    ): ActionExecutorResult<T> {
       val mediaApp = preferencesStore.data.first()[MediaActionAppKey]
       fun mediaIntentFor(keyEvent: Int) = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
         putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent(keyEvent, id.keycode))

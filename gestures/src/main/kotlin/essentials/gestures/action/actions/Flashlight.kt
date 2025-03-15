@@ -42,7 +42,7 @@ import kotlinx.coroutines.flow.*
     cameraManager: @SystemService CameraManager,
     coroutineContexts: CoroutineContexts,
     showToast: showToast
-  ): ExecuteActionResult<FlashlightActionId> {
+  ): ActionExecutorResult<FlashlightActionId> {
     withContext(coroutineContexts.main) {
       val state = cameraManager.flashlightState(coroutineContexts).first()
       catch {

@@ -27,7 +27,7 @@ import injekt.*
     closeSystemDialogs: closeSystemDialogs,
     performAction: performGlobalAccessibilityAction,
     sendIntent: sendActionIntent,
-  ): ExecuteActionResult<HomeActionId> {
+  ): ActionExecutorResult<HomeActionId> {
     if (!needsHomeIntentWorkaround) {
       performAction(GLOBAL_ACTION_HOME)
     } else {

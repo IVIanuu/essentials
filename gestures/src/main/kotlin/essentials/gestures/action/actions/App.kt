@@ -37,7 +37,7 @@ import injekt.*
     )
   }
 
-  override suspend fun execute(id: String): ExecuteActionResult<*>? {
+  override suspend fun execute(id: String): ActionExecutorResult<*>? {
     if (!id.startsWith(BASE_ID)) return null
     val packageName = id.removePrefix(BASE_ID)
       .split(ACTION_DELIMITER)
@@ -46,7 +46,7 @@ import injekt.*
       packageManager.getLaunchIntentForPackage(packageName)!!,
       null
     )
-    return ExecuteActionResult
+    return ActionExecutorResult
   }
 }
 

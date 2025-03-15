@@ -45,7 +45,7 @@ import kotlin.coroutines.*
     logger: Logger,
     packageManager: PackageManager,
     sendIntent: sendActionIntent
-  ): ExecuteActionResult<CameraActionId> {
+  ): ActionExecutorResult<CameraActionId> {
     val cameraApp = packageManager.resolveActivity(
       Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
       PackageManager.MATCH_DEFAULT_ONLY

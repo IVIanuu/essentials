@@ -36,12 +36,12 @@ import kotlin.reflect.*
 
 abstract class ActionId(val value: String)
 
-@Tag typealias ExecuteActionResult<I> = Unit
+@Tag typealias ActionExecutorResult<I> = Unit
 
 interface ActionFactory {
   suspend fun createAction(id: String): Action<*>?
 
-  suspend fun execute(id: String): ExecuteActionResult<*>?
+  suspend fun execute(id: String): ActionExecutorResult<*>?
 }
 
 @Tag typealias ActionSettingsScreen<I> = Screen<Unit>
@@ -65,10 +65,10 @@ interface ActionPickerDelegate {
     provider: () -> T
   ): () -> ActionFactory = provider
 
-  @Provide fun <@AddOn T : ExecuteActionResult<I>, I : ActionId> actionExecutorBinding(
+  @Provide fun <@AddOn T : ActionExecutorResult<I>, I : ActionId> actionExecutorBinding(
     id: I,
     provider: suspend (I) -> T
-  ): Pair<String, suspend (ActionId) -> ExecuteActionResult<*>> =
+  ): Pair<String, suspend (ActionId) -> ActionExecutorResult<*>> =
     id.value to provider.cast()
 
   @Provide fun <@AddOn T : ActionPickerDelegate> actionPickerDelegateBinding(
