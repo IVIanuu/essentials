@@ -4,7 +4,7 @@
 
 package essentials.ui.app
 
-import androidx.compose.foundation.*
+import android.content.res.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
@@ -24,15 +24,18 @@ data class AppColors(
   }
 }
 
+@Tag typealias IsSystemInDarkTheme = Boolean
+@Provide @Composable fun isSystemInDarkTheme(configuration: Configuration): IsSystemInDarkTheme =
+  (configuration.uiMode  and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+
 @Tag typealias AppColorScheme = ColorScheme
-@Tag typealias IsDark = Boolean
 
 @Provide @Composable fun defaultAppColorScheme(
   appColors: AppColors,
-  isDark: IsDark
-): AppColorScheme = remember(isDark) {
+  isSystemInDarkTheme: IsSystemInDarkTheme
+): AppColorScheme = remember(isSystemInDarkTheme) {
   dynamicColorScheme(
-    isDark = isDark,
+    isDark = isSystemInDarkTheme,
     isAmoled = false,
     primary = appColors.primary,
     secondary = appColors.secondary,
@@ -79,12 +82,12 @@ fun interface AppThemeDecorator : AppUiDecorator {
 }
 
 @Provide fun appThemeDecorator(
-  colorSchemeProducer: @Composable (IsDark) -> AppColorScheme,
+  colorScheme: @Composable () -> AppColorScheme,
   shapes: AppShapes,
   typography: AppTypography
 ) = AppThemeDecorator { content ->
   MaterialTheme(
-    colorScheme = colorSchemeProducer(isSystemInDarkTheme()),
+    colorScheme = colorScheme(),
     typography = typography,
     shapes = shapes,
     content = content
