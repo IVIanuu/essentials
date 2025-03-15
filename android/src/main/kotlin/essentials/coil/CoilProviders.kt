@@ -19,8 +19,10 @@ import kotlin.reflect.*
 
 @OptIn(ExperimentalStdlibApi::class)
 @Provide object CoilProviders {
-  @Provide fun coilInitializer(imageLoaderFactory: () -> ImageLoader) =
-    ScopeInitializer<AppScope> { Coil.setImageLoader(imageLoaderFactory) }
+  data object CoilInit
+  @Provide fun initializeCoil(imageLoaderFactory: () -> ImageLoader): ScopeInit<AppScope, CoilInit> {
+    Coil.setImageLoader(imageLoaderFactory)
+  }
 
   @Provide fun imageLoader(
     appContext: AppContext,

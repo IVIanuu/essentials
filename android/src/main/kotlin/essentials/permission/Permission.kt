@@ -51,6 +51,6 @@ interface Permission {
 
 internal val permissionRefreshes = EventFlow<Unit>()
 
-@Provide fun permissionRefreshesWorker() = ScopeInitializer<UiScope> {
+@Provide fun refreshPermissions(): ScopeInit<UiScope, Any> {
   permissionRefreshes.tryEmit(Unit)
 }

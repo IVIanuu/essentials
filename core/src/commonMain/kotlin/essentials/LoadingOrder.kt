@@ -8,6 +8,27 @@ import androidx.compose.ui.util.*
 import injekt.*
 import kotlin.reflect.*
 
+@Tag typealias LoadingOrderList<T> = List<T>
+
+data class LoadingOrderListElement<T : Any>(
+  val key: KClass<*>,
+  val instance: T,
+  val loadingOrder: LoadingOrder<*>
+) {
+  @Provide companion object {
+    @Provide val descriptor = object : LoadingOrder.Descriptor<LoadingOrderListElement<*>> {
+      override fun key(x: LoadingOrderListElement<*>): KClass<*> = x.key
+      override fun loadingOrder(x: LoadingOrderListElement<*>): LoadingOrder<*> = x.loadingOrder
+    }
+
+    @Provide fun <T : Any> loadingOrderList(
+      list: List<LoadingOrderListElement<T>>
+    ): LoadingOrderList<T> = list.sortedWithLoadingOrder().fastMap { it.instance }
+
+    @Provide fun <T : Any> defaultElements() = emptyList<LoadingOrderListElement<T>>()
+  }
+}
+
 sealed interface LoadingOrder<T : Any> {
   sealed interface Static<T : Any> : LoadingOrder<T> {
     class First<T : Any> : Static<T>

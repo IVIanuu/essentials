@@ -121,18 +121,18 @@ data class WorkConstraints(
     else null
 }
 
-@Provide class WorkInitializer(
-  private val appContext: AppContext,
-  private val workerFactory: WorkerFactory
-) : ScopeInitializer<AppScope> {
-  override fun initialize() {
-    AndroidWorkManager.initialize(
-      appContext,
-      Configuration.Builder()
-        .setWorkerFactory(workerFactory)
-        .build()
-    )
-  }
+data object WorkInit
+
+@Provide fun initializeWork(
+  appContext: AppContext,
+  workerFactory: WorkerFactory
+): ScopeInit<AppScope, WorkInit> {
+  AndroidWorkManager.initialize(
+    appContext,
+    Configuration.Builder()
+      .setWorkerFactory(workerFactory)
+      .build()
+  )
 }
 
 @SuppressLint("RestrictedApi")

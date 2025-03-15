@@ -40,9 +40,7 @@ import kotlin.reflect.*
         this[providedService.key] = providedService
     }
 
-    config.initializers
-      .sortedWithLoadingOrder()
-      .fastForEach { it.instance.initialize() }
+    config.initializers.fastForEach { it() }
 
     setContent(config)
   }
@@ -114,7 +112,7 @@ import kotlin.reflect.*
 }
 
 @Provide data class ScopeConfig<N : Any>(
-  val initializers: List<ExtensionPointRecord<ScopeInitializer<N>>>,
+  val initializers: LoadingOrderList<() -> ScopeInit<N, *>>,
   val content: List<@Composable () -> ScopeContent<N>>,
   val services: List<ProvidedService<N, *>>
 )
@@ -187,17 +185,21 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
   @Provide companion object {
     @Provide fun <@AddOn T : @Eager<N> S, S, N : Any> scoped(value: T): @Scoped<N> S = value
 
-    @Provide inline fun <@AddOn T : @Eager<N> S, S, N : Any> initializer(
-      crossinline factory: () -> S
-    ): ScopeInitializer<N> = ScopeInitializer { factory() }
+    @Provide fun <@AddOn T : @Eager<N> S, S, N : Any> init(s: S): ScopeInit<N, Any> {
+    }
   }
 }
 
 val LocalScope = compositionLocalOf<Scope<*>> { error("No provided scope") }
 
-fun interface ScopeInitializer<N : Any> : ExtensionPoint<ScopeInitializer<N>> {
-  fun initialize()
-}
+@Tag annotation class ScopeInitTag<N, K : Any>
+typealias ScopeInit<N, K> = @ScopeInitTag<N, K> Unit
+
+@Provide fun <@AddOn T : @ScopeInitTag<N, K> Unit, N, K : Any> scopeInitElement(
+  key: KClass<K>,
+  result: () -> ScopeInit<N, K>,
+  loadingOrder: LoadingOrder<K> = LoadingOrder()
+) = LoadingOrderListElement<() -> ScopeInit<N, *>>(key, result, loadingOrder)
 
 @Tag typealias ScopeContent<N> = Unit
 
