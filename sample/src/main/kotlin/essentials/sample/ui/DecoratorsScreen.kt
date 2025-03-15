@@ -47,11 +47,10 @@ class DecoratorsScreen : Screen<Unit>
   }
 }
 
-@Provide val sampleKeyUiDecorator = ScreenDecorator decorator@ { content ->
-  val screen = LocalScope.current.screen
+@Provide fun SampleUiDecorator(screen: Screen<*>) = ScreenDecorator { content ->
   if (screen !is DecoratorsScreen) {
     content()
-    return@decorator
+    return@ScreenDecorator
   } else {
     Column {
       Box(
