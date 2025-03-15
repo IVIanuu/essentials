@@ -7,11 +7,8 @@ package essentials.gestures.action.actions
 import android.content.*
 import android.provider.*
 import android.view.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.SkipNext
-import androidx.compose.material.icons.filled.SkipPrevious
-import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.datastore.core.*
@@ -19,16 +16,12 @@ import androidx.datastore.preferences.core.*
 import essentials.*
 import essentials.apps.*
 import essentials.compose.*
-import essentials.gestures.action.Action
-import essentials.gestures.action.ExecuteActionResult
-import essentials.gestures.action.ActionId
-import essentials.gestures.action.ActionSettingsScreen
+import essentials.gestures.action.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.flow.*
-import kotlin.collections.get
 
 @Provide object PlayPauseActionId : MediaActionId(
   "media_play_pause",

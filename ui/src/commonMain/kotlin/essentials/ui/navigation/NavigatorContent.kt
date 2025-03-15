@@ -6,32 +6,19 @@
 
 package essentials.ui.navigation
 
-import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.Transition
-import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import android.annotation.*
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.util.fastForEachIndexed
-import androidx.compose.ui.util.fastLastOrNull
+import androidx.compose.ui.*
+import androidx.compose.ui.util.*
 import com.slack.circuit.foundation.internal.*
 import essentials.*
 import essentials.compose.*
-import injekt.Provide
-import kotlinx.coroutines.flow.filter
-import soup.compose.material.motion.animation.materialSharedAxisXIn
-import soup.compose.material.motion.animation.materialSharedAxisXOut
-import soup.compose.material.motion.animation.rememberSlideDistance
-import kotlin.collections.set
+import injekt.*
+import kotlinx.coroutines.flow.*
+import soup.compose.material.motion.animation.*
 
 @Composable fun NavigatorContent(
   navigator: Navigator,

@@ -1,11 +1,8 @@
 package essentials.gestures.action.actions
 
-import essentials.accessibility.performGlobalAccessibilityAction
-import essentials.gestures.action.ActionAccessibilityPermission
-import essentials.gestures.action.ActionId
-import essentials.gestures.action.ExecuteActionResult
-import injekt.AddOn
-import injekt.Provide
+import essentials.accessibility.*
+import essentials.gestures.action.*
+import injekt.*
 
 val accessibilityActionPermissions = listOf(ActionAccessibilityPermission::class)
 

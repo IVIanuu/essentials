@@ -7,7 +7,6 @@ package essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService.*
 import androidx.compose.material3.*
 import androidx.compose.ui.res.*
-import essentials.accessibility.*
 import essentials.gestures.R
 import essentials.gestures.action.*
 import injekt.*

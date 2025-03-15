@@ -10,11 +10,9 @@ import android.annotation.*
 import android.app.*
 import android.content.*
 import android.os.*
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.*
 import essentials.*
 import essentials.accessibility.*
-import essentials.gestures.action.ActionAccessibilityPermission
 import essentials.util.*
 import injekt.*
 
