@@ -14,15 +14,14 @@ import injekt.*
 import kotlinx.coroutines.*
 
 @Provide object LastAppActionId : ActionId("last_app") {
-  @Provide val action
-    get() = Action(
-      id = LastAppActionId,
-      title = "Last app",
-      permissions = accessibilityActionPermissions,
-      unlockScreen = true,
-      closeSystemDialogs = true,
-      icon = { Icon(Icons.Default.Repeat, null) }
-    )
+  @Provide val action get() = Action(
+    id = LastAppActionId,
+    title = "Last app",
+    permissions = accessibilityActionPermissions,
+    unlockScreen = true,
+    closeSystemDialogs = true,
+    icon = { Icon(Icons.Default.Repeat, null) }
+  )
 
   @Provide suspend fun execute(
     performAction: performGlobalAccessibilityAction

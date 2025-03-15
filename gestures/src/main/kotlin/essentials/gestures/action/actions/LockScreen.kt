@@ -12,17 +12,14 @@ import essentials.accessibility.*
 import essentials.gestures.action.*
 import injekt.*
 
-@Provide object LockScreenActionId : ActionId("lock_screen") {
+@Provide object LockScreenActionId : AccessibilityActionId(
+  "lock_screen",
+  GLOBAL_ACTION_LOCK_SCREEN
+) {
   @Provide val action get() = Action(
-      id = LockScreenActionId,
-      title = "Lock screen",
-      icon = { Icon(Icons.Default.SettingsPower, null) },
-      permissions = listOf(ActionAccessibilityPermission::class)
-    )
-
-  @Provide suspend fun execute(
-    performAction: performGlobalAccessibilityAction
-  ): ExecuteActionResult<LockScreenActionId> {
-    performAction(GLOBAL_ACTION_LOCK_SCREEN)
-  }
+    id = LockScreenActionId,
+    title = "Lock screen",
+    icon = { Icon(Icons.Default.SettingsPower, null) },
+    permissions = listOf(ActionAccessibilityPermission::class)
+  )
 }

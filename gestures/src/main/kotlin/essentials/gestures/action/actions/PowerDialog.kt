@@ -12,17 +12,14 @@ import essentials.accessibility.*
 import essentials.gestures.action.*
 import injekt.*
 
-@Provide object PowerDialogActionId : ActionId("power_dialog") {
+@Provide object PowerDialogActionId : AccessibilityActionId(
+  "power_dialog",
+  GLOBAL_ACTION_POWER_DIALOG
+) {
   @Provide val action get() = Action(
     id = PowerDialogActionId,
     title = "Power dialog",
     permissions = accessibilityActionPermissions,
     icon = { Icon(Icons.Default.PowerSettingsNew, null) }
   )
-
-  @Provide suspend fun execute(
-    performAction: performGlobalAccessibilityAction
-  ): ExecuteActionResult<PowerDialogActionId> {
-    performAction(GLOBAL_ACTION_POWER_DIALOG)
-  }
 }

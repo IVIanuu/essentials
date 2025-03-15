@@ -15,14 +15,13 @@ import essentials.gestures.action.*
 import injekt.*
 
 @Provide object HomeActionId : ActionId("home") {
-  @Provide val action
-    get() = Action(
-      id = HomeActionId,
-      title = "Home",
-      permissions = if (needsHomeIntentWorkaround) emptyList()
-      else accessibilityActionPermissions,
-      icon = { Icon(painterResource(R.drawable.ic_action_home), null) }
-    )
+  @Provide val action get() = Action(
+    id = HomeActionId,
+    title = "Home",
+    permissions = if (needsHomeIntentWorkaround) emptyList()
+    else accessibilityActionPermissions,
+    icon = { Icon(painterResource(R.drawable.ic_action_home), null) }
+  )
 
   @Provide suspend fun execute(
     closeSystemDialogs: closeSystemDialogs,

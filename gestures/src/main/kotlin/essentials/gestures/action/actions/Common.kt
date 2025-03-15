@@ -18,17 +18,12 @@ import essentials.gestures.action.ActionAccessibilityPermission
 import essentials.util.*
 import injekt.*
 
-val accessibilityActionPermissions = listOf(ActionAccessibilityPermission::class)
-
-@Tag typealias sendActionIntentResult = Unit
-typealias sendActionIntent = (Intent, Bundle?) -> sendActionIntentResult
+@Tag typealias sendActionIntent = (Intent, Bundle?) -> Unit
 
 @Provide fun sendActionIntent(
-  intent: Intent,
-  options: Bundle?,
   appContext: AppContext,
   showToast: showToast
-): sendActionIntentResult {
+): sendActionIntent = { intent, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   catch {
     PendingIntent.getActivity(

@@ -12,17 +12,14 @@ import essentials.gestures.R
 import essentials.gestures.action.*
 import injekt.*
 
-@Provide object RecentAppsActionId : ActionId("recent_apps") {
-  @Provide val action
-    get() = Action(
-      id = RecentAppsActionId,
-      title = "Recent apps",
-      icon = { Icon(painterResource(R.drawable.ic_action_recent_apps), null) }
-    )
-
-  @Provide suspend fun execute(
-    performAction: performGlobalAccessibilityAction
-  ): ExecuteActionResult<RecentAppsActionId> {
-    performAction(GLOBAL_ACTION_RECENTS)
-  }
+@Provide object RecentAppsActionId : AccessibilityActionId(
+  "recent_apps",
+  GLOBAL_ACTION_RECENTS
+) {
+  @Provide val action get() = Action(
+    id = RecentAppsActionId,
+    title = "Recent apps",
+    permissions = accessibilityActionPermissions,
+    icon = { Icon(painterResource(R.drawable.ic_action_recent_apps), null) }
+  )
 }

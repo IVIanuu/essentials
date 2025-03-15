@@ -12,18 +12,14 @@ import essentials.accessibility.*
 import essentials.gestures.action.*
 import injekt.*
 
-@Provide object SplitScreenActionId : ActionId("split_screen") {
-  @Provide val action
-    get() = Action(
-      id = SplitScreenActionId,
-      title = "Split screen",
-      permissions = accessibilityActionPermissions,
-      icon = { Icon(Icons.Default.ViewAgenda, null) }
-    )
-
-  @Provide suspend fun execute(
-    performAction: performGlobalAccessibilityAction
-  ): ExecuteActionResult<SplitScreenActionId> {
-    performAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
-  }
+@Provide object SplitScreenActionId : AccessibilityActionId(
+  "split_screen",
+  GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN
+) {
+  @Provide val action get() = Action(
+    id = SplitScreenActionId,
+    title = "Split screen",
+    permissions = accessibilityActionPermissions,
+    icon = { Icon(Icons.Default.ViewAgenda, null) }
+  )
 }

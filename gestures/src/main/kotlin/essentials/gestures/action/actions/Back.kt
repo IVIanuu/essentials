@@ -12,16 +12,14 @@ import essentials.gestures.R
 import essentials.gestures.action.*
 import injekt.*
 
-@Provide object BackActionId : ActionId("back") {
+@Provide object BackActionId : AccessibilityActionId(
+  "back",
+  GLOBAL_ACTION_BACK
+) {
   @Provide val action get() = Action(
     id = BackActionId,
     title = "Back",
     permissions = accessibilityActionPermissions,
     icon = { Icon(painterResource(R.drawable.ic_action_back), null) }
   )
-
-  @Provide suspend fun execute(performAction: performGlobalAccessibilityAction):
-      ExecuteActionResult<BackActionId> {
-    performAction(GLOBAL_ACTION_BACK)
-  }
 }
