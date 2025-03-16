@@ -86,45 +86,52 @@ enum class ScreenRotation(val isPortrait: Boolean) {
   return displayRotation
 }
 
-@Stable @Provide class DeviceScreenManager(
-  private val appContext: AppContext,
-  private val keyguardManager: @SystemService KeyguardManager,
-  private val logger: Logger,
-  private val powerManager: @SystemService PowerManager
-) {
-  suspend fun turnScreenOn(): Boolean {
-    logger.d { "on request is off ? ${!powerManager.isInteractive}" }
-    if (powerManager.isInteractive) {
-      logger.d { "already on" }
-      return true
+@Tag typealias turnScreenOnResult = Boolean
+typealias turnScreenOn = suspend () -> turnScreenOnResult
+
+@Provide suspend fun turnScreenOn(
+  appContext: AppContext,
+  logger: Logger,
+  powerManager: @SystemService PowerManager
+): turnScreenOnResult {
+  logger.d { "on request is off ? ${!powerManager.isInteractive}" }
+  if (powerManager.isInteractive) {
+    logger.d { "already on" }
+    return true
+  }
+
+  return startUnlockActivityForResult(appContext, REQUEST_TYPE_SCREEN_ON)
+}
+
+@Tag typealias unlockScreenResult = Boolean
+typealias unlockScreen = suspend () -> unlockScreenResult
+
+@Provide suspend fun unlockScreen(
+  appContext: AppContext,
+  logger: Logger,
+  keyguardManager: @SystemService KeyguardManager
+): unlockScreenResult {
+  logger.d { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
+  if (!keyguardManager.isKeyguardLocked) {
+    logger.d { "already unlocked" }
+    return true
+  }
+
+  return startUnlockActivityForResult(appContext, REQUEST_TYPE_UNLOCK)
+}
+
+private suspend fun startUnlockActivityForResult(appContext: AppContext, requestType: Int): Boolean {
+  val result = CompletableDeferred<Boolean>()
+  val requestId = UUID.randomUUID().toString()
+  requestsById[requestId] = result
+  appContext.startActivity(
+    Intent(appContext, UnlockActivity::class.java).apply {
+      putExtra(KEY_REQUEST_ID, requestId)
+      putExtra(KEY_REQUEST_TYPE, requestType)
+      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
-
-    return startUnlockActivityForResult(REQUEST_TYPE_SCREEN_ON)
-  }
-
-  suspend fun unlockScreen(): Boolean {
-    logger.d { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
-    if (!keyguardManager.isKeyguardLocked) {
-      logger.d { "already unlocked" }
-      return true
-    }
-
-    return startUnlockActivityForResult(REQUEST_TYPE_UNLOCK)
-  }
-
-  private suspend fun startUnlockActivityForResult(requestType: Int): Boolean {
-    val result = CompletableDeferred<Boolean>()
-    val requestId = UUID.randomUUID().toString()
-    requestsById[requestId] = result
-    appContext.startActivity(
-      Intent(appContext, UnlockActivity::class.java).apply {
-        putExtra(KEY_REQUEST_ID, requestId)
-        putExtra(KEY_REQUEST_TYPE, requestType)
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-      }
-    )
-    return result.await()
-  }
+  )
+  return result.await()
 }
 
 private const val KEY_REQUEST_ID = "request_id"

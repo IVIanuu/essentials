@@ -24,10 +24,11 @@ import kotlinx.coroutines.flow.*
 class UnlockScreen : Screen<Unit>
 
 @Provide @Composable fun UnlockUi(
-  deviceScreenManager: DeviceScreenManager,
   scope: ScopedCoroutineScope<ScreenScope>,
   screenStateProducer: @Composable () -> ScreenState,
-  showToast: showToast
+  showToast: showToast,
+  turnScreenOn: turnScreenOn,
+  unlockScreen: unlockScreen
 ): Ui<UnlockScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Unlock") } }) {
     Column(
@@ -41,7 +42,7 @@ class UnlockScreen : Screen<Unit>
             showToast("Turn the screen off")
             moleculeFlow { screenStateProducer() }.first { !it.isOn }
             delay(1500)
-            val unlocked = deviceScreenManager.unlockScreen()
+            val unlocked = unlockScreen()
             showToast("Screen unlocked $unlocked")
           }
         }
@@ -55,7 +56,7 @@ class UnlockScreen : Screen<Unit>
             showToast("Turn the screen off")
             moleculeFlow { screenStateProducer() }.first { !it.isOn }
             delay(1500)
-            val screenOn = deviceScreenManager.turnScreenOn()
+            val screenOn = turnScreenOn()
             showToast("Screen activated $screenOn")
           }
         }

@@ -67,10 +67,11 @@ typealias executeAction = suspend (String) -> executeActionResult
   appConfig: AppConfig,
   closeSystemDialogs: closeSystemDialogs,
   coroutineContexts: CoroutineContexts,
-  deviceScreenManager: DeviceScreenManager,
   logger: Logger,
   permissionManager: PermissionManager,
-  showToast: showToast
+  showToast: showToast,
+  turnScreenOn: turnScreenOn,
+  unlockScreen: unlockScreen
 ): executeActionResult = withContext(coroutineContexts.computation) {
   catch {
     logger.d { "execute $id" }
@@ -79,18 +80,18 @@ typealias executeAction = suspend (String) -> executeActionResult
     // check permissions
     if (!permissionManager.permissionState(action.permissions).first()) {
       logger.d { "didn't had permissions for $id ${action.permissions}" }
-      deviceScreenManager.unlockScreen()
+      unlockScreen()
       permissionManager.ensurePermissions(action.permissions)
       return@catch false
     }
 
-    if (action.turnScreenOn && !deviceScreenManager.turnScreenOn()) {
+    if (action.turnScreenOn && !turnScreenOn()) {
       logger.d { "couldn't turn screen on for $id" }
       return@catch false
     }
 
     // unlock screen
-    if (action.unlockScreen && !deviceScreenManager.unlockScreen()) {
+    if (action.unlockScreen && !unlockScreen()) {
       logger.d { "couldn't unlock screen for $id" }
       return@catch false
     }
