@@ -97,7 +97,7 @@ typealias restoreBackup = suspend () -> restoreBackupResult
   dataDir: DataDir,
   logger: Logger,
   navigator: Navigator,
-  processManager: ProcessManager,
+  restartProcess: restartProcess,
 ): restoreBackupResult = withContext(coroutineContexts.io) {
   val uri = navigator.push(
     Intent.createChooser(
@@ -122,7 +122,7 @@ typealias restoreBackup = suspend () -> restoreBackupResult
       }
   }
 
-  processManager.restart()
+  restartProcess()
 }
 
 private val BACKUP_BLACKLIST = listOf(

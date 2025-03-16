@@ -4,18 +4,20 @@
 
 package essentials.util
 
-import androidx.compose.runtime.*
 import com.jakewharton.processphoenix.*
 import essentials.*
 import essentials.logging.*
 import injekt.*
+import kotlinx.coroutines.*
 
-@Stable @Provide class ProcessManager(
-  private val appContext: AppContext,
-  private val logger: Logger
-) {
-  suspend fun restart() {
-    logger.d { "restart process" }
-    ProcessPhoenix.triggerRebirth(appContext)
-  }
+@Tag annotation class restartProcessResult
+typealias restartProcess = suspend () -> @restartProcessResult Nothing
+
+@Provide suspend fun restartProcess(
+  appContext: AppContext,
+  logger: Logger
+): @restartProcessResult Nothing {
+  logger.d { "restart process" }
+  ProcessPhoenix.triggerRebirth(appContext)
+  awaitCancellation()
 }
