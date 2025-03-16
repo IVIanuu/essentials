@@ -21,8 +21,6 @@ import kotlin.coroutines.*
   @Provide companion object {
     @Provide fun <N> service(scope: () -> ScopedCoroutineScope<N>) =
       ProvidedService<N, CoroutineScope>(CoroutineScope::class, scope)
-
-    @Provide fun coroutinesScope(scope: ScopedCoroutineScope<*>): CoroutineScope = scope
   }
 }
 
