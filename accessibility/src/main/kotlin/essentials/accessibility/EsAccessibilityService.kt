@@ -15,8 +15,10 @@ import injekt.*
 import kotlinx.coroutines.flow.*
 
 @Provide @AndroidComponent class EsAccessibilityService(
-  private val accessibilityScopeFactory: (@Service<AccessibilityScope> EsAccessibilityService) -> Scope<AccessibilityScope>,
-  private val logger: Logger
+  private val accessibilityScopeFactory: (
+    @Service<AccessibilityScope> EsAccessibilityService
+  ) -> @New Scope<AccessibilityScope>,
+  @property:Provide private val logger: Logger
 ) : AccessibilityService() {
   private val _events = EventFlow<AccessibilityEvent>()
   val events: Flow<AccessibilityEvent> by this::_events
@@ -25,10 +27,10 @@ import kotlinx.coroutines.flow.*
 
   override fun onServiceConnected() {
     super.onServiceConnected()
-    logger.d { "accessibility service connected" }
+    d { "accessibility service connected" }
     accessibilityScope = accessibilityScopeFactory(this)
     val configs = accessibilityScope!!.service<Component>().configs
-    logger.d { "update accessibility configs $configs" }
+    d { "update accessibility configs $configs" }
     serviceInfo = serviceInfo.apply {
       eventTypes = configs
         .fastMap { it.eventTypes }
@@ -51,7 +53,7 @@ import kotlinx.coroutines.flow.*
   }
 
   override fun onAccessibilityEvent(event: AndroidAccessibilityEvent) {
-    logger.d { "on accessibility event $event" }
+    d { "on accessibility event $event" }
     _events.tryEmit(
       AccessibilityEvent(
         type = event.eventType,
@@ -66,7 +68,7 @@ import kotlinx.coroutines.flow.*
   }
 
   override fun onUnbind(intent: Intent?): Boolean {
-    logger.d { "accessibility service disconnected" }
+    d { "accessibility service disconnected" }
     accessibilityScope?.dispose()
     accessibilityScope = null
     return super.onUnbind(intent)

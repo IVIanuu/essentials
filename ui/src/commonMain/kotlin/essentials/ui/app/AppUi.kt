@@ -26,7 +26,7 @@ typealias AppUiDecoration<K> = @AppUiDecorationTag<K> Unit
 
 @Provide @Composable fun DecoratedAppUi(
   records: List<LoadingOrderListElement<@Composable (@Composable () -> Unit) -> AppUiDecoration<*>>>,
-  logger: Logger,
+  logger: Logger = inject,
   content: @Composable () -> Unit
 ): DecoratedAppUi {
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
@@ -35,14 +35,14 @@ typealias AppUiDecoration<K> = @AppUiDecorationTag<K> Unit
       .fastFold({ it() }) { acc, record ->
         { content ->
           acc {
-            logger.d { "decorate app ui ${record.key.qualifiedName}" }
+            d { "decorate app ui ${record.key.qualifiedName}" }
             record.instance(content)
           }
         }
       }
   }
 
-  logger.d { "decorate app ui $content with combined $combinedDecorator" }
+  d { "decorate app ui $content with combined $combinedDecorator" }
 
   combinedDecorator(content)
 }

@@ -51,11 +51,11 @@ import kotlinx.coroutines.flow.*
 
 @Provide @AndroidComponent class EsBroadcastReceiver(
   private val broadcastManager: BroadcastManager,
-  private val logger: Logger,
+  @property:Provide private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
-    logger.d { "on receive $intent" }
+    d { "on receive $intent" }
     scope.launch {
       delay(100)
       broadcastManager.explicitBroadcasts.emit(intent)

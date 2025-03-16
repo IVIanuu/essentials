@@ -26,19 +26,19 @@ import kotlin.time.Duration.Companion.seconds
   private val foregroundManager: ForegroundManager,
   private val notificationFactory: NotificationFactory,
   private val notificationManager: @SystemService NotificationManager,
-  private val logger: Logger,
+  @property:Provide private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>,
-  private val foregroundScopeFactory: () -> Scope<ForegroundScope>
+  private val foregroundScopeFactory: () -> @New Scope<ForegroundScope>
 ) : Service() {
   private var job: Job? = null
   private var needsStartForegroundCall by mutableStateOf(true)
 
   override fun onCreate() {
     super.onCreate()
-    logger.d { "foreground service started" }
+    d { "foreground service started" }
 
     job = scope.launchMolecule {
-      logger.d { "compose main body" }
+      d { "compose main body" }
 
       DisposableEffect(true) {
         val foregroundScope = foregroundScopeFactory()
@@ -88,7 +88,7 @@ import kotlin.time.Duration.Companion.seconds
         LaunchedEffect(removeServiceNotification) {
           delay(1.seconds)
 
-          logger.d { "stop foreground -> remove notification $removeServiceNotification" }
+          d { "stop foreground -> remove notification $removeServiceNotification" }
           stopForeground(
             if (removeServiceNotification) STOP_FOREGROUND_REMOVE
             else STOP_FOREGROUND_DETACH
@@ -96,13 +96,13 @@ import kotlin.time.Duration.Companion.seconds
 
           onCancel(
             fa = {
-              logger.d { "dispatch delayed service stop" }
+              d { "dispatch delayed service stop" }
               delay(6.seconds)
 
-              logger.d { "stop self" }
+              d { "stop self" }
               stopSelf()
             }
-          ) { logger.d { "cancel stopping" } }
+          ) { d { "cancel stopping" } }
         }
       } else {
         currentStates.fastForEach { state ->
@@ -119,7 +119,7 @@ import kotlin.time.Duration.Companion.seconds
   }
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    logger.d { "on start command $intent" }
+    d { "on start command $intent" }
     needsStartForegroundCall = true
     return super.onStartCommand(intent, flags, startId)
   }
@@ -135,7 +135,7 @@ import kotlin.time.Duration.Companion.seconds
       DisposableEffect(notificationId) {
         onDispose {
           if (state.removeNotification) {
-            logger.d { "remove notification $notificationId" }
+            d { "remove notification $notificationId" }
             notificationManager.cancel(notificationId)
           }
         }
@@ -143,7 +143,7 @@ import kotlin.time.Duration.Companion.seconds
 
       if (shouldStartForeground())
         DisposableEffect(true) {
-          logger.d { "${state.id} call start foreground" }
+          d { "${state.id} call start foreground" }
           startForeground(notificationId, notification)
           onStartForegroundCalled()
           onDispose {
@@ -151,7 +151,7 @@ import kotlin.time.Duration.Companion.seconds
         }
 
       DisposableEffect(notification) {
-        logger.d { "${state.id} update notification" }
+        d { "${state.id} update notification" }
         notificationManager.notify(notificationId, notification)
         onDispose {
         }
@@ -160,7 +160,7 @@ import kotlin.time.Duration.Companion.seconds
   }
 
   override fun onDestroy() {
-    logger.d { "stop foreground service" }
+    d { "stop foreground service" }
     job?.cancel()
     super.onDestroy()
   }

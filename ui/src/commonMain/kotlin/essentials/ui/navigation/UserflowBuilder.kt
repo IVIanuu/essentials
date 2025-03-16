@@ -17,7 +17,7 @@ fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
 
 @Provide @Composable fun UserflowBuilder(
   records: List<ExtensionPointRecord<UserflowBuilder>>,
-  logger: Logger,
+  logger: Logger = inject,
   navigator: Navigator
 ): ScopeContent<UiScope> {
   LaunchedEffect(true) {
@@ -25,7 +25,7 @@ fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
       .sortedWithLoadingOrder()
       .fastFlatMap { it.instance.createUserflow() }
 
-    logger.d { "Userflow -> $userflowScreens" }
+    d { "Userflow -> $userflowScreens" }
 
     if (userflowScreens.isEmpty()) return@LaunchedEffect
 

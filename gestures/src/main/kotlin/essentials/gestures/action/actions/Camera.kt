@@ -42,7 +42,7 @@ import kotlin.coroutines.*
     cameraManager: @SystemService CameraManager,
     currentAppProducer: @Composable () -> CurrentApp?,
     screenStateProducer: @Composable () -> ScreenState,
-    logger: Logger,
+    logger: Logger = inject,
     packageManager: PackageManager,
     sendIntent: sendActionIntent
   ): ActionExecutorResult<CameraActionId> {
@@ -89,7 +89,7 @@ import kotlin.coroutines.*
       }
     else null
 
-    logger.d { "open camera with $frontFacing" }
+    d { "open camera with $frontFacing" }
 
     if (frontFacing != null)
       intent.addCameraFacingExtras(frontFacing)

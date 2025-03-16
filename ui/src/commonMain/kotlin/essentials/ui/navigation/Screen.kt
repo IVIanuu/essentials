@@ -40,7 +40,7 @@ data object ScreenScope
 @Tag typealias DecoratedScreenContent = Unit
 
 @Provide @Composable fun DecoratedScreenContent(
-  logger: Logger,
+  logger: Logger = inject,
   records: List<ExtensionPointRecord<ScreenDecorator>>,
   content: @Composable () -> Unit
 ): DecoratedScreenContent {
@@ -50,7 +50,7 @@ data object ScreenScope
       .fastFold({ it() }) { acc, record ->
         { content ->
           acc {
-            logger.d { "decorate screen with ${record.key.qualifiedName}" }
+            d { "decorate screen with ${record.key.qualifiedName}" }
             record.instance.DecoratedContent(content)
           }
         }

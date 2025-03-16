@@ -28,7 +28,7 @@ import kotlin.time.Duration.Companion.seconds
   private val adsEnabledProducer: @Composable () -> AdsEnabled,
   config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
-  private val logger: Logger,
+  @property:Provide private val logger: Logger,
   scope: ScopedCoroutineScope<UiScope>
 ) {
   private var currentAd by mutableStateOf<FullScreenAd?>(null)
@@ -40,7 +40,7 @@ import kotlin.time.Duration.Companion.seconds
       adsEnabled = adsEnabledProducer()
 
       if (!adsEnabled) {
-        logger.d { "ads not enabled" }
+        d { "ads not enabled" }
         return@launchMolecule
       }
 
@@ -48,7 +48,7 @@ import kotlin.time.Duration.Companion.seconds
         LaunchedEffect(true) {
           var attempt = 1
           while (currentCoroutineContext().isActive) {
-            logger.d { "load ad $attempt" }
+            d { "load ad $attempt" }
 
             val ad = catch {
               suspendCoroutine { cont ->
@@ -58,12 +58,12 @@ import kotlin.time.Duration.Companion.seconds
                   AdRequest.Builder().build(),
                   object : InterstitialAdLoadCallback() {
                     override fun onAdLoaded(ad: InterstitialAd) {
-                      logger.d { "ad loaded" }
+                      d { "ad loaded" }
                       cont.resume(FullScreenAd(ad))
                     }
 
                     override fun onAdFailedToLoad(error: LoadAdError) {
-                      logger.e { "ad failed to load $error" }
+                      e { "ad failed to load $error" }
                       cont.resumeWithException(IllegalStateException("$error"))
                     }
                   }
@@ -85,7 +85,7 @@ import kotlin.time.Duration.Companion.seconds
         }
 
       if (currentAd?.wasShown == true) {
-        logger.d { "clear ad and preload next" }
+        d { "clear ad and preload next" }
         currentAd = null
       }
     }
@@ -103,25 +103,25 @@ import kotlin.time.Duration.Companion.seconds
 
     suspend fun show(): Boolean {
       if (appScope.scopeOfOrNull<AppVisibleScope>() == null) return false
-        .also { logger.d { "do not show -> not in foreground" } }
+        .also { d { "do not show -> not in foreground" } }
 
       if (!rateLimiter.tryAcquire()) return false
-        .also { logger.d { "do not show -> rate limit reached" } }
+        .also { d { "do not show -> rate limit reached" } }
 
       wasShown = true
 
-      logger.d { "show ad" }
+      d { "show ad" }
 
       return withContext(coroutineContexts.main) {
         suspendCoroutine { cont ->
           interstitial.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
-              logger.d { "on ad dismissed" }
+              d { "on ad dismissed" }
               cont.resume(true)
             }
 
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-              logger.d { "on failed to show ad $p0" }
+              d { "on failed to show ad $p0" }
               cont.resume(false)
             }
           }

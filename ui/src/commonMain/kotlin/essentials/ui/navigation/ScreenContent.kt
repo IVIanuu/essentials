@@ -99,7 +99,7 @@ import kotlin.reflect.*
 @Stable @Provide data class NavigationComponent<N>(
   val uiFactories: Map<KClass<Screen<*>>, @NavGraph<N> UiContent<Screen<*>>>,
   val configFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>>,
-  val screenScopeFactory: (@Service<ScreenScope> Navigator, @Service<ScreenScope> Screen<*>) -> Scope<ScreenScope>,
+  val screenScopeFactory: (@Service<ScreenScope> Navigator, @Service<ScreenScope> Screen<*>) -> @New Scope<ScreenScope>,
   val decorateScreen: @Composable (Navigator, Scope<ScreenScope>, Screen<*>, @Composable () -> Unit) -> DecoratedScreenContent
 ) {
   @Provide companion object {

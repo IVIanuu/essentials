@@ -17,17 +17,18 @@ abstract class EsTileService : TileService() {
 
   private var currentOnClick: (() -> Unit)? = null
 
-  private val component by lazy {
+  @Provide private val component by lazy {
     applicationContext.cast<AppScopeOwner>()
       .appScope
       .service<TileServiceComponent>()
   }
+  @Provide private val logger: Logger get() = component.logger
 
   private var tileScope: Scope<TileScope>? = null
 
   override fun onStartListening() {
     super.onStartListening()
-    component.logger.d { "${this::class} on start listening" }
+    d { "${this::class} on start listening" }
     tileScope = component.tileScopeFactory(this)
     tileScope!!.coroutineScope.launchMolecule {
       val currentState = state()
@@ -50,21 +51,21 @@ abstract class EsTileService : TileService() {
 
   override fun onClick() {
     super.onClick()
-    component.logger.d { "${this::class} on click" }
+    d { "${this::class} on click" }
     currentOnClick?.invoke()
   }
 
   override fun onStopListening() {
     tileScope?.dispose()
     tileScope = null
-    component.logger.d { "${this::class} on stop listening" }
+    d { "${this::class} on stop listening" }
     super.onStopListening()
   }
 }
 
 @Provide @Service<AppScope> data class TileServiceComponent(
-  val logger: Logger,
-  val tileScopeFactory: (EsTileService) -> Scope<TileScope>
+  @Provide val logger: Logger,
+  val tileScopeFactory: (EsTileService) -> @New Scope<TileScope>
 )
 
 data class TileState(

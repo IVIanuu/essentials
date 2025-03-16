@@ -10,11 +10,11 @@ import essentials.logging.*
 import injekt.*
 
 @Provide @Composable fun ActiveScopeLogger(
-  logger: Logger,
+  logger: Logger = inject,
   appScope: Scope<AppScope>
 ): ScopeContent<AppScope> {
   val activeScopes = appScope.allScopes
   LaunchedEffect(activeScopes) {
-    logger.d { "active scopes ${activeScopes.map { it.name.simpleName }}" }
+    d { "active scopes ${activeScopes.map { it.name.simpleName }}" }
   }
 }

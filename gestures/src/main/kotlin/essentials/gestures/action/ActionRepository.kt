@@ -67,32 +67,32 @@ typealias executeAction = suspend (String) -> executeActionResult
   appConfig: AppConfig,
   closeSystemDialogs: closeSystemDialogs,
   coroutineContexts: CoroutineContexts,
-  logger: Logger,
+  logger: Logger = inject,
   permissionManager: PermissionManager,
   showToast: showToast,
   turnScreenOn: turnScreenOn,
   unlockScreen: unlockScreen
 ): executeActionResult = withContext(coroutineContexts.computation) {
   catch {
-    logger.d { "execute $id" }
+    d { "execute $id" }
     val action = actionRepository.getAction(id)
 
     // check permissions
     if (!permissionManager.permissionState(action.permissions).first()) {
-      logger.d { "didn't had permissions for $id ${action.permissions}" }
+      d { "didn't had permissions for $id ${action.permissions}" }
       unlockScreen()
       permissionManager.ensurePermissions(action.permissions)
       return@catch false
     }
 
     if (action.turnScreenOn && !turnScreenOn()) {
-      logger.d { "couldn't turn screen on for $id" }
+      d { "couldn't turn screen on for $id" }
       return@catch false
     }
 
     // unlock screen
     if (action.unlockScreen && !unlockScreen()) {
-      logger.d { "couldn't unlock screen for $id" }
+      d { "couldn't unlock screen for $id" }
       return@catch false
     }
 
@@ -102,7 +102,7 @@ typealias executeAction = suspend (String) -> executeActionResult
           permissionManager.permissionState(listOf(ActionAccessibilityPermission::class)).first()))
       closeSystemDialogs()
 
-    logger.d { "fire $id" }
+    d { "fire $id" }
 
     // fire
     catch {

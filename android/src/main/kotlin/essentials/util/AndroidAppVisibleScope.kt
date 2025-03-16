@@ -14,7 +14,7 @@ import essentials.ui.*
 import injekt.*
 
 @Provide @Composable fun AppVisibleScopeManager(
-  appVisibleScopeFactory: () -> Scope<AppVisibleScope>,
+  appVisibleScopeFactory: () -> @New Scope<AppVisibleScope>,
   activity: ComponentActivity
 ): ScopeContent<UiScope> {
   if (activity is EsActivity) {

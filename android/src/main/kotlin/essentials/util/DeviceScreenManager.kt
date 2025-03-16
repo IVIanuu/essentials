@@ -91,12 +91,12 @@ typealias turnScreenOn = suspend () -> turnScreenOnResult
 
 @Provide suspend fun turnScreenOn(
   appContext: AppContext,
-  logger: Logger,
+  logger: Logger = inject,
   powerManager: @SystemService PowerManager
 ): turnScreenOnResult {
-  logger.d { "on request is off ? ${!powerManager.isInteractive}" }
+  d { "on request is off ? ${!powerManager.isInteractive}" }
   if (powerManager.isInteractive) {
-    logger.d { "already on" }
+    d { "already on" }
     return true
   }
 
@@ -108,12 +108,12 @@ typealias unlockScreen = suspend () -> unlockScreenResult
 
 @Provide suspend fun unlockScreen(
   appContext: AppContext,
-  logger: Logger,
+  logger: Logger = inject,
   keyguardManager: @SystemService KeyguardManager
 ): unlockScreenResult {
-  logger.d { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
+  d { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
   if (!keyguardManager.isKeyguardLocked) {
-    logger.d { "already unlocked" }
+    d { "already unlocked" }
     return true
   }
 
@@ -142,7 +142,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
 
 @Provide @AndroidComponent class UnlockActivity(
   private val keyguardManager: @SystemService KeyguardManager,
-  private val logger: Logger,
+  @property:Provide private val logger: Logger,
   private val powerManager: @SystemService PowerManager
 ) : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -160,7 +160,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
       return
     }
 
-    logger.d {
+    d {
       when (requestType) {
         REQUEST_TYPE_UNLOCK -> "unlock screen for $requestId"
         REQUEST_TYPE_SCREEN_ON -> "turn screen on $requestId"
@@ -171,7 +171,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
     var hasResult = false
 
     fun finishWithResult(success: Boolean) {
-      logger.d { "finish with result $success" }
+      d { "finish with result $success" }
       hasResult = true
       requestsById.remove(requestId)?.complete(success)
       finish()
@@ -199,19 +199,19 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
               KeyguardManager.KeyguardDismissCallback() {
               override fun onDismissSucceeded() {
                 super.onDismissSucceeded()
-                logger.d { "dismiss succeeded" }
+                d { "dismiss succeeded" }
                 finishWithResult(true)
               }
 
               override fun onDismissError() {
                 super.onDismissError()
-                logger.d { "dismiss error" }
+                d { "dismiss error" }
                 finishWithResult(true)
               }
 
               override fun onDismissCancelled() {
                 super.onDismissCancelled()
-                logger.d { "dismiss cancelled" }
+                d { "dismiss cancelled" }
                 finishWithResult(false)
               }
             }

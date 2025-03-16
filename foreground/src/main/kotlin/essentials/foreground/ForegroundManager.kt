@@ -14,7 +14,7 @@ import injekt.*
 
 @Stable @Provide @Scoped<AppScope> class ForegroundManager(
   private val appContext: AppContext,
-  private val logger: Logger
+  @property:Provide private val logger: Logger
 ) {
   internal var states by mutableStateOf(emptyList<ForegroundState>())
     private set
@@ -33,15 +33,15 @@ import injekt.*
 
       DisposableEffect(state) {
         states += state
-        logger.d { "add state $id $states" }
+        d { "add state $id $states" }
         onDispose {
           states -= state
-          logger.d { "remove state $id $states" }
+          d { "remove state $id $states" }
         }
       }
 
       LaunchedEffect(true) {
-        logger.d { "start foreground service $id $states" }
+        d { "start foreground service $id $states" }
         ContextCompat.startForegroundService(
           appContext,
           Intent(appContext, ForegroundService::class.java)

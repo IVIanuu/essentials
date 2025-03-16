@@ -15,9 +15,9 @@ typealias restartProcess = suspend () -> @restartProcessResult Nothing
 
 @Provide suspend fun restartProcess(
   appContext: AppContext,
-  logger: Logger
+  logger: Logger = inject
 ): @restartProcessResult Nothing {
-  logger.d { "restart process" }
+  d { "restart process" }
   ProcessPhoenix.triggerRebirth(appContext)
   awaitCancellation()
 }

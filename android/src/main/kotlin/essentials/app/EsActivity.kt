@@ -18,7 +18,7 @@ import injekt.*
 import kotlinx.coroutines.*
 
 @Provide @AndroidComponent class EsActivity(
-  private val uiScopeFactory: (@Service<UiScope> ComponentActivity) -> Scope<UiScope>
+  private val uiScopeFactory: (@Service<UiScope> ComponentActivity) -> @New Scope<UiScope>
 ) : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

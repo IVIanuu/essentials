@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.*
 
 @Provide @Composable fun currentApp(
   accessibilityEvents: Flow<AccessibilityEvent>,
-  logger: Logger
+  logger: Logger = inject
 ): @ComposeIn<AppScope> CurrentApp? = produceState(nullOf()) {
   accessibilityEvents
     .filter {
@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.*
           it.packageName != "android"
     }
     .map { it.packageName!! }
-    .onEach { logger.d { "current app changed $it" } }
+    .onEach { d { "current app changed $it" } }
     .collect { value = it }
 }.value
 

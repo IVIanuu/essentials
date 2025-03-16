@@ -12,6 +12,7 @@ import androidx.work.*
 import arrow.fx.coroutines.*
 import essentials.*
 import essentials.coroutines.*
+import essentials.logging.*
 import essentials.logging.Logger
 import injekt.*
 import kotlinx.atomicfu.locks.SynchronizedObject
@@ -39,13 +40,13 @@ data class WorkConstraints(
 @Provide @Scoped<AppScope> class WorkManager(
   private val androidWorkManager: AndroidWorkManager,
   private val coroutineContexts: CoroutineContexts,
-  private val logger: Logger,
+  @property:Provide private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>,
   private val workersMap: Map<String, suspend () -> WorkerResult<*>>,
 ) : SynchronizedObject() {
   private val workerStates = mutableMapOf<String, MutableState<Boolean>>()
   private val sharedWorkers = scope.sharedComputation<WorkId, WorkerResult<*>> { id ->
-    logger.d { "run worker ${id.value}" }
+    d { "run worker ${id.value}" }
 
     var workerState by synchronized(this@WorkManager) {
       workerStates.getOrPut(id.value) { mutableStateOf(false) }
@@ -59,7 +60,7 @@ data class WorkConstraints(
       finalizer = {
         if (it is ExitCase.Failure) it.failure.printStackTrace()
         workerState = false
-        logger.d { "run worker end ${id.value}" }
+        d { "run worker end ${id.value}" }
       }
     )
   }
@@ -71,7 +72,7 @@ data class WorkConstraints(
   suspend fun <I : WorkId> runWorker(id: I): WorkerResult<I> =
     withContext(scope.coroutineContext + coroutineContexts.computation) {
       if (id.value !in workersMap) {
-        logger.d { "no worker found for ${id.value}" }
+        d { "no worker found for ${id.value}" }
         androidWorkManager.cancelUniqueWork(id.value)
         return@withContext WorkerResult.failure()
       }
@@ -138,7 +139,7 @@ data object WorkInit
 @SuppressLint("RestrictedApi")
 @Provide @Composable fun PeriodicWorkScheduler(
   coroutineContexts: CoroutineContexts,
-  logger: Logger,
+  logger: Logger = inject,
   schedules: Map<String, PeriodicWorkSchedule<*>>,
   androidWorkManager: androidx.work.WorkManager,
 ): ScopeContent<AppScope> {
@@ -156,7 +157,7 @@ data object WorkInit
                 existing.state == WorkInfo.State.RUNNING) &&
                 existing.tags.any { it == scheduleHash }
           }) {
-          logger.d { "enqueue work $workId with $schedule" }
+          d { "enqueue work $workId with $schedule" }
 
           androidWorkManager.enqueueUniquePeriodicWork(
             workId,
@@ -179,7 +180,7 @@ data object WorkInit
               .build()
           )
         } else {
-          logger.d { "do not reenqueue work $workId with $schedule" }
+          d { "do not reenqueue work $workId with $schedule" }
         }
       }
     }

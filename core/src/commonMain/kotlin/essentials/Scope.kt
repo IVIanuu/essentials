@@ -15,7 +15,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
-@Stable @Provide class Scope<N : Any>(
+@Tag annotation class New
+
+@Stable @Provide @New class Scope<N : Any>(
   val name: KClass<N>,
   val parent: ParentScope? = null,
   config: (Scope<N>, ParentScope?) -> ScopeConfig<N>

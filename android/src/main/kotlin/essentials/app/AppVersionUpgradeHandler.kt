@@ -21,7 +21,7 @@ data class AppVersionUpgradeParams(val lastAppVersion: Int?, val appVersion: Int
 @Provide @Composable fun AppVersionUpgradeHandler(
   appConfig: AppConfig,
   handlers: () -> List<suspend (AppVersionUpgradeParams) -> AppVersionUpgradeResult>,
-  logger: Logger,
+  logger: Logger = inject,
   preferencesStore: DataStore<Preferences>
 ): ScopeContent<AppScope> {
   LaunchedEffect(true) {
@@ -30,7 +30,7 @@ data class AppVersionUpgradeParams(val lastAppVersion: Int?, val appVersion: Int
     if (lastAppVersion == null ||
       appConfig.versionCode <= lastAppVersion) return@LaunchedEffect
 
-    logger.d { "upgrade from app version $lastAppVersion to ${appConfig.versionCode}" }
+    d { "upgrade from app version $lastAppVersion to ${appConfig.versionCode}" }
 
     val params = AppVersionUpgradeParams(lastAppVersion, appConfig.versionCode)
     handlers().parMap { it(params) }

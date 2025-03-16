@@ -33,7 +33,7 @@ typealias createBackup = suspend () -> createBackupResult
   appConfig: AppConfig,
   coroutineContexts: CoroutineContexts,
   dataDir: DataDir,
-  logger: Logger,
+  logger: Logger = inject,
   navigator: Navigator,
   packageManager: PackageManager
 ): createBackupResult = withContext(coroutineContexts.io) {
@@ -54,7 +54,7 @@ typealias createBackup = suspend () -> createBackupResult
       .fastFilter { it.absolutePath !in BACKUP_BLACKLIST }
       .fastFilter { it.exists() }
       .fastForEach { file ->
-        logger.d { "backup file $file" }
+        d { "backup file $file" }
         val entry = ZipEntry(file.relativeTo(dataDir).toString())
         zipOutputStream.putNextEntry(entry)
         file.inputStream().copyTo(zipOutputStream)
@@ -95,7 +95,7 @@ typealias restoreBackup = suspend () -> restoreBackupResult
   contentResolver: ContentResolver,
   coroutineContexts: CoroutineContexts,
   dataDir: DataDir,
-  logger: Logger,
+  logger: Logger = inject,
   navigator: Navigator,
   restartProcess: restartProcess,
 ): restoreBackupResult = withContext(coroutineContexts.io) {
@@ -112,7 +112,7 @@ typealias restoreBackup = suspend () -> restoreBackupResult
     generateSequence { zipInputStream.nextEntry }
       .forEach { entry ->
         val file = dataDir.resolve(entry.name)
-        logger.d { "restore file $file" }
+        d { "restore file $file" }
         if (!file.exists()) {
           file.parentFile.mkdirs()
           file.createNewFile()

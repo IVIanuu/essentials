@@ -13,8 +13,10 @@ import essentials.logging.*
 import injekt.*
 
 @Provide @AndroidComponent class EsNotificationListenerService(
-  private val logger: Logger,
-  private val notificationScopeFactory: (@Service<NotificationScope> EsNotificationListenerService) -> Scope<NotificationScope>
+  @property:Provide private val logger: Logger,
+  private val notificationScopeFactory: (
+    @Service<NotificationScope> EsNotificationListenerService
+  ) -> @New Scope<NotificationScope>
 ) : NotificationListenerService() {
   var notifications by mutableStateOf(emptyList<StatusBarNotification>())
     private set
@@ -23,31 +25,31 @@ import injekt.*
 
   override fun onListenerConnected() {
     super.onListenerConnected()
-    logger.d { "notification listener connected" }
+    d { "notification listener connected" }
     notificationScope = notificationScopeFactory(this)
     updateNotifications()
   }
 
   override fun onNotificationPosted(sbn: StatusBarNotification) {
     super.onNotificationPosted(sbn)
-    logger.d { "notification posted $sbn" }
+    d { "notification posted $sbn" }
     updateNotifications()
   }
 
   override fun onNotificationRemoved(sbn: StatusBarNotification) {
     super.onNotificationRemoved(sbn)
-    logger.d { "notification removed $sbn" }
+    d { "notification removed $sbn" }
     updateNotifications()
   }
 
   override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
     super.onNotificationRankingUpdate(rankingMap)
-    logger.d { "notification ranking update $rankingMap" }
+    d { "notification ranking update $rankingMap" }
     updateNotifications()
   }
 
   override fun onListenerDisconnected() {
-    logger.d { "notification listener disconnected" }
+    d { "notification listener disconnected" }
     notificationScope?.dispose()
     notificationScope = null
     super.onListenerDisconnected()
