@@ -28,9 +28,7 @@ abstract class AccessibilityServicePermission(
       Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
     )
       ?.split(":")
-      ?.fastMap {
-        it.split("/").first()
-      }
+      ?.fastMap { it.split("/").first() }
       ?.fastAny { it == appContext.packageName } == true
 
     @Provide fun <P : AccessibilityServicePermission> requestParams(
