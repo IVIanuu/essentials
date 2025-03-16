@@ -58,10 +58,10 @@ class WriteSecureSettingsScreen(
 
 @Provide @Composable fun WriteSecureSettingsUi(
   adbEnabledDataStore: DataStore<AdbEnabled>,
-  uiLauncher: UiLauncher,
   appConfig: AppConfig,
-  navigator: Navigator,
   developerModeDataStore: DataStore<DeveloperMode>,
+  launchUi: launchUi,
+  navigator: Navigator,
   permissionManager: PermissionManager,
   screen: WriteSecureSettingsScreen,
   shell: Shell,
@@ -162,7 +162,7 @@ class WriteSecureSettingsScreen(
                 },
                 { developerModeDataStore.data.first { it != 0 } }
               )
-              uiLauncher.start()
+              launchUi()
             }) { Text("Open about phone") }
           }
         )
@@ -192,7 +192,7 @@ class WriteSecureSettingsScreen(
                 },
                 { adbEnabledDataStore.data.first { it != 0 } }
               )
-              uiLauncher.start()
+              launchUi()
             }) {
               Text("Open developer options")
             }

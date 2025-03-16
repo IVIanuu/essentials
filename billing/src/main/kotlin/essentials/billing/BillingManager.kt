@@ -20,7 +20,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Stable @Provide @Scoped<AppScope> class BillingManager(
   private val appScope: Scope<AppScope>,
-  private val uiLauncher: UiLauncher,
+  private val launchUi: launchUi,
   private val billingClientFactory: () -> BillingClient,
   coroutineContexts: CoroutineContexts,
   private val logger: Logger,
@@ -100,7 +100,7 @@ import kotlin.time.Duration.Companion.seconds
         consumePurchase(sku)
     }
 
-    val activity = uiLauncher.start().activity
+    val activity = launchUi().activity
 
     val skuDetails = getSkuDetails(sku)
       ?: return@use false

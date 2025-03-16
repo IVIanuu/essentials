@@ -27,13 +27,12 @@ interface IntentScreen : Screen<Result<ActivityResult, ActivityNotFoundException
 
 @Tag typealias ScreenIntent<T> = Intent
 
-fun interface UiLauncher {
-  suspend fun start(): Scope<UiScope>
-}
+@Tag typealias launchUiResult = Scope<UiScope>
+typealias launchUi = suspend () -> launchUiResult
 
 @Provide fun interceptIntentScreen(
   screen: Screen<*>,
-  uiLauncher: UiLauncher,
+  launchUi: launchUi,
   coroutineContexts: CoroutineContexts,
   intentFactories: () -> Map<KClass<IntentScreen>, (IntentScreen) -> Intent>
 ): ScreenInterceptorResult<Either<Throwable, ActivityResult>> {
@@ -42,8 +41,7 @@ fun interface UiLauncher {
     ?: return null
   val intent = intentFactory(screen)
   return {
-    val activity = uiLauncher.start()
-      .service<ComponentActivity>()
+    val activity = launchUi().service<ComponentActivity>()
     withContext(coroutineContexts.main) {
       suspendCancellableCoroutine<Either<Throwable, ActivityResult>> { continuation ->
         val launcher = activity.activityResultRegistry.register(

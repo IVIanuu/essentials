@@ -25,7 +25,7 @@ class PermissionRequestScreen(
 ) : CriticalUserFlowScreen<Boolean>
 
 @Provide @Composable fun PermissionRequestUi(
-  uiLauncher: UiLauncher,
+  launchUi: launchUi,
   navigator: Navigator,
   permissionManager: PermissionManager,
   requestHandlers: Map<KClass<out Permission>, suspend (Permission) -> PermissionRequestResult<Permission>>,
@@ -83,7 +83,7 @@ class PermissionRequestScreen(
                 onClick = scopedAction {
                   requestHandlers[keysByPermission[permission]!!]!!(permission)
                   permissionRefreshes.emit(Unit)
-                  uiLauncher.start()
+                  launchUi()
                 }
               ) { Text("Allow") }
             }
