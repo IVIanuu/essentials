@@ -24,6 +24,14 @@ import kotlin.coroutines.*
   }
 }
 
+@Provide object CoroutineScopeProviders : BaseCoroutineScopeProviders() {
+  @Provide fun scopeCoroutineScope(scope: Scope<*> = inject): CoroutineScope = scope.service()
+}
+
+abstract class BaseCoroutineScopeProviders {
+  @Provide @Composable fun compositionCoroutineScope(): CoroutineScope = rememberCoroutineScope()
+}
+
 @Tag typealias ScopeCoroutineContext<N> = CoroutineContext
 
 @Provide fun <N> scopeCoroutineContext(

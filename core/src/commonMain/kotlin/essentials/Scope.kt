@@ -139,14 +139,6 @@ fun <N : Any> Scope<*>.scopeOf(name: KClass<N> = inject): Flow<Scope<N>> = snaps
 
 val Scope<*>.root: Scope<*> get() = parent?.root ?: this
 
-@Provide object CoroutineScopeProviders : BaseCoroutineScopeProviders() {
-  @Provide fun scopeCoroutineScope(scope: Scope<*> = inject): CoroutineScope = scope.service()
-}
-
-abstract class BaseCoroutineScopeProviders {
-  @Provide @Composable fun compositionCoroutineScope(): CoroutineScope = rememberCoroutineScope()
-}
-
 interface ChildScopeMarker<C : Any, P : Any> {
   @Provide companion object {
     @Provide fun <@AddOn T : ChildScopeMarker<C, P>, C : Any, P : Any> parentFromChild(
@@ -199,15 +191,6 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
 }
 
 @Tag typealias ParentScope = Scope<*>
-
-@Tag annotation class Eager<N : Any> {
-  @Provide companion object {
-    @Provide fun <@AddOn T : @Eager<N> S, S, N : Any> scoped(value: T): @Scoped<N> S = value
-
-    @Provide fun <@AddOn T : @Eager<N> S, S, N : Any> init(s: S): ScopeInit<N, Any> {
-    }
-  }
-}
 
 val LocalScope = compositionLocalOf<Scope<*>> { error("No provided scope") }
 
