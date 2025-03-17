@@ -11,8 +11,6 @@ import androidx.compose.foundation.*
 import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import essentials.*
-import essentials.coroutines.*
-import essentials.ui.*
 import essentials.ui.app.*
 import injekt.*
 import kotlinx.coroutines.*
@@ -26,9 +24,7 @@ import kotlinx.coroutines.*
     onBackPressedDispatcher.addCallback { finish() }
 
     val uiScope = uiScopeFactory(this)
-    lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
-      onCancel { uiScope.dispose() }
-    }
+    lifecycleScope.coroutineContext.job.invokeOnCompletion { uiScope.dispose() }
 
     val esActivityComponent = uiScope.service<EsActivityComponent>()
 
