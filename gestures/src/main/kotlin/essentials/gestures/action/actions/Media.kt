@@ -5,6 +5,7 @@
 package essentials.gestures.action.actions
 
 import android.content.*
+import android.content.pm.*
 import android.provider.*
 import android.view.*
 import androidx.compose.material.icons.*
@@ -96,7 +97,7 @@ class MediaActionSettingsScreen : Screen<Unit>
 @Provide @Composable fun MediaActionSettingsUi(
   getAppInfo: suspend (String) -> AppInfo?,
   navigator: Navigator,
-  intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
+  packageManager: PackageManager = inject,
   preferencesStore: DataStore<Preferences>,
   scope: Scope<ScreenScope> = inject,
 ): Ui<MediaActionSettingsScreen> {
@@ -107,7 +108,8 @@ class MediaActionSettingsScreen : Screen<Unit>
           onClick = scopedAction {
             val newMediaApp = navigator.push(
               AppPickerScreen(
-                intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
+                Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)
+                  .asAppPredicate(), null
               )
             )
             if (newMediaApp != null)

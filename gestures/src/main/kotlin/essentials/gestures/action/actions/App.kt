@@ -51,7 +51,7 @@ import injekt.*
 }
 
 @Provide class AppActionPickerDelegate(
-  private val launchableAppPredicate: LaunchableAppPredicate
+  @property:Provide private val packageManager: PackageManager
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
@@ -61,7 +61,7 @@ import injekt.*
     get() = { Icon(Icons.Default.Apps, null) }
 
   override suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result? {
-    val app = navigator.push(AppPickerScreen(launchableAppPredicate)) ?: return null
+    val app = navigator.push(AppPickerScreen(launchableAppPredicate())) ?: return null
     return ActionPickerScreen.Result.Action("$BASE_ID${app.packageName}$ACTION_DELIMITER")
   }
 }

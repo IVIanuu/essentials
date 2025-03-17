@@ -15,20 +15,19 @@ fun interface AppPredicate {
 
 val DefaultAppPredicate = AppPredicate { true }
 
-@Provide class LaunchableAppPredicate(private val packageManager: PackageManager): AppPredicate {
+fun launchableAppPredicate(packageManager: PackageManager = inject): AppPredicate {
   val cache = mutableMapOf<String, Boolean>()
-  override fun test(app: AppInfo): Boolean = cache.getOrPut(app.packageName) {
-    packageManager.getLaunchIntentForPackage(app.packageName) != null
+  return AppPredicate { app ->
+    cache.getOrPut(app.packageName) {
+      packageManager.getLaunchIntentForPackage(app.packageName) != null
+    }
   }
 }
 
-@Provide class IntentAppPredicate(
-  private val intent: Intent,
-  private val packageManager: PackageManager
-) : AppPredicate {
-  private val apps by lazy {
-    packageManager.queryIntentActivities(intent, 0)
+fun Intent.asAppPredicate(packageManager: PackageManager = inject): AppPredicate {
+  val apps by lazy {
+    packageManager.queryIntentActivities(this, 0)
       .fastMap { it.activityInfo.applicationInfo.packageName }
   }
-  override fun test(app: AppInfo): Boolean = app.packageName in apps
+  return AppPredicate { it.packageName in apps }
 }
