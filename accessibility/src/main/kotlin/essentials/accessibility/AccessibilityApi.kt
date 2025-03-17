@@ -16,14 +16,12 @@ val Scope<*>.accessibilityService: EsAccessibilityService
   snapshotFlow { appScope.scopeOfOrNull<AccessibilityScope>() }
     .flatMapLatest { it?.accessibilityService?.events ?: neverFlow() }
 
-@Tag typealias performGlobalAccessibilityActionResult = Unit
-typealias performGlobalAccessibilityAction = suspend (Int) -> performGlobalAccessibilityActionResult
-@Provide suspend fun performGlobalAccessibilityAction(
-  action: Int,
+@Tag typealias performGlobalAccessibilityAction = suspend (Int) -> Unit
+@Provide fun performGlobalAccessibilityAction(
   appScope: Scope<AppScope>
-): performGlobalAccessibilityActionResult {
+): performGlobalAccessibilityAction = {
   appScope.scopeOf<AccessibilityScope>().first().accessibilityService
-    .performGlobalAction(action)
+    .performGlobalAction(it)
 }
 
 typealias AndroidAccessibilityEvent = android.view.accessibility.AccessibilityEvent
