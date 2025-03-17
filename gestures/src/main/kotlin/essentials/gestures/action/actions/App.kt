@@ -16,11 +16,11 @@ import essentials.gestures.action.ui.*
 import essentials.ui.navigation.*
 import injekt.*
 
-@Provide class AppActionFactory(
-  private val getAppInfo: suspend (String) -> AppInfo?,
-  private val packageManager: PackageManager,
-  private val sendIntent: sendActionIntent
-) : ActionFactory {
+@Provide fun appActionFactory(
+  getAppInfo: suspend (String) -> AppInfo?,
+  packageManager: PackageManager,
+  sendIntent: sendActionIntent
+) = object : ActionFactory {
   override suspend fun createAction(id: String): Action<*>? {
     if (!id.startsWith(BASE_ID)) return null
     val packageName = id.removePrefix(BASE_ID)
@@ -50,9 +50,7 @@ import injekt.*
   }
 }
 
-@Provide class AppActionPickerDelegate(
-  @property:Provide private val packageManager: PackageManager
-) : ActionPickerDelegate {
+@Provide fun appActionPickerDelegate(packageManager: PackageManager = inject) = object : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String

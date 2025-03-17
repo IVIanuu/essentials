@@ -21,7 +21,7 @@ import essentials.ui.navigation.*
 import injekt.*
 import java.io.*
 
-@Provide class ShortcutActionFactory(private val sendActionIntent: sendActionIntent) : ActionFactory {
+@Provide fun shortcutActionFactory(sendActionIntent: sendActionIntent) = object : ActionFactory {
   override suspend fun createAction(id: String): Action<*>? {
     if (!id.startsWith(BASE_ID)) return null
 
@@ -51,7 +51,7 @@ import java.io.*
   }
 }
 
-@Provide class ShortcutActionPickerDelegate : ActionPickerDelegate {
+@Provide fun shortcutActionPickerDelegate() = object : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String
