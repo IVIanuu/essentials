@@ -21,10 +21,8 @@ enum class ScreenState(val isOn: Boolean) {
   OFF(false), LOCKED(true), UNLOCKED(true)
 }
 
-@Provide @Composable fun screenState(
-  broadcasts: Broadcasts,
-  context: Application
-): ScreenState = broadcasts.stateOf(
+@Provide @Composable
+fun screenState(context: Application = inject): ScreenState = broadcastStateOf(
   Intent.ACTION_SCREEN_OFF,
   Intent.ACTION_SCREEN_ON,
   Intent.ACTION_USER_PRESENT
