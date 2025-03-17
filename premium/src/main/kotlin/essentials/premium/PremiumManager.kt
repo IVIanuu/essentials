@@ -61,7 +61,6 @@ interface Paywall {
   get() = Sku("premium_version", Sku.Type.SUBS)
 
 @Tag typealias OldPremiumVersionSku = Sku
-
 @Provide val defaultOldPermissionVersionSkus
   get() = emptyList<OldPremiumVersionSku>()
 
