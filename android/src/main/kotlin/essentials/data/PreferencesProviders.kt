@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.*
 import essentials.*
 import essentials.coroutines.*
 import injekt.*
+import kotlinx.coroutines.*
 
 @Provide object PreferencesProviders {
   @Provide fun preferencesDataStore(
@@ -12,7 +13,7 @@ import injekt.*
     prefsDir: () -> PrefsDir,
     scope: ScopedCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<Preferences> = PreferenceDataStoreFactory
-    .create(scope = scope.childCoroutineScope(coroutineContexts.io)) {
+    .create(scope = scope + coroutineContexts.io) {
       prefsDir().resolve("default.preferences_pb")
     }
 }

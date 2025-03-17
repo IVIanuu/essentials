@@ -9,6 +9,7 @@ import androidx.datastore.core.Serializer
 import essentials.*
 import essentials.coroutines.*
 import injekt.*
+import kotlinx.coroutines.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import java.io.*
@@ -45,6 +46,6 @@ class DataStoreProvider<T : Any>(
       }
     },
     produceFile = { prefsDir().resolve(name) },
-    scope = scope.childCoroutineScope(coroutineContexts.io)
+    scope = scope + coroutineContexts.io
   )
 }

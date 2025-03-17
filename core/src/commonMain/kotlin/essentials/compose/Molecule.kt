@@ -22,7 +22,7 @@ fun launchMolecule(
   block: @Composable () -> Unit
 ): Job {
   val job = Job(scope.coroutineContext.job)
-  scope.childCoroutineScope(job).launchMolecule(mode, {}, context, body = block)
+  (scope + job).launchMolecule(mode, {}, context, body = block)
   return job
 }
 
