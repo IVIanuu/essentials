@@ -19,12 +19,12 @@ import kotlin.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
 @Stable @Provide @Scoped<AppScope> class Billing(
-  @property:Provide val appScope: Scope<AppScope>,
-  val launchUi: launchUi,
-  val billingClientFactory: () -> BillingClient,
+  @property:Provide private val appScope: Scope<AppScope>,
+  private val launchUi: launchUi,
+  private val billingClientFactory: () -> BillingClient,
   coroutineContexts: CoroutineContexts,
-  @property:Provide val logger: Logger,
-  val refreshes: MutableSharedFlow<BillingRefresh>
+  @property:Provide private val logger: Logger,
+  private val refreshes: MutableSharedFlow<BillingRefresh>
 ) {
   private val client = provide(implicitly<CoroutineScope>().childCoroutineScope(coroutineContexts.io)) {
     sharedResource(

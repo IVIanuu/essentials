@@ -12,7 +12,6 @@ import essentials.*
 import essentials.ads.*
 import essentials.app.*
 import essentials.billing.*
-import essentials.compose.*
 import essentials.coroutines.*
 import essentials.ui.navigation.*
 import essentials.util.*
@@ -37,14 +36,14 @@ interface Paywall {
 }
 
 @Provide fun paywall(
-  isPremiumVersion: @Composable () -> IsPremiumVersion,
+  appScope: ScopedCoroutineScope<AppScope> = inject,
+  isPremiumVersion: Flow<IsPremiumVersion>,
   launchUi: launchUi,
-  scope: ScopedCoroutineScope<AppScope> = inject,
   showToast: showToast,
   unlockScreen: unlockScreen
 ) = object : Paywall {
   override suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
-    if (moleculeFlow { isPremiumVersion() }.filterNotNull().first()) return block()
+    if (isPremiumVersion.filterNotNull().first()) return block()
 
     launch {
       showToast("This functionality is only available in the premium version!")
