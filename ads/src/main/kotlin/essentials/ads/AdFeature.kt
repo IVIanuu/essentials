@@ -12,32 +12,31 @@ import kotlin.reflect.*
 
 interface AdFeature
 
-@JvmInline value class AdFeatures<T : Screen<*>>(val value: List<AdFeature>) {
-  @Provide companion object {
-    @Provide fun <T : Screen<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<T> =
-      AdFeatures(allFeatures)
+@Tag typealias AdFeatures<T> = List<AdFeature>
 
-    @Provide fun <T : RootScreen> defaultRootAdFeatures(allFeatures: List<AdFeature>): AdFeatures<T> =
-      AdFeatures(allFeatures.fastFilter { it != ListAdBannerFeature })
+@Provide object AdFeatureProviders {
+  @Provide fun <T : Screen<*>> default(allFeatures: List<AdFeature>): AdFeatures<T> =
+    allFeatures
 
-    @Provide fun <T : OverlayScreen<*>> defaultOverlayAdFeatures(): AdFeatures<T> =
-      AdFeatures(emptyList())
+  @Provide fun <T : RootScreen> root(allFeatures: List<AdFeature>): AdFeatures<T> =
+    allFeatures.fastFilter { it != ListAdBannerFeature }
 
-    @Provide fun <T : CriticalUserFlowScreen<*>> defaultCriticalUserFlowAdFeatures(): AdFeatures<T> =
-      AdFeatures(listOf(ScreenAdBannerFeature))
+  @Provide fun <T : OverlayScreen<*>> overlay(): AdFeatures<T> = emptyList()
 
-    @Provide fun <@AddOn T : Ui<S>, S : Screen<*>> adFeatureConfigBinding(
-      keyClass: KClass<S>,
-      features: AdFeatures<S>
-    ): Pair<KClass<out Screen<*>>, AdFeatures<*>> = keyClass to features
-  }
+  @Provide fun <T : CriticalUserFlowScreen<*>> criticalUserFlow(): AdFeatures<T> =
+    listOf(ScreenAdBannerFeature)
+
+  @Provide fun <@AddOn T : Ui<S>, S : Screen<*>> binding(
+    keyClass: KClass<S>,
+    features: AdFeatures<S>
+  ): Pair<KClass<out Screen<*>>, AdFeatures<*>> = keyClass to features
 }
 
 @Stable @Provide class AdFeatureRepository(
   private val featuresByScreen: Map<KClass<out Screen<*>>, AdFeatures<*>>
 ) {
   fun isEnabled(screenClass: KClass<out Screen<*>>, feature: AdFeature): Boolean =
-    featuresByScreen[screenClass]?.value?.contains(feature) == true
+    featuresByScreen[screenClass]?.contains(feature) == true
 }
 
 @Tag annotation class FinalAdConfig
