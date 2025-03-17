@@ -8,57 +8,102 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
 import kotlin.coroutines.*
+import kotlin.time.*
 
-fun <K, T> sharedFlow(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
+fun <K, V> sharedFlows(
+  stopTimeout: Duration = Duration.ZERO,
+  replayExpiration: Duration = Duration.ZERO,
   replay: Int = 0,
   scope: CoroutineScope = inject,
-  block: suspend FlowCollector<T>.(K) -> Unit
-): (K) -> Flow<T> {
-  val map = mutableMapOf<K, SharedFlow<T>>()
-  val mutex = Mutex()
+  create: (K) -> Flow<V>
+): (K) -> Flow<V> {
+  val statesLock = Mutex()
+
+  class SharedFlowState<V>(
+    private val key: K,
+    private val states: MutableMap<K, SharedFlowState<V>>
+  ) : CoroutineScope {
+    override val coroutineContext: CoroutineContext =
+      scope.coroutineContext + Job(scope.coroutineContext.job)
+
+    private var wasEverSubscribed = false
+
+    val sharedFlow = create(key).shareIn(
+      scope = this,
+      started = { subs ->
+        subs
+          .transformLatest { count ->
+            if (count > 0) {
+              wasEverSubscribed = true
+              emit(SharingCommand.START)
+            } else if (wasEverSubscribed) {
+              delay(stopTimeout)
+              if (replayExpiration > Duration.ZERO) {
+                emit(SharingCommand.STOP)
+                delay(replayExpiration)
+              }
+              launch(start = CoroutineStart.UNDISPATCHED) {
+                statesLock.withLock { states.remove(key) }
+                this@SharedFlowState.coroutineContext.job.cancel()
+              }
+            }
+          }
+      },
+      replay = replay
+    )
+  }
+
+  val states = mutableMapOf<K, SharedFlowState<V>>()
+
   return { key ->
     flow {
       emitAll(
-        mutex.withLock {
-          map.getOrPut(key) {
-            flow { block(this, key) }.shareIn(scope, sharingStarted, replay)
-          }
-        }
+        statesLock.withLock {
+          states.getOrPut(key) { SharedFlowState(key, states) }
+        }.sharedFlow
       )
     }
   }
 }
 
-fun <K, T> sharedComputation(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
+fun <K, V> sharedAsync(
+  timeout: Duration = Duration.ZERO,
+  context: CoroutineContext = EmptyCoroutineContext,
   scope: CoroutineScope = inject,
-  block: suspend (K) -> T
-): suspend (K) -> T {
-  val flows = sharedFlow<K, Result<T, Throwable>>(sharingStarted, 1) { key ->
-    emit(catch { block(key) })
-  }
+  block: suspend (K) -> V
+): suspend (K) -> V {
+  val flows = sharedFlows(
+    stopTimeout = timeout,
+    replay = 1,
+    create = { key: K ->
+      flow { emit(catch { block(key) }) }
+        .flowOn(context)
+    }
+  )
+
   return { flows(it).first().getOrThrow() }
 }
 
 data class Releasable<T>(val value: T, val release: () -> Unit)
 
 fun <K, T> sharedResource(
-  sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
+  timeout: Duration = Duration.ZERO,
   release: (suspend (K, T) -> Unit)? = null,
   scope: CoroutineScope = inject,
   create: suspend (K) -> T
 ): suspend (K) -> Releasable<T> {
-  val flows: (K) -> Flow<Result<T, Throwable>> = sharedFlow(sharingStarted, 1) { key: K ->
-    val value = catch { create(key) }
-    bracketCase(
-      acquire = { value },
-      use = {
-        emit(value)
-        awaitCancellation()
-      },
-      release = { _, _ -> value.onSuccess { release?.invoke(key, it) } }
-    )
+  val flows: (K) -> Flow<Result<T, Throwable>> = sharedFlows(timeout, replay = 1) { key: K ->
+    flow {
+      val value = catch { create(key) }
+      bracketCase(
+        acquire = { value },
+        use = {
+          emit(value)
+          awaitCancellation()
+        },
+        release = { _, _ -> value.onSuccess { release?.invoke(key, it) } }
+      )
+    }
   }
 
   return { key ->

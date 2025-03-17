@@ -28,7 +28,7 @@ import kotlin.time.Duration.Companion.seconds
 ) {
   private val client = provide(implicitly<CoroutineScope>() + coroutineContexts.io) {
     sharedResource(
-      sharingStarted = SharingStarted.WhileSubscribed(10.seconds.inWholeMilliseconds),
+      timeout = 10.seconds,
       create = { _: Unit ->
         d { "create client" }
         val client = billingClientFactory()
