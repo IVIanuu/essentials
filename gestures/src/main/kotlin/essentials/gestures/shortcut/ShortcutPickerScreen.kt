@@ -26,9 +26,9 @@ import injekt.*
 class ShortcutPickerScreen : Screen<Shortcut>
 
 @Provide @Composable fun ShortcutPickerUi(
-  navigator: Navigator,
   getShortcuts: getShortcuts,
   extractShortcut: extractShortcut,
+  scope: Scope<ScreenScope> = inject,
   screen: ShortcutPickerScreen,
   showToast: showToast
 ): Ui<ShortcutPickerScreen> {
@@ -44,11 +44,11 @@ class ShortcutPickerScreen : Screen<Shortcut>
           EsListItem(
             onClick = scopedAction {
               catch {
-                val shortcutRequestResult = navigator.push(shortcut.intent.asScreen())
+                val shortcutRequestResult = navigator().push(shortcut.intent.asScreen())
                   ?.getOrNull()
                   ?.data ?: return@catch
                 val finalShortcut = extractShortcut(shortcutRequestResult)
-                navigator.pop(screen, finalShortcut)
+                navigator().pop(screen, finalShortcut)
               }.onFailure {
                 it.printStackTrace()
                 showToast("Failed to pick a shortcut!")

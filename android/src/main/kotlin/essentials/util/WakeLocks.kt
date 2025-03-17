@@ -9,7 +9,7 @@ import essentials.logging.*
 import injekt.*
 import kotlinx.coroutines.*
 
-@Stable @Provide class WakeLockManager(
+@Stable @Provide class WakeLocks(
   private val coroutineContexts: CoroutineContexts,
   @property:Provide private val logger: Logger,
   private val powerManager: @SystemService PowerManager

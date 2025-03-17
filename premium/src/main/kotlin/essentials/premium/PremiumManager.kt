@@ -10,9 +10,11 @@ import androidx.datastore.core.*
 import androidx.datastore.preferences.core.*
 import essentials.*
 import essentials.ads.*
+import essentials.app.*
 import essentials.billing.*
 import essentials.compose.*
 import essentials.coroutines.*
+import essentials.ui.*
 import essentials.ui.navigation.*
 import essentials.util.*
 import injekt.*
@@ -22,12 +24,12 @@ import kotlinx.coroutines.flow.*
 @Tag typealias IsPremiumVersion = Boolean?
 
 @Provide @Composable fun isPremiumVersion(
-  billingManager: BillingManager,
+  billing: Billing,
   premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>
 ): @ComposeIn<AppScope> IsPremiumVersion {
   val premiumVersionStates = remember { oldPremiumVersionSkus + premiumVersionSku }
-    .fastMap { billingManager.isPurchased(it) }
+    .fastMap { billing.isPurchased(it) }
   return if (premiumVersionStates.fastAll { it == null }) null
   else premiumVersionStates.fastAny { it == true }
 }
@@ -39,17 +41,19 @@ interface Paywall {
 @Provide fun paywall(
   isPremiumVersion: @Composable () -> IsPremiumVersion,
   launchUi: launchUi,
-  scope: ScopedCoroutineScope<AppScope>,
+  scope: ScopedCoroutineScope<AppScope> = inject,
   showToast: showToast,
   unlockScreen: unlockScreen
 ): Paywall = object : Paywall {
   override suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
     if (moleculeFlow { isPremiumVersion() }.filterNotNull().first()) return block()
 
-    scope.launch {
+    launch {
       showToast("This functionality is only available in the premium version!")
       if (!unlockScreen()) return@launch
-      launchUi().navigator.push(GoPremiumScreen(showTryBasicOption = false))
+      provide<Scope<UiScope>, _>(launchUi()) {
+        navigator().push(GoPremiumScreen(showTryBasicOption = false))
+      }
     }
 
     return null
@@ -70,12 +74,12 @@ interface Paywall {
 ): AdsEnabled = isPremiumVersion != true
 
 @Provide class PremiumHintUserflowBuilder(
-  private val isPremiumVersion: @Composable () -> IsPremiumVersion,
+  private val isPremiumVersion: Flow<IsPremiumVersion>,
   private val preferencesStore: DataStore<Preferences>
 ) : UserflowBuilder {
   override suspend fun createUserflow(): List<Screen<*>> {
     val hintShown = preferencesStore.data.first()[HintShownKey] == true
-    return if (hintShown || moleculeFlow { isPremiumVersion() }.filterNotNull().first()) emptyList()
+    return if (hintShown || isPremiumVersion.filterNotNull().first()) emptyList()
     else listOf(GoPremiumScreen(showTryBasicOption = true, allowBackNavigation = false))
       .also { preferencesStore.edit { it[HintShownKey] = true } }
   }

@@ -13,6 +13,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.*
 import arrow.fx.coroutines.*
+import essentials.*
 import essentials.billing.*
 import essentials.compose.*
 import essentials.resource.*
@@ -27,8 +28,8 @@ class DonationScreen(
 ) : OverlayScreen<Unit>
 
 @Provide @Composable fun DonationUi(
-  billingManager: BillingManager,
-  navigator: Navigator,
+  billing: Billing,
+  scope: Scope<ScreenScope> = inject,
   screen: DonationScreen,
   showToast: showToast,
 ): Ui<DonationScreen> {
@@ -36,7 +37,7 @@ class DonationScreen(
     resourceFlow {
       emit(
         screen.donations.parMap { donation ->
-          val details = billingManager.getSkuDetails(donation.sku)!!
+          val details = billing.getSkuDetails(donation.sku)!!
           UiDonation(
             donation,
             details.title
@@ -50,15 +51,13 @@ class DonationScreen(
       .collect { value = it }
   }
 
-  EsModalBottomSheet(
-    onDismissRequest = action { navigator.pop(screen, null) }
-  ) {
+  EsModalBottomSheet {
     skus.getOrNull()?.fastForEach { donation ->
       EsListItem(
         modifier = Modifier.padding(horizontal = 8.dp),
         onClick = scopedAction {
-          if (billingManager.purchase(donation.donation.sku, true, true)) {
-            billingManager.consumePurchase(donation.donation.sku)
+          if (billing.purchase(donation.donation.sku, true, true)) {
+            billing.consumePurchase(donation.donation.sku)
             showToast("Thanks for your support! \uD83D\uDC9B")
           }
         },

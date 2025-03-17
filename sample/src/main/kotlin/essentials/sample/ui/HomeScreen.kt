@@ -18,6 +18,7 @@ import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
+import essentials.*
 import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
@@ -30,7 +31,7 @@ import injekt.*
 
 @Provide @Composable fun HomeUi(
   itemsFactory: () -> List<HomeItem>,
-  navigator: Navigator,
+  scope: Scope<ScreenScope> = inject,
   showToast: showToast
 ): Ui<HomeScreen> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
@@ -66,7 +67,7 @@ import injekt.*
           index = index,
           color = color,
           onClick = action {
-            navigator.push(
+            navigator().push(
               item.screenFactoryWithIndex?.invoke(index, color)
                 ?: item.screenFactory(color)
             )
@@ -80,8 +81,9 @@ import injekt.*
 @Composable private fun HomeItem(
   index: Int,
   color: Color,
-  onClick: () -> Unit,
-  item: HomeItem
+  item: HomeItem,
+  navigator: Navigator = inject,
+  onClick: () -> Unit
 ) {
   Surface(
     modifier = with(LocalScreenAnimationScope.current) {

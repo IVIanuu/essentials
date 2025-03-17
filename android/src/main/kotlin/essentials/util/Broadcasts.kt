@@ -15,20 +15,20 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
-@Stable @Provide @Scoped<AppScope> class BroadcastManager(
+@Stable @Provide @Scoped<AppScope> class Broadcasts(
   private val appContext: AppContext,
   private val coroutineContexts: CoroutineContexts
 ) {
   internal val explicitBroadcasts = EventFlow<Intent>()
 
-  @Composable fun <T> broadcastState(
+  @Composable fun <T> stateOf(
     vararg actions: String,
     compute: (Intent?) -> T
   ): T = produceState(remember { compute(null) }) {
-    broadcasts(*actions).collect { value = compute(it) }
+    of(*actions).collect { value = compute(it) }
   }.value
 
-  fun broadcasts(vararg actions: String): Flow<Intent> = merge(
+  fun of(vararg actions: String): Flow<Intent> = merge(
     explicitBroadcasts.filter { it.action in actions },
     callbackFlow {
       val broadcastReceiver = object : BroadcastReceiver() {
@@ -50,7 +50,7 @@ import kotlinx.coroutines.flow.*
 }
 
 @Provide @AndroidComponent class EsBroadcastReceiver(
-  private val broadcastManager: BroadcastManager,
+  private val broadcasts: Broadcasts,
   @property:Provide private val logger: Logger,
   private val scope: ScopedCoroutineScope<AppScope>
 ) : BroadcastReceiver() {
@@ -58,7 +58,7 @@ import kotlinx.coroutines.flow.*
     d { "on receive $intent" }
     scope.launch {
       delay(100)
-      broadcastManager.explicitBroadcasts.emit(intent)
+      broadcasts.explicitBroadcasts.emit(intent)
     }
   }
 }

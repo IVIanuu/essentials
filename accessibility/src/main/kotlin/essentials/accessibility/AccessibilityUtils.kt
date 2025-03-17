@@ -7,7 +7,7 @@ import essentials.*
 import injekt.*
 import kotlinx.coroutines.flow.*
 
-data object AccessibilityScope
+@Provide data object AccessibilityScope : ChildScopeMarker<AccessibilityScope, AppScope>
 
 val Scope<*>.accessibilityService: EsAccessibilityService
   get() = service()

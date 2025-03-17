@@ -60,4 +60,4 @@ import injekt.*
   }
 }
 
-data object ForegroundScope
+@Provide data object ForegroundScope : ChildScopeMarker<ForegroundScope, AppScope>

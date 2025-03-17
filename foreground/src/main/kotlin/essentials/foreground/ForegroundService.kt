@@ -27,7 +27,7 @@ import kotlin.time.Duration.Companion.seconds
   private val notificationFactory: NotificationFactory,
   private val notificationManager: @SystemService NotificationManager,
   @property:Provide private val logger: Logger,
-  private val scope: ScopedCoroutineScope<AppScope>,
+  @property:Provide private val scope: ScopedCoroutineScope<AppScope>,
   private val foregroundScopeFactory: () -> @New Scope<ForegroundScope>
 ) : Service() {
   private var job: Job? = null
@@ -37,7 +37,7 @@ import kotlin.time.Duration.Companion.seconds
     super.onCreate()
     d { "foreground service started" }
 
-    job = scope.launchMolecule {
+    job = launchMolecule {
       d { "compose main body" }
 
       DisposableEffect(true) {

@@ -13,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
-import essentials.*
 import essentials.compose.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
@@ -24,9 +23,9 @@ import injekt.*
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   indication: Indication? = ripple(bounded = false, radius = 24.dp),
   enabled: Boolean = true,
+  navigator: Navigator = inject,
   menuContent: @Composable BottomSheetScope.() -> Unit
 ) {
-  val navigator = LocalScope.current.navigator
   Box(
     modifier = modifier
       .minimumInteractiveComponentSize()
@@ -34,9 +33,7 @@ import injekt.*
         interactionSource = interactionSource,
         indication = indication,
         enabled = enabled,
-        onClick = scopedAction {
-          navigator.push(BottomSheetScreen(menuContent))
-        }
+        onClick = action { navigator.push(BottomSheetScreen(menuContent)) }
       ),
     contentAlignment = Alignment.Center
   ) {
@@ -57,8 +54,8 @@ class BottomSheetScreen(
 ) : OverlayScreen<Unit>
 
 @Provide @Composable fun BottomSheetUi(
-  navigator: Navigator,
-  screen: BottomSheetScreen
+  screen: BottomSheetScreen,
+  navigator: Navigator = inject
 ): Ui<BottomSheetScreen> {
   val sheetState = rememberModalBottomSheetState()
 

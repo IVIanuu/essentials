@@ -6,7 +6,6 @@ package essentials
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
-import app.cash.molecule.*
 import essentials.compose.*
 import injekt.*
 import injekt.common.*
@@ -50,7 +49,7 @@ import kotlin.reflect.*
   private fun setContent(config: ScopeConfig<N>) {
     val content = config.content
     if (content.isNotEmpty())
-      coroutineScope.launchMolecule {
+      launchMolecule {
         content.fastForEachIndexed { i, content ->
           key(i) { content() }
         }
@@ -140,7 +139,21 @@ fun <N : Any> Scope<*>.scopeOf(name: KClass<N> = inject): Flow<Scope<N>> = snaps
 
 val Scope<*>.root: Scope<*> get() = parent?.root ?: this
 
-val Scope<*>.coroutineScope: CoroutineScope get() = service()
+@Provide object CoroutineScopeProviders : BaseCoroutineScopeProviders() {
+  @Provide fun scopeCoroutineScope(scope: Scope<*> = inject): CoroutineScope = scope.service()
+}
+
+abstract class BaseCoroutineScopeProviders {
+  @Provide @Composable fun compositionCoroutineScope(): CoroutineScope = rememberCoroutineScope()
+}
+
+interface ChildScopeMarker<C : Any, P : Any> {
+  @Provide companion object {
+    @Provide fun <@AddOn T : ChildScopeMarker<C, P>, C : Any, P : Any> parentFromChild(
+      scope: Scope<C>
+    ): Scope<P> = scope.parent.cast()
+  }
+}
 
 data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T) {
   @Provide companion object {
@@ -176,8 +189,12 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
     ): @Scoped<N> S = init()
 
     @Provide inline fun <@AddOn T : @ScopedService<N> S, reified S : Any, N : Any> service(
-      noinline init: () -> S,
-    ) = ProvidedService<N, S>(S::class, init)
+      scope: Scope<N>,
+      key: TypeKey<S>,
+      crossinline init: () -> T,
+    ) = ProvidedService<N, S>(S::class) {
+      scope.scoped(key) { init() }
+    }
   }
 }
 
@@ -211,15 +228,11 @@ typealias ScopeInit<N, K> = @ScopeInitTag<N, K> Unit
 @Tag annotation class ComposeIn<N : Any> {
   @Provide companion object {
     @Provide @Composable inline fun <@AddOn T : @ComposeIn<N> S, S, N : Any> composeIn(
-      scope: Scope<N>,
+      scope: Scope<N> = inject,
       key: TypeKey<StateFlow<S>>,
       crossinline block: @Composable () -> T,
     ): S = rememberScoped(scope = scope, key = key.value) {
-      scope.coroutineScope.moleculeState(
-        RecompositionMode.ContextClock,
-        AndroidUiDispatcher.Main,
-        body = { block() }
-      )
+      moleculeState { block() }
     }.value
   }
 }

@@ -5,8 +5,9 @@
 package essentials.notificationlistener
 
 import essentials.*
+import injekt.*
 
-data object NotificationScope
+@Provide data object NotificationScope : ChildScopeMarker<NotificationScope, AppScope>
 
 val Scope<*>.notificationListenerService: EsNotificationListenerService
   get() = service()

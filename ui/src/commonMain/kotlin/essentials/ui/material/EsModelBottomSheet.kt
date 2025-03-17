@@ -6,15 +6,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
-import essentials.*
 import essentials.compose.*
 import essentials.ui.navigation.*
+import injekt.*
 
 @Composable fun EsModalBottomSheet(
-  onDismissRequest: () -> Unit = run {
-    val navigator = LocalScope.current.navigator
-    action { navigator.popTop() }
-  },
   modifier: Modifier = Modifier,
   sheetState: SheetState = rememberModalBottomSheetState(),
   sheetMaxWidth: Dp = BottomSheetDefaults.SheetMaxWidth,
@@ -26,10 +22,11 @@ import essentials.ui.navigation.*
   dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
   contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
   properties: ModalBottomSheetProperties = ModalBottomSheetDefaults.properties,
+  onDismissRequest: onBottomSheetDismissRequest = inject,
   content: @Composable ColumnScope.() -> Unit,
 ) {
   ModalBottomSheet(
-    onDismissRequest = onDismissRequest,
+    onDismissRequest = action(block = onDismissRequest),
     modifier = modifier.statusBarsPadding(),
     sheetState = sheetState,
     sheetMaxWidth = sheetMaxWidth,
@@ -44,3 +41,8 @@ import essentials.ui.navigation.*
     content = content
   )
 }
+
+@Tag typealias onBottomSheetDismissRequest = suspend () -> Unit
+@Provide fun defaultOnBottomSheetDismissRequest(
+  navigator: Navigator = inject
+): onBottomSheetDismissRequest = { navigator.popTop() }

@@ -3,6 +3,7 @@ package essentials.compose
 import androidx.compose.runtime.*
 import app.cash.molecule.*
 import essentials.coroutines.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*
@@ -14,24 +15,26 @@ fun <T> moleculeFlow(
   moleculeFlow(RecompositionMode.ContextClock, block)
     .flowOn(context)
 
-fun CoroutineScope.launchMolecule(
+fun launchMolecule(
   mode: RecompositionMode = RecompositionMode.ContextClock,
   context: CoroutineContext = AndroidUiDispatcher.Main,
+  scope: CoroutineScope = inject,
   block: @Composable () -> Unit
 ): Job {
-  val job = Job(coroutineContext.job)
-  childCoroutineScope(job).launchMolecule(mode, {}, context, body = block)
+  val job = Job(scope.coroutineContext.job)
+  scope.childCoroutineScope(job).launchMolecule(mode, {}, context, body = block)
   return job
 }
 
-fun <T> CoroutineScope.moleculeState(
+fun <T> moleculeState(
   mode: RecompositionMode = RecompositionMode.ContextClock,
   context: CoroutineContext = AndroidUiDispatcher.Main,
+  scope: CoroutineScope = inject,
   body: @Composable () -> T,
 ): State<T> {
   var state: MutableState<T>? = null
 
-  launchMolecule(
+  scope.launchMolecule(
     context = context,
     mode = mode,
     emitter = { value ->

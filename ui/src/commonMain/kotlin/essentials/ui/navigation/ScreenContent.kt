@@ -3,11 +3,15 @@ package essentials.ui.navigation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import essentials.*
+import essentials.app.*
 import essentials.ui.*
 import injekt.*
 import kotlin.reflect.*
 
-@Composable fun <S : Screen<*>> ScreenContent(screen: S) {
+@Composable fun <S : Screen<*>> ScreenContent(
+  screen: S,
+  navigator: Navigator = inject
+) {
   ScreenContent(rememberScreenState(screen))
 }
 
@@ -75,7 +79,7 @@ import kotlin.reflect.*
 
 @Composable fun <S : Screen<*>> rememberScreenState(
   screen: S,
-  navigator: Navigator = LocalScope.current.navigator,
+  navigator: Navigator = inject,
   component: NavigationComponent<*> = LocalScope.current.service<NavigationComponent<RootNavGraph>>()
 ): ScreenState<S> = remember {
   val scope = component.screenScopeFactory(navigator, screen)

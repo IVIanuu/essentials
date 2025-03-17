@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.datastore.core.*
+import essentials.*
 import essentials.compose.*
 import essentials.data.*
 import essentials.ui.common.*
@@ -26,8 +27,8 @@ import kotlinx.serialization.*
 class PrefsScreen : Screen<Unit>
 
 @Provide @Composable fun PrefsUi(
-  navigator: Navigator,
-  pref: DataStore<SamplePrefs>
+  pref: DataStore<SamplePrefs>,
+  scope: Scope<ScreenScope> = inject,
 ): Ui<PrefsScreen> {
   val prefs by pref.data.collectAsScopedState(SamplePrefs())
   EsScaffold(topBar = { EsAppBar { Text("Prefs") } }) {
@@ -100,7 +101,7 @@ class PrefsScreen : Screen<Unit>
         EsListItem(
           modifier = Modifier.interactive(prefs.switch),
           onClick = scopedAction {
-            val newTextInput = navigator.push(
+            val newTextInput = navigator().push(
               TextInputScreen(
                 initial = prefs.textInput,
                 label = "Input",
@@ -119,7 +120,7 @@ class PrefsScreen : Screen<Unit>
         ColorListItem(
           value = prefs.color,
           onValueChangeRequest = action {
-            val newColor = navigator.push(
+            val newColor = navigator().push(
               ColorPickerScreen(initialColor = prefs.color)
             ) ?: return@action
             pref.updateData { it.copy(color = newColor) }

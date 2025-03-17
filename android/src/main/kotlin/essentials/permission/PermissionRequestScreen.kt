@@ -27,19 +27,20 @@ class PermissionRequestScreen(
 @Provide @Composable fun PermissionRequestUi(
   launchUi: launchUi,
   navigator: Navigator,
-  permissionManager: PermissionManager,
+  permissions: Permissions,
   requestHandlers: Map<KClass<out Permission>, suspend (Permission) -> PermissionRequestResult<Permission>>,
-  screen: PermissionRequestScreen
+  screen: PermissionRequestScreen,
+  scope: Scope<ScreenScope> = inject
 ): Ui<PermissionRequestScreen> {
   val keysByPermission = remember {
-    screen.permissionsKeys.associateBy { permissionManager.permission(it) }
+    screen.permissionsKeys.associateBy { permissions.permission(it) }
   }
 
   val permissionStates = keysByPermission
     .mapValues { (permission, key) ->
       key(permission) {
         produceScopedState(nullOf()) {
-          permissionManager.permissionState(listOf(key))
+          permissions.permissionState(listOf(key))
             .collect { value = it }
         }.value
       }

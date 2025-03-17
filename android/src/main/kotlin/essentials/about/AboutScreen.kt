@@ -26,8 +26,8 @@ class AboutScreen(
 
 @Provide @Composable fun AboutUi(
   appConfig: AppConfig,
-  navigator: Navigator,
-  screen: AboutScreen
+  screen: AboutScreen,
+  scope: Scope<ScreenScope> = inject
 ): Ui<AboutScreen> {
   EsScaffold(topBar = { EsAppBar { Text("About") } }) {
     EsLazyColumn {
@@ -42,7 +42,7 @@ class AboutScreen(
       item {
         EsListItem(
           onClick = scopedAction {
-            navigator.push(PlayStoreAppDetailsKey(appConfig.packageName))
+            navigator().push(PlayStoreAppDetailsKey(appConfig.packageName))
           },
           leadingContent = { Icon(Icons.Default.Star, null) },
           headlineContent = { Text("Rate") },
@@ -54,7 +54,7 @@ class AboutScreen(
         item {
           EsListItem(
             onClick = scopedAction {
-              navigator.push(screen.donationScreen)
+              navigator().push(screen.donationScreen)
             },
             leadingContent = { Icon(Icons.Default.Favorite, null) },
             headlineContent = { Text("Donate") }
@@ -64,7 +64,7 @@ class AboutScreen(
       item {
         EsListItem(
           onClick = scopedAction {
-            navigator.push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
+            navigator().push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
           },
           leadingContent = { Icon(Icons.Default.ShoppingBag, null) },
           headlineContent = { Text("More apps") },
@@ -75,7 +75,7 @@ class AboutScreen(
       item {
         EsListItem(
           onClick = scopedAction {
-            navigator.push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
+            navigator().push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
           },
           leadingContent = {
             Icon(
@@ -94,7 +94,7 @@ class AboutScreen(
       item {
         EsListItem(
           onClick = scopedAction {
-            navigator.push(UrlScreen("https://github.com/IVIanuu"))
+            navigator().push(UrlScreen("https://github.com/IVIanuu"))
           },
           leadingContent = {
             Icon(
@@ -111,7 +111,7 @@ class AboutScreen(
       item {
         EsListItem(
           onClick = scopedAction {
-            navigator.push(UrlScreen("https://twitter.com/IVIanuu"))
+            navigator().push(UrlScreen("https://twitter.com/IVIanuu"))
           },
           leadingContent = {
             Icon(
@@ -129,7 +129,7 @@ class AboutScreen(
         val email = "ivianuu@gmail.com"
         EsListItem(
           onClick = scopedAction {
-            navigator.push(
+            navigator().push(
               Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
@@ -151,7 +151,7 @@ class AboutScreen(
         item {
           EsListItem(
             onClick = scopedAction {
-              navigator.push(UrlScreen(screen.privacyPolicyUrl))
+              navigator().push(UrlScreen(screen.privacyPolicyUrl))
             },
             leadingContent = { Icon(Icons.Default.Policy, null) },
             headlineContent = { Text("Privacy policy") }

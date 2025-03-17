@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import essentials.*
+import essentials.coroutines.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import injekt.*
@@ -35,7 +36,7 @@ import kotlin.time.Duration.Companion.seconds
     modifier = modifier,
     headlineContent = headlineContent,
     supportingContent = {
-      val scope = rememberCoroutineScope()
+      @Provide val scope = rememberCoroutineScope()
       CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
         EsSlider(
           modifier = Modifier
@@ -50,7 +51,7 @@ import kotlin.time.Duration.Companion.seconds
           onValueChangeFinished = { newValue ->
             onValueChangeFinished?.invoke(stepPolicy.stepValue(newValue, valueRange))
             internalValueEraseJob?.cancel()
-            internalValueEraseJob = scope.launch {
+            internalValueEraseJob = launch {
               delay(1.seconds)
               internalValue = null
             }

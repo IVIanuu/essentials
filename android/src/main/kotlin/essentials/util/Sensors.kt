@@ -1,21 +1,20 @@
 package essentials.util
 
 import android.hardware.*
-import android.hardware.SensorManager
 import androidx.compose.runtime.*
 import essentials.*
 import injekt.*
 import kotlin.time.*
 
-@Provide class SensorManager(
+@Provide class Sensors(
   private val sensorManager: @SystemService SensorManager,
-  private val wakeLockManager: WakeLockManager
+  private val wakeLocks: WakeLocks
 ) {
-  fun sensor(type: Int): Sensor? = sensorManager.getDefaultSensor(type)
+  fun sensorOf(type: Int): Sensor? = sensorManager.getDefaultSensor(type)
 
   @Composable fun TriggerEventHandler(sensor: Sensor, onEvent: (TriggerEvent) -> Unit) {
     if (!sensor.isWakeUpSensor)
-      wakeLockManager.WakeLock("sensors")
+      wakeLocks.WakeLock("sensors")
 
     DisposableEffect(sensor) {
       val listener = object : TriggerEventListener() {
@@ -36,7 +35,7 @@ import kotlin.time.*
     onEvent: (SensorEvent) -> Unit
   ) {
     if (!sensor.isWakeUpSensor)
-      wakeLockManager.WakeLock("sensors")
+      wakeLocks.WakeLock("sensors")
 
     DisposableEffect(sensor) {
       val listener = object : SensorEventListener {

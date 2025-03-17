@@ -29,8 +29,9 @@ abstract class EsTileService : TileService() {
   override fun onStartListening() {
     super.onStartListening()
     d { "${this::class} on start listening" }
-    tileScope = component.tileScopeFactory(this)
-    tileScope!!.coroutineScope.launchMolecule {
+    @Provide val tileScope: Scope<TileScope> = component.tileScopeFactory(this)
+      .also { this.tileScope = it }
+    launchMolecule {
       val currentState = state()
         .also { this.currentOnClick = it.onClick }
 
@@ -78,4 +79,4 @@ data class TileState(
   enum class Status { UNAVAILABLE, ACTIVE, INACTIVE }
 }
 
-data object TileScope
+@Provide data object TileScope : ChildScopeMarker<TileScope, AppScope>

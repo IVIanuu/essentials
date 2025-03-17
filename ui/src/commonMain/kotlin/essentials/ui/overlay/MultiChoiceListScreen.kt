@@ -7,7 +7,6 @@ package essentials.ui.overlay
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
-import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
@@ -27,9 +26,7 @@ class MultiChoiceListScreen<T : Any>(
 ): Ui<MultiChoiceListScreen<Any>> {
   var selectedItems by remember { mutableStateOf(screen.selected) }
 
-  EsModalBottomSheet(
-    onDismissRequest = action { navigator.pop(screen, selectedItems) }
-  ) {
+  EsModalBottomSheet(onDismissRequest = { navigator.pop(screen, selectedItems) }) {
     if (screen.title != null)
       Subheader { Text(screen.title) }
     screen.items.fastForEach { item ->

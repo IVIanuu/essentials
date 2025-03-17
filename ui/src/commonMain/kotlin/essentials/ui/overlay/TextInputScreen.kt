@@ -14,6 +14,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.focus.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.*
+import essentials.*
 import essentials.compose.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
@@ -27,7 +28,7 @@ class TextInputScreen(
 ) : OverlayScreen<String>
 
 @Provide @Composable fun TextInputUi(
-  navigator: Navigator,
+  scope: Scope<ScreenScope> = inject,
   screen: TextInputScreen
 ): Ui<TextInputScreen> {
   EsModalBottomSheet {
@@ -55,7 +56,7 @@ class TextInputScreen(
 
       val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
       IconButton(
-        onClick = scopedAction { navigator.pop(screen, currentValue.text) },
+        onClick = scopedAction { navigator().pop(screen, currentValue.text) },
         enabled = currentValueIsOk
       ) { Icon(Icons.Default.Send, null) }
     }

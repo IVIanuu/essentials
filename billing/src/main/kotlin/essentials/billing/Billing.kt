@@ -18,51 +18,53 @@ import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
-@Stable @Provide @Scoped<AppScope> class BillingManager(
-  private val appScope: Scope<AppScope>,
-  private val launchUi: launchUi,
-  private val billingClientFactory: () -> BillingClient,
+@Stable @Provide @Scoped<AppScope> class Billing(
+  @property:Provide val appScope: Scope<AppScope>,
+  val launchUi: launchUi,
+  val billingClientFactory: () -> BillingClient,
   coroutineContexts: CoroutineContexts,
-  @property:Provide private val logger: Logger,
-  private val refreshes: MutableSharedFlow<BillingRefresh>
+  @property:Provide val logger: Logger,
+  val refreshes: MutableSharedFlow<BillingRefresh>
 ) {
-  private val billingClient = appScope.coroutineScope.childCoroutineScope(coroutineContexts.io).sharedResource(
-    sharingStarted = SharingStarted.WhileSubscribed(10.seconds.inWholeMilliseconds),
-    create = { _: Unit ->
-      d { "create client" }
-      val client = billingClientFactory()
-      suspendCancellableCoroutine { continuation ->
-        client.startConnection(
-          object : BillingClientStateListener {
-            override fun onBillingSetupFinished(result: BillingResult) {
-              // for some reason on billing setup finished is sometimes called multiple times
-              // we ensure that we we only resume once
-              if (continuation.isActive) {
-                if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                  d { "connected" }
-                  continuation.resume(Unit)
-                } else {
-                  continuation.resumeWithException(
-                    IllegalStateException("connecting failed ${result.responseCode} ${result.debugMessage}")
-                  )
+  private val client = provide(implicitly<CoroutineScope>().childCoroutineScope(coroutineContexts.io)) {
+    sharedResource(
+      sharingStarted = SharingStarted.WhileSubscribed(10.seconds.inWholeMilliseconds),
+      create = { _: Unit ->
+        d { "create client" }
+        val client = billingClientFactory()
+        suspendCancellableCoroutine { continuation ->
+          client.startConnection(
+            object : BillingClientStateListener {
+              override fun onBillingSetupFinished(result: BillingResult) {
+                // for some reason on billing setup finished is sometimes called multiple times
+                // we ensure that we we only resume once
+                if (continuation.isActive) {
+                  if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+                    d { "connected" }
+                    continuation.resume(Unit)
+                  } else {
+                    continuation.resumeWithException(
+                      IllegalStateException("connecting failed ${result.responseCode} ${result.debugMessage}")
+                    )
+                  }
                 }
               }
-            }
 
-            override fun onBillingServiceDisconnected() {
-              d { "on billing service disconnected" }
+              override fun onBillingServiceDisconnected() {
+                d { "on billing service disconnected" }
+              }
             }
-          }
-        )
+          )
+        }
+        client
+          .also { d { "client created" } }
+      },
+      release = { _, billingClient ->
+        d { "release client" }
+        catch { billingClient.endConnection() }
       }
-      client
-        .also { d { "client created" } }
-     },
-    release = { _, billingClient ->
-      d { "release client" }
-      catch { billingClient.endConnection() }
-    }
-  )
+    )
+  }
 
   @Composable fun isPurchased(sku: Sku): Boolean? {
     var isPurchased: Boolean? by remember { mutableStateOf(null) }
@@ -71,7 +73,7 @@ import kotlin.time.Duration.Companion.seconds
       val version by produceState(0) { refreshes.collect { value += 1 } }
 
       LaunchedEffect(version) {
-        isPurchased = billingClient.use(Unit) { it.getIsPurchased(sku) }
+        isPurchased = client.use(Unit) { it.getIsPurchased(sku) }
         d { "is purchased for $sku -> $isPurchased" }
       }
     }
@@ -79,7 +81,7 @@ import kotlin.time.Duration.Companion.seconds
     return isPurchased
   }
 
-  suspend fun getSkuDetails(sku: Sku): SkuDetails? = billingClient.use(Unit) {
+  suspend fun getSkuDetails(sku: Sku): SkuDetails? = client.use(Unit) {
     it.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
       ?.fastFirstOrNull { it.sku == sku.skuString }
@@ -90,7 +92,7 @@ import kotlin.time.Duration.Companion.seconds
     sku: Sku,
     acknowledge: Boolean,
     consumeOldPurchaseIfUnspecified: Boolean
-  ): Boolean = billingClient.use(Unit) { billingClient ->
+  ): Boolean = client.use(Unit) { billingClient ->
     d {
       "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
     }
@@ -120,7 +122,7 @@ import kotlin.time.Duration.Companion.seconds
     return@use if (success && acknowledge) acknowledgePurchase(sku) else success
   }
 
-  suspend fun consumePurchase(sku: Sku): Boolean = billingClient.use(Unit) { billingClient ->
+  suspend fun consumePurchase(sku: Sku): Boolean = client.use(Unit) { billingClient ->
     val purchase = billingClient.getPurchase(sku) ?: return@use false
 
     val consumeParams = ConsumeParams.newBuilder()
@@ -138,7 +140,7 @@ import kotlin.time.Duration.Companion.seconds
     return@use success
   }
 
-  suspend fun acknowledgePurchase(sku: Sku): Boolean = billingClient.use(Unit) { billingClient ->
+  suspend fun acknowledgePurchase(sku: Sku): Boolean = client.use(Unit) { billingClient ->
     val purchase = billingClient.getPurchase(sku)
       ?: return@use false
 

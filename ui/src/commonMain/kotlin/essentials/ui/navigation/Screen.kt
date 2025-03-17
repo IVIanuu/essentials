@@ -8,6 +8,7 @@ import androidx.compose.animation.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import essentials.*
+import essentials.app.*
 import essentials.logging.*
 import injekt.*
 import kotlin.reflect.*
@@ -31,7 +32,7 @@ data class ScreenConfig<T : Screen<*>>(
   constructor(transitionSpec: ScreenTransitionSpec) : this(transitionSpec, transitionSpec)
 }
 
-data object ScreenScope
+@Provide data object ScreenScope : ChildScopeMarker<ScreenScope, UiScope>
 
 @Stable fun interface ScreenDecorator : ExtensionPoint<ScreenDecorator> {
   @Composable fun DecoratedContent(content: @Composable () -> Unit)

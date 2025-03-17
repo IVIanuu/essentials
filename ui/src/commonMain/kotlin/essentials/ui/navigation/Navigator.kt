@@ -7,8 +7,8 @@ package essentials.ui.navigation
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import essentials.*
+import essentials.app.*
 import essentials.coroutines.*
-import essentials.ui.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -113,7 +113,12 @@ suspend fun Navigator.popTo(screen: Screen<*>) {
   setBackStack(backStack.take(index + 1))
 }
 
-val Scope<*>.navigator: Navigator get() = service()
+@Provide object NavigatorProviders {
+  @Provide fun fromUiScope(scope: Scope<UiScope>): Navigator = scope.service()
+  @Provide fun fromScreenScope(scope: Scope<ScreenScope>): Navigator = scope.service()
+}
+
+fun navigator(x: Navigator = inject): Navigator = x
 
 @Tag annotation class NavGraph<N>
 

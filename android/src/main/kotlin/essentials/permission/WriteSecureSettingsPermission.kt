@@ -62,7 +62,8 @@ class WriteSecureSettingsScreen(
   developerModeDataStore: DataStore<DeveloperMode>,
   launchUi: launchUi,
   navigator: Navigator,
-  permissionManager: PermissionManager,
+  permissions: Permissions,
+  scope: Scope<ScreenScope> = inject,
   screen: WriteSecureSettingsScreen,
   shell: Shell,
   showToast: showToast
@@ -87,7 +88,7 @@ class WriteSecureSettingsScreen(
         3 -> true
         4 -> produceScopedState(false) {
           while (true) {
-            value = permissionManager.permissionState(listOf(screen.permissionClass)).first()
+            value = permissions.permissionState(listOf(screen.permissionClass)).first()
             delay(1.seconds)
           }
         }.value
@@ -109,7 +110,7 @@ class WriteSecureSettingsScreen(
           TextButton(onClick = scopedAction {
             shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
               .onSuccess {
-                if (permissionManager.permissionState(listOf(screen.permissionClass)).first()) {
+                if (permissions.permissionState(listOf(screen.permissionClass)).first()) {
                   showToast("Permission granted!")
                   navigator.pop(screen)
                 }

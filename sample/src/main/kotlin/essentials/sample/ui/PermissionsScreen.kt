@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.util.*
+import essentials.*
 import essentials.accessibility.*
 import essentials.compose.*
 import essentials.notificationlistener.*
@@ -24,8 +25,9 @@ import injekt.*
 class PermissionsScreen : Screen<Unit>
 
 @Provide @Composable fun PermissionsUi(
-  permissionManager: PermissionManager,
-  permissions: List<SamplePermission>
+  permissionManager: Permissions,
+  permissions: List<SamplePermission>,
+  scope: Scope<ScreenScope> = inject,
 ): Ui<PermissionsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Permissions") } }) {
     Button(

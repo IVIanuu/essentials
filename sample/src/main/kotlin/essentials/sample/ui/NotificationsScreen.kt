@@ -23,7 +23,7 @@ class NotificationsScreen : Screen<Unit>
 
 @Provide @Composable fun NotificationsUi(
   api: NotificationApi,
-  permissionManager: PermissionManager
+  permissions: Permissions
 ): Ui<NotificationsScreen> {
   EsScaffold(
     topBar = { EsAppBar { Text("Notifications") } },
@@ -39,7 +39,7 @@ class NotificationsScreen : Screen<Unit>
     when (api) {
       is NotificationApi.Unavailable -> {
         LaunchedEffect(true) {
-          permissionManager.ensurePermissions(listOf(SampleNotificationListenerPermission::class))
+          permissions.ensurePermissions(listOf(SampleNotificationListenerPermission::class))
         }
 
         Text("Unavailable")

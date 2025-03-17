@@ -20,18 +20,18 @@ import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Stable @Provide class ActionRepository(
+@Stable @Provide class Actions(
   private val actions: Map<String, () -> Action<*>>,
   private val actionFactories: List<() -> ActionFactory>,
   private val actionSettings: Map<String, () -> ActionSettingsScreen<ActionId>>,
   private val actionPickerDelegates: List<() -> ActionPickerDelegate>,
   private val coroutineContexts: CoroutineContexts
 ) {
-  suspend fun getAllActions() = withContext(coroutineContexts.computation) {
+  suspend fun getAll() = withContext(coroutineContexts.computation) {
     actions.values.map { it() }
   }
 
-  suspend fun getAction(id: String) = withContext(coroutineContexts.computation) {
+  suspend fun get(id: String) = withContext(coroutineContexts.computation) {
     catch {
       actions[id]
         ?.invoke()
@@ -48,10 +48,10 @@ import kotlinx.coroutines.flow.*
       )
   }
 
-  suspend fun getActionSettingsKey(id: String) =
+  suspend fun getSettingsKey(id: String) =
     withContext(coroutineContexts.computation) { actionSettings[id]?.invoke() }
 
-  suspend fun getActionPickerDelegates() =
+  suspend fun getPickerDelegates() =
     withContext(coroutineContexts.computation) { actionPickerDelegates.fastMap { it() } }
 }
 
@@ -63,25 +63,25 @@ typealias executeAction = suspend (String) -> executeActionResult
   actionIds: List<ActionId>,
   actionsExecutors: Map<String, suspend (ActionId) -> ActionExecutorResult<*>>,
   actionFactories: List<() -> ActionFactory>,
-  actionRepository: ActionRepository,
+  actions: Actions,
   appConfig: AppConfig,
   closeSystemDialogs: closeSystemDialogs,
   coroutineContexts: CoroutineContexts,
   logger: Logger = inject,
-  permissionManager: PermissionManager,
+  permissions: Permissions,
   showToast: showToast,
   turnScreenOn: turnScreenOn,
   unlockScreen: unlockScreen
 ): executeActionResult = withContext(coroutineContexts.computation) {
   catch {
     d { "execute $id" }
-    val action = actionRepository.getAction(id)
+    val action = actions.get(id)
 
     // check permissions
-    if (!permissionManager.permissionState(action.permissions).first()) {
+    if (!permissions.permissionState(action.permissions).first()) {
       d { "didn't had permissions for $id ${action.permissions}" }
       unlockScreen()
-      permissionManager.ensurePermissions(action.permissions)
+      permissions.ensurePermissions(action.permissions)
       return@catch false
     }
 
@@ -99,7 +99,7 @@ typealias executeAction = suspend (String) -> executeActionResult
     // close system dialogs
     if (action.closeSystemDialogs &&
       (appConfig.sdk < 31 ||
-          permissionManager.permissionState(listOf(ActionAccessibilityPermission::class)).first()))
+          permissions.permissionState(listOf(ActionAccessibilityPermission::class)).first()))
       closeSystemDialogs()
 
     d { "fire $id" }

@@ -2,40 +2,55 @@ package essentials.compose
 
 import androidx.compose.runtime.*
 import essentials.*
+import essentials.coroutines.*
+import injekt.*
 import kotlinx.coroutines.*
 
-@Composable inline fun scopedAction(crossinline block: suspend () -> Unit): () -> Unit =
-  action(LocalScope.current.coroutineScope, block)
+@Composable inline fun scopedAction(
+  scope: Scope<*> = inject,
+  crossinline block: suspend () -> Unit
+): () -> Unit = action(implicitly(), block)
 
-@Composable inline fun <P1> scopedAction(crossinline block: suspend (P1) -> Unit): (P1) -> Unit =
-  action(LocalScope.current.coroutineScope, block)
+@Composable inline fun <P1> scopedAction(
+  scope: Scope<*> = inject,
+  crossinline block: suspend (P1) -> Unit
+): (P1) -> Unit = action(implicitly(), block)
 
-@Composable inline fun <P1, P2> scopedAction(crossinline block: suspend (P1, P2) -> Unit): (P1, P2) -> Unit =
-  action(LocalScope.current.coroutineScope, block)
+@Composable inline fun <P1, P2> scopedAction(
+  scope: Scope<*> = inject,
+  crossinline block: suspend (P1, P2) -> Unit
+): (P1, P2) -> Unit = action(implicitly(), block)
 
 @Composable inline fun <P1, P2, P3> scopedAction(
+  scope: Scope<*> = inject,
   crossinline block: suspend (P1, P2, P3) -> Unit
-): (P1, P2, P3) -> Unit = action(LocalScope.current.coroutineScope, block)
+): (P1, P2, P3) -> Unit = action(implicitly(), block)
 
 @Composable inline fun <P1, P2, P3, P4> scopedAction(
+  scope: Scope<*> = inject,
   crossinline block: suspend (P1, P2, P3, P4) -> Unit
-): (P1, P2, P3, P4) -> Unit = action(LocalScope.current.coroutineScope, block)
+): (P1, P2, P3, P4) -> Unit = action(implicitly(), block)
 
 @Composable inline fun <P1, P2, P3, P4, P5> scopedAction(
+  scope: Scope<*> = inject,
   crossinline block: suspend (P1, P2, P3, P4, P5) -> Unit
-): (P1, P2, P3, P4, P5) -> Unit = action(LocalScope.current.coroutineScope, block)
+): (P1, P2, P3, P4, P5) -> Unit = action(implicitly(), block)
 
 @Composable fun LaunchedScopedEffect(
   vararg keys: Any?,
-  block: suspend CoroutineScope.() -> Unit
+  scope: Scope<*> = inject,
+  block: suspend (@Provide CoroutineScope) -> Unit
 ) {
-  val coroutineScope = LocalScope.current.coroutineScope
   rememberScoped(keys = keys) {
     object : RememberObserver {
       private var job: Job? = null
 
       override fun onRemembered() {
-        job = coroutineScope.launch(block = block)
+        job = launch(
+          // TODO REMOVE EXPLICIT PASSING ONCE WE FIGURED OUT THAT NASTY INJEKT BUG
+          scope = CoroutineScopeProviders.scopeCoroutineScope(scope),
+          block = block
+        )
       }
 
       override fun onForgotten() {
@@ -53,7 +68,7 @@ import kotlinx.coroutines.*
 
 @Composable fun <T : Any> rememberScoped(
   vararg keys: Any?,
-  scope: Scope<*> = LocalScope.current,
+  scope: Scope<*> = inject,
   key: String? = null,
   init: () -> T,
 ): T {

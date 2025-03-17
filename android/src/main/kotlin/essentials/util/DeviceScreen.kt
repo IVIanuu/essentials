@@ -22,10 +22,10 @@ enum class ScreenState(val isOn: Boolean) {
 }
 
 @Provide @Composable fun screenState(
-  broadcastManager: BroadcastManager,
+  broadcasts: Broadcasts,
   keyguardManager: @SystemService KeyguardManager,
   powerManager: @SystemService PowerManager
-): ScreenState = broadcastManager.broadcastState(
+): ScreenState = broadcasts.stateOf(
   Intent.ACTION_SCREEN_OFF,
   Intent.ACTION_SCREEN_ON,
   Intent.ACTION_USER_PRESENT

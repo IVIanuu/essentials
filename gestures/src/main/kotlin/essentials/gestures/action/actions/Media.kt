@@ -97,7 +97,8 @@ class MediaActionSettingsScreen : Screen<Unit>
   getAppInfo: suspend (String) -> AppInfo?,
   navigator: Navigator,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
-  preferencesStore: DataStore<Preferences>
+  preferencesStore: DataStore<Preferences>,
+  scope: Scope<ScreenScope> = inject,
 ): Ui<MediaActionSettingsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Media action settings") } }) {
     EsLazyColumn {

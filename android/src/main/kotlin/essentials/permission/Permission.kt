@@ -6,8 +6,8 @@ package essentials.permission
 
 import androidx.compose.runtime.*
 import essentials.*
+import essentials.app.*
 import essentials.coroutines.*
-import essentials.ui.*
 import injekt.*
 import kotlin.reflect.*
 

@@ -9,8 +9,8 @@ import androidx.compose.ui.util.*
 import androidx.datastore.core.*
 import androidx.datastore.preferences.core.*
 import essentials.*
+import essentials.app.*
 import essentials.logging.*
-import essentials.ui.*
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.flow.*
@@ -27,7 +27,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   adsEnabled: AdsEnabled,
   adFeatureRepository: AdFeatureRepository,
   config: ScreenLaunchFullscreenAdConfig,
-  fullScreenAdManager: FullScreenAdManager,
+  fullScreenAds: FullScreenAds,
   logger: Logger = inject,
   navigator: Navigator,
   preferencesStore: DataStore<Preferences>
@@ -43,7 +43,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
         d { "screen launched $launchCount" }
         if (launchCount >= config.screenLaunchToShowAdCount) {
           d { "try to show full screen ad $launchCount" }
-          if (fullScreenAdManager.showAd())
+          if (fullScreenAds.showAd())
             preferencesStore.edit { it[FullScreenAdScreenLaunchCount] = 0 }
         }
       }

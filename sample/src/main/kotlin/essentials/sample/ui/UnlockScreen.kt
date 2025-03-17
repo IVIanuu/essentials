@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import essentials.compose.*
-import essentials.coroutines.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import essentials.util.*
@@ -24,8 +23,7 @@ import kotlinx.coroutines.flow.*
 class UnlockScreen : Screen<Unit>
 
 @Provide @Composable fun UnlockUi(
-  scope: ScopedCoroutineScope<ScreenScope>,
-  screenStateProducer: @Composable () -> ScreenState,
+  screenState: Flow<ScreenState>,
   showToast: showToast,
   turnScreenOn: turnScreenOn,
   unlockScreen: unlockScreen
@@ -37,31 +35,26 @@ class UnlockScreen : Screen<Unit>
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       Button(
-        onClick = {
-          scope.launch {
-            showToast("Turn the screen off")
-            moleculeFlow { screenStateProducer() }.first { !it.isOn }
-            delay(1500)
-            val unlocked = unlockScreen()
-            showToast("Screen unlocked $unlocked")
-          }
+        onClick = action {
+          showToast("Turn the screen off")
+          screenState.first { !it.isOn }
+          delay(1500)
+          val unlocked = unlockScreen()
+          showToast("Screen unlocked $unlocked")
         }
       ) { Text("Unlock") }
 
       Spacer(Modifier.height(8.dp))
 
       Button(
-        onClick = {
-          scope.launch {
-            showToast("Turn the screen off")
-            moleculeFlow { screenStateProducer() }.first { !it.isOn }
-            delay(1500)
-            val screenOn = turnScreenOn()
-            showToast("Screen activated $screenOn")
-          }
+        onClick = action {
+          showToast("Turn the screen off")
+          screenState.first { !it.isOn }
+          delay(1500)
+          val screenOn = turnScreenOn()
+          showToast("Screen activated $screenOn")
         }
       ) { Text("Activate") }
     }
   }
 }
-

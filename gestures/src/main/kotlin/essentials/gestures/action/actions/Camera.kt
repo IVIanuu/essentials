@@ -12,10 +12,8 @@ import android.provider.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import essentials.*
 import essentials.accessibility.*
-import essentials.compose.*
 import essentials.gestures.action.*
 import essentials.logging.*
 import essentials.util.*
@@ -40,8 +38,8 @@ import kotlin.coroutines.*
   @Provide suspend fun execute(
     appScope: Scope<AppScope>,
     cameraManager: @SystemService CameraManager,
-    currentAppProducer: @Composable () -> CurrentApp?,
-    screenStateProducer: @Composable () -> ScreenState,
+    currentApp: Flow<CurrentApp?>,
+    screenState: Flow<ScreenState>,
     logger: Logger = inject,
     packageManager: PackageManager,
     sendIntent: sendActionIntent
@@ -61,14 +59,14 @@ import kotlin.coroutines.*
             CameraCharacteristics.LENS_FACING_FRONT
       }
 
-    val currentScreenState = moleculeFlow { screenStateProducer() }.first()
+    val currentScreenState = screenState.first()
 
     val frontFacing = if (frontCamera != null &&
       currentScreenState != ScreenState.OFF &&
       (currentScreenState == ScreenState.UNLOCKED ||
           appScope.scopeOfOrNull<AccessibilityScope>()
             ?.accessibilityService?.rootInActiveWindow?.packageName != "com.android.systemui") &&
-      cameraApp.activityInfo!!.packageName == moleculeFlow { currentAppProducer() }.first()
+      cameraApp.activityInfo!!.packageName == currentApp.first()
     )
       suspendCancellableCoroutine<Boolean> { cont ->
         cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {

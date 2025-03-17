@@ -6,7 +6,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
-import kotlinx.coroutines.*
+import essentials.coroutines.*
+import injekt.*
 
 fun Modifier.animatePlacement(
   animationSpec: FiniteAnimationSpec<IntOffset> = spring(
@@ -14,7 +15,7 @@ fun Modifier.animatePlacement(
     visibilityThreshold = IntOffset.VisibilityThreshold
   )
 ): Modifier = composed {
-  val scope = rememberCoroutineScope()
+  @Provide val scope = rememberCoroutineScope()
   var targetOffset by remember { mutableStateOf(IntOffset.Zero) }
   var animatable by remember {
     mutableStateOf<Animatable<IntOffset, AnimationVector2D>?>(null)
@@ -28,7 +29,7 @@ fun Modifier.animatePlacement(
       ?: Animatable(targetOffset, IntOffset.VectorConverter)
         .also { animatable = it }
     if (anim.targetValue != targetOffset) {
-      scope.launch {
+      launch {
         anim.animateTo(targetOffset, animationSpec)
       }
     }

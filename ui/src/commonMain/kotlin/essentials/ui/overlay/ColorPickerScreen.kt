@@ -18,7 +18,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
-import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
@@ -42,7 +41,7 @@ class ColorPickerScreen(
     derivedStateOf { currentHex.toColorOrNull() ?: Color.Transparent }
   }
 
-  EsModalBottomSheet(onDismissRequest = action { navigator.pop(screen, currentColor) }) {
+  EsModalBottomSheet(onDismissRequest = { navigator.pop(screen, currentColor) }) {
     val textFieldContentColor = if (currentColor == Color.Transparent) LocalContentColor.current
     else guessingContentColorFor(currentColor)
 

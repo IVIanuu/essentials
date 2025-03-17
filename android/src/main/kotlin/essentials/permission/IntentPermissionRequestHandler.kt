@@ -25,7 +25,7 @@ data class IntentPermissionRequestParams<P : Permission>(
   key: KClass<P>,
   appConfig: AppConfig,
   navigator: Navigator,
-  permissionManager: PermissionManager,
+  permissions: Permissions,
   showToast: showToast
 ): PermissionRequestResult<P> = raceOf(
   {
@@ -39,7 +39,7 @@ data class IntentPermissionRequestParams<P : Permission>(
   {
     // wait until user granted permission
     // we intentionally call it again and again to force a refresh
-    while (!permissionManager.permissionState(listOf(key)).first())
+    while (!permissions.permissionState(listOf(key)).first())
       delay(100)
   }
 )

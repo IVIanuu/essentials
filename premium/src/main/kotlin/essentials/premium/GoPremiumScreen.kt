@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.*
 import com.android.billingclient.api.*
 import com.slack.circuit.foundation.internal.*
+import essentials.*
 import essentials.ads.*
 import essentials.billing.*
 import essentials.compose.*
@@ -45,33 +46,33 @@ class GoPremiumScreen(
 }
 
 @Provide @Composable fun GoPremiumUi(
-  billingManager: BillingManager,
+  billing: Billing,
   features: List<AppFeature>,
-  fullScreenAdManager: FullScreenAdManager,
-  navigator: Navigator,
+  fullScreenAds: FullScreenAds,
   premiumVersionSku: PremiumVersionSku,
+  scope: Scope<ScreenScope> = inject,
   screen: GoPremiumScreen,
   showToast: showToast
 ): Ui<GoPremiumScreen> {
   val premiumSkuDetails by produceScopedState(Resource.Idle()) {
-    resourceFlow { emit(billingManager.getSkuDetails(premiumVersionSku)) }
+    resourceFlow { emit(billing.getSkuDetails(premiumVersionSku)) }
       .collect { value = it }
   }
   val goPremium = scopedAction {
-    if (billingManager.purchase(premiumVersionSku, true, true)) {
-      navigator.pop(screen, true)
+    if (billing.purchase(premiumVersionSku, true, true)) {
+      navigator().pop(screen, true)
       showToast("Premium version is now active!")
     }
   }
   val tryBasicVersion = scopedAction {
-    fullScreenAdManager.showAd()
-    navigator.pop(screen, false)
+    fullScreenAds.showAd()
+    navigator().pop(screen, false)
   }
 
   BackHandler(onBack = scopedAction {
     if (screen.allowBackNavigation) {
-      fullScreenAdManager.showAd()
-      navigator.pop(screen, false)
+      fullScreenAds.showAd()
+      navigator().pop(screen, false)
     }
   })
 

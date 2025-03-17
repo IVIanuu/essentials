@@ -13,7 +13,6 @@ import essentials.app.*
 import essentials.compose.*
 import essentials.coroutines.*
 import essentials.logging.*
-import essentials.ui.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -21,22 +20,20 @@ import kotlin.coroutines.*
 import kotlin.time.*
 import kotlin.time.Duration.Companion.seconds
 
-@Stable @Provide @Scoped<UiScope> class FullScreenAdManager(
+@Stable @Provide @Scoped<UiScope> class FullScreenAds(
   private val activity: ComponentActivity,
   private val appContext: AppContext,
-  private val appScope: Scope<AppScope>,
   private val adsEnabledProducer: @Composable () -> AdsEnabled,
   config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
-  @property:Provide private val logger: Logger,
-  scope: ScopedCoroutineScope<UiScope>
+  @property:Provide private val scope: Scope<UiScope> = inject
 ) {
   private var currentAd by mutableStateOf<FullScreenAd?>(null)
   private val rateLimiter = RateLimiter(1, config.adsInterval)
   private var adsEnabled by mutableStateOf(false)
 
   init {
-    scope.launchMolecule {
+    launchMolecule {
       adsEnabled = adsEnabledProducer()
 
       if (!adsEnabled) {
@@ -102,7 +99,7 @@ import kotlin.time.Duration.Companion.seconds
     var wasShown by mutableStateOf(false)
 
     suspend fun show(): Boolean {
-      if (appScope.scopeOfOrNull<AppVisibleScope>() == null) return false
+      if (scope.scopeOfOrNull<AppVisibleScope>() == null) return false
         .also { d { "do not show -> not in foreground" } }
 
       if (!rateLimiter.tryAcquire()) return false

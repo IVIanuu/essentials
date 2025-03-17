@@ -3,14 +3,16 @@ package essentials.coroutines
 import arrow.fx.coroutines.*
 import com.github.michaelbull.result.*
 import essentials.*
+import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
 import kotlin.coroutines.*
 
-fun <K, T> CoroutineScope.sharedFlow(
+fun <K, T> sharedFlow(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   replay: Int = 0,
+  scope: CoroutineScope = inject,
   block: suspend FlowCollector<T>.(K) -> Unit
 ): (K) -> Flow<T> {
   val map = mutableMapOf<K, SharedFlow<T>>()
@@ -20,7 +22,7 @@ fun <K, T> CoroutineScope.sharedFlow(
       emitAll(
         mutex.withLock {
           map.getOrPut(key) {
-            flow { block(this, key) }.shareIn(this@sharedFlow, sharingStarted, replay)
+            flow { block(this, key) }.shareIn(scope, sharingStarted, replay)
           }
         }
       )
@@ -28,8 +30,9 @@ fun <K, T> CoroutineScope.sharedFlow(
   }
 }
 
-fun <K, T> CoroutineScope.sharedComputation(
+fun <K, T> sharedComputation(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
+  scope: CoroutineScope = inject,
   block: suspend (K) -> T
 ): suspend (K) -> T {
   val flows = sharedFlow<K, Result<T, Throwable>>(sharingStarted, 1) { key ->
@@ -40,9 +43,10 @@ fun <K, T> CoroutineScope.sharedComputation(
 
 data class Releasable<T>(val value: T, val release: () -> Unit)
 
-fun <K, T> CoroutineScope.sharedResource(
+fun <K, T> sharedResource(
   sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(0, 0),
   release: (suspend (K, T) -> Unit)? = null,
+  scope: CoroutineScope = inject,
   create: suspend (K) -> T
 ): suspend (K) -> Releasable<T> {
   val flows: (K) -> Flow<Result<T, Throwable>> = sharedFlow(sharingStarted, 1) { key: K ->

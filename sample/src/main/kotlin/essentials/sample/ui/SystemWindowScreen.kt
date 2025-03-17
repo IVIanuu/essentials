@@ -16,15 +16,14 @@ import essentials.systemoverlay.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import injekt.*
-import kotlinx.coroutines.*
 
 @Provide val systemWindowHomeItem = HomeItem("System Window") { SystemWindowScreen() }
 
 class SystemWindowScreen : Screen<Unit>
 
 @Provide @Composable fun SystemWindowUi(
-  permissionManager: PermissionManager,
-  scope: ScopedCoroutineScope<ScreenScope>,
+  permissions: Permissions,
+  scope: ScopedCoroutineScope<ScreenScope> = inject,
   systemWindowManager: SystemWindowManager
 ): Ui<SystemWindowScreen> {
   EsScaffold(topBar = { EsAppBar { Text("System window") } }) {
@@ -44,8 +43,8 @@ class SystemWindowScreen : Screen<Unit>
     Button(
       modifier = Modifier.fillMaxSize().wrapContentSize(),
       onClick = {
-        scope.launch {
-          if (permissionManager.ensurePermissions(listOf(SampleSystemOverlayPermission::class)))
+        launch {
+          if (permissions.ensurePermissions(listOf(SampleSystemOverlayPermission::class)))
             showSystemWindow = true
         }
       }

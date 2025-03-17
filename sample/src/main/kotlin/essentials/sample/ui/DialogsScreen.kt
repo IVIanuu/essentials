@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
+import essentials.*
 import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
@@ -50,7 +51,7 @@ class TestSharedElementScreen : OverlayScreen<Unit>
 
 class DialogsScreen : Screen<Unit>
 
-@Provide @Composable fun DialogsUi(navigator: Navigator): Ui<DialogsScreen> {
+@Provide @Composable fun DialogsUi(scope: Scope<ScreenScope> = inject): Ui<DialogsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Dialogs") } }) {
     EsLazyColumn(
       modifier = Modifier.fillMaxSize(),
@@ -62,7 +63,7 @@ class DialogsScreen : Screen<Unit>
         var selected by remember { mutableIntStateOf(1) }
         Button(
           onClick = scopedAction {
-            navigator.push(
+            navigator().push(
               SingleChoiceListScreen(
                 items = items,
                 selected = selected
@@ -79,7 +80,7 @@ class DialogsScreen : Screen<Unit>
         var selected by remember { mutableStateOf(items.toSet()) }
         Button(
           onClick = action {
-            navigator.push(
+            navigator().push(
               MultiChoiceListScreen(
                 items = items,
                 selected = selected
@@ -94,7 +95,7 @@ class DialogsScreen : Screen<Unit>
         var currentColor by remember { mutableStateOf(primaryColor) }
         Button(
           onClick = action {
-            navigator.push(
+            navigator().push(
               ColorPickerScreen(initialColor = currentColor)
             )?.let { currentColor = it }
           }
@@ -104,7 +105,7 @@ class DialogsScreen : Screen<Unit>
         var current by remember { mutableStateOf("") }
         Button(
           onClick = action {
-            navigator.push(
+            navigator().push(
               TextInputScreen(
                 label = "text...",
                 initial = current

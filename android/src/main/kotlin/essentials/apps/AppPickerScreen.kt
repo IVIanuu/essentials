@@ -12,6 +12,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.*
 import coil.compose.*
+import essentials.*
 import essentials.compose.*
 import essentials.coroutines.*
 import essentials.resource.*
@@ -29,7 +30,7 @@ class AppPickerScreen(
 @Provide @Composable fun AppPickerUi(
   coroutineContexts: CoroutineContexts,
   getInstalledApps: getInstalledApps,
-  navigator: Navigator,
+  scope: Scope<ScreenScope> = inject,
   screen: AppPickerScreen
 ): Ui<AppPickerScreen> {
   EsScaffold(
@@ -51,7 +52,7 @@ class AppPickerScreen(
         items(apps) { app ->
           EsListItem(
             modifier = Modifier.animateItem(),
-            onClick = scopedAction { navigator.pop(screen, app) },
+            onClick = scopedAction { navigator().pop(screen, app) },
             headlineContent = { Text(app.appName) },
             leadingContent = {
               AsyncImage(

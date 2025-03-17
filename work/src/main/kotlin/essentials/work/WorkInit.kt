@@ -41,11 +41,11 @@ data class WorkConstraints(
   private val androidWorkManager: AndroidWorkManager,
   private val coroutineContexts: CoroutineContexts,
   @property:Provide private val logger: Logger,
-  private val scope: ScopedCoroutineScope<AppScope>,
+  @property:Provide private val scope: ScopedCoroutineScope<AppScope>,
   private val workersMap: Map<String, suspend () -> WorkerResult<*>>,
 ) : SynchronizedObject() {
   private val workerStates = mutableMapOf<String, MutableState<Boolean>>()
-  private val sharedWorkers = scope.sharedComputation<WorkId, WorkerResult<*>> { id ->
+  private val sharedWorkers = sharedComputation<WorkId, WorkerResult<*>> { id ->
     d { "run worker ${id.value}" }
 
     var workerState by synchronized(this@WorkManager) {

@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.util.*
 import essentials.*
+import essentials.coroutines.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlin.math.*
@@ -34,7 +35,7 @@ import kotlin.time.Duration.Companion.seconds
   var internalValue: Float? by remember { mutableStateOf(null) }
   var internalValueEraseJob: Job? by remember { mutableStateOf(null) }
 
-  val scope = rememberCoroutineScope()
+  @Provide val scope = rememberCoroutineScope()
   androidx.compose.material3.Slider(
     value = internalValue ?: value.toFloat(),
     onValueChange = { newInternalValue ->
@@ -52,7 +53,7 @@ import kotlin.time.Duration.Companion.seconds
       onValueChangeFinished?.invoke(stepPolicy.stepValue(internalValue!!.toValue(), valueRange))
 
       internalValueEraseJob?.cancel()
-      internalValueEraseJob = scope.launch {
+      internalValueEraseJob = launch {
         delay(1.seconds)
         internalValue = null
       }

@@ -8,9 +8,9 @@ import injekt.*
 @Tag typealias IsPowerSaveMode = Boolean
 
 @Provide @Composable fun isPowerSaveMode(
-  broadcastManager: BroadcastManager,
+  broadcasts: Broadcasts,
   powerManager: @SystemService PowerManager
 ): IsPowerSaveMode =
-  broadcastManager.broadcastState(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED) {
+  broadcasts.stateOf(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED) {
     powerManager.isPowerSaveMode
   }

@@ -6,6 +6,7 @@ package essentials.ui.overlay
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
+import essentials.*
 import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
@@ -21,12 +22,10 @@ class SingleChoiceListScreen<T : Any>(
 ) : OverlayScreen<T>
 
 @Provide @Composable fun SingleChoiceListUi(
-  navigator: Navigator,
   screen: SingleChoiceListScreen<Any>,
+  scope: Scope<ScreenScope> = inject
 ): Ui<SingleChoiceListScreen<Any>> {
-  EsModalBottomSheet(
-    onDismissRequest = action { navigator.pop(screen, null) }
-  ) {
+  EsModalBottomSheet(onDismissRequest = { navigator().pop(screen, null) }) {
     if (screen.title != null)
       Subheader { Text(screen.title) }
 
@@ -34,7 +33,7 @@ class SingleChoiceListScreen<T : Any>(
       RadioListItem(
         value = item == screen.selected,
         onValueChange = scopedAction { value ->
-          navigator.pop(screen, item)
+          navigator().pop(screen, item)
         },
         headlineContent = { Text(screen.renderable.render(item)) }
       )
