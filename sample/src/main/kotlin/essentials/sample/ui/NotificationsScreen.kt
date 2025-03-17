@@ -22,14 +22,14 @@ import injekt.*
 class NotificationsScreen : Screen<Unit>
 
 @Provide @Composable fun NotificationsUi(
-  api: NotificationApi,
+  api: NotificationsApi,
   permissions: Permissions
 ): Ui<NotificationsScreen> {
   EsScaffold(
     topBar = { EsAppBar { Text("Notifications") } },
     floatingActionButton = {
-      AnimatedVisibility(api is NotificationApi.Notifications) {
-        if (api is NotificationApi.Notifications)
+      AnimatedVisibility(api is NotificationsApi.Notifications) {
+        if (api is NotificationsApi.Notifications)
           FloatingActionButton(onClick = action { api.dismissAllNotifications() }) {
             Icon(Icons.Default.ClearAll, null)
         }
@@ -37,15 +37,15 @@ class NotificationsScreen : Screen<Unit>
     }
   ) {
     when (api) {
-      is NotificationApi.Unavailable -> {
+      is NotificationsApi.Unavailable -> {
         LaunchedEffect(true) {
           permissions.ensurePermissions(listOf(SampleNotificationListenerPermission::class))
         }
 
         Text("Unavailable")
       }
-      is NotificationApi.Empty -> Text("No notifications")
-      is NotificationApi.Notifications -> EsLazyColumn {
+      is NotificationsApi.Empty -> Text("No notifications")
+      is NotificationsApi.Notifications -> EsLazyColumn {
         items(api.notifications) { notification ->
           EsListItem(
             onClick = action { api.openNotification(notification.notification) },

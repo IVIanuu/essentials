@@ -11,25 +11,25 @@ import com.github.michaelbull.result.*
 import essentials.*
 import injekt.*
 
-sealed interface NotificationApi {
-  data object Unavailable : NotificationApi
-  data object Empty : NotificationApi
+sealed interface NotificationsApi {
+  data object Unavailable : NotificationsApi
+  data object Empty : NotificationsApi
   data class Notifications(
     val notifications: List<StatusBarNotification>,
     val openNotification: suspend (Notification) -> Boolean,
     val dismissNotification: suspend (String) -> Unit,
     val dismissAllNotifications: suspend () -> Unit
-  ) : NotificationApi
+  ) : NotificationsApi
 }
 
-@Provide @Composable fun notificationApi(
+@Provide @Composable fun notificationsApi(
   appScope: Scope<AppScope>
-): @ComposeIn<AppScope> NotificationApi {
+): @ComposeIn<AppScope> NotificationsApi {
   val notificationListenerService = appScope.scopeOfOrNull<NotificationScope>()
     ?.notificationListenerService
-  return if (notificationListenerService == null) NotificationApi.Unavailable
-  else if (notificationListenerService.notifications.isEmpty()) NotificationApi.Empty
-  else NotificationApi.Notifications(
+  return if (notificationListenerService == null) NotificationsApi.Unavailable
+  else if (notificationListenerService.notifications.isEmpty()) NotificationsApi.Empty
+  else NotificationsApi.Notifications(
     notifications = notificationListenerService.notifications,
     openNotification = { catch { it.contentIntent.send() }.fold({ true }, { false }) },
     dismissNotification = notificationListenerService::cancelNotification,
