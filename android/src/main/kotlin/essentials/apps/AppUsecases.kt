@@ -31,15 +31,14 @@ import kotlinx.coroutines.*
   }
 }
 
-@Provide suspend fun getAppInfo(
-  packageName: String,
+@Provide suspend fun String.toAppInfo(
   coroutineContexts: CoroutineContexts,
   packageManager: PackageManager
 ): AppInfo? = withContext(coroutineContexts.io) {
   val applicationInfo = catch {
-    packageManager.getApplicationInfo(packageName, 0)
+    packageManager.getApplicationInfo(this@toAppInfo, 0)
   }.getOrNull() ?: return@withContext null
-  AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
+  AppInfo(this@toAppInfo, applicationInfo.loadLabel(packageManager).toString())
 }
 
 data class AppInfo(val packageName: String, val appName: String)

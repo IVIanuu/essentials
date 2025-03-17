@@ -17,9 +17,9 @@ import essentials.ui.navigation.*
 import injekt.*
 
 @Provide fun appActionFactory(
-  getAppInfo: suspend (String) -> AppInfo?,
   packageManager: PackageManager,
-  sendIntent: sendActionIntent
+  sendIntent: sendActionIntent,
+  toAppInfo: suspend String.() -> AppInfo?
 ) = object : ActionFactory {
   override suspend fun createAction(id: String): Action<*>? {
     if (!id.startsWith(BASE_ID)) return null
@@ -28,7 +28,7 @@ import injekt.*
       .first()
     return Action<ActionId>(
       id = id,
-      title = getAppInfo(packageName)!!.appName,
+      title = packageName.toAppInfo()!!.appName,
       unlockScreen = true,
       closeSystemDialogs = true,
       enabled = true,

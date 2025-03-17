@@ -95,11 +95,11 @@ abstract class MediaActionId(
 class MediaActionSettingsScreen : Screen<Unit>
 
 @Provide @Composable fun MediaActionSettingsUi(
-  getAppInfo: suspend (String) -> AppInfo?,
   navigator: Navigator,
   packageManager: PackageManager = inject,
   preferencesStore: DataStore<Preferences>,
   scope: Scope<ScreenScope> = inject,
+  toAppInfo: suspend String.() -> AppInfo?,
 ): Ui<MediaActionSettingsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Media action settings") } }) {
     EsLazyColumn {
@@ -122,7 +122,7 @@ class MediaActionSettingsScreen : Screen<Unit>
                 .map { it[MediaActionAppKey] }
                 .mapLatest {
                   if (it == null) null
-                  else getAppInfo(it)?.appName
+                  else it.toAppInfo()?.appName
                 }
                 .collect { value = it }
             }
