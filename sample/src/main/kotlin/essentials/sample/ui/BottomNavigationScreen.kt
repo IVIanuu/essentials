@@ -23,7 +23,9 @@ import injekt.*
 
 class BottomNavigationScreen : Screen<Unit>
 
-@Provide @Composable fun BottomNavigationUi(): Ui<BottomNavigationScreen> {
+@Provide @Composable fun BottomNavigationUi(
+  context: ScreenContext<BottomNavigationScreen> = inject
+): Ui<BottomNavigationScreen> {
   var selectedItem by remember { mutableStateOf(BottomNavItem.entries.first()) }
 
   EsScaffold(

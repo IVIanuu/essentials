@@ -21,7 +21,10 @@ import kotlin.time.Duration.Companion.seconds
 
 class WorkScreen : Screen<Unit>
 
-@Provide @Composable fun WorkUi(workManager: WorkManager): Ui<WorkScreen> {
+@Provide @Composable fun WorkUi(
+  workManager: WorkManager,
+  context: ScreenContext<WorkScreen> = inject
+): Ui<WorkScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Work") } }) {
     Column {
       if (workManager.isWorkerRunning(SampleWorkId))

@@ -11,13 +11,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
-import essentials.*
 import essentials.compose.*
 import essentials.ui.navigation.*
+import injekt.*
 
 @Composable fun EsAppBar(
   modifier: Modifier = Modifier,
-  navigationIcon: @Composable () -> Unit = { BackPressButton() },
+  navigationIcon: NavigationIcon? = inject,
   actions: @Composable RowScope.() -> Unit = {},
   expandedHeight: Dp = TopAppBarDefaults.TopAppBarExpandedHeight,
   windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
@@ -28,7 +28,7 @@ import essentials.ui.navigation.*
   CenterAlignedTopAppBar(
     title = title,
     modifier = modifier,
-    navigationIcon = navigationIcon,
+    navigationIcon = navigationIcon ?: {},
     actions = actions,
     expandedHeight = expandedHeight,
     windowInsets = windowInsets,
@@ -43,15 +43,15 @@ val LocalAppBarScrollBehaviorProvider = compositionLocalOf<@Composable () -> Top
 
 val LocalAppBarScrollBehavior = compositionLocalOf<TopAppBarScrollBehavior?> { null }
 
-@Composable fun BackPressButton() {
-  val navigator = catch { LocalScope.current.service<Navigator>() }.getOrNull()
-  val screen = catch { LocalScope.current.screen }.getOrNull()
-  val canGoBack = remember {
-    navigator?.backStack?.indexOf(screen)?.let { it > 0 } == true
-  }
+@Tag typealias NavigationIcon = @Composable () -> Unit
+@Provide fun defaultNavigationIcon(navigator: Navigator, screen: Screen<*>): NavigationIcon = {
+  BackPressButton(navigator, screen)
+}
 
+@Composable fun BackPressButton(navigator: Navigator = inject, screen: Screen<*> = inject) {
+  val canGoBack = remember { navigator.backStack.indexOf(screen) > 0 }
   if (canGoBack)
-    IconButton(onClick = action { navigator!!.pop(screen!!) }) {
+    IconButton(onClick = action { navigator.pop(screen) }) {
       Icon(Icons.Default.ArrowBack, null)
     }
 }

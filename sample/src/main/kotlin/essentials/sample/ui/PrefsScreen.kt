@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.datastore.core.*
-import essentials.*
 import essentials.compose.*
 import essentials.data.*
 import essentials.ui.common.*
@@ -28,7 +27,7 @@ class PrefsScreen : Screen<Unit>
 
 @Provide @Composable fun PrefsUi(
   pref: DataStore<SamplePrefs>,
-  scope: Scope<ScreenScope> = inject,
+  scope: ScreenContext<PrefsScreen> = inject,
 ): Ui<PrefsScreen> {
   val prefs by pref.data.collectAsScopedState(SamplePrefs())
   EsScaffold(topBar = { EsAppBar { Text("Prefs") } }) {

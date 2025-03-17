@@ -26,7 +26,8 @@ class ForegroundScreen : Screen<Unit>
 
 @Provide @Composable fun ForegroundUi(
   foregroundManager: ForegroundManager,
-  context: Context = inject
+  androidContext: Context = inject,
+  context: ScreenContext<ForegroundScreen> = inject
 ): Ui<ForegroundScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Foreground") } }) {
     var isEnabled by remember { mutableStateOf(false) }

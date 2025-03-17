@@ -6,7 +6,6 @@ package essentials.sample.ui
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import essentials.*
 import essentials.ads.*
 import essentials.compose.*
 import essentials.ui.common.*
@@ -21,7 +20,7 @@ class AdsScreen : Screen<Unit>
 
 @Provide @Composable fun AdsUi(
   fullScreenAd: FullScreenAds,
-  scope: Scope<ScreenScope> = inject,
+  context: ScreenContext<AdsScreen> = inject,
 ): Ui<AdsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Ads") } }) {
     EsLazyColumn {

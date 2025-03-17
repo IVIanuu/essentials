@@ -25,10 +25,12 @@ import injekt.*
 
 class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit>
 
-@Provide @Composable fun HelpUi(screen: HelpScreen): Ui<HelpScreen> {
+@Provide @Composable fun HelpUi(
+  context: ScreenContext<HelpScreen> = inject
+): Ui<HelpScreen> {
   var expandedItem: HelpItem? by remember {
     mutableStateOf(
-      screen.categories
+      context.screen.categories
         .fastFlatMap { it.items }
         .firstOrNull()
     )
@@ -36,7 +38,7 @@ class HelpScreen(val categories: List<HelpCategory>) : Screen<Unit>
 
   EsScaffold(topBar = { EsAppBar { Text("Help") } }) {
     EsLazyColumn {
-      screen.categories.fastForEach { category ->
+      context.screen.categories.fastForEach { category ->
         if (category.title != null) {
           item {
             Subheader { Text(category.title) }

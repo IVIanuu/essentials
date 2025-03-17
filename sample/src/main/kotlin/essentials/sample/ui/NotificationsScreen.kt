@@ -23,7 +23,8 @@ class NotificationsScreen : Screen<Unit>
 
 @Provide @Composable fun NotificationsUi(
   api: NotificationsApi,
-  permissions: Permissions
+  permissions: Permissions,
+  context: ScreenContext<NotificationsScreen> = inject
 ): Ui<NotificationsScreen> {
   EsScaffold(
     topBar = { EsAppBar { Text("Notifications") } },

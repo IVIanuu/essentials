@@ -19,7 +19,9 @@ import injekt.*
 
 class DecoratorsScreen : Screen<Unit>
 
-@Provide @Composable fun DecoratorsUi(): Ui<DecoratorsScreen> {
+@Provide @Composable fun DecoratorsUi(
+  context: ScreenContext<DecoratorsScreen> = inject
+): Ui<DecoratorsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Decorators") } }) {
     EsLazyColumn {
       (1..10).forEach { itemIndex ->

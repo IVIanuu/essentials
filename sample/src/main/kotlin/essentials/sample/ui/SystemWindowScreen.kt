@@ -23,7 +23,7 @@ class SystemWindowScreen : Screen<Unit>
 
 @Provide @Composable fun SystemWindowUi(
   permissions: Permissions,
-  scope: ScopedCoroutineScope<ScreenScope> = inject,
+  context: ScreenContext<SystemWindowScreen> = inject,
   systemWindows: SystemWindows
 ): Ui<SystemWindowScreen> {
   EsScaffold(topBar = { EsAppBar { Text("System window") } }) {

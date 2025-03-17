@@ -26,7 +26,8 @@ class UnlockScreen : Screen<Unit>
   screenState: Flow<ScreenState>,
   showToast: showToast,
   turnScreenOn: turnScreenOn,
-  unlockScreen: unlockScreen
+  unlockScreen: unlockScreen,
+  context: ScreenContext<UnlockScreen> = inject
 ): Ui<UnlockScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Unlock") } }) {
     Column(

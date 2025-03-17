@@ -21,7 +21,8 @@ object ChildNavGraph
 @Provide val childNavigationHomeItem = HomeItem("Child Navigation") { ChildNavigationScreen() }
 
 @Provide @Composable fun ChildNavigationUi(
-  navigationComponent: NavigationComponent<ChildNavGraph>
+  navigationComponent: NavigationComponent<ChildNavGraph>,
+  context: ScreenContext<ChildNavigationScreen> = inject
 ): Ui<ChildNavigationScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Child Navigation") } }) {
     Column {
