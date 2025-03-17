@@ -11,13 +11,13 @@ import android.icu.text.*
 import androidx.compose.ui.util.*
 import androidx.core.content.*
 import com.github.michaelbull.result.*
+import com.jakewharton.processphoenix.*
 import essentials.*
 import essentials.app.*
 import essentials.coroutines.*
 import essentials.data.*
 import essentials.logging.*
 import essentials.ui.navigation.*
-import essentials.util.*
 import injekt.*
 import kotlinx.coroutines.*
 import java.io.*
@@ -97,7 +97,6 @@ typealias restoreBackup = suspend () -> restoreBackupResult
   dirs: AppDirs,
   logger: Logger = inject,
   navigator: Navigator,
-  restartProcess: restartProcess,
 ): restoreBackupResult = withContext(coroutineContexts.io) {
   val uri = navigator.push(
     Intent.createChooser(
@@ -122,7 +121,7 @@ typealias restoreBackup = suspend () -> restoreBackupResult
       }
   }
 
-  restartProcess()
+  ProcessPhoenix.triggerRebirth(context)
 }
 
 private val BACKUP_BLACKLIST = listOf(
