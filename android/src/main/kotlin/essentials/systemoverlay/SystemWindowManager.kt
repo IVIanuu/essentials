@@ -24,15 +24,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.*
+import androidx.core.content.*
 import essentials.*
 import injekt.*
 import kotlin.math.*
 
 @Stable @Provide class SystemWindowManager(
   private val context: Context,
-  private val systemWindowScopeFactory: () -> @New Scope<SystemWindowScope>,
-  val windowManager: @SystemService WindowManager
+  private val systemWindowScopeFactory: () -> @New Scope<SystemWindowScope>
 ) {
+  val windowManager = context.getSystemService<WindowManager>()!!
   val accessibilityAvailable: Boolean
     get() = context is AccessibilityService
 

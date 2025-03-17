@@ -22,7 +22,7 @@ class DataStoreProvider<T : Any>(
     coroutineContexts: CoroutineContexts,
     json: () -> Json,
     serializerFactory: () -> KSerializer<T>,
-    prefsDir: () -> PrefsDir,
+    dirs: () -> AppDirs,
     scope: ScopedCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<T> = DataStoreFactory.create(
     object : Serializer<T> {
@@ -45,7 +45,7 @@ class DataStoreProvider<T : Any>(
         }
       }
     },
-    produceFile = { prefsDir().resolve(name) },
+    produceFile = { dirs().prefs.resolve(name) },
     scope = scope + coroutineContexts.io
   )
 }

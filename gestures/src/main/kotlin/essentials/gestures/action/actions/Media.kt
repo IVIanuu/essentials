@@ -4,8 +4,8 @@
 
 package essentials.gestures.action.actions
 
+import android.app.*
 import android.content.*
-import android.content.pm.*
 import android.provider.*
 import android.view.*
 import androidx.compose.material.icons.*
@@ -75,7 +75,7 @@ abstract class MediaActionId(
   @Provide companion object {
     @Provide suspend fun <@AddOn T : MediaActionId> execute(
       id: T,
-      appContext: AppContext,
+      context: Application,
       preferencesStore: DataStore<Preferences>
     ): ActionExecutorResult<T> {
       val mediaApp = preferencesStore.data.first()[MediaActionAppKey]
@@ -83,8 +83,8 @@ abstract class MediaActionId(
         putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent(keyEvent, id.keycode))
         if (mediaApp != null) `package` = mediaApp
       }
-      appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN), null)
-      appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP), null)
+      context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN), null)
+      context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP), null)
     }
 
     @Provide fun <@AddOn I : MediaActionId> settingsScreen(): ActionSettingsScreen<I> =
@@ -95,8 +95,8 @@ abstract class MediaActionId(
 class MediaActionSettingsScreen : Screen<Unit>
 
 @Provide @Composable fun MediaActionSettingsUi(
-  packageManager: PackageManager = inject,
   preferencesStore: DataStore<Preferences>,
+  androidContext: Context = inject,
   context: ScreenContext<MediaActionSettingsScreen> = inject,
   toAppInfo: suspend String.() -> AppInfo?,
 ): Ui<MediaActionSettingsScreen> {

@@ -10,10 +10,10 @@ import kotlinx.coroutines.*
 @Provide object PreferencesProviders {
   @Provide fun preferencesDataStore(
     coroutineContexts: CoroutineContexts,
-    prefsDir: () -> PrefsDir,
+    dirs: () -> AppDirs,
     scope: ScopedCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<Preferences> = PreferenceDataStoreFactory
     .create(scope = scope + coroutineContexts.io) {
-      prefsDir().resolve("default.preferences_pb")
+      dirs().data.resolve("default.preferences_pb")
     }
 }

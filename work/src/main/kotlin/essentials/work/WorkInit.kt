@@ -5,6 +5,7 @@
 package essentials.work
 
 import android.annotation.*
+import android.app.*
 import android.content.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
@@ -96,7 +97,7 @@ data class WorkConstraints(
 
   @Provide val defaultSchedules get() = emptyList<Pair<String, PeriodicWorkSchedule<*>>>()
 
-  @Provide fun androidWorkManager(appContext: AppContext) = AndroidWorkManager.getInstance(appContext)
+  @Provide fun androidWorkManager(context: Application) = AndroidWorkManager.getInstance(context)
 }
 
 @Provide class EsWorker(
@@ -111,7 +112,7 @@ data class WorkConstraints(
 }
 
 @Provide class EsWorkerFactory(
-  private val worker: (AppContext, WorkerParameters) -> EsWorker
+  private val worker: (Context, WorkerParameters) -> EsWorker
 ) : WorkerFactory() {
   override fun createWorker(
     appContext: Context,
@@ -125,11 +126,11 @@ data class WorkConstraints(
 data object WorkInit
 
 @Provide fun initializeWork(
-  appContext: AppContext,
+  context: Application,
   workerFactory: WorkerFactory
 ): ScopeInit<AppScope, WorkInit> {
   AndroidWorkManager.initialize(
-    appContext,
+    context,
     Configuration.Builder()
       .setWorkerFactory(workerFactory)
       .build()

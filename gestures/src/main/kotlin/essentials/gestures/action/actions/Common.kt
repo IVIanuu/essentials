@@ -19,13 +19,13 @@ import injekt.*
 @Tag typealias sendActionIntent = (Intent, Bundle?) -> Unit
 
 @Provide fun sendActionIntent(
-  appContext: AppContext,
+  context: Application,
   showToast: showToast
 ): sendActionIntent = { intent, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   catch {
     PendingIntent.getActivity(
-      appContext,
+      context,
       1000,
       intent,
       PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
@@ -43,11 +43,11 @@ typealias closeSystemDialogs = suspend () -> closeSystemDialogsResult
 @SuppressLint("MissingPermission", "InlinedApi")
 @Provide suspend fun closeSystemDialogs(
   appConfig: AppConfig,
-  appContext: AppContext,
+  context: Application,
   performAccessibilityAction: performGlobalAccessibilityAction
 ): closeSystemDialogsResult = catch {
   if (appConfig.sdk >= 31)
     performAccessibilityAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
   else
-    appContext.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+    context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
 }

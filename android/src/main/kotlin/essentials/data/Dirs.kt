@@ -4,20 +4,24 @@
 
 package essentials.data
 
+import android.content.*
 import essentials.*
 import injekt.*
 import java.io.*
 
-@Tag typealias CacheDir = File
-
-@Tag typealias DataDir = File
-
-@Tag typealias PrefsDir = File
-
-@Provide object DirProviders {
-  @Provide fun cacheDir(dataDir: DataDir): CacheDir = dataDir.resolve("cache")
-
-  @Provide fun dataDir(appContext: AppContext): DataDir = File(appContext.applicationInfo.dataDir)
-
-  @Provide fun prefsDir(dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
+data class AppDirs(
+  val cache: File,
+  val data: File,
+  val prefs: File
+) {
+  @Provide companion object {
+    @Provide fun default(context: Context): @Scoped<AppScope> AppDirs {
+      val dataDir = File(context.applicationInfo.dataDir)
+      return AppDirs(
+        cache = dataDir.resolve("cache"),
+        data = dataDir,
+        prefs = dataDir.resolve("prefs")
+      )
+    }
+  }
 }

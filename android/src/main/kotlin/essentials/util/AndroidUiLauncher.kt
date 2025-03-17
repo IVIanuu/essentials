@@ -4,8 +4,8 @@
 
 package essentials.util
 
+import android.app.*
 import android.content.*
-import android.content.pm.*
 import essentials.*
 import essentials.app.*
 import essentials.coroutines.*
@@ -15,14 +15,13 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 @Provide suspend fun launchAndroidUi(
-  appContext: AppContext,
+  context: Application,
   appConfig: AppConfig,
   appScope: Scope<AppScope>,
   coroutineContexts: CoroutineContexts,
-  packageManager: PackageManager,
 ): launchUiResult = withContext(coroutineContexts.main) {
-  val intent = packageManager.getLaunchIntentForPackage(appConfig.packageName)!!
-  appContext.startActivity(
+  val intent = context.packageManager.getLaunchIntentForPackage(appConfig.packageName)!!
+  context.startActivity(
     intent.apply {
       addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }

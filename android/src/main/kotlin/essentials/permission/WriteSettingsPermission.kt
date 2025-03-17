@@ -4,6 +4,7 @@
 
 package essentials.permission
 
+import android.app.*
 import android.content.*
 import android.provider.*
 import androidx.compose.runtime.*
@@ -18,8 +19,8 @@ abstract class WriteSettingsPermission(
 ) : Permission {
   @Provide companion object {
     @Provide fun <P : WriteSettingsPermission> state(
-      appContext: AppContext
-    ): PermissionState<P> = Settings.System.canWrite(appContext)
+      context: Application
+    ): PermissionState<P> = Settings.System.canWrite(context)
 
     @Provide fun <P : WriteSettingsPermission> requestParams(
       appConfig: AppConfig

@@ -5,7 +5,6 @@
 package essentials.apps
 
 import android.content.*
-import android.content.pm.*
 import androidx.compose.ui.util.*
 import injekt.*
 
@@ -15,18 +14,18 @@ fun interface AppPredicate {
 
 val DefaultAppPredicate = AppPredicate { true }
 
-fun launchableAppPredicate(packageManager: PackageManager = inject): AppPredicate {
+fun launchableAppPredicate(context: Context = inject): AppPredicate {
   val cache = mutableMapOf<String, Boolean>()
   return AppPredicate { app ->
     cache.getOrPut(app.packageName) {
-      packageManager.getLaunchIntentForPackage(app.packageName) != null
+      context.packageManager.getLaunchIntentForPackage(app.packageName) != null
     }
   }
 }
 
-fun Intent.asAppPredicate(packageManager: PackageManager = inject): AppPredicate {
+fun Intent.asAppPredicate(context: Context = inject): AppPredicate {
   val apps by lazy {
-    packageManager.queryIntentActivities(this, 0)
+    context.packageManager.queryIntentActivities(this, 0)
       .fastMap { it.activityInfo.applicationInfo.packageName }
   }
   return AppPredicate { it.packageName in apps }

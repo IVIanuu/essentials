@@ -6,8 +6,8 @@ import android.os.*
 import android.view.*
 import androidx.activity.*
 import androidx.compose.runtime.*
+import androidx.core.content.*
 import androidx.lifecycle.*
-import essentials.*
 import essentials.app.*
 import essentials.coroutines.*
 import essentials.logging.*
@@ -23,15 +23,14 @@ enum class ScreenState(val isOn: Boolean) {
 
 @Provide @Composable fun screenState(
   broadcasts: Broadcasts,
-  keyguardManager: @SystemService KeyguardManager,
-  powerManager: @SystemService PowerManager
+  context: Application
 ): ScreenState = broadcasts.stateOf(
   Intent.ACTION_SCREEN_OFF,
   Intent.ACTION_SCREEN_ON,
   Intent.ACTION_USER_PRESENT
 ) {
-  if (powerManager.isInteractive) {
-    if (keyguardManager.isDeviceLocked) ScreenState.LOCKED
+  if (context.getSystemService<PowerManager>()!!.isInteractive) {
+    if (context.getSystemService<KeyguardManager>()!!.isDeviceLocked) ScreenState.LOCKED
     else ScreenState.UNLOCKED
   } else {
     ScreenState.OFF
@@ -53,11 +52,10 @@ enum class ScreenRotation(val isPortrait: Boolean) {
 }
 
 @Provide @Composable fun screenRotation(
-  appContext: AppContext,
-  screenState: ScreenState,
-  windowManager: @SystemService WindowManager
+  context: Application,
+  screenState: ScreenState
 ): ScreenRotation {
-  fun getCurrentDisplayRotation() = when (windowManager.defaultDisplay.rotation) {
+  fun getCurrentDisplayRotation() = when (context.getSystemService<WindowManager>()!!.defaultDisplay.rotation) {
     Surface.ROTATION_0 -> ScreenRotation.PORTRAIT_UP
     Surface.ROTATION_90 -> ScreenRotation.LANDSCAPE_LEFT
     Surface.ROTATION_180 -> ScreenRotation.PORTRAIT_DOWN
@@ -72,7 +70,7 @@ enum class ScreenRotation(val isPortrait: Boolean) {
   if (screenState.isOn)
     DisposableEffect(true) {
       val listener = object : OrientationEventListener(
-        appContext,
+        context,
         android.hardware.SensorManager.SENSOR_DELAY_NORMAL
       ) {
         override fun onOrientationChanged(orientation: Int) {
@@ -90,42 +88,42 @@ enum class ScreenRotation(val isPortrait: Boolean) {
 typealias turnScreenOn = suspend () -> turnScreenOnResult
 
 @Provide suspend fun turnScreenOn(
-  appContext: AppContext,
-  logger: Logger = inject,
-  powerManager: @SystemService PowerManager
+  context: Application,
+  logger: Logger = inject
 ): turnScreenOnResult {
+  val powerManager = context.getSystemService<PowerManager>()!!
   d { "on request is off ? ${!powerManager.isInteractive}" }
   if (powerManager.isInteractive) {
     d { "already on" }
     return true
   }
 
-  return startUnlockActivityForResult(appContext, REQUEST_TYPE_SCREEN_ON)
+  return startUnlockActivityForResult(context, REQUEST_TYPE_SCREEN_ON)
 }
 
 @Tag typealias unlockScreenResult = Boolean
 typealias unlockScreen = suspend () -> unlockScreenResult
 
 @Provide suspend fun unlockScreen(
-  appContext: AppContext,
-  logger: Logger = inject,
-  keyguardManager: @SystemService KeyguardManager
+  context: Application,
+  logger: Logger = inject
 ): unlockScreenResult {
+  val keyguardManager = context.getSystemService<KeyguardManager>()!!
   d { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
   if (!keyguardManager.isKeyguardLocked) {
     d { "already unlocked" }
     return true
   }
 
-  return startUnlockActivityForResult(appContext, REQUEST_TYPE_UNLOCK)
+  return startUnlockActivityForResult(context, REQUEST_TYPE_UNLOCK)
 }
 
-private suspend fun startUnlockActivityForResult(appContext: AppContext, requestType: Int): Boolean {
+private suspend fun startUnlockActivityForResult(context: Application, requestType: Int): Boolean {
   val result = CompletableDeferred<Boolean>()
   val requestId = UUID.randomUUID().toString()
   requestsById[requestId] = result
-  appContext.startActivity(
-    Intent(appContext, UnlockActivity::class.java).apply {
+  context.startActivity(
+    Intent(context, UnlockActivity::class.java).apply {
       putExtra(KEY_REQUEST_ID, requestId)
       putExtra(KEY_REQUEST_TYPE, requestType)
       addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -141,9 +139,7 @@ private const val REQUEST_TYPE_SCREEN_ON = 1
 private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
 
 @Provide @AndroidComponent class UnlockActivity(
-  private val keyguardManager: @SystemService KeyguardManager,
-  @property:Provide private val logger: Logger,
-  private val powerManager: @SystemService PowerManager
+  @property:Provide private val logger: Logger
 ) : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -193,7 +189,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
         REQUEST_TYPE_UNLOCK -> {
           delay(250)
 
-          keyguardManager.requestDismissKeyguard(
+          getSystemService<KeyguardManager>()!!.requestDismissKeyguard(
             this@UnlockActivity,
             object :
               KeyguardManager.KeyguardDismissCallback() {
@@ -218,6 +214,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
           )
         }
         REQUEST_TYPE_SCREEN_ON -> {
+          val powerManager = getSystemService<PowerManager>()!!
           withTimeoutOrNull(1.seconds) {
             while (!powerManager.isInteractive)
               yield()

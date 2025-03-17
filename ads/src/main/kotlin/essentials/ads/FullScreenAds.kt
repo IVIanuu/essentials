@@ -4,6 +4,7 @@
 
 package essentials.ads
 
+import android.app.*
 import androidx.activity.*
 import androidx.compose.runtime.*
 import com.google.android.gms.ads.*
@@ -22,7 +23,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Stable @Provide @Scoped<UiScope> class FullScreenAds(
   private val activity: ComponentActivity,
-  private val appContext: AppContext,
+  private val context: Application,
   private val adsEnabledProducer: @Composable () -> AdsEnabled,
   config: @FinalAdConfig FullScreenAdConfig,
   private val coroutineContexts: CoroutineContexts,
@@ -50,7 +51,7 @@ import kotlin.time.Duration.Companion.seconds
             val ad = catch {
               suspendCoroutine { cont ->
                 InterstitialAd.load(
-                  appContext,
+                  context,
                   config.id,
                   AdRequest.Builder().build(),
                   object : InterstitialAdLoadCallback() {

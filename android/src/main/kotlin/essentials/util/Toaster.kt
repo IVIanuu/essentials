@@ -4,6 +4,7 @@
 
 package essentials.util
 
+import android.app.*
 import android.widget.*
 import essentials.*
 import essentials.coroutines.*
@@ -15,13 +16,13 @@ typealias showToast = (String) -> showToastResult
 
 @Provide fun showToast(
   message: String,
-  appContext: AppContext,
+  context: Application,
   coroutineContexts: CoroutineContexts,
   scope: ScopedCoroutineScope<AppScope>
 ): showToastResult {
   scope.launch(coroutineContexts.main) {
     Toast.makeText(
-      appContext,
+      context,
       message,
       Toast.LENGTH_SHORT
     ).show()

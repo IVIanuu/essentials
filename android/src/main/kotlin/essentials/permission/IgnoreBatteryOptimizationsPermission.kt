@@ -5,10 +5,12 @@
 package essentials.permission
 
 import android.annotation.*
+import android.app.*
 import android.content.*
 import android.os.*
 import android.provider.*
 import androidx.compose.runtime.*
+import androidx.core.content.*
 import androidx.core.net.*
 import essentials.*
 import injekt.*
@@ -21,8 +23,9 @@ abstract class IgnoreBatteryOptimizationsPermission(
   @Provide companion object {
     @Provide fun <P : IgnoreBatteryOptimizationsPermission> state(
       appConfig: AppConfig,
-      powerManager: @SystemService PowerManager
-    ): PermissionState<P> = powerManager.isIgnoringBatteryOptimizations(appConfig.packageName)
+      context: Application
+    ): PermissionState<P> = context.getSystemService<PowerManager>()!!
+      .isIgnoringBatteryOptimizations(appConfig.packageName)
 
     @SuppressLint("BatteryLife")
     @Provide fun <P : IgnoreBatteryOptimizationsPermission> requestParams(

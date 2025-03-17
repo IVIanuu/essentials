@@ -4,6 +4,7 @@
 
 package essentials.permission
 
+import android.app.*
 import android.content.*
 import android.provider.*
 import androidx.compose.runtime.*
@@ -18,8 +19,8 @@ abstract class SystemOverlayPermission(
 ) : Permission {
   @Provide companion object {
     @Provide fun <P : SystemOverlayPermission> state(
-      appContext: AppContext
-    ): PermissionState<P> = Settings.canDrawOverlays(appContext)
+      context: Application
+    ): PermissionState<P> = Settings.canDrawOverlays(context)
 
     @Provide fun <P : SystemOverlayPermission> requestParams(
       appConfig: AppConfig

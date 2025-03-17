@@ -4,6 +4,7 @@
 
 package essentials.gestures.shortcut
 
+import android.app.*
 import android.content.*
 import android.content.pm.*
 import android.graphics.*
@@ -25,10 +26,10 @@ typealias getShortcuts = suspend () -> getShortcutsResult
 
 @Provide suspend fun getShortcuts(
   coroutineContexts: CoroutineContexts,
-  packageManager: PackageManager
+  context: Application
 ): getShortcutsResult = withContext(coroutineContexts.io) {
   val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
-  packageManager.queryIntentActivities(shortcutsIntent, 0)
+  context.packageManager.queryIntentActivities(shortcutsIntent, 0)
     .parMap { resolveInfo ->
       catch {
         Shortcut(
@@ -39,8 +40,8 @@ typealias getShortcuts = suspend () -> getShortcutsResult
               resolveInfo.activityInfo.name
             )
           },
-          name = resolveInfo.loadLabel(packageManager).toString(),
-          icon = resolveInfo.loadIcon(packageManager)
+          name = resolveInfo.loadLabel(context.packageManager).toString(),
+          icon = resolveInfo.loadIcon(context.packageManager)
         )
       }.getOrNull()
     }
@@ -53,9 +54,8 @@ typealias extractShortcut = suspend (Intent) -> extractShortcutResult
 
 @Provide suspend fun extractShortcut(
   shortcutRequestResult: Intent,
-  appContext: AppContext,
-  coroutineContexts: CoroutineContexts,
-  packageManager: PackageManager
+  context: Application,
+  coroutineContexts: CoroutineContexts
 ): extractShortcutResult = withContext(coroutineContexts.io) {
   val intent =
     shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
@@ -66,10 +66,10 @@ typealias extractShortcut = suspend (Intent) -> extractShortcutResult
     shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
 
   @Suppress("DEPRECATION") val icon = when {
-    bitmapIcon != null -> bitmapIcon.toDrawable(appContext.resources)
+    bitmapIcon != null -> bitmapIcon.toDrawable(context.resources)
     iconResource != null -> {
       val resources =
-        packageManager.getResourcesForApplication(iconResource.packageName)
+        context.packageManager.getResourcesForApplication(iconResource.packageName)
       val id =
         resources.getIdentifier(iconResource.resourceName, null, null)
       resources.getDrawable(id)

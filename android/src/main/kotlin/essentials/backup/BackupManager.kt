@@ -4,6 +4,7 @@
 
 package essentials.backup
 
+import android.app.*
 import android.content.*
 import android.content.pm.*
 import android.icu.text.*
@@ -27,15 +28,14 @@ import java.util.zip.*
 typealias createBackup = suspend () -> createBackupResult
 
 @Provide suspend fun createBackup(
-  appContext: AppContext,
   backupDestinationDir: BackupDestinationDir,
   backupFiles: List<BackupFile>,
   appConfig: AppConfig,
+  context: Context,
   coroutineContexts: CoroutineContexts,
-  dataDir: DataDir,
+  dirs: AppDirs,
   logger: Logger = inject,
-  navigator: Navigator,
-  packageManager: PackageManager
+  navigator: Navigator
 ): createBackupResult = withContext(coroutineContexts.io) {
   val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
   val backupFileName =
@@ -55,7 +55,7 @@ typealias createBackup = suspend () -> createBackupResult
       .fastFilter { it.exists() }
       .fastForEach { file ->
         d { "backup file $file" }
-        val entry = ZipEntry(file.relativeTo(dataDir).toString())
+        val entry = ZipEntry(file.relativeTo(dirs.data).toString())
         zipOutputStream.putNextEntry(entry)
         file.inputStream().copyTo(zipOutputStream)
         zipOutputStream.closeEntry()
@@ -63,7 +63,7 @@ typealias createBackup = suspend () -> createBackupResult
   }
 
   val uri = FileProvider.getUriForFile(
-    appContext,
+    context,
     "${appConfig.packageName}.backupprovider",
     backupFile
   )
@@ -73,12 +73,12 @@ typealias createBackup = suspend () -> createBackupResult
     putExtra(Intent.EXTRA_STREAM, uri)
     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
   }
-  packageManager
+  context.packageManager
     .queryIntentActivities(intent, PackageManager.MATCH_ALL)
     .fastMap { it.activityInfo.packageName }
     .fastDistinctBy { it }
     .fastForEach {
-      appContext.grantUriPermission(
+      context.grantUriPermission(
         it,
         uri,
         Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -92,9 +92,9 @@ typealias createBackup = suspend () -> createBackupResult
 typealias restoreBackup = suspend () -> restoreBackupResult
 
 @Provide suspend fun restoreBackup(
-  contentResolver: ContentResolver,
+  context: Application,
   coroutineContexts: CoroutineContexts,
-  dataDir: DataDir,
+  dirs: AppDirs,
   logger: Logger = inject,
   navigator: Navigator,
   restartProcess: restartProcess,
@@ -108,10 +108,10 @@ typealias restoreBackup = suspend () -> restoreBackupResult
     ).asScreen()
   )?.getOrNull()?.data?.data ?: return@withContext
 
-  ZipInputStream(contentResolver.openInputStream(uri)!!).use { zipInputStream ->
+  ZipInputStream(context.contentResolver.openInputStream(uri)!!).use { zipInputStream ->
     generateSequence { zipInputStream.nextEntry }
       .forEach { entry ->
-        val file = dataDir.resolve(entry.name)
+        val file = dirs.data.resolve(entry.name)
         d { "restore file $file" }
         if (!file.exists()) {
           file.parentFile.mkdirs()
@@ -135,13 +135,13 @@ private val BACKUP_BLACKLIST = listOf(
 @Tag typealias BackupDestinationDir = File
 
 @Provide object BackupFileProviders {
-  @Provide fun backupPrefs(prefsDir: PrefsDir): BackupFile = prefsDir
+  @Provide fun backupPrefs(dirs: AppDirs): BackupFile = dirs.prefs
 
-  @Provide fun backupDatabases(dataDir: DataDir): BackupFile = dataDir.resolve("databases")
+  @Provide fun backupDatabases(dirs: AppDirs): BackupFile = dirs.data.resolve("databases")
 
-  @Provide fun backupSharedPrefs(dataDir: DataDir): BackupFile = dataDir.resolve("shared_prefs")
+  @Provide fun backupSharedPrefs(dirs: AppDirs): BackupFile = dirs.data.resolve("shared_prefs")
 
-  @Provide fun backupDestinationDir(dataDir: DataDir): BackupDestinationDir = dataDir.resolve("files/backups")
+  @Provide fun backupDestinationDir(dirs: AppDirs): BackupDestinationDir = dirs.data.resolve("files/backups")
 }
 
 @Provide @AndroidComponent class BackupFileProvider : FileProvider()

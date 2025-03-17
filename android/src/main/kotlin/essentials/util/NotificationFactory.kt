@@ -9,22 +9,21 @@ import android.app.*
 import android.content.*
 import androidx.compose.ui.graphics.*
 import androidx.core.app.*
-import essentials.*
+import androidx.core.content.*
 import essentials.app.*
 import essentials.ui.app.*
 import injekt.*
 
 @Provide class NotificationFactory(
-  @PublishedApi internal val appContext: AppContext,
-  private val appColors: AppColors,
-  @PublishedApi internal val notificationManager: @SystemService NotificationManager
+  @PublishedApi internal val context: Application,
+  private val appColors: AppColors
 ) {
   inline fun create(
     channel: NotificationChannel,
     builder: NotificationCompat.Builder.() -> Unit
   ): Notification {
-    notificationManager.createNotificationChannel(channel)
-    return NotificationCompat.Builder(appContext, channel.id)
+    context.getSystemService<NotificationManager>()!!.createNotificationChannel(channel)
+    return NotificationCompat.Builder(context, channel.id)
       .defaults()
       .apply(builder)
       .build()

@@ -4,6 +4,7 @@
 
 package essentials.coil
 
+import android.app.*
 import androidx.compose.ui.util.*
 import coil.*
 import coil.decode.*
@@ -25,14 +26,14 @@ import kotlin.reflect.*
   }
 
   @Provide fun imageLoader(
-    appContext: AppContext,
+    context: Application,
     coroutineContexts: CoroutineContexts,
     decoderFactories: List<Decoder.Factory>,
     fetcherFactories: List<FetcherFactoryBinding<*>>,
     keyers: List<KeyerBinding<*>>,
     interceptors: List<Interceptor>,
     mappers: List<MapperBinding<*>>,
-  ): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(appContext)
+  ): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(context)
     .let { builder ->
       coroutineContexts.io[CoroutineDispatcher]
         ?.let { builder.dispatcher(it) }

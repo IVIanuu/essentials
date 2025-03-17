@@ -1,15 +1,18 @@
 package essentials.util
 
+import android.app.*
 import android.hardware.*
 import androidx.compose.runtime.*
-import essentials.*
+import androidx.core.content.*
 import injekt.*
 import kotlin.time.*
 
 @Provide class Sensors(
-  private val sensorManager: @SystemService SensorManager,
+  private val context: Application,
   private val wakeLocks: WakeLocks
 ) {
+  private val sensorManager by lazy { context.getSystemService<SensorManager>()!! }
+
   fun sensorOf(type: Int): Sensor? = sensorManager.getDefaultSensor(type)
 
   @Composable fun TriggerEventHandler(sensor: Sensor, onEvent: (TriggerEvent) -> Unit) {

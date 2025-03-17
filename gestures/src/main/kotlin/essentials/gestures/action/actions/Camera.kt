@@ -12,6 +12,7 @@ import android.provider.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.core.content.*
 import essentials.*
 import essentials.accessibility.*
 import essentials.gestures.action.*
@@ -37,22 +38,22 @@ import kotlin.coroutines.*
 
   @Provide suspend fun execute(
     appScope: Scope<AppScope>,
-    cameraManager: @SystemService CameraManager,
+    context: Context = inject,
     currentApp: Flow<CurrentApp?>,
     screenState: Flow<ScreenState>,
     logger: Logger = inject,
-    packageManager: PackageManager,
     sendIntent: sendActionIntent
   ): ActionExecutorResult<CameraActionId> {
-    val cameraApp = packageManager.resolveActivity(
+    val cameraApp = context.packageManager.resolveActivity(
       Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
       PackageManager.MATCH_DEFAULT_ONLY
     )!!
 
     val intent = if (cameraApp.activityInfo!!.packageName == "com.motorola.camera2")
-      packageManager.getLaunchIntentForPackage("com.motorola.camera2")!!
+      context.packageManager.getLaunchIntentForPackage("com.motorola.camera2")!!
     else Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE)
 
+    val cameraManager = context.getSystemService<CameraManager>()!!
     val frontCamera = cameraManager.cameraIdList
       .firstOrNull {
         cameraManager.getCameraCharacteristics(it)[CameraCharacteristics.LENS_FACING] ==

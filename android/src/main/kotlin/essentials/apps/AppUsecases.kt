@@ -4,7 +4,7 @@
 
 package essentials.apps
 
-import android.content.pm.*
+import android.app.*
 import androidx.compose.ui.util.*
 import arrow.fx.coroutines.*
 import essentials.*
@@ -15,14 +15,14 @@ import kotlinx.coroutines.*
 @Tag typealias getInstalledApps = suspend () -> List<AppInfo>
 
 @Provide fun getInstalledApps(
-  coroutineContexts: CoroutineContexts,
-  packageManager: PackageManager
+  context: Application = inject,
+  coroutineContexts: CoroutineContexts
 ): getInstalledApps = {
   withContext(coroutineContexts.io) {
-    packageManager.getInstalledApplications(0)
+    context.packageManager.getInstalledApplications(0)
       .parMap {
         AppInfo(
-          appName = it.loadLabel(packageManager).toString(),
+          appName = it.loadLabel(context.packageManager).toString(),
           packageName = it.packageName
         )
       }
@@ -33,12 +33,12 @@ import kotlinx.coroutines.*
 
 @Provide suspend fun String.toAppInfo(
   coroutineContexts: CoroutineContexts,
-  packageManager: PackageManager
+  context: Application = inject
 ): AppInfo? = withContext(coroutineContexts.io) {
   val applicationInfo = catch {
-    packageManager.getApplicationInfo(this@toAppInfo, 0)
+    context.packageManager.getApplicationInfo(this@toAppInfo, 0)
   }.getOrNull() ?: return@withContext null
-  AppInfo(this@toAppInfo, applicationInfo.loadLabel(packageManager).toString())
+  AppInfo(this@toAppInfo, applicationInfo.loadLabel(context.packageManager).toString())
 }
 
 data class AppInfo(val packageName: String, val appName: String)

@@ -4,10 +4,10 @@
 
 package essentials.permission
 
+import android.app.*
 import android.content.pm.*
 import androidx.activity.result.contract.*
 import androidx.compose.runtime.*
-import essentials.*
 import essentials.ui.navigation.*
 import injekt.*
 
@@ -20,18 +20,18 @@ abstract class RuntimePermission(
   @Provide companion object {
     @Provide fun <P : RuntimePermission> state(
       permission: P,
-      appContext: AppContext
+      context: Application
     ): PermissionState<P> =
-      appContext.checkSelfPermission(permission.permissionName) ==
+      context.checkSelfPermission(permission.permissionName) ==
           PackageManager.PERMISSION_GRANTED
 
     @Provide suspend fun <P : RuntimePermission> request(
       permission: P,
-      appContext: AppContext,
+      context: Application,
       navigator: Navigator
     ): PermissionRequestResult<P> {
       val contract = ActivityResultContracts.RequestPermission()
-      val intent = contract.createIntent(appContext, permission.permissionName)
+      val intent = contract.createIntent(context, permission.permissionName)
       navigator.push(intent.asScreen())
     }
   }

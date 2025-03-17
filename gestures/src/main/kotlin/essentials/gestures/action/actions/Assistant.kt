@@ -8,10 +8,10 @@ import android.annotation.*
 import android.app.*
 import android.os.*
 import androidx.compose.material3.*
+import androidx.core.content.*
 import compose.icons.*
 import compose.icons.fontawesomeicons.*
 import compose.icons.fontawesomeicons.brands.*
-import essentials.*
 import essentials.gestures.action.*
 import injekt.*
 
@@ -25,10 +25,10 @@ import injekt.*
   )
 
   @SuppressLint("DiscouragedPrivateApi")
-  @Provide fun execute(searchManager: @SystemService SearchManager):
+  @Provide fun execute(context: Application):
       ActionExecutorResult<AssistantActionId> {
     val launchAssist = SearchManager::class.java
         .getDeclaredMethod("launchAssist", Bundle::class.java)
-      launchAssist.invoke(searchManager, Bundle())
+      launchAssist.invoke(context.getSystemService(), Bundle())
     }
 }

@@ -2,6 +2,7 @@ package essentials.gestures.action.actions
 
 import android.accessibilityservice.*
 import android.accessibilityservice.AccessibilityService.*
+import android.app.*
 import android.view.accessibility.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
@@ -50,14 +51,14 @@ abstract class ToggleSystemPanelActionId(
     @Provide suspend fun <@AddOn T : ToggleSystemPanelActionId> execute(
       id: T,
       appScope: Scope<AppScope>,
-      appContext: AppContext,
+      context: Application,
       closeSystemDialogs: closeSystemDialogs,
       performAccessibilityAction: performGlobalAccessibilityAction
     ): ActionExecutorResult<T> {
       val targetState = catch {
         val service = appScope.scopeOfOrNull<AccessibilityScope>()!!.accessibilityService
 
-        val systemUiContext = appContext.createPackageContext(
+        val systemUiContext = context.createPackageContext(
           "com.android.systemui", 0
         )
 

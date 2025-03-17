@@ -5,6 +5,7 @@
 package essentials.permission
 
 import android.*
+import android.app.*
 import android.content.*
 import android.content.pm.*
 import android.provider.*
@@ -39,8 +40,8 @@ abstract class WriteSecureSettingsPermission(
 ) : Permission {
   @Provide companion object {
     @Provide fun <P : WriteSecureSettingsPermission> state(
-      appContext: AppContext
-    ): PermissionState<P> = appContext
+      context: Application
+    ): PermissionState<P> = context
       .checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED
 
     @Provide suspend fun <P : WriteSecureSettingsPermission> requestHandler(

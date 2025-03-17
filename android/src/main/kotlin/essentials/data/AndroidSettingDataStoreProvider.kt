@@ -4,7 +4,7 @@
 
 package essentials.data
 
-import android.content.*
+import android.app.*
 import android.database.*
 import android.provider.*
 import androidx.datastore.core.*
@@ -21,10 +21,11 @@ class AndroidSettingDataStoreProvider<T : Any>(
   private val defaultValue: T
 ) {
   @Provide fun provide(
-    contentResolver: ContentResolver,
+    context: Application,
     coroutineContexts: CoroutineContexts,
     scope: ScopedCoroutineScope<AppScope>
-  ): DataStore<T> = object : DataStore<T> {
+  ): @Scoped<AppScope> DataStore<T> = object : DataStore<T> {
+    private val contentResolver = context.contentResolver
     private suspend fun get(): T = withContext(coroutineContexts.io) {
       when (defaultValue) {
         is Float -> when (type) {

@@ -4,6 +4,7 @@
 
 package essentials.permission
 
+import android.app.*
 import android.content.*
 import android.provider.*
 import android.service.notification.*
@@ -22,10 +23,10 @@ abstract class NotificationListenerPermission(
 ) : Permission {
   @Provide companion object {
     @Provide fun <P : NotificationListenerPermission> state(
-      appContext: AppContext,
+      context: Application,
       appConfig: AppConfig
     ): PermissionState<P> =
-      NotificationManagerCompat.getEnabledListenerPackages(appContext)
+      NotificationManagerCompat.getEnabledListenerPackages(context)
         .any { it == appConfig.packageName }
 
     @Provide fun <P : NotificationListenerPermission> requestParams(

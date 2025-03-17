@@ -4,6 +4,7 @@
 
 package essentials.util
 
+import android.app.*
 import android.content.*
 import androidx.compose.runtime.*
 import essentials.*
@@ -16,7 +17,7 @@ import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
 @Stable @Provide @Scoped<AppScope> class Broadcasts(
-  private val appContext: AppContext,
+  private val context: Application,
   private val coroutineContexts: CoroutineContexts
 ) {
   internal val explicitBroadcasts = EventFlow<Intent>()
@@ -36,12 +37,12 @@ import kotlinx.coroutines.flow.*
           trySend(intent)
         }
       }
-      appContext.registerReceiver(broadcastReceiver, IntentFilter().apply {
+      context.registerReceiver(broadcastReceiver, IntentFilter().apply {
         actions.forEach { addAction(it) }
       })
       awaitClose {
         catch {
-          appContext.unregisterReceiver(broadcastReceiver)
+          context.unregisterReceiver(broadcastReceiver)
         }
       }
     }

@@ -5,6 +5,7 @@
 package essentials.permission
 
 import android.accessibilityservice.*
+import android.app.*
 import android.content.*
 import android.provider.*
 import androidx.compose.runtime.*
@@ -22,14 +23,14 @@ abstract class AccessibilityServicePermission(
 ) : Permission {
   @Provide companion object {
     @Provide fun <P : AccessibilityServicePermission> state(
-      appContext: AppContext
+      context: Application
     ): PermissionState<P> = Settings.Secure.getString(
-      appContext.contentResolver,
+      context.contentResolver,
       Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
     )
       ?.split(":")
       ?.fastMap { it.split("/").first() }
-      ?.fastAny { it == appContext.packageName } == true
+      ?.fastAny { it == context.packageName } == true
 
     @Provide fun <P : AccessibilityServicePermission> requestParams(
       permission: P,

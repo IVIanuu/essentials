@@ -4,6 +4,7 @@
 
 package essentials.apps
 
+import android.app.*
 import androidx.core.graphics.drawable.*
 import coil.*
 import coil.decode.*
@@ -11,21 +12,20 @@ import coil.fetch.*
 import coil.key.*
 import coil.request.*
 import coil.size.*
-import essentials.*
 import injekt.*
 
 data class AppIcon(val packageName: String)
 
-@Provide fun appIconFetcherFactory(appContext: AppContext) = object : Fetcher.Factory<AppIcon> {
+@Provide fun appIconFetcherFactory(context: Application) = object : Fetcher.Factory<AppIcon> {
   override fun create(data: AppIcon, options: Options, imageLoader: ImageLoader) = Fetcher {
-    val rawDrawable = appContext.packageManager.getApplicationIcon(data.packageName)
+    val rawDrawable = context.packageManager.getApplicationIcon(data.packageName)
     val finalDrawable = when (val size = options.size) {
       Size.ORIGINAL -> rawDrawable
       else -> rawDrawable.toBitmap(
         width = size.width.pxOrElse { rawDrawable.intrinsicWidth },
         height = size.height.pxOrElse { rawDrawable.intrinsicHeight }
       )
-        .toDrawable(appContext.resources)
+        .toDrawable(context.resources)
     }
     DrawableResult(finalDrawable, false, DataSource.DISK)
   }

@@ -4,8 +4,8 @@
 
 package essentials.util
 
+import android.app.*
 import com.jakewharton.processphoenix.*
-import essentials.*
 import essentials.logging.*
 import injekt.*
 import kotlinx.coroutines.*
@@ -14,10 +14,10 @@ import kotlinx.coroutines.*
 typealias restartProcess = suspend () -> @restartProcessResult Nothing
 
 @Provide suspend fun restartProcess(
-  appContext: AppContext,
+  context: Application,
   logger: Logger = inject
 ): @restartProcessResult Nothing {
   d { "restart process" }
-  ProcessPhoenix.triggerRebirth(appContext)
+  ProcessPhoenix.triggerRebirth(context)
   awaitCancellation()
 }

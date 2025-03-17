@@ -13,7 +13,7 @@ import essentials.logging.*
 import injekt.*
 
 @Stable @Provide @Scoped<AppScope> class ForegroundManager(
-  private val appContext: AppContext,
+  private val context: Application,
   @property:Provide private val logger: Logger
 ) {
   internal var states by mutableStateOf(emptyList<ForegroundState>())
@@ -43,8 +43,8 @@ import injekt.*
       LaunchedEffect(true) {
         d { "start foreground service $id $states" }
         ContextCompat.startForegroundService(
-          appContext,
-          Intent(appContext, ForegroundService::class.java)
+          context,
+          Intent(context, ForegroundService::class.java)
         )
       }
     }

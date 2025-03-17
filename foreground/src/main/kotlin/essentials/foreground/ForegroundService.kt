@@ -10,6 +10,7 @@ import android.content.*
 import android.os.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
+import androidx.core.content.*
 import arrow.fx.coroutines.*
 import essentials.*
 import essentials.app.*
@@ -25,11 +26,12 @@ import kotlin.time.Duration.Companion.seconds
   private val appConfig: AppConfig,
   private val foregroundManager: ForegroundManager,
   private val notificationFactory: NotificationFactory,
-  private val notificationManager: @SystemService NotificationManager,
   @property:Provide private val logger: Logger,
   @property:Provide private val scope: ScopedCoroutineScope<AppScope>,
   private val foregroundScopeFactory: () -> @New Scope<ForegroundScope>
 ) : Service() {
+  private val notificationManager by lazy { getSystemService<NotificationManager>()!! }
+
   private var job: Job? = null
   private var needsStartForegroundCall by mutableStateOf(true)
 

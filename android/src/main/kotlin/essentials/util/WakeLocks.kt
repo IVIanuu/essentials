@@ -1,24 +1,28 @@
 package essentials.util
 
+import android.app.*
 import android.os.*
 import androidx.compose.runtime.*
+import androidx.core.content.*
 import arrow.fx.coroutines.*
-import essentials.*
 import essentials.coroutines.*
 import essentials.logging.*
 import injekt.*
 import kotlinx.coroutines.*
 
 @Stable @Provide class WakeLocks(
+  private val context: Application,
   private val coroutineContexts: CoroutineContexts,
   @property:Provide private val logger: Logger,
-  private val powerManager: @SystemService PowerManager
 ) {
   @Composable fun WakeLock(id: String) {
     LaunchedEffect(id) {
       withContext(coroutineContexts.io) {
         bracketCase(
-          acquire = { powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, id) },
+          acquire = {
+            context.getSystemService<PowerManager>()!!
+              .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, id)
+          },
           use = {
             d { "$id acquire wake lock" }
             it.acquire()

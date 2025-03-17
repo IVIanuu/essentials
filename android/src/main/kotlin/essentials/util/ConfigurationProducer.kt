@@ -4,14 +4,14 @@
 
 package essentials.util
 
+import android.app.*
 import android.content.*
 import android.content.res.*
 import androidx.compose.runtime.*
-import essentials.*
 import injekt.*
 
-@Provide @Composable fun configuration(appContext: AppContext): Configuration =
-  produceState(appContext.resources.configuration) {
+@Provide @Composable fun configuration(context: Application): Configuration =
+  produceState(context.resources.configuration) {
     val callbacks = object : ComponentCallbacks2 {
       override fun onConfigurationChanged(newConfig: Configuration) {
         value = newConfig
@@ -23,6 +23,6 @@ import injekt.*
       override fun onTrimMemory(level: Int) {
       }
     }
-    appContext.registerComponentCallbacks(callbacks)
-    awaitDispose { appContext.unregisterComponentCallbacks(callbacks) }
+    context.registerComponentCallbacks(callbacks)
+    awaitDispose { context.unregisterComponentCallbacks(callbacks) }
   }.value

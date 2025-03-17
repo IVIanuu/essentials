@@ -4,7 +4,7 @@
 
 package essentials.gestures.action.actions
 
-import android.content.pm.*
+import android.app.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -17,7 +17,7 @@ import essentials.ui.navigation.*
 import injekt.*
 
 @Provide fun appActionFactory(
-  packageManager: PackageManager,
+  context: Application,
   sendIntent: sendActionIntent,
   toAppInfo: suspend String.() -> AppInfo?
 ) = object : ActionFactory {
@@ -43,14 +43,14 @@ import injekt.*
       .split(ACTION_DELIMITER)
       .first()
     sendIntent(
-      packageManager.getLaunchIntentForPackage(packageName)!!,
+      context.packageManager.getLaunchIntentForPackage(packageName)!!,
       null
     )
     return ActionExecutorResult
   }
 }
 
-@Provide fun appActionPickerDelegate(packageManager: PackageManager = inject) = object : ActionPickerDelegate {
+@Provide fun appActionPickerDelegate(context: Application = inject) = object : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String

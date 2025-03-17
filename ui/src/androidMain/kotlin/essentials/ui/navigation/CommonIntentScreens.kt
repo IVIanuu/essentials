@@ -1,7 +1,7 @@
 package essentials.ui.navigation
 
+import android.app.*
 import android.content.*
-import android.content.pm.*
 import android.provider.*
 import androidx.core.net.*
 import injekt.*
@@ -26,9 +26,9 @@ class AppInfoScreen(val packageName: String) : IntentScreen {
 class AppScreen(val packageName: String) : IntentScreen {
   @Provide companion object {
     @Provide fun intent(
-      packageManager: PackageManager,
+      context: Application,
       screen: AppScreen
-    ): ScreenIntent<AppScreen> = packageManager.getLaunchIntentForPackage(screen.packageName)!!
+    ): ScreenIntent<AppScreen> = context.packageManager.getLaunchIntentForPackage(screen.packageName)!!
   }
 }
 

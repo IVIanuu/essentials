@@ -4,6 +4,7 @@
 
 package essentials
 
+import android.app.*
 import android.content.pm.*
 import android.os.*
 import injekt.*
@@ -19,13 +20,13 @@ data class AppConfig(
   val deviceManufacturer: String
 ) {
   @Provide companion object {
-    @Provide fun androidAppConfig(appContext: AppContext): @Scoped<AppScope> AppConfig {
-      val appInfo = appContext.applicationInfo
-      val packageInfo = appContext.packageManager
+    @Provide fun androidAppConfig(context: Application): @Scoped<AppScope> AppConfig {
+      val appInfo = context.applicationInfo
+      val packageInfo = context.packageManager
         .getPackageInfo(appInfo.packageName, 0)
       return AppConfig(
         isDebug = appInfo.flags.hasFlag(ApplicationInfo.FLAG_DEBUGGABLE),
-        appName = appInfo.loadLabel(appContext.packageManager).toString(),
+        appName = appInfo.loadLabel(context.packageManager).toString(),
         packageName = appInfo.packageName,
         versionName = packageInfo.versionName!!,
         versionCode = packageInfo.versionCode,
