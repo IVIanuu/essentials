@@ -5,6 +5,7 @@
 package essentials.sample.ui
 
 import android.app.*
+import android.content.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,7 +26,7 @@ class ForegroundScreen : Screen<Unit>
 
 @Provide @Composable fun ForegroundUi(
   foregroundManager: ForegroundManager,
-  notificationFactory: NotificationFactory
+  context: Context = inject
 ): Ui<ForegroundScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Foreground") } }) {
     var isEnabled by remember { mutableStateOf(false) }
@@ -37,7 +38,7 @@ class ForegroundScreen : Screen<Unit>
         id = "foreground",
         removeNotification = removeNotification
       ) {
-        notificationFactory.create(
+        buildNotification(
           "foreground",
           "Foreground",
           NotificationManager.IMPORTANCE_LOW
@@ -61,7 +62,7 @@ class ForegroundScreen : Screen<Unit>
         id = "foreground2",
         removeNotification = removeNotification
       ) {
-        notificationFactory.create(
+        buildNotification(
           "foreground2",
           "Foreground2",
           NotificationManager.IMPORTANCE_LOW

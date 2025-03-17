@@ -25,7 +25,6 @@ import kotlin.time.Duration.Companion.seconds
 @Stable @Provide @AndroidComponent class ForegroundService(
   private val appConfig: AppConfig,
   private val foregroundManager: ForegroundManager,
-  private val notificationFactory: NotificationFactory,
   @property:Provide private val logger: Logger,
   @property:Provide private val scope: ScopedCoroutineScope<AppScope>,
   private val foregroundScopeFactory: () -> @New Scope<ForegroundScope>
@@ -52,7 +51,7 @@ import kotlin.time.Duration.Companion.seconds
           "default_foreground_id",
           true
         ) {
-          notificationFactory.create(
+          buildNotification(
             "default_foreground",
             "Foreground",
             NotificationManager.IMPORTANCE_LOW
