@@ -29,7 +29,7 @@ import essentials.*
 import injekt.*
 import kotlin.math.*
 
-@Stable @Provide class SystemWindowManager(
+@Stable @Provide class SystemWindows(
   private val context: Context,
   private val systemWindowScopeFactory: () -> @New Scope<SystemWindowScope>
 ) {
@@ -112,7 +112,7 @@ import kotlin.math.*
     }
 
     CompositionLocalProvider(
-      LocalSystemWindowManager provides this,
+      LocalSystemWindows provides this,
       content = content
     )
   }
@@ -138,7 +138,7 @@ fun Modifier.systemWindowTrigger(useDownTouchOffset: Boolean = true) = composed 
   val ownerView = LocalView.current
   val triggerView = remember { TriggerView(ownerView) }
   triggerView.useDownTouchOffset = useDownTouchOffset
-  val systemWindowManager = LocalSystemWindowManager.current
+  val systemWindowManager = LocalSystemWindows.current
   val layoutParams = remember {
     WindowManager.LayoutParams().apply {
       gravity = Gravity.LEFT or Gravity.TOP
@@ -199,7 +199,7 @@ fun Modifier.systemWindowTrigger(useDownTouchOffset: Boolean = true) = composed 
   }
 }
 
-internal val LocalSystemWindowManager = staticCompositionLocalOf<SystemWindowManager> {
+internal val LocalSystemWindows = staticCompositionLocalOf<SystemWindows> {
   throw IllegalStateException("No system window manager provided")
 }
 

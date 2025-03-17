@@ -24,13 +24,13 @@ class SystemWindowScreen : Screen<Unit>
 @Provide @Composable fun SystemWindowUi(
   permissions: Permissions,
   scope: ScopedCoroutineScope<ScreenScope> = inject,
-  systemWindowManager: SystemWindowManager
+  systemWindows: SystemWindows
 ): Ui<SystemWindowScreen> {
   EsScaffold(topBar = { EsAppBar { Text("System window") } }) {
     var showSystemWindow by remember { mutableStateOf(false) }
 
     if (showSystemWindow)
-      systemWindowManager.SystemWindow {
+      systemWindows.SystemWindow {
         Box(
           modifier = Modifier
             .fillMaxSize()
