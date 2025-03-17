@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import essentials.*
 import essentials.app.*
-import essentials.logging.*
 import injekt.*
 import kotlin.reflect.*
 
@@ -41,21 +40,13 @@ data class ScreenConfig<T : Screen<*>>(
 @Tag typealias DecoratedScreenContent = Unit
 
 @Provide @Composable fun DecoratedScreenContent(
-  logger: Logger = inject,
-  records: List<ExtensionPointRecord<ScreenDecorator>>,
+  decorators: LoadingOrderList<ScreenDecorator>,
   content: @Composable () -> Unit
 ): DecoratedScreenContent {
-  val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
-    records
-      .sortedWithLoadingOrder()
-      .fastFold({ it() }) { acc, record ->
-        { content ->
-          acc {
-            d { "decorate screen with ${record.key.qualifiedName}" }
-            record.instance.DecoratedContent(content)
-          }
-        }
-      }
+  val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(decorators) {
+    decorators.fastFold({ it() }) { acc, decorator ->
+      { content -> acc { decorator.DecoratedContent(content) } }
+    }
   }
 
   combinedDecorator(content)

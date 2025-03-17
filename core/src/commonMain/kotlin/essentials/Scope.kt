@@ -231,7 +231,7 @@ typealias ScopeInit<N, K> = @ScopeInitTag<N, K> Unit
       scope: Scope<N> = inject,
       key: TypeKey<StateFlow<S>>,
       crossinline block: @Composable () -> T,
-    ): S = rememberScoped(scope = scope, key = key.value) {
+    ): S = rememberScoped(key = key.value) {
       moleculeState { block() }
     }.value
   }

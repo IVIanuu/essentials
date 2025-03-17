@@ -16,14 +16,13 @@ fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
 }
 
 @Provide @Composable fun UserflowBuilder(
-  records: List<ExtensionPointRecord<UserflowBuilder>>,
+  builders: List<UserflowBuilder>,
   logger: Logger = inject,
   navigator: Navigator
 ): ScopeContent<UiScope> {
   LaunchedEffect(true) {
-    val userflowScreens = records
-      .sortedWithLoadingOrder()
-      .fastFlatMap { it.instance.createUserflow() }
+    val userflowScreens = builders
+      .fastFlatMap { it.createUserflow() }
 
     d { "Userflow -> $userflowScreens" }
 

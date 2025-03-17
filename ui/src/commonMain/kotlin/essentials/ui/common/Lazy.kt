@@ -26,7 +26,7 @@ import injekt.*
   horizontalAlignment: Alignment.Horizontal = Alignment.Start,
   flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
   userScrollEnabled: Boolean = true,
-  decorators: List<ExtensionPointRecord<ListDecorator>> = remember(LocalListDecorators.current),
+  decorators: LoadingOrderList<ListDecorator> = remember(LocalListDecorators.current),
   content: LazyListScope.() -> Unit
 ) {
   LazyColumn(
@@ -53,7 +53,7 @@ import injekt.*
   verticalAlignment: Alignment.Vertical = Alignment.Top,
   flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
   userScrollEnabled: Boolean = true,
-  decorators: List<ExtensionPointRecord<ListDecorator>> = remember(LocalListDecorators.current),
+  decorators: List<ListDecorator> = remember(LocalListDecorators.current),
   content: LazyListScope.() -> Unit
 ) {
   LazyRow(
@@ -80,31 +80,31 @@ import injekt.*
   fun content()
 }
 
-val LocalListDecorators = staticCompositionLocalOf<() -> List<ExtensionPointRecord<ListDecorator>>> {
+val LocalListDecorators = staticCompositionLocalOf<() -> List<ListDecorator>> {
   { emptyList() }
 }
 
 data object ListDecoratorsProvider
 
 @Provide @Composable fun ProvideListDecorators(
-  decorators: () -> List<ExtensionPointRecord<ListDecorator>>,
+  decorators: () -> List<ListDecorator>,
   content: @Composable () -> Unit
 ): AppUiDecoration<ListDecoratorsProvider> {
   CompositionLocalProvider(
-    LocalListDecorators provides { decorators().sortedWithLoadingOrder() },
+    LocalListDecorators provides decorators,
     content = content
   )
 }
 
 private fun LazyListScope.decoratedContent(
   isVertical: Boolean,
-  decorators: List<ExtensionPointRecord<ListDecorator>>,
+  decorators: List<ListDecorator>,
   content: LazyListScope.() -> Unit
 ) {
   decorators
-    .fastFold(content) { acc, record ->
+    .fastFold(content) { acc, decorator ->
       decorator@{
-        with(record.instance) {
+        with(decorator) {
           val scope = object : ListDecoratorScope, LazyListScope by this@decorator {
             override val isVertical: Boolean
               get() = isVertical

@@ -29,6 +29,20 @@ data class LoadingOrderListElement<T : Any>(
   }
 }
 
+interface ExtensionPoint<T : ExtensionPoint<T>> {
+  @Provide companion object {
+    @Provide fun <@AddOn T : ExtensionPoint<B>, B : ExtensionPoint<*>> asLoadingOrderListElement(
+      key: KClass<T>,
+      instance: T,
+      loadingOrder: LoadingOrder<T> = LoadingOrder()
+    ): LoadingOrderListElement<B> = LoadingOrderListElement(
+      key = key,
+      instance = instance,
+      loadingOrder = loadingOrder
+    ).cast()
+  }
+}
+
 sealed interface LoadingOrder<T : Any> {
   sealed interface Static<T : Any> : LoadingOrder<T> {
     class First<T : Any> : Static<T>
