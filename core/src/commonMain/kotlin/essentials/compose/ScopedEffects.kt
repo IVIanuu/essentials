@@ -64,16 +64,6 @@ fun <T> StateFlow<T>.collectAsScopedState(
   crossinline block: suspend (P1, P2, P3) -> Unit
 ): (P1, P2, P3) -> Unit = action(implicitly(), block)
 
-@Composable inline fun <P1, P2, P3, P4> scopedAction(
-  scope: Scope<*> = inject,
-  crossinline block: suspend (P1, P2, P3, P4) -> Unit
-): (P1, P2, P3, P4) -> Unit = action(implicitly(), block)
-
-@Composable inline fun <P1, P2, P3, P4, P5> scopedAction(
-  scope: Scope<*> = inject,
-  crossinline block: suspend (P1, P2, P3, P4, P5) -> Unit
-): (P1, P2, P3, P4, P5) -> Unit = action(implicitly(), block)
-
 @Composable fun LaunchedScopedEffect(
   vararg keys: Any?,
   scope: Scope<*> = inject,
