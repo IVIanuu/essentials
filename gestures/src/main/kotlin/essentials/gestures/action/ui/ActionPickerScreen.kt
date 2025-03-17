@@ -37,16 +37,15 @@ class ActionPickerScreen(
 @Provide @Composable fun ActionPickerUi(
   permissions: Permissions,
   actions: Actions,
-  scope: Scope<ScreenScope> = inject,
-  screen: ActionPickerScreen
+  context: ScreenContext<ActionPickerScreen> = inject
 ): Ui<ActionPickerScreen> {
   val items by produceScopedState(Resource.Idle()) {
     value = catchResource {
       buildList<ActionPickerItem> {
-        if (screen.showDefaultOption)
+        if (context.screen.showDefaultOption)
           this += ActionPickerItem.SpecialOption(title = "Default", getResult = { ActionPickerScreen.Result.Default })
 
-        if (screen.showNoneOption)
+        if (context.screen.showNoneOption)
           this += ActionPickerItem.SpecialOption(title = "None", getResult = { ActionPickerScreen.Result.None })
 
         this += (
@@ -76,7 +75,7 @@ class ActionPickerScreen(
                 if (!permissions.ensurePermissions(action.permissions))
                   return@scopedAction
               }
-              navigator().pop(screen, result)
+              popWithResult(result)
             },
             leadingContent = { item.Icon(Modifier.size(24.dp)) },
             trailingContent = if (item.settingsScreen == null) null

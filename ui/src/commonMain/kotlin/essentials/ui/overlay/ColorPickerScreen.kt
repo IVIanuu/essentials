@@ -31,17 +31,16 @@ class ColorPickerScreen(
 ) : OverlayScreen<Color>
 
 @Provide @Composable fun ColorPickerUi(
-  navigator: Navigator,
-  screen: ColorPickerScreen
+  context: ScreenContext<ColorPickerScreen> = inject
 ): Ui<ColorPickerScreen> {
   var currentHex by remember {
-    mutableStateOf(screen.initialColor.toHexString(includeAlpha = screen.includeAlpha))
+    mutableStateOf(context.screen.initialColor.toHexString(includeAlpha = context.screen.includeAlpha))
   }
   val currentColor by remember {
     derivedStateOf { currentHex.toColorOrNull() ?: Color.Transparent }
   }
 
-  EsModalBottomSheet(onDismissRequest = { navigator.pop(screen, currentColor) }) {
+  EsModalBottomSheet(onDismissRequest = { popWithResult(currentColor) }) {
     val textFieldContentColor = if (currentColor == Color.Transparent) LocalContentColor.current
     else guessingContentColorFor(currentColor)
 
@@ -54,8 +53,8 @@ class ColorPickerScreen(
       prefix = { Text("#") },
       value = currentHex,
       onValueChange = { newValue ->
-        if ((screen.includeAlpha && newValue.length > 8) ||
-          (!screen.includeAlpha && newValue.length > 6)
+        if ((context.screen.includeAlpha && newValue.length > 8) ||
+          (!context.screen.includeAlpha && newValue.length > 6)
         ) return@TextField
 
         currentHex = newValue
@@ -78,7 +77,7 @@ class ColorPickerScreen(
     EsLazyRow(
       horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-      items(screen.colorPalette) { color ->
+      items(context.screen.colorPalette) { color ->
         Box(
           modifier = Modifier
             .size(48.dp)
@@ -87,7 +86,7 @@ class ColorPickerScreen(
             .clickable(
               interactionSource = remember { MutableInteractionSource() },
               indication = ripple(bounded = false)
-            ) { currentHex = color.toHexString(screen.includeAlpha) },
+            ) { currentHex = color.toHexString(context.screen.includeAlpha) },
           contentAlignment = Alignment.Center
         ) {
           androidx.compose.animation.AnimatedVisibility(
@@ -107,7 +106,7 @@ class ColorPickerScreen(
 
     Spacer(Modifier.height(8.dp))
 
-    if (screen.includeAlpha)
+    if (context.screen.includeAlpha)
       ColorComponentItem(
         title = "A",
         color = LocalContentColor.current,
@@ -116,7 +115,7 @@ class ColorPickerScreen(
           currentHex = currentHex
             .toColor()
             .copy(alpha = it)
-            .toHexString(screen.includeAlpha)
+            .toHexString(context.screen.includeAlpha)
         }
       )
 
@@ -128,7 +127,7 @@ class ColorPickerScreen(
         currentHex = currentHex
           .toColor()
           .copy(red = it)
-          .toHexString(screen.includeAlpha)
+          .toHexString(context.screen.includeAlpha)
       }
     )
 
@@ -140,7 +139,7 @@ class ColorPickerScreen(
         currentHex = currentHex
           .toColor()
           .copy(green = it)
-          .toHexString(screen.includeAlpha)
+          .toHexString(context.screen.includeAlpha)
       }
     )
 
@@ -152,7 +151,7 @@ class ColorPickerScreen(
         currentHex = currentHex
           .toColor()
           .copy(blue = it)
-          .toHexString(screen.includeAlpha)
+          .toHexString(context.screen.includeAlpha)
       }
     )
 

@@ -13,7 +13,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.*
 import arrow.fx.coroutines.*
-import essentials.*
 import essentials.billing.*
 import essentials.compose.*
 import essentials.resource.*
@@ -29,14 +28,13 @@ class DonationScreen(
 
 @Provide @Composable fun DonationUi(
   billing: Billing,
-  scope: Scope<ScreenScope> = inject,
-  screen: DonationScreen,
   showToast: showToast,
+  context: ScreenContext<DonationScreen> = inject
 ): Ui<DonationScreen> {
   val skus by produceScopedState(Resource.Idle()) {
     resourceFlow {
       emit(
-        screen.donations.parMap { donation ->
+        context.screen.donations.parMap { donation ->
           val details = billing.getSkuDetails(donation.sku)!!
           UiDonation(
             donation,

@@ -113,6 +113,12 @@ suspend fun Navigator.popTo(screen: Screen<*>) {
   setBackStack(backStack.take(index + 1))
 }
 
+suspend fun <R> popWithResult(
+  result: R? = null,
+  screen: Screen<R> = inject,
+  navigator: Navigator = inject
+) = navigator.pop(screen, result)
+
 @Provide object NavigatorProviders {
   @Provide fun fromUiScope(scope: Scope<UiScope>): Navigator = scope.service()
   @Provide fun fromScreenScope(scope: Scope<ScreenScope>): Navigator = scope.service()

@@ -26,11 +26,10 @@ class PermissionRequestScreen(
 
 @Provide @Composable fun PermissionRequestUi(
   launchUi: launchUi,
-  navigator: Navigator,
   permissions: Permissions,
   requestHandlers: Map<KClass<out Permission>, suspend (Permission) -> PermissionRequestResult<Permission>>,
   screen: PermissionRequestScreen,
-  scope: Scope<ScreenScope> = inject
+  context: ScreenContext<PermissionRequestScreen> = inject
 ): Ui<PermissionRequestScreen> {
   val keysByPermission = remember {
     screen.permissionsKeys.associateBy { permissions.permission(it) }
@@ -48,7 +47,7 @@ class PermissionRequestScreen(
 
   LaunchedScopedEffect(permissionStates) {
     if (permissionStates.all { it.value == true })
-      navigator.pop(screen, true)
+      popWithResult(true)
   }
 
   val isLoading = permissionStates.any { it.value == null }
@@ -77,7 +76,7 @@ class PermissionRequestScreen(
           trailingContent = {
             Row(horizontalArrangement = Arrangement.End) {
               TextButton(
-                onClick = action { navigator.pop(screen, false) }
+                onClick = action { popWithResult(false) }
               ) { Text("Deny") }
 
               TextButton(

@@ -85,15 +85,16 @@ import kotlin.reflect.*
   val scope = component.screenScopeFactory(navigator, screen)
   val ui = component.uiFactories[screen::class.cast()]
     ?: error("No ui factory found for $screen")
+  val context = ScreenContext(navigator, screen, scope)
   val config = component.configFactories[screen::class.cast()]
-    ?.invoke(navigator, scope.cast(), screen)
+    ?.invoke(context.cast())
     ?: error("No config found for $screen")
   ScreenState(
     screen = screen,
     config = config,
     content = {
       component.decorateScreen(navigator, scope, screen) {
-        ui(navigator, scope.cast(), screen)
+        ui(context.cast())
       }
     },
     scope = scope

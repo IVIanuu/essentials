@@ -18,7 +18,6 @@ import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
-import essentials.*
 import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
@@ -31,7 +30,7 @@ import injekt.*
 
 @Provide @Composable fun HomeUi(
   itemsFactory: () -> List<HomeItem>,
-  scope: Scope<ScreenScope> = inject,
+  context: ScreenContext<HomeScreen> = inject,
   showToast: showToast
 ): Ui<HomeScreen> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }

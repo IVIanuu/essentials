@@ -9,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
-import essentials.*
 import essentials.compose.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
@@ -52,8 +51,7 @@ data class ChildNavigationItemScreen(
 ) : Screen<Unit>
 
 @Provide @Composable fun ChildNavigationItemUi(
-  scope: Scope<ScreenScope> = inject,
-  screen: ChildNavigationItemScreen,
+  context: ScreenContext<ChildNavigationItemScreen> = inject
 ): @NavGraph<ChildNavGraph> Ui<ChildNavigationItemScreen> {
   val color = Colors.shuffled().first()
 
@@ -67,17 +65,17 @@ data class ChildNavigationItemScreen(
       horizontalArrangement = Arrangement.Center,
       verticalAlignment = Alignment.CenterVertically
     ) {
-      Text("${screen.navigationIndex} ${screen.index}")
+      Text("${context.screen.navigationIndex} ${context.screen.index}")
 
       Button(
-        enabled = screen.index > 0,
+        enabled = context.screen.index > 0,
         onClick = action { navigator().popTop() }
       ) {
         Text("Previous")
       }
 
       Button(onClick = action {
-        navigator().push(screen.copy(index = screen.index.inc()))
+        navigator().push(context.screen.copy(index = context.screen.index.inc()))
       }) {
         Text("Next")
       }

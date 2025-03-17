@@ -21,15 +21,14 @@ class MultiChoiceListScreen<T : Any>(
 ) : OverlayScreen<Set<T>>
 
 @Provide @Composable fun MultiChoiceListUi(
-  navigator: Navigator,
-  screen: MultiChoiceListScreen<Any>,
+  context: ScreenContext<MultiChoiceListScreen<Any>> = inject,
 ): Ui<MultiChoiceListScreen<Any>> {
-  var selectedItems by remember { mutableStateOf(screen.selected) }
+  var selectedItems by remember { mutableStateOf(context.screen.selected) }
 
-  EsModalBottomSheet(onDismissRequest = { navigator.pop(screen, selectedItems) }) {
-    if (screen.title != null)
-      Subheader { Text(screen.title) }
-    screen.items.fastForEach { item ->
+  EsModalBottomSheet(onDismissRequest = { popWithResult(selectedItems) }) {
+    if (context.screen.title != null)
+      Subheader { Text(context.screen.title) }
+    context.screen.items.fastForEach { item ->
       val selected = item in selectedItems
       CheckboxListItem(
         value = selected,
@@ -39,7 +38,7 @@ class MultiChoiceListScreen<T : Any>(
           else newSelectedItems -= item
           selectedItems = newSelectedItems
         },
-        headlineContent = { Text(screen.renderable.render(item)) }
+        headlineContent = { Text(context.screen.renderable.render(item)) }
       )
     }
   }

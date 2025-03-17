@@ -27,7 +27,7 @@ class ActionsScreen : Screen<Unit>
   actions: Actions,
   executeAction: executeAction,
   showToast: showToast,
-  scope: Scope<ScreenScope> = inject
+  context: ScreenContext<ActionsScreen> = inject
 ): Ui<ActionsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Actions") } }) {
     Column(

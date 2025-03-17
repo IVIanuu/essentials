@@ -64,29 +64,35 @@ data class ScreenConfig<T : Screen<*>>(
 @Provide object ScreenProviders {
   @Provide fun <@AddOn T : @UiTag<S> Unit, S : Screen<*>> rootNavGraphUiFactory(
     screenClass: KClass<S>,
-    uiContent: @Composable (Navigator, Scope<ScreenScope>, S) -> @UiTag<S> Unit
+    uiContent: @Composable (ScreenContext<S>) -> @UiTag<S> Unit
   ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> UiContent<Screen<*>>> =
     (screenClass to uiContent).unsafeCast()
 
   @Provide fun <@AddOn T : @UiTag<S> Unit, S : Screen<*>> rootNavGraphConfigFactory(
     screenClass: KClass<S>,
-    screenConfigFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
+    screenConfigFactory: ScreenConfigFactory<S> = { ScreenConfig() }
   ): Pair<KClass<Screen<*>>, @NavGraph<RootNavGraph> ScreenConfigFactory<Screen<*>>> =
     (screenClass to screenConfigFactory).unsafeCast()
 
   @Provide fun <@AddOn T : @NavGraph<N> @UiTag<S> Unit, N, S : Screen<*>> navGraphUiFactory(
     screenClass: KClass<S>,
-    uiContent: @Composable (Navigator, Scope<ScreenScope>, S) -> @NavGraph<N> @UiTag<S> Unit
+    uiContent: @Composable (ScreenContext<S>) -> @NavGraph<N> @UiTag<S> Unit
   ): Pair<KClass<Screen<*>>, @NavGraph<N> UiContent<Screen<*>>> =
     (screenClass to uiContent).unsafeCast()
 
   @Provide fun <@AddOn T : @NavGraph<N> @UiTag<S> Unit, N, S : Screen<*>> navGraphConfigFactory(
     screenClass: KClass<S>,
-    screenConfigFactory: ScreenConfigFactory<S> = { _, _, _ -> ScreenConfig() }
+    screenConfigFactory: ScreenConfigFactory<S> = { ScreenConfig() }
   ): Pair<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>> =
     (screenClass to screenConfigFactory).unsafeCast()
 }
 
-typealias UiContent<S> = @Composable (Navigator, Scope<ScreenScope>, S) -> @UiTag<S> Unit
+typealias UiContent<S> = @Composable (ScreenContext<S>) -> @UiTag<S> Unit
 
-typealias ScreenConfigFactory<S> = (Navigator, Scope<ScreenScope>, S) -> ScreenConfig<S>
+typealias ScreenConfigFactory<S> = (ScreenContext<S>) -> ScreenConfig<S>
+
+@data class ScreenContext<S : Screen<*>>(
+  @property:Provide val navigator: Navigator,
+  @property:Provide val screen: S,
+  @property:Provide val scope: Scope<ScreenScope>
+)

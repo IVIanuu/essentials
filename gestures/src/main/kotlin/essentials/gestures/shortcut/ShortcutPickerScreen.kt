@@ -28,8 +28,7 @@ class ShortcutPickerScreen : Screen<Shortcut>
 @Provide @Composable fun ShortcutPickerUi(
   getShortcuts: getShortcuts,
   extractShortcut: extractShortcut,
-  scope: Scope<ScreenScope> = inject,
-  screen: ShortcutPickerScreen,
+  context: ScreenContext<ShortcutPickerScreen> = inject,
   showToast: showToast
 ): Ui<ShortcutPickerScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Pick an shortcut") } }) {
@@ -47,8 +46,8 @@ class ShortcutPickerScreen : Screen<Shortcut>
                 val shortcutRequestResult = navigator().push(shortcut.intent.asScreen())
                   ?.getOrNull()
                   ?.data ?: return@catch
-                val finalShortcut = extractShortcut(shortcutRequestResult)
-                navigator().pop(screen, finalShortcut)
+                val finalShortcut: Shortcut = extractShortcut(shortcutRequestResult)
+                popWithResult(finalShortcut)
               }.onFailure {
                 it.printStackTrace()
                 showToast("Failed to pick a shortcut!")

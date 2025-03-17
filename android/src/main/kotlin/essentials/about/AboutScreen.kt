@@ -26,8 +26,7 @@ class AboutScreen(
 
 @Provide @Composable fun AboutUi(
   appConfig: AppConfig,
-  screen: AboutScreen,
-  scope: Scope<ScreenScope> = inject
+  context: ScreenContext<AboutScreen> = inject
 ): Ui<AboutScreen> {
   EsScaffold(topBar = { EsAppBar { Text("About") } }) {
     EsLazyColumn {
@@ -50,11 +49,11 @@ class AboutScreen(
         )
       }
 
-      if (screen.donationScreen != null)
+      if (context.screen.donationScreen != null)
         item {
           EsListItem(
             onClick = scopedAction {
-              navigator().push(screen.donationScreen)
+              navigator().push(context.screen.donationScreen!!)
             },
             leadingContent = { Icon(Icons.Default.Favorite, null) },
             headlineContent = { Text("Donate") }
@@ -147,11 +146,11 @@ class AboutScreen(
         )
       }
 
-      if (screen.privacyPolicyUrl != null)
+      if (context.screen.privacyPolicyUrl != null)
         item {
           EsListItem(
             onClick = scopedAction {
-              navigator().push(UrlScreen(screen.privacyPolicyUrl))
+              navigator().push(UrlScreen(context.screen.privacyPolicyUrl!!))
             },
             leadingContent = { Icon(Icons.Default.Policy, null) },
             headlineContent = { Text("Privacy policy") }

@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.*
 import com.android.billingclient.api.*
 import com.slack.circuit.foundation.internal.*
-import essentials.*
 import essentials.ads.*
 import essentials.billing.*
 import essentials.compose.*
@@ -50,9 +49,8 @@ class GoPremiumScreen(
   features: List<AppFeature>,
   fullScreenAds: FullScreenAds,
   premiumVersionSku: PremiumVersionSku,
-  scope: Scope<ScreenScope> = inject,
-  screen: GoPremiumScreen,
-  showToast: showToast
+  showToast: showToast,
+  context: ScreenContext<GoPremiumScreen> = inject
 ): Ui<GoPremiumScreen> {
   val premiumSkuDetails by produceScopedState(Resource.Idle()) {
     resourceFlow { emit(billing.getSkuDetails(premiumVersionSku)) }
@@ -60,19 +58,19 @@ class GoPremiumScreen(
   }
   val goPremium = scopedAction {
     if (billing.purchase(premiumVersionSku, true, true)) {
-      navigator().pop(screen, true)
+      popWithResult(true)
       showToast("Premium version is now active!")
     }
   }
   val tryBasicVersion = scopedAction {
     fullScreenAds.showAd()
-    navigator().pop(screen, false)
+    popWithResult(false)
   }
 
   BackHandler(onBack = scopedAction {
-    if (screen.allowBackNavigation) {
+    if (context.screen.allowBackNavigation) {
       fullScreenAds.showAd()
-      navigator().pop(screen, false)
+      popWithResult(false)
     }
   })
 
@@ -93,7 +91,7 @@ class GoPremiumScreen(
 
           PremiumUiFooter(
             skuDetails = premiumSkuDetails.getOrNull(),
-            showTryBasicOption = screen.showTryBasicOption,
+            showTryBasicOption = context.screen.showTryBasicOption,
             onGoPremiumClick = goPremium,
             onTryBasicVersionClick = tryBasicVersion
           )
@@ -110,7 +108,7 @@ class GoPremiumScreen(
 
             PremiumUiFooter(
               skuDetails = premiumSkuDetails.getOrNull(),
-              showTryBasicOption = screen.showTryBasicOption,
+              showTryBasicOption = context.screen.showTryBasicOption,
               onGoPremiumClick = goPremium,
               onTryBasicVersionClick = tryBasicVersion
             )

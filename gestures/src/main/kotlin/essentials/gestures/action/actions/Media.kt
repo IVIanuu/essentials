@@ -95,10 +95,9 @@ abstract class MediaActionId(
 class MediaActionSettingsScreen : Screen<Unit>
 
 @Provide @Composable fun MediaActionSettingsUi(
-  navigator: Navigator,
   packageManager: PackageManager = inject,
   preferencesStore: DataStore<Preferences>,
-  scope: Scope<ScreenScope> = inject,
+  context: ScreenContext<MediaActionSettingsScreen> = inject,
   toAppInfo: suspend String.() -> AppInfo?,
 ): Ui<MediaActionSettingsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Media action settings") } }) {
@@ -106,7 +105,7 @@ class MediaActionSettingsScreen : Screen<Unit>
       item {
         EsListItem(
           onClick = scopedAction {
-            val newMediaApp = navigator.push(
+            val newMediaApp = navigator().push(
               AppPickerScreen(
                 Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)
                   .asAppPredicate(), null

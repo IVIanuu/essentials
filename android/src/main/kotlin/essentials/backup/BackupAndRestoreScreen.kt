@@ -22,7 +22,7 @@ class BackupAndRestoreScreen : Screen<Unit>
 @Provide @Composable fun BackupAndRestoreUi(
   createBackup: createBackup,
   restoreBackup: restoreBackup,
-  scope: Scope<ScreenScope> = inject,
+  context: ScreenContext<BackupAndRestoreScreen> = inject,
   showToast: showToast,
 ): Ui<BackupAndRestoreScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Backup/Restore") } }) {

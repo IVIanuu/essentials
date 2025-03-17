@@ -61,12 +61,11 @@ class WriteSecureSettingsScreen(
   appConfig: AppConfig,
   developerModeDataStore: DataStore<DeveloperMode>,
   launchUi: launchUi,
-  navigator: Navigator,
   permissions: Permissions,
-  scope: Scope<ScreenScope> = inject,
   screen: WriteSecureSettingsScreen,
   shell: Shell,
-  showToast: showToast
+  showToast: showToast,
+  context: ScreenContext<WriteSecureSettingsScreen> = inject
 ): Ui<WriteSecureSettingsScreen> {
   var currentStep by remember { mutableIntStateOf(1) }
   var completedStep by remember { mutableIntStateOf(1) }
@@ -75,7 +74,7 @@ class WriteSecureSettingsScreen(
     Button(
       onClick = action {
         if (completedStep == 4)
-          navigator.pop(screen, true)
+          popWithResult(true)
         else {
           completedStep++
           currentStep = completedStep
@@ -112,7 +111,7 @@ class WriteSecureSettingsScreen(
               .onSuccess {
                 if (permissions.permissionState(listOf(screen.permissionClass)).first()) {
                   showToast("Permission granted!")
-                  navigator.pop(screen)
+                  popWithResult<Boolean>()
                 }
               }
               .onFailure {
@@ -158,7 +157,7 @@ class WriteSecureSettingsScreen(
             OutlinedButton(onClick = scopedAction {
               raceOf(
                 {
-                  navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).asScreen())
+                  navigator().push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).asScreen())
                     ?.onFailure { showToast("Couldn't open phone! Please open manually") }
                 },
                 { developerModeDataStore.data.first { it != 0 } }
@@ -188,7 +187,7 @@ class WriteSecureSettingsScreen(
             OutlinedButton(onClick = scopedAction {
               raceOf(
                 {
-                  navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).asScreen())
+                  navigator().push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).asScreen())
                     ?.onFailure { showToast("Couldn\'t open developer options! Please open manually") }
                 },
                 { adbEnabledDataStore.data.first { it != 0 } }
