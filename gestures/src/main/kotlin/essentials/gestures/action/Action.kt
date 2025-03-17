@@ -61,19 +61,11 @@ interface ActionPickerDelegate {
     provider: () -> T,
   ): Pair<String, () -> Action<*>> = id.value to provider
 
-  @Provide fun <@AddOn T : ActionFactory> actionFactoryBinding(
-    provider: () -> T
-  ): () -> ActionFactory = provider
-
   @Provide fun <@AddOn T : ActionExecutorResult<I>, I : ActionId> actionExecutorBinding(
     id: I,
     provider: suspend (I) -> T
   ): Pair<String, suspend (ActionId) -> ActionExecutorResult<*>> =
     id.value to provider.cast()
-
-  @Provide fun <@AddOn T : ActionPickerDelegate> actionPickerDelegateBinding(
-    provider: () -> T
-  ): () -> ActionPickerDelegate = provider
 
   @Provide fun <@AddOn T : ActionSettingsScreen<I>, I : ActionId> actionSettingsKeyBinding(
     id: I,

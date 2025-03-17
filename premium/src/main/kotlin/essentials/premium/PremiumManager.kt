@@ -14,11 +14,9 @@ import essentials.app.*
 import essentials.billing.*
 import essentials.compose.*
 import essentials.coroutines.*
-import essentials.ui.*
 import essentials.ui.navigation.*
 import essentials.util.*
 import injekt.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 @Tag typealias IsPremiumVersion = Boolean?
@@ -44,16 +42,15 @@ interface Paywall {
   scope: ScopedCoroutineScope<AppScope> = inject,
   showToast: showToast,
   unlockScreen: unlockScreen
-): Paywall = object : Paywall {
+) = object : Paywall {
   override suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
     if (moleculeFlow { isPremiumVersion() }.filterNotNull().first()) return block()
 
     launch {
       showToast("This functionality is only available in the premium version!")
       if (!unlockScreen()) return@launch
-      provide<Scope<UiScope>, _>(launchUi()) {
-        navigator().push(GoPremiumScreen(showTryBasicOption = false))
-      }
+      @Provide val scope: Scope<UiScope> = launchUi()
+      navigator().push(GoPremiumScreen(showTryBasicOption = false))
     }
 
     return null
