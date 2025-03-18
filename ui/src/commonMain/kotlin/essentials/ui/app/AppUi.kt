@@ -24,7 +24,7 @@ typealias AppUiDecoration<K> = @AppUiDecorationTag<K> Unit
 @Tag typealias DecoratedAppUi = Unit
 
 @Provide @Composable fun DecoratedAppUi(
-  decorators: List<@Composable (@Composable () -> Unit) -> AppUiDecoration<*>>,
+  decorators: LoadingOrderList<@Composable (@Composable () -> Unit) -> AppUiDecoration<*>>,
   content: @Composable () -> Unit
 ): DecoratedAppUi {
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(decorators) {
