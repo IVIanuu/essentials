@@ -24,7 +24,7 @@ import injekt.*
   indication: Indication? = ripple(bounded = false, radius = 24.dp),
   enabled: Boolean = true,
   navigator: Navigator = inject,
-  menuContent: @Composable BottomSheetScope.() -> Unit
+  menuContent: @Composable BottomSheetScope.(@Provide ScreenContext<BottomSheetScreen>) -> Unit
 ) {
   Box(
     modifier = modifier
@@ -50,23 +50,24 @@ interface BottomSheetScope : ColumnScope {
 }
 
 class BottomSheetScreen(
-  val content: @Composable BottomSheetScope.() -> Unit
+  val content: @Composable BottomSheetScope.(
+    @Provide ScreenContext<BottomSheetScreen>
+  ) -> Unit
 ) : OverlayScreen<Unit>
 
 @Provide @Composable fun BottomSheetUi(
-  screen: BottomSheetScreen,
-  navigator: Navigator = inject
+  context: ScreenContext<BottomSheetScreen> = inject
 ): Ui<BottomSheetScreen> {
   val sheetState = rememberModalBottomSheetState()
 
   val hideAndDismissAction = action {
     sheetState.hide()
     if (!sheetState.isVisible)
-      navigator.pop(screen)
+      popWithResult<Unit>()
   }
 
   EsModalBottomSheet(sheetState = sheetState) {
-    screen.content(
+    context.screen.content(
       object : BottomSheetScope, ColumnScope by this {
         override val sheetState: SheetState
           get() = sheetState
@@ -74,7 +75,8 @@ class BottomSheetScreen(
         override fun dismiss() {
           hideAndDismissAction()
         }
-      }
+      },
+      context
     )
   }
 }

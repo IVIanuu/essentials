@@ -4,39 +4,30 @@
 
 package essentials.sample.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
 import essentials.compose.*
 import essentials.ui.material.*
-import essentials.ui.navigation.*
+import essentials.ui.overlay.*
 import essentials.work.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 
-@Provide val workHomeItem = HomeItem("Work") { WorkScreen() }
-
-class WorkScreen : Screen<Unit>
-
-@Provide @Composable fun WorkUi(
-  workManager: WorkManager,
-  context: ScreenContext<WorkScreen> = inject
-): Ui<WorkScreen> {
-  EsScaffold(topBar = { EsAppBar { Text("Work") } }) {
-    Column {
-      if (workManager.isWorkerRunning(SampleWorkId))
-        CircularProgressIndicator()
-
-      Button(
-        modifier = Modifier.fillMaxSize().wrapContentSize(),
-        onClick = action { workManager.runWorker(SampleWorkId) }
-      ) {
-        Text("Run")
+@Provide fun workHomeItem(workManager: WorkManager) = HomeItem("Work") {
+  BottomSheetScreen {
+    Subheader { Text("Work") }
+    SectionListItem(
+      sectionType = SectionType.SINGLE,
+      onClick = action { workManager.runWorker(SampleWorkId) },
+      title = { Text("Run") },
+      trailing = {
+        AnimatedVisibility(workManager.isWorkerRunning(SampleWorkId)) {
+          CircularProgressIndicator()
+        }
       }
-    }
+    )
   }
 }
 

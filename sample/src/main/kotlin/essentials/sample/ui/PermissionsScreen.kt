@@ -4,42 +4,35 @@
 
 package essentials.sample.ui
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
 import androidx.compose.ui.util.*
-import essentials.*
 import essentials.accessibility.*
 import essentials.compose.*
 import essentials.notificationlistener.*
 import essentials.permission.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
+import essentials.ui.overlay.*
 import injekt.*
 
-@Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsScreen() }
-
-class PermissionsScreen : Screen<Unit>
-
-@Provide @Composable fun PermissionsUi(
+@Provide fun permissionsHomeItem(
   permissionManager: Permissions,
-  permissions: List<SamplePermission>,
-  scope: Scope<ScreenScope> = inject,
-): Ui<PermissionsScreen> {
-  EsScaffold(topBar = { EsAppBar { Text("Permissions") } }) {
-    Button(
-      modifier = Modifier.fillMaxSize().wrapContentSize(),
+  permissions: List<SamplePermission>
+) = HomeItem("Permissions") {
+  BottomSheetScreen {
+    SectionListItem(
+      sectionType = SectionType.SINGLE,
       onClick = scopedAction {
         permissionManager.ensurePermissions(permissions.fastMap { it::class })
-      }
-    ) {
-      Text("Request")
-    }
+      },
+      title = { Text("Request") }
+    )
   }
 }
+
+class PermissionsScreen : Screen<Unit>
 
 interface SamplePermission : Permission
 

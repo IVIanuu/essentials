@@ -6,29 +6,23 @@ package essentials.sample.ui
 
 import android.app.*
 import android.content.*
-import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
 import essentials.foreground.*
 import essentials.sample.R
 import essentials.ui.material.*
-import essentials.ui.navigation.*
+import essentials.ui.overlay.*
 import essentials.util.*
 import injekt.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
-@Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundScreen() }
-
-class ForegroundScreen : Screen<Unit>
-
-@Provide @Composable fun ForegroundUi(
+@Provide fun foregroundHomeItem(
   foregroundManager: ForegroundManager,
-  androidContext: Context = inject,
-  context: ScreenContext<ForegroundScreen> = inject
-): Ui<ForegroundScreen> {
-  EsScaffold(topBar = { EsAppBar { Text("Foreground") } }) {
+  androidContext: Context = inject
+) = HomeItem("Foreground") {
+  BottomSheetScreen {
+    Subheader { Text("Foreground") }
     var isEnabled by remember { mutableStateOf(false) }
     var isSecondEnabled by remember { mutableStateOf(false) }
     var removeNotification by remember { mutableStateOf(true) }
@@ -81,25 +75,25 @@ class ForegroundScreen : Screen<Unit>
         }
       }
 
-    Column(
-      modifier = Modifier.fillMaxSize(),
-      verticalArrangement = Arrangement.Center,
-      horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-      Button(onClick = { isEnabled = !isEnabled }) {
-        Text(if (isEnabled) "Stop foreground" else "Start foreground")
-      }
+    SectionSwitch(
+      sectionType = SectionType.FIRST,
+      checked = isEnabled,
+      onCheckedChange = { isEnabled = it },
+      title = { Text("Foreground 1") }
+    )
 
-      Button(onClick = { isSecondEnabled = !isSecondEnabled }) {
-        Text(if (isSecondEnabled) "Stop foreground2" else "Start foreground2")
-      }
+    SectionSwitch(
+      sectionType = SectionType.MIDDLE,
+      checked = isSecondEnabled,
+      onCheckedChange = { isSecondEnabled = it },
+      title = { Text("Foreground 2") }
+    )
 
-      SectionSwitch(
-        checked = removeNotification,
-        onCheckedChange = { removeNotification = it },
-        title = { Text("Remove notification") }
-      )
-    }
+    SectionSwitch(
+      sectionType = SectionType.LAST,
+      checked = removeNotification,
+      onCheckedChange = { removeNotification = it },
+      title = { Text("Remove notification") }
+    )
   }
 }
-

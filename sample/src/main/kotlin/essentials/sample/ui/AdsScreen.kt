@@ -8,35 +8,26 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import essentials.ads.*
 import essentials.compose.*
-import essentials.ui.common.*
 import essentials.ui.material.*
-import essentials.ui.navigation.*
+import essentials.ui.overlay.*
 import injekt.*
 
-@Provide val adsHomeItem = HomeItem("Ads") { AdsScreen() }
+@Provide fun adsHomeItem(fullScreenAd: FullScreenAds) = HomeItem("Ads") {
+  BottomSheetScreen {
+    Subheader { Text("Ads") }
 
-class AdsScreen : Screen<Unit>
+    SectionSwitch(
+      sectionType = SectionType.FIRST,
+      checked = showAds,
+      onCheckedChange = { showAds = it },
+      title = { Text("Show ads") }
+    )
 
-@Provide @Composable fun AdsUi(
-  fullScreenAd: FullScreenAds,
-  context: ScreenContext<AdsScreen> = inject,
-): Ui<AdsScreen> {
-  EsScaffold(topBar = { EsAppBar { Text("Ads") } }) {
-    EsLazyColumn {
-      item {
-        SectionSwitch(
-          checked = showAds,
-          onCheckedChange = { showAds = it },
-          title = { Text("Show ads") }
-        )
-      }
-
-      item {
-        Button(onClick = scopedAction { fullScreenAd.showAd() }) {
-          Text("Show full screen ad")
-        }
-      }
-    }
+    SectionListItem(
+      sectionType = SectionType.LAST,
+      onClick = scopedAction { fullScreenAd.showAd() },
+      title = { Text("Show full screen ad") }
+    )
   }
 }
 
