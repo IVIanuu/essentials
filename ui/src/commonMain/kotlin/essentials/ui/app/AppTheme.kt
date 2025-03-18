@@ -5,6 +5,7 @@
 package essentials.ui.app
 
 import android.content.res.*
+import androidx.compose.material.ripple.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
@@ -168,7 +169,18 @@ fun Typography.withFontFamily(fontFamily: FontFamily?): Typography = copy(
   MaterialTheme(
     colorScheme = colorScheme,
     typography = typography,
-    shapes = shapes,
-    content = content
-  )
+    shapes = shapes
+  ) {
+    CompositionLocalProvider(
+      LocalRippleConfiguration provides RippleConfiguration(
+        rippleAlpha = RippleAlpha(
+          pressedAlpha = 0.24f * 1.5f,
+          focusedAlpha = 0.24f * 1.5f,
+          draggedAlpha = 0.16f * 1.5f,
+          hoveredAlpha = 0.08f * 1.5f
+        )
+      ),
+      content = content
+    )
+  }
 }

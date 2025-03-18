@@ -3,6 +3,7 @@ package essentials.ui.material
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
@@ -25,6 +26,7 @@ import injekt.*
   onDismissRequest: onBottomSheetDismissRequest = inject,
   content: @Composable ColumnScope.() -> Unit,
 ) {
+  val registry = LocalSaveableStateRegistry.current
   ModalBottomSheet(
     onDismissRequest = action(block = onDismissRequest),
     modifier = modifier.statusBarsPadding(),
@@ -37,9 +39,12 @@ import injekt.*
     scrimColor = scrimColor,
     dragHandle = dragHandle,
     contentWindowInsets = contentWindowInsets,
-    properties = properties,
-    content = content
-  )
+    properties = properties
+  ) {
+    CompositionLocalProvider(LocalSaveableStateRegistry provides registry) {
+      content()
+    }
+  }
 }
 
 @Tag typealias onBottomSheetDismissRequest = suspend () -> Unit

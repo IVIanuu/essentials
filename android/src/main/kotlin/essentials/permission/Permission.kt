@@ -13,7 +13,7 @@ import kotlin.reflect.*
 
 interface Permission {
   val title: String
-  val desc: String? get() = null
+  val desc: String
   val icon: (@Composable () -> Unit)? get() = null
 }
 

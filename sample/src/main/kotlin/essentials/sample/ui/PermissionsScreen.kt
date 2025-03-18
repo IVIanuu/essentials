@@ -46,6 +46,7 @@ interface SamplePermission : Permission
 @Provide class BluetoothPermission : RuntimePermission(
   permissionName = android.Manifest.permission.BLUETOOTH,
   title = "Bluetooth",
+  desc = "This is a desc",
   icon = { Icon(Icons.Default.Bluetooth, null) }
 ), SamplePermission
 

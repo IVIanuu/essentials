@@ -19,7 +19,7 @@ import kotlin.reflect.*
 
 class PermissionRequestScreen(
   val permissionsKeys: List<KClass<out Permission>>
-) : CriticalUserFlowScreen<Boolean>
+) : OverlayScreen<Boolean>
 
 @Provide @Composable fun PermissionRequestUi(
   launchUi: launchUi,
@@ -54,30 +54,40 @@ class PermissionRequestScreen(
     .keys
     .toList()
 
-  EsScaffold(topBar = { EsAppBar { Text("Required permissions") } }) {
-    if (isLoading) CircularProgressIndicator(modifier = Modifier.fillMaxSize().wrapContentSize())
+  EsModalBottomSheet {
+    Subheader { Text("Permissions required") }
+
+    if (isLoading) CircularProgressIndicator(modifier = Modifier
+      .fillMaxSize()
+      .wrapContentSize())
     else EsLazyColumn {
       itemsIndexed(permissionsToGrant, { _, permission -> permission }) { index, permission ->
-        SectionListItem(
+        SectionAlert(
           modifier = Modifier.animateItem(),
           sectionType = sectionTypeOf(index, permissionsToGrant.size),
-          headlineContent = { Text(permission.title) },
-          supportingContent = permission.desc?.let { { Text(it) } },
-          leadingContent = { permission.icon?.invoke() },
-          trailingContent = {
-            Row(horizontalArrangement = Arrangement.End) {
-              TextButton(
-                onClick = action { popWithResult(false) }
-              ) { Text("Deny") }
+          title = { Text(permission.title) },
+          text = { Text(permission.desc, modifier = Modifier.padding(it)) },
+          icon = { permission.icon?.invoke() },
+          actions = {
+            Button(
+              colors = ButtonDefaults.buttonColors(
+                MaterialTheme.colorScheme.onTertiary.copy(ContentAlpha.Medium),
+                MaterialTheme.colorScheme.tertiary.copy(ContentAlpha.Medium)
+              ),
+              onClick = action { popWithResult(false) }
+            ) { Text("Deny") }
 
-              TextButton(
-                onClick = scopedAction {
-                  requestHandlers[keysByPermission[permission]!!]!!(permission)
-                  permissionRefreshes.emit(Unit)
-                  launchUi()
-                }
-              ) { Text("Allow") }
-            }
+            Button(
+              colors = ButtonDefaults.buttonColors(
+                MaterialTheme.colorScheme.tertiary,
+                MaterialTheme.colorScheme.onTertiary
+              ),
+              onClick = scopedAction {
+                requestHandlers[keysByPermission[permission]!!]!!(permission)
+                permissionRefreshes.emit(Unit)
+                launchUi()
+              }
+            ) { Text("Allow") }
           }
         )
       }

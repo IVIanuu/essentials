@@ -30,7 +30,7 @@ data class IntentPermissionRequestParams<P : Permission>(
 ): PermissionRequestResult<P> = raceOf(
   {
     if (data.showFindHint)
-      showToast("Find ${appConfig.appName} here")
+      showToast("Find ${appConfig.appName} and grant permission!")
     // wait until user navigates back from the permission screen
     catch { navigator.push(data.intent.asScreen()) }
       .printErrors()

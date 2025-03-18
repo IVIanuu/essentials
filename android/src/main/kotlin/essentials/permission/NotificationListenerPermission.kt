@@ -18,7 +18,7 @@ import kotlin.reflect.*
 abstract class NotificationListenerPermission(
   val serviceClass: KClass<out NotificationListenerService>,
   override val title: String,
-  override val desc: String? = null,
+  override val desc: String,
   override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   @Provide companion object {
