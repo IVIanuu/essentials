@@ -29,6 +29,6 @@ import injekt.*
       ActionExecutorResult<AssistantActionId> {
     val launchAssist = SearchManager::class.java
         .getDeclaredMethod("launchAssist", Bundle::class.java)
-      launchAssist.invoke(context.getSystemService(), Bundle())
+      launchAssist.invoke(context.getSystemService<SearchManager>(), Bundle())
     }
 }
