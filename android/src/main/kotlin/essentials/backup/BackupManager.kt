@@ -100,9 +100,7 @@ typealias restoreBackup = suspend () -> restoreBackupResult
 ): restoreBackupResult = withContext(coroutineContexts.io) {
   val uri = navigator.push(
     Intent.createChooser(
-      Intent(Intent.ACTION_GET_CONTENT).apply {
-        type = "application/zip"
-      },
+      Intent(Intent.ACTION_GET_CONTENT).apply { type = "application/zip" },
       ""
     ).asScreen()
   )?.getOrNull()?.data?.data ?: return@withContext
@@ -134,11 +132,9 @@ private val BACKUP_BLACKLIST = listOf(
 @Tag typealias BackupDestinationDir = File
 
 @Provide object BackupFileProviders {
-  @Provide fun backupPrefs(dirs: AppDirs): BackupFile = dirs.prefs
+  @Provide fun backupSharedPrefs(dirs: AppDirs): BackupFile = dirs.prefs
 
   @Provide fun backupDatabases(dirs: AppDirs): BackupFile = dirs.data.resolve("databases")
-
-  @Provide fun backupSharedPrefs(dirs: AppDirs): BackupFile = dirs.data.resolve("shared_prefs")
 
   @Provide fun backupDestinationDir(dirs: AppDirs): BackupDestinationDir = dirs.data.resolve("files/backups")
 }

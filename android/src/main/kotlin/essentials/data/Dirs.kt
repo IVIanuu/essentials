@@ -16,7 +16,7 @@ data class AppDirs(val cache: File, val data: File, val prefs: File) {
       return AppDirs(
         cache = dataDir.resolve("cache"),
         data = dataDir,
-        prefs = dataDir.resolve("prefs")
+        prefs = dataDir.resolve("shared_prefs")
       )
     }
   }
