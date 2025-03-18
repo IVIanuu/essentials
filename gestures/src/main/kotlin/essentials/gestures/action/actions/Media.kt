@@ -8,12 +8,16 @@ import android.app.*
 import android.content.*
 import android.provider.*
 import android.view.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
 import androidx.datastore.core.*
 import androidx.datastore.preferences.core.*
+import coil.compose.*
 import essentials.*
 import essentials.apps.*
 import essentials.compose.*
@@ -103,7 +107,16 @@ class MediaActionSettingsScreen : Screen<Unit>
   EsScaffold(topBar = { EsAppBar { Text("Media action settings") } }) {
     EsLazyColumn {
       item {
-        EsListItem(
+        val mediaApp by produceScopedState(nullOf()) {
+          preferencesStore.data
+            .map { it[MediaActionAppKey] }
+            .mapLatest { it?.toAppInfo() }
+            .collect { value = it }
+        }
+
+        DecoratedListItem(
+          first = true,
+          last = true,
           onClick = scopedAction {
             val newMediaApp = navigator().push(
               AppPickerScreen(
@@ -116,18 +129,15 @@ class MediaActionSettingsScreen : Screen<Unit>
           },
           headlineContent = { Text("Media app") },
           supportingContent = {
-            val mediaAppName by produceScopedState(nullOf()) {
-              preferencesStore.data
-                .map { it[MediaActionAppKey] }
-                .mapLatest {
-                  if (it == null) null
-                  else it.toAppInfo()?.appName
-                }
-                .collect { value = it }
-            }
-
             Text(
-              "Define the target app for the media actions (current: ${mediaAppName ?: "None"})"
+              "Define the target app for the media actions (current: ${mediaApp?.appName ?: "None"})"
+            )
+          },
+          trailingContent = {
+            AsyncImage(
+              mediaApp?.let { AppIcon(it.packageName) },
+              null,
+              modifier = Modifier.size(40.dp)
             )
           }
         )

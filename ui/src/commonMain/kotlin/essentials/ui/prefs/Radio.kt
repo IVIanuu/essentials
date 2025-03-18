@@ -10,10 +10,15 @@ import essentials.ui.material.*
   onValueChange: (Boolean) -> Unit,
   headlineContent: @Composable () -> Unit,
   modifier: Modifier = Modifier,
+  first: Boolean = false,
+  last: Boolean = false,
   supportingContent: (@Composable () -> Unit)? = null,
   leadingContent: (@Composable () -> Unit)? = null,
 ) {
-  EsListItem(
+  DecoratedListItem(
+    first = first,
+    last = last,
+    selected = value,
     modifier = modifier,
     onClick = { onValueChange(!value) },
     headlineContent = headlineContent,

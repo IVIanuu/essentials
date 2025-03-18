@@ -1,11 +1,12 @@
 package essentials.coroutines
 
+import androidx.compose.runtime.*
 import app.cash.molecule.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
-data class CoroutineContexts(
+@Stable data class CoroutineContexts(
   val main: CoroutineContext = AndroidUiDispatcher.Main,
   val computation: CoroutineContext = Dispatchers.Default,
   val io: CoroutineContext = Dispatchers.IO,

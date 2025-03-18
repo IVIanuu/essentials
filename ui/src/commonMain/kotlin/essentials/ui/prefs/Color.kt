@@ -19,10 +19,14 @@ import essentials.ui.material.*
   onValueChangeRequest: () -> Unit,
   headlineContent: @Composable () -> Unit,
   modifier: Modifier = Modifier,
+  first: Boolean = false,
+  last: Boolean = false,
   supportingContent: (@Composable () -> Unit)? = null,
   leadingContent: (@Composable () -> Unit)? = null,
 ) {
-  EsListItem(
+  DecoratedListItem(
+    first = first,
+    last = last,
     onClick = onValueChangeRequest,
     modifier = modifier,
     headlineContent = headlineContent,

@@ -18,7 +18,7 @@ import injekt.*
 @Composable fun EsAppBar(
   modifier: Modifier = Modifier,
   navigationIcon: NavigationIcon? = inject,
-  actions: @Composable RowScope.() -> Unit = {},
+  actions: (@Composable RowScope.() -> Unit)? = null,
   expandedHeight: Dp = TopAppBarDefaults.TopAppBarExpandedHeight,
   windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
   colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
@@ -29,7 +29,7 @@ import injekt.*
     title = title,
     modifier = modifier,
     navigationIcon = navigationIcon ?: {},
-    actions = actions,
+    actions = actions ?: {},
     expandedHeight = expandedHeight,
     windowInsets = windowInsets,
     colors = colors,

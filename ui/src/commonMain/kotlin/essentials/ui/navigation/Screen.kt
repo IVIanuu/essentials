@@ -82,7 +82,7 @@ typealias UiContent<S> = @Composable (ScreenContext<S>) -> @UiTag<S> Unit
 
 typealias ScreenConfigFactory<S> = (ScreenContext<S>) -> ScreenConfig<S>
 
-data class ScreenContext<S : Screen<*>>(
+@Stable data class ScreenContext<S : Screen<*>>(
   @property:Provide val navigator: Navigator,
   @property:Provide val screen: S,
   @property:Provide val scope: Scope<ScreenScope>

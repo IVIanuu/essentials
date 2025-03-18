@@ -65,8 +65,10 @@ class ActionPickerScreen(
   EsScaffold(topBar = { EsAppBar { Text("Pick an action") } }) {
     ResourceBox(items) { items ->
       EsLazyColumn {
-        items(items) { item ->
-          EsListItem(
+        itemsIndexed(items) { index, item ->
+          DecoratedListItem(
+            first = index == 0,
+            last = index == items.lastIndex,
             onClick = scopedAction {
               val result = item.getResult(navigator())
                 ?: return@scopedAction

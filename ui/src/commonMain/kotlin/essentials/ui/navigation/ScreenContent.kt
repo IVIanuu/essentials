@@ -93,7 +93,7 @@ import kotlin.reflect.*
     screen = screen,
     config = config,
     content = {
-      component.decorateScreen(navigator, scope, screen) {
+      component.decorateScreen(context.cast()) {
         ui(context.cast())
       }
     },
@@ -105,7 +105,7 @@ import kotlin.reflect.*
   val uiFactories: Map<KClass<Screen<*>>, @NavGraph<N> UiContent<Screen<*>>>,
   val configFactories: Map<KClass<Screen<*>>, @NavGraph<N> ScreenConfigFactory<Screen<*>>>,
   val screenScopeFactory: (@Service<ScreenScope> Navigator, @Service<ScreenScope> Screen<*>) -> @New Scope<ScreenScope>,
-  val decorateScreen: @Composable (Navigator, Scope<ScreenScope>, Screen<*>, @Composable () -> Unit) -> DecoratedScreenContent
+  val decorateScreen: @Composable (ScreenContext<Screen<*>>, @Composable () -> Unit) -> DecoratedScreenContent
 ) {
   @Provide companion object {
     @Provide fun rootService(

@@ -21,6 +21,8 @@ import kotlin.time.Duration.Companion.seconds
   value: T,
   headlineContent: @Composable () -> Unit,
   modifier: Modifier = Modifier,
+  first: Boolean = false,
+  last: Boolean = false,
   onValueChange: ((T) -> Unit)? = null,
   onValueChangeFinished: ((T) -> Unit)? = null,
   stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
@@ -32,7 +34,9 @@ import kotlin.time.Duration.Companion.seconds
   var internalValue: T? by remember { mutableStateOf(null) }
   var internalValueEraseJob: Job? by remember { mutableStateOf(null) }
 
-  ListItem(
+  DecoratedListItem(
+    first = first,
+    last = last,
     modifier = modifier,
     headlineContent = headlineContent,
     supportingContent = {

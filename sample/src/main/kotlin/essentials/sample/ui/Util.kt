@@ -4,6 +4,23 @@
 
 package essentials.sample.ui
 
+import androidx.compose.foundation.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.*
+import androidx.datastore.core.*
+import essentials.ui.app.*
+import injekt.*
+
+@Provide @Composable fun sampleColorScheme(
+  pref: DataStore<SamplePrefs>
+): AppColorScheme = defaultAppColorScheme(
+  AppColors(
+    pref.data.collectAsState(null).value?.color
+      ?: Color.Blue
+  ),
+  isSystemInDarkTheme()
+)
+
 object Strings {
   const val Title = "Title"
   const val Text = "This is a sub text"

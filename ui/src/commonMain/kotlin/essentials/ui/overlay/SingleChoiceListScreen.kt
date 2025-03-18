@@ -7,11 +7,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import essentials.*
-import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
-import essentials.ui.prefs.*
 import injekt.*
 
 class SingleChoiceListScreen<T : Any>(
@@ -25,16 +23,17 @@ class SingleChoiceListScreen<T : Any>(
   screen: SingleChoiceListScreen<Any>,
   scope: Scope<ScreenScope> = inject
 ): Ui<SingleChoiceListScreen<Any>> {
-  EsModalBottomSheet(onDismissRequest = { navigator().pop(screen, null) }) {
+  var selected by remember { mutableStateOf(screen.selected) }
+  EsModalBottomSheet(onDismissRequest = { navigator().pop(screen, selected) }) {
     if (screen.title != null)
       Subheader { Text(screen.title) }
 
-    screen.items.fastForEach { item ->
-      RadioListItem(
-        value = item == screen.selected,
-        onValueChange = scopedAction { value ->
-          navigator().pop(screen, item)
-        },
+    screen.items.fastForEachIndexed { index, item ->
+      DecoratedListItem(
+        first = index == 0,
+        last = index == screen.items.lastIndex,
+        selected = item == selected,
+        onClick = { selected = item },
         headlineContent = { Text(screen.renderable.render(item)) }
       )
     }

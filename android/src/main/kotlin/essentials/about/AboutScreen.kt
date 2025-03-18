@@ -31,7 +31,8 @@ class AboutScreen(
   EsScaffold(topBar = { EsAppBar { Text("About") } }) {
     EsLazyColumn {
       item {
-        EsListItem(
+        DecoratedListItem(
+          first = true,
           leadingContent = { Icon(Icons.Default.Info, null) },
           headlineContent = { Text("Version") },
           supportingContent = { Text(appConfig.versionName) }
@@ -39,7 +40,7 @@ class AboutScreen(
       }
 
       item {
-        EsListItem(
+        DecoratedListItem(
           onClick = scopedAction {
             navigator().push(PlayStoreAppDetailsKey(appConfig.packageName))
           },
@@ -51,7 +52,7 @@ class AboutScreen(
 
       if (context.screen.donationScreen != null)
         item {
-          EsListItem(
+          DecoratedListItem(
             onClick = scopedAction {
               navigator().push(context.screen.donationScreen!!)
             },
@@ -61,7 +62,7 @@ class AboutScreen(
         }
 
       item {
-        EsListItem(
+        DecoratedListItem(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
           },
@@ -72,7 +73,7 @@ class AboutScreen(
       }
 
       item {
-        EsListItem(
+        DecoratedListItem(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
           },
@@ -91,7 +92,7 @@ class AboutScreen(
       }
 
       item {
-        EsListItem(
+        DecoratedListItem(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://github.com/IVIanuu"))
           },
@@ -108,7 +109,7 @@ class AboutScreen(
       }
 
       item {
-        EsListItem(
+        DecoratedListItem(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://twitter.com/IVIanuu"))
           },
@@ -126,7 +127,7 @@ class AboutScreen(
 
       item {
         val email = "ivianuu@gmail.com"
-        EsListItem(
+        DecoratedListItem(
           onClick = scopedAction {
             navigator().push(
               Intent(Intent.ACTION_SENDTO).apply {
@@ -148,7 +149,8 @@ class AboutScreen(
 
       if (context.screen.privacyPolicyUrl != null)
         item {
-          EsListItem(
+          DecoratedListItem(
+            last = true,
             onClick = scopedAction {
               navigator().push(UrlScreen(context.screen.privacyPolicyUrl!!))
             },

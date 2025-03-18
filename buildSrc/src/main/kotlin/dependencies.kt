@@ -75,14 +75,14 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.7.3"
+    const val version = "1.7.8"
     const val gradlePlugin = "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${Kotlin.version}"
-    const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
+    const val foundation = "androidx.compose.foundation:foundation:$version"
     const val googleFonts = "androidx.compose.ui:ui-text-google-fonts:$version"
-    const val material3 = "org.jetbrains.compose.material3:material3:$version"
-    const val materialIconsExtended = "org.jetbrains.compose.material:material-icons-extended:$version"
-    const val runtime = "org.jetbrains.compose.runtime:runtime:$version"
-    const val runtimeSaveable = "org.jetbrains.compose.runtime:runtime-saveable:$version"
+    const val material3 = "androidx.compose.material3:material3:1.3.1"
+    const val materialIconsExtended = "androidx.compose.material:material-icons-extended:$version"
+    const val runtime = "androidx.compose.runtime:runtime:$version"
+    const val runtimeSaveable = "androidx.compose.runtime:runtime-saveable:$version"
   }
 
   const val composeIconsFontAwesome = "br.com.devsrsouza.compose.icons:font-awesome:1.1.0"

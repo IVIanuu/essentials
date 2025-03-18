@@ -19,34 +19,34 @@ val LocalContentPadding = compositionLocalOf {
 
 @Composable fun EsScaffold(
   modifier: Modifier = Modifier,
-  topBar: @Composable () -> Unit = {},
-  bottomBar: @Composable () -> Unit = {},
-  snackbarHost: @Composable () -> Unit = {},
-  floatingActionButton: @Composable () -> Unit = {},
+  topBar: (@Composable () -> Unit)? = null,
+  bottomBar: (@Composable () -> Unit)? = null,
+  snackbarHost: (@Composable () -> Unit)? = null,
+  floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
   containerColor: Color = MaterialTheme.colorScheme.background,
   contentColor: Color = contentColorFor(containerColor),
   contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
+  topBarScrollBehavior: TopAppBarScrollBehavior? = if (topBar == null) null
+  else LocalAppBarScrollBehaviorProvider.current(),
   content: @Composable () -> Unit
 ) {
-  val scrollBehavior = LocalAppBarScrollBehaviorProvider.current()
-
   Scaffold(
     modifier = modifier
       .then(
-        if (scrollBehavior == null) Modifier
-        else Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        if (topBarScrollBehavior == null) Modifier
+        else Modifier.nestedScroll(topBarScrollBehavior.nestedScrollConnection)
       ),
     topBar = {
       CompositionLocalProvider(
-        LocalAppBarScrollBehavior provides scrollBehavior
-      ) { topBar.invoke() }
+        LocalAppBarScrollBehavior provides topBarScrollBehavior
+      ) { topBar?.invoke() }
     },
-    bottomBar = bottomBar,
-    floatingActionButton = floatingActionButton,
+    bottomBar = bottomBar ?: {},
+    floatingActionButton = floatingActionButton ?: {},
     floatingActionButtonPosition = floatingActionButtonPosition,
     containerColor = containerColor,
-    snackbarHost = snackbarHost,
+    snackbarHost = snackbarHost ?: {},
     contentColor = contentColor,
     contentWindowInsets = contentWindowInsets
   ) { contentPadding ->

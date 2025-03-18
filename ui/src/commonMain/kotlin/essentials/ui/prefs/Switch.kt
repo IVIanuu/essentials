@@ -4,6 +4,7 @@
 
 package essentials.ui.prefs
 
+import androidx.compose.foundation.interaction.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -14,15 +15,27 @@ import essentials.ui.material.*
   onValueChange: (Boolean) -> Unit,
   headlineContent: @Composable () -> Unit,
   modifier: Modifier = Modifier,
+  first: Boolean = false,
+  last: Boolean = false,
   supportingContent: (@Composable () -> Unit)? = null,
   leadingContent: (@Composable () -> Unit)? = null,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
-  EsListItem(
+  DecoratedListItem(
+    first = first,
+    last = last,
     modifier = modifier,
     onClick = { onValueChange(!value) },
     headlineContent = headlineContent,
     supportingContent = supportingContent,
     leadingContent = leadingContent,
-    trailingContent = { Switch(checked = value, onCheckedChange = null) }
+    trailingContent = {
+      Switch(
+        checked = value,
+        onCheckedChange = null,
+        interactionSource = interactionSource
+      )
+    },
+    interactionSource = interactionSource
   )
 }

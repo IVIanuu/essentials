@@ -7,7 +7,6 @@ package essentials.ui.app
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import essentials.*
-import essentials.logging.*
 import injekt.*
 import kotlin.reflect.*
 
@@ -25,24 +24,17 @@ typealias AppUiDecoration<K> = @AppUiDecorationTag<K> Unit
 @Tag typealias DecoratedAppUi = Unit
 
 @Provide @Composable fun DecoratedAppUi(
-  records: List<LoadingOrderListElement<@Composable (@Composable () -> Unit) -> AppUiDecoration<*>>>,
-  logger: Logger = inject,
+  decorators: List<@Composable (@Composable () -> Unit) -> AppUiDecoration<*>>,
   content: @Composable () -> Unit
 ): DecoratedAppUi {
-  val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(records) {
-    records
-      .sortedWithLoadingOrder()
-      .fastFold({ it() }) { acc, record ->
+  val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(decorators) {
+    decorators
+      .fastFold({ it() }) { acc, decorator ->
         { content ->
-          acc {
-            d { "decorate app ui ${record.key.qualifiedName}" }
-            record.instance(content)
-          }
+          acc { decorator(content) }
         }
       }
   }
-
-  d { "decorate app ui $content with combined $combinedDecorator" }
 
   combinedDecorator(content)
 }

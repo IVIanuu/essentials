@@ -8,7 +8,9 @@ import android.content.res.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
+import androidx.compose.ui.unit.*
 import com.materialkolor.*
 import essentials.*
 import injekt.*
@@ -33,14 +35,14 @@ data class AppColors(
 @Provide @Composable fun defaultAppColorScheme(
   appColors: AppColors,
   isSystemInDarkTheme: IsSystemInDarkTheme
-): AppColorScheme = remember(isSystemInDarkTheme) {
+): AppColorScheme = remember(appColors, isSystemInDarkTheme) {
   dynamicColorScheme(
     isDark = isSystemInDarkTheme,
     isAmoled = false,
     primary = appColors.primary,
     secondary = appColors.secondary,
     tertiary = appColors.tertiary,
-    style = PaletteStyle.Vibrant
+    style = PaletteStyle.FruitSalad
   )
 }
 
@@ -49,7 +51,83 @@ data class AppColors(
 @Tag typealias AppTypography = Typography
 
 @Provide fun defaultAppTypography(font: AppFont? = null): AppTypography =
-  Typography().withFontFamily(font)
+  Typography(
+    displayLarge = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Normal,
+      fontSize = 16.sp
+    ),
+    displayMedium = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Normal,
+      fontSize = 16.sp
+    ),
+    displaySmall = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Normal,
+      fontSize = 16.sp
+    ),
+    headlineLarge = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.SemiBold,
+      fontSize = 30.sp
+    ),
+    headlineMedium = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Normal,
+      fontSize = 16.sp
+    ),
+    headlineSmall = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Normal,
+      fontSize = 16.sp
+    ),
+    titleLarge = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Bold,
+      fontSize = 24.sp
+    ),
+    titleMedium = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.SemiBold,
+      fontSize = 18.sp
+    ),
+    titleSmall = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Medium,
+      fontSize = 16.sp
+    ),
+    bodyLarge = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Medium,
+      fontSize = 15.sp
+    ),
+    bodyMedium = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Normal,
+      fontSize = 14.sp
+    ),
+    bodySmall = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Normal,
+      fontSize = 16.sp
+    ),
+    labelLarge = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Medium,
+      fontSize = 14.sp
+    ),
+    labelMedium = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Medium,
+      fontSize = 12.sp
+    ),
+    labelSmall = TextStyle(
+      fontFamily = font,
+      fontWeight = FontWeight.Normal,
+      fontSize = 16.sp
+    ),
+  ).withFontFamily(font)
 
 fun Typography.withFontFamily(fontFamily: FontFamily?): Typography = copy(
   displayLarge = displayLarge.copy(fontFamily = fontFamily),

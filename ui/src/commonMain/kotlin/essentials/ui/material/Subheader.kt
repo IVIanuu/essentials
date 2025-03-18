@@ -20,13 +20,13 @@ import androidx.compose.ui.unit.*
       .fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    Spacer(Modifier.width(16.dp))
+    Spacer(Modifier.width(32.dp))
 
     CompositionLocalProvider(
       LocalTextStyle provides MaterialTheme.typography.titleLarge,
       content = title
     )
 
-    Spacer(Modifier.width(16.dp))
+    Spacer(Modifier.width(32.dp))
   }
 }

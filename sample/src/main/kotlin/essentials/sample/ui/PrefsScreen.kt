@@ -27,7 +27,7 @@ class PrefsScreen : Screen<Unit>
 
 @Provide @Composable fun PrefsUi(
   pref: DataStore<SamplePrefs>,
-  scope: ScreenContext<PrefsScreen> = inject,
+  context: ScreenContext<PrefsScreen> = inject,
 ): Ui<PrefsScreen> {
   val prefs by pref.data.collectAsScopedState(SamplePrefs())
   EsScaffold(topBar = { EsAppBar { Text("Prefs") } }) {
@@ -35,6 +35,8 @@ class PrefsScreen : Screen<Unit>
       item {
         SwitchListItem(
           value = prefs.switch,
+          first = true,
+          last = true,
           onValueChange = action { value ->
             pref.updateData { it.copy(switch = value) }
           },
@@ -44,11 +46,12 @@ class PrefsScreen : Screen<Unit>
       }
 
       item {
-        Subheader(modifier = Modifier.interactive(prefs.switch)) { Text("Category") }
+        SectionHeader(modifier = Modifier.interactive(prefs.switch)) { Text("Category") }
       }
 
       item {
         SliderListItem(
+          first = true,
           value = prefs.slider,
           onValueChangeFinished = action { value ->
             pref.updateData { it.copy(slider = value) }
@@ -77,6 +80,7 @@ class PrefsScreen : Screen<Unit>
 
       item {
         SliderListItem(
+          last = true,
           value = prefs.steppedSlider,
           onValueChangeFinished = action { value ->
             pref.updateData { it.copy(steppedSlider = value) }
@@ -91,13 +95,14 @@ class PrefsScreen : Screen<Unit>
       }
 
       item {
-        Subheader(modifier = Modifier.interactive(prefs.switch)) {
+        SectionHeader(modifier = Modifier.interactive(prefs.switch)) {
           Text("Dialogs")
         }
       }
 
       item {
-        EsListItem(
+        DecoratedListItem(
+          first = true,
           modifier = Modifier.interactive(prefs.switch),
           onClick = scopedAction {
             val newTextInput = navigator().push(
@@ -117,6 +122,7 @@ class PrefsScreen : Screen<Unit>
 
       item {
         ColorListItem(
+          last = true,
           value = prefs.color,
           onValueChangeRequest = action {
             val newColor = navigator().push(
@@ -129,6 +135,66 @@ class PrefsScreen : Screen<Unit>
           headlineContent = { Text("Color") },
           supportingContent = { Text("This is a color preference") }
         )
+      }
+
+      item {
+        val items = listOf(1, 2, 3, 4, 5)
+        var selected by remember { mutableIntStateOf(1) }
+        Button(
+          onClick = scopedAction {
+            navigator().push(
+              SingleChoiceListScreen(
+                items = items,
+                selected = selected
+              ) { it.toString() }
+            )
+              ?.let { selected = it }
+          }
+        ) {
+          Text("Single choice")
+        }
+      }
+
+      item {
+        val items = listOf("A", "B", "C")
+        var selected by remember { mutableStateOf(items.toSet()) }
+        Button(
+          onClick = action {
+            navigator().push(
+              MultiChoiceListScreen(
+                title = "Multi choice",
+                items = items,
+                selected = selected
+              )
+            )?.let { selected = it }
+          }
+        ) { Text("Multi choice") }
+      }
+
+      item {
+        val primaryColor = MaterialTheme.colorScheme.primary
+        var currentColor by remember { mutableStateOf(primaryColor) }
+        Button(
+          onClick = action {
+            navigator().push(
+              ColorPickerScreen(initialColor = currentColor)
+            )?.let { currentColor = it }
+          }
+        ) { Text("Color choice") }
+      }
+
+      item {
+        var current by remember { mutableStateOf("") }
+        Button(
+          onClick = action {
+            navigator().push(
+              TextInputScreen(
+                label = "text...",
+                initial = current
+              )
+            )?.let { current = it }
+          }
+        ) { Text("Text") }
       }
     }
   }

@@ -4,7 +4,6 @@
 
 package essentials.sample.ui
 
-import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -40,6 +39,8 @@ import injekt.*
         title = { Text("Home") },
         actions = {
           BottomSheetLauncherButton {
+            Subheader { Text("Example sheet") }
+
             EsListItem(
               onClick = {
                 showToast("Clicked")
@@ -64,6 +65,7 @@ import injekt.*
         HomeItem(
           item = item,
           index = index,
+          lastIndex = finalItems.lastIndex,
           color = color,
           onClick = action {
             navigator().push(
@@ -79,61 +81,48 @@ import injekt.*
 
 @Composable private fun HomeItem(
   index: Int,
+  lastIndex: Int,
   color: Color,
   item: HomeItem,
   navigator: Navigator = inject,
   onClick: () -> Unit
 ) {
-  Surface(
-    modifier = with(LocalScreenAnimationScope.current) {
-      Modifier
-        .sharedBounds(
-          rememberSharedContentState(ContainerKey + index),
-          this,
-          boundsTransform = { _, _ -> tween(400) },
-          enter = fadeIn(tween(400)),
-          exit = fadeOut(tween(400))
-        )
-    },
-  ) {
-    EsListItem(
-      onClick = onClick,
-      headlineContent = {
-        Text(item.title)
-      },
-      overlineContent = {
-        Text("Overline")
-      },
-      supportingContent = {
-        Text("Supporting")
-      },
-      leadingContent = {
-        Box(
-          modifier = with(LocalScreenAnimationScope.current) {
-            Modifier
-              .size(40.dp)
-              .background(color, CircleShape)
-              .sharedElement(
-                rememberSharedContentState(ColorKey + index),
-                this,
-                boundsTransform = { _, _ -> tween(400) }
-              )
-          }
-        )
-      },
-      trailingContent = {
-        BottomSheetLauncherButton {
-          (0..40).forEach { index ->
-            EsListItem(
-              onClick = { dismiss() },
-              headlineContent = { Text(index.toString()) },
-              leadingContent = { Icon(Icons.Default.Add, null) }
+  DecoratedListItem(
+    onClick = onClick,
+    headlineContent = { Text(item.title) },
+    supportingContent = { Text(Strings.Text) },
+    first = index == 0,
+    last = index == lastIndex,
+    leadingContent = {
+      Box(
+        modifier = with(LocalScreenAnimationScope.current) {
+          Modifier
+            .size(40.dp)
+            .background(color, CircleShape)
+            .sharedElement(
+              rememberSharedContentState(ColorKey + index),
+              this,
+              boundsTransform = { _, _ -> tween(400) }
             )
-          }
+        }
+      )
+    },
+    trailingContent = {
+      BottomSheetLauncherButton {
+        Subheader { Text("Example sheet") }
+
+        (0..40).forEach { index ->
+          DecoratedListItem(
+            first = index == 0,
+            last = index == 40,
+            onClick = { dismiss() },
+            headlineContent = { Text(index.toString()) },
+            leadingContent = { Icon(Icons.Default.Add, null) }
+          )
         }
       }
-    )
-  }
+    }
+  )
 }
 
 data class HomeItem(

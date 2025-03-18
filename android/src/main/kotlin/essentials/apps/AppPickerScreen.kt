@@ -31,9 +31,7 @@ class AppPickerScreen(
   getInstalledApps: getInstalledApps,
   context: ScreenContext<AppPickerScreen> = inject,
 ): Ui<AppPickerScreen> {
-  EsScaffold(
-    topBar = { EsAppBar { Text(context.screen.title ?: "Pick an app") } }
-  ) {
+  EsScaffold(topBar = { EsAppBar { Text(context.screen.title ?: "Pick an app") } }) {
     ResourceBox(
       produceScopedState(Resource.Idle()) {
         resourceFlow {
@@ -47,9 +45,10 @@ class AppPickerScreen(
       }.value
     ) { apps ->
       EsLazyColumn {
-        items(apps) { app ->
-          EsListItem(
-            modifier = Modifier.animateItem(),
+        itemsIndexed(apps) { index, app ->
+          DecoratedListItem(
+            first = index == 0,
+            last = index == apps.lastIndex,
             onClick = scopedAction { popWithResult(app) },
             headlineContent = { Text(app.appName) },
             leadingContent = {

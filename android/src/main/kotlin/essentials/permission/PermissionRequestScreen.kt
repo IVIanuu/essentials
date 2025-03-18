@@ -4,14 +4,11 @@
 
 package essentials.permission
 
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
 import essentials.*
 import essentials.compose.*
 import essentials.ui.common.*
@@ -60,16 +57,11 @@ class PermissionRequestScreen(
   EsScaffold(topBar = { EsAppBar { Text("Required permissions") } }) {
     if (isLoading) CircularProgressIndicator(modifier = Modifier.fillMaxSize().wrapContentSize())
     else EsLazyColumn {
-      items(permissionsToGrant, { it }) { permission ->
-        EsListItem(
-          modifier = Modifier
-            .padding(start = 8.dp, top = 8.dp, end = 8.dp)
-            .border(
-              1.dp,
-              LocalContentColor.current.copy(alpha = 0.12f),
-              RoundedCornerShape(8.dp)
-            )
-            .animateItem(),
+      itemsIndexed(permissionsToGrant, { _, permission -> permission }) { index, permission ->
+        DecoratedListItem(
+          modifier = Modifier.animateItem(),
+          first = index == 0,
+          last = index == permissionsToGrant.lastIndex,
           headlineContent = { Text(permission.title) },
           supportingContent = permission.desc?.let { { Text(it) } },
           leadingContent = { permission.icon?.invoke() },

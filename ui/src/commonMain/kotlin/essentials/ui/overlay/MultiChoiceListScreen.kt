@@ -28,9 +28,11 @@ class MultiChoiceListScreen<T : Any>(
   EsModalBottomSheet(onDismissRequest = { popWithResult(selectedItems) }) {
     if (context.screen.title != null)
       Subheader { Text(context.screen.title) }
-    context.screen.items.fastForEach { item ->
+    context.screen.items.fastForEachIndexed { index, item ->
       val selected = item in selectedItems
-      CheckboxListItem(
+      SwitchListItem(
+        first = index == 0,
+        last = index == context.screen.items.lastIndex,
         value = selected,
         onValueChange = {
           val newSelectedItems = selectedItems.toMutableSet()
