@@ -36,4 +36,3 @@ suspend fun <T> par(
   vararg blocks: suspend () -> T,
   context: CoroutineContext = EmptyCoroutineContext
 ): List<T> = blocks.toList().parMap(context) { it() }
-

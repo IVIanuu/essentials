@@ -132,7 +132,7 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
   title: (@Composable () -> Unit)? = null,
   icon: (@Composable () -> Unit)? = null,
   actions: (@Composable RowScope.() -> Unit)? = null,
-  description: @Composable (PaddingValues) -> Unit
+  description: @Composable ColumnScope.(PaddingValues) -> Unit
 ) {
   SectionContainer(
     modifier = modifier,
@@ -147,22 +147,21 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
     interactionSource = interactionSource
   ) {
     Column {
-      if (title != null || icon != null) {
+      if (title != null || icon != null)
         Row(
           verticalAlignment = Alignment.CenterVertically,
           horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start)
         ) {
           if (title != null)
-            ProvideTextStyle(MaterialTheme.typography.bodyLarge) { title() }
-
-          Spacer(Modifier.weight(1f))
+            Box(modifier = Modifier.weight(1f)) {
+              ProvideTextStyle(MaterialTheme.typography.bodyLarge) { title() }
+            }
 
           if (icon != null)
             CompositionLocalProvider(LocalContentColor provides colors.iconColor) {
               icon()
             }
         }
-      }
 
       ProvideContentColorTextStyle(
         LocalContentColor.current.copy(alpha = ContentAlpha.Medium),

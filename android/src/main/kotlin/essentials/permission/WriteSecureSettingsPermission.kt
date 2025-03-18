@@ -151,11 +151,7 @@ class WriteSecureSettingsScreen(
             )
           },
           description = { textPadding ->
-            AnimatedVisibility(
-              visible = isCurrentStep,
-              enter = fadeIn() + expandVertically(),
-              exit = fadeOut() + shrinkVertically()
-            ) {
+            AnimatedVisibility(visible = isCurrentStep) {
               Column(modifier = Modifier.padding(textPadding)) {
                 ProvideContentColorTextStyle(
                   LocalContentColor.current.copy(alpha = ContentAlpha.Medium),
