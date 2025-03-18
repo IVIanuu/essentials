@@ -69,8 +69,6 @@ sealed interface LoadingOrder<T : Any> {
 
     data class Combined<T : Any>(val a: Topological<T>, val b: Topological<T>) : Topological<T>
 
-    operator fun plus(other: Topological<T>) = Combined(this, other)
-
     fun <S : Any> before(key: KClass<S> = inject) = Combined(this, Before(key).cast())
 
     fun <S : Any> after(key: KClass<S> = inject) = Combined(this, After(key).cast())
