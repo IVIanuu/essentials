@@ -8,6 +8,7 @@ package essentials.resource
 
 import androidx.compose.runtime.*
 import arrow.core.*
+import com.github.michaelbull.result.*
 import kotlinx.coroutines.flow.*
 
 @Stable sealed interface Resource<out T> {
@@ -71,9 +72,9 @@ fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Uni
     }
   }
 
-fun <V> Either<Throwable, V>.toResource(): Resource<V> = fold(
-  ifRight = { it.success() },
-  ifLeft = { it.error() }
+fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
+  success = { it.success() },
+  failure = { it.error() }
 )
 
 fun <T> Resource<T>.printErrors() = apply {
