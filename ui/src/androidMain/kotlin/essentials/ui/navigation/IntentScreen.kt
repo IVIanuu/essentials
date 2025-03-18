@@ -4,7 +4,6 @@ import android.content.*
 import androidx.activity.*
 import androidx.activity.result.*
 import androidx.activity.result.contract.*
-import arrow.core.*
 import com.github.michaelbull.result.*
 import essentials.*
 import essentials.app.*
@@ -35,7 +34,7 @@ typealias launchUi = suspend () -> launchUiResult
   launchUi: launchUi,
   coroutineContexts: CoroutineContexts,
   intentFactories: () -> Map<KClass<IntentScreen>, (IntentScreen) -> Intent>
-): ScreenInterceptorResult<Either<Throwable, ActivityResult>> {
+): ScreenInterceptorResult<Result<ActivityResult, Throwable>> {
   if (screen !is IntentScreen) return null
   val intentFactory = intentFactories()[screen::class]
     ?: return null
@@ -43,17 +42,17 @@ typealias launchUi = suspend () -> launchUiResult
   return {
     val activity = launchUi().service<ComponentActivity>()
     withContext(coroutineContexts.main) {
-      suspendCancellableCoroutine<Either<Throwable, ActivityResult>> { continuation ->
+      suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
         val launcher = activity.activityResultRegistry.register(
           UUID.randomUUID().toString(),
           ActivityResultContracts.StartActivityForResult()
         ) {
-          continuation.resume(it.right())
+          continuation.resume(it.ok())
         }
         try {
           launcher.launch(intent)
         } catch (e: ActivityNotFoundException) {
-          continuation.resume(e.left())
+          continuation.resume(e.err())
         }
         continuation.invokeOnCancellation { launcher.unregister() }
       }
