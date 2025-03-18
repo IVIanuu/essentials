@@ -109,9 +109,10 @@ class WriteSecureSettingsScreen(
       item {
         SectionAlert(
           sectionType = SectionType.SINGLE,
-          containerColor = MaterialTheme.colorScheme.secondaryContainer,
-          contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-          text = {
+          colors = SectionDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+          ),
+          description = {
             Text(
               """
                 The WRITE_SECURE_SETTINGS permission can be granted directly from your PC browser!  
@@ -126,8 +127,8 @@ class WriteSecureSettingsScreen(
 
       @Composable fun SectionStep(
         step: Int,
-        title: @Composable RowScope.() -> Unit,
-        text: @Composable ColumnScope.() -> Unit,
+        title: @Composable () -> Unit,
+        text: @Composable () -> Unit,
         actions: @Composable RowScope.() -> Unit
       ) {
         val isCurrentStep = step == currentStep
@@ -145,15 +146,16 @@ class WriteSecureSettingsScreen(
             Icon(
               Icons.Default.ExpandMore,
               null,
-              modifier = Modifier
-                .weight(1f)
-                .wrapContentSize(Alignment.CenterEnd)
-                .rotate(iconRotation),
+              modifier = Modifier.rotate(iconRotation),
               tint = MaterialTheme.colorScheme.tertiary.copy(alpha = ContentAlpha.Medium)
             )
           },
-          text = { textPadding ->
-            AnimatedVisibility(isCurrentStep) {
+          description = { textPadding ->
+            AnimatedVisibility(
+              visible = isCurrentStep,
+              enter = fadeIn() + expandVertically(),
+              exit = fadeOut() + shrinkVertically()
+            ) {
               Column(modifier = Modifier.padding(textPadding)) {
                 ProvideContentColorTextStyle(
                   LocalContentColor.current.copy(alpha = ContentAlpha.Medium),

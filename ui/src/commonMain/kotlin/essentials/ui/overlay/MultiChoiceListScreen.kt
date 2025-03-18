@@ -10,7 +10,6 @@ import androidx.compose.ui.util.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
-import essentials.ui.prefs.*
 import injekt.*
 
 class MultiChoiceListScreen<T : Any>(
@@ -30,16 +29,16 @@ class MultiChoiceListScreen<T : Any>(
       Subheader { Text(context.screen.title) }
     context.screen.items.fastForEachIndexed { index, item ->
       val selected = item in selectedItems
-      SwitchListItem(
+      SectionSwitch(
         sectionType = sectionTypeOf(index, context.screen.items.size),
-        value = selected,
-        onValueChange = {
+        checked = selected,
+        onCheckedChange = {
           val newSelectedItems = selectedItems.toMutableSet()
           if (!selected) newSelectedItems += item
           else newSelectedItems -= item
           selectedItems = newSelectedItems
         },
-        headlineContent = { Text(context.screen.renderable.render(item)) }
+        title = { Text(context.screen.renderable.render(item)) }
       )
     }
   }

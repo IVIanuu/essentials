@@ -66,22 +66,17 @@ class PermissionRequestScreen(
           modifier = Modifier.animateItem(),
           sectionType = sectionTypeOf(index, permissionsToGrant.size),
           title = { Text(permission.title) },
-          text = { Text(permission.desc, modifier = Modifier.padding(it)) },
+          description = { Text(permission.desc, modifier = Modifier.padding(it)) },
           icon = { permission.icon?.invoke() },
           actions = {
-            Button(
-              colors = ButtonDefaults.buttonColors(
-                MaterialTheme.colorScheme.onTertiary.copy(ContentAlpha.Medium),
-                MaterialTheme.colorScheme.tertiary.copy(ContentAlpha.Medium)
+            TextButton(
+              colors = ButtonDefaults.textButtonColors(
+                contentColor = LocalContentColor.current
               ),
               onClick = action { popWithResult(false) }
             ) { Text("Deny") }
 
             Button(
-              colors = ButtonDefaults.buttonColors(
-                MaterialTheme.colorScheme.tertiary,
-                MaterialTheme.colorScheme.onTertiary
-              ),
               onClick = scopedAction {
                 requestHandlers[keysByPermission[permission]!!]!!(permission)
                 permissionRefreshes.emit(Unit)

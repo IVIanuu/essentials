@@ -49,8 +49,8 @@ class AppPickerScreen(
           SectionListItem(
             sectionType = sectionTypeOf(index, apps.size),
             onClick = scopedAction { popWithResult(app) },
-            headlineContent = { Text(app.appName) },
-            leadingContent = {
+            title = { Text(app.appName) },
+            leading = {
               AsyncImage(
                 modifier = Modifier.size(40.dp),
                 model = AppIcon(packageName = app.packageName),

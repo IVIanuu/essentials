@@ -90,9 +90,9 @@ import injekt.*
   SectionListItem(
     onClick = onClick,
     sectionType = sectionTypeOf(index, itemCount),
-    headlineContent = { Text(item.title) },
-    supportingContent = { Text(Strings.Text) },
-    trailingContent = {
+    title = { Text(item.title) },
+    description = { Text(Strings.Text) },
+    trailing = {
       Box(
         modifier = with(LocalScreenAnimationScope.current) {
           Modifier

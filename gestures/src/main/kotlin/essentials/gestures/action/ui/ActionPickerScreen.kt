@@ -78,14 +78,14 @@ class ActionPickerScreen(
               }
               popWithResult(result)
             },
-            leadingContent = { item.Icon(Modifier.size(24.dp)) },
-            trailingContent = if (item.settingsScreen == null) null
+            leading = { item.Icon(Modifier.size(24.dp)) },
+            trailing = if (item.settingsScreen == null) null
             else ({
               IconButton(onClick = scopedAction { navigator().push(item.settingsScreen!!) }) {
                 Icon(Icons.Default.Settings, null)
               }
             }),
-            headlineContent = { Text(item.title) }
+            title = { Text(item.title) }
           )
         }
       }

@@ -33,7 +33,7 @@ class SingleChoiceListScreen<T : Any>(
         sectionType = sectionTypeOf(index, screen.items.size),
         selected = item == selected,
         onClick = { selected = item },
-        headlineContent = { Text(screen.renderable.render(item)) }
+        title = { Text(screen.renderable.render(item)) }
       )
     }
   }

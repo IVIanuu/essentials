@@ -4,8 +4,6 @@
 
 package essentials.sample.ui
 
-import androidx.compose.material.icons.*
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -17,7 +15,6 @@ import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import essentials.ui.overlay.*
-import essentials.ui.prefs.*
 import injekt.*
 import kotlinx.serialization.*
 
@@ -33,14 +30,13 @@ class PrefsScreen : Screen<Unit>
   EsScaffold(topBar = { EsAppBar { Text("Prefs") } }) {
     EsLazyColumn {
       item {
-        SwitchListItem(
-          value = prefs.switch,
-          sectionType = SectionType.SINGLE,
-          onValueChange = action { value ->
+        SectionSwitch(
+          checked = prefs.switch,
+          onCheckedChange = action { value ->
             pref.updateData { it.copy(switch = value) }
           },
-          leadingContent = { Icon(Icons.Default.ThumbUp, null) },
-          headlineContent = { Text("Switch") }
+          sectionType = SectionType.SINGLE,
+          title = { Text("Switch") }
         )
       }
 
@@ -49,7 +45,7 @@ class PrefsScreen : Screen<Unit>
       }
 
       item {
-        SliderListItem(
+        SectionSlider(
           sectionType = SectionType.FIRST,
           value = prefs.slider,
           onValueChangeFinished = action { value ->
@@ -63,7 +59,7 @@ class PrefsScreen : Screen<Unit>
       }
 
       item {
-        SliderListItem(
+        SectionSlider(
           sectionType = SectionType.LAST,
           value = prefs.steppedSlider,
           onValueChangeFinished = action { value ->
@@ -97,16 +93,15 @@ class PrefsScreen : Screen<Unit>
             ) ?: return@scopedAction
             pref.updateData { it.copy(textInput = newTextInput) }
           },
-          headlineContent = { Text("Text input") },
-          supportingContent = { Text("This is a text input preference") }
+          title = { Text("Text input") },
+          description = { Text("This is a text input preference") }
         )
       }
 
       item {
-        ColorListItem(
+        SectionListItem(
           sectionType = SectionType.LAST,
-          value = prefs.color,
-          onValueChangeRequest = action {
+          onClick = action {
             val newColor = navigator().push(
               ColorPickerScreen(
                 initialColor = prefs.color,
@@ -116,8 +111,9 @@ class PrefsScreen : Screen<Unit>
             pref.updateData { it.copy(color = newColor) }
           },
           modifier = Modifier.interactive(prefs.switch),
-          headlineContent = { Text("Color") },
-          supportingContent = { Text("This is a color preference") }
+          title = { Text("Color") },
+          description = { Text("This is a color preference") },
+          leading = { ColorIcon(prefs.color) }
         )
       }
 
@@ -154,32 +150,6 @@ class PrefsScreen : Screen<Unit>
             )?.let { selected = it }
           }
         ) { Text("Multi choice") }
-      }
-
-      item {
-        val primaryColor = MaterialTheme.colorScheme.primary
-        var currentColor by remember { mutableStateOf(primaryColor) }
-        Button(
-          onClick = action {
-            navigator().push(
-              ColorPickerScreen(initialColor = currentColor)
-            )?.let { currentColor = it }
-          }
-        ) { Text("Color choice") }
-      }
-
-      item {
-        var current by remember { mutableStateOf("") }
-        Button(
-          onClick = action {
-            navigator().push(
-              TextInputScreen(
-                label = "text...",
-                initial = current
-              )
-            )?.let { current = it }
-          }
-        ) { Text("Text") }
       }
     }
   }

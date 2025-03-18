@@ -11,13 +11,12 @@ import androidx.compose.runtime.*
 import com.github.michaelbull.result.*
 import essentials.*
 import essentials.compose.*
-import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import essentials.util.*
 import injekt.*
 
-class BackupAndRestoreScreen : Screen<Unit>
+class BackupAndRestoreScreen : OverlayScreen<Unit>
 
 @Provide @Composable fun BackupAndRestoreUi(
   createBackup: createBackup,
@@ -25,36 +24,33 @@ class BackupAndRestoreScreen : Screen<Unit>
   context: ScreenContext<BackupAndRestoreScreen> = inject,
   showToast: showToast,
 ): Ui<BackupAndRestoreScreen> {
-  EsScaffold(topBar = { EsAppBar { Text("Backup/Restore") } }) {
-    EsLazyColumn {
-      item {
-        EsListItem(
-          onClick = scopedAction {
-            catch { createBackup() }
-              .onFailure {
-                it.printStackTrace()
-                showToast("Failed to backup your data!")
-              }
-          },
-          leadingContent = { Icon(Icons.Default.Save, null) },
-          headlineContent = { Text("Backup") },
-          supportingContent = { Text("Export your data") }
-        )
-      }
-      item {
-        EsListItem(
-          onClick = scopedAction {
-            catch { restoreBackup() }
-              .onFailure {
-                it.printStackTrace()
-                showToast("Failed to restore your data!")
-              }
-          },
-          leadingContent = { Icon(Icons.Default.Restore, null) },
-          headlineContent = { Text("Restore") },
-          supportingContent = { Text("Restore your data") }
-        )
-      }
-    }
+  EsModalBottomSheet {
+    Subheader { Text("Backup/Restore") }
+
+    SectionListItem(
+      sectionType = SectionType.FIRST,
+      onClick = scopedAction {
+        catch { createBackup() }
+          .onFailure {
+            it.printStackTrace()
+            showToast("Failed to backup your data!")
+          }
+      },
+      title = { Text("Export your data") },
+      trailing = { Icon(Icons.Default.Save, null) }
+    )
+
+    SectionListItem(
+      sectionType = SectionType.LAST,
+      onClick = scopedAction {
+        catch { restoreBackup() }
+          .onFailure {
+            it.printStackTrace()
+            showToast("Failed to restore your data!")
+          }
+      },
+      title = { Text("Restore your data") },
+      trailing = { Icon(Icons.Default.Restore, null) }
+    )
   }
 }

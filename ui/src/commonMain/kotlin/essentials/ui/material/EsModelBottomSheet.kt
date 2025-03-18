@@ -20,8 +20,14 @@ import injekt.*
   contentColor: Color = contentColorFor(containerColor),
   tonalElevation: Dp = 0.dp,
   scrimColor: Color = BottomSheetDefaults.ScrimColor,
-  dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
+  dragHandle: @Composable (() -> Unit)? = {
+    BottomSheetDefaults.DragHandle(
+      color = MaterialTheme.colorScheme.onSurfaceVariant
+        .copy(alpha = ContentAlpha.Medium)
+    )
+  },
   contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
+  contentPadding: PaddingValues = PaddingValues(8.dp),
   properties: ModalBottomSheetProperties = ModalBottomSheetDefaults.properties,
   onDismissRequest: onBottomSheetDismissRequest = inject,
   content: @Composable ColumnScope.() -> Unit,
@@ -29,7 +35,7 @@ import injekt.*
   val registry = LocalSaveableStateRegistry.current
   ModalBottomSheet(
     onDismissRequest = action(block = onDismissRequest),
-    modifier = modifier.statusBarsPadding(),
+    modifier = modifier,
     sheetState = sheetState,
     sheetMaxWidth = sheetMaxWidth,
     shape = shape,
@@ -41,8 +47,10 @@ import injekt.*
     contentWindowInsets = contentWindowInsets,
     properties = properties
   ) {
-    CompositionLocalProvider(LocalSaveableStateRegistry provides registry) {
-      content()
+    Column(modifier = Modifier.padding(contentPadding)) {
+      CompositionLocalProvider(LocalSaveableStateRegistry provides registry) {
+        content()
+      }
     }
   }
 }

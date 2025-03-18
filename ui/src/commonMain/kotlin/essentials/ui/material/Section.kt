@@ -11,13 +11,29 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
+import essentials.*
+import essentials.coroutines.*
 import essentials.ui.common.*
+import injekt.*
+import kotlinx.coroutines.*
+import kotlin.time.Duration.Companion.seconds
 
 object SectionDefaults {
-  @Composable fun containerColor(selected: Boolean, focused: Boolean, tone: Tone) =
-    essentials.ui.material.containerColor(selected, focused, tone)
+  @Composable fun colors(
+    selected: Boolean = false,
+    focused: Boolean = false,
+    tone: Tone = Tone.NEUTRAL
+  ) = SectionColors(
+    containerColor = containerColor(selected, focused, tone),
+    contentColor = sectionTextColorForTone(selected, tone),
+    iconColor = iconColor(tone, selected)
+  )
 
-  @Composable fun contentColor(selected: Boolean, tone: Tone) = sectionTextColorForTone(selected, tone)
+  @Composable fun colors(
+    containerColor: Color,
+    contentColor: Color = guessingContentColorFor(containerColor),
+    iconColor: Color = MaterialTheme.colorScheme.tertiary
+  ) = SectionColors(containerColor, contentColor, iconColor)
 
   @Composable fun shape(sectionType: SectionType): Shape {
     val topCorners = if (sectionType.first) 28.dp else 8.dp
@@ -30,43 +46,49 @@ object SectionDefaults {
     )
   }
 
-  fun padding(sectionType: SectionType) = PaddingValues(
-    start = 16.dp,
-    end = 16.dp,
-    top = if (sectionType.first) 16.dp else 2.dp,
-    bottom = if (sectionType.last) 16.dp else 2.dp
-  )
-
-  val contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp)
-
-  @Composable fun extraContentPadding(selected: Boolean) = PaddingValues(
-    vertical = animateDpAsState(if (selected) 8.dp else 0.dp).value
+  @Composable fun padding(sectionType: SectionType, selected: Boolean) = SectionPadding(
+    padding = PaddingValues(
+      start = 16.dp,
+      end = 16.dp,
+      top = if (sectionType.first) 16.dp else 2.dp,
+      bottom = if (sectionType.last) 16.dp else 2.dp
+    ),
+    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
+    extraContentPadding = {
+      PaddingValues(
+        vertical = animateDpAsState(if (selected) 8.dp else 0.dp).value
+      )
+    }
   )
 }
+
+data class SectionColors(val containerColor: Color, val contentColor: Color, val iconColor: Color)
+
+data class SectionPadding(
+  val padding: PaddingValues,
+  val contentPadding: PaddingValues,
+  val extraContentPadding: @Composable () -> PaddingValues
+)
 
 @Composable fun SectionContainer(
   modifier: Modifier = Modifier,
   sectionType: SectionType = SectionType.MIDDLE,
   selected: Boolean = false,
   focused: Boolean = false,
-  tone: Tone = Tone.NEUTRAL,
-  containerColor: Color = SectionDefaults.containerColor(selected, focused, tone),
-  contentColor: Color = SectionDefaults.contentColor(selected, tone),
+  colors: SectionColors = SectionDefaults.colors(selected, focused),
   shape: Shape = SectionDefaults.shape(sectionType),
-  padding: PaddingValues = SectionDefaults.padding(sectionType),
-  contentPadding: PaddingValues = SectionDefaults.contentPadding,
-  extraContentPadding: PaddingValues = SectionDefaults.extraContentPadding(selected),
+  padding: SectionPadding = SectionDefaults.padding(sectionType, selected),
   onClick: (() -> Unit)? = null,
   onLongClick: (() -> Unit)? = null,
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   content: @Composable () -> Unit
 ) {
-  val currentContainerColor by animateColorAsState(containerColor)
-  val currentContentColor by animateColorAsState(contentColor)
+  val currentContainerColor by animateColorAsState(colors.containerColor)
+  val currentContentColor by animateColorAsState(colors.contentColor)
   Surface(
     color = currentContainerColor,
     contentColor = currentContentColor,
-    modifier = modifier.padding(padding),
+    modifier = modifier.padding(padding.padding),
     shape = shape
   ) {
     Box(
@@ -80,8 +102,8 @@ object SectionDefaults {
             indication = ripple()
           )
         )
-        .padding(contentPadding)
-        .padding(extraContentPadding)
+        .padding(padding.contentPadding)
+        .padding(padding.extraContentPadding())
     ) { content() }
   }
 }
@@ -101,33 +123,25 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
   sectionType: SectionType = SectionType.MIDDLE,
   selected: Boolean = false,
   focused: Boolean = false,
-  tone: Tone = Tone.NEUTRAL,
-  containerColor: Color = SectionDefaults.containerColor(selected, focused, tone),
-  contentColor: Color = SectionDefaults.contentColor(selected, tone),
+  colors: SectionColors = SectionDefaults.colors(selected, focused),
   shape: Shape = SectionDefaults.shape(sectionType),
-  padding: PaddingValues = SectionDefaults.padding(sectionType),
-  contentPadding: PaddingValues = SectionDefaults.contentPadding,
-  extraContentPadding: PaddingValues = SectionDefaults.extraContentPadding(selected),
+  padding: SectionPadding = SectionDefaults.padding(sectionType, selected),
   onClick: (() -> Unit)? = null,
   onLongClick: (() -> Unit)? = null,
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  title: (@Composable RowScope.() -> Unit)? = null,
-  icon: (@Composable RowScope.() -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  icon: (@Composable () -> Unit)? = null,
   actions: (@Composable RowScope.() -> Unit)? = null,
-  text: @Composable ColumnScope.(PaddingValues) -> Unit
+  description: @Composable (PaddingValues) -> Unit
 ) {
   SectionContainer(
     modifier = modifier,
     sectionType = sectionType,
     selected = selected,
     focused = focused,
-    tone = tone,
-    containerColor = containerColor,
-    contentColor = contentColor,
+    colors = colors,
     shape = shape,
     padding = padding,
-    contentPadding = contentPadding,
-    extraContentPadding = extraContentPadding,
     onClick = onClick,
     onLongClick = onLongClick,
     interactionSource = interactionSource
@@ -144,7 +158,9 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
           Spacer(Modifier.weight(1f))
 
           if (icon != null)
-            icon()
+            CompositionLocalProvider(LocalContentColor provides colors.iconColor) {
+              icon()
+            }
         }
       }
 
@@ -152,7 +168,7 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
         LocalContentColor.current.copy(alpha = ContentAlpha.Medium),
         MaterialTheme.typography.bodyMedium
       ) {
-        text(PaddingValues(
+        description(PaddingValues(
           top = if (title != null) 8.dp else 0.dp,
           bottom = if (actions != null) 8.dp else 0.dp
         ))
@@ -170,44 +186,194 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
 }
 
 @Composable fun SectionListItem(
-  headlineContent: @Composable () -> Unit,
   modifier: Modifier = Modifier,
   sectionType: SectionType = SectionType.MIDDLE,
   selected: Boolean = false,
+  focused: Boolean = false,
+  colors: SectionColors = SectionDefaults.colors(selected, focused),
+  shape: Shape = SectionDefaults.shape(sectionType),
+  padding: SectionPadding = SectionDefaults.padding(sectionType, selected),
   onClick: (() -> Unit)? = null,
-  supportingContent: (@Composable () -> Unit)? = null,
-  leadingContent: (@Composable () -> Unit)? = null,
-  trailingContent: (@Composable () -> Unit)? = null,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+  onLongClick: (() -> Unit)? = null,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  title: (@Composable () -> Unit)? = null,
+  description: (@Composable () -> Unit)? = null,
+  leading: (@Composable () -> Unit)? = null,
+  trailing: (@Composable () -> Unit)? = null
 ) {
   SectionContainer(
     modifier = modifier,
     sectionType = sectionType,
     selected = selected,
+    focused = focused,
+    colors = colors,
+    shape = shape,
+    padding = padding,
     onClick = onClick,
+    onLongClick = onLongClick,
     interactionSource = interactionSource
   ) {
-    EsListItem(
-      contentPadding = PaddingValues(0.dp),
-      headlineContent = headlineContent,
-      supportingContent = supportingContent,
-      leadingContent = leadingContent?.let {
-        {
-          CompositionLocalProvider(
-            LocalContentColor provides MaterialTheme.colorScheme.secondary,
-            content = leadingContent
-          )
-        }
-      },
-      trailingContent = trailingContent?.let {
-        {
-          CompositionLocalProvider(
-            LocalContentColor provides MaterialTheme.colorScheme.secondary,
-            content = trailingContent
-          )
-        }
-      },
-      interactionSource = interactionSource
-    )
+    Row(
+      horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      if (leading != null)
+        ProvideContentColorTextStyle(
+          contentColor = colors.iconColor,
+          textStyle = MaterialTheme.typography.labelMedium
+        ) { leading() }
+
+      Column(
+        modifier = Modifier
+          .weight(1f)
+          .align(Alignment.CenterVertically),
+        verticalArrangement = Arrangement.Center
+      ) {
+        if (title != null)
+          ProvideContentColorTextStyle(
+            contentColor = colors.contentColor,
+            textStyle = MaterialTheme.typography.bodyLarge
+          ) { title() }
+        if (description != null)
+          ProvideContentColorTextStyle(
+            contentColor = colors.contentColor.copy(alpha = ContentAlpha.Medium),
+            textStyle = MaterialTheme.typography.bodyMedium
+          ) { description() }
+      }
+
+      if (trailing != null)
+        ProvideContentColorTextStyle(
+          contentColor = colors.iconColor,
+          textStyle = MaterialTheme.typography.labelMedium
+        ) { trailing() }
+    }
   }
+}
+
+@Composable fun SectionSwitch(
+  checked: Boolean,
+  onCheckedChange: (Boolean) -> Unit,
+  modifier: Modifier = Modifier,
+  sectionType: SectionType = SectionType.MIDDLE,
+  colors: SectionColors = SectionDefaults.colors(false),
+  shape: Shape = SectionDefaults.shape(sectionType),
+  padding: SectionPadding = SectionDefaults.padding(sectionType, false),
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  title: (@Composable () -> Unit)? = null,
+  description: (@Composable () -> Unit)? = null,
+  leading: (@Composable () -> Unit)? = null
+) {
+  SectionListItem(
+    modifier = modifier,
+    sectionType = sectionType,
+    colors = colors,
+    shape = shape,
+    padding = padding,
+    interactionSource = interactionSource,
+
+    onClick = { onCheckedChange(!checked) },
+    title = title,
+    description = description,
+    leading = leading,
+    trailing = {
+      Switch(
+        checked = checked,
+        onCheckedChange = null,
+        interactionSource = interactionSource
+      )
+    }
+  )
+}
+
+@Composable fun <T : Comparable<T>> SectionSlider(
+  value: T,
+  headlineContent: @Composable () -> Unit,
+  modifier: Modifier = Modifier,
+  sectionType: SectionType = SectionType.MIDDLE,
+
+  onValueChange: ((T) -> Unit)? = null,
+  onValueChangeFinished: ((T) -> Unit)? = null,
+  stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
+  leadingContent: (@Composable () -> Unit)? = null,
+  trailingContent: @Composable ((T) -> Unit)? = { Text(it.toString()) },
+  lerper: Lerper<T> = inject,
+  valueRange: @DefaultSliderRange ClosedRange<T> = inject,
+) {
+  var internalValue: T? by remember { mutableStateOf(null) }
+  var internalValueEraseJob: Job? by remember { mutableStateOf(null) }
+
+  SectionListItem(
+    modifier = modifier,
+    sectionType = sectionType,
+    title = headlineContent,
+    description = {
+      @Provide val scope = rememberCoroutineScope()
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
+          EsSlider(
+            modifier = Modifier
+              .padding(end = 16.dp)
+              .weight(1f),
+            value = internalValue ?: value,
+            onValueChange = { newValue ->
+              internalValue = newValue
+              internalValueEraseJob?.cancel()
+              onValueChange?.invoke(stepPolicy.stepValue(internalValue!!, valueRange))
+            },
+            onValueChangeFinished = { newValue ->
+              onValueChangeFinished?.invoke(stepPolicy.stepValue(newValue, valueRange))
+              internalValueEraseJob?.cancel()
+              internalValueEraseJob = launch {
+                delay(1.seconds)
+                internalValue = null
+              }
+            },
+            stepPolicy = stepPolicy,
+            valueRange = valueRange,
+            colors = SliderDefaults.colors(
+              thumbColor = MaterialTheme.colorScheme.tertiary,
+              activeTrackColor = MaterialTheme.colorScheme.tertiary,
+              inactiveTrackColor = MaterialTheme.colorScheme.tertiary.copy(0.2f),
+            )
+          )
+        }
+
+        if (trailingContent != null)
+          Box(
+            modifier = Modifier.widthIn(min = 96.dp),
+            contentAlignment = Alignment.TopEnd
+          ) {
+            ProvideContentColorTextStyle(
+              contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+              textStyle = MaterialTheme.typography.headlineLarge
+            ) {
+              trailingContent(stepPolicy.stepValue(internalValue ?: value, valueRange))
+            }
+          }
+      }
+    },
+    leading = leadingContent
+  )
+}
+
+@Composable fun <T> SectionSlider(
+  value: T,
+  values: List<T>,
+  modifier: Modifier = Modifier,
+  onValueChange: ((T) -> Unit)? = null,
+  onValueChangeFinished: ((T) -> Unit)? = null,
+  headlineContent: @Composable () -> Unit,
+  leadingContent: (@Composable () -> Unit)? = null,
+  trailingContent: @Composable ((T) -> Unit)? = { Text(it.toString()) }
+) {
+  SectionSlider(
+    value = values.indexOf(value),
+    modifier = modifier,
+    valueRange = 0..values.lastIndex,
+    onValueChange = onValueChange?.let { { onValueChange(values[it]) } },
+    onValueChangeFinished = onValueChangeFinished?.let { { onValueChangeFinished(values[it]) } },
+    headlineContent = headlineContent,
+    leadingContent = leadingContent,
+    trailingContent = trailingContent?.let { { trailingContent(values[it]) } }
+  )
 }

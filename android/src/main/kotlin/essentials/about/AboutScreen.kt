@@ -33,9 +33,9 @@ class AboutScreen(
       item {
         SectionListItem(
           sectionType = SectionType.FIRST,
-          headlineContent = { Text("Version") },
-          supportingContent = { Text(appConfig.versionName) },
-          trailingContent = { Icon(Icons.Default.Info, null) }
+          title = { Text("Version") },
+          description = { Text(appConfig.versionName) },
+          trailing = { Icon(Icons.Default.Info, null) }
         )
       }
 
@@ -44,9 +44,9 @@ class AboutScreen(
           onClick = scopedAction {
             navigator().push(PlayStoreAppDetailsKey(appConfig.packageName))
           },
-          headlineContent = { Text("Rate") },
-          supportingContent = { Text("I'll be happy if you give me 5 stars") },
-          trailingContent = { Icon(Icons.Default.Star, null) }
+          title = { Text("Rate") },
+          description = { Text("I'll be happy if you give me 5 stars") },
+          trailing = { Icon(Icons.Default.Star, null) }
         )
       }
 
@@ -56,8 +56,8 @@ class AboutScreen(
             onClick = scopedAction {
               navigator().push(context.screen.donationScreen!!)
             },
-            headlineContent = { Text("Donate") },
-            trailingContent = { Icon(Icons.Default.Favorite, null) }
+            title = { Text("Donate") },
+            trailing = { Icon(Icons.Default.Favorite, null) }
           )
         }
 
@@ -66,9 +66,9 @@ class AboutScreen(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
           },
-          headlineContent = { Text("More apps") },
-          supportingContent = { Text("Check out my other apps on Google Play") },
-          trailingContent = { Icon(Icons.Default.ShoppingBag, null) }
+          title = { Text("More apps") },
+          description = { Text("Check out my other apps on Google Play") },
+          trailing = { Icon(Icons.Default.ShoppingBag, null) }
         )
       }
 
@@ -77,11 +77,11 @@ class AboutScreen(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
           },
-          headlineContent = { Text("Reddit") },
-          supportingContent = {
+          title = { Text("Reddit") },
+          description = {
             Text("If you need help or have questions, my subreddit is a good place to go")
           },
-          trailingContent = {
+          trailing = {
             Icon(
               imageVector = FontAwesomeIcons.Brands.RedditAlien,
               modifier = Modifier.size(24.dp),
@@ -96,9 +96,9 @@ class AboutScreen(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://github.com/IVIanuu"))
           },
-          headlineContent = { Text("Github") },
-          supportingContent = { Text("Check out my work on Github") },
-          trailingContent = {
+          title = { Text("Github") },
+          description = { Text("Check out my work on Github") },
+          trailing = {
             Icon(
               imageVector = FontAwesomeIcons.Brands.Github,
               modifier = Modifier.size(24.dp),
@@ -113,9 +113,9 @@ class AboutScreen(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://twitter.com/IVIanuu"))
           },
-          headlineContent = { Text("Twitter") },
-          supportingContent = { Text("Follow me on Twitter") },
-          trailingContent = {
+          title = { Text("Twitter") },
+          description = { Text("Follow me on Twitter") },
+          trailing = {
             Icon(
               imageVector = FontAwesomeIcons.Brands.Twitter,
               modifier = Modifier.size(24.dp),
@@ -141,9 +141,9 @@ class AboutScreen(
                 .asScreen()
             )
           },
-          headlineContent = { Text("Send feedback") },
-          supportingContent = { Text(email) },
-          trailingContent = { Icon(Icons.Default.Email, null) }
+          title = { Text("Send feedback") },
+          description = { Text(email) },
+          trailing = { Icon(Icons.Default.Email, null) }
         )
       }
 
@@ -154,8 +154,8 @@ class AboutScreen(
             onClick = scopedAction {
               navigator().push(UrlScreen(context.screen.privacyPolicyUrl!!))
             },
-            headlineContent = { Text("Privacy policy") },
-            trailingContent = { Icon(Icons.Default.Policy, null) }
+            title = { Text("Privacy policy") },
+            trailing = { Icon(Icons.Default.Policy, null) }
           )
         }
     }

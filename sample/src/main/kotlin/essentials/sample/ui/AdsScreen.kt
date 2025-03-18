@@ -11,7 +11,6 @@ import essentials.compose.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
-import essentials.ui.prefs.*
 import injekt.*
 
 @Provide val adsHomeItem = HomeItem("Ads") { AdsScreen() }
@@ -25,10 +24,10 @@ class AdsScreen : Screen<Unit>
   EsScaffold(topBar = { EsAppBar { Text("Ads") } }) {
     EsLazyColumn {
       item {
-        SwitchListItem(
-          value = showAds,
-          onValueChange = { showAds = it },
-          headlineContent = { Text("Show ads") }
+        SectionSwitch(
+          checked = showAds,
+          onCheckedChange = { showAds = it },
+          title = { Text("Show ads") }
         )
       }
 

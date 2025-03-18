@@ -14,7 +14,6 @@ import essentials.foreground.*
 import essentials.sample.R
 import essentials.ui.material.*
 import essentials.ui.navigation.*
-import essentials.ui.prefs.*
 import essentials.util.*
 import injekt.*
 import kotlinx.coroutines.channels.*
@@ -95,10 +94,10 @@ class ForegroundScreen : Screen<Unit>
         Text(if (isSecondEnabled) "Stop foreground2" else "Start foreground2")
       }
 
-      SwitchListItem(
-        value = removeNotification,
-        onValueChange = { removeNotification = it },
-        headlineContent = { Text("Remove notification") }
+      SectionSwitch(
+        checked = removeNotification,
+        onCheckedChange = { removeNotification = it },
+        title = { Text("Remove notification") }
       )
     }
   }

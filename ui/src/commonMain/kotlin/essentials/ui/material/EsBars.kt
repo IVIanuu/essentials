@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import essentials.compose.*
 import essentials.ui.navigation.*
@@ -42,6 +43,24 @@ val LocalAppBarScrollBehaviorProvider = compositionLocalOf<@Composable () -> Top
 }
 
 val LocalAppBarScrollBehavior = compositionLocalOf<TopAppBarScrollBehavior?> { null }
+
+@Composable fun EsNavigationBar(
+  modifier: Modifier = Modifier,
+  containerColor: Color = NavigationBarDefaults.containerColor,
+  contentColor: Color = MaterialTheme.colorScheme.contentColorFor(containerColor),
+  tonalElevation: Dp = NavigationBarDefaults.Elevation,
+  windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
+  content: @Composable RowScope.() -> Unit
+) {
+  NavigationBar(
+    modifier,
+    containerColor,
+    contentColor,
+    tonalElevation,
+    windowInsets,
+    content
+  )
+}
 
 @Tag typealias NavigationIcon = @Composable () -> Unit
 @Provide fun defaultNavigationIcon(navigator: Navigator, screen: Screen<*>): NavigationIcon = {
