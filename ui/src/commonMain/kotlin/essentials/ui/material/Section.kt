@@ -18,6 +18,44 @@ import injekt.*
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
+@Composable fun SectionContainer(
+  modifier: Modifier = Modifier,
+  sectionType: SectionType = SectionType.MIDDLE,
+  selected: Boolean = false,
+  focused: Boolean = false,
+  colors: SectionColors = SectionDefaults.colors(selected, focused),
+  shape: Shape = SectionDefaults.shape(sectionType),
+  padding: SectionPadding = SectionDefaults.padding(sectionType, selected),
+  onClick: (() -> Unit)? = null,
+  onLongClick: (() -> Unit)? = null,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  content: @Composable () -> Unit
+) {
+  val currentContainerColor by animateColorAsState(colors.containerColor)
+  val currentContentColor by animateColorAsState(colors.contentColor)
+  Surface(
+    color = currentContainerColor,
+    contentColor = currentContentColor,
+    modifier = modifier.padding(padding.padding),
+    shape = shape
+  ) {
+    Box(
+      modifier = Modifier
+        .then(
+          if (onClick == null) Modifier
+          else Modifier.combinedClickable(
+            onClick = onClick,
+            onLongClick = onLongClick,
+            interactionSource = interactionSource,
+            indication = ripple()
+          )
+        )
+        .padding(padding.contentPadding)
+        .padding(padding.extraContentPadding())
+    ) { content() }
+  }
+}
+
 object SectionDefaults {
   @Composable fun colors(
     selected: Boolean = false,
@@ -69,44 +107,6 @@ data class SectionPadding(
   val contentPadding: PaddingValues,
   val extraContentPadding: @Composable () -> PaddingValues
 )
-
-@Composable fun SectionContainer(
-  modifier: Modifier = Modifier,
-  sectionType: SectionType = SectionType.MIDDLE,
-  selected: Boolean = false,
-  focused: Boolean = false,
-  colors: SectionColors = SectionDefaults.colors(selected, focused),
-  shape: Shape = SectionDefaults.shape(sectionType),
-  padding: SectionPadding = SectionDefaults.padding(sectionType, selected),
-  onClick: (() -> Unit)? = null,
-  onLongClick: (() -> Unit)? = null,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  content: @Composable () -> Unit
-) {
-  val currentContainerColor by animateColorAsState(colors.containerColor)
-  val currentContentColor by animateColorAsState(colors.contentColor)
-  Surface(
-    color = currentContainerColor,
-    contentColor = currentContentColor,
-    modifier = modifier.padding(padding.padding),
-    shape = shape
-  ) {
-    Box(
-      modifier = Modifier
-        .then(
-          if (onClick == null) Modifier
-          else Modifier.combinedClickable(
-            onClick = onClick,
-            onLongClick = onLongClick,
-            interactionSource = interactionSource,
-            indication = ripple()
-          )
-        )
-        .padding(padding.contentPadding)
-        .padding(padding.extraContentPadding())
-    ) { content() }
-  }
-}
 
 enum class SectionType(val first: Boolean, val last: Boolean) {
   FIRST(true, false), LAST(false, true), MIDDLE(false, false), SINGLE(true, true)

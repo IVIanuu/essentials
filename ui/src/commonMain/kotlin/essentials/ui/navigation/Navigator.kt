@@ -84,15 +84,6 @@ suspend fun <R> Navigator.push(screen: Screen<R>): R? {
   return awaitResult(screen)
 }
 
-suspend fun <R> Navigator.replaceTop(screen: Screen<R>): R? {
-  val currentBackStack = backStack
-  setBackStack(
-    currentBackStack
-      .dropLast(1) + screen
-  )
-  return awaitResult(screen)
-}
-
 suspend fun <R> Navigator.pop(screen: Screen<R>, result: R? = null) {
   setBackStack(backStack.fastFilter { it != screen }, mapOf(screen to result))
 }

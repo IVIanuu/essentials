@@ -1,37 +1,12 @@
 package essentials.ui.material
 
 import androidx.annotation.*
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import androidx.core.graphics.*
-
-fun verticalPaddingValues(first: Boolean = false, last: Boolean = false) = PaddingValues(
-  top = if (first) 10.dp else 8.dp,
-  bottom = if (last) 10.dp else 8.dp,
-  start = 22.dp,
-  end = 22.dp
-)
-
-fun horizontalPaddingValues(first: Boolean = false, last: Boolean = false) = PaddingValues(
-  start = if (first) 24.dp else 20.dp,
-  end = if (last) 24.dp else 20.dp,
-  top = 12.dp,
-  bottom = 12.dp,
-)
-
-fun marginValues(orientation: SectionOrientation, last: Boolean): PaddingValues = when (orientation) {
-  SectionOrientation.VERTICAL -> verticalMarginValues(last)
-  SectionOrientation.HORIZONTAL -> horizontalMarginValues()
-}
-
-fun verticalMarginValues(last: Boolean = false) =
-  PaddingValues(bottom = if (last) 16.dp else 2.dp, top = 2.dp)
-
-fun horizontalMarginValues() = PaddingValues(end = 5.dp, start = 0.dp)
 
 @Composable fun containerColor(selected: Boolean, focused: Boolean, tone: Tone): Color {
   return if (selected) {
@@ -97,18 +72,6 @@ fun firstLastCornersHorizontal(
     bottomEnd = endCorners
   )
 }
-
-fun firstLastCornersChip(
-  first: Boolean = false,
-  last: Boolean = false,
-  defaultCornerRadius: Dp = 5.dp,
-  pronouncedCornerRadius: Dp = 22.dp,
-) = firstLastCornersHorizontal(
-  first = first,
-  last = last,
-  defaultCornerRadius = defaultCornerRadius,
-  pronouncedCornerRadius = pronouncedCornerRadius
-)
 
 enum class Tone { NEGATIVE, WARNING, NEUTRAL, POSITIVE }
 
