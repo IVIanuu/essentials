@@ -26,6 +26,7 @@ import injekt.*
 
 class ColorPickerScreen(
   val initialColor: Color,
+  val title: String? = null,
   val colorPalette: List<Color> = DefaultColorPalette,
   val includeAlpha: Boolean = false,
 ) : OverlayScreen<Color>
@@ -41,6 +42,9 @@ class ColorPickerScreen(
   }
 
   EsModalBottomSheet(onDismissRequest = { popWithResult(currentColor) }) {
+    if (context.screen.title != null)
+      Subheader { Text(context.screen.title) }
+
     val textFieldContentColor = if (currentColor == Color.Transparent) LocalContentColor.current
     else guessingContentColorFor(currentColor)
 

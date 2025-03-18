@@ -24,7 +24,7 @@ interface AdFeature
   @Provide fun <T : OverlayScreen<*>> overlay(): AdFeatures<T> = emptyList()
 
   @Provide fun <T : CriticalUserFlowScreen<*>> criticalUserFlow(): AdFeatures<T> =
-    listOf(ScreenAdBannerFeature)
+    listOf(AppAdBannerFeature)
 
   @Provide fun <@AddOn T : Ui<S>, S : Screen<*>> binding(
     keyClass: KClass<S>,

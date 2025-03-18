@@ -8,7 +8,6 @@ import android.content.res.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
 import com.materialkolor.*
@@ -50,9 +49,26 @@ data class AppColors(
 
 @Tag typealias AppTypography = Typography
 
-@Provide @Composable fun defaultAppTypography(font: AppFont? = null): AppTypography =
-  Typography(
-    headlineLarge = TextStyle(
+@Provide @Composable fun defaultAppTypography(font: AppFont? = null): AppTypography {
+  val default = Typography()
+  return Typography(
+    titleLarge = default.titleLarge.copy(
+      fontWeight = FontWeight.Bold,
+      fontSize = 24.sp
+    ),
+
+    bodyLarge = default.bodyLarge.copy(
+      fontFamily = font,
+      fontWeight = FontWeight.Medium,
+      fontSize = 16.sp
+    ),
+    bodyMedium = default.bodyMedium.copy(
+      fontFamily = font,
+      fontWeight = FontWeight.Normal,
+      fontSize = 14.sp
+    ),
+
+    /*headlineLarge = TextStyle(
       fontFamily = font,
       fontWeight = FontWeight.SemiBold,
       fontSize = 30.sp
@@ -85,7 +101,7 @@ data class AppColors(
     bodyLarge = TextStyle(
       fontFamily = font,
       fontWeight = FontWeight.Medium,
-      fontSize = 15.sp
+      fontSize = 16.sp
     ),
     bodyMedium = TextStyle(
       fontFamily = font,
@@ -111,8 +127,9 @@ data class AppColors(
       fontFamily = font,
       fontWeight = FontWeight.Normal,
       fontSize = 16.sp
-    ),
+    ),*/
   ).withFontFamily(font)
+}
 
 fun Typography.withFontFamily(fontFamily: FontFamily?): Typography = copy(
   displayLarge = displayLarge.copy(fontFamily = fontFamily),

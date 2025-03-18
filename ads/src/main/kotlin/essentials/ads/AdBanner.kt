@@ -4,11 +4,14 @@
 
 package essentials.ads
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.viewinterop.*
 import com.google.android.gms.ads.*
@@ -19,7 +22,13 @@ import com.google.android.gms.ads.*
   }
 }
 
-@Composable fun AdBanner(config: AdBannerConfig, modifier: Modifier = Modifier) {
+@Composable fun AdBanner(
+  config: AdBannerConfig,
+  modifier: Modifier = Modifier,
+  containerColor: Color = MaterialTheme.colorScheme.surface
+) {
+  var isLoading by remember { mutableStateOf(true) }
+  val alpha by animateFloatAsState(if (isLoading) 0f else 1f)
   AndroidView(
     modifier = modifier
       .height(
@@ -28,12 +37,22 @@ import com.google.android.gms.ads.*
         }
       )
       .fillMaxWidth()
-      .background(MaterialTheme.colorScheme.surface),
+      .background(containerColor)
+      .alpha(alpha),
     factory = {
       AdView(it).apply {
         adUnitId = config.id
         setAdSize(config.size)
-        loadAd(AdRequest.Builder().build())
+        adListener = object : AdListener() {
+          override fun onAdLoaded() {
+            super.onAdLoaded()
+            isLoading = false
+          }
+        }
+        loadAd(
+          AdRequest.Builder()
+            .build()
+        )
       }
     }
   )

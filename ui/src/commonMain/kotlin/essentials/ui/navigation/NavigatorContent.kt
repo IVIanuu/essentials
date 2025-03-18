@@ -18,7 +18,6 @@ import essentials.*
 import essentials.compose.*
 import injekt.*
 import kotlinx.coroutines.flow.*
-import soup.compose.material.motion.animation.*
 
 @Composable fun NavigatorContent(
   navigator: Navigator,
@@ -180,9 +179,7 @@ val ScreenAnimationScope.isPush: Boolean
   AnimatedVisibilityScope by animatedVisibilityScope
 
 fun interface ScreenTransitionDecorator : ScreenDecorator {
-  @Composable override fun DecoratedContent(
-    content: @Composable (() -> Unit)
-  ) {
+  @Composable override fun DecoratedContent(content: @Composable () -> Unit) {
     val screen = LocalScope.current.screen
     if (screen is OverlayScreen<*>) {
       content()
@@ -209,7 +206,7 @@ fun interface ScreenTransitionDecorator : ScreenDecorator {
   ScreenDecorator { it() }
 } else ScreenTransitionDecorator {
   Modifier.animateEnterExit(
-    materialSharedAxisXIn(isPush, rememberSlideDistance()),
-    materialSharedAxisXOut(isPush, rememberSlideDistance())
+    fadeIn() + slideInVertically { it / 2 },
+    fadeOut() + slideOutVertically { it / 2 }
   )
 }

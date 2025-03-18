@@ -1,7 +1,5 @@
 package essentials.ui.material
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.*
 import androidx.compose.foundation.layout.*
@@ -11,103 +9,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import essentials.ui.common.*
-
-enum class SectionType(val first: Boolean, val last: Boolean) {
-  FIRST(true, false), LAST(false, true), MIDDLE(false, false), SINGLE(true, true)
-}
-
-fun sectionTypeOf(index: Int, itemCount: Int) = when {
-  index == 0 -> if (itemCount == 1) SectionType.SINGLE else SectionType.FIRST
-  index == itemCount - 1 -> SectionType.LAST
-  else -> SectionType.MIDDLE
-}
-
-@Composable fun SectionContainer(
-  modifier: Modifier = Modifier,
-  sectionType: SectionType = SectionType.MIDDLE,
-  selected: Boolean = false,
-  onClick: (() -> Unit)? = null,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  content: @Composable () -> Unit
-) {
-  val color by animateColorAsState(
-    if (selected) MaterialTheme.colorScheme.tertiary
-    else MaterialTheme.colorScheme.surfaceColorAtElevation(12.dp)
-  )
-  val contentColor by animateColorAsState(
-    if (selected) MaterialTheme.colorScheme.onTertiary
-    else MaterialTheme.colorScheme.onSurface
-  )
-  Surface(
-    color = color,
-    contentColor = contentColor,
-    modifier = modifier.padding(
-      start = 16.dp,
-      end = 16.dp,
-      top = if (sectionType.first) 16.dp else 2.dp,
-      bottom = if (sectionType.last) 16.dp else 2.dp
-    ),
-    shape = firstLastCornersVertical(sectionType.first, sectionType.last)
-  ) {
-    val innerPadding by animateDpAsState(
-      if (selected) 8.dp else 0.dp
-    )
-    Box(
-      modifier = Modifier
-        .then(
-          if (onClick == null) Modifier
-          else Modifier.clickable(
-            onClick = onClick,
-            interactionSource = interactionSource,
-            indication = ripple()
-          )
-        )
-        .padding(innerPadding)
-    ) { content() }
-  }
-}
-
-@Composable fun SectionListItem(
-  headlineContent: @Composable () -> Unit,
-  modifier: Modifier = Modifier,
-  sectionType: SectionType = SectionType.MIDDLE,
-  selected: Boolean = false,
-  onClick: (() -> Unit)? = null,
-  supportingContent: (@Composable () -> Unit)? = null,
-  leadingContent: (@Composable () -> Unit)? = null,
-  trailingContent: (@Composable () -> Unit)? = null,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
-) {
-  SectionContainer(
-    modifier = modifier,
-    sectionType = sectionType,
-    selected = selected,
-    onClick = onClick,
-    interactionSource = interactionSource
-  ) {
-    EsListItem(
-      headlineContent = headlineContent,
-      supportingContent = supportingContent,
-      leadingContent = leadingContent?.let {
-        {
-          CompositionLocalProvider(
-            LocalContentColor provides MaterialTheme.colorScheme.secondary,
-            content = leadingContent
-          )
-        }
-      },
-      trailingContent = trailingContent?.let {
-        {
-          CompositionLocalProvider(
-            LocalContentColor provides MaterialTheme.colorScheme.secondary,
-            content = trailingContent
-          )
-        }
-      },
-      interactionSource = interactionSource
-    )
-  }
-}
 
 @Composable fun EsListItem(
   modifier: Modifier = Modifier,

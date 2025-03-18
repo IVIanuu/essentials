@@ -108,7 +108,10 @@ class PrefsScreen : Screen<Unit>
           value = prefs.color,
           onValueChangeRequest = action {
             val newColor = navigator().push(
-              ColorPickerScreen(initialColor = prefs.color)
+              ColorPickerScreen(
+                initialColor = prefs.color,
+                title = "Color picker"
+              )
             ) ?: return@action
             pref.updateData { it.copy(color = newColor) }
           },
@@ -125,6 +128,7 @@ class PrefsScreen : Screen<Unit>
           onClick = scopedAction {
             navigator().push(
               SingleChoiceListScreen(
+                title = "Single choice",
                 items = items,
                 selected = selected
               ) { it.toString() }
