@@ -17,21 +17,18 @@ enum class SectionType(val first: Boolean, val last: Boolean) {
 }
 
 fun sectionTypeOf(index: Int, itemCount: Int) = when {
-  index == 0 -> SectionType.FIRST
+  index == 0 -> if (itemCount == 1) SectionType.SINGLE else SectionType.FIRST
   index == itemCount - 1 -> SectionType.LAST
   else -> SectionType.MIDDLE
 }
 
-@Composable fun SectionListItem(
-  headlineContent: @Composable () -> Unit,
+@Composable fun SectionContainer(
   modifier: Modifier = Modifier,
   sectionType: SectionType = SectionType.MIDDLE,
   selected: Boolean = false,
   onClick: (() -> Unit)? = null,
-  supportingContent: (@Composable () -> Unit)? = null,
-  leadingContent: (@Composable () -> Unit)? = null,
-  trailingContent: (@Composable () -> Unit)? = null,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  content: @Composable () -> Unit
 ) {
   val color by animateColorAsState(
     if (selected) MaterialTheme.colorScheme.tertiary
@@ -55,10 +52,40 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
     val innerPadding by animateDpAsState(
       if (selected) 8.dp else 0.dp
     )
+    Box(
+      modifier = Modifier
+        .then(
+          if (onClick == null) Modifier
+          else Modifier.clickable(
+            onClick = onClick,
+            interactionSource = interactionSource,
+            indication = ripple()
+          )
+        )
+        .padding(innerPadding)
+    ) { content() }
+  }
+}
 
+@Composable fun SectionListItem(
+  headlineContent: @Composable () -> Unit,
+  modifier: Modifier = Modifier,
+  sectionType: SectionType = SectionType.MIDDLE,
+  selected: Boolean = false,
+  onClick: (() -> Unit)? = null,
+  supportingContent: (@Composable () -> Unit)? = null,
+  leadingContent: (@Composable () -> Unit)? = null,
+  trailingContent: (@Composable () -> Unit)? = null,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+) {
+  SectionContainer(
+    modifier = modifier,
+    sectionType = sectionType,
+    selected = selected,
+    onClick = onClick,
+    interactionSource = interactionSource
+  ) {
     EsListItem(
-      modifier = Modifier.padding(vertical = innerPadding),
-      onClick = onClick,
       headlineContent = headlineContent,
       supportingContent = supportingContent,
       leadingContent = leadingContent?.let {
@@ -69,7 +96,14 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
           )
         }
       },
-      trailingContent = trailingContent,
+      trailingContent = trailingContent?.let {
+        {
+          CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colorScheme.secondary,
+            content = trailingContent
+          )
+        }
+      },
       interactionSource = interactionSource
     )
   }
