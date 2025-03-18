@@ -49,7 +49,10 @@ class BottomNavigationScreen : Screen<Unit>
       EsLazyColumn {
         (1..100).forEach { item ->
           item {
-            EsListItem(headlineContent = { Text("Item $item") })
+            SectionListItem(
+              sectionType = sectionTypeOf(item - 1, 100),
+              title = { Text("Item $item") }
+            )
           }
         }
       }

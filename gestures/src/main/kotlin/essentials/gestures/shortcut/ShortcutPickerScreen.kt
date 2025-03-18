@@ -39,8 +39,9 @@ class ShortcutPickerScreen : Screen<Shortcut>
       }.value
     ) { shortcuts ->
       EsLazyColumn {
-        items(shortcuts) { shortcut ->
-          EsListItem(
+        itemsIndexed(shortcuts) { index, shortcut ->
+          SectionListItem(
+            sectionType = sectionTypeOf(index, shortcuts.size),
             onClick = scopedAction {
               catch {
                 val shortcutRequestResult = navigator().push(shortcut.intent.asScreen())
@@ -53,14 +54,14 @@ class ShortcutPickerScreen : Screen<Shortcut>
                 showToast("Failed to pick a shortcut!")
               }
             },
-            leadingContent = {
+            title = { Text(shortcut.name) },
+            trailing = {
               Image(
                 modifier = Modifier.size(40.dp),
                 bitmap = shortcut.icon.toBitmap().asImageBitmap(),
                 contentDescription = null
               )
-            },
-            headlineContent = { Text(shortcut.name) }
+            }
           )
         }
       }

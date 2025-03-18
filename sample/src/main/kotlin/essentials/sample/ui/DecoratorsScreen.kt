@@ -26,7 +26,10 @@ class DecoratorsScreen : Screen<Unit>
     EsLazyColumn {
       (1..10).forEach { itemIndex ->
         item {
-          EsListItem(headlineContent = { Text("Item $itemIndex") })
+          SectionListItem(
+            sectionType = sectionTypeOf(itemIndex - 1, 10),
+            title = { Text("Item $itemIndex") }
+          )
         }
       }
     }

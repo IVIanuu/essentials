@@ -4,13 +4,10 @@
 
 package essentials.donation
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.*
 import arrow.fx.coroutines.*
 import essentials.billing.*
@@ -50,18 +47,20 @@ class DonationScreen(
   }
 
   EsModalBottomSheet {
-    skus.getOrNull()?.fastForEach { donation ->
-      EsListItem(
-        modifier = Modifier.padding(horizontal = 8.dp),
+    Subheader { Text("Donate") }
+
+    skus.getOrNull()?.fastForEachIndexed { index, donation ->
+      SectionListItem(
+        sectionType = sectionTypeOf(index, skus.get().size),
         onClick = scopedAction {
           if (billing.purchase(donation.donation.sku, true, true)) {
             billing.consumePurchase(donation.donation.sku)
             showToast("Thanks for your support! \uD83D\uDC9B")
           }
         },
-        headlineContent = { Text(donation.title) },
-        leadingContent = donation.donation.icon,
-        trailingContent = { Text(text = donation.price) }
+        title = { Text(donation.title) },
+        leading = donation.donation.icon,
+        trailing = { Text(text = donation.price) }
       )
     }
   }

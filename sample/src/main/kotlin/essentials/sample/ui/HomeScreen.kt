@@ -41,13 +41,13 @@ import injekt.*
           BottomSheetLauncherButton {
             Subheader { Text("Example sheet") }
 
-            EsListItem(
+            SectionListItem(
               onClick = {
                 showToast("Clicked")
                 dismiss()
               },
-              headlineContent = { Text("Test") },
-              leadingContent = { Icon(Icons.Default.Add, null) }
+              title = { Text("Test") },
+              trailing = { Icon(Icons.Default.Add, null) }
             )
           }
         }

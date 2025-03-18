@@ -47,22 +47,23 @@ class NotificationsScreen : Screen<Unit>
       }
       is NotificationsApi.Empty -> Text("No notifications")
       is NotificationsApi.Notifications -> EsLazyColumn {
-        items(api.notifications) { notification ->
-          EsListItem(
+        itemsIndexed(api.notifications) { index, notification ->
+          SectionListItem(
+            sectionType = sectionTypeOf(index, api.notifications.size),
             onClick = action { api.openNotification(notification.notification) },
-            headlineContent = {
+            title = {
               Text(
                 notification.notification.extras.getCharSequence(Notification.EXTRA_TITLE)
                   ?.toString() ?: ""
               )
             },
-            supportingContent = {
+            description = {
               Text(
                 notification.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
                   ?.toString() ?: ""
               )
             },
-            trailingContent = {
+            trailing = {
               IconButton(
                 onClick = action { api.dismissNotification(notification.key) }
               ) {
