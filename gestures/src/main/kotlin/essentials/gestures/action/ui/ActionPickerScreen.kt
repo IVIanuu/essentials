@@ -66,9 +66,8 @@ class ActionPickerScreen(
     ResourceBox(items) { items ->
       EsLazyColumn {
         itemsIndexed(items) { index, item ->
-          DecoratedListItem(
-            first = index == 0,
-            last = index == items.lastIndex,
+          SectionListItem(
+            sectionType = sectionTypeOf(index, items.size),
             onClick = scopedAction {
               val result = item.getResult(navigator())
                 ?: return@scopedAction

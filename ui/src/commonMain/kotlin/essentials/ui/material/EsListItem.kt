@@ -12,11 +12,20 @@ import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import essentials.ui.common.*
 
-@Composable fun DecoratedListItem(
+enum class SectionType(val first: Boolean, val last: Boolean) {
+  FIRST(true, false), LAST(false, true), MIDDLE(false, false), SINGLE(true, true)
+}
+
+fun sectionTypeOf(index: Int, itemCount: Int) = when {
+  index == 0 -> SectionType.FIRST
+  index == itemCount - 1 -> SectionType.LAST
+  else -> SectionType.MIDDLE
+}
+
+@Composable fun SectionListItem(
   headlineContent: @Composable () -> Unit,
   modifier: Modifier = Modifier,
-  first: Boolean = false,
-  last: Boolean = false,
+  sectionType: SectionType = SectionType.MIDDLE,
   selected: Boolean = false,
   onClick: (() -> Unit)? = null,
   supportingContent: (@Composable () -> Unit)? = null,
@@ -38,10 +47,10 @@ import essentials.ui.common.*
     modifier = modifier.padding(
       start = 16.dp,
       end = 16.dp,
-      top = if (first) 16.dp else 2.dp,
-      bottom = if (last) 16.dp else 2.dp
+      top = if (sectionType.first) 16.dp else 2.dp,
+      bottom = if (sectionType.last) 16.dp else 2.dp
     ),
-    shape = firstLastCornersVertical(first, last)
+    shape = firstLastCornersVertical(sectionType.first, sectionType.last)
   ) {
     val innerPadding by animateDpAsState(
       if (selected) 8.dp else 0.dp
@@ -85,7 +94,10 @@ import essentials.ui.common.*
         indication = ripple()
       )
     } ?: Modifier)
-      .padding(contentPadding)
+      .padding(
+        start = contentPadding.calculateStartPadding(LocalLayoutDirection.current),
+        end = contentPadding.calculateEndPadding(LocalLayoutDirection.current)
+      )
       .then(modifier),
     horizontalArrangement = Arrangement.Center,
     verticalAlignment = Alignment.CenterVertically
@@ -109,10 +121,10 @@ import essentials.ui.common.*
         .padding(
           start = if (leadingContent != null) textPadding.calculateStartPadding(LocalLayoutDirection.current)
           else 0.dp,
-          top = 0.dp,
+          top = contentPadding.calculateTopPadding(),
           end = if (trailingContent != null) textPadding.calculateEndPadding(LocalLayoutDirection.current)
           else 0.dp,
-          bottom = 0.dp
+          bottom = contentPadding.calculateBottomPadding()
         ),
       verticalArrangement = Arrangement.Center
     ) {

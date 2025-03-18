@@ -31,103 +31,103 @@ class AboutScreen(
   EsScaffold(topBar = { EsAppBar { Text("About") } }) {
     EsLazyColumn {
       item {
-        DecoratedListItem(
-          first = true,
-          leadingContent = { Icon(Icons.Default.Info, null) },
+        SectionListItem(
+          sectionType = SectionType.FIRST,
           headlineContent = { Text("Version") },
-          supportingContent = { Text(appConfig.versionName) }
+          supportingContent = { Text(appConfig.versionName) },
+          trailingContent = { Icon(Icons.Default.Info, null) }
         )
       }
 
       item {
-        DecoratedListItem(
+        SectionListItem(
           onClick = scopedAction {
             navigator().push(PlayStoreAppDetailsKey(appConfig.packageName))
           },
-          leadingContent = { Icon(Icons.Default.Star, null) },
           headlineContent = { Text("Rate") },
-          supportingContent = { Text("I'll be happy if you give me 5 stars") }
+          supportingContent = { Text("I'll be happy if you give me 5 stars") },
+          trailingContent = { Icon(Icons.Default.Star, null) }
         )
       }
 
       if (context.screen.donationScreen != null)
         item {
-          DecoratedListItem(
+          SectionListItem(
             onClick = scopedAction {
               navigator().push(context.screen.donationScreen!!)
             },
-            leadingContent = { Icon(Icons.Default.Favorite, null) },
-            headlineContent = { Text("Donate") }
+            headlineContent = { Text("Donate") },
+            trailingContent = { Icon(Icons.Default.Favorite, null) }
           )
         }
 
       item {
-        DecoratedListItem(
+        SectionListItem(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
           },
-          leadingContent = { Icon(Icons.Default.ShoppingBag, null) },
           headlineContent = { Text("More apps") },
-          supportingContent = { Text("Check out my other apps on Google Play") }
+          supportingContent = { Text("Check out my other apps on Google Play") },
+          trailingContent = { Icon(Icons.Default.ShoppingBag, null) }
         )
       }
 
       item {
-        DecoratedListItem(
+        SectionListItem(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://www.reddit.com/r/manuelwrageapps"))
           },
-          leadingContent = {
+          headlineContent = { Text("Reddit") },
+          supportingContent = {
+            Text("If you need help or have questions, my subreddit is a good place to go")
+          },
+          trailingContent = {
             Icon(
               imageVector = FontAwesomeIcons.Brands.RedditAlien,
               modifier = Modifier.size(24.dp),
               contentDescription = null
             )
-          },
-          headlineContent = { Text("Reddit") },
-          supportingContent = {
-            Text("If you need help or have questions, my subreddit is a good place to go")
           }
         )
       }
 
       item {
-        DecoratedListItem(
+        SectionListItem(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://github.com/IVIanuu"))
           },
-          leadingContent = {
+          headlineContent = { Text("Github") },
+          supportingContent = { Text("Check out my work on Github") },
+          trailingContent = {
             Icon(
               imageVector = FontAwesomeIcons.Brands.Github,
               modifier = Modifier.size(24.dp),
               contentDescription = null
             )
-          },
-          headlineContent = { Text("Github") },
-          supportingContent = { Text("Check out my work on Github") }
+          }
         )
       }
 
       item {
-        DecoratedListItem(
+        SectionListItem(
           onClick = scopedAction {
             navigator().push(UrlScreen("https://twitter.com/IVIanuu"))
           },
-          leadingContent = {
+          headlineContent = { Text("Twitter") },
+          supportingContent = { Text("Follow me on Twitter") },
+          trailingContent = {
             Icon(
               imageVector = FontAwesomeIcons.Brands.Twitter,
               modifier = Modifier.size(24.dp),
               contentDescription = null
             )
-          },
-          headlineContent = { Text("Twitter") },
-          supportingContent = { Text("Follow me on Twitter") }
+          }
         )
       }
 
       item {
         val email = "ivianuu@gmail.com"
-        DecoratedListItem(
+        SectionListItem(
           onClick = scopedAction {
             navigator().push(
               Intent(Intent.ACTION_SENDTO).apply {
@@ -141,21 +141,21 @@ class AboutScreen(
                 .asScreen()
             )
           },
-          leadingContent = { Icon(Icons.Default.Email, null) },
           headlineContent = { Text("Send feedback") },
-          supportingContent = { Text(email) }
+          supportingContent = { Text(email) },
+          trailingContent = { Icon(Icons.Default.Email, null) }
         )
       }
 
       if (context.screen.privacyPolicyUrl != null)
         item {
-          DecoratedListItem(
-            last = true,
+          SectionListItem(
+            sectionType = SectionType.LAST,
             onClick = scopedAction {
               navigator().push(UrlScreen(context.screen.privacyPolicyUrl!!))
             },
-            leadingContent = { Icon(Icons.Default.Policy, null) },
-            headlineContent = { Text("Privacy policy") }
+            headlineContent = { Text("Privacy policy") },
+            trailingContent = { Icon(Icons.Default.Policy, null) }
           )
         }
     }

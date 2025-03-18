@@ -19,16 +19,14 @@ import essentials.ui.material.*
   onValueChangeRequest: () -> Unit,
   headlineContent: @Composable () -> Unit,
   modifier: Modifier = Modifier,
-  first: Boolean = false,
-  last: Boolean = false,
+  sectionType: SectionType = SectionType.MIDDLE,
   supportingContent: (@Composable () -> Unit)? = null,
   leadingContent: (@Composable () -> Unit)? = null,
 ) {
-  DecoratedListItem(
-    first = first,
-    last = last,
+  SectionListItem(
     onClick = onValueChangeRequest,
     modifier = modifier,
+    sectionType = sectionType,
     headlineContent = headlineContent,
     supportingContent = supportingContent,
     leadingContent = leadingContent,

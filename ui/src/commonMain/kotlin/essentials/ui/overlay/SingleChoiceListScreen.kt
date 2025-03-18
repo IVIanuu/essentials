@@ -29,9 +29,8 @@ class SingleChoiceListScreen<T : Any>(
       Subheader { Text(screen.title) }
 
     screen.items.fastForEachIndexed { index, item ->
-      DecoratedListItem(
-        first = index == 0,
-        last = index == screen.items.lastIndex,
+      SectionListItem(
+        sectionType = sectionTypeOf(index, screen.items.size),
         selected = item == selected,
         onClick = { selected = item },
         headlineContent = { Text(screen.renderable.render(item)) }

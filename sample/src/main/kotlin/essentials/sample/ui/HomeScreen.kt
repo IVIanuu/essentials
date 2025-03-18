@@ -65,7 +65,7 @@ import injekt.*
         HomeItem(
           item = item,
           index = index,
-          lastIndex = finalItems.lastIndex,
+          itemCount = finalItems.size,
           color = color,
           onClick = action {
             navigator().push(
@@ -81,19 +81,18 @@ import injekt.*
 
 @Composable private fun HomeItem(
   index: Int,
-  lastIndex: Int,
+  itemCount: Int,
   color: Color,
   item: HomeItem,
   navigator: Navigator = inject,
   onClick: () -> Unit
 ) {
-  DecoratedListItem(
+  SectionListItem(
     onClick = onClick,
+    sectionType = sectionTypeOf(index, itemCount),
     headlineContent = { Text(item.title) },
     supportingContent = { Text(Strings.Text) },
-    first = index == 0,
-    last = index == lastIndex,
-    leadingContent = {
+    trailingContent = {
       Box(
         modifier = with(LocalScreenAnimationScope.current) {
           Modifier
@@ -106,7 +105,7 @@ import injekt.*
             )
         }
       )
-    },
+    }/*,
     trailingContent = {
       BottomSheetLauncherButton {
         Subheader { Text("Example sheet") }
@@ -121,7 +120,7 @@ import injekt.*
           )
         }
       }
-    }
+    }*/
   )
 }
 

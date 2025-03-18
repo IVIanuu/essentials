@@ -35,8 +35,7 @@ class PrefsScreen : Screen<Unit>
       item {
         SwitchListItem(
           value = prefs.switch,
-          first = true,
-          last = true,
+          sectionType = SectionType.SINGLE,
           onValueChange = action { value ->
             pref.updateData { it.copy(switch = value) }
           },
@@ -51,13 +50,12 @@ class PrefsScreen : Screen<Unit>
 
       item {
         SliderListItem(
-          first = true,
+          sectionType = SectionType.FIRST,
           value = prefs.slider,
           onValueChangeFinished = action { value ->
             pref.updateData { it.copy(slider = value) }
           },
           modifier = Modifier.interactive(prefs.switch),
-          leadingContent = { Icon(Icons.Default.ThumbUp, null) },
           headlineContent = { Text("Slider") },
           valueRange = 0..100,
           trailingContent = { Text(it.toString()) }
@@ -66,27 +64,12 @@ class PrefsScreen : Screen<Unit>
 
       item {
         SliderListItem(
-          value = prefs.slider,
-          onValueChangeFinished = action { value ->
-            pref.updateData { it.copy(slider = value) }
-          },
-          modifier = Modifier.interactive(prefs.switch),
-          leadingContent = { Icon(Icons.Default.ThumbUp, null) },
-          headlineContent = { Text("Slider") },
-          valueRange = 0..100,
-          trailingContent = { Text(it.toString()) }
-        )
-      }
-
-      item {
-        SliderListItem(
-          last = true,
+          sectionType = SectionType.LAST,
           value = prefs.steppedSlider,
           onValueChangeFinished = action { value ->
             pref.updateData { it.copy(steppedSlider = value) }
           },
           modifier = Modifier.interactive(prefs.switch),
-          leadingContent = { Icon(Icons.Default.ThumbUp, null) },
           headlineContent = { Text("Stepped slider") },
           stepPolicy = incrementingStepPolicy(0.05f),
           valueRange = 0.75f..1.5f,
@@ -101,8 +84,8 @@ class PrefsScreen : Screen<Unit>
       }
 
       item {
-        DecoratedListItem(
-          first = true,
+        SectionListItem(
+          sectionType = SectionType.FIRST,
           modifier = Modifier.interactive(prefs.switch),
           onClick = scopedAction {
             val newTextInput = navigator().push(
@@ -114,7 +97,6 @@ class PrefsScreen : Screen<Unit>
             ) ?: return@scopedAction
             pref.updateData { it.copy(textInput = newTextInput) }
           },
-          leadingContent = { Icon(Icons.Default.ThumbUp, null) },
           headlineContent = { Text("Text input") },
           supportingContent = { Text("This is a text input preference") }
         )
@@ -122,7 +104,7 @@ class PrefsScreen : Screen<Unit>
 
       item {
         ColorListItem(
-          last = true,
+          sectionType = SectionType.LAST,
           value = prefs.color,
           onValueChangeRequest = action {
             val newColor = navigator().push(
@@ -131,7 +113,6 @@ class PrefsScreen : Screen<Unit>
             pref.updateData { it.copy(color = newColor) }
           },
           modifier = Modifier.interactive(prefs.switch),
-          leadingContent = { Icon(Icons.Default.ThumbUp, null) },
           headlineContent = { Text("Color") },
           supportingContent = { Text("This is a color preference") }
         )

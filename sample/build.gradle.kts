@@ -26,7 +26,6 @@ dependencies {
   implementation(project(":gestures"))
   implementation(project(":notification-listener"))
   implementation(project(":premium"))
-  implementation(project(":rubik"))
   implementation(project(":work"))
   testImplementation(project(":android-test"))
   testImplementation(project(":test"))

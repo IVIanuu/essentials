@@ -46,9 +46,8 @@ class AppPickerScreen(
     ) { apps ->
       EsLazyColumn {
         itemsIndexed(apps) { index, app ->
-          DecoratedListItem(
-            first = index == 0,
-            last = index == apps.lastIndex,
+          SectionListItem(
+            sectionType = sectionTypeOf(index, apps.size),
             onClick = scopedAction { popWithResult(app) },
             headlineContent = { Text(app.appName) },
             leadingContent = {

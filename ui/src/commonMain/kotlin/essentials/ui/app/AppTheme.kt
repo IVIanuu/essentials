@@ -50,23 +50,8 @@ data class AppColors(
 
 @Tag typealias AppTypography = Typography
 
-@Provide fun defaultAppTypography(font: AppFont? = null): AppTypography =
+@Provide @Composable fun defaultAppTypography(font: AppFont? = null): AppTypography =
   Typography(
-    displayLarge = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Normal,
-      fontSize = 16.sp
-    ),
-    displayMedium = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Normal,
-      fontSize = 16.sp
-    ),
-    displaySmall = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Normal,
-      fontSize = 16.sp
-    ),
     headlineLarge = TextStyle(
       fontFamily = font,
       fontWeight = FontWeight.SemiBold,

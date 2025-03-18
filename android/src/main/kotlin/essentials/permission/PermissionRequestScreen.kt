@@ -58,10 +58,9 @@ class PermissionRequestScreen(
     if (isLoading) CircularProgressIndicator(modifier = Modifier.fillMaxSize().wrapContentSize())
     else EsLazyColumn {
       itemsIndexed(permissionsToGrant, { _, permission -> permission }) { index, permission ->
-        DecoratedListItem(
+        SectionListItem(
           modifier = Modifier.animateItem(),
-          first = index == 0,
-          last = index == permissionsToGrant.lastIndex,
+          sectionType = sectionTypeOf(index, permissionsToGrant.size),
           headlineContent = { Text(permission.title) },
           supportingContent = permission.desc?.let { { Text(it) } },
           leadingContent = { permission.icon?.invoke() },

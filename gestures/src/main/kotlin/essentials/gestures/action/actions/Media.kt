@@ -114,9 +114,8 @@ class MediaActionSettingsScreen : Screen<Unit>
             .collect { value = it }
         }
 
-        DecoratedListItem(
-          first = true,
-          last = true,
+        SectionListItem(
+          sectionType = SectionType.SINGLE,
           onClick = scopedAction {
             val newMediaApp = navigator().push(
               AppPickerScreen(
