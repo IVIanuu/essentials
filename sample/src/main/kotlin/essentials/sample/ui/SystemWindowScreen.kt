@@ -10,23 +10,20 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
-import essentials.coroutines.*
+import essentials.compose.*
 import essentials.permission.*
 import essentials.systemoverlay.*
 import essentials.ui.material.*
-import essentials.ui.navigation.*
+import essentials.ui.overlay.*
 import injekt.*
 
-@Provide val systemWindowHomeItem = HomeItem("System Window") { SystemWindowScreen() }
-
-class SystemWindowScreen : Screen<Unit>
-
-@Provide @Composable fun SystemWindowUi(
+@Provide fun systemWindowHomeItem(
   permissions: Permissions,
-  context: ScreenContext<SystemWindowScreen> = inject,
   systemWindows: SystemWindows
-): Ui<SystemWindowScreen> {
-  EsScaffold(topBar = { EsAppBar { Text("System window") } }) {
+) = HomeItem("System Window") {
+  BottomSheetScreen {
+    Subheader { Text("System Window") }
+
     var showSystemWindow by remember { mutableStateOf(false) }
 
     if (showSystemWindow)
@@ -40,16 +37,13 @@ class SystemWindowScreen : Screen<Unit>
         )
       }
 
-    Button(
-      modifier = Modifier.fillMaxSize().wrapContentSize(),
-      onClick = {
-        launch {
-          if (permissions.ensurePermissions(listOf(SampleSystemOverlayPermission::class)))
-            showSystemWindow = true
-        }
-      }
-    ) {
-      Text("Attach system window")
-    }
+    SectionListItem(
+      sectionType = SectionType.SINGLE,
+      onClick = action {
+        if (permissions.ensurePermissions(listOf(SampleSystemOverlayPermission::class)))
+          showSystemWindow = true
+      },
+      title = { Text("Attach system window") }
+    )
   }
 }
