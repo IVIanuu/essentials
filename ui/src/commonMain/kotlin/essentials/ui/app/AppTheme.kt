@@ -67,68 +67,7 @@ data class AppColors(
       fontFamily = font,
       fontWeight = FontWeight.Normal,
       fontSize = 14.sp
-    ),
-
-    /*headlineLarge = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.SemiBold,
-      fontSize = 30.sp
-    ),
-    headlineMedium = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Normal,
-      fontSize = 16.sp
-    ),
-    headlineSmall = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Normal,
-      fontSize = 16.sp
-    ),
-    titleLarge = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Bold,
-      fontSize = 24.sp
-    ),
-    titleMedium = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.SemiBold,
-      fontSize = 18.sp
-    ),
-    titleSmall = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Medium,
-      fontSize = 16.sp
-    ),
-    bodyLarge = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Medium,
-      fontSize = 16.sp
-    ),
-    bodyMedium = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Normal,
-      fontSize = 14.sp
-    ),
-    bodySmall = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Normal,
-      fontSize = 16.sp
-    ),
-    labelLarge = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Medium,
-      fontSize = 14.sp
-    ),
-    labelMedium = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Medium,
-      fontSize = 12.sp
-    ),
-    labelSmall = TextStyle(
-      fontFamily = font,
-      fontWeight = FontWeight.Normal,
-      fontSize = 16.sp
-    ),*/
+    )
   ).withFontFamily(font)
 }
 

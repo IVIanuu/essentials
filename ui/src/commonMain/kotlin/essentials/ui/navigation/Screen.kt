@@ -37,6 +37,9 @@ data class ScreenConfig<T : Screen<*>>(
   @Composable fun DecoratedContent(content: @Composable () -> Unit)
 }
 
+@Tag annotation class UiTag<S : Screen<*>>
+typealias Ui<S> = @UiTag<S> Unit
+
 @Tag typealias DecoratedScreenContent = Unit
 
 @Provide @Composable fun DecoratedScreenContent(

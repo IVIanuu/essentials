@@ -9,6 +9,7 @@ import androidx.activity.*
 import androidx.activity.compose.*
 import androidx.compose.foundation.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.*
 import androidx.lifecycle.*
 import essentials.*
 import essentials.ui.app.*
@@ -34,7 +35,10 @@ import kotlinx.coroutines.*
         onDispose {  }
       }
 
-      CompositionLocalProvider(LocalScope provides uiScope) {
+      CompositionLocalProvider(
+        LocalScope provides uiScope,
+        LocalSaveableStateRegistry provides SaveableStateRegistry(emptyMap()) { true }
+      ) {
         esActivityComponent.decorateAppUi {
           esActivityComponent.appUi()
         }

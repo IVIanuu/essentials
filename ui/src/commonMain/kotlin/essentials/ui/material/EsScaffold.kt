@@ -13,10 +13,6 @@ import androidx.compose.ui.input.nestedscroll.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 
-val LocalContentPadding = compositionLocalOf {
-  PaddingValues(0.dp)
-}
-
 @Composable fun EsScaffold(
   modifier: Modifier = Modifier,
   topBar: (@Composable () -> Unit)? = null,
@@ -64,3 +60,8 @@ val LocalContentPadding = compositionLocalOf {
     }
   }
 }
+
+val LocalContentPadding = compositionLocalOf {
+  PaddingValues(0.dp)
+}
+

@@ -9,11 +9,7 @@ import essentials.*
 import injekt.*
 import java.io.*
 
-data class AppDirs(
-  val cache: File,
-  val data: File,
-  val prefs: File
-) {
+data class AppDirs(val cache: File, val data: File, val prefs: File) {
   @Provide companion object {
     @Provide fun default(context: Context): @Scoped<AppScope> AppDirs {
       val dataDir = File(context.applicationInfo.dataDir)
