@@ -20,11 +20,6 @@ inline fun <P1, P2> action(
   crossinline block: suspend (P1, P2) -> Unit
 ): (P1, P2) -> Unit = { p1, p2 -> launch { block(p1, p2) } }
 
-inline fun <P1, P2, P3> action(
-  scope: CoroutineScope = inject,
-  crossinline block: suspend (P1, P2, P3) -> Unit
-): (P1, P2, P3) -> Unit = { p1, p2, p3 -> launch { block(p1, p2, p3) } }
-
 @Composable fun RestartableScope(block: @Composable () -> Unit) {
   block()
 }
