@@ -80,7 +80,7 @@ import kotlin.math.*
 
       onDispose {
         catch { windowManager.removeViewImmediate(contentView) }
-        contentView.dispose()
+          .printErrors()
       }
     }
   }

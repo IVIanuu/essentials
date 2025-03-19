@@ -58,6 +58,20 @@ class DecoratorsScreen : Screen<Unit>
     return@ScreenDecorator
   } else {
     Column {
+      Surface(color = MaterialTheme.colorScheme.primary, shadowElevation = 8.dp) {
+        Box(
+          modifier = Modifier
+            .fillMaxWidth()
+            .statusBarsPadding(),
+          contentAlignment = Alignment.Center
+        ) {
+          Text(
+            text = "This is a top decorator",
+            style = MaterialTheme.typography.displaySmall
+          )
+        }
+      }
+
       Box(
         modifier = Modifier
           .weight(1f)
