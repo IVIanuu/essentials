@@ -4,9 +4,9 @@ import arrow.core.*
 import com.github.michaelbull.result.*
 
 inline fun <T> catch(block: () -> T): Result<T, Throwable> = try {
-  Ok(block())
+  block().ok()
 } catch (t: Throwable) {
-  Err(t.nonFatalOrThrow())
+  t.nonFatalOrThrow().err()
 }
 
 fun <V, E : Throwable> Result<V, E>.printErrors() = onFailure {
