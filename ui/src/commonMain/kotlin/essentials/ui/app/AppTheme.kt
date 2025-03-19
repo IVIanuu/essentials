@@ -61,7 +61,7 @@ data class AppColors(
     bodyLarge = default.bodyLarge.copy(
       fontFamily = font,
       fontWeight = FontWeight.Medium,
-      fontSize = 16.sp
+      fontSize = 15.sp
     ),
     bodyMedium = default.bodyMedium.copy(
       fontFamily = font,

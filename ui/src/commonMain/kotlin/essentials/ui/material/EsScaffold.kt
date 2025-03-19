@@ -12,16 +12,17 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.nestedscroll.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
+import injekt.*
 
 @Composable fun EsScaffold(
   modifier: Modifier = Modifier,
-  topBar: (@Composable () -> Unit)? = null,
+  topBar: (@Composable (@Provide TopAppBarScrollBehavior?) -> Unit)? = null,
   bottomBar: (@Composable () -> Unit)? = null,
   snackbarHost: (@Composable () -> Unit)? = null,
   floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
   containerColor: Color = MaterialTheme.colorScheme.background,
-  contentColor: Color = contentColorFor(containerColor),
+  contentColor: Color = guessingContentColorFor(containerColor),
   contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
   topBarScrollBehavior: TopAppBarScrollBehavior? = if (topBar == null) null
   else LocalAppBarScrollBehaviorProvider.current(),
@@ -33,11 +34,7 @@ import androidx.compose.ui.unit.*
         if (topBarScrollBehavior == null) Modifier
         else Modifier.nestedScroll(topBarScrollBehavior.nestedScrollConnection)
       ),
-    topBar = {
-      CompositionLocalProvider(
-        LocalAppBarScrollBehavior provides topBarScrollBehavior
-      ) { topBar?.invoke() }
-    },
+    topBar = { topBar?.invoke(topBarScrollBehavior) },
     bottomBar = bottomBar ?: {},
     floatingActionButton = floatingActionButton ?: {},
     floatingActionButtonPosition = floatingActionButtonPosition,

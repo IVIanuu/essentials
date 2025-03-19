@@ -23,7 +23,7 @@ import injekt.*
   expandedHeight: Dp = TopAppBarDefaults.TopAppBarExpandedHeight,
   windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
   colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
-  scrollBehavior: TopAppBarScrollBehavior? = LocalAppBarScrollBehavior.current,
+  scrollBehavior: TopAppBarScrollBehavior? = inject,
   title: @Composable () -> Unit
 ) {
   CenterAlignedTopAppBar(
@@ -39,10 +39,10 @@ import injekt.*
 }
 
 val LocalAppBarScrollBehaviorProvider = compositionLocalOf<@Composable () -> TopAppBarScrollBehavior?> {
-  { TopAppBarDefaults.pinnedScrollBehavior() }
+  { TopAppBarDefaults.enterAlwaysScrollBehavior() }
 }
 
-val LocalAppBarScrollBehavior = compositionLocalOf<TopAppBarScrollBehavior?> { null }
+@Provide val DefaultAppBarScrollBehavior: TopAppBarScrollBehavior? = null
 
 @Composable fun EsNavigationBar(
   modifier: Modifier = Modifier,
