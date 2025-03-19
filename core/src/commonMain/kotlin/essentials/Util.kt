@@ -24,7 +24,7 @@ inline fun <reified T> Any?.safeAs(): T? = this as? T
   @Provide fun <K, V> pairsToMap(pairs: List<Pair<K, V>>) = pairs.toMap()
 
   @Provide inline fun <reified T : Any> kclass(): KClass<T> = T::class
-}
 
-@Provide fun <T> (@Composable () -> T).asFlow(): Flow<T> =
-  moleculeFlow { this() }
+  @Provide fun <T> (@Composable () -> T).asFlow(): Flow<T> =
+    moleculeFlow { this() }
+}
