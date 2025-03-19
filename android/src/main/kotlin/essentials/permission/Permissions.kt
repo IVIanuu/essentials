@@ -7,11 +7,9 @@ package essentials.permission
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import essentials.*
-import essentials.app.*
 import essentials.compose.*
 import essentials.coroutines.*
 import essentials.logging.*
-import essentials.ui.*
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.*
@@ -52,9 +50,8 @@ import kotlin.reflect.*
     d { "ensure permissions $permissions" }
 
     val result = permissions.fastAll { permissionState(listOf(it)).first() } || run {
-      provide<Scope<UiScope>, _>(launchUi()) {
-        navigator().push(PermissionRequestScreen(permissions)) == true
-      }
+      launchUi().service<Navigator>()
+        .push(PermissionRequestScreen(permissions)) == true
     }
 
     d { "ensure permissions result $permissions -> $result" }

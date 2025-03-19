@@ -10,7 +10,6 @@ import androidx.datastore.core.*
 import androidx.datastore.preferences.core.*
 import essentials.*
 import essentials.ads.*
-import essentials.app.*
 import essentials.billing.*
 import essentials.coroutines.*
 import essentials.ui.navigation.*
@@ -48,8 +47,7 @@ interface Paywall {
     launch {
       showToast("This functionality is only available in the premium version!")
       if (!unlockScreen()) return@launch
-      @Provide val scope: Scope<UiScope> = launchUi()
-      navigator().push(GoPremiumScreen(showTryBasicOption = false))
+      launchUi().service<Navigator>().push(GoPremiumScreen(showTryBasicOption = false))
     }
 
     return null

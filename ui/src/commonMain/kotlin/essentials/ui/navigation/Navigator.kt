@@ -67,9 +67,6 @@ fun <R> popWithResult(result: R? = null, navigator: Navigator = inject, screen: 
     initialBackStack = listOfNotNull(rootScreen),
     screenInterceptors = screenInterceptors
   )
-
-  @Provide fun fromUiScope(scope: Scope<UiScope>): Navigator = scope.service()
-  @Provide fun fromScreenScope(scope: Scope<ScreenScope>): Navigator = scope.service()
 }
 
 fun navigator(x: Navigator = inject): Navigator = x

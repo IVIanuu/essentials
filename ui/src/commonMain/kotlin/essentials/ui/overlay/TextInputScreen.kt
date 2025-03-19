@@ -14,7 +14,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.focus.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.*
-import essentials.*
 import essentials.compose.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
@@ -28,12 +27,11 @@ class TextInputScreen(
 ) : OverlayScreen<String>
 
 @Provide @Composable fun TextInputUi(
-  scope: Scope<ScreenScope> = inject,
-  screen: TextInputScreen
+  context: ScreenContext<TextInputScreen> = inject
 ): Ui<TextInputScreen> {
   EsModalBottomSheet {
     var currentValue by remember {
-      mutableStateOf(TextFieldValue(screen.initial, TextRange(screen.initial.length)))
+      mutableStateOf(TextFieldValue(context.screen.initial, TextRange(context.screen.initial.length)))
     }
 
     val focusRequester = remember { FocusRequester() }
@@ -49,14 +47,16 @@ class TextInputScreen(
         modifier = Modifier.focusRequester(focusRequester).weight(1f),
         value = currentValue,
         onValueChange = { currentValue = it },
-        keyboardOptions = screen.keyboardOptions,
+        keyboardOptions = context.screen.keyboardOptions,
         textStyle = MaterialTheme.typography.titleLarge,
-        label = { Text(screen.label) }
+        label = { Text(context.screen.label) }
       )
 
-      val currentValueIsOk = remember(currentValue) { screen.predicate(currentValue.text) }
+      val currentValueIsOk = remember(currentValue) {
+        context.screen.predicate(currentValue.text)
+      }
       IconButton(
-        onClick = scopedAction { navigator().pop(screen, currentValue.text) },
+        onClick = scopedAction { popWithResult(currentValue.text) },
         enabled = currentValueIsOk
       ) { Icon(Icons.Default.Send, null) }
     }

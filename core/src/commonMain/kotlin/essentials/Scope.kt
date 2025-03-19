@@ -184,9 +184,7 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
       scope: Scope<N>,
       key: TypeKey<S>,
       crossinline init: () -> T,
-    ) = ProvidedService<N, S>(S::class) {
-      scope.scoped(key) { init() }
-    }
+    ) = ProvidedService<N, S>(S::class) { scope.scoped(key) { init() } }
   }
 }
 
