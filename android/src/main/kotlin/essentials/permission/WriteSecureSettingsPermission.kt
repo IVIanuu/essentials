@@ -109,9 +109,7 @@ class WriteSecureSettingsScreen(
       item {
         SectionAlert(
           sectionType = SectionType.SINGLE,
-          colors = SectionDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
-          ),
+          colors = SectionDefaults.colors(tone = Tone.INFO),
           description = {
             Text(
               """

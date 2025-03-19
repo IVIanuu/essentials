@@ -73,7 +73,7 @@ fun firstLastCornersHorizontal(
   )
 }
 
-enum class Tone { NEGATIVE, WARNING, NEUTRAL, POSITIVE }
+enum class Tone { NEGATIVE, WARNING, NEUTRAL, POSITIVE, INFO }
 
 val baseWarningColor = Color(0xffffb624)
 
@@ -82,51 +82,33 @@ val baseWarningColor = Color(0xffffb624)
   by = 0.2f
 )
 
-@Composable fun textErrorColor() = MaterialTheme.colorScheme.onSurfaceVariant.blend(
-  to = MaterialTheme.colorScheme.error,
-  by = 0.5f
-)
-
-@Composable fun vividTextColorForTone(tone: Tone) = when (tone) {
-  Tone.POSITIVE -> MaterialTheme.colorScheme.surface
-  Tone.NEUTRAL -> MaterialTheme.colorScheme.primary
-  Tone.NEGATIVE -> MaterialTheme.colorScheme.surface
-  Tone.WARNING -> MaterialTheme.colorScheme.error
-}
-
-@Composable fun vividContainerColorForTone(tone: Tone) = when (tone) {
-  Tone.POSITIVE -> MaterialTheme.colorScheme.primary
-  Tone.NEUTRAL -> MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp)
-  Tone.NEGATIVE -> textErrorColor()
-  Tone.WARNING -> MaterialTheme.colorScheme.errorContainer
-}
+@Composable fun textErrorColor() = MaterialTheme.colorScheme.onErrorContainer
 
 @Composable fun containerColorForTone(tone: Tone) = when (tone) {
   Tone.POSITIVE -> MaterialTheme.colorScheme.primary
   Tone.NEUTRAL -> MaterialTheme.colorScheme.surfaceColorAtElevation(12.dp)
-  Tone.NEGATIVE -> MaterialTheme.colorScheme.surface.blend(
-    to = Color.Red,
-    by = 0.13f
-  )
+  Tone.NEGATIVE -> MaterialTheme.colorScheme.errorContainer
   Tone.WARNING -> MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp).blend(
     to = baseWarningColor,
     by = 0.13f
   )
+  Tone.INFO -> MaterialTheme.colorScheme.secondaryContainer
 }
-
 
 @Composable fun textColorForTone(tone: Tone) = when (tone) {
   Tone.POSITIVE -> MaterialTheme.colorScheme.surface
   Tone.NEUTRAL -> MaterialTheme.colorScheme.onSurfaceVariant
   Tone.NEGATIVE -> textErrorColor()
   Tone.WARNING -> textWarningColor()
+  Tone.INFO -> MaterialTheme.colorScheme.onSecondaryContainer
 }
 
 @Composable fun iconColorForTone(tone: Tone) = when (tone) {
-  Tone.POSITIVE -> MaterialTheme.colorScheme.surface
+  Tone.POSITIVE -> MaterialTheme.colorScheme.onPrimary
   Tone.NEUTRAL -> MaterialTheme.colorScheme.tertiary
   Tone.NEGATIVE -> textErrorColor()
   Tone.WARNING -> textWarningColor()
+  Tone.INFO -> MaterialTheme.colorScheme.onSecondaryContainer
 }
 
 fun Color.blend(to: Color, @FloatRange(0.0, 1.0) by: Float): Color {

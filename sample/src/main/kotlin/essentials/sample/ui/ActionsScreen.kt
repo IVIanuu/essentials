@@ -45,6 +45,7 @@ import kotlin.time.Duration.Companion.seconds
 
     SectionListItem(
       sectionType = SectionType.LAST,
+      colors = SectionDefaults.colors(tone = Tone.NEGATIVE),
       onClick = scopedAction {
         val actionId = navigator().push(ActionPickerScreen())
           .safeAs<ActionPickerScreen.Result.Action>()
