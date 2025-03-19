@@ -205,8 +205,5 @@ fun interface ScreenTransitionDecorator : ScreenDecorator {
 ): ScreenDecorator = if (screenTransitionDecorator != null) {
   ScreenDecorator { it() }
 } else ScreenTransitionDecorator {
-  Modifier.animateEnterExit(
-    fadeIn() + slideInVertically { it / 2 },
-    fadeOut() + slideOutVertically { it / 2 }
-  )
+  Modifier.animateEnterExit(fadeIn(), fadeOut())
 }

@@ -27,7 +27,7 @@ class DecoratorsScreen : Screen<Unit>
       (1..10).forEach { itemIndex ->
         item {
           SectionListItem(
-            sectionType = sectionTypeOf(itemIndex - 1, 10),
+            sectionType = sectionTypeOf(itemIndex - 1, 10, false),
             title = { Text("Item $itemIndex") }
           )
         }

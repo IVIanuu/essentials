@@ -51,7 +51,7 @@ class DonationScreen(
 
     skus.getOrNull()?.fastForEachIndexed { index, donation ->
       SectionListItem(
-        sectionType = sectionTypeOf(index, skus.get().size),
+        sectionType = sectionTypeOf(index, skus.get().size, false),
         onClick = scopedAction {
           if (billing.purchase(donation.donation.sku, true, true)) {
             billing.consumePurchase(donation.donation.sku)

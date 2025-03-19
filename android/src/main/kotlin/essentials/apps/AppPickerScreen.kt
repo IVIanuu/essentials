@@ -53,7 +53,7 @@ class AppPickerScreen(
 
           itemsIndexed(apps) { index, app ->
             SectionListItem(
-              sectionType = sectionTypeOf(index, apps.size),
+              sectionType = sectionTypeOf(index, apps.size, true),
               onClick = scopedAction { popWithResult(app) },
               title = { Text(app.appName) },
               trailing = {

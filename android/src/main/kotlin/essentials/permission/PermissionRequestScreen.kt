@@ -64,7 +64,7 @@ class PermissionRequestScreen(
       itemsIndexed(permissionsToGrant, { _, permission -> permission }) { index, permission ->
         SectionAlert(
           modifier = Modifier.animateItem(),
-          sectionType = sectionTypeOf(index, permissionsToGrant.size),
+          sectionType = sectionTypeOf(index, permissionsToGrant.size, false),
           title = { Text(permission.title) },
           description = { Text(permission.desc, modifier = Modifier.padding(it)) },
           icon = { permission.icon?.invoke() },

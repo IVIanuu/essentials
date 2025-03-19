@@ -97,7 +97,7 @@ import injekt.*
 ) {
   SectionListItem(
     onClick = onClick,
-    sectionType = sectionTypeOf(index, itemCount),
+    sectionType = sectionTypeOf(index, itemCount, true),
     title = { Text(item.title) },
     description = { Text(Strings.Text) },
     trailing = {
@@ -113,22 +113,7 @@ import injekt.*
             )
         }
       )
-    }/*,
-    trailingContent = {
-      BottomSheetLauncherButton {
-        Subheader { Text("Example sheet") }
-
-        (0..40).forEach { index ->
-          DecoratedListItem(
-            first = index == 0,
-            last = index == 40,
-            onClick = { dismiss() },
-            headlineContent = { Text(index.toString()) },
-            leadingContent = { Icon(Icons.Default.Add, null) }
-          )
-        }
-      }
-    }*/
+    }
   )
 }
 

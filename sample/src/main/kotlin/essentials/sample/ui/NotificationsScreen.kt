@@ -49,7 +49,7 @@ class NotificationsScreen : Screen<Unit>
       is NotificationsApi.Notifications -> EsLazyColumn {
         itemsIndexed(api.notifications) { index, notification ->
           SectionListItem(
-            sectionType = sectionTypeOf(index, api.notifications.size),
+            sectionType = sectionTypeOf(index, api.notifications.size, false),
             onClick = action { api.openNotification(notification.notification) },
             title = {
               Text(

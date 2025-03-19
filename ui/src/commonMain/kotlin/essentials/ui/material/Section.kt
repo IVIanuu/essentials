@@ -89,7 +89,7 @@ object SectionDefaults {
     padding = PaddingValues(
       start = 16.dp,
       end = 16.dp,
-      top = if (sectionType.first) 16.dp else 2.dp,
+      top = if (sectionType.first) if (sectionType.withHeader) 8.dp else 16.dp else 2.dp,
       bottom = if (sectionType.last) 16.dp else 2.dp
     ),
     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
@@ -109,12 +109,20 @@ data class SectionPadding(
   val extraContentPadding: @Composable () -> PaddingValues
 )
 
-enum class SectionType(val first: Boolean, val last: Boolean) {
-  FIRST(true, false), LAST(false, true), MIDDLE(false, false), SINGLE(true, true)
+enum class SectionType(val first: Boolean, val last: Boolean, val withHeader: Boolean) {
+  FIRST_WITH_HEADER(true, false, true),
+  FIRST(true, false, false),
+  LAST(false, true, false),
+  MIDDLE(false, false, false),
+  SINGLE(true, true, false),
+  SINGLE_WITH_HEADER(true, true, true)
 }
 
-fun sectionTypeOf(index: Int, itemCount: Int) = when {
-  index == 0 -> if (itemCount == 1) SectionType.SINGLE else SectionType.FIRST
+fun sectionTypeOf(index: Int, itemCount: Int, withHeader: Boolean) = when {
+  index == 0 ->
+    if (itemCount == 1)
+        (if (withHeader) SectionType.SINGLE_WITH_HEADER else SectionType.SINGLE)
+    else if (withHeader) SectionType.FIRST_WITH_HEADER else SectionType.FIRST
   index == itemCount - 1 -> SectionType.LAST
   else -> SectionType.MIDDLE
 }

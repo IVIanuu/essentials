@@ -50,7 +50,7 @@ class BottomNavigationScreen : Screen<Unit>
         (1..100).forEach { item ->
           item {
             SectionListItem(
-              sectionType = sectionTypeOf(item - 1, 100),
+              sectionType = sectionTypeOf(item - 1, 100, false),
               title = { Text("Item $item") }
             )
           }

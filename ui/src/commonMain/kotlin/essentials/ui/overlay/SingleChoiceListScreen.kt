@@ -28,7 +28,7 @@ class SingleChoiceListScreen<T : Any>(
 
     context.screen.items.fastForEachIndexed { index, item ->
       SectionListItem(
-        sectionType = sectionTypeOf(index, context.screen.items.size),
+        sectionType = sectionTypeOf(index, context.screen.items.size, false),
         selected = item == selected,
         onClick = { selected = item },
         title = { Text(context.screen.renderable.render(item)) }

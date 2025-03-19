@@ -67,7 +67,7 @@ class ActionPickerScreen(
       EsLazyColumn {
         itemsIndexed(items) { index, item ->
           SectionListItem(
-            sectionType = sectionTypeOf(index, items.size),
+            sectionType = sectionTypeOf(index, items.size, false),
             onClick = scopedAction {
               val result = item.getResult(navigator())
                 ?: return@scopedAction

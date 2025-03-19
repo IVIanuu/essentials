@@ -41,7 +41,7 @@ class ShortcutPickerScreen : Screen<Shortcut>
       EsLazyColumn {
         itemsIndexed(shortcuts) { index, shortcut ->
           SectionListItem(
-            sectionType = sectionTypeOf(index, shortcuts.size),
+            sectionType = sectionTypeOf(index, shortcuts.size, false),
             onClick = scopedAction {
               catch {
                 val shortcutRequestResult = navigator().push(shortcut.intent.asScreen())

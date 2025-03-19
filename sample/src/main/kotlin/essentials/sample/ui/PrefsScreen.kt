@@ -46,7 +46,7 @@ class PrefsScreen : Screen<Unit>
 
       item {
         SectionSlider(
-          sectionType = SectionType.FIRST,
+          sectionType = SectionType.FIRST_WITH_HEADER,
           value = prefs.slider,
           onValueChangeFinished = action { value ->
             pref.updateData { it.copy(slider = value) }
@@ -100,7 +100,7 @@ class PrefsScreen : Screen<Unit>
 
       item {
         SectionListItem(
-          sectionType = SectionType.FIRST,
+          sectionType = SectionType.FIRST_WITH_HEADER,
           onClick = action {
             val newColor = navigator().push(
               ColorPickerScreen(

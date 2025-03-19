@@ -30,7 +30,7 @@ class MultiChoiceListScreen<T : Any>(
     context.screen.items.fastForEachIndexed { index, item ->
       val selected = item in selectedItems
       SectionSwitch(
-        sectionType = sectionTypeOf(index, context.screen.items.size),
+        sectionType = sectionTypeOf(index, context.screen.items.size, false),
         checked = selected,
         onCheckedChange = {
           val newSelectedItems = selectedItems.toMutableSet()
