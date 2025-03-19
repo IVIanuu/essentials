@@ -18,11 +18,9 @@ import kotlin.reflect.*
 @Composable fun <S : Screen<*>> ScreenContent(state: ScreenState<S>) {
   if (state.isDisposed) return
 
-  val compositionKey = currentCompositeKeyHash
-
   val savableStateRegistry = remember {
     SaveableStateRegistry(
-      restoredValues = state.savedState.remove(compositionKey),
+      restoredValues = state.savedState,
       canBeSaved = { true }
     )
   }
@@ -37,9 +35,10 @@ import kotlin.reflect.*
       state.isContentRemoved = false
       onDispose {
         state.isContentRemoved = true
-        if (!state.isStateRemoved)
-          state.savedState[compositionKey] = savableStateRegistry.performSave()
-        state.disposeIfNeeded()
+        if (!state.isStateRemoved) {
+          state.savedState = savableStateRegistry.performSave()
+          state.disposeIfNeeded()
+        }
       }
     }
   }
@@ -56,7 +55,7 @@ import kotlin.reflect.*
   var isDisposed by mutableStateOf(false)
     private set
 
-  internal var savedState = mutableMapOf<Any, Map<String, List<Any?>>>()
+  internal var savedState = emptyMap<String, List<Any?>>()
 
   override fun onRemembered() {
     isStateRemoved = false
