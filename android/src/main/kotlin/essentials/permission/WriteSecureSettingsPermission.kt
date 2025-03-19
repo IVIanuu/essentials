@@ -135,7 +135,7 @@ class WriteSecureSettingsScreen(
         SectionAlert(
           modifier = Modifier.fillMaxWidth(),
           onClick = { openStep(step) },
-          sectionType = sectionTypeOf(step - 1, 4, false),
+          sectionType = sectionTypeOf(step - 1, 4, true),
           focused = isCurrentStep,
           title = title,
           icon = {
