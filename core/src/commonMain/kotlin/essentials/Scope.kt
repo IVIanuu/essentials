@@ -72,7 +72,7 @@ import kotlin.reflect.*
     }
   }
 
-  inline fun <T : Any> scoped(key: TypeKey<T> = inject, compute: () -> T): T =
+  inline fun <T> scoped(key: TypeKey<T> = inject, compute: () -> T): T =
     scoped(key.value, compute)
 
   override fun dispose() {
@@ -177,16 +177,12 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
 @Tag annotation class ScopedService<N> {
   @Provide companion object {
     @Provide inline fun <@AddOn T : @ScopedService<N> S, reified S : Any, N : Any> scoped(
-      scope: Scope<N>,
-      key: TypeKey<S>,
       init: () -> T
-    ): S = scope.scoped(key) { init() }
+    ): @Scoped<N> S = init()
 
     @Provide inline fun <@AddOn T : @ScopedService<N> S, reified S : Any, N : Any> service(
-      scope: Scope<N>,
-      key: TypeKey<S>,
-      crossinline init: () -> T,
-    ) = ProvidedService<N, S>(S::class) { scope.scoped(key) { init() } }
+      crossinline init: () -> S
+    ) = ProvidedService<N, S>(S::class) { init() }
   }
 }
 

@@ -1,11 +1,12 @@
 package essentials.logging
 
+import androidx.compose.runtime.*
 import co.touchlab.kermit.*
 import essentials.*
 import injekt.*
 import injekt.common.*
 
-@JvmInline value class Logger(val kermitLogger: co.touchlab.kermit.Logger) {
+@Stable @JvmInline value class Logger(val kermitLogger: co.touchlab.kermit.Logger) {
   @Provide companion object {
     @Provide fun default(): @ScopedService<AppScope> Logger =
       Logger(co.touchlab.kermit.Logger(loggerConfigInit(platformLogWriter())))

@@ -11,7 +11,7 @@ import com.github.michaelbull.result.*
 import essentials.*
 import injekt.*
 
-sealed interface NotificationsApi {
+@Stable sealed interface NotificationsApi {
   data object Unavailable : NotificationsApi
   data object Empty : NotificationsApi
   data class Notifications(
