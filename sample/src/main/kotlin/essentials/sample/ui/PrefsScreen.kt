@@ -104,16 +104,54 @@ class PrefsScreen : Screen<Unit>
           onClick = action {
             val newColor = navigator().push(
               ColorPickerScreen(
-                initialColor = prefs.color,
-                title = "Color picker"
+                initialColor = prefs.primary,
+                title = "Primary color"
               )
             ) ?: return@action
-            pref.updateData { it.copy(color = newColor) }
+            pref.updateData { it.copy(primary = newColor) }
           },
           modifier = Modifier.interactive(prefs.switch),
-          title = { Text("Color") },
+          title = { Text("Primary color") },
           description = { Text("This is a color preference") },
-          trailing = { ColorIcon(prefs.color) }
+          trailing = { ColorIcon(prefs.primary) }
+        )
+      }
+
+      item {
+        SectionListItem(
+          sectionType = SectionType.LAST,
+          onClick = action {
+            val newColor = navigator().push(
+              ColorPickerScreen(
+                initialColor = prefs.secondary,
+                title = "Secondary color"
+              )
+            ) ?: return@action
+            pref.updateData { it.copy(secondary = newColor) }
+          },
+          modifier = Modifier.interactive(prefs.switch),
+          title = { Text("Secondary color") },
+          description = { Text("This is a color preference") },
+          trailing = { ColorIcon(prefs.secondary) }
+        )
+      }
+
+      item {
+        SectionListItem(
+          sectionType = SectionType.LAST,
+          onClick = action {
+            val newColor = navigator().push(
+              ColorPickerScreen(
+                initialColor = prefs.tertiary,
+                title = "Tertiary color"
+              )
+            ) ?: return@action
+            pref.updateData { it.copy(tertiary = newColor) }
+          },
+          modifier = Modifier.interactive(prefs.switch),
+          title = { Text("Tertiary color") },
+          description = { Text("This is a color preference") },
+          trailing = { ColorIcon(prefs.tertiary) }
         )
       }
 
@@ -161,7 +199,9 @@ class PrefsScreen : Screen<Unit>
   val slider: Int = 50,
   val steppedSlider: Float = 0.5f,
   val textInput: String = "",
-  @Contextual val color: Color = Color.Red,
+  @Contextual val primary: Color = Color.Red,
+  @Contextual val secondary: Color = Color.Blue,
+  @Contextual val tertiary: Color = Color.Green,
   val multiChoice: Set<String> = setOf("A", "B", "C"),
   val singleChoice: String = "C",
 ) {

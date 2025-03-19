@@ -5,9 +5,8 @@
 package essentials.sample.ui
 
 import androidx.compose.foundation.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.*
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.googlefonts.*
 import androidx.datastore.core.*
 import essentials.font.*
@@ -18,14 +17,17 @@ import injekt.*
 
 @Provide @Composable fun sampleColorScheme(
   pref: DataStore<SamplePrefs>
-): AppColorScheme = /*defaultAppColorScheme(
+): AppColorScheme = defaultAppColorScheme(
   AppColors(
-    pref.data.collectAsState(null).value?.color
+    pref.data.collectAsState(null).value?.primary
+      ?: Color.Blue,
+    pref.data.collectAsState(null).value?.secondary
+      ?: Color.Blue,
+    pref.data.collectAsState(null).value?.tertiary
       ?: Color.Blue
   ),
   isSystemInDarkTheme()
-)*/ if (isSystemInDarkTheme()) dynamicDarkColorScheme(LocalContext.current)
-else dynamicLightColorScheme(LocalContext.current)
+)
 
 object Strings {
   const val Title = "Title"

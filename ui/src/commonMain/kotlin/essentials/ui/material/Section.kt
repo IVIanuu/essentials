@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import essentials.*
 import essentials.coroutines.*
@@ -207,7 +208,12 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
     focused = focused,
     colors = colors,
     shape = shape,
-    padding = padding,
+    padding = padding.copy(
+      contentPadding = PaddingValues(
+        start = padding.contentPadding.calculateStartPadding(LocalLayoutDirection.current),
+        end = padding.contentPadding.calculateEndPadding(LocalLayoutDirection.current)
+      )
+    ),
     onClick = onClick,
     onLongClick = onLongClick,
     interactionSource = interactionSource
@@ -225,7 +231,10 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
       Column(
         modifier = Modifier
           .weight(1f)
-          .align(Alignment.CenterVertically),
+          .padding(
+            top = padding.contentPadding.calculateTopPadding(),
+            bottom = padding.contentPadding.calculateBottomPadding()
+          ),
         verticalArrangement = Arrangement.Center
       ) {
         if (title != null)
