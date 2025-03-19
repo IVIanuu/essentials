@@ -8,9 +8,9 @@ import androidx.activity.*
 import androidx.compose.runtime.*
 import androidx.core.content.*
 import androidx.lifecycle.*
+import essentials.*
 import essentials.app.*
 import essentials.coroutines.*
-import essentials.logging.*
 import injekt.*
 import kotlinx.coroutines.*
 import java.util.*

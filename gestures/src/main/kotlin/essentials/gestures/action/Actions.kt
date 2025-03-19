@@ -13,7 +13,6 @@ import com.github.michaelbull.result.*
 import essentials.*
 import essentials.coroutines.*
 import essentials.gestures.action.actions.*
-import essentials.logging.*
 import essentials.permission.*
 import essentials.util.*
 import injekt.*

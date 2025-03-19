@@ -9,7 +9,6 @@ import android.service.quicksettings.*
 import androidx.compose.runtime.*
 import essentials.*
 import essentials.compose.*
-import essentials.logging.*
 import injekt.*
 
 abstract class EsTileService : TileService() {

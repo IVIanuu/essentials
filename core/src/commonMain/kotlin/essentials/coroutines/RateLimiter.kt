@@ -4,7 +4,7 @@
 
 package essentials.coroutines
 
-import essentials.time.*
+import essentials.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*

@@ -4,7 +4,7 @@
 
 @file:Suppress("UNCHECKED_CAST")
 
-package essentials.resource
+package essentials
 
 import androidx.compose.runtime.*
 import arrow.core.*

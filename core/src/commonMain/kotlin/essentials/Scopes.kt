@@ -4,8 +4,14 @@
 
 package essentials
 
+import injekt.*
+
 data object AppScope
 
 interface AppScopeOwner {
   val appScope: Scope<AppScope>
 }
+
+@Provide data object AppVisibleScope : ChildScopeMarker<AppVisibleScope, UiScope>
+
+@Provide data object UiScope : ChildScopeMarker<UiScope, AppScope>

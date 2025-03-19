@@ -1,8 +1,7 @@
-package essentials.logging
+package essentials
 
 import androidx.compose.runtime.*
 import co.touchlab.kermit.*
-import essentials.*
 import injekt.*
 import injekt.common.*
 

@@ -10,10 +10,8 @@ import androidx.compose.runtime.*
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.*
 import essentials.*
-import essentials.app.*
 import essentials.compose.*
 import essentials.coroutines.*
-import essentials.logging.*
 import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*

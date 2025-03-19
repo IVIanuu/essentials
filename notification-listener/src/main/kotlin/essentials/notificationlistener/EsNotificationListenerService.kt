@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import com.github.michaelbull.result.*
 import essentials.*
 import essentials.app.*
-import essentials.logging.*
 import injekt.*
 
 @Provide @AndroidComponent class EsNotificationListenerService(

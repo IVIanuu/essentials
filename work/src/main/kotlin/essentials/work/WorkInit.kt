@@ -12,9 +12,8 @@ import androidx.compose.ui.util.*
 import androidx.work.*
 import arrow.fx.coroutines.*
 import essentials.*
+import essentials.Logger
 import essentials.coroutines.*
-import essentials.logging.*
-import essentials.logging.Logger
 import injekt.*
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.coroutines.*

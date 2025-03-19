@@ -9,8 +9,6 @@ import androidx.compose.ui.util.*
 import androidx.datastore.core.*
 import androidx.datastore.preferences.core.*
 import essentials.*
-import essentials.app.*
-import essentials.logging.*
 import essentials.ui.navigation.*
 import injekt.*
 import kotlinx.coroutines.flow.*

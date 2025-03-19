@@ -17,7 +17,6 @@ import com.github.michaelbull.result.*
 import essentials.*
 import essentials.apps.*
 import essentials.compose.*
-import essentials.resource.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*

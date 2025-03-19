@@ -10,10 +10,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.util.*
 import arrow.fx.coroutines.*
+import essentials.*
+import essentials.Resource
 import essentials.billing.*
 import essentials.compose.*
-import essentials.resource.*
-import essentials.resource.Resource
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import essentials.util.*

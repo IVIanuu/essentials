@@ -6,7 +6,6 @@ package essentials.sample
 
 import androidx.compose.runtime.*
 import essentials.*
-import essentials.logging.*
 import injekt.*
 
 @Provide @Composable fun ActiveScopeLogger(

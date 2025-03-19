@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.*
 import com.android.billingclient.api.*
 import com.slack.circuit.foundation.internal.*
+import essentials.*
 import essentials.ads.*
 import essentials.billing.*
 import essentials.compose.*
-import essentials.resource.*
 import essentials.ui.navigation.*
 import essentials.util.*
 import injekt.*
