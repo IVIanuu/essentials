@@ -42,8 +42,8 @@ import kotlin.math.*
     content: @Composable () -> Unit
   ) {
     val contentView = remember {
-      lateinit var contentView: OverlayComposeView
-      contentView = OverlayComposeView(context) {
+      lateinit var contentView: SystemWindowComposeView
+      contentView = SystemWindowComposeView(context) {
         val scope = remember(systemWindowScopeFactory)
         DisposableEffect(true) {
           onDispose { scope.dispose() }
@@ -86,7 +86,7 @@ import kotlin.math.*
   }
 
   @Composable private fun Window(
-    contentView: OverlayComposeView,
+    contentView: SystemWindowComposeView,
     state: SystemWindowState,
     content: @Composable () -> Unit
   ) {

@@ -2,6 +2,8 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
+@file:SuppressLint("ViewConstructor")
+
 package essentials.systemoverlay
 
 import android.annotation.*
@@ -14,26 +16,23 @@ import androidx.lifecycle.*
 import androidx.savedstate.*
 import injekt.*
 
-@SuppressLint("ViewConstructor")
-@Stable @Provide class OverlayComposeView(
+@Stable @Provide class SystemWindowComposeView(
   context: Context,
   private val content: @Composable () -> Unit,
 ) : AbstractComposeView(context),
   LifecycleOwner,
-  SavedStateRegistryOwner,
-  ViewModelStoreOwner {
+  SavedStateRegistryOwner {
   private val _lifecycle = LifecycleRegistry(this)
-  override val lifecycle: Lifecycle
-    get() = _lifecycle
+  override val lifecycle: Lifecycle get() = _lifecycle
   private val savedStateRegistryController = SavedStateRegistryController.create(this)
-  override val viewModelStore = ViewModelStore()
+  override val savedStateRegistry: SavedStateRegistry
+    get() = savedStateRegistryController.savedStateRegistry
 
   init {
     setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
     setViewTreeLifecycleOwner(this)
     savedStateRegistryController.performRestore(null)
     setViewTreeSavedStateRegistryOwner(this)
-    setViewTreeViewModelStoreOwner(this)
     _lifecycle.currentState = Lifecycle.State.CREATED
   }
 
@@ -50,17 +49,8 @@ import injekt.*
     _lifecycle.currentState = Lifecycle.State.CREATED
     super.onDetachedFromWindow()
   }
-
-  override val savedStateRegistry: SavedStateRegistry
-    get() = savedStateRegistryController.savedStateRegistry
-
-  fun dispose() {
-    _lifecycle.currentState = Lifecycle.State.DESTROYED
-    viewModelStore.clear()
-  }
 }
 
-@SuppressLint("ViewConstructor")
 @Stable class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {
   var useDownTouchOffset = true
 
@@ -99,7 +89,6 @@ import injekt.*
       )
     }
 
-    // compose crashes in some situations
     return delegate.dispatchTouchEvent(ev)
   }
 }
