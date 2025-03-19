@@ -35,10 +35,9 @@ import kotlin.reflect.*
       state.isContentRemoved = false
       onDispose {
         state.isContentRemoved = true
-        if (!state.isStateRemoved) {
+        if (!state.isStateRemoved)
           state.savedState = savableStateRegistry.performSave()
-          state.disposeIfNeeded()
-        }
+        state.disposeIfNeeded()
       }
     }
   }
