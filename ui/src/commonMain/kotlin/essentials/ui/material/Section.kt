@@ -375,25 +375,3 @@ fun sectionTypeOf(index: Int, itemCount: Int, withHeader: Boolean) = when {
     leading = leadingContent
   )
 }
-
-@Composable fun <T> SectionSlider(
-  value: T,
-  values: List<T>,
-  modifier: Modifier = Modifier,
-  onValueChange: ((T) -> Unit)? = null,
-  onValueChangeFinished: ((T) -> Unit)? = null,
-  headlineContent: @Composable () -> Unit,
-  leadingContent: (@Composable () -> Unit)? = null,
-  trailingContent: @Composable ((T) -> Unit)? = { Text(it.toString()) }
-) {
-  SectionSlider(
-    value = values.indexOf(value),
-    modifier = modifier,
-    valueRange = 0..values.lastIndex,
-    onValueChange = onValueChange?.let { { onValueChange(values[it]) } },
-    onValueChangeFinished = onValueChangeFinished?.let { { onValueChangeFinished(values[it]) } },
-    headlineContent = headlineContent,
-    leadingContent = leadingContent,
-    trailingContent = trailingContent?.let { { trailingContent(values[it]) } }
-  )
-}
