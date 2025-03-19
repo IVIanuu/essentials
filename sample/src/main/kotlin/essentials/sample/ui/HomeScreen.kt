@@ -55,26 +55,34 @@ import injekt.*
     }
   ) {
     EsLazyColumn {
-      itemsIndexed(finalItems) { index, item ->
-        val color = rememberSaveable(item) {
-          DefaultColorPalette
-            .shuffled()
-            .first()
-        }
+      finalItems
+        .groupBy { it.title.first().uppercase() }
+        .toList()
+        .sortedBy { it.first }
+        .forEach { (title, items) ->
+          item { SectionHeader { Text(title.toString()) } }
 
-        HomeItem(
-          item = item,
-          index = index,
-          itemCount = finalItems.size,
-          color = color,
-          onClick = action {
-            navigator().push(
-              item.screenFactoryWithIndex?.invoke(index, color)
-                ?: item.screenFactory(color)
+          itemsIndexed(items) { index, item ->
+            val color = rememberSaveable(item) {
+              DefaultColorPalette
+                .shuffled()
+                .first()
+            }
+
+            HomeItem(
+              item = item,
+              index = index,
+              itemCount = items.size,
+              color = color,
+              onClick = action {
+                navigator().push(
+                  item.screenFactoryWithIndex?.invoke(index, color)
+                    ?: item.screenFactory(color)
+                )
+              }
             )
           }
-        )
-      }
+        }
     }
   }
 }

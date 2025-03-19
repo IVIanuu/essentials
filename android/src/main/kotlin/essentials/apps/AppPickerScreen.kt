@@ -38,26 +38,33 @@ class AppPickerScreen(
           emit(
             getInstalledApps()
               .fastFilter { context.screen.appPredicate.test(it) }
+              .groupBy { it.appName.first().uppercase() }
+              .toList()
+              .sortedBy { it.first }
           )
         }
           .flowOn(coroutineContexts.computation)
           .collect { value = it }
       }.value
-    ) { apps ->
+    ) { appGroups ->
       EsLazyColumn {
-        itemsIndexed(apps) { index, app ->
-          SectionListItem(
-            sectionType = sectionTypeOf(index, apps.size),
-            onClick = scopedAction { popWithResult(app) },
-            title = { Text(app.appName) },
-            leading = {
-              AsyncImage(
-                modifier = Modifier.size(40.dp),
-                model = AppIcon(packageName = app.packageName),
-                contentDescription = null
-              )
-            }
-          )
+        appGroups.fastForEach { (title, apps) ->
+          item { SectionHeader { Text(title.toString()) } }
+
+          itemsIndexed(apps) { index, app ->
+            SectionListItem(
+              sectionType = sectionTypeOf(index, apps.size),
+              onClick = scopedAction { popWithResult(app) },
+              title = { Text(app.appName) },
+              trailing = {
+                AsyncImage(
+                  modifier = Modifier.size(40.dp),
+                  model = AppIcon(packageName = app.packageName),
+                  contentDescription = null
+                )
+              }
+            )
+          }
         }
       }
     }
