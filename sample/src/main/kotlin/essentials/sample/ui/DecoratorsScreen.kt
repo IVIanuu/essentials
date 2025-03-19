@@ -37,7 +37,7 @@ class DecoratorsScreen : Screen<Unit>
 }
 
 @Provide val sampleListDecorator = ListDecorator {
-  item(null) {
+  item {
     val screen = catch { LocalScope.current }.getOrNull()?.screen
     if (screen is DecoratorsScreen)
       Text("Sample decorator before content $screen")
@@ -45,7 +45,7 @@ class DecoratorsScreen : Screen<Unit>
 
   content()
 
-  item(null) {
+  item {
     val screen = catch { LocalScope.current }.getOrNull()?.screen
     if (screen is DecoratorsScreen)
       Text("Sample decorator after content $screen")

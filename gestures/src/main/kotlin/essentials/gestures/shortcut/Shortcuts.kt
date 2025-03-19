@@ -19,7 +19,12 @@ import injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-data class Shortcut(val intent: Intent, val name: String, val icon: Drawable)
+data class Shortcut(
+  val intent: Intent,
+  val title: String,
+  val icon: Drawable,
+  val packageName: String
+)
 
 @Tag typealias getShortcutsResult = List<Shortcut>
 typealias getShortcuts = suspend () -> getShortcutsResult
@@ -40,19 +45,21 @@ typealias getShortcuts = suspend () -> getShortcutsResult
               resolveInfo.activityInfo.name
             )
           },
-          name = resolveInfo.loadLabel(context.packageManager).toString(),
-          icon = resolveInfo.loadIcon(context.packageManager)
+          title = resolveInfo.loadLabel(context.packageManager).toString(),
+          icon = resolveInfo.loadIcon(context.packageManager),
+          packageName = resolveInfo.activityInfo.packageName
         )
       }.getOrNull()
     }
     .filterNotNull()
-    .sortedBy { it.name }
+    .sortedBy { it.title }
 }
 
 @Tag typealias extractShortcutResult = Shortcut
-typealias extractShortcut = suspend (Intent) -> extractShortcutResult
+typealias extractShortcut = suspend (String, Intent) -> extractShortcutResult
 
 @Provide suspend fun extractShortcut(
+  packageName: String,
   shortcutRequestResult: Intent,
   context: Application,
   coroutineContexts: CoroutineContexts
@@ -64,7 +71,7 @@ typealias extractShortcut = suspend (Intent) -> extractShortcutResult
     shortcutRequestResult.getParcelableExtra<Bitmap>(Intent.EXTRA_SHORTCUT_ICON)
   val iconResource =
     shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
-
+  println("lolo $intent")
   @Suppress("DEPRECATION") val icon = when {
     bitmapIcon != null -> bitmapIcon.toDrawable(context.resources)
     iconResource != null -> {
@@ -77,5 +84,5 @@ typealias extractShortcut = suspend (Intent) -> extractShortcutResult
     else -> error("No icon provided $shortcutRequestResult")
   }
 
-  Shortcut(intent, name, icon)
+  Shortcut(intent, name, icon, packageName)
 }

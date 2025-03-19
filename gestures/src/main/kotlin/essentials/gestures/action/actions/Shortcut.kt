@@ -61,7 +61,7 @@ import java.io.*
 
   override suspend fun pickAction(navigator: Navigator): ActionPickerScreen.Result? {
     val shortcut = navigator.push(ShortcutPickerScreen()) ?: return null
-    val name = shortcut.name
+    val name = shortcut.title
     val icon = shortcut.icon.toBitmap()
     val stream = ByteArrayOutputStream()
     icon.compress(Bitmap.CompressFormat.PNG, 100, stream)
