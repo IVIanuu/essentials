@@ -15,6 +15,7 @@ import injekt.*
 import kotlinx.coroutines.*
 import java.util.*
 import java.util.concurrent.*
+import kotlin.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
 enum class ScreenState(val isOn: Boolean) { OFF(false), LOCKED(true), UNLOCKED(true) }
@@ -114,25 +115,25 @@ typealias unlockScreen = suspend () -> unlockScreenResult
   return startUnlockActivityForResult(context, REQUEST_TYPE_UNLOCK)
 }
 
-private suspend fun startUnlockActivityForResult(context: Application, requestType: Int): Boolean {
-  val result = CompletableDeferred<Boolean>()
-  val requestId = UUID.randomUUID().toString()
-  requestsById[requestId] = result
-  context.startActivity(
-    Intent(context, UnlockActivity::class.java).apply {
-      putExtra(KEY_REQUEST_ID, requestId)
-      putExtra(KEY_REQUEST_TYPE, requestType)
-      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-  )
-  return result.await()
-}
+private suspend fun startUnlockActivityForResult(context: Application, requestType: Int): Boolean =
+  suspendCancellableCoroutine {
+    val requestId = UUID.randomUUID().toString()
+    it.invokeOnCancellation { requestsById.remove(requestId) }
+    requestsById[requestId] = it
+    context.startActivity(
+      Intent(context, UnlockActivity::class.java).apply {
+        putExtra(KEY_REQUEST_ID, requestId)
+        putExtra(KEY_REQUEST_TYPE, requestType)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      }
+    )
+  }
 
 private const val KEY_REQUEST_ID = "request_id"
 private const val KEY_REQUEST_TYPE = "request_type"
 private const val REQUEST_TYPE_UNLOCK = 0
 private const val REQUEST_TYPE_SCREEN_ON = 1
-private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
+private val requestsById = ConcurrentHashMap<String, Continuation<Boolean>>()
 
 @Provide @AndroidComponent class UnlockActivity(
   @property:Provide private val logger: Logger
@@ -165,7 +166,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
     fun finishWithResult(success: Boolean) {
       d { "finish with result $success" }
       hasResult = true
-      requestsById.remove(requestId)?.complete(success)
+      requestsById.remove(requestId)?.resume(success)
       finish()
     }
 
@@ -176,7 +177,7 @@ private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean
       onCancel {
         // just in case we didn't respond yet
         if (!hasResult)
-          requestsById.remove(requestId)?.complete(false)
+          requestsById.remove(requestId)?.resume(false)
       }
     }
 
