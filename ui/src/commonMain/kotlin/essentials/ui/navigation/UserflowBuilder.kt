@@ -28,6 +28,6 @@ fun interface UserflowBuilder : ExtensionPoint<UserflowBuilder> {
 
     if (userflowScreens.isEmpty()) return@LaunchedEffect
 
-    navigator.setBackStack(backStack = navigator.backStack + userflowScreens)
+    navigator.newBackStack(backStack = navigator.backStack + userflowScreens)
   }
 }

@@ -5,112 +5,69 @@
 package essentials.ui.navigation
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.*
 import essentials.*
 import essentials.app.*
-import essentials.coroutines.*
 import injekt.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.*
+import kotlin.coroutines.*
 
 @Stable class Navigator(
-  private val scope: CoroutineScope,
   initialBackStack: List<Screen<*>> = emptyList(),
-  private val screenInterceptors: List<(Screen<*>) -> ScreenInterceptorResult<*>> = emptyList(),
+  private val screenInterceptors: List<(Screen<*>) -> ScreenInterceptorResult<*>> = emptyList()
 ) {
   var backStack by mutableStateOf(initialBackStack)
     private set
 
-  private val _results = EventFlow<Pair<Screen<*>, Any?>>()
-  val results: Flow<Pair<Screen<*>, Any?>> by this::_results
+  private val results = mutableMapOf<Screen<*>, CancellableContinuation<*>>()
 
-  private val mutex = Mutex()
+  suspend fun <R> push(screen: Screen<R>): R? {
+    screenInterceptors.firstNotNullOfOrNull { it(screen) }
+      ?.let { return it.invoke().unsafeCast() }
 
-  suspend fun setBackStack(backStack: List<Screen<*>>, results: Map<Screen<*>, Any?> = emptyMap()) {
-    backStack.groupBy { it }
-      .forEach {
-        check(it.value.size == 1) {
-          "Back stack cannot contain duplicates ${it.key} -> $backStack"
-        }
-      }
-
-    scope.launch(start = CoroutineStart.UNDISPATCHED) {
-      mutex.withLock {
-        val finalResults = results.toMutableMap()
-        this@Navigator.backStack = buildList {
-          for (screen in backStack) {
-            @Suppress("UNCHECKED_CAST")
-            screen as Screen<Any?>
-
-            val interceptedHandle = screenInterceptors.firstNotNullOfOrNull {
-              it(screen)
-            }
-
-            if (interceptedHandle == null) add(screen)
-            else finalResults[screen] = interceptedHandle()
-          }
-        }
-
-        finalResults.forEach { _results.emit(it.key to it.value) }
-      }
+    return suspendCancellableCoroutine { continuation ->
+      continuation.invokeOnCancellation { results.remove(screen) }
+      backStack += screen
+      results[screen] = continuation
     }
   }
 
-  @Provide companion object {
-    @Provide fun rootNavigator(
-      scope: ScopedCoroutineScope<UiScope>,
-      rootScreen: RootScreen?,
-      screenInterceptors: List<(Screen<*>) -> ScreenInterceptorResult<*>>,
-    ): @ScopedService<UiScope> Navigator = Navigator(
-      scope = scope,
-      initialBackStack = listOfNotNull(rootScreen),
-      screenInterceptors = screenInterceptors
-    )
+  fun newBackStack(backStack: List<Screen<*>>) {
+    this.backStack.reversed().forEach { pop(it) }
+    this.backStack = backStack
+  }
+
+  fun newRoot(screen: Screen<*>) {
+    backStack.reversed().forEach { pop(it) }
+    backStack += screen
+  }
+
+  fun <R> pop(screen: Screen<R>, result: R? = null) {
+    backStack -= screen
+    results.remove(screen)
+      ?.unsafeCast<CancellableContinuation<R?>>()
+      ?.takeIf { it.isActive }
+      ?.resume(result)
+  }
+
+  fun popTop() {
+    if (backStack.size > 1)
+      pop(backStack.last(), null)
   }
 }
 
-suspend fun <R> Navigator.awaitResult(screen: Screen<R>): R? = results
-  .firstOrNull { it.first == screen }
-  ?.second as? R
-
-suspend fun <R> Navigator.setRoot(screen: Screen<R>): R? {
-  setBackStack(listOf(screen))
-  return awaitResult(screen)
+fun <R> popWithResult(result: R? = null, navigator: Navigator = inject, screen: Screen<R> = inject) {
+  navigator.pop(screen, result)
 }
-
-suspend fun <R> Navigator.push(screen: Screen<R>): R? {
-  setBackStack(backStack.fastFilter { it != screen } + screen)
-  return awaitResult(screen)
-}
-
-suspend fun <R> Navigator.pop(screen: Screen<R>, result: R? = null) {
-  setBackStack(backStack.fastFilter { it != screen }, mapOf(screen to result))
-}
-
-suspend fun Navigator.popTop(): Boolean {
-  val currentBackStack = backStack
-  return if (currentBackStack.isNotEmpty()) {
-    pop(currentBackStack.last())
-    true
-  } else false
-}
-
-suspend fun Navigator.popTo(screen: Screen<*>) {
-  val index = backStack.indexOfLast { it == screen }
-  check(index != -1) {
-    "Screen $screen was not in $backStack"
-  }
-  setBackStack(backStack.take(index + 1))
-}
-
-suspend fun <R> popWithResult(
-  result: R? = null,
-  screen: Screen<R> = inject,
-  navigator: Navigator = inject
-) = navigator.pop(screen, result)
 
 @Provide object NavigatorProviders {
+  @Provide fun rootNavigator(
+    rootScreen: RootScreen?,
+    screenInterceptors: List<(Screen<*>) -> ScreenInterceptorResult<*>>,
+  ): @ScopedService<UiScope> Navigator = Navigator(
+    initialBackStack = listOfNotNull(rootScreen),
+    screenInterceptors = screenInterceptors
+  )
+
   @Provide fun fromUiScope(scope: Scope<UiScope>): Navigator = scope.service()
   @Provide fun fromScreenScope(scope: Scope<ScreenScope>): Navigator = scope.service()
 }

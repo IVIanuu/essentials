@@ -17,9 +17,7 @@ import java.util.*
 import java.util.concurrent.*
 import kotlin.time.Duration.Companion.seconds
 
-enum class ScreenState(val isOn: Boolean) {
-  OFF(false), LOCKED(true), UNLOCKED(true)
-}
+enum class ScreenState(val isOn: Boolean) { OFF(false), LOCKED(true), UNLOCKED(true) }
 
 @Provide @Composable
 fun screenState(context: Application = inject): ScreenState = broadcastStateOf(
