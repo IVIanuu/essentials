@@ -105,11 +105,7 @@ fun Typography.withFontFamily(fontFamily: FontFamily?): Typography = copy(
   typography: AppTypography,
   content: @Composable () -> Unit
 ): AppUiDecoration<AppTheme> {
-  MaterialTheme(
-    colorScheme = colorScheme,
-    typography = typography,
-    shapes = shapes
-  ) {
+  MaterialTheme(colorScheme = colorScheme, typography = typography, shapes = shapes) {
     CompositionLocalProvider(
       LocalRippleConfiguration provides RippleConfiguration(
         rippleAlpha = RippleAlpha(
