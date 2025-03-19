@@ -74,14 +74,8 @@ class PrefsScreen : Screen<Unit>
       }
 
       item {
-        SectionHeader(modifier = Modifier.interactive(prefs.switch)) {
-          Text("Dialogs")
-        }
-      }
-
-      item {
         SectionListItem(
-          sectionType = SectionType.FIRST,
+          sectionType = SectionType.SINGLE,
           modifier = Modifier.interactive(prefs.switch),
           onClick = scopedAction {
             val newTextInput = navigator().push(
@@ -99,8 +93,14 @@ class PrefsScreen : Screen<Unit>
       }
 
       item {
+        SectionHeader(modifier = Modifier.interactive(prefs.switch)) {
+          Text("Colors")
+        }
+      }
+
+      item {
         SectionListItem(
-          sectionType = SectionType.LAST,
+          sectionType = SectionType.FIRST,
           onClick = action {
             val newColor = navigator().push(
               ColorPickerScreen(
@@ -119,7 +119,7 @@ class PrefsScreen : Screen<Unit>
 
       item {
         SectionListItem(
-          sectionType = SectionType.LAST,
+          sectionType = SectionType.MIDDLE,
           onClick = action {
             val newColor = navigator().push(
               ColorPickerScreen(
