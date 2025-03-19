@@ -13,7 +13,6 @@ import essentials.compose.*
 import essentials.notificationlistener.*
 import essentials.permission.*
 import essentials.ui.material.*
-import essentials.ui.navigation.*
 import essentials.ui.overlay.*
 import injekt.*
 
@@ -31,8 +30,6 @@ import injekt.*
     )
   }
 }
-
-class PermissionsScreen : Screen<Unit>
 
 interface SamplePermission : Permission
 
