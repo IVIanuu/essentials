@@ -278,7 +278,6 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
     shape = shape,
     padding = padding,
     interactionSource = interactionSource,
-
     onClick = { onCheckedChange(!checked) },
     title = title,
     description = description,
@@ -287,7 +286,12 @@ fun sectionTypeOf(index: Int, itemCount: Int) = when {
       Switch(
         checked = checked,
         onCheckedChange = null,
-        interactionSource = interactionSource
+        interactionSource = interactionSource,
+        colors = SwitchDefaults.colors(
+          uncheckedTrackColor = Color.Transparent,
+          checkedTrackColor = MaterialTheme.colorScheme.tertiary,
+          checkedThumbColor = MaterialTheme.colorScheme.surfaceColorAtElevation(12.dp)
+        )
       )
     }
   )
