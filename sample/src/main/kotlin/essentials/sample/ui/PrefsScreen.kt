@@ -113,7 +113,7 @@ class PrefsScreen : Screen<Unit>
           modifier = Modifier.interactive(prefs.switch),
           title = { Text("Color") },
           description = { Text("This is a color preference") },
-          leading = { ColorIcon(prefs.color) }
+          trailing = { ColorIcon(prefs.color) }
         )
       }
 

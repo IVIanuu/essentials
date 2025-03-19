@@ -177,8 +177,10 @@ data class ProvidedService<N, T : Any>(val key: KClass<T>, val factory: () -> T)
 @Tag annotation class ScopedService<N> {
   @Provide companion object {
     @Provide inline fun <@AddOn T : @ScopedService<N> S, reified S : Any, N : Any> scoped(
-      init: () -> T,
-    ): @Scoped<N> S = init()
+      scope: Scope<N>,
+      key: TypeKey<S>,
+      init: () -> T
+    ): S = scope.scoped(key) { init() }
 
     @Provide inline fun <@AddOn T : @ScopedService<N> S, reified S : Any, N : Any> service(
       scope: Scope<N>,
