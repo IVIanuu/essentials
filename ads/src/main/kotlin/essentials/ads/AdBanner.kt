@@ -49,10 +49,7 @@ import com.google.android.gms.ads.*
             isLoading = false
           }
         }
-        loadAd(
-          AdRequest.Builder()
-            .build()
-        )
+        loadAd(AdRequest.Builder().build())
       }
     }
   )
