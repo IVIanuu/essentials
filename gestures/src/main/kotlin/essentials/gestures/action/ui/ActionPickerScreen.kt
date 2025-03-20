@@ -17,7 +17,6 @@ import essentials.*
 import essentials.compose.*
 import essentials.gestures.action.*
 import essentials.permission.*
-import essentials.resource.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*

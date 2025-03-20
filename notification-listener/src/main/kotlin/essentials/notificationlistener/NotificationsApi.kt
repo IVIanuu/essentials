@@ -16,7 +16,7 @@ import injekt.*
   data object Empty : NotificationsApi
   data class Notifications(
     val notifications: List<StatusBarNotification>,
-    val openNotification: suspend (Notification) -> Boolean,
+    val openNotification: suspend (StatusBarNotification) -> Boolean,
     val dismissNotification: suspend (String) -> Unit,
     val dismissAllNotifications: suspend () -> Unit
   ) : NotificationsApi
@@ -31,7 +31,13 @@ import injekt.*
   else if (notificationListenerService.notifications.isEmpty()) NotificationsApi.Empty
   else NotificationsApi.Notifications(
     notifications = notificationListenerService.notifications,
-    openNotification = { catch { it.contentIntent.send() }.fold({ true }, { false }) },
+    openNotification = {
+      catch {
+        it.notification.contentIntent.send()
+        if (it.notification.flags.hasFlag(Notification.FLAG_AUTO_CANCEL))
+          notificationListenerService.cancelNotification(it.key)
+      }
+        .fold({ true }, { false }) },
     dismissNotification = notificationListenerService::cancelNotification,
     dismissAllNotifications = notificationListenerService::cancelAllNotifications
   )

@@ -76,8 +76,6 @@ class WriteSecureSettingsScreen(
   var currentStep by remember { mutableIntStateOf(1) }
   var completedStep by remember { mutableIntStateOf(1) }
 
-  val openStep = { step: Int -> currentStep = step }
-
   EsScaffold(
     topBar = { EsAppBar { Text("WRITE_SECURE_SETTINGS") } },
     bottomBar = {
@@ -132,7 +130,7 @@ class WriteSecureSettingsScreen(
         val isCurrentStep = step == currentStep
         SectionAlert(
           modifier = Modifier.fillMaxWidth(),
-          onClick = { openStep(step) },
+          onClick = { currentStep = step },
           sectionType = sectionTypeOf(step - 1, 4, true),
           focused = isCurrentStep,
           title = title,

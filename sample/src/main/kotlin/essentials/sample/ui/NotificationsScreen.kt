@@ -2,11 +2,13 @@ package essentials.sample.ui
 
 import android.app.*
 import androidx.compose.animation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import essentials.compose.*
 import essentials.notificationlistener.*
 import essentials.permission.*
@@ -43,14 +45,14 @@ class NotificationsScreen : Screen<Unit>
           permissions.ensurePermissions(listOf(SampleNotificationListenerPermission::class))
         }
 
-        Text("Unavailable")
+        Text("Unavailable", modifier = Modifier.padding(LocalContentPadding.current))
       }
-      is NotificationsApi.Empty -> Text("No notifications")
+      is NotificationsApi.Empty -> Text("No notifications", modifier = Modifier.padding(LocalContentPadding.current))
       is NotificationsApi.Notifications -> EsLazyColumn {
         itemsIndexed(api.notifications) { index, notification ->
           SectionListItem(
             sectionType = sectionTypeOf(index, api.notifications.size, false),
-            onClick = action { api.openNotification(notification.notification) },
+            onClick = action { api.openNotification(notification) },
             title = {
               Text(
                 notification.notification.extras.getCharSequence(Notification.EXTRA_TITLE)
