@@ -26,5 +26,5 @@ inline fun <reified T> Any?.safeAs(): T? = this as? T
   @Provide inline fun <reified T : Any> kclass(): KClass<T> = T::class
 
   @Provide fun <T> (@Composable () -> T).asFlow(): Flow<T> =
-    moleculeFlow { this() }
+    moleculeFlow(block = this)
 }
