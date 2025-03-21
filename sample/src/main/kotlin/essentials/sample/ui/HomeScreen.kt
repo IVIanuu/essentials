@@ -2,9 +2,10 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package essentials.sample.ui
 
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -106,11 +107,6 @@ import injekt.*
           Modifier
             .size(40.dp)
             .background(color, CircleShape)
-            .sharedElement(
-              rememberSharedContentState(ColorKey + index),
-              this,
-              boundsTransform = { _, _ -> tween(400) }
-            )
         }
       )
     }

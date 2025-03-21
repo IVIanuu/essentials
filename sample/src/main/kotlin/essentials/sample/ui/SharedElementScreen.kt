@@ -1,16 +1,20 @@
 package essentials.sample.ui
 
+import androidx.activity.compose.*
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
+import essentials.ui.overlay.*
 import injekt.*
 
 @Provide val SharedElementHomeItem = HomeItem(
@@ -20,54 +24,98 @@ import injekt.*
 
 class SharedElementScreen(val index: Int, val color: Color) : Screen<Unit>
 
-const val ColorKey = "image"
-const val ContainerKey = "container"
-
 @Provide @Composable fun SharedElementUi(
-  screen: SharedElementScreen
+  context: ScreenContext<SharedElementScreen> = inject
 ): Ui<SharedElementScreen> {
-  Surface(
-    shadowElevation = 8.dp,
-    modifier = with(LocalScreenAnimationScope.current) {
-      Modifier
-        .sharedBounds(
-          rememberSharedContentState(ContainerKey + screen.index),
-          this,
-          boundsTransform = { _, _ -> tween(400) },
-          enter = fadeIn(tween(400)),
-          exit = fadeOut(tween(400))
-        )
-    }
-  ) {
-    EsScaffold {
-      EsLazyColumn {
-        /*item {
-          Box(
-            modifier = with(LocalScreenAnimationScope.current) {
-              Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .background(screen.color)
-                .sharedElement(
-                  rememberSharedContentState(ColorKey + screen.index),
-                  this,
-                  boundsTransform = { _, _ -> tween(3000) }
-                )
-            }
-          ) {
-            EsAppBar(
-              colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent
-              )
-            ) { Text("Shared elements") }
-          }
-        }*/
+  EsScaffold(/*topBar = { EsAppBar { Text("Shared Elements") } }*/) {
+    var selectedColor by remember { mutableStateOf<Color?>(null) }
+    BackHandler(selectedColor != null) { selectedColor = null }
 
-        items((0..100).toList()) { item ->
-          ListItem(
-            headlineContent = { Text("Item $item") }
-          )
+    SharedTransitionLayout(modifier = Modifier.fillMaxSize(),) {
+      val stateHolder = rememberSaveableStateHolder()
+
+      val Null = remember { Any() }
+
+      AnimatedContent(
+        selectedColor,
+        transitionSpec = { fadeIn(tween(2000)) togetherWith fadeOut(tween(2000)) }
+      ) { currentSelectedColor ->
+        stateHolder.SaveableStateProvider(currentSelectedColor ?: Null) {
+          if (currentSelectedColor != null) {
+            DetailContent(currentSelectedColor, this) { selectedColor = null }
+          } else {
+            ListContent(this) { selectedColor = it }
+          }
         }
+      }
+    }
+  }
+}
+
+@Composable fun SharedTransitionScope.DetailContent(
+  color: Color,
+  animatedVisibilityScope: AnimatedVisibilityScope,
+  onDismissRequest: () -> Unit
+) {
+  Box(
+    modifier = Modifier
+      .sharedBounds(
+        sharedContentState = rememberSharedContentState("container_$color"),
+        animatedVisibilityScope = animatedVisibilityScope,
+        enter = fadeIn(tween(2000)),
+        exit = fadeOut(tween(2000)),
+        boundsTransform = { _, _ -> tween(2000) },
+        resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+      )
+      .fillMaxSize()
+      .background(SectionDefaults.colors().containerColor)
+  ) {
+    Box(
+      modifier = Modifier
+        .sharedElement(
+          state = rememberSharedContentState(color.toString()),
+          animatedVisibilityScope = animatedVisibilityScope,
+          boundsTransform = { _, _ -> tween(2000) }
+        )
+        .fillMaxWidth()
+        .aspectRatio(1f)
+        .background(color)
+        .clickable(onClick = onDismissRequest)
+    )
+  }
+}
+
+@Composable fun SharedTransitionScope.ListContent(
+  animatedVisibilityScope: AnimatedVisibilityScope,
+  showColor: (Color) -> Unit
+) {
+  EsLazyColumn(modifier = Modifier.fillMaxSize()) {
+    DefaultColorPalette.forEach { color ->
+      item(color) {
+        SectionListItem(
+          modifier = Modifier.sharedBounds(
+            sharedContentState = rememberSharedContentState("container_$color"),
+            animatedVisibilityScope = animatedVisibilityScope,
+            enter = fadeIn(tween(2000)),
+            exit = fadeOut(tween(2000)),
+            boundsTransform = { _, _ -> tween(2000) },
+            resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+          ),
+          title = { Text("Title") },
+          trailing = {
+            Box(
+              modifier = Modifier
+                .sharedElement(
+                  state = rememberSharedContentState(color.toString()),
+                  animatedVisibilityScope = animatedVisibilityScope,
+                  boundsTransform = { _, _ -> tween(2000) }
+                )
+                .size(100.dp)
+                .background(color)
+                .clickable { showColor(color) }
+            )
+          }
+        )
       }
     }
   }

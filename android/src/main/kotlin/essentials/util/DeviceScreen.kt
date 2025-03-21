@@ -48,7 +48,8 @@ enum class ScreenRotation(val isPortrait: Boolean) {
   LANDSCAPE_RIGHT(false)
 }
 
-@Provide @Composable fun screenRotation(
+@Provide @Composable
+fun screenRotation(
   context: Application,
   screenState: ScreenState
 ): ScreenRotation {

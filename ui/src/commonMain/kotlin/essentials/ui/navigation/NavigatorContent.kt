@@ -6,18 +6,18 @@
 
 package essentials.ui.navigation
 
-import android.annotation.*
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.util.*
 import com.slack.circuit.foundation.internal.*
 import essentials.*
 import essentials.compose.*
-import injekt.*
 import kotlinx.coroutines.flow.*
+import soup.compose.material.motion.animation.*
 
 @Composable fun NavigatorContent(
   navigator: Navigator,
@@ -66,91 +66,90 @@ import kotlinx.coroutines.flow.*
   }
 
   SharedTransitionLayout(modifier = modifier) {
-    RestartableScope {
-      val currentScreenState by remember {
-        derivedStateOf {
-          ScreenAnimationState(
-            navigator.backStack.fastLastOrNull {
-              it !is OverlayScreen
-            },
-            navigator.backStack.count { it !is OverlayScreen<*> }
-          )
-        }
-      }
-
-      val screenTransition = updateTransition(
-        targetState = currentScreenState
-      )
-      screenTransition.AnimatedContent(
-        modifier = Modifier.fillMaxSize(),
-        transitionSpec = {
-          ContentTransform(
-            EnterTransition.None,
-            ExitTransition.None,
-            sizeTransform = null
-          )
-        }
-      ) { (screen) ->
-        screenStates[screen]?.let {
-          CompositionLocalProvider(
-            LocalScreenAnimationScope provides remember(
-              screenTransition,
-              this@SharedTransitionLayout,
-              this
-            ) { ScreenAnimationScope(this@SharedTransitionLayout, this@AnimatedContent, screenTransition) }
-          ) {
-            ScreenContent(it)
-          }
-        }
+    val currentScreenState by remember {
+      derivedStateOf {
+        ScreenAnimationState(
+          navigator.backStack.fastLastOrNull {
+            it !is OverlayScreen
+          },
+          navigator.backStack.count { it !is OverlayScreen<*> }
+        )
       }
     }
 
-    RestartableScope {
-      val currentOverlay by remember {
-        derivedStateOf {
-          val currentScreenIndex = navigator.backStack.indexOfLast {
-            it !is OverlayScreen<*>
-          }
-
-          val overlaysForCurrentScreen = navigator.backStack
-            .filterIndexed { i, screen ->
-              screen is OverlayScreen<*> &&
-                  i > currentScreenIndex
-            }
-
-          ScreenAnimationState(
-            overlaysForCurrentScreen.lastOrNull(),
-            overlaysForCurrentScreen.size
-          )
-        }
+    val screenTransition = updateTransition(
+      targetState = currentScreenState
+    )
+    val slideDistance = rememberSlideDistance()
+    screenTransition.AnimatedContent(
+      modifier = Modifier.fillMaxSize(),
+      transitionSpec = {
+        val isPush = targetState.backStackSize > initialState.backStackSize
+        materialSharedAxisXIn(isPush, slideDistance) togetherWith
+            materialSharedAxisXOut(isPush, slideDistance)
       }
-
-      val overlayTransition = updateTransition(currentOverlay)
-      overlayTransition.AnimatedContent(
-        modifier = Modifier.fillMaxSize(),
-        transitionSpec = {
-          ContentTransform(
-            EnterTransition.None,
-            ExitTransition.None,
-            sizeTransform = null
-          )
-        }
-      ) { (screen) ->
-        screenStates[screen]?.let {
-          CompositionLocalProvider(
-            LocalScreenAnimationScope provides remember(
-              overlayTransition,
-              this@SharedTransitionLayout,
-              this
-            ) {
-              ScreenAnimationScope(
-                this@SharedTransitionLayout,
-                this@AnimatedContent,
-                overlayTransition
-              )
-            }
-          ) {
+    ) { (screen) ->
+      screenStates[screen]?.let {
+        CompositionLocalProvider(
+          LocalScreenAnimationScope provides remember(
+            screenTransition,
+            this@SharedTransitionLayout,
+            this
+          ) { ScreenAnimationScope(this@SharedTransitionLayout, this@AnimatedContent, screenTransition) }
+        ) {
+          Box {
             ScreenContent(it)
+
+            val currentOverlayState by remember {
+              derivedStateOf {
+                val overlays = mutableListOf<OverlayScreen<*>>()
+
+                val currentScreenIndex = navigator.backStack.indexOf(screen)
+                if (currentScreenIndex >= 0 && currentScreenIndex != navigator.backStack.lastIndex)
+                  for (i in currentScreenIndex + 1 until navigator.backStack.size) {
+                    val innerScreen = navigator.backStack[i]
+                    if (innerScreen !is OverlayScreen<*>) break
+                    overlays.add(innerScreen)
+                  }
+
+                ScreenAnimationState(overlays.lastOrNull(), overlays.size)
+              }
+            }
+
+            val overlayTransitionState = rememberSaveable {
+              MutableTransitionState(currentOverlayState)
+            }
+            val overlayTransition = rememberTransition(overlayTransitionState)
+            overlayTransitionState.targetState = currentOverlayState
+
+            overlayTransition.AnimatedContent(
+              modifier = Modifier.fillMaxSize(),
+              transitionSpec = {
+                ContentTransform(
+                  EnterTransition.None,
+                  ExitTransition.None,
+                  sizeTransform = null
+                )
+              }
+            ) { (screen) ->
+              screenStates[screen]?.let {
+                CompositionLocalProvider(
+                  LocalScreenAnimationScope provides remember(
+                    overlayTransition,
+                    this@SharedTransitionLayout,
+                    this
+                  ) {
+                    ScreenAnimationScope(
+                      this@SharedTransitionLayout,
+                      this@AnimatedContent,
+                      overlayTransition
+                    )
+                  }
+                ) {
+                  ScreenContent(it)
+                }
+              }
+            }
           }
         }
       }
@@ -162,10 +161,7 @@ val LocalScreenAnimationScope = compositionLocalOf<ScreenAnimationScope> {
   error("not provided")
 }
 
-data class ScreenAnimationState(
-  val current: Screen<*>?,
-  val backStackSize: Int
-)
+data class ScreenAnimationState(val current: Screen<*>?, val backStackSize: Int)
 
 val ScreenAnimationScope.isPush: Boolean
   get() = screenTransition.currentState.backStackSize >
@@ -177,33 +173,3 @@ val ScreenAnimationScope.isPush: Boolean
   val screenTransition: Transition<ScreenAnimationState>
 ) : SharedTransitionScope by sharedTransitionScope,
   AnimatedVisibilityScope by animatedVisibilityScope
-
-fun interface ScreenTransitionDecorator : ScreenDecorator {
-  @Composable override fun DecoratedContent(content: @Composable () -> Unit) {
-    val screen = LocalScope.current.screen
-    if (screen is OverlayScreen<*>) {
-      content()
-      return
-    }
-
-    Box(modifier = with(LocalScreenAnimationScope.current) { modifier() }) {
-      content()
-    }
-  }
-
-  @SuppressLint("ModifierFactoryExtensionFunction")
-  @Composable fun ScreenAnimationScope.modifier(): Modifier
-
-  @Provide companion object {
-    @Provide fun <T : ScreenTransitionDecorator> loadingOrder() = LoadingOrder<T>()
-      .first()
-  }
-}
-
-@Provide fun defaultScreenTransitionDecorator(
-  screenTransitionDecorator: ScreenTransitionDecorator? = null
-): ScreenDecorator = if (screenTransitionDecorator != null) {
-  ScreenDecorator { it() }
-} else ScreenTransitionDecorator {
-  Modifier.animateEnterExit(fadeIn(), fadeOut())
-}

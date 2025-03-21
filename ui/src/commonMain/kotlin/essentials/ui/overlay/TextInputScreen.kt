@@ -29,7 +29,7 @@ class TextInputScreen(
 @Provide @Composable fun TextInputUi(
   context: ScreenContext<TextInputScreen> = inject
 ): Ui<TextInputScreen> {
-  EsModalBottomSheet {
+  BottomSheet {
     var currentValue by remember {
       mutableStateOf(TextFieldValue(context.screen.initial, TextRange(context.screen.initial.length)))
     }
@@ -40,9 +40,7 @@ class TextInputScreen(
       onDispose { }
     }
 
-    Row(
-      verticalAlignment = Alignment.CenterVertically
-    ) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
       TextField(
         modifier = Modifier.focusRequester(focusRequester).weight(1f),
         value = currentValue,

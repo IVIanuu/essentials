@@ -103,7 +103,7 @@ class MediaActionSettingsScreen : OverlayScreen<Unit>
   context: ScreenContext<MediaActionSettingsScreen> = inject,
   toAppInfo: suspend String.() -> AppInfo?,
 ): Ui<MediaActionSettingsScreen> {
-  EsModalBottomSheet {
+  BottomSheet {
     Subheader { Text("Media action settings") }
     val mediaApp by produceScopedState(nullOf()) {
       preferencesStore.data

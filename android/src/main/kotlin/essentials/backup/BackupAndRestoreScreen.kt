@@ -24,7 +24,7 @@ class BackupAndRestoreScreen : OverlayScreen<Unit>
   context: ScreenContext<BackupAndRestoreScreen> = inject,
   showToast: showToast,
 ): Ui<BackupAndRestoreScreen> {
-  EsModalBottomSheet {
+  BottomSheet {
     Subheader { Text("Backup/Restore") }
 
     SectionListItem(

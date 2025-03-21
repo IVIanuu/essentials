@@ -24,7 +24,7 @@ class MultiChoiceListScreen<T : Any>(
 ): Ui<MultiChoiceListScreen<Any>> {
   var selectedItems by remember { mutableStateOf(context.screen.selected) }
 
-  EsModalBottomSheet(onDismissRequest = { popWithResult(selectedItems) }) {
+  BottomSheet(onDismissRequest = { popWithResult(selectedItems) }) {
     if (context.screen.title != null)
       Subheader { Text(context.screen.title) }
     context.screen.items.fastForEachIndexed { index, item ->

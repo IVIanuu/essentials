@@ -54,13 +54,13 @@ class PermissionRequestScreen(
     .keys
     .toList()
 
-  EsModalBottomSheet {
+  BottomSheet {
     Subheader { Text("Permissions required") }
 
     if (isLoading) CircularProgressIndicator(modifier = Modifier
       .fillMaxSize()
       .wrapContentSize())
-    else EsLazyColumn {
+    else EsLazyColumn(modifier = Modifier.fillMaxSize()) {
       itemsIndexed(permissionsToGrant, { _, permission -> permission }) { index, permission ->
         SectionAlert(
           modifier = Modifier.animateItem(),

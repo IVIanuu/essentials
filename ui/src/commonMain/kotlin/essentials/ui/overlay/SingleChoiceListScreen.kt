@@ -22,7 +22,7 @@ class SingleChoiceListScreen<T : Any>(
   context: ScreenContext<SingleChoiceListScreen<Any>> = inject
 ): Ui<SingleChoiceListScreen<Any>> {
   var selected by remember { mutableStateOf(context.screen.selected) }
-  EsModalBottomSheet(onDismissRequest = { popWithResult(selected) }) {
+  BottomSheet(onDismissRequest = { popWithResult(selected) }) {
     if (context.screen.title != null)
       Subheader { Text(context.screen.title) }
 

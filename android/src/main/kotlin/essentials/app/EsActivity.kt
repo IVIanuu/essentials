@@ -8,8 +8,11 @@ import android.os.*
 import androidx.activity.*
 import androidx.activity.compose.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
+import androidx.compose.ui.*
 import androidx.lifecycle.*
 import essentials.*
 import essentials.ui.app.*
@@ -40,7 +43,12 @@ import kotlinx.coroutines.*
         LocalSaveableStateRegistry provides SaveableStateRegistry(emptyMap()) { true }
       ) {
         esActivityComponent.decorateAppUi {
-          esActivityComponent.appUi()
+          Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+          ) {
+            esActivityComponent.appUi()
+          }
         }
       }
     }

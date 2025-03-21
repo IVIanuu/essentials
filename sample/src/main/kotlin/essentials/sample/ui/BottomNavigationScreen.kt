@@ -8,6 +8,7 @@ package essentials.sample.ui
 
 import android.annotation.*
 import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -45,9 +46,32 @@ class BottomNavigationScreen : Screen<Unit>
     }
   ) {
     @SuppressLint("UnusedContentLambdaTargetStateParameter")
-    AnimatedContent(selectedItem) { item ->
+    AnimatedContent(
+      selectedItem,
+      transitionSpec = {
+        slideInVertically(
+          tween()
+        ) { it / 2 } + fadeIn(
+          tween(easing = LinearEasing)
+        ) togetherWith
+            slideOutVertically(
+              tween()
+            ) { it / 2 } + fadeOut(
+              tween(easing = LinearEasing)
+            )
+      }
+    ) { navItem ->
       EsLazyColumn {
         (1..100).forEach { item ->
+          item {
+            SectionAlert(
+              sectionType = SectionType.SINGLE,
+              colors = SectionDefaults.colors(tone = navItem.tone)
+            ) {
+              Text(Strings.LoremIpsum)
+            }
+          }
+
           item {
             SectionListItem(
               sectionType = sectionTypeOf(item - 1, 100, false),
@@ -62,26 +86,32 @@ class BottomNavigationScreen : Screen<Unit>
 
 private enum class BottomNavItem(
   val title: String,
-  val icon: ImageVector
+  val icon: ImageVector,
+  val tone: Tone
 ) {
   HOME(
     title = "Home",
-    icon = Icons.Default.Home
+    icon = Icons.Default.Home,
+    tone = Tone.POSITIVE
   ),
   MAILS(
     title = "Mails",
-    icon = Icons.Default.Email
+    icon = Icons.Default.Email,
+    tone = Tone.NEGATIVE
   ),
   SEARCH(
     title = "Search",
-    icon = Icons.Default.Search
+    icon = Icons.Default.Search,
+    tone = Tone.NEUTRAL
   ),
   SCHEDULE(
     title = "Schedule",
-    icon = Icons.Default.ViewAgenda
+    icon = Icons.Default.ViewAgenda,
+    tone = Tone.INFO
   ),
   SETTINGS(
     title = "Settings",
-    icon = Icons.Default.Settings
+    icon = Icons.Default.Settings,
+    tone = Tone.WARNING
   )
 }

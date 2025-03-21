@@ -45,7 +45,7 @@ import injekt.*
 }
 
 interface BottomSheetScope : ColumnScope {
-  val sheetState: SheetState
+  val state: BottomSheetState
   fun dismiss()
 }
 
@@ -58,23 +58,18 @@ class BottomSheetScreen(
 @Provide @Composable fun BottomSheetUi(
   context: ScreenContext<BottomSheetScreen> = inject
 ): Ui<BottomSheetScreen> {
-  val sheetState = rememberModalBottomSheetState()
+  val state = rememberBottomSheetState()
 
   val hideAndDismissAction = action {
-    sheetState.hide()
-    if (!sheetState.isVisible)
-      popWithResult<Unit>()
+    state.animateTo(BottomSheetValue.HIDDEN)
+    popWithResult<Unit>()
   }
 
-  EsModalBottomSheet(sheetState = sheetState) {
+  BottomSheet(state = state) {
     context.screen.content(
       object : BottomSheetScope, ColumnScope by this {
-        override val sheetState: SheetState
-          get() = sheetState
-
-        override fun dismiss() {
-          hideAndDismissAction()
-        }
+        override val state get() = state
+        override fun dismiss() = hideAndDismissAction()
       },
       context
     )

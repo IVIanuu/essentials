@@ -1,5 +1,6 @@
 package essentials.ui.material
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
@@ -13,7 +14,7 @@ import kotlin.math.*
 @Composable fun ColorIcon(color: Color) {
   Surface(
     modifier = Modifier.requiredSize(48.dp),
-    color = color,
+    color = animateColorAsState(color).value,
     shape = CircleShape,
     border = BorderStroke(
       width = 1.dp,
@@ -37,4 +38,3 @@ enum class ValueUnit(val format: (Any) -> String) {
   PX({ "$it px" }),
   SECONDS({ "$it seconds" })
 }
-

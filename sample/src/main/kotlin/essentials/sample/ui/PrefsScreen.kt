@@ -78,14 +78,18 @@ class PrefsScreen : Screen<Unit>
           sectionType = SectionType.SINGLE,
           modifier = Modifier.interactive(prefs.switch),
           onClick = scopedAction {
-            val newTextInput = navigator().push(
-              TextInputScreen(
-                initial = prefs.textInput,
-                label = "Input",
-                predicate = { it.isNotEmpty() }
-              )
-            ) ?: return@scopedAction
-            pref.updateData { it.copy(textInput = newTextInput) }
+            navigator().push(
+              BottomSheetScreen {
+                TextInputUi(
+                  initial = prefs.textInput,
+                  label = "Input",
+                  predicate = { it.isNotEmpty() },
+                  onResult = scopedAction { value ->
+                    pref.updateData { it.copy(textInput = value ?: "") }
+                  }
+                )
+              }
+            )
           },
           title = { Text("Text input") },
           description = { Text("This is a text input preference") }
@@ -99,8 +103,18 @@ class PrefsScreen : Screen<Unit>
       }
 
       item {
-        SectionListItem(
+        SectionSwitch(
           sectionType = SectionType.FIRST_WITH_HEADER,
+          modifier = Modifier.interactive(prefs.switch),
+          title = { Text("Material you") },
+          checked = prefs.materialYou,
+          onCheckedChange = action { value -> pref.updateData { it.copy(materialYou = value) } }
+        )
+      }
+
+      item {
+        SectionListItem(
+          sectionType = SectionType.MIDDLE,
           onClick = action {
             val newColor = navigator().push(
               ColorPickerScreen(
@@ -199,6 +213,7 @@ class PrefsScreen : Screen<Unit>
   val slider: Int = 50,
   val steppedSlider: Float = 0.5f,
   val textInput: String = "",
+  val materialYou: Boolean = true,
   @Contextual val primary: Color = Color.Red,
   @Contextual val secondary: Color = Color.Blue,
   @Contextual val tertiary: Color = Color.Green,

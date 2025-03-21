@@ -41,7 +41,7 @@ class ColorPickerScreen(
     derivedStateOf { currentHex.toColorOrNull() ?: Color.Transparent }
   }
 
-  EsModalBottomSheet(onDismissRequest = { popWithResult(currentColor) }) {
+  BottomSheet(onDismissRequest = { popWithResult(currentColor) }) {
     if (context.screen.title != null)
       Subheader { Text(context.screen.title) }
 

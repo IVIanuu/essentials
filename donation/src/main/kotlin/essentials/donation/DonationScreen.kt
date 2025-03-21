@@ -46,7 +46,7 @@ class DonationScreen(
       .collect { value = it }
   }
 
-  EsModalBottomSheet {
+  BottomSheet {
     Subheader { Text("Donate") }
 
     skus.getOrNull()?.fastForEachIndexed { index, donation ->
