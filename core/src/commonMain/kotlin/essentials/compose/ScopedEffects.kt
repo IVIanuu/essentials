@@ -39,9 +39,8 @@ fun <T> StateFlow<T>.collectAsScopedState(
   context: CoroutineContext = EmptyCoroutineContext,
   scope: Scope<*> = inject
 ): State<R> = produceScopedState(initial, this, context) {
-  if (context == EmptyCoroutineContext) {
-    collect { value = it }
-  } else withContext(context) { collect { value = it } }
+  if (context == EmptyCoroutineContext) collect { value = it }
+  else withContext(context) { collect { value = it } }
 }
 
 @Composable inline fun scopedAction(

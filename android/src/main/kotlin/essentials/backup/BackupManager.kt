@@ -56,7 +56,7 @@ typealias createBackup = suspend () -> createBackupResult
         d { "backup file $file" }
         val entry = ZipEntry(file.relativeTo(dirs.data).toString())
         zipOutputStream.putNextEntry(entry)
-        file.inputStream().copyTo(zipOutputStream)
+        file.inputStream().use { it.copyTo(zipOutputStream) }
         zipOutputStream.closeEntry()
       }
   }
