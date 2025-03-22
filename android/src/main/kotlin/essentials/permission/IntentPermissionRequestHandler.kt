@@ -11,9 +11,7 @@ import essentials.ui.navigation.*
 import essentials.util.*
 import injekt.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 import splitties.coroutines.*
-import kotlin.reflect.*
 
 data class IntentPermissionRequestParams<P : Permission>(
   val intent: Intent,
@@ -22,11 +20,10 @@ data class IntentPermissionRequestParams<P : Permission>(
 
 @Provide suspend fun <P : Permission> requestPermissionWithIntent(
   data: IntentPermissionRequestParams<P>,
-  key: KClass<P>,
   appConfig: AppConfig,
   navigator: Navigator,
-  permissions: Permissions,
-  showToast: showToast
+  showToast: showToast,
+  state: () -> PermissionState<P>
 ): PermissionRequestResult<P> = raceOf(
   {
     if (data.showFindHint)
@@ -39,7 +36,7 @@ data class IntentPermissionRequestParams<P : Permission>(
   {
     // wait until user granted permission
     // we intentionally call it again and again to force a refresh
-    while (!permissions.permissionState(listOf(key)).first())
+    while (!state())
       delay(100)
   }
 )
