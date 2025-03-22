@@ -79,17 +79,14 @@ class PrefsScreen : Screen<Unit>
           modifier = Modifier.interactive(prefs.switch),
           onClick = scopedAction {
             navigator().push(
-              BottomSheetScreen {
-                TextInputUi(
-                  initial = prefs.textInput,
-                  label = "Input",
-                  predicate = { it.isNotEmpty() },
-                  onResult = scopedAction { value ->
-                    pref.updateData { it.copy(textInput = value ?: "") }
-                  }
-                )
-              }
-            )
+              TextInputScreen(
+                initial = prefs.textInput,
+                label = "Input",
+                predicate = { it.isNotEmpty() }
+              )
+            )?.let { value ->
+              pref.updateData { it.copy(textInput = value) }
+            }
           },
           title = { Text("Text input") },
           description = { Text("This is a text input preference") }

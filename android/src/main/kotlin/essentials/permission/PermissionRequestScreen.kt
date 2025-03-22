@@ -60,7 +60,7 @@ class PermissionRequestScreen(
     if (isLoading) CircularProgressIndicator(modifier = Modifier
       .fillMaxSize()
       .wrapContentSize())
-    else EsLazyColumn(modifier = Modifier.fillMaxSize()) {
+    else EsLazyColumn {
       itemsIndexed(permissionsToGrant, { _, permission -> permission }) { index, permission ->
         SectionAlert(
           modifier = Modifier.animateItem(),
