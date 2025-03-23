@@ -10,6 +10,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.text.googlefonts.*
 import androidx.datastore.core.*
+import com.materialkolor.*
+import com.materialkolor.ktx.*
 import essentials.font.*
 import essentials.ui.app.*
 import injekt.*
@@ -21,14 +23,24 @@ import injekt.*
 ): AppColorScheme {
   val isDark = isSystemInDarkTheme()
   val prefs = pref.data.collectAsState(null).value
-    ?: return if (isDark) darkColorScheme() else lightColorScheme()
+    ?: return if (isDark) darkColorScheme().tweak(isDark) else lightColorScheme().tweak(isDark)
   if (prefs.materialYou)
-    return if (isDark) dynamicDarkColorScheme(LocalContext.current)
-    else dynamicLightColorScheme(LocalContext.current)
+    return if (isDark) dynamicDarkColorScheme(LocalContext.current).tweak(isDark)
+    else dynamicLightColorScheme(LocalContext.current).tweak(isDark)
 
-  return defaultAppColorScheme(
-    AppColors(prefs.primary, prefs.secondary, prefs.tertiary),
-    isDark
+  return dynamicColorScheme(
+    isDark = isDark,
+    isAmoled = false,
+    primary = prefs.primary,
+    secondary = prefs.secondary,
+    tertiary = prefs.tertiary,
+    style = prefs.paletteStyle
+  ).tweak(isDark)
+}
+
+fun ColorScheme.tweak(isDark: Boolean): ColorScheme {
+  return copy(
+    onSurface = if (isDark) onSurface.darken(1.5f) else onSurface.lighten(1.5f)
   )
 }
 

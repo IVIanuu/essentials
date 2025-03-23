@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.datastore.core.*
+import com.materialkolor.*
 import essentials.compose.*
 import essentials.data.*
 import essentials.ui.common.*
@@ -106,6 +107,24 @@ class PrefsScreen : Screen<Unit>
           title = { Text("Material you") },
           checked = prefs.materialYou,
           onCheckedChange = action { value -> pref.updateData { it.copy(materialYou = value) } }
+        )
+      }
+
+      item {
+        SectionListItem(
+          sectionType = SectionType.MIDDLE,
+          modifier = Modifier.interactive(prefs.switch),
+          title = { Text("Palette style") },
+          onClick = scopedAction {
+            navigator().push(
+              SingleChoiceListScreen(
+                title = "Palette style",
+                items = PaletteStyle.entries,
+                selected = prefs.paletteStyle
+              ) { it.toString() }
+            )
+              ?.let { value -> pref.updateData { it.copy(paletteStyle = value) } }
+          }
         )
       }
 
@@ -211,6 +230,7 @@ class PrefsScreen : Screen<Unit>
   val steppedSlider: Float = 0.5f,
   val textInput: String = "",
   val materialYou: Boolean = true,
+  val paletteStyle: PaletteStyle = PaletteStyle.TonalSpot,
   @Contextual val primary: Color = Color.Red,
   @Contextual val secondary: Color = Color.Blue,
   @Contextual val tertiary: Color = Color.Green,

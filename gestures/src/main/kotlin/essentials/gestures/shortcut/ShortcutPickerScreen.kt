@@ -78,7 +78,6 @@ class ShortcutPickerScreen : Screen<Shortcut>
             )
           }
         }
-
       }
     }
   }
