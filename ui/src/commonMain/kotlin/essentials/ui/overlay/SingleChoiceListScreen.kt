@@ -5,7 +5,6 @@
 package essentials.ui.overlay
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
@@ -26,13 +25,16 @@ class SingleChoiceListScreen<T : Any>(
     if (context.screen.title != null)
       Subheader { Text(context.screen.title) }
 
-    context.screen.items.fastForEachIndexed { index, item ->
-      SectionListItem(
-        sectionType = sectionTypeOf(index, context.screen.items.size, false),
-        selected = item == selected,
-        onClick = { selected = item },
-        title = { Text(context.screen.renderable.render(item)) }
-      )
+    EsLazyColumn {
+      section {
+        sectionItems(context.screen.items) { item, _ ->
+          SectionListItem(
+            selected = item == selected,
+            onClick = { selected = item },
+            title = { Text(context.screen.renderable.render(item)) }
+          )
+        }
+      }
     }
   }
 }

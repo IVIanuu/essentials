@@ -6,7 +6,6 @@ package essentials.ui.overlay
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.*
 import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
@@ -27,19 +26,22 @@ class MultiChoiceListScreen<T : Any>(
   BottomSheet(onDismissRequest = { popWithResult(selectedItems) }) {
     if (context.screen.title != null)
       Subheader { Text(context.screen.title) }
-    context.screen.items.fastForEachIndexed { index, item ->
-      val selected = item in selectedItems
-      SectionSwitch(
-        sectionType = sectionTypeOf(index, context.screen.items.size, false),
-        checked = selected,
-        onCheckedChange = {
-          val newSelectedItems = selectedItems.toMutableSet()
-          if (!selected) newSelectedItems += item
-          else newSelectedItems -= item
-          selectedItems = newSelectedItems
-        },
-        title = { Text(context.screen.renderable.render(item)) }
-      )
+    EsLazyColumn {
+      section {
+        sectionItems(context.screen.items) { item, _ ->
+          val selected = item in selectedItems
+          SectionSwitch(
+            checked = selected,
+            onCheckedChange = {
+              val newSelectedItems = selectedItems.toMutableSet()
+              if (!selected) newSelectedItems += item
+              else newSelectedItems -= item
+              selectedItems = newSelectedItems
+            },
+            title = { Text(context.screen.renderable.render(item)) }
+          )
+        }
+      }
     }
   }
 }
