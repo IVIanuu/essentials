@@ -24,12 +24,9 @@ class DecoratorsScreen : Screen<Unit>
 ): Ui<DecoratorsScreen> {
   EsScaffold(topBar = { EsAppBar { Text("Decorators") } }) {
     EsLazyColumn {
-      (1..10).forEach { itemIndex ->
-        item {
-          SectionListItem(
-            sectionType = sectionTypeOf(itemIndex - 1, 10, false),
-            title = { Text("Item $itemIndex") }
-          )
+      section {
+        (1..10).forEach { itemIndex ->
+          item { SectionListItem(title = { Text("Item $itemIndex") }) }
         }
       }
     }

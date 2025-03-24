@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import com.github.michaelbull.result.*
 import essentials.*
 import essentials.compose.*
+import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import essentials.util.*
@@ -25,32 +26,38 @@ class BackupAndRestoreScreen : OverlayScreen<Unit>
   showToast: showToast,
 ): Ui<BackupAndRestoreScreen> {
   BottomSheet {
-    Subheader { Text("Backup/Restore") }
+    EsLazyColumn {
+      item { Subheader { Text("Backup/Restore") } }
 
-    SectionListItem(
-      sectionType = SectionType.FIRST,
-      onClick = scopedAction {
-        catch { createBackup() }
-          .onFailure {
-            it.printStackTrace()
-            showToast("Failed to backup your data!")
-          }
-      },
-      title = { Text("Export your data") },
-      trailing = { Icon(Icons.Default.Save, null) }
-    )
+      section {
+        item {
+          SectionListItem(
+            onClick = scopedAction {
+              catch { createBackup() }
+                .onFailure {
+                  it.printStackTrace()
+                  showToast("Failed to backup your data!")
+                }
+            },
+            title = { Text("Export your data") },
+            trailing = { Icon(Icons.Default.Save, null) }
+          )
+        }
 
-    SectionListItem(
-      sectionType = SectionType.LAST,
-      onClick = scopedAction {
-        catch { restoreBackup() }
-          .onFailure {
-            it.printStackTrace()
-            showToast("Failed to restore your data!")
-          }
-      },
-      title = { Text("Restore your data") },
-      trailing = { Icon(Icons.Default.Restore, null) }
-    )
+        item {
+          SectionListItem(
+            onClick = scopedAction {
+              catch { restoreBackup() }
+                .onFailure {
+                  it.printStackTrace()
+                  showToast("Failed to restore your data!")
+                }
+            },
+            title = { Text("Restore your data") },
+            trailing = { Icon(Icons.Default.Restore, null) }
+          )
+        }
+      }
+    }
   }
 }

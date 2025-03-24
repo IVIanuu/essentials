@@ -8,7 +8,6 @@ package essentials.sample.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
@@ -61,44 +60,43 @@ import injekt.*
         .toList()
         .sortedBy { it.first }
         .forEach { (title, items) ->
-          item { SectionHeader { Text(title.toString()) } }
-
-          itemsIndexed(items) { index, item ->
-            val color = rememberSaveable(item) {
-              DefaultColorPalette
-                .shuffled()
-                .first()
-            }
-
-            HomeItem(
-              item = item,
-              index = index,
-              itemCount = items.size,
-              color = color,
-              onClick = action {
-                navigator().push(
-                  item.screenFactoryWithIndex?.invoke(index, color)
-                    ?: item.screenFactory(color)
-                )
+          section(header = {
+            SectionHeader { Text(title) }
+          }) {
+            sectionItemsIndexed(items) { index, item, _ ->
+              val color = rememberSaveable(item) {
+                DefaultColorPalette
+                  .shuffled()
+                  .first()
               }
-            )
+
+              HomeItem(
+                item = item,
+                color = color,
+                onClick = action {
+                  navigator().push(
+                    item.screenFactoryWithIndex?.invoke(index, color)
+                      ?: item.screenFactory(color)
+                  )
+                }
+              )
+            }
           }
+
         }
     }
   }
 }
 
 @Composable private fun HomeItem(
-  index: Int,
-  itemCount: Int,
   color: Color,
   item: HomeItem,
+  sectionType: SectionType = inject,
   navigator: Navigator = inject,
   onClick: () -> Unit
 ) {
   SectionListItem(
     onClick = onClick,
-    sectionType = sectionTypeOf(index, itemCount, true),
     title = { Text(item.title) },
     description = { Text(Strings.Text) },
     trailing = {

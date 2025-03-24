@@ -64,28 +64,29 @@ class ActionPickerScreen(
   EsScaffold(topBar = { EsAppBar { Text("Pick an action") } }) {
     ResourceBox(items) { items ->
       EsLazyColumn {
-        itemsIndexed(items) { index, item ->
-          SectionListItem(
-            sectionType = sectionTypeOf(index, items.size, false),
-            onClick = scopedAction {
-              val result = item.getResult(navigator())
-                ?: return@scopedAction
-              if (result is ActionPickerScreen.Result.Action) {
-                val action = actions.get(result.actionId)
-                if (!permissions.ensurePermissions(action.permissions))
-                  return@scopedAction
-              }
-              popWithResult(result)
-            },
-            leading = { item.Icon(Modifier.size(24.dp)) },
-            trailing = if (item.settingsScreen == null) null
-            else ({
-              IconButton(onClick = scopedAction { navigator().push(item.settingsScreen!!) }) {
-                Icon(Icons.Default.Settings, null)
-              }
-            }),
-            title = { Text(item.title) }
-          )
+        section {
+          sectionItems(items) { item, _ ->
+            SectionListItem(
+              onClick = scopedAction {
+                val result = item.getResult(navigator())
+                  ?: return@scopedAction
+                if (result is ActionPickerScreen.Result.Action) {
+                  val action = actions.get(result.actionId)
+                  if (!permissions.ensurePermissions(action.permissions))
+                    return@scopedAction
+                }
+                popWithResult(result)
+              },
+              leading = { item.Icon(Modifier.size(24.dp)) },
+              trailing = if (item.settingsScreen == null) null
+              else ({
+                IconButton(onClick = scopedAction { navigator().push(item.settingsScreen!!) }) {
+                  Icon(Icons.Default.Settings, null)
+                }
+              }),
+              title = { Text(item.title) }
+            )
+          }
         }
       }
     }

@@ -5,7 +5,6 @@
 package essentials.apps
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -46,24 +45,23 @@ class AppPickerScreen(
           .flowOn(coroutineContexts.computation)
           .collect { value = it }
       }.value
-    ) { appGroups ->
+    ) { appSections ->
       EsLazyColumn {
-        appGroups.fastForEach { (title, apps) ->
-          item { SectionHeader { Text(title.toString()) } }
-
-          itemsIndexed(apps) { index, app ->
-            SectionListItem(
-              sectionType = sectionTypeOf(index, apps.size, true),
-              onClick = scopedAction { popWithResult(app) },
-              title = { Text(app.appName) },
-              trailing = {
-                AsyncImage(
-                  modifier = Modifier.size(40.dp),
-                  model = AppIcon(packageName = app.packageName),
-                  contentDescription = null
-                )
-              }
-            )
+        appSections.fastForEach { (title, apps) ->
+          section(header = { SectionHeader { Text(title) } }) {
+            sectionItems(apps) { app, _ ->
+              SectionListItem(
+                onClick = scopedAction { popWithResult(app) },
+                title = { Text(app.appName) },
+                trailing = {
+                  AsyncImage(
+                    modifier = Modifier.size(40.dp),
+                    model = AppIcon(packageName = app.packageName),
+                    contentDescription = null
+                  )
+                }
+              )
+            }
           }
         }
       }

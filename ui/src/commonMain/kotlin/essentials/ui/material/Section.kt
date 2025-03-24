@@ -5,6 +5,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,6 +13,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.util.*
 import essentials.*
 import essentials.coroutines.*
 import essentials.ui.common.*
@@ -21,7 +23,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Composable fun SectionContainer(
   modifier: Modifier = Modifier,
-  sectionType: SectionType = SectionType.MIDDLE,
+  sectionType: SectionType = inject,
   selected: Boolean = false,
   focused: Boolean = false,
   colors: SectionColors = SectionDefaults.colors(selected, focused),
@@ -115,7 +117,10 @@ enum class SectionType(val first: Boolean, val last: Boolean, val withHeader: Bo
   LAST(false, true, false),
   MIDDLE(false, false, false),
   SINGLE(true, true, false),
-  SINGLE_WITH_HEADER(true, true, true)
+  SINGLE_WITH_HEADER(true, true, true);
+  @Provide companion object {
+    @Provide val default = MIDDLE
+  }
 }
 
 fun sectionTypeOf(index: Int, itemCount: Int, withHeader: Boolean) = when {
@@ -129,7 +134,7 @@ fun sectionTypeOf(index: Int, itemCount: Int, withHeader: Boolean) = when {
 
 @Composable fun SectionAlert(
   modifier: Modifier = Modifier,
-  sectionType: SectionType = SectionType.MIDDLE,
+  sectionType: SectionType = inject,
   selected: Boolean = false,
   focused: Boolean = false,
   colors: SectionColors = SectionDefaults.colors(selected, focused),
@@ -195,7 +200,7 @@ fun sectionTypeOf(index: Int, itemCount: Int, withHeader: Boolean) = when {
 
 @Composable fun SectionListItem(
   modifier: Modifier = Modifier,
-  sectionType: SectionType = SectionType.MIDDLE,
+  sectionType: SectionType = inject,
   selected: Boolean = false,
   focused: Boolean = false,
   colors: SectionColors = SectionDefaults.colors(selected, focused),
@@ -270,7 +275,7 @@ fun sectionTypeOf(index: Int, itemCount: Int, withHeader: Boolean) = when {
   checked: Boolean,
   onCheckedChange: (Boolean) -> Unit,
   modifier: Modifier = Modifier,
-  sectionType: SectionType = SectionType.MIDDLE,
+  sectionType: SectionType = inject,
   colors: SectionColors = SectionDefaults.colors(false),
   shape: Shape = SectionDefaults.shape(sectionType),
   padding: SectionPadding = SectionDefaults.padding(sectionType, false),
@@ -309,8 +314,7 @@ fun sectionTypeOf(index: Int, itemCount: Int, withHeader: Boolean) = when {
   value: T,
   headlineContent: @Composable () -> Unit,
   modifier: Modifier = Modifier,
-  sectionType: SectionType = SectionType.MIDDLE,
-
+  sectionType: SectionType = inject,
   onValueChange: ((T) -> Unit)? = null,
   onValueChangeFinished: ((T) -> Unit)? = null,
   stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
@@ -374,4 +378,71 @@ fun sectionTypeOf(index: Int, itemCount: Int, withHeader: Boolean) = when {
     },
     leading = leadingContent
   )
+}
+
+interface SectionScope {
+  fun item(
+    key: Any? = null,
+    content: @Composable LazyItemScope.(@Provide SectionType) -> Unit
+  )
+}
+
+inline fun <T> SectionScope.sectionItems(
+  items: List<T>,
+  crossinline key: (T) -> Any? = { null },
+  crossinline itemContent: @Composable LazyItemScope.(T, @Provide SectionType) -> Unit
+) {
+  items.fastForEach { item ->
+    item(key(item)) {
+      itemContent(this, item, it)
+    }
+  }
+}
+
+inline fun <T> SectionScope.sectionItemsIndexed(
+  items: List<T>,
+  crossinline key: (Int, T) -> Any? = { _, _ -> null },
+  crossinline itemContent: @Composable LazyItemScope.(Int, T, @Provide SectionType) -> Unit
+) {
+  items.fastForEachIndexed { index, item ->
+    item(key(index, item)) {
+      itemContent(this, index, item, it)
+    }
+  }
+}
+
+fun LazyListScope.section(
+  header: (@Composable LazyItemScope.() -> Unit)? = null,
+  headerKey: Any? = null,
+  block: SectionScope.() -> Unit
+) {
+  class Item(
+    val key: Any?,
+    val content: @Composable LazyItemScope.(SectionType) -> Unit
+  )
+
+  val items = mutableListOf<Item>()
+  block(
+    object : SectionScope {
+      override fun item(key: Any?, content: @Composable (LazyItemScope.(SectionType) -> Unit)) {
+        items += Item(key, content)
+      }
+    }
+  )
+
+  if (header != null)
+    item(headerKey, content = header)
+
+  items.fastForEachIndexed { index, item ->
+    item(item.key) {
+      item.content(this, sectionTypeOf(index, items.size, header != null))
+    }
+  }
+}
+
+fun LazyListScope.singleItemSection(
+  key: Any? = null,
+  block: @Composable LazyItemScope.(@Provide SectionType) -> Unit
+) {
+  item(key) { block(SectionType.SINGLE) }
 }

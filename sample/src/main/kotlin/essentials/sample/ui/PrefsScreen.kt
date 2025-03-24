@@ -30,159 +30,150 @@ class PrefsScreen : Screen<Unit>
   val prefs by pref.data.collectAsScopedState(SamplePrefs())
   EsScaffold(topBar = { EsAppBar { Text("Prefs") } }) {
     EsLazyColumn {
-      item {
+      singleItemSection {
         SectionSwitch(
           checked = prefs.switch,
           onCheckedChange = action { value ->
             pref.updateData { it.copy(switch = value) }
           },
-          sectionType = SectionType.SINGLE,
           title = { Text("Switch") }
         )
       }
 
-      item {
+      section(header = {
         SectionHeader(modifier = Modifier.interactive(prefs.switch)) { Text("Category") }
-      }
+      }) {
+        item {
+          SectionSlider(
+            value = prefs.slider,
+            onValueChangeFinished = action { value ->
+              pref.updateData { it.copy(slider = value) }
+            },
+            modifier = Modifier.interactive(prefs.switch),
+            headlineContent = { Text("Slider") },
+            valueRange = 0..100,
+            trailingContent = { Text(it.toString()) }
+          )
+        }
 
-      item {
-        SectionSlider(
-          sectionType = SectionType.FIRST_WITH_HEADER,
-          value = prefs.slider,
-          onValueChangeFinished = action { value ->
-            pref.updateData { it.copy(slider = value) }
-          },
-          modifier = Modifier.interactive(prefs.switch),
-          headlineContent = { Text("Slider") },
-          valueRange = 0..100,
-          trailingContent = { Text(it.toString()) }
-        )
-      }
+        item {
+          SectionSlider(
+            value = prefs.steppedSlider,
+            onValueChangeFinished = action { value ->
+              pref.updateData { it.copy(steppedSlider = value) }
+            },
+            modifier = Modifier.interactive(prefs.switch),
+            headlineContent = { Text("Stepped slider") },
+            stepPolicy = incrementingStepPolicy(0.05f),
+            valueRange = 0.75f..1.5f,
+            trailingContent = { ScaledPercentageUnitText(it) }
+          )
+        }
 
-      item {
-        SectionSlider(
-          sectionType = SectionType.LAST,
-          value = prefs.steppedSlider,
-          onValueChangeFinished = action { value ->
-            pref.updateData { it.copy(steppedSlider = value) }
-          },
-          modifier = Modifier.interactive(prefs.switch),
-          headlineContent = { Text("Stepped slider") },
-          stepPolicy = incrementingStepPolicy(0.05f),
-          valueRange = 0.75f..1.5f,
-          trailingContent = { ScaledPercentageUnitText(it) }
-        )
-      }
-
-      item {
-        SectionListItem(
-          sectionType = SectionType.SINGLE,
-          modifier = Modifier.interactive(prefs.switch),
-          onClick = scopedAction {
-            navigator().push(
-              TextInputScreen(
-                initial = prefs.textInput,
-                label = "Input",
-                predicate = { it.isNotEmpty() }
-              )
-            )?.let { value ->
-              pref.updateData { it.copy(textInput = value) }
-            }
-          },
-          title = { Text("Text input") },
-          description = { Text("This is a text input preference") }
-        )
-      }
-
-      item {
-        SectionHeader(modifier = Modifier.interactive(prefs.switch)) {
-          Text("Colors")
+        singleItemSection {
+          SectionListItem(
+            modifier = Modifier.interactive(prefs.switch),
+            onClick = scopedAction {
+              navigator().push(
+                TextInputScreen(
+                  initial = prefs.textInput,
+                  label = "Input",
+                  predicate = { it.isNotEmpty() }
+                )
+              )?.let { value ->
+                pref.updateData { it.copy(textInput = value) }
+              }
+            },
+            title = { Text("Text input") },
+            description = { Text("This is a text input preference") }
+          )
         }
       }
 
-      item {
-        SectionSwitch(
-          sectionType = SectionType.FIRST_WITH_HEADER,
-          modifier = Modifier.interactive(prefs.switch),
-          title = { Text("Material you") },
-          checked = prefs.materialYou,
-          onCheckedChange = action { value -> pref.updateData { it.copy(materialYou = value) } }
-        )
-      }
+      section(header = {
+        SectionHeader(modifier = Modifier.interactive(prefs.switch)) {
+          Text("Colors")
+        }
+      }) {
+        item {
+          SectionSwitch(
+            modifier = Modifier.interactive(prefs.switch),
+            title = { Text("Material you") },
+            checked = prefs.materialYou,
+            onCheckedChange = action { value -> pref.updateData { it.copy(materialYou = value) } }
+          )
+        }
 
-      item {
-        SectionListItem(
-          sectionType = SectionType.MIDDLE,
-          modifier = Modifier.interactive(prefs.switch),
-          title = { Text("Palette style") },
-          onClick = scopedAction {
-            navigator().push(
-              SingleChoiceListScreen(
-                title = "Palette style",
-                items = PaletteStyle.entries,
-                selected = prefs.paletteStyle
-              ) { it.toString() }
-            )
-              ?.let { value -> pref.updateData { it.copy(paletteStyle = value) } }
-          }
-        )
-      }
-
-      item {
-        SectionListItem(
-          sectionType = SectionType.MIDDLE,
-          onClick = action {
-            val newColor = navigator().push(
-              ColorPickerScreen(
-                initialColor = prefs.primary,
-                title = "Primary color"
+        item {
+          SectionListItem(
+            modifier = Modifier.interactive(prefs.switch),
+            title = { Text("Palette style") },
+            onClick = scopedAction {
+              navigator().push(
+                SingleChoiceListScreen(
+                  title = "Palette style",
+                  items = PaletteStyle.entries,
+                  selected = prefs.paletteStyle
+                ) { it.toString() }
               )
-            ) ?: return@action
-            pref.updateData { it.copy(primary = newColor) }
-          },
-          modifier = Modifier.interactive(prefs.switch),
-          title = { Text("Primary color") },
-          description = { Text("This is a color preference") },
-          trailing = { ColorIcon(prefs.primary) }
-        )
-      }
+                ?.let { value -> pref.updateData { it.copy(paletteStyle = value) } }
+            }
+          )
+        }
 
-      item {
-        SectionListItem(
-          sectionType = SectionType.MIDDLE,
-          onClick = action {
-            val newColor = navigator().push(
-              ColorPickerScreen(
-                initialColor = prefs.secondary,
-                title = "Secondary color"
-              )
-            ) ?: return@action
-            pref.updateData { it.copy(secondary = newColor) }
-          },
-          modifier = Modifier.interactive(prefs.switch),
-          title = { Text("Secondary color") },
-          description = { Text("This is a color preference") },
-          trailing = { ColorIcon(prefs.secondary) }
-        )
-      }
+        item {
+          SectionListItem(
+            onClick = action {
+              val newColor = navigator().push(
+                ColorPickerScreen(
+                  initialColor = prefs.primary,
+                  title = "Primary color"
+                )
+              ) ?: return@action
+              pref.updateData { it.copy(primary = newColor) }
+            },
+            modifier = Modifier.interactive(prefs.switch),
+            title = { Text("Primary color") },
+            description = { Text("This is a color preference") },
+            trailing = { ColorIcon(prefs.primary) }
+          )
+        }
 
-      item {
-        SectionListItem(
-          sectionType = SectionType.LAST,
-          onClick = action {
-            val newColor = navigator().push(
-              ColorPickerScreen(
-                initialColor = prefs.tertiary,
-                title = "Tertiary color"
-              )
-            ) ?: return@action
-            pref.updateData { it.copy(tertiary = newColor) }
-          },
-          modifier = Modifier.interactive(prefs.switch),
-          title = { Text("Tertiary color") },
-          description = { Text("This is a color preference") },
-          trailing = { ColorIcon(prefs.tertiary) }
-        )
+        item {
+          SectionListItem(
+            onClick = action {
+              val newColor = navigator().push(
+                ColorPickerScreen(
+                  initialColor = prefs.secondary,
+                  title = "Secondary color"
+                )
+              ) ?: return@action
+              pref.updateData { it.copy(secondary = newColor) }
+            },
+            modifier = Modifier.interactive(prefs.switch),
+            title = { Text("Secondary color") },
+            description = { Text("This is a color preference") },
+            trailing = { ColorIcon(prefs.secondary) }
+          )
+        }
+
+        item {
+          SectionListItem(
+            onClick = action {
+              val newColor = navigator().push(
+                ColorPickerScreen(
+                  initialColor = prefs.tertiary,
+                  title = "Tertiary color"
+                )
+              ) ?: return@action
+              pref.updateData { it.copy(tertiary = newColor) }
+            },
+            modifier = Modifier.interactive(prefs.switch),
+            title = { Text("Tertiary color") },
+            description = { Text("This is a color preference") },
+            trailing = { ColorIcon(prefs.tertiary) }
+          )
+        }
       }
 
       item {

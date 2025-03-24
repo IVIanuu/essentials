@@ -5,7 +5,6 @@
 package essentials.permission
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -61,30 +60,31 @@ class PermissionRequestScreen(
       .fillMaxSize()
       .wrapContentSize())
     else EsLazyColumn {
-      itemsIndexed(permissionsToGrant, { _, permission -> permission }) { index, permission ->
-        SectionAlert(
-          modifier = Modifier.animateItem(),
-          sectionType = sectionTypeOf(index, permissionsToGrant.size, false),
-          title = { Text(permission.title) },
-          description = { Text(permission.desc, modifier = Modifier.padding(it)) },
-          icon = { permission.icon?.invoke() },
-          actions = {
-            TextButton(
-              colors = ButtonDefaults.textButtonColors(
-                contentColor = LocalContentColor.current
-              ),
-              onClick = action { popWithResult(false) }
-            ) { Text("Deny") }
+      section {
+        sectionItems(permissionsToGrant, { it }) { permission, _ ->
+          SectionAlert(
+            modifier = Modifier.animateItem(),
+            title = { Text(permission.title) },
+            description = { Text(permission.desc, modifier = Modifier.padding(it)) },
+            icon = { permission.icon?.invoke() },
+            actions = {
+              TextButton(
+                colors = ButtonDefaults.textButtonColors(
+                  contentColor = LocalContentColor.current
+                ),
+                onClick = action { popWithResult(false) }
+              ) { Text("Deny") }
 
-            Button(
-              onClick = scopedAction {
-                requestHandlers[keysByPermission[permission]!!]!!(permission)
-                permissionRefreshes.emit(Unit)
-                launchUi()
-              }
-            ) { Text("Allow") }
-          }
-        )
+              Button(
+                onClick = scopedAction {
+                  requestHandlers[keysByPermission[permission]!!]!!(permission)
+                  permissionRefreshes.emit(Unit)
+                  launchUi()
+                }
+              ) { Text("Allow") }
+            }
+          )
+        }
       }
     }
   }

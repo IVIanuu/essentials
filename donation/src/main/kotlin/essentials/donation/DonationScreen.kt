@@ -8,12 +8,12 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.util.*
 import arrow.fx.coroutines.*
 import essentials.*
 import essentials.Resource
 import essentials.billing.*
 import essentials.compose.*
+import essentials.ui.common.*
 import essentials.ui.material.*
 import essentials.ui.navigation.*
 import essentials.util.*
@@ -49,19 +49,22 @@ class DonationScreen(
   BottomSheet {
     Subheader { Text("Donate") }
 
-    skus.getOrNull()?.fastForEachIndexed { index, donation ->
-      SectionListItem(
-        sectionType = sectionTypeOf(index, skus.get().size, false),
-        onClick = scopedAction {
-          if (billing.purchase(donation.donation.sku, true, true)) {
-            billing.consumePurchase(donation.donation.sku)
-            showToast("Thanks for your support! \uD83D\uDC9B")
-          }
-        },
-        title = { Text(donation.title) },
-        leading = donation.donation.icon,
-        trailing = { Text(text = donation.price) }
-      )
+    EsLazyColumn {
+      section {
+        sectionItems(skus.getOrElse { emptyList() }) { donation, _ ->
+          SectionListItem(
+            onClick = scopedAction {
+              if (billing.purchase(donation.donation.sku, true, true)) {
+                billing.consumePurchase(donation.donation.sku)
+                showToast("Thanks for your support! \uD83D\uDC9B")
+              }
+            },
+            title = { Text(donation.title) },
+            leading = donation.donation.icon,
+            trailing = { Text(text = donation.price) }
+          )
+        }
+      }
     }
   }
 }

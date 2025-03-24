@@ -62,21 +62,18 @@ class BottomNavigationScreen : Screen<Unit>
       }
     ) { navItem ->
       EsLazyColumn {
-        (1..100).forEach { item ->
-          item {
-            SectionAlert(
-              sectionType = SectionType.SINGLE,
-              colors = SectionDefaults.colors(tone = navItem.tone)
-            ) {
-              Text(Strings.LoremIpsum)
-            }
+        item {
+          SectionAlert(
+            sectionType = SectionType.SINGLE,
+            colors = SectionDefaults.colors(tone = navItem.tone)
+          ) {
+            Text(Strings.LoremIpsum)
           }
+        }
 
-          item {
-            SectionListItem(
-              sectionType = sectionTypeOf(item - 1, 100, false),
-              title = { Text("Item $item") }
-            )
+        section {
+          (1..100).forEach { item ->
+            item { SectionListItem(title = { Text("Item $item") }) }
           }
         }
       }

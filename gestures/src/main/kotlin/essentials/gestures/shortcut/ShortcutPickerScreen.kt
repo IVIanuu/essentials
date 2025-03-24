@@ -6,7 +6,6 @@ package essentials.gestures.shortcut
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -47,35 +46,34 @@ class ShortcutPickerScreen : Screen<Shortcut>
     ) { shortcutGroups ->
       EsLazyColumn {
         shortcutGroups.forEach { (title, shortcuts) ->
-          item { SectionHeader { Text(title) } }
-
-          itemsIndexed(shortcuts) { index, shortcut ->
-            SectionListItem(
-              sectionType = sectionTypeOf(index, shortcuts.size, true),
-              onClick = scopedAction {
-                catch {
-                  val shortcutRequestResult = navigator().push(shortcut.intent.asScreen())
-                    ?.getOrNull()
-                    ?.data ?: return@catch
-                  val finalShortcut: Shortcut = extractShortcut(
-                    shortcut.packageName,
-                    shortcutRequestResult
+          section(header = { SectionHeader { Text(title) } }) {
+            sectionItems(shortcuts) { shortcut, _ ->
+              SectionListItem(
+                onClick = scopedAction {
+                  catch {
+                    val shortcutRequestResult = navigator().push(shortcut.intent.asScreen())
+                      ?.getOrNull()
+                      ?.data ?: return@catch
+                    val finalShortcut: Shortcut = extractShortcut(
+                      shortcut.packageName,
+                      shortcutRequestResult
+                    )
+                    popWithResult(finalShortcut)
+                  }.onFailure {
+                    it.printStackTrace()
+                    showToast("Failed to pick a shortcut!")
+                  }
+                },
+                title = { Text(shortcut.title) },
+                trailing = {
+                  Image(
+                    modifier = Modifier.size(40.dp),
+                    bitmap = shortcut.icon.toBitmap().asImageBitmap(),
+                    contentDescription = null
                   )
-                  popWithResult(finalShortcut)
-                }.onFailure {
-                  it.printStackTrace()
-                  showToast("Failed to pick a shortcut!")
                 }
-              },
-              title = { Text(shortcut.title) },
-              trailing = {
-                Image(
-                  modifier = Modifier.size(40.dp),
-                  bitmap = shortcut.icon.toBitmap().asImageBitmap(),
-                  contentDescription = null
-                )
-              }
-            )
+              )
+            }
           }
         }
       }

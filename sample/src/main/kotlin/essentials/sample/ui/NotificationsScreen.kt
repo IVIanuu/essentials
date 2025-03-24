@@ -3,7 +3,6 @@ package essentials.sample.ui
 import android.app.*
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -49,30 +48,31 @@ class NotificationsScreen : Screen<Unit>
       }
       is NotificationsApi.Empty -> Text("No notifications", modifier = Modifier.padding(LocalContentPadding.current))
       is NotificationsApi.Notifications -> EsLazyColumn {
-        itemsIndexed(api.notifications) { index, notification ->
-          SectionListItem(
-            sectionType = sectionTypeOf(index, api.notifications.size, false),
-            onClick = action { api.openNotification(notification) },
-            title = {
-              Text(
-                notification.notification.extras.getCharSequence(Notification.EXTRA_TITLE)
-                  ?.toString() ?: ""
-              )
-            },
-            description = {
-              Text(
-                notification.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
-                  ?.toString() ?: ""
-              )
-            },
-            trailing = {
-              IconButton(
-                onClick = action { api.dismissNotification(notification.key) }
-              ) {
-                Icon(Icons.Default.Clear, null)
+        section {
+          sectionItems(api.notifications) { notification, _ ->
+            SectionListItem(
+              onClick = action { api.openNotification(notification) },
+              title = {
+                Text(
+                  notification.notification.extras.getCharSequence(Notification.EXTRA_TITLE)
+                    ?.toString() ?: ""
+                )
+              },
+              description = {
+                Text(
+                  notification.notification.extras.getCharSequence(Notification.EXTRA_TEXT)
+                    ?.toString() ?: ""
+                )
+              },
+              trailing = {
+                IconButton(
+                  onClick = action { api.dismissNotification(notification.key) }
+                ) {
+                  Icon(Icons.Default.Clear, null)
+                }
               }
-            }
-          )
+            )
+          }
         }
       }
     }
