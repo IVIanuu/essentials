@@ -45,9 +45,7 @@ class PermissionRequestScreen(
     if (permissionStates.all { it.value == true })
       popWithResult(true)
   }
-
-  val isLoading = permissionStates.any { it.value == null }
-
+  
   val permissionsToGrant = permissionStates
     .filter { it.value == false }
     .keys
@@ -56,10 +54,7 @@ class PermissionRequestScreen(
   BottomSheet {
     Subheader { Text("Permissions required") }
 
-    if (isLoading) CircularProgressIndicator(modifier = Modifier
-      .fillMaxSize()
-      .wrapContentSize())
-    else EsLazyColumn {
+    EsLazyColumn {
       section {
         sectionItems(permissionsToGrant, { it }) { permission, _ ->
           SectionAlert(

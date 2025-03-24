@@ -5,6 +5,7 @@
 package essentials.ui.overlay
 
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.interaction.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.*
@@ -45,7 +46,7 @@ import injekt.*
 }
 
 interface BottomSheetScope : ColumnScope {
-  val state: BottomSheetState
+  val state: AnchoredDraggableState<BottomSheetValue>
   fun dismiss()
 }
 

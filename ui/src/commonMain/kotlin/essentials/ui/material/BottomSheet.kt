@@ -28,7 +28,7 @@ import kotlin.math.*
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable fun BottomSheet(
   modifier: Modifier = Modifier,
-  state: BottomSheetState = rememberBottomSheetState(),
+  state: AnchoredDraggableState<BottomSheetValue> = rememberBottomSheetState(),
   onDismissRequest: onBottomSheetDismissRequest = inject,
   dismissOnOutsideTouch: Boolean = true,
   dismissOnBack: Boolean = true,
@@ -46,7 +46,7 @@ import kotlin.math.*
 
   BackHandler(
     enabled = state.targetValue == BottomSheetValue.EXPANDED &&
-    state.anchoredDraggableState.anchors.hasAnchorFor(BottomSheetValue.COLLAPSED),
+    state.anchors.hasAnchorFor(BottomSheetValue.COLLAPSED),
     onBack = action { state.animateTo(BottomSheetValue.COLLAPSED) }
   )
 
@@ -73,7 +73,19 @@ import kotlin.math.*
     val maxHeight = constraints.maxHeight
     Box(
       modifier = Modifier
-        .onSizeChanged { state.updateAnchors(it.height.toFloat(), maxHeight.toFloat()) }
+        .onSizeChanged {
+          val contentHeight = it.height.toFloat()
+          val newAnchors = DraggableAnchors {
+            BottomSheetValue.HIDDEN at contentHeight
+            if (contentHeight > maxHeight / 2)
+              BottomSheetValue.COLLAPSED at contentHeight * 0.5f
+            BottomSheetValue.EXPANDED at 0f
+          }
+          val newTarget = if (newAnchors.hasAnchorFor(state.targetValue))
+            state.targetValue
+          else newAnchors.closestAnchor(state.offset) ?: state.targetValue
+          state.updateAnchors(newAnchors, newTarget)
+        }
         .offset {
           try {
             IntOffset(x = 0, y = state.offset.roundToInt())
@@ -81,9 +93,9 @@ import kotlin.math.*
             IntOffset(0, 0)
           }
         }
-        .nestedScroll(state.nestedScrollConnection)
+        .nestedScroll(rememberBottomSheetScrollConnection(state))
         .anchoredDraggable(
-          state = state.anchoredDraggableState,
+          state = state,
           orientation = Orientation.Vertical,
           overscrollEffect = overscrollEffect
         )
@@ -135,12 +147,15 @@ import kotlin.math.*
 
   if (animateToExpandedOnInit)
     LaunchedEffect(true) {
+      println("animate to expanded")
       state.animateTo(BottomSheetValue.EXPANDED)
     }
 
   LaunchedEffect(state) {
-    snapshotFlow { state.currentValue }
-      .drop(1)
+    snapshotFlow { state.settledValue }
+      .filter { it == BottomSheetValue.EXPANDED }
+      .take(1)
+      .flatMapLatest { snapshotFlow { state.settledValue } }
       .filter { it == BottomSheetValue.HIDDEN }
       .take(1)
       .collect { onDismissRequest() }
@@ -149,102 +164,69 @@ import kotlin.math.*
 
 enum class BottomSheetValue { EXPANDED, COLLAPSED, HIDDEN }
 
-@Stable class BottomSheetState(
-  density: Density,
-  val scope: CoroutineScope,
-  initialState: BottomSheetValue
-) {
-  val anchoredDraggableState = AnchoredDraggableState(
-    initialValue = initialState,
-    positionalThreshold = { with(density) { 56.dp.toPx() } },
-    velocityThreshold = { with(density) { 125.dp.toPx() } },
-    snapAnimationSpec = spring(),
-    decayAnimationSpec = splineBasedDecay(density)
-  )
-  val nestedScrollConnection = object : NestedScrollConnection {
-    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-      val delta = available.y
-      return if (delta < 0 && source == NestedScrollSource.UserInput) {
-        Offset(x = 0f, y = anchoredDraggableState.dispatchRawDelta(delta))
+@Composable fun rememberBottomSheetScrollConnection(
+  state: AnchoredDraggableState<BottomSheetValue>
+): NestedScrollConnection {
+  val scope = rememberCoroutineScope()
+  return remember {
+    object : NestedScrollConnection {
+      override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+        val delta = available.y
+        return if (delta < 0 && source == NestedScrollSource.UserInput) {
+          Offset(x = 0f, y = state.dispatchRawDelta(delta))
+        } else {
+          Offset.Zero
+        }
+      }
+
+      override fun onPostScroll(
+        consumed: Offset,
+        available: Offset,
+        source: NestedScrollSource
+      ): Offset = if (source == NestedScrollSource.UserInput) {
+        Offset(x = 0f, y = state.dispatchRawDelta(available.y))
       } else {
         Offset.Zero
       }
-    }
 
-    override fun onPostScroll(
-      consumed: Offset,
-      available: Offset,
-      source: NestedScrollSource
-    ): Offset = if (source == NestedScrollSource.UserInput) {
-      Offset(x = 0f, y = anchoredDraggableState.dispatchRawDelta(available.y))
-    } else {
-      Offset.Zero
-    }
+      override suspend fun onPreFling(available: Velocity): Velocity {
+        val toFling = available.y
+        val currentOffset = state.requireOffset()
+        val minAnchor = state.anchors.minAnchor()
+        return if (toFling < 0 && currentOffset > minAnchor) {
+          onFling(toFling)
+          // since we go to the anchor with tween settling, consume all for the best UX
+          available
+        } else {
+          Velocity.Zero
+        }
+      }
 
-    override suspend fun onPreFling(available: Velocity): Velocity {
-      val toFling = available.y
-      val currentOffset = anchoredDraggableState.requireOffset()
-      val minAnchor = anchoredDraggableState.anchors.minAnchor()
-      return if (toFling < 0 && currentOffset > minAnchor) {
-        onFling(toFling)
-        // since we go to the anchor with tween settling, consume all for the best UX
-        available
-      } else {
-        Velocity.Zero
+      override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+        onFling(available.y)
+        return available
+      }
+
+      private fun onFling(y: Float) {
+        scope.launch { state.settle(y) }
       }
     }
-
-    override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-      onFling(available.y)
-      return available
-    }
-
-    private fun onFling(y: Float) {
-      scope.launch { anchoredDraggableState.settle(y) }
-    }
-  }
-
-  val currentValue: BottomSheetValue
-    get() = anchoredDraggableState.currentValue
-  val targetValue: BottomSheetValue
-    get() = anchoredDraggableState.targetValue
-  val isAnimationRunning: Boolean
-    get() = anchoredDraggableState.isAnimationRunning
-  val settledValue: BottomSheetValue
-    get() = anchoredDraggableState.settledValue
-  val offset: Float
-    get() = anchoredDraggableState.requireOffset()
-
-  fun updateAnchors(contentHeight: Float, maxHeight: Float) {
-    val newAnchors = DraggableAnchors {
-      BottomSheetValue.HIDDEN at contentHeight
-      if (contentHeight > maxHeight / 2)
-        BottomSheetValue.COLLAPSED at contentHeight * 0.5f
-      BottomSheetValue.EXPANDED at 0f
-    }
-    anchoredDraggableState.updateAnchors(
-      newAnchors,
-      if (newAnchors.hasAnchorFor(anchoredDraggableState.targetValue))
-        anchoredDraggableState.targetValue
-      else newAnchors.closestAnchor(offset) ?: anchoredDraggableState.targetValue
-    )
-  }
-
-  suspend fun animateTo(value: BottomSheetValue) {
-    anchoredDraggableState.animateTo(value)
-  }
-
-  suspend fun snapTo(value: BottomSheetValue) {
-    anchoredDraggableState.snapTo(value)
   }
 }
 
 @Composable fun rememberBottomSheetState(
   initialState: BottomSheetValue = BottomSheetValue.HIDDEN
-): BottomSheetState {
+): AnchoredDraggableState<BottomSheetValue> {
   val density = LocalDensity.current
-  val scope = rememberCoroutineScope()
-  return rememberSaveable { BottomSheetState(density, scope, initialState) }
+  return rememberSaveable {
+    AnchoredDraggableState<BottomSheetValue>(
+      initialValue = initialState,
+      positionalThreshold = { with(density) { 56.dp.toPx() } },
+      velocityThreshold = { with(density) { 125.dp.toPx() } },
+      snapAnimationSpec = spring(),
+      decayAnimationSpec = splineBasedDecay(density)
+    )
+  }
 }
 
 @Tag typealias onBottomSheetDismissRequest = () -> Unit
