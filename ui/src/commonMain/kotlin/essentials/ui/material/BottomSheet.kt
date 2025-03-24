@@ -135,12 +135,7 @@ import kotlin.math.*
 
   if (animateToExpandedOnInit)
     LaunchedEffect(true) {
-      state.animateTo(
-        if (state.anchoredDraggableState.anchors.hasAnchorFor(BottomSheetValue.COLLAPSED))
-          BottomSheetValue.COLLAPSED
-        else
-          BottomSheetValue.EXPANDED
-      )
+      state.animateTo(BottomSheetValue.EXPANDED)
     }
 
   LaunchedEffect(state) {
