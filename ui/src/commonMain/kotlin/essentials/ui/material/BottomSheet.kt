@@ -219,7 +219,7 @@ enum class BottomSheetValue { EXPANDED, COLLAPSED, HIDDEN }
 ): AnchoredDraggableState<BottomSheetValue> {
   val density = LocalDensity.current
   return rememberSaveable {
-    AnchoredDraggableState<BottomSheetValue>(
+    AnchoredDraggableState(
       initialValue = initialState,
       positionalThreshold = { with(density) { 56.dp.toPx() } },
       velocityThreshold = { with(density) { 125.dp.toPx() } },
