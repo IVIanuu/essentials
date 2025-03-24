@@ -19,7 +19,7 @@ abstract class EsTileService : TileService() {
   @Provide private val component by lazy {
     applicationContext.cast<AppScopeOwner>()
       .appScope
-      .service<TileServiceComponent>()
+      .service<Component>()
   }
   @Provide private val logger: Logger get() = component.logger
 
@@ -61,12 +61,12 @@ abstract class EsTileService : TileService() {
     d { "${this::class} on stop listening" }
     super.onStopListening()
   }
-}
 
-@Provide @Service<AppScope> data class TileServiceComponent(
-  @Provide val logger: Logger,
-  val tileScopeFactory: (EsTileService) -> @New Scope<TileScope>
-)
+  @Provide @Service<AppScope> data class Component(
+    @Provide val logger: Logger,
+    val tileScopeFactory: (EsTileService) -> @New Scope<TileScope>
+  )
+}
 
 data class TileState(
   val label: String? = null,

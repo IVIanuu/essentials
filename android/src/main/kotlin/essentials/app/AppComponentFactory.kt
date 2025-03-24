@@ -22,13 +22,9 @@ import kotlin.reflect.*
   }
 }
 
-@Provide @Service<AppScope> class AppComponentFactoryComponent(
-  val factories: List<Pair<KClass<*>, (Intent?) -> Any>>
-)
-
 class EsAppComponentFactory : AppComponentFactory() {
   private val factories: Map<String, (Intent?) -> Any> by lazy(LazyThreadSafetyMode.NONE) {
-    app.appScope.service<AppComponentFactoryComponent>()
+    app.appScope.service<Component>()
       .factories
       .toMap()
       .mapKeys { it.key.java.name }
@@ -52,6 +48,10 @@ class EsAppComponentFactory : AppComponentFactory() {
 
   override fun instantiateProvider(cl: ClassLoader, className: String): ContentProvider =
     factories[className]?.invoke(null)?.cast() ?: super.instantiateProvider(cl, className)
+
+  @Provide @Service<AppScope> class Component(
+    val factories: List<Pair<KClass<*>, (Intent?) -> Any>>
+  )
 
   companion object {
     private lateinit var app: EsApp
