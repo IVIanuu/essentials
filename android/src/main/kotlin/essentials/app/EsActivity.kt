@@ -30,7 +30,7 @@ import kotlinx.coroutines.*
     val uiScope = uiScopeFactory(this)
     lifecycleScope.coroutineContext.job.invokeOnCompletion { uiScope.dispose() }
 
-    val esActivityComponent = uiScope.service<EsActivityComponent>()
+    val component = uiScope.service<Component>()
 
     setContent {
       DisposableEffect(isSystemInDarkTheme()) {
@@ -42,22 +42,22 @@ import kotlinx.coroutines.*
         LocalScope provides uiScope,
         LocalSaveableStateRegistry provides SaveableStateRegistry(emptyMap()) { true }
       ) {
-        esActivityComponent.decorateAppUi {
+        component.decorateAppUi {
           Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
           ) {
-            esActivityComponent.appUi()
+            component.appUi()
           }
         }
       }
     }
   }
-}
 
-@Provide @Service<UiScope> data class EsActivityComponent(
-  val appUi: @Composable () -> AppUi,
-  val decorateAppUi: @Composable (@Composable () -> Unit) -> DecoratedAppUi
-)
+  @Provide @Service<UiScope> data class Component(
+    val appUi: @Composable () -> AppUi,
+    val decorateAppUi: @Composable (@Composable () -> Unit) -> DecoratedAppUi
+  )
+}
 
 val Scope<*>.activity: ComponentActivity get() = service()
