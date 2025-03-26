@@ -21,21 +21,25 @@ import injekt.*
 @Provide @Composable fun sampleColorScheme(
   pref: DataStore<SamplePrefs>
 ): AppColorScheme {
-  val isDark = isSystemInDarkTheme()
-  val prefs = pref.data.collectAsState(null).value
-    ?: return if (isDark) darkColorScheme().tweak(isDark) else lightColorScheme().tweak(isDark)
-  if (prefs.materialYou)
-    return if (isDark) dynamicDarkColorScheme(LocalContext.current).tweak(isDark)
-    else dynamicLightColorScheme(LocalContext.current).tweak(isDark)
+  @Composable fun result(): ColorScheme {
+    val isDark = isSystemInDarkTheme()
+    val prefs = pref.data.collectAsState(null).value
+      ?: return if (isDark) darkColorScheme().tweak(isDark) else lightColorScheme().tweak(isDark)
+    if (prefs.materialYou)
+      return if (isDark) dynamicDarkColorScheme(LocalContext.current).tweak(isDark)
+      else dynamicLightColorScheme(LocalContext.current).tweak(isDark)
 
-  return dynamicColorScheme(
-    isDark = isDark,
-    isAmoled = false,
-    primary = prefs.primary,
-    secondary = prefs.secondary,
-    tertiary = prefs.tertiary,
-    style = prefs.paletteStyle
-  ).tweak(isDark)
+    return dynamicColorScheme(
+      isDark = isDark,
+      isAmoled = false,
+      primary = prefs.primary,
+      secondary = prefs.secondary,
+      tertiary = prefs.tertiary,
+      style = prefs.paletteStyle
+    ).tweak(isDark)
+  }
+
+  return animateColorScheme(result())
 }
 
 fun ColorScheme.tweak(isDark: Boolean): ColorScheme {
