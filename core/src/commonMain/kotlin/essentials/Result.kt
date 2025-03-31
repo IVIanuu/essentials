@@ -9,6 +9,9 @@ inline fun <T> catch(block: () -> T): Result<T, Throwable> = try {
   t.nonFatalOrThrow().err()
 }
 
+inline fun <T, S> Result<T, Throwable>.catchMap(block: (T) -> S): Result<S, Throwable> =
+  flatMap { catch { block(it) } }
+
 fun <V, E : Throwable> Result<V, E>.printErrors() = onFailure {
   it.printStackTrace()
 }

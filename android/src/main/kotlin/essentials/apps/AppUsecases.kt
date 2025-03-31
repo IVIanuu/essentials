@@ -16,7 +16,7 @@ import kotlinx.coroutines.*
 
 @Provide fun getInstalledApps(
   context: Application = inject,
-  coroutineContexts: CoroutineContexts
+  coroutineContexts: CoroutineContexts = inject
 ): getInstalledApps = {
   withContext(coroutineContexts.io) {
     context.packageManager.getInstalledApplications(0)
@@ -32,13 +32,12 @@ import kotlinx.coroutines.*
 }
 
 @Provide suspend fun String.toAppInfo(
-  coroutineContexts: CoroutineContexts,
-  context: Application = inject
+  context: Application = inject,
+  coroutineContexts: CoroutineContexts = inject
 ): AppInfo? = withContext(coroutineContexts.io) {
-  val applicationInfo = catch {
-    context.packageManager.getApplicationInfo(this@toAppInfo, 0)
-  }.getOrNull() ?: return@withContext null
-  AppInfo(this@toAppInfo, applicationInfo.loadLabel(context.packageManager).toString())
+  catch { context.packageManager.getApplicationInfo(this@toAppInfo, 0) }
+    .catchMap { AppInfo(this@toAppInfo, it.loadLabel(context.packageManager).toString()) }
+    .getOrNull()
 }
 
 data class AppInfo(val packageName: String, val appName: String)
