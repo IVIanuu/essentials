@@ -20,17 +20,17 @@ import injekt.*
       icon = { Icon(Icons.Default.Search, null) }
     )
 
-  @Provide fun execute(sendActionMediaIntent: sendActionIntent):
-    ActionExecutorResult<SearchActionId> {
-      sendActionMediaIntent(
-        Intent(Intent.ACTION_MAIN).apply {
-          component = ComponentName(
-            "com.google.android.googlequicksearchbox",
-            "com.google.android.apps.gsa.queryentry.QueryEntryActivity"
-          )
-          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        },
-        null
-      )
-    }
+  @Provide suspend fun execute(sendActionMediaIntent: sendActionIntent):
+      ActionExecutorResult<SearchActionId> {
+    sendActionMediaIntent(
+      Intent(Intent.ACTION_MAIN).apply {
+        component = ComponentName(
+          "com.google.android.googlequicksearchbox",
+          "com.google.android.apps.gsa.queryentry.QueryEntryActivity"
+        )
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      },
+      null
+    )
+  }
 }

@@ -6,21 +6,19 @@ package essentials.util
 
 import android.app.*
 import android.widget.*
-import essentials.*
 import essentials.coroutines.*
 import injekt.*
 import kotlinx.coroutines.*
 
 @Tag typealias showToastResult = Unit
-typealias showToast = (String) -> showToastResult
+typealias showToast = suspend (String) -> showToastResult
 
-@Provide fun showToast(
+@Provide suspend fun showToast(
   message: String,
   context: Application,
-  coroutineContexts: CoroutineContexts,
-  scope: ScopedCoroutineScope<AppScope>
+  coroutineContexts: CoroutineContexts
 ): showToastResult {
-  scope.launch(coroutineContexts.main) {
+  withContext(coroutineContexts.main) {
     Toast.makeText(
       context,
       message,

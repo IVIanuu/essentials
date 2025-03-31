@@ -42,7 +42,7 @@ import injekt.*
             Subheader { Text("Example sheet") }
 
             SectionListItem(
-              onClick = {
+              onClick = action {
                 showToast("Clicked")
                 dismiss()
               },

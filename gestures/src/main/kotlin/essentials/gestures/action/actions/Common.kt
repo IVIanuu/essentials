@@ -16,7 +16,7 @@ import essentials.accessibility.*
 import essentials.util.*
 import injekt.*
 
-@Tag typealias sendActionIntent = (Intent, Bundle?) -> Unit
+@Tag typealias sendActionIntent = suspend (Intent, Bundle?) -> Unit
 
 @Provide fun sendActionIntent(
   context: Application,

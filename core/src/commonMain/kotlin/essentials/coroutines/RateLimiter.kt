@@ -13,7 +13,7 @@ import kotlin.time.*
 class RateLimiter(
   private val eventsPerInterval: Int,
   private val interval: Duration,
-  private val clock: Clock = inject,
+  private val clock: () -> Now = inject,
 ) {
   private val lock = Mutex()
 
