@@ -46,7 +46,7 @@ import kotlin.math.*
 
   BackHandler(
     enabled = state.targetValue == BottomSheetValue.EXPANDED &&
-    state.anchors.hasAnchorFor(BottomSheetValue.COLLAPSED),
+    state.anchors.hasPositionFor(BottomSheetValue.COLLAPSED),
     onBack = action { state.animateTo(BottomSheetValue.COLLAPSED) }
   )
 
@@ -81,7 +81,7 @@ import kotlin.math.*
               BottomSheetValue.COLLAPSED at contentHeight * 0.5f
             BottomSheetValue.EXPANDED at 0f
           }
-          val newTarget = if (newAnchors.hasAnchorFor(state.targetValue))
+          val newTarget = if (newAnchors.hasPositionFor(state.targetValue))
             state.targetValue
           else newAnchors.closestAnchor(state.offset) ?: state.targetValue
           state.updateAnchors(newAnchors, newTarget)
@@ -147,7 +147,6 @@ import kotlin.math.*
 
   if (animateToExpandedOnInit)
     LaunchedEffect(true) {
-      println("animate to expanded")
       state.animateTo(BottomSheetValue.EXPANDED)
     }
 
@@ -192,7 +191,7 @@ enum class BottomSheetValue { EXPANDED, COLLAPSED, HIDDEN }
       override suspend fun onPreFling(available: Velocity): Velocity {
         val toFling = available.y
         val currentOffset = state.requireOffset()
-        val minAnchor = state.anchors.minAnchor()
+        val minAnchor = state.anchors.minPosition()
         return if (toFling < 0 && currentOffset > minAnchor) {
           onFling(toFling)
           // since we go to the anchor with tween settling, consume all for the best UX

@@ -75,12 +75,12 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.7.8"
+    const val version = "1.8.0-rc02"
     const val gradlePlugin = "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${Kotlin.version}"
     const val foundation = "androidx.compose.foundation:foundation:$version"
     const val googleFonts = "androidx.compose.ui:ui-text-google-fonts:$version"
     const val material3 = "androidx.compose.material3:material3:1.3.1"
-    const val materialIconsExtended = "androidx.compose.material:material-icons-extended:$version"
+    const val materialIconsExtended = "androidx.compose.material:material-icons-extended:1.7.8"
     const val runtime = "androidx.compose.runtime:runtime:$version"
     const val runtimeSaveable = "androidx.compose.runtime:runtime-saveable:$version"
   }

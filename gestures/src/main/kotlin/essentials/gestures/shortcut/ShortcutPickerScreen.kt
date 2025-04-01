@@ -36,7 +36,6 @@ class ShortcutPickerScreen : Screen<Shortcut>
       produceScopedState(Resource.Idle()) {
         value = catchResource {
           getShortcuts()
-            .also { println(it) }
             .groupBy { it.packageName }
             .mapKeys { it.key.toAppInfo()!!.appName }
             .toList()

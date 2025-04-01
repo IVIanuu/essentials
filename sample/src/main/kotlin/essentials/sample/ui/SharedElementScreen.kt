@@ -73,7 +73,7 @@ class SharedElementScreen(val index: Int, val color: Color) : Screen<Unit>
     Box(
       modifier = Modifier
         .sharedElement(
-          state = rememberSharedContentState(color.toString()),
+          sharedContentState = rememberSharedContentState(color.toString()),
           animatedVisibilityScope = animatedVisibilityScope,
           boundsTransform = { _, _ -> tween(2000) }
         )
@@ -106,7 +106,7 @@ class SharedElementScreen(val index: Int, val color: Color) : Screen<Unit>
             Box(
               modifier = Modifier
                 .sharedElement(
-                  state = rememberSharedContentState(color.toString()),
+                  sharedContentState = rememberSharedContentState(color.toString()),
                   animatedVisibilityScope = animatedVisibilityScope,
                   boundsTransform = { _, _ -> tween(2000) }
                 )

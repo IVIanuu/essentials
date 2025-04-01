@@ -71,7 +71,6 @@ typealias extractShortcut = suspend (String, Intent) -> extractShortcutResult
     shortcutRequestResult.getParcelableExtra<Bitmap>(Intent.EXTRA_SHORTCUT_ICON)
   val iconResource =
     shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
-  println("lolo $intent")
   @Suppress("DEPRECATION") val icon = when {
     bitmapIcon != null -> bitmapIcon.toDrawable(context.resources)
     iconResource != null -> {
