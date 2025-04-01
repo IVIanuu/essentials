@@ -37,10 +37,11 @@ import injekt.*
     verticalArrangement = verticalArrangement,
     horizontalAlignment = horizontalAlignment,
     flingBehavior = flingBehavior,
-    userScrollEnabled = userScrollEnabled
-  ) {
-    decoratedContent(true, decorators, content)
-  }
+    userScrollEnabled = userScrollEnabled,
+    content = @DontMemoize {
+      decoratedContent(true, decorators, content)
+    }
+  )
 }
 
 @Composable fun EsLazyRow(
@@ -64,10 +65,11 @@ import injekt.*
     horizontalArrangement = horizontalArrangement,
     verticalAlignment = verticalAlignment,
     flingBehavior = flingBehavior,
-    userScrollEnabled = userScrollEnabled
-  ) {
-    decoratedContent(false, decorators, content)
-  }
+    userScrollEnabled = userScrollEnabled,
+    content = @DontMemoize {
+      decoratedContent(false, decorators, content)
+    }
+  )
 }
 
 @Stable fun interface ListDecorator : ExtensionPoint<ListDecorator> {
