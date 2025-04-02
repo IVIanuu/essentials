@@ -8,17 +8,20 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.ui.util.*
+import essentials.*
 import essentials.accessibility.*
 import essentials.compose.*
 import essentials.notificationlistener.*
 import essentials.permission.*
 import essentials.ui.material.*
+import essentials.ui.navigation.*
 import essentials.ui.overlay.*
 import injekt.*
 
 @Provide fun permissionsHomeItem(
   permissionManager: Permissions,
-  permissions: List<SamplePermission>
+  permissions: List<SamplePermission>,
+  scope: Scope<ScreenScope> = inject
 ) = HomeItem("Permissions") {
   BottomSheetScreen {
     SectionListItem(

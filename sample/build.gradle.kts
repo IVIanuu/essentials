@@ -3,9 +3,9 @@
  */
 
 plugins {
+  kotlin("android")
   id("com.android.application")
   id("essentials")
-  kotlin("android")
 }
 
 android {

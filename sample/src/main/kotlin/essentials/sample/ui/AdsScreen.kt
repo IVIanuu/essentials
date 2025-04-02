@@ -9,10 +9,14 @@ import androidx.compose.runtime.*
 import essentials.ads.*
 import essentials.compose.*
 import essentials.ui.material.*
+import essentials.ui.navigation.*
 import essentials.ui.overlay.*
 import injekt.*
 
-@Provide fun adsHomeItem(fullScreenAd: FullScreenAds) = HomeItem("Ads") {
+@Provide fun adsHomeItem(
+  fullScreenAd: FullScreenAds,
+  ctx: ScreenContext<*> = inject
+) = HomeItem("Ads") {
   BottomSheetScreen {
     Subheader { Text("Ads") }
 

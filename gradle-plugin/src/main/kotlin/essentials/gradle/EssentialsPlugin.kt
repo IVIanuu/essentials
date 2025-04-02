@@ -9,7 +9,6 @@ import org.gradle.api.*
 import org.gradle.api.provider.*
 import org.jetbrains.kotlin.gradle.dsl.*
 import org.jetbrains.kotlin.gradle.plugin.*
-import org.jetbrains.kotlin.gradle.plugin.mpp.*
 
 open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
   override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean =
@@ -27,6 +26,8 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
       "essentials:ksp:${BuildConfig.VERSION}"
     )
     target.extensions.add("essentials", EssentialsExtension(target))
+    target.extensions.getByType(KotlinBaseExtension::class.java)
+      .jvmToolchain(11)
   }
 
   override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> {
@@ -42,11 +43,9 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
         "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
         "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "-opt-in=androidx.compose.animation.ExperimentalSharedTransitionApi"
+        "-opt-in=androidx.compose.animation.ExperimentalSharedTransitionApi",
+        "-Xcontext-parameters"
       )
-      if (kotlinCompilation is KotlinJvmCompilation ||
-        kotlinCompilation is KotlinJvmAndroidCompilation)
-          (kotlinCompilation.kotlinOptions as KotlinJvmOptions).jvmTarget = "1.8"
     }
     return kotlinCompilation.target.project.provider { emptyList() }
   }
