@@ -5,6 +5,7 @@
 
 package essentials.ui.common
 
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -26,6 +27,7 @@ import injekt.*
   horizontalAlignment: Alignment.Horizontal = Alignment.Start,
   flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
   userScrollEnabled: Boolean = true,
+  overscrollEffect: OverscrollEffect? = rememberOverscrollEffect(),
   decorators: LoadingOrderList<ListDecorator> = remember(LocalListDecorators.current),
   content: LazyListScope.() -> Unit
 ) {
@@ -38,6 +40,7 @@ import injekt.*
     horizontalAlignment = horizontalAlignment,
     flingBehavior = flingBehavior,
     userScrollEnabled = userScrollEnabled,
+    overscrollEffect = overscrollEffect,
     content = @DontMemoize {
       decoratedContent(true, decorators, content)
     }
@@ -54,6 +57,7 @@ import injekt.*
   verticalAlignment: Alignment.Vertical = Alignment.Top,
   flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
   userScrollEnabled: Boolean = true,
+  overscrollEffect: OverscrollEffect? = rememberOverscrollEffect(),
   decorators: List<ListDecorator> = remember(LocalListDecorators.current),
   content: LazyListScope.() -> Unit
 ) {
@@ -66,6 +70,7 @@ import injekt.*
     verticalAlignment = verticalAlignment,
     flingBehavior = flingBehavior,
     userScrollEnabled = userScrollEnabled,
+    overscrollEffect = overscrollEffect,
     content = @DontMemoize {
       decoratedContent(false, decorators, content)
     }
