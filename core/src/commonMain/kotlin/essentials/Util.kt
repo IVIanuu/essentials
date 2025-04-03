@@ -8,9 +8,6 @@ import kotlin.reflect.*
 
 inline fun <T> implicit(x: T = inject): T = x
 
-inline fun <A, R> provide(value: A, block: (@Provide A) -> R): R =
-  block(value)
-
 fun <T> nullOf(): T? = null
 
 inline fun <reified T> Any?.cast(): T = this as T
