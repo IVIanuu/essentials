@@ -18,7 +18,7 @@ import kotlin.coroutines.*
   val result = rememberScoped { mutableStateOf(initialValue) }
   LaunchedScopedEffect(keys = keys) {
     producer(
-      object : ProduceStateScope<T>, MutableState<T> by result, CoroutineScope by implicitly() {
+      object : ProduceStateScope<T>, MutableState<T> by result, CoroutineScope by implicit() {
         override suspend fun awaitDispose(onDispose: () -> Unit) =
           awaitCancellation()
       }

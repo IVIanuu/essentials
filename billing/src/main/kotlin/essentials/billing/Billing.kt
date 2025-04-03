@@ -25,7 +25,7 @@ import kotlin.time.Duration.Companion.seconds
   @property:Provide private val logger: Logger,
   private val refreshes: MutableSharedFlow<BillingRefresh>
 ) {
-  private val client = provide(implicitly<CoroutineScope>() + coroutineContexts.io) {
+  private val client = provide(implicit<CoroutineScope>() + coroutineContexts.io) {
     sharedResource(
       timeout = 10.seconds,
       create = { _: Unit ->
