@@ -32,6 +32,7 @@ import kotlin.math.*
   dismissOnBack: Boolean = true,
   animateToExpandedOnInit: Boolean = true,
   skipCollapsed: Boolean = true,
+  animationSpec: AnimationSpec<Float> = spring(),
   overscrollEffect: OverscrollEffect? = rememberOverscrollEffect(),
   content: @Composable ColumnScope.() -> Unit
 ) {
@@ -88,11 +89,14 @@ import kotlin.math.*
           if (state.offset.isNaN()) IntOffset(0, 0)
           else IntOffset(x = 0, y = state.requireOffset().roundToInt())
         }
-        .nestedScroll(rememberBottomSheetScrollConnection(state))
+        .nestedScroll(rememberBottomSheetScrollConnection(state, animationSpec))
         .anchoredDraggable(
           state = state,
           orientation = Orientation.Vertical,
-          flingBehavior = AnchoredDraggableDefaults.flingBehavior(state = state),
+          flingBehavior = AnchoredDraggableDefaults.flingBehavior(
+            state = state,
+            animationSpec = animationSpec
+          ),
           overscrollEffect = overscrollEffect
         )
         .overscroll(overscrollEffect)
@@ -160,7 +164,8 @@ import kotlin.math.*
 enum class BottomSheetValue { EXPANDED, COLLAPSED, HIDDEN }
 
 @Composable fun rememberBottomSheetScrollConnection(
-  state: AnchoredDraggableState<BottomSheetValue>
+  state: AnchoredDraggableState<BottomSheetValue>,
+  animationSpec: AnimationSpec<Float> = spring()
 ): NestedScrollConnection {
   val scope = rememberCoroutineScope()
   return remember {
@@ -189,7 +194,7 @@ enum class BottomSheetValue { EXPANDED, COLLAPSED, HIDDEN }
         val currentOffset = state.requireOffset()
         val minAnchor = state.anchors.minPosition()
         return if (toFling < 0 && currentOffset > minAnchor) {
-          onFling(toFling)
+          onFling()
           // since we go to the anchor with tween settling, consume all for the best UX
           available
         } else {
@@ -198,12 +203,14 @@ enum class BottomSheetValue { EXPANDED, COLLAPSED, HIDDEN }
       }
 
       override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-        onFling(available.y)
+        onFling()
         return available
       }
 
-      private fun onFling(y: Float) {
-        scope.launch { state.settle(y) }
+      private fun onFling() {
+        scope.launch {
+          state.settle(animationSpec)
+        }
       }
     }
   }
