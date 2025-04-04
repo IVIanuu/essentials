@@ -38,7 +38,12 @@ import kotlin.math.*
 ) {
   val animateToHiddenAndDismiss = action {
     guarantee(
-      fa = { state.animateTo(BottomSheetValue.HIDDEN) },
+      fa = {
+        state.animateTo(
+          BottomSheetValue.HIDDEN,
+          animationSpec
+        )
+      },
       finalizer = { onDismissRequest() }
     )
   }
@@ -48,7 +53,12 @@ import kotlin.math.*
   BackHandler(
     enabled = state.targetValue == BottomSheetValue.EXPANDED &&
     state.anchors.hasPositionFor(BottomSheetValue.COLLAPSED),
-    onBack = action { state.animateTo(BottomSheetValue.COLLAPSED) }
+    onBack = action {
+      state.animateTo(
+        BottomSheetValue.COLLAPSED,
+        animationSpec
+      )
+    }
   )
 
   BoxWithConstraints(
@@ -147,7 +157,10 @@ import kotlin.math.*
 
   if (animateToExpandedOnInit)
     LaunchedEffect(true) {
-      state.animateTo(BottomSheetValue.EXPANDED)
+      state.animateTo(
+        BottomSheetValue.EXPANDED,
+        animationSpec
+      )
     }
 
   LaunchedEffect(state) {
