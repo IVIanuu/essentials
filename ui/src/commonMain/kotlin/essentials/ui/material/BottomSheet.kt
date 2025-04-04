@@ -2,7 +2,6 @@ package essentials.ui.material
 
 import android.annotation.*
 import androidx.activity.compose.*
-import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
@@ -15,7 +14,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.geometry.*
 import androidx.compose.ui.input.nestedscroll.*
 import androidx.compose.ui.layout.*
-import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import arrow.fx.coroutines.*
 import essentials.compose.*
@@ -86,11 +84,15 @@ import kotlin.math.*
           else newAnchors.closestAnchor(state.offset) ?: state.targetValue
           state.updateAnchors(newAnchors, newTarget)
         }
-        .offset { IntOffset(x = 0, y = state.requireOffset().roundToInt()) }
+        .offset {
+          if (state.offset.isNaN()) IntOffset(0, 0)
+          else IntOffset(x = 0, y = state.requireOffset().roundToInt())
+        }
         .nestedScroll(rememberBottomSheetScrollConnection(state))
         .anchoredDraggable(
           state = state,
           orientation = Orientation.Vertical,
+          flingBehavior = AnchoredDraggableDefaults.flingBehavior(state = state),
           overscrollEffect = overscrollEffect
         )
         .overscroll(overscrollEffect)
@@ -209,17 +211,8 @@ enum class BottomSheetValue { EXPANDED, COLLAPSED, HIDDEN }
 
 @Composable fun rememberBottomSheetState(
   initialState: BottomSheetValue = BottomSheetValue.HIDDEN
-): AnchoredDraggableState<BottomSheetValue> {
-  val density = LocalDensity.current
-  return rememberSaveable {
-    AnchoredDraggableState(
-      initialValue = initialState,
-      positionalThreshold = { with(density) { 56.dp.toPx() } },
-      velocityThreshold = { with(density) { 125.dp.toPx() } },
-      snapAnimationSpec = spring(),
-      decayAnimationSpec = splineBasedDecay(density)
-    )
-  }
+): AnchoredDraggableState<BottomSheetValue> = rememberSaveable {
+  AnchoredDraggableState(initialValue = initialState)
 }
 
 @Tag typealias onBottomSheetDismissRequest = () -> Unit
