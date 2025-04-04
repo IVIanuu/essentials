@@ -33,6 +33,8 @@ import kotlin.math.*
   dismissOnOutsideTouch: Boolean = true,
   dismissOnBack: Boolean = true,
   animateToExpandedOnInit: Boolean = true,
+  skipCollapsed: Boolean = true,
+  overscrollEffect: OverscrollEffect? = rememberOverscrollEffect(),
   content: @Composable ColumnScope.() -> Unit
 ) {
   val animateToHiddenAndDismiss = action {
@@ -49,8 +51,6 @@ import kotlin.math.*
     state.anchors.hasPositionFor(BottomSheetValue.COLLAPSED),
     onBack = action { state.animateTo(BottomSheetValue.COLLAPSED) }
   )
-
-  val overscrollEffect = ScrollableDefaults.overscrollEffect()
 
   BoxWithConstraints(
     modifier = modifier.fillMaxSize(),
@@ -77,7 +77,7 @@ import kotlin.math.*
           val contentHeight = it.height.toFloat()
           val newAnchors = DraggableAnchors {
             BottomSheetValue.HIDDEN at contentHeight
-            if (contentHeight > maxHeight / 2)
+            if (!skipCollapsed && contentHeight > maxHeight / 2)
               BottomSheetValue.COLLAPSED at contentHeight * 0.5f
             BottomSheetValue.EXPANDED at 0f
           }
@@ -86,13 +86,7 @@ import kotlin.math.*
           else newAnchors.closestAnchor(state.offset) ?: state.targetValue
           state.updateAnchors(newAnchors, newTarget)
         }
-        .offset {
-          try {
-            IntOffset(x = 0, y = state.offset.roundToInt())
-          } catch (e: Throwable) {
-            IntOffset(0, 0)
-          }
-        }
+        .offset { IntOffset(x = 0, y = state.requireOffset().roundToInt()) }
         .nestedScroll(rememberBottomSheetScrollConnection(state))
         .anchoredDraggable(
           state = state,
