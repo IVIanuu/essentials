@@ -66,7 +66,8 @@ import kotlin.math.*
     contentAlignment = Alignment.BottomCenter
   ) {
     val scrimAlpha by animateFloatAsState(
-      if (state.targetValue != BottomSheetValue.HIDDEN) 1f else 0f
+      if (state.targetValue != BottomSheetValue.HIDDEN) 1f else 0f,
+      animationSpec
     )
     Box(
       modifier = Modifier
