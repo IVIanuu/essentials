@@ -15,7 +15,6 @@ import arrow.fx.coroutines.*
 import essentials.*
 import essentials.app.*
 import essentials.compose.*
-import essentials.coroutines.*
 import essentials.util.*
 import injekt.*
 import kotlinx.coroutines.*
@@ -25,7 +24,7 @@ import kotlin.time.Duration.Companion.seconds
   private val appConfig: AppConfig,
   private val foregroundManager: ForegroundManager,
   @property:Provide private val logger: Logger,
-  @property:Provide private val scope: ScopedCoroutineScope<AppScope>,
+  @property:Provide private val scope: @For<AppScope> CoroutineScope,
   private val foregroundScopeFactory: () -> @New Scope<ForegroundScope>
 ) : Service() {
   private val notificationManager by lazy { getSystemService<NotificationManager>()!! }

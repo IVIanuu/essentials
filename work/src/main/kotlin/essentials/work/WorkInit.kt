@@ -41,7 +41,7 @@ data class WorkConstraints(
   private val androidWorkManager: AndroidWorkManager,
   private val coroutineContexts: CoroutineContexts,
   @property:Provide private val logger: Logger,
-  @property:Provide private val scope: ScopedCoroutineScope<AppScope>,
+  @property:Provide private val scope: @For<AppScope> CoroutineScope,
   private val workersMap: Map<String, suspend () -> WorkerResult<*>>,
 ) : SynchronizedObject() {
   private val workerStates = mutableMapOf<String, MutableState<Boolean>>()

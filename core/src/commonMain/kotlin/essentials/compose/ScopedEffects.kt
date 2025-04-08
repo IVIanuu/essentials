@@ -70,7 +70,7 @@ fun <T> StateFlow<T>.collectAsScopedState(
       override fun onRemembered() {
         job = launch(
           // TODO REMOVE EXPLICIT PASSING ONCE WE FIGURED OUT THAT NASTY INJEKT BUG
-          scope = CoroutineScopeProviders.scopeCoroutineScope(scope),
+          scope = CoroutineProviders.scopeCoroutineScope(scope),
           block = block
         )
       }

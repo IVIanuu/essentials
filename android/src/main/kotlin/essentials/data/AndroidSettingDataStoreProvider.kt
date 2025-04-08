@@ -23,7 +23,7 @@ class AndroidSettingDataStoreProvider<T : Any>(
   @Provide fun provide(
     context: Application,
     coroutineContexts: CoroutineContexts,
-    scope: ScopedCoroutineScope<AppScope>
+    scope: @For<AppScope> CoroutineScope
   ): @Scoped<AppScope> DataStore<T> = object : DataStore<T> {
     private val contentResolver = context.contentResolver
     private suspend fun get(): T = withContext(coroutineContexts.io) {

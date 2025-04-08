@@ -6,6 +6,12 @@ import injekt.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
+@Tag annotation class For<N> {
+  @Provide companion object {
+    @Provide inline fun <@AddOn T : @For<N> S, S, N> unwrap(t: T): S = t
+  }
+}
+
 inline fun <T> implicit(x: T = inject): T = x
 
 fun <T> nullOf(): T? = null

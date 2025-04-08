@@ -10,30 +10,26 @@ import injekt.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
-@Stable class ScopedCoroutineScope<N> @Provide @Scoped<N> constructor(
-  context: ScopeCoroutineContext<N>
-): CoroutineScope, DisposableHandle {
-  override val coroutineContext: CoroutineContext = context + SupervisorJob()
-  override fun dispose() {
-    coroutineContext.cancel()
-  }
+@Provide object CoroutineProviders : BaseCoroutineProviders() {
+  @Provide fun <N> scopedCoroutineScope(
+    context: @For<N> CoroutineContext
+  ): @Scoped<N> @For<N> CoroutineScope =
+    object : CoroutineScope by CoroutineScope(context), DisposableHandle {
+      override fun dispose() {
+        cancel()
+      }
+    }
 
-  @Provide companion object {
-    @Provide fun <N> service(scope: () -> ScopedCoroutineScope<N>) =
-      ProvidedService<N, CoroutineScope>(CoroutineScope::class, scope)
-  }
+  @Provide fun <N> scopeCoroutineContext(
+    contexts: CoroutineContexts
+  ): @For<N> CoroutineContext = contexts.main
+
+  @Provide fun <N> coroutineScopeService(scope: () -> @For<N> CoroutineScope) =
+    ProvidedService<N, CoroutineScope>(CoroutineScope::class, scope)
+
+  @Provide fun scopeCoroutineScope(scope: Scope<*>): CoroutineScope = scope.service()
 }
 
-@Provide object CoroutineScopeProviders : BaseCoroutineScopeProviders() {
-  @Provide fun scopeCoroutineScope(scope: Scope<*> = inject): CoroutineScope = scope.service()
-}
-
-abstract class BaseCoroutineScopeProviders {
+abstract class BaseCoroutineProviders {
   @Provide @Composable fun compositionCoroutineScope(): CoroutineScope = rememberCoroutineScope()
 }
-
-@Tag typealias ScopeCoroutineContext<N> = CoroutineContext
-
-@Provide fun <N> scopeCoroutineContext(
-  contexts: CoroutineContexts
-): ScopeCoroutineContext<N> = contexts.main

@@ -23,7 +23,7 @@ class DataStoreProvider<T : Any>(
     json: () -> Json,
     serializerFactory: () -> KSerializer<T>,
     dirs: () -> AppDirs,
-    scope: ScopedCoroutineScope<AppScope>
+    scope: @For<AppScope> CoroutineScope
   ): @Scoped<AppScope> DataStore<T> = DataStoreFactory.create(
     object : Serializer<T> {
       override val defaultValue: T get() = default()

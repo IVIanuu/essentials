@@ -48,7 +48,7 @@ private val explicitBroadcasts = EventFlow<Intent>()
 
 @Provide @AndroidComponent class EsBroadcastReceiver(
   @property:Provide private val logger: Logger,
-  private val scope: ScopedCoroutineScope<AppScope>
+  private val scope: @For<AppScope> CoroutineScope
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     d { "on receive $intent" }

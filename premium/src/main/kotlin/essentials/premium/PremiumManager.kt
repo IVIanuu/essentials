@@ -15,6 +15,7 @@ import essentials.coroutines.*
 import essentials.ui.navigation.*
 import essentials.util.*
 import injekt.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 @Tag typealias IsPremiumVersion = Boolean?
@@ -35,7 +36,7 @@ interface Paywall {
 }
 
 @Provide fun paywall(
-  appScope: ScopedCoroutineScope<AppScope> = inject,
+  appScope: @For<AppScope> CoroutineScope = inject,
   isPremiumVersion: Flow<IsPremiumVersion>,
   launchUi: launchUi,
   showToast: showToast,
