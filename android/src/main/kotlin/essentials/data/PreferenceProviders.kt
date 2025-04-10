@@ -7,8 +7,8 @@ import essentials.coroutines.*
 import injekt.*
 import kotlinx.coroutines.*
 
-@Provide object PreferencesProviders {
-  @Provide fun preferencesDataStore(
+@Provide object PreferenceProviders {
+  @Provide fun dataStore(
     coroutineContexts: CoroutineContexts,
     dirs: () -> AppDirs,
     scope: @For<AppScope> CoroutineScope
