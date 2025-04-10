@@ -55,8 +55,7 @@ import kotlin.time.Duration.Companion.seconds
             }
           )
         }
-        client
-          .also { d { "client created" } }
+        client.also { d { "client created" } }
       },
       release = { _, billingClient ->
         d { "release client" }
