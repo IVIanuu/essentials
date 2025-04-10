@@ -56,15 +56,5 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
-        <receiver
-            android:name="essentials.util.EsBroadcastReceiver"
-            tools:ignore="Instantiatable"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.bluetooth.device.action.ACL_CONNECTED"/>
-            </intent-filter>
-        </receiver>
-
     </application>
 </manifest>
