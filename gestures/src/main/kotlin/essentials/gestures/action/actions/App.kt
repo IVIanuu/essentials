@@ -31,7 +31,6 @@ import injekt.*
       title = packageName.toAppInfo()!!.appName,
       unlockScreen = true,
       closeSystemDialogs = true,
-      enabled = true,
       permissions = listOf(ActionSystemOverlayPermission::class),
       icon = { AsyncImage(AppIcon(packageName), null) }
     )

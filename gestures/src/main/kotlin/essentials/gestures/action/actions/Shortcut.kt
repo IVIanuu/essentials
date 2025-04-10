@@ -35,7 +35,6 @@ import java.io.*
       title = label,
       unlockScreen = true,
       closeSystemDialogs = true,
-      enabled = true,
       permissions = listOf(ActionSystemOverlayPermission::class),
       icon = { Image(bitmap = icon, contentDescription = null) }
     )
