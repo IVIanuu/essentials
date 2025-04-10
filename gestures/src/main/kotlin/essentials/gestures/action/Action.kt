@@ -19,7 +19,6 @@ import kotlin.reflect.*
   val unlockScreen: Boolean = false,
   val closeSystemDialogs: Boolean = false,
   val turnScreenOn: Boolean = false,
-  val enabled: Boolean = true,
   val icon: @Composable () -> Unit
 ) {
   constructor(
@@ -29,9 +28,8 @@ import kotlin.reflect.*
     unlockScreen: Boolean = false,
     closeSystemDialogs: Boolean = false,
     turnScreenOn: Boolean = false,
-    enabled: Boolean = true,
     icon: @Composable () -> Unit
-  ) : this(id.value, title, permissions, unlockScreen, closeSystemDialogs, turnScreenOn, enabled, icon)
+  ) : this(id.value, title, permissions, unlockScreen, closeSystemDialogs, turnScreenOn, icon)
 }
 
 abstract class ActionId(val value: String)
