@@ -18,7 +18,7 @@ class DataStoreProvider<T : Any>(
   private val name: String,
   private val default: () -> T
 ) {
-  @Provide fun dataStore(
+  @Provide fun provide(
     coroutineContexts: CoroutineContexts,
     json: () -> Json,
     serializerFactory: () -> KSerializer<T>,
