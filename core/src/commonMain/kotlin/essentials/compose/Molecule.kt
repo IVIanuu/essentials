@@ -10,23 +10,26 @@ import kotlin.coroutines.*
 
 fun <T> moleculeFlow(
   mode: RecompositionMode = inject,
+  snapshotNotifier: SnapshotNotifier = inject,
   block: @Composable () -> T
-): Flow<T> = moleculeFlow(mode, body = block)
+): Flow<T> = moleculeFlow(mode, snapshotNotifier, body = block)
 
 fun launchMolecule(
   context: MoleculeCoroutineContext = inject,
   mode: RecompositionMode = inject,
+  snapshotNotifier: SnapshotNotifier = inject,
   scope: CoroutineScope = inject,
   block: @Composable () -> Unit
 ): Job {
   val job = Job(scope.coroutineContext.job)
-  (scope + job).launchMolecule(mode, {}, context, body = block)
+  (scope + job).launchMolecule(mode, context, snapshotNotifier, block)
   return job
 }
 
 fun <T> moleculeState(
   context: MoleculeCoroutineContext = inject,
   mode: RecompositionMode = inject,
+  snapshotNotifier: SnapshotNotifier = inject,
   scope: CoroutineScope = inject,
   body: @Composable () -> T,
 ): State<T> {
@@ -35,6 +38,7 @@ fun <T> moleculeState(
   scope.launchMolecule(
     context = context,
     mode = mode,
+    snapshotNotifier = snapshotNotifier,
     emitter = { value ->
       val outputState = state
       if (outputState != null) {
@@ -54,4 +58,5 @@ fun <T> moleculeState(
 @Provide object MoleculeDefaults {
   @Provide val context: MoleculeCoroutineContext get() = AndroidUiDispatcher.Main
   @Provide val recompositionMode get() = RecompositionMode.ContextClock
+  @Provide val snapshotNotifier get() = SnapshotNotifier.External
 }

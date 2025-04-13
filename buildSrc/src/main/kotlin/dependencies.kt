@@ -159,7 +159,7 @@ object Deps {
 
   const val mockk = "io.mockk:mockk:1.12.8"
 
-  const val molecule = "app.cash.molecule:molecule-runtime:2.0.0"
+  const val molecule = "app.cash.molecule:molecule-runtime:2.1.0"
 
   const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.30.0"
 
