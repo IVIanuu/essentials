@@ -5,7 +5,7 @@
 plugins {
   kotlin("android")
   id("com.android.application")
-  id("essentials")
+  id("io.github.ivianuu.essentials")
 }
 
 android {

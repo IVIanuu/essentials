@@ -13,11 +13,11 @@ plugins {
 gradlePlugin {
   plugins {
     create("essentialsPlugin") {
-      id = "essentials"
+      id = "io.github.ivianuu.essentials"
       implementationClass = "essentials.gradle.EssentialsPlugin"
     }
     create("composePlugin") {
-      id = "essentials.compose"
+      id = "io.github.ivianuu.essentials.compose"
       implementationClass = "essentials.gradle.ComposePlugin"
     }
   }

@@ -23,7 +23,7 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
     target.plugins.apply("io.github.ivianuu.injekt")
     target.dependencies.add(
       "ksp",
-      "essentials:ksp:${BuildConfig.VERSION}"
+      "io.github.ivianuu.essentials:ksp:${BuildConfig.VERSION}"
     )
     target.extensions.add("essentials", EssentialsExtension(target))
     target.extensions.getByType(KotlinBaseExtension::class.java)
@@ -50,10 +50,10 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
     return kotlinCompilation.target.project.provider { emptyList() }
   }
 
-  override fun getCompilerPluginId(): String = "essentials"
+  override fun getCompilerPluginId(): String = "io.github.ivianuu.essentials"
 
   override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
-    groupId = "essentials",
+    groupId = "io.github.ivianuu.essentials",
     artifactId = "compiler",
     version = BuildConfig.VERSION
   )

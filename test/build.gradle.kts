@@ -4,7 +4,7 @@
 
 plugins {
   kotlin("jvm")
-  id("essentials")
+  id("io.github.ivianuu.essentials")
 }
 
 dependencies {
