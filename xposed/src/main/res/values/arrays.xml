@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
+  -->
+
+<resources>
+    <array name="xposed_module_scope">
+        <item>essentials.sample</item>
+    </array>
+</resources>

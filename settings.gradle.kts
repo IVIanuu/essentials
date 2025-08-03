@@ -18,5 +18,7 @@ include(
   ":sample",
   ":test",
   ":ui",
-  ":work"
+  ":work",
+  ":xposed",
+  ":xposed-provided"
 )
