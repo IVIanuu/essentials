@@ -55,7 +55,7 @@ object Deps {
   }
 
   object AtomicFu {
-    private const val version = "0.27.0"
+    private const val version = "0.29.0"
     const val gradlePlugin = "org.jetbrains.kotlinx:atomicfu-gradle-plugin:$version"
     const val runtime = "org.jetbrains.kotlinx:atomicfu:$version"
   }
@@ -97,7 +97,7 @@ object Deps {
 
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:2.0.0"
 
-  const val essentialsGradlePlugin = "io.github.ivianuu.essentials:gradle-plugin:0.0.1-dev1288"
+  const val essentialsGradlePlugin = "io.github.ivianuu.essentials:gradle-plugin:0.0.1-dev1289"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:23.5.0"
@@ -125,7 +125,7 @@ object Deps {
   const val kotestAssertions = "io.kotest:kotest-assertions-core:5.4.2"
 
   object Kotlin {
-    const val version = "2.1.20"
+    const val version = "2.2.0"
     const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
     const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
@@ -146,7 +146,7 @@ object Deps {
   const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:2.0.1"
 
   object Ksp {
-    const val version = "2.1.20-1.0.31"
+    const val version = "2.2.0-2.0.2"
     const val api = "com.google.devtools.ksp:symbol-processing-api:$version"
     const val gradlePlugin = "com.google.devtools.ksp:symbol-processing-gradle-plugin:$version"
     const val symbolProcessing = "com.google.devtools.ksp:symbol-processing:$version"

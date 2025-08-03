@@ -31,21 +31,23 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
   }
 
   override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> {
-    kotlinCompilation.kotlinOptions.run {
-      freeCompilerArgs = freeCompilerArgs + listOf(
-        "-XXLanguage:+NewInference",
-        "-Xskip-prerelease-check",
-        "-opt-in=kotlin.experimental.ExperimentalTypeInference",
-        "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
-        "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
-        "-opt-in=androidx.compose.animation.core.InternalAnimationApi",
-        "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
-        "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-        "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
-        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "-opt-in=androidx.compose.animation.ExperimentalSharedTransitionApi",
-        "-Xcontext-parameters"
-      )
+    kotlinCompilation.compileTaskProvider.configure {
+      it.compilerOptions {
+        freeCompilerArgs.addAll(
+          "-XXLanguage:+NewInference",
+          "-Xskip-prerelease-check",
+          "-opt-in=kotlin.experimental.ExperimentalTypeInference",
+          "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
+          "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
+          "-opt-in=androidx.compose.animation.core.InternalAnimationApi",
+          "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+          "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+          "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+          "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+          "-opt-in=androidx.compose.animation.ExperimentalSharedTransitionApi",
+          "-Xcontext-parameters"
+        )
+      }
     }
     return kotlinCompilation.target.project.provider { emptyList() }
   }

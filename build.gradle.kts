@@ -48,8 +48,10 @@ allprojects {
 
   configurations.configureEach {
     resolutionStrategy.dependencySubstitution {
-      substitute(module("essentials:ksp")).using(project(":ksp"))
-      substitute(module("essentials:compiler")).using(project(":compiler"))
+      substitute(module("io.github.ivianuu.essentials:ksp"))
+        .using(project(":ksp"))
+      substitute(module("io.github.ivianuu.essentials:compiler"))
+        .using(project(":compiler"))
     }
   }
 
