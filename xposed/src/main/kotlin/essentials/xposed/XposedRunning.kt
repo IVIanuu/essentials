@@ -18,7 +18,8 @@ private fun isXposedRunning() = false
   if (config.packageName == config.modulePackageName)
     hookAllMethods(
       "essentials.xposed.XposedRunningKt",
-      "isXposedRunning"
+      "isXposedRunning",
+      config.classLoader
     ) {
       replace { true }
     }

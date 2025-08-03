@@ -11,7 +11,7 @@ import essentials.*
 import injekt.*
 
 abstract class EsXposedInit(
-  private val buildXposedScope: (@Provide EsXposedInit).() -> Scope<XposedScope>
+  private val buildXposedScope: (@Provide EsXposedInit).() -> @New Scope<XposedScope>
 ) : IXposedHookLoadPackage {
   @Provide lateinit var lpparam: LoadPackageParam
   @Provide val xposedAppScopeModule get() = XposedAppScopeModule

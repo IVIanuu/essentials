@@ -111,7 +111,7 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.4.2"
 
   object Injekt {
-    private const val version = "0.0.1-dev754"
+    private const val version = "0.0.1-dev756"
     const val common = "io.github.ivianuu.injekt:common:$version"
     const val core = "io.github.ivianuu.injekt:core:$version"
     const val compiler = "io.github.ivianuu.injekt:compiler:$version"
@@ -125,7 +125,7 @@ object Deps {
   const val kotestAssertions = "io.kotest:kotest-assertions-core:5.4.2"
 
   object Kotlin {
-    const val version = "2.2.0"
+    const val version = "2.2.20-Beta2"
     const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
     const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
@@ -146,7 +146,7 @@ object Deps {
   const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:2.0.1"
 
   object Ksp {
-    const val version = "2.2.0-2.0.2"
+    const val version = "2.2.20-Beta2-2.0.2"
     const val api = "com.google.devtools.ksp:symbol-processing-api:$version"
     const val gradlePlugin = "com.google.devtools.ksp:symbol-processing-gradle-plugin:$version"
     const val symbolProcessing = "com.google.devtools.ksp:symbol-processing:$version"

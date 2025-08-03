@@ -4,7 +4,6 @@
 
 package essentials.sample.xposed
 
-import android.media.*
 import essentials.*
 import essentials.xposed.*
 import injekt.*
@@ -15,9 +14,9 @@ import injekt.*
 
   d { "spot spot spot" }
 
-  hookAllMethods(AudioTrack::class, "write") {
+  hookAllConstructors("d6.i") {
     before {
-      d { "write ${args.contentDeepToString()}" }
+      d { "TrackSegment ${args.contentDeepToString()}" }
     }
   }
 }

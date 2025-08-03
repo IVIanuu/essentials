@@ -33,12 +33,12 @@ typealias launchUi = suspend () -> launchUiResult
   launchUi: launchUi,
   coroutineContexts: CoroutineContexts,
   intentFactories: () -> Map<KClass<IntentScreen>, (IntentScreen) -> Intent>
-): ScreenInterceptorResult<Result<ActivityResult, Throwable>> {
+): ScreenInterceptorResult<Result<ActivityResult, Throwable>>? {
   if (screen !is IntentScreen) return null
   val intentFactory = intentFactories()[screen::class]
     ?: return null
   val intent = intentFactory(screen)
-  return {
+  return ScreenInterceptorResult {
     val activity = launchUi().service<ComponentActivity>()
     withContext(coroutineContexts.main) {
       suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->

@@ -85,7 +85,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
   }
 
   @Provide fun xposedPrefFlow(
-    appContext: Application,
+    appContext: Application = inject,
     config: XposedConfig,
     coroutineContexts: CoroutineContexts,
     jsonFactory: () -> Json,

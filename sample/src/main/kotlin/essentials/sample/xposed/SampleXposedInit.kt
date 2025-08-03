@@ -9,5 +9,5 @@ import injekt.*
 
 class SampleXposedInit : EsXposedInit({
   @Provide val modulePackageName = ModulePackageName("essentials.sample")
-  inject()
+  create()
 })

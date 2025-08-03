@@ -12,7 +12,7 @@ import kotlin.coroutines.*
 
 @Stable class Navigator(
   initialBackStack: List<Screen<*>> = emptyList(),
-  private val screenInterceptors: List<(Screen<*>) -> ScreenInterceptorResult<*>> = emptyList()
+  private val screenInterceptors: List<(Screen<*>) -> ScreenInterceptorResult<*>?> = emptyList()
 ) {
   var backStack by mutableStateOf(initialBackStack)
     private set
@@ -61,7 +61,7 @@ fun <R> popWithResult(result: R? = null, navigator: Navigator = inject, screen: 
 @Provide object NavigatorProviders {
   @Provide fun rootNavigator(
     rootScreen: RootScreen?,
-    screenInterceptors: List<(Screen<*>) -> ScreenInterceptorResult<*>>,
+    screenInterceptors: List<(Screen<*>) -> ScreenInterceptorResult<*>?>,
   ): @ScopedService<UiScope> Navigator = Navigator(
     initialBackStack = listOfNotNull(rootScreen),
     screenInterceptors = screenInterceptors
@@ -74,7 +74,9 @@ fun navigator(x: Navigator = inject): Navigator = x
 
 object RootNavGraph
 
-@Tag typealias ScreenInterceptorResult<R> = (suspend () -> R?)?
+fun interface ScreenInterceptorResult<R> {
+  suspend operator fun invoke(): R?
+}
 
 @Provide val defaultScreenInterceptors
-  get() = emptyList<(Screen<*>) -> ScreenInterceptorResult<*>>()
+  get() = emptyList<(Screen<*>) -> ScreenInterceptorResult<*>?>()
