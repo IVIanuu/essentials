@@ -4,19 +4,21 @@
 
 package essentials.sample.xposed
 
-import essentials.*
 import essentials.xposed.*
 import injekt.*
 
-@Provide fun sampleHooks(logger: Logger = inject) = Hooks { config ->
-  d { "hello ${config.packageName}" }
+@Provide fun sampleHooks() = Hooks { config ->
+  @Provide val provided = config
+
+  println("hello ${config.packageName}")
   if (config.packageName != "com.offtrack.app") return@Hooks
 
-  d { "spot spot spot" }
+  println("offtrack spot spot spot")
 
-  hookAllConstructors("d6.i") {
+  hookAllConstructors("q6.i") {
     before {
-      d { "TrackSegment ${args.contentDeepToString()}" }
+      println("offtrack TrackSegment ${args.contentDeepToString()}")
     }
   }
 }
+
